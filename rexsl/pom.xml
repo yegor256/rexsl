@@ -50,7 +50,7 @@
     <modules>
         <module>rexsl-tk</module>
         <module>rexsl-core</module>
-        <module>maven-rexsl-plugin</module>
+        <!-- <module>maven-rexsl-plugin</module> -->
     </modules>
 
     <description>
