@@ -44,8 +44,10 @@
             <issueUrlBuilder>com.rempl.readers.its.trac.TracIssueUrlBuilder</issueUrlBuilder>
             <codeUrlBuilder>com.rempl.readers.its.trac.TracCodeUrlBuilder</codeUrlBuilder>
             <params>
-                <url>http://trac.fazend.com/rexsl/</url>
+                <url>http://trac.rexsl.com/rexsl/</url>
                 <repoPrefix>trunk/rexsl</repoPrefix>
+                <user>${trac.user}</user>
+                <password>${trac.password}</password>
             </params>
         </its>
     </configuration>
