@@ -30,24 +30,37 @@
 package com.rexsl.maven;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.junit.*;
+import org.apache.maven.project.MavenProject;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
+ * Test maven plugin single MOJO.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public class CheckMojoTest extends AbstractMojoTestCase {
+public final class CheckMojoTest extends AbstractMojoTestCase {
 
+    /**
+     * Test plugin for a single execution.
+     * @throws Exception If something goes wrong inside
+     */
     @Test
     public void testMojoGoal() throws Exception {
         final CheckMojo mojo = this.mojo();
-        // mojo.execute();
+        mojo.execute();
     }
 
+    /**
+     * Create MOJO for tests.
+     * @return The MOJO just created
+     * @throws Exception If something goes wrong inside
+     */
     private CheckMojo mojo() throws Exception {
-        // mojo.setProject(mock(MavenProject.class));
-        // return mojo;
-        return null;
+        final CheckMojo mojo = new CheckMojo();
+        mojo.setProject(Mockito.mock(MavenProject.class));
+        return mojo;
     }
 
 }
