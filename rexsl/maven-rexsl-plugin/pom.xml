@@ -50,4 +50,116 @@
     <packaging>maven-plugin</packaging>
     <name>maven-rexsl-plugin</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version since="22 Aug 2011">3.0.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version since="22 Aug 2011">3.0.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version since="22 Aug 2011">3.0.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version since="22 Aug 2011">3.0.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version since="22 Aug 2011">3.0-alpha-2</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <!--
+                    This artifact is excluded from here because of a conflict
+                    with the same artifact (but newer) included by Checkstyle
+                    -->
+                    <groupId>com.google.code.google-collections</groupId>
+                    <artifactId>google-collect</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-testing</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <version since="22 Aug 2011">2.0-alpha-1</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <!-- other details are in parent pom.xml -->
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <!-- other details are in parent pom.xml -->
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!--
+                @todo #2 This plugin won't work when a local repository is clean
+                 and you're running it for the first time. I think that it's
+                 a defect in plugin itself. Just run "mvn install" and ignore the
+                 error message. Run "mvn install" again and everything will be
+                 fine. And I don't know how to fix this defect.
+                -->
+                <artifactId>maven-invoker-plugin</artifactId>
+                <version since="22 Mar 2011">1.5</version>
+                <configuration>
+                    <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                    <debug>false</debug>
+                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+                    <noLog>false</noLog>
+                    <!--
+                    With this construct you can exclude certain IT projects.
+                    <pomExcludes>
+                        <pomExclude>*/pom.xml</pomExclude>
+                    </pomExcludes>
+                    -->
+                    <pomIncludes>
+                        <pomInclude>*/pom.xml</pomInclude>
+                    </pomIncludes>
+                    <postBuildHookScript>verify</postBuildHookScript>
+                    <preBuildHookScript>setup</preBuildHookScript>
+                    <projectsDirectory>src/it</projectsDirectory>
+                    <settingsFile>${basedir}/src/it/settings.xml</settingsFile>
+                    <showErrors>true</showErrors>
+                    <showVersion>false</showVersion>
+                    <streamLogs>true</streamLogs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>install</goal>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
