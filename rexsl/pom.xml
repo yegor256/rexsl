@@ -45,7 +45,7 @@
     <artifactId>rexsl</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>ReXSL</name>
+    <name>rexsl</name>
 
     <modules>
         <module>rexsl-tk</module>
@@ -55,7 +55,7 @@
 
     <description>
         <![CDATA[
-        RESTful web framework.
+        RESTful web framework on top of XSL.
         ]]>
     </description>
     <url>http://www.rexsl.com</url>
@@ -197,9 +197,9 @@
                             <configuration>
                                 <archive>
                                     <manifestEntries>
-                                        <REMPL-Revision>${buildNumber}</REMPL-Revision>
-                                        <REMPL-Version>${project.version}</REMPL-Version>
-                                        <REMPL-Date>${maven.build.timestamp}</REMPL-Date>
+                                        <REXSL-Revision>${buildNumber}</REXSL-Revision>
+                                        <REXSL-Version>${project.version}</REXSL-Version>
+                                        <REXSL-Date>${maven.build.timestamp}</REXSL-Date>
                                     </manifestEntries>
                                 </archive>
                             </configuration>
@@ -214,6 +214,18 @@
                                     <version>1.0-SNAPSHOT</version>
                                 </dependency>
                             </dependencies>
+                        </plugin>
+                        <plugin>
+                            <!-- version and configuration is in pluginManagement section -->
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>jar</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
                         </plugin>
                     </plugins>
                 </pluginManagement>
@@ -425,40 +437,6 @@
                                 <goals>
                                     <goal>attach-descriptor</goal>
                                 </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <!--
-            This profile activates all strict static code analysis validation
-            procedures, mandatory for continuous integration.
-            -->
-            <id>static-analysis</id>
-            <activation>
-                <property><name>ci</name></property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <!-- version and configuration is in pluginManagement section -->
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                                <configuration>
-                                    <!--
-                                    Would be nice to have failOnWarnings option as well:
-                                    @see http://jira.codehaus.org/browse/MJAVADOC-314
-                                    -->
-                                    <failOnError>true</failOnError>
-                                    <quiet>true</quiet>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
