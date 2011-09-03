@@ -30,7 +30,8 @@
 package com.rexsl.foo;
 
 import com.rexsl.test.JaxbConverter;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Test;
 import org.xmlmatchers.XmlMatchers;
 
 /**
@@ -40,7 +41,7 @@ import org.xmlmatchers.XmlMatchers;
 public class HomeTest {
 
     @Test
-    public void testXmlContents() {
+    public void testXmlContents() throws Exception {
         Home home = new Home();
         Assert.assertThat(
             JaxbConverter.the(home),
