@@ -29,75 +29,18 @@
  */
 package com.rexsl.maven;
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
-
 /**
- * Test entire project against RESTful principles.
+ * Single check to be executed by CheckMojo.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal check
- * @phase test
- * @threadSafe
  */
-public final class CheckMojo extends AbstractMojo {
+public interface Check {
 
     /**
-     * Maven project, to be injected by Maven itself.
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
+     * Perform all validations and return whether everything is fine or not.
+     * @return Everything is fine?
      */
-    private MavenProject project;
-
-    /**
-     * Shall we skip execution?
-     * @parameter expression="${qulice.skip}" default-value="false"
-     * @required
-     */
-    private boolean skip;
-
-    /**
-     * Public ctor.
-     */
-    public CheckMojo() {
-        super();
-        this.project = null;
-    }
-
-    /**
-     * Set Maven Project (used mostly for unit testing).
-     * @param proj The project to set
-     */
-    public void setProject(final MavenProject proj) {
-        this.project = proj;
-    }
-
-    /**
-     * Set skip option.
-     * @param skp Shall we skip execution?
-     */
-    public void setSkip(final boolean skp) {
-        this.skip = skp;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void execute() throws MojoFailureException {
-        if (this.skip) {
-            this.getLog().info("Execution skipped");
-            return;
-        }
-        this.getLog().info(
-            String.format(
-                "XSL stylesheets tested in %s",
-                this.project.getName()
-            )
-        );
-    }
+    boolean validate();
 
 }

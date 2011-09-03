@@ -46,6 +46,49 @@
         <maven>3.0</maven>
     </prerequisites>
 
+    <dependencies>
+        <dependency>
+            <!-- JAX-RS API -->
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>jsr311-api</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <!-- JAXB 2.0 API -->
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <!-- ReXSL runtime library -->
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-core</artifactId>
+            <version>0.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!-- ReXSL test harness -->
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-test</artifactId>
+            <version>0.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- XML matchers from http://code.google.com/p/xml-matchers/ -->
+            <groupId>org.xmlmatchers</groupId>
+            <artifactId>xml-matchers</artifactId>
+            <version>0.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Unit testing framework from http://www.junit.org/ -->
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

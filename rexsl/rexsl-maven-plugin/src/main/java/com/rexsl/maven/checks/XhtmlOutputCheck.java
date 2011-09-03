@@ -27,77 +27,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.checks;
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
+import com.rexsl.maven.AbstractCheck;
+import java.io.File;
 
 /**
- * Test entire project against RESTful principles.
+ * Validate XHTML output.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal check
- * @phase test
- * @threadSafe
  */
-public final class CheckMojo extends AbstractMojo {
-
-    /**
-     * Maven project, to be injected by Maven itself.
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
-     */
-    private MavenProject project;
-
-    /**
-     * Shall we skip execution?
-     * @parameter expression="${qulice.skip}" default-value="false"
-     * @required
-     */
-    private boolean skip;
+public final class XhtmlOutputCheck extends AbstractCheck {
 
     /**
      * Public ctor.
+     * @param basedir Base directory of maven project
      */
-    public CheckMojo() {
-        super();
-        this.project = null;
-    }
-
-    /**
-     * Set Maven Project (used mostly for unit testing).
-     * @param proj The project to set
-     */
-    public void setProject(final MavenProject proj) {
-        this.project = proj;
-    }
-
-    /**
-     * Set skip option.
-     * @param skp Shall we skip execution?
-     */
-    public void setSkip(final boolean skp) {
-        this.skip = skp;
+    public XhtmlOutputCheck(final File basedir) {
+        super(basedir);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void execute() throws MojoFailureException {
-        if (this.skip) {
-            this.getLog().info("Execution skipped");
-            return;
-        }
-        this.getLog().info(
-            String.format(
-                "XSL stylesheets tested in %s",
-                this.project.getName()
-            )
-        );
+    public final boolean validate() {
+        return false;
     }
 
 }

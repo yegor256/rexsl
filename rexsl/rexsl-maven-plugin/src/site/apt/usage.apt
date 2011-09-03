@@ -1,9 +1,9 @@
  ------
- Introduction to ReXSL
+ Usage of ReXSL Maven Plugin
  ------
  Yegor Bugayenko
  ------
- 2011-08-21
+ 2011-09-3
  ------
 
 ~~
@@ -38,6 +38,32 @@
 ~~ @version $Id$
 ~~
 
-ReXSL core module
+Usage
 
-  TBD...
+  It's easy:
+
++--
+<project>
+  [...]
+  <build>
+    <plugins>
+      [...]
+      <plugin>
+        <groupId>com.rexsl</groupId>
+        <artifactId>rexsl-maven-plugin</artifactId>
+        <version>0.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compress</goal>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
++--
+
+  Read more in {{{../index.html}intro page}}.

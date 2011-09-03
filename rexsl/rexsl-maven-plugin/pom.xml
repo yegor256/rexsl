@@ -113,6 +113,11 @@
             <artifactId>mockito-all</artifactId>
             <!-- other details are in parent pom.xml -->
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <!-- other details are in parent pom.xml -->
+        </dependency>
     </dependencies>
 
     <build>
