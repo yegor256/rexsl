@@ -29,23 +29,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @version $Id$
+ * @version $Id: home.xml 9 2011-09-02 12:03:51Z yegor256@yahoo.com $
  -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:r="http://www.rexsl.com"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    version="2.0" exclude-result-prefixes="xs xsl xhtml">
-
-    <xsl:output method="xhtml"/>
-
-    <xsl:include href="/xsl/layout.xsl"/>
-
-    <xsl:template name="content">
-        <div id="message">
-            <xsl:value-of select="/page/text" />
-        </div>
-    </xsl:template>
-
-</xsl:stylesheet>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="page">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1" />
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

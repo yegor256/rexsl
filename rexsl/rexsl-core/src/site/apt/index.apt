@@ -73,20 +73,22 @@ ReXSL, a framework for lightweight Java web apps
       /webapp
         /WEB-INF
           web.xml
-        /css
-          screen.css
         /xsl
           layout.xsl
-          Home.xml
+          Home.xsl
     /test
       /java
         /foo
           HomeTest.java
-        /it
-          FrontEndIT.java
       /rexsl
+        /xhtml
+          index.groovy
         /xml
-          Home.xml
+          index.xml
+        /scripts
+          home-page.groovy
+        /xsd
+          Home.xsd
 ---
 
   Maven <<<pom.xml>>> should look like this (latest version of ReXSL
@@ -147,8 +149,8 @@ ReXSL, a framework for lightweight Java web apps
         <executions>
           <execution>
             <goals>
-              <goal>check</goal>
               <goal>compress</goal>
+              <goal>check</goal>
             </goals>
           </execution>
         </executions>
@@ -163,7 +165,7 @@ ReXSL, a framework for lightweight Java web apps
 +--
 <web-app>
   <listener>
-    <listener-class>com.rexsl.core.JerseyGuiceListener</listener-class>
+    <listener-class>com.rexsl.core.RexslListener</listener-class>
   </listener>
   <filter>
     <filter-name>GuiceFilter</filter-name>
@@ -218,11 +220,11 @@ public class Home {
 }
 +--
 
-  Now let's unit-test our data class:
+  Now let's unit-test our data class in <<<src/test/java/foo/HomeTest.java>>>:
 
 +--
 package foo;
-import com.rexql.test.Jaxb;
+import com.rexsl.test.JaxbConverter;
 import org.junit.*;
 import org.xmlmatchers.XmlMatchers;
 public class HomeTest {
@@ -237,3 +239,106 @@ public class HomeTest {
 }
 +--
 
+  And now let's create a test XML document (<<<src/test/rexsl/xml/index.xml>>>):
+
++--
+<?xml version="1.0"?>
+<page>
+  <text>let's say hello!</text>
+</page>
++--
+
+  This document will be XSL-transformed by <<<rexsl-maven-plugin:check>>>
+  Maven goal and validated by <<<src/test/rexsl/xhtml/index.groovy>>>:
+
++--
+import static com.rexsl.test.XhtmlConverter.the
+import static org.junit.Assert.assertThat
+import static org.junit.matchers.JUnitMatchers.containsString
+import static org.xmlmatchers.XmlMatchers.hasXPath
+assertThat(document, containsString('say hello'))
+assertThat(the(document), hasXPath("//div[contains(.,'say hello')]"))
++--
+
+  And now the most interesting part, a test
+  script in <<<src/test/rexsl/scripts/home-page.groovy>>>:
+
++--
+import static com.rexsl.test.TestClient
+import static com.rexsl.test.XmlConverter.the
+import static org.junit.Assert.assertThat
+import static org.junit.matchers.JUnitMatchers.*
+import static org.xmlmatchers.XmlMatchers.hasXPath
+def r1 = TestClient
+  .header('Accept', 'application/xml')
+  .header('User-agent', 'Safari')
+  .get('/')
+assertThat(the(r1), hasXPath("//div[contains(.,'world')]"))
+assertThat(r1.status, equalTo(200))
+def r2 = TestClient.get('/strange-address')
+assertThat(r2.body, containsString('Page not found'))
+assertThat(r2.status, equalTo(404))
++--
+
+  Now let's create <<<src/main/webapp/xsl/layout.xsl>>>:
+
++--
+<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+  version="2.0" exclude-result-prefixes="xs xsl xhtml">
+  <xsl:output method="xhtml"
+    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+    doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" />
+  <xsl:template match="/">
+    <html xml:lang="en">
+      <body>
+        <div id="content">
+          <xsl:call-template name="content" />
+        </div>
+      </body>
+    </html>
+  </xsl:template>
+</xsl:stylesheet>
++--
+
+  And main page XSL at <<<src/main/webapp/xsl/Home.xsl>>>:
+
++--
+<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+  version="2.0" exclude-result-prefixes="xs xsl xhtml">
+  <xsl:output method="xhtml"/>
+  <xsl:include href="/xsl/layout.xsl"/>
+  <xsl:template name="content">
+    <xsl:value-of select="/page/text" />
+  </xsl:template>
+</xsl:stylesheet>
++--
+
+  The last step is to create <<<src/test/rexsl/xsd/Home.xsd>>>
+  in order to validate XML output on fly:
+
++--
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="page">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1" />
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
++--
+
+  That's it. All you have to do now is to run <<<mvn package>>
+  and deploy your WAR to production server.
+
+  To test the system on your local machine run <<<mvn rexsl:run>>>
+  and use your favorite browser to test the system.
