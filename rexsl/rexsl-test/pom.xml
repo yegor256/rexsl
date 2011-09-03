@@ -45,4 +45,44 @@
     <packaging>jar</packaging>
     <name>rexsl-test</name>
 
+    <dependencies>
+        <dependency>
+            <!--
+            JAXB 2.0 API.
+            -->
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version since="2 Sep 2011">2.0</version>
+        </dependency>
+        <dependency>
+            <!--
+            JAXB 2.0 implementation, required in runtime.
+            -->
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version since="2 Sep 2011">2.2.4-1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <!-- other details are in parent pom.xml -->
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <!-- other details are in parent pom.xml -->
+        </dependency>
+        <dependency>
+            <!--
+            XML matchers.
+            @link http://code.google.com/p/xml-matchers/
+            -->
+            <groupId>org.xmlmatchers</groupId>
+            <artifactId>xml-matchers</artifactId>
+            <version since="26 Jun 2011">0.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>

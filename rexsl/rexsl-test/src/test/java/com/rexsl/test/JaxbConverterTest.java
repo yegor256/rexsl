@@ -27,78 +27,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.test;
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.transform.Source;
+import org.junit.Test;
+import org.junit.Assert;
+import org.xmlmatchers.XmlMatchers;
 
 /**
- * Test entire project against RESTful principles.
+ * Test JAXB converter.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal check
- * @phase test
- * @threadSafe
  */
-public final class CheckMojo extends AbstractMojo {
+public final class JaxbConverterTest {
 
     /**
-     * Maven project, to be injected by Maven itself.
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
+     * Test simple conversion.
+     * @throws Exception If something goes wrong inside
      */
-    private MavenProject project;
-
-    /**
-     * Shall we skip execution?
-     * @parameter expression="${qulice.skip}" default-value="false"
-     * @required
-     */
-    private boolean skip;
-
-    /**
-     * Public ctor.
-     */
-    public CheckMojo() {
-        super();
-        this.project = null;
-    }
-
-    /**
-     * Set Maven Project (used mostly for unit testing).
-     * @param proj The project to set
-     */
-    public void setProject(final MavenProject proj) {
-        this.project = proj;
-    }
-
-    /**
-     * Set skip option.
-     * @param skp Shall we skip execution?
-     */
-    public void setSkip(final boolean skp) {
-        this.skip = skp;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void execute() throws MojoFailureException {
-        if (this.skip) {
-            this.getLog().info("Execution skipped");
-            return;
-        }
-        // new XhtmlOutputCheck().validate()
-        this.getLog().info(
-            String.format(
-                "All ReXSL checks passed in '%s'",
-                this.project.getName()
-            )
+    @Test
+    public void testObjectToXmlConversion() throws Exception {
+        final Object object = new Employee();
+        Assert.assertThat(
+            JaxbConverter.the(object),
+            XmlMatchers.hasXPath("/employee/name[.='John Doe']")
         );
+    }
+
+    @XmlRootElement(name = "employee")
+    @XmlAccessorType(XmlAccessType.NONE)
+    private static final class Employee {
+        @XmlElement(name = "name")
+        public String getName() {
+            return "John Doe";
+        }
     }
 
 }

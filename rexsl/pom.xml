@@ -49,6 +49,7 @@
 
     <modules>
         <module>rexsl-tk</module>
+        <module>rexsl-test</module>
         <module>rexsl-core</module>
         <module>rexsl-maven-plugin</module>
     </modules>

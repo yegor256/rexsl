@@ -27,78 +27,44 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.test;
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
+import java.io.StringWriter;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.io.IOUtils;
 
 /**
- * Test entire project against RESTful principles.
+ * Convert an object to XML.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal check
- * @phase test
- * @threadSafe
  */
-public final class CheckMojo extends AbstractMojo {
+public final class JaxbConverter {
 
     /**
-     * Maven project, to be injected by Maven itself.
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
+     * Private ctor.
      */
-    private MavenProject project;
-
-    /**
-     * Shall we skip execution?
-     * @parameter expression="${qulice.skip}" default-value="false"
-     * @required
-     */
-    private boolean skip;
-
-    /**
-     * Public ctor.
-     */
-    public CheckMojo() {
-        super();
-        this.project = null;
+    private JaxbConverter() {
+        // intentionally empty
     }
 
     /**
-     * Set Maven Project (used mostly for unit testing).
-     * @param proj The project to set
+     * Convert it to XML.
+     * @param object The object to convert
+     * @return DOM source/document
+     * @throws Exception If anything goes wrong
      */
-    public void setProject(final MavenProject proj) {
-        this.project = proj;
-    }
-
-    /**
-     * Set skip option.
-     * @param skp Shall we skip execution?
-     */
-    public void setSkip(final boolean skp) {
-        this.skip = skp;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void execute() throws MojoFailureException {
-        if (this.skip) {
-            this.getLog().info("Execution skipped");
-            return;
-        }
-        // new XhtmlOutputCheck().validate()
-        this.getLog().info(
-            String.format(
-                "All ReXSL checks passed in '%s'",
-                this.project.getName()
-            )
-        );
+    public static Source the(final Object object) throws Exception {
+        final JAXBContext ctx = JAXBContext.newInstance(object.getClass());
+        final Marshaller mrsh = ctx.createMarshaller();
+        mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        final StringWriter writer = new StringWriter();
+        mrsh.marshal(object, writer);
+        final String xml = writer.toString();
+        return new StreamSource(IOUtils.toInputStream(xml));
     }
 
 }
