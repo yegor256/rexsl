@@ -118,6 +118,14 @@
             <artifactId>commons-io</artifactId>
             <!-- other details are in parent pom.xml -->
         </dependency>
+        <dependency>
+            <!--
+            XSLT 2.0 transformer.
+            -->
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon</artifactId>
+            <version since="3 Sep 2011">8.7</version>
+        </dependency>
     </dependencies>
 
     <build>

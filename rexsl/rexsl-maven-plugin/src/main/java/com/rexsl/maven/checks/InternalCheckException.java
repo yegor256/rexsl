@@ -27,52 +27,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
-
-import java.io.File;
+package com.rexsl.maven.checks;
 
 /**
- * Abstract check.
+ * Internal exception.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public abstract class AbstractCheck implements Check {
+public final class InternalCheckException extends Exception {
 
     /**
-     * Base directory of maven project.
+     * Default ctor.
      */
-    private File basedir;
-
-    /**
-     * Reporter.
-     */
-    private Reporter reporter;
-
-    /**
-     * Public ctor.
-     * @param dir Home directory of maven project
-     * @param rep The reporter
-     */
-    public AbstractCheck(final File dir, final Reporter rep) {
-        this.basedir = dir;
-        this.reporter = rep;
+    public InternalCheckException() {
+        super();
     }
 
     /**
-     * Get basedir.
-     * @return The directory
+     * Default ctor.
+     * @param cause The cause
      */
-    protected final File basedir() {
-        return this.basedir;
-    }
-
-    /**
-     * Get reporter.
-     * @return The reporter
-     */
-    protected final Reporter reporter() {
-        return this.reporter;
+    public InternalCheckException(final Throwable cause) {
+        super(cause);
     }
 
 }

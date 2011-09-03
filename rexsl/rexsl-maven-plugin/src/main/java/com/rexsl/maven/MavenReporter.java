@@ -29,50 +29,51 @@
  */
 package com.rexsl.maven;
 
-import java.io.File;
+import org.apache.maven.plugin.logging.Log;
 
 /**
- * Abstract check.
+ * Reporter through Maven log.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public abstract class AbstractCheck implements Check {
+public final class MavenReporter implements Reporter {
 
     /**
-     * Base directory of maven project.
+     * The log.
      */
-    private File basedir;
-
-    /**
-     * Reporter.
-     */
-    private Reporter reporter;
+    private Log log;
 
     /**
      * Public ctor.
-     * @param dir Home directory of maven project
-     * @param rep The reporter
+     * @param mlog Maven log
      */
-    public AbstractCheck(final File dir, final Reporter rep) {
-        this.basedir = dir;
-        this.reporter = rep;
+    public MavenReporter(final Log mlog) {
+        this.log = mlog;
     }
 
     /**
-     * Get basedir.
-     * @return The directory
+     * {@inheritDoc}
      */
-    protected final File basedir() {
-        return this.basedir;
+    @Override
+    public void report(final String line, final Object... args) {
+        if (args.length > 0) {
+            this.log.info(String.format(line, args));
+        } else {
+            this.log.info(line);
+        }
     }
 
     /**
-     * Get reporter.
-     * @return The reporter
+     * {@inheritDoc}
      */
-    protected final Reporter reporter() {
-        return this.reporter;
+    @Override
+    public void log(final String line, final Object... args) {
+        if (args.length > 0) {
+            this.log.debug(String.format(line, args));
+        } else {
+            this.log.debug(line);
+        }
     }
 
 }

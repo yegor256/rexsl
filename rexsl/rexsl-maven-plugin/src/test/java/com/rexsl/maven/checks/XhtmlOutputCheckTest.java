@@ -30,10 +30,12 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
+import com.rexsl.maven.Reporter;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.Mockito;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -59,8 +61,23 @@ public class XhtmlOutputCheckTest {
         this.copy(basedir, "src/main/webapp/xsl/layout.xsl");
         this.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         this.copy(basedir, "src/test/rexsl/xml/index.xml");
-        final Check check = new XhtmlOutputCheck(basedir);
+        final Reporter reporter = Mockito.mock(Reporter.class);
+        final Check check = new XhtmlOutputCheck(basedir, reporter);
         assertThat(check.validate(), is(true));
+    }
+
+    /**
+     * Validate incorrect XML+XSL transformation (layout file is missed).
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void textFalsePositiveValidation() throws Exception {
+        final File basedir = this.temp.newFolder("basedir");
+        this.copy(basedir, "src/main/webapp/xsl/Home.xsl");
+        this.copy(basedir, "src/test/rexsl/xml/index.xml");
+        final Reporter reporter = Mockito.mock(Reporter.class);
+        final Check check = new XhtmlOutputCheck(basedir, reporter);
+        assertThat(check.validate(), is(false));
     }
 
     /**

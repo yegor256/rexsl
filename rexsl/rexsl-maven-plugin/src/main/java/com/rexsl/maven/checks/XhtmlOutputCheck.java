@@ -30,7 +30,16 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.maven.AbstractCheck;
+import com.rexsl.maven.Reporter;
 import java.io.File;
+import java.io.StringWriter;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Validate XHTML output.
@@ -43,9 +52,10 @@ public final class XhtmlOutputCheck extends AbstractCheck {
     /**
      * Public ctor.
      * @param basedir Base directory of maven project
+     * @param reporter The reporter to use
      */
-    public XhtmlOutputCheck(final File basedir) {
-        super(basedir);
+    public XhtmlOutputCheck(final File basedir, final Reporter reporter) {
+        super(basedir, reporter);
     }
 
     /**
@@ -53,7 +63,86 @@ public final class XhtmlOutputCheck extends AbstractCheck {
      */
     @Override
     public final boolean validate() {
-        return false;
+        final File dir = new File(this.basedir(), "src/test/rexsl/xml");
+        boolean success = true;
+        for (File xml : FileUtils.listFiles(dir, new String[] {"xml"}, true)) {
+            try {
+                this.one(xml);
+            } catch (InternalCheckException ex) {
+                final String msg = ex.getMessage();
+                if (!msg.isEmpty()) {
+                    this.reporter().report(msg);
+                }
+                success = false;
+            }
+        }
+        return success;
+    }
+
+    /**
+     * Check one XML document.
+     * @param file Check this particular XML document
+     * @throws InternalCheckException If some failure inside
+     */
+    public final void one(final File file) throws InternalCheckException {
+        final Source xml = new StreamSource(file);
+        final TransformerFactory factory = TransformerFactory.newInstance();
+        factory.setURIResolver(
+            new XhtmlOutputCheck.InDirResolver(
+                new File(this.basedir(), "src/main/webapp")
+            )
+        );
+        Source xsl;
+        try {
+            xsl = factory.getAssociatedStylesheet(xml, null, null, null);
+        } catch (javax.xml.transform.TransformerConfigurationException ex) {
+            throw new InternalCheckException(ex);
+        }
+        if (xsl == null) {
+            this.reporter().report(
+                "Associated XSL stylesheet not found in %s",
+                file
+            );
+            throw new InternalCheckException();
+        }
+        Transformer transformer;
+        try {
+            transformer = factory.newTransformer(xsl);
+        } catch (javax.xml.transform.TransformerConfigurationException ex) {
+            throw new InternalCheckException(ex);
+        }
+        final StringWriter writer = new StringWriter();
+        try {
+            transformer.transform(xml, new StreamResult(writer));
+        } catch (javax.xml.transform.TransformerException ex) {
+            throw new InternalCheckException(ex);
+        }
+        final String xhtml = writer.toString();
+        // run through Groovy
+    }
+
+    /**
+     * Resolve URLs to point them to directory.
+     */
+    private static final class InDirResolver implements URIResolver {
+        /**
+         * The directory to work in.
+         */
+        private final File dir;
+        /**
+         * Public ctor.
+         * @param path The directory
+         */
+        public InDirResolver(final File path) {
+            this.dir = path;
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Source resolve(final String href, final String base) {
+            return new StreamSource(new File(this.dir, href));
+        }
     }
 
 }

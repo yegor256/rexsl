@@ -29,50 +29,26 @@
  */
 package com.rexsl.maven;
 
-import java.io.File;
-
 /**
- * Abstract check.
+ * Reporter.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public abstract class AbstractCheck implements Check {
+public interface Reporter {
 
     /**
-     * Base directory of maven project.
+     * Report one line.
+     * @param line The line to report
+     * @param args Optional arguments for String.format()
      */
-    private File basedir;
+    void report(final String line, final Object... args);
 
     /**
-     * Reporter.
+     * Log one unimportant line.
+     * @param line The line to log
+     * @param args Optional arguments for String.format()
      */
-    private Reporter reporter;
-
-    /**
-     * Public ctor.
-     * @param dir Home directory of maven project
-     * @param rep The reporter
-     */
-    public AbstractCheck(final File dir, final Reporter rep) {
-        this.basedir = dir;
-        this.reporter = rep;
-    }
-
-    /**
-     * Get basedir.
-     * @return The directory
-     */
-    protected final File basedir() {
-        return this.basedir;
-    }
-
-    /**
-     * Get reporter.
-     * @return The reporter
-     */
-    protected final Reporter reporter() {
-        return this.reporter;
-    }
+    void log(final String line, final Object... args);
 
 }
