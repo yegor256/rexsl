@@ -29,36 +29,52 @@
  */
 package com.rexsl.maven.checks;
 
+import com.rexsl.maven.Reporter;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.lang.StringUtils;
+
 /**
- * Internal exception.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class InternalCheckException extends Exception {
+final class DummyReporter implements Reporter {
 
     /**
-     * Default ctor.
+     * Collection of lines reported.
      */
-    public InternalCheckException() {
-        super();
+    private final List<String> lines = new ArrayList<String>();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void report(final String line, final Object... args) {
+        String msg = line;
+        if (args.length > 0) {
+            msg = String.format(line, args);
+        }
+        this.lines.add("#report: " + msg);
     }
 
     /**
-     * Ctor.
-     * @param cause The cause
+     * {@inheritDoc}
      */
-    public InternalCheckException(final Throwable cause) {
-        super(cause);
+    @Override
+    public void log(final String line, final Object... args) {
+        String msg = line;
+        if (args.length > 0) {
+            msg = String.format(line, args);
+        }
+        this.lines.add("#log: " + msg);
     }
 
     /**
-     * Ctor.
-     * @param cause The cause
-     * @param args Agruments for String.format()
+     * Get summary.
+     * @return The summary
      */
-    public InternalCheckException(final String cause, final Object... args) {
-        super(String.format(cause, args));
+    public String summary() {
+        return StringUtils.join(this.lines, "\n");
     }
 
 }

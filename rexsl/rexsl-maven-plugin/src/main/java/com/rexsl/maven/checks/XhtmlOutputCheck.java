@@ -31,6 +31,8 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.AbstractCheck;
 import com.rexsl.maven.Reporter;
+import groovy.lang.Binding;
+import groovy.util.GroovyScriptEngine;
 import java.io.File;
 import java.io.StringWriter;
 import javax.xml.transform.Source;
@@ -39,6 +41,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -85,6 +88,43 @@ public final class XhtmlOutputCheck extends AbstractCheck {
      * @throws InternalCheckException If some failure inside
      */
     public final void one(final File file) throws InternalCheckException {
+        final File root = new File(this.basedir(), "src/test/rexsl/xhtml");
+        final String script = String.format(
+            "%s.groovy",
+            FilenameUtils.getBaseName(file.getPath())
+        );
+        final File groovy = new File(root, script);
+        if (!groovy.exists()) {
+            throw new InternalCheckException(
+                "Groovy script '%s' is absent for '%s' XML page",
+                groovy,
+                file
+            );
+        }
+        final String xhtml = this.xhtml(file);
+        GroovyScriptEngine gse;
+        try {
+            gse = new GroovyScriptEngine(new String[] { root.getPath() });
+        } catch (java.io.IOException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        final Binding binding = new Binding();
+        binding.setVariable("document", xhtml);
+        try {
+            gse.run(script, binding);
+        } catch (groovy.util.ResourceException ex) {
+            throw new InternalCheckException(ex);
+        } catch (groovy.util.ScriptException ex) {
+            throw new InternalCheckException(ex);
+        }
+    }
+
+    /**
+     * Turn XML into XHTML.
+     * @param file XML document
+     * @throws InternalCheckException If some failure inside
+     */
+    public final String xhtml(final File file) throws InternalCheckException {
         final Source xml = new StreamSource(file);
         final TransformerFactory factory = TransformerFactory.newInstance();
         factory.setURIResolver(
@@ -99,11 +139,10 @@ public final class XhtmlOutputCheck extends AbstractCheck {
             throw new InternalCheckException(ex);
         }
         if (xsl == null) {
-            this.reporter().report(
-                "Associated XSL stylesheet not found in %s",
+            throw new InternalCheckException(
+                "Associated XSL stylesheet not found in '%s'",
                 file
             );
-            throw new InternalCheckException();
         }
         Transformer transformer;
         try {
@@ -117,8 +156,7 @@ public final class XhtmlOutputCheck extends AbstractCheck {
         } catch (javax.xml.transform.TransformerException ex) {
             throw new InternalCheckException(ex);
         }
-        final String xhtml = writer.toString();
-        // run through Groovy
+        return writer.toString();
     }
 
     /**

@@ -43,7 +43,7 @@ import static org.hamcrest.Matchers.*;
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public class XhtmlOutputCheckTest {
+public final class XhtmlOutputCheckTest {
 
     /**
      * @checkstyle VisibilityModifier (3 lines)
@@ -61,9 +61,13 @@ public class XhtmlOutputCheckTest {
         this.copy(basedir, "src/main/webapp/xsl/layout.xsl");
         this.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         this.copy(basedir, "src/test/rexsl/xml/index.xml");
-        final Reporter reporter = Mockito.mock(Reporter.class);
+        this.copy(basedir, "src/test/rexsl/xhtml/index.groovy");
+        final DummyReporter reporter = new DummyReporter();
         final Check check = new XhtmlOutputCheck(basedir, reporter);
-        assertThat(check.validate(), is(true));
+        assertThat(
+            check.validate(),
+            describedAs(reporter.summary(), is(true))
+        );
     }
 
     /**
@@ -75,9 +79,12 @@ public class XhtmlOutputCheckTest {
         final File basedir = this.temp.newFolder("basedir");
         this.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         this.copy(basedir, "src/test/rexsl/xml/index.xml");
-        final Reporter reporter = Mockito.mock(Reporter.class);
+        final DummyReporter reporter = new DummyReporter();
         final Check check = new XhtmlOutputCheck(basedir, reporter);
-        assertThat(check.validate(), is(false));
+        assertThat(
+            check.validate(),
+            describedAs(reporter.summary(), is(false))
+        );
     }
 
     /**
