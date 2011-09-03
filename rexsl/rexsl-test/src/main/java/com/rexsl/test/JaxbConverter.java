@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,30 +26,45 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.test;
+
+import java.io.StringWriter;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.io.IOUtils;
+
+/**
+ * Convert an object to XML.
  *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    version="2.0" exclude-result-prefixes="xs xsl xhtml">
+ */
+public final class JaxbConverter {
 
-    <xsl:output method="xhtml"
-        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-        doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" />
+    /**
+     * Private ctor.
+     */
+    private JaxbConverter() {
+        // intentionally empty
+    }
 
-    <xsl:template match="/">
-        <html xml:lang="en">
-            <head>
-                <link href="/css/screen.css" rel="stylesheet" type="text/css"></link>
-            </head>
-            <body>
-                <div id="content">
-                    <xsl:call-template name="content" />
-                </div>
-            </body>
-        </html>
-    </xsl:template>
+    /**
+     * Convert it to XML.
+     * @param object The object to convert
+     * @return DOM source/document
+     * @throws Exception If anything goes wrong
+     */
+    public static Source the(final Object object) throws Exception {
+        final JAXBContext ctx = JAXBContext.newInstance(object.getClass());
+        final Marshaller mrsh = ctx.createMarshaller();
+        mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        final StringWriter writer = new StringWriter();
+        mrsh.marshal(object, writer);
+        final String xml = writer.toString();
+        return new StreamSource(IOUtils.toInputStream(xml));
+    }
 
-</xsl:stylesheet>
+}

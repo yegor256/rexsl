@@ -38,7 +38,10 @@
 ~~ @version $Id$
 ~~
 
-Introduction
+ReXSL Maven Plugin
 
-  TBD...
+  This plugin is helping you to test your ReXSL-powered
+  web application and perform some per-packaging changes to your
+  web assets (like CSS/XSL stylesheets, JavaScript code, images, etc.)
 
+  Read more about its {{{./usage.html}usage}}.

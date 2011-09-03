@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,9 +26,12 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * @version $Id$
- -->
-<page>
-    <text>hello, world! :)</text>
-</page>
+ */
+
+import static com.rexsl.test.XhtmlConverter.the
+import static org.junit.Assert.assertThat
+import static org.junit.matchers.JUnitMatchers.containsString
+import static org.xmlmatchers.XmlMatchers.hasXPath
+
+assertThat(document, containsString('say hello'))
+assertThat(the(document), hasXPath("//div[contains(.,'say hello')]"))

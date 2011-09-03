@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,24 +26,55 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ */
+package com.rexsl.maven.checks;
+
+import com.rexsl.maven.Reporter;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.lang.StringUtils;
+
+/**
+ * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
- -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:e="http://www.expinia.com"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    version="2.0" exclude-result-prefixes="xs xsl xhtml">
+ */
+final class DummyReporter implements Reporter {
 
-    <xsl:output method="xhtml"/>
+    /**
+     * Collection of lines reported.
+     */
+    private final List<String> lines = new ArrayList<String>();
 
-    <xsl:include href="/xsl/layout.xsl"/>
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void report(final String line, final Object... args) {
+        String msg = line;
+        if (args.length > 0) {
+            msg = String.format(line, args);
+        }
+        this.lines.add("#report: " + msg);
+    }
 
-    <xsl:template name="content">
-        <div id="message">
-            <xsl:value-of select="/page/text" />
-        </div>
-    </xsl:template>
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void log(final String line, final Object... args) {
+        String msg = line;
+        if (args.length > 0) {
+            msg = String.format(line, args);
+        }
+        this.lines.add("#log: " + msg);
+    }
 
-</xsl:stylesheet>
+    /**
+     * Get summary.
+     * @return The summary
+     */
+    public String summary() {
+        return StringUtils.join(this.lines, "\n");
+    }
+
+}

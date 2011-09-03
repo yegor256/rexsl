@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,30 +26,53 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.maven;
+
+import java.io.File;
+
+/**
+ * Abstract check.
  *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    version="2.0" exclude-result-prefixes="xs xsl xhtml">
+ */
+public abstract class AbstractCheck implements Check {
 
-    <xsl:output method="xhtml"
-        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-        doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" />
+    /**
+     * Base directory of maven project.
+     */
+    private File basedir;
 
-    <xsl:template match="/">
-        <html xml:lang="en">
-            <head>
-                <link href="/css/screen.css" rel="stylesheet" type="text/css"></link>
-            </head>
-            <body>
-                <div id="content">
-                    <xsl:call-template name="content" />
-                </div>
-            </body>
-        </html>
-    </xsl:template>
+    /**
+     * Reporter.
+     */
+    private Reporter reporter;
 
-</xsl:stylesheet>
+    /**
+     * Public ctor.
+     * @param dir Home directory of maven project
+     * @param rep The reporter
+     */
+    public AbstractCheck(final File dir, final Reporter rep) {
+        this.basedir = dir;
+        this.reporter = rep;
+    }
+
+    /**
+     * Get basedir.
+     * @return The directory
+     */
+    protected final File basedir() {
+        return this.basedir;
+    }
+
+    /**
+     * Get reporter.
+     * @return The reporter
+     */
+    protected final Reporter reporter() {
+        return this.reporter;
+    }
+
+}

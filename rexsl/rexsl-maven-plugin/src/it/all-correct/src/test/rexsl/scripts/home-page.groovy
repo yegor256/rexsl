@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,30 +26,21 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * @version $Id$
- -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    version="2.0" exclude-result-prefixes="xs xsl xhtml">
+ */
 
-    <xsl:output method="xhtml"
-        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-        doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" />
+import static com.rexsl.test.TestClient
+import static com.rexsl.test.XmlConverter.the
+import static org.junit.Assert.assertThat
+import static org.junit.matchers.JUnitMatchers.*
+import static org.xmlmatchers.XmlMatchers.hasXPath
 
-    <xsl:template match="/">
-        <html xml:lang="en">
-            <head>
-                <link href="/css/screen.css" rel="stylesheet" type="text/css"></link>
-            </head>
-            <body>
-                <div id="content">
-                    <xsl:call-template name="content" />
-                </div>
-            </body>
-        </html>
-    </xsl:template>
+def r1 = TestClient
+  .header('Accept', 'application/xml')
+  .header('User-agent', 'Safari')
+  .get('/')
+assertThat(the(r1), hasXPath("//div[contains(.,'world')]"))
+assertThat(r1.status, equalTo(200))
 
-</xsl:stylesheet>
+def r2 = TestClient.get('/strange-address')
+assertThat(r2.body, containsString('Page not found'))
+assertThat(r2.status, equalTo(404))

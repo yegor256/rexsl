@@ -34,7 +34,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
 /**
- * Test XSL stylesheets against XML mocks.
+ * Test entire project against RESTful principles.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -92,9 +92,10 @@ public final class CheckMojo extends AbstractMojo {
             this.getLog().info("Execution skipped");
             return;
         }
+        // new XhtmlOutputCheck().validate()
         this.getLog().info(
             String.format(
-                "XSL stylesheets tested in %s",
+                "All ReXSL checks passed in '%s'",
                 this.project.getName()
             )
         );

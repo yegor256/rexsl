@@ -36,77 +36,53 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.rexsl.plugin</groupId>
-    <artifactId>all-correct</artifactId>
-    <version>1.0</version>
+    <parent>
+        <groupId>com.rexsl</groupId>
+        <artifactId>rexsl</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>rexsl-test</artifactId>
     <packaging>jar</packaging>
-    <name>all-correct</name>
-
-    <prerequisites>
-        <maven>3.0</maven>
-    </prerequisites>
+    <name>rexsl-test</name>
 
     <dependencies>
         <dependency>
-            <!-- JAX-RS API -->
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>jsr311-api</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <dependency>
-            <!-- JAXB 2.0 API -->
+            <!--
+            JAXB 2.0 API.
+            -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.0</version>
+            <version since="2 Sep 2011">2.0</version>
         </dependency>
         <dependency>
-            <!-- ReXSL runtime library -->
-            <groupId>com.rexsl</groupId>
-            <artifactId>rexsl-core</artifactId>
-            <version rexsl="yes">1.0-SNAPSHOT</version>
+            <!--
+            JAXB 2.0 implementation, required in runtime.
+            -->
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version since="2 Sep 2011">2.2.4-1</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!-- ReXSL test harness -->
-            <groupId>com.rexsl</groupId>
-            <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">1.0-SNAPSHOT</version>
-            <scope>test</scope>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
-            <!-- XML matchers from http://code.google.com/p/xml-matchers/ -->
-            <groupId>org.xmlmatchers</groupId>
-            <artifactId>xml-matchers</artifactId>
-            <version>0.10</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- Unit testing framework from http://www.junit.org/ -->
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.2</version>
+            <!-- other details are in parent pom.xml -->
+        </dependency>
+        <dependency>
+            <!--
+            XML matchers.
+            @link http://code.google.com/p/xml-matchers/
+            -->
+            <groupId>org.xmlmatchers</groupId>
+            <artifactId>xml-matchers</artifactId>
+            <version since="26 Jun 2011">0.10</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.rexsl</groupId>
-                <artifactId>rexsl-maven-plugin</artifactId>
-                <version rexsl="yes">1.0-SNAPSHOT</version>
-                <configuration>
-                    <!-- ... to be continued ... -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

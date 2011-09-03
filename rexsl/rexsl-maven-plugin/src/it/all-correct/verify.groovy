@@ -33,4 +33,4 @@
  */
 
 def log = new File(basedir, "build.log")
-assert log.text.contains("XSL stylesheets tested")
+assert log.text.contains("All ReXSL checks passed")
