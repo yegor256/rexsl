@@ -184,7 +184,7 @@ ReXSL, a framework for lightweight Java web apps
 </web-app>
 +--
 
-  Now let's create JAX-RS front end (<<<FrontEnd.java>>):
+  Now let's create JAX-RS front end (<<<FrontEnd.java>>>):
 
 +--
 package foo;
