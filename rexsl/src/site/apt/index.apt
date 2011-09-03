@@ -338,7 +338,7 @@ assertThat(r2.status, equalTo(404))
 </xs:schema>
 +--
 
-  That's it. All you have to do now is to run <<<mvn package>>
+  That's it. All you have to do now is to run <<<mvn package>>>
   and deploy your WAR to production server.
 
   To test the system on your local machine run <<<mvn rexsl:run>>>
