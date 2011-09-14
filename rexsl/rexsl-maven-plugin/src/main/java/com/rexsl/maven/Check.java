@@ -39,8 +39,9 @@ public interface Check {
 
     /**
      * Perform all validations and return whether everything is fine or not.
+     * @param env Envirorment
      * @return Everything is fine?
      */
-    boolean validate();
+    boolean validate(final Environment env);
 
 }

@@ -104,6 +104,14 @@
             </exclusions>
         </dependency>
         <dependency>
+            <!--
+            Embedded Java Servlet Container
+            -->
+            <groupId>com.sun.grizzly</groupId>
+            <artifactId>grizzly-servlet-webserver</artifactId>
+            <version>1.9.10</version>
+        </dependency>
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <!-- other details are in parent pom.xml -->

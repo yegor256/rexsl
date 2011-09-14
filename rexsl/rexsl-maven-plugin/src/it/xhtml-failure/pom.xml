@@ -39,7 +39,7 @@
     <groupId>com.rexsl.plugin</groupId>
     <artifactId>xhtml-failure</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>xhtml-failure</name>
 
     <dependencies>

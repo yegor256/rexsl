@@ -39,7 +39,7 @@
     <groupId>com.rexsl.plugin</groupId>
     <artifactId>script-failure</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>script-failure</name>
 
     <dependencies>

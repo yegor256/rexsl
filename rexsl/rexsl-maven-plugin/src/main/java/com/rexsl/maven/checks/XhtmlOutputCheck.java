@@ -29,7 +29,8 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.AbstractCheck;
+import com.rexsl.maven.Check;
+import com.rexsl.maven.Environment;
 import com.rexsl.maven.Reporter;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
@@ -50,7 +51,7 @@ import org.apache.commons.io.FileUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class XhtmlOutputCheck extends AbstractCheck {
+public final class XhtmlOutputCheck implements Check {
 
     /**
      * Directory with XML files.
@@ -63,24 +64,13 @@ public final class XhtmlOutputCheck extends AbstractCheck {
     private static final String GROOVY_DIR = "src/test/rexsl/xhtml";
 
     /**
-     * Public ctor.
-     * @param basedir Base directory of maven project
-     * @param reporter The reporter to use
-     * @param loader Class loader
-     */
-    public XhtmlOutputCheck(final File basedir, final Reporter reporter,
-        final ClassLoader loader) {
-        super(basedir, reporter, loader);
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
-    public final boolean validate() {
-        final File dir = new File(this.basedir(), this.XML_DIR);
+    public final boolean validate(final Environment env) {
+        final File dir = new File(env.basedir(), this.XML_DIR);
         if (!dir.exists()) {
-            this.reporter().report(
+            env.reporter().report(
                 "%s directory is absent, no XHTML tests",
                 this.XML_DIR
             );
@@ -89,13 +79,13 @@ public final class XhtmlOutputCheck extends AbstractCheck {
         boolean success = true;
         for (File xml : FileUtils.listFiles(dir, new String[] {"xml"}, true)) {
             try {
-                this.reporter().report("Testing %s...", xml);
-                this.one(xml);
-                this.reporter().report("XML+XSL tested: %s", xml);
+                env.reporter().report("Testing %s...", xml);
+                this.one(env, xml);
+                env.reporter().report("XML+XSL tested: %s", xml);
             } catch (InternalCheckException ex) {
                 final String msg = ex.getMessage();
                 if (!msg.isEmpty()) {
-                    this.reporter().report(msg);
+                    env.reporter().report(msg);
                 }
                 success = false;
             }
@@ -108,8 +98,9 @@ public final class XhtmlOutputCheck extends AbstractCheck {
      * @param file Check this particular XML document
      * @throws InternalCheckException If some failure inside
      */
-    public final void one(final File file) throws InternalCheckException {
-        final File root = new File(this.basedir(), this.GROOVY_DIR);
+    public final void one(final Environment env, final File file)
+        throws InternalCheckException {
+        final File root = new File(env.basedir(), this.GROOVY_DIR);
         if (!root.exists()) {
             throw new InternalCheckException(
                 "%s directory is absent",
@@ -132,12 +123,12 @@ public final class XhtmlOutputCheck extends AbstractCheck {
                 file
             );
         }
-        final String xhtml = this.xhtml(file);
+        final String xhtml = this.xhtml(env, file);
         GroovyScriptEngine gse;
         try {
             gse = new GroovyScriptEngine(
                 new String[] { root.getPath() },
-                this.classloader()
+                env.classloader()
             );
         } catch (java.io.IOException ex) {
             throw new IllegalArgumentException(ex);
@@ -155,15 +146,17 @@ public final class XhtmlOutputCheck extends AbstractCheck {
 
     /**
      * Turn XML into XHTML.
+     * @param env Environment
      * @param file XML document
      * @throws InternalCheckException If some failure inside
      */
-    public final String xhtml(final File file) throws InternalCheckException {
+    public final String xhtml(final Environment env, final File file)
+        throws InternalCheckException {
         final Source xml = new StreamSource(file);
         final TransformerFactory factory = TransformerFactory.newInstance();
         factory.setURIResolver(
             new XhtmlOutputCheck.InDirResolver(
-                new File(this.basedir(), "src/main/webapp")
+                new File(env.basedir(), "src/main/webapp")
             )
         );
         Source xsl;

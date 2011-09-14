@@ -29,7 +29,8 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.AbstractCheck;
+import com.rexsl.maven.Check;
+import com.rexsl.maven.Environment;
 import com.rexsl.maven.Reporter;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
@@ -50,24 +51,13 @@ import org.apache.commons.io.FileUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class FilesStructureCheck extends AbstractCheck {
-
-    /**
-     * Public ctor.
-     * @param basedir Base directory of maven project
-     * @param reporter The reporter to use
-     * @param loader The classloader
-     */
-    public FilesStructureCheck(final File basedir, final Reporter reporter,
-        final ClassLoader loader) {
-        super(basedir, reporter, loader);
-    }
+public final class FilesStructureCheck implements Check {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public final boolean validate() {
+    public final boolean validate(final Environment env) {
         final String[] names = {
             "src/main/webapp/",
             "src/main/webapp/xsl/",
@@ -80,11 +70,11 @@ public final class FilesStructureCheck extends AbstractCheck {
         boolean success = true;
         for (String name : names) {
             try {
-                this.one(name);
+                this.one(env.basedir(), name);
             } catch (InternalCheckException ex) {
                 final String msg = ex.getMessage();
                 if (!msg.isEmpty()) {
-                    this.reporter().report(msg);
+                    env.reporter().report(msg);
                 }
                 success = false;
             }
@@ -94,11 +84,13 @@ public final class FilesStructureCheck extends AbstractCheck {
 
     /**
      * Check for existence of this file/dir.
+     * @param basedir Project basedir
      * @param name The name of the file to check
      * @throws InternalCheckException If some failure inside
      */
-    public final void one(final String name) throws InternalCheckException {
-        final File file = new File(this.basedir(), name);
+    public final void one(final File basedir, final String name)
+        throws InternalCheckException {
+        final File file = new File(basedir, name);
         if (!file.exists()) {
             throw new InternalCheckException(
                 "File '%s' is absent, but should be there",
