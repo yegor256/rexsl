@@ -27,77 +27,24 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.foo;
 
-import java.io.File;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Abstract check.
- *
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
+ * @version $Id: Home.java 17 2011-09-03 13:22:19Z yegor256@yahoo.com $
  */
-public abstract class AbstractCheck implements Check {
+@XmlRootElement(name = "page")
+@XmlAccessorType(XmlAccessType.NONE)
+public class Home {
 
-    /**
-     * Base directory of maven project.
-     */
-    private File basedir;
-
-    /**
-     * Reporter.
-     */
-    private Reporter reporter;
-
-    /**
-     * Classloader, pre-configured by Maven.
-     */
-    private ClassLoader loader;
-
-    /**
-     * Public ctor.
-     * @param dir Home directory of maven project
-     * @param rep The reporter
-     * @param ldr Classloader
-     */
-    public AbstractCheck(final File dir, final Reporter rep,
-        final ClassLoader ldr) {
-        if (dir == null) {
-            throw new IllegalArgumentException("basedir can't be NULL");
-        }
-        this.basedir = dir;
-        if (rep == null) {
-            throw new IllegalArgumentException("reporter can't be NULL");
-        }
-        this.reporter = rep;
-        if (ldr == null) {
-            throw new IllegalArgumentException("loader can't be NULL");
-        }
-        this.loader = ldr;
-    }
-
-    /**
-     * Get basedir.
-     * @return The directory
-     */
-    protected final File basedir() {
-        return this.basedir;
-    }
-
-    /**
-     * Get reporter.
-     * @return The reporter
-     */
-    protected final Reporter reporter() {
-        return this.reporter;
-    }
-
-    /**
-     * Get classloader.
-     * @return The classloader
-     */
-    protected final ClassLoader classloader() {
-        return this.loader;
+    @XmlElement(name = "text")
+    public String getText() {
+        return "Hello, world!";
     }
 
 }

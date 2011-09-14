@@ -1,4 +1,6 @@
-/**
+<?xml version="1.0"?>
+<!--
+ *
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -26,78 +28,29 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-package com.rexsl.maven;
-
-import java.io.File;
-
-/**
- * Abstract check.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- */
-public abstract class AbstractCheck implements Check {
+ -->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
+    version="2.0" exclude-result-prefixes="xs xsl xhtml">
 
-    /**
-     * Base directory of maven project.
-     */
-    private File basedir;
+    <xsl:output method="xhtml"/>
 
-    /**
-     * Reporter.
-     */
-    private Reporter reporter;
+    <xsl:output method="xhtml"
+        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+        doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" />
 
-    /**
-     * Classloader, pre-configured by Maven.
-     */
-    private ClassLoader loader;
+    <xsl:template match="/">
+        <html xml:lang="en">
+            <body>
+                <p>
+                    <xsl:value-of select="/page/text" />
+                </p>
+            </body>
+        </html>
+    </xsl:template>
 
-    /**
-     * Public ctor.
-     * @param dir Home directory of maven project
-     * @param rep The reporter
-     * @param ldr Classloader
-     */
-    public AbstractCheck(final File dir, final Reporter rep,
-        final ClassLoader ldr) {
-        if (dir == null) {
-            throw new IllegalArgumentException("basedir can't be NULL");
-        }
-        this.basedir = dir;
-        if (rep == null) {
-            throw new IllegalArgumentException("reporter can't be NULL");
-        }
-        this.reporter = rep;
-        if (ldr == null) {
-            throw new IllegalArgumentException("loader can't be NULL");
-        }
-        this.loader = ldr;
-    }
-
-    /**
-     * Get basedir.
-     * @return The directory
-     */
-    protected final File basedir() {
-        return this.basedir;
-    }
-
-    /**
-     * Get reporter.
-     * @return The reporter
-     */
-    protected final Reporter reporter() {
-        return this.reporter;
-    }
-
-    /**
-     * Get classloader.
-     * @return The classloader
-     */
-    protected final ClassLoader classloader() {
-        return this.loader;
-    }
-
-}
+</xsl:stylesheet>

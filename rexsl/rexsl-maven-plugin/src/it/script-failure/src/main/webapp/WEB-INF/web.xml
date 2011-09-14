@@ -1,4 +1,6 @@
-/**
+<?xml version="1.0"?>
+<!--
+ *
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -26,78 +28,29 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-package com.rexsl.maven;
-
-import java.io.File;
-
-/**
- * Abstract check.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- */
-public abstract class AbstractCheck implements Check {
+ * @version $Id: web.xml 9 2011-09-02 12:03:51Z yegor256@yahoo.com $
+ -->
+<web-app version="3.0"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
-    /**
-     * Base directory of maven project.
-     */
-    private File basedir;
+    <listener>
+        <listener-class>com.rexsl.core.JerseyGuiceListener</listener-class>
+    </listener>
 
-    /**
-     * Reporter.
-     */
-    private Reporter reporter;
+    <filter>
+        <filter-name>GuiceFilter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
 
-    /**
-     * Classloader, pre-configured by Maven.
-     */
-    private ClassLoader loader;
+    <filter-mapping>
+        <filter-name>GuiceFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
 
-    /**
-     * Public ctor.
-     * @param dir Home directory of maven project
-     * @param rep The reporter
-     * @param ldr Classloader
-     */
-    public AbstractCheck(final File dir, final Reporter rep,
-        final ClassLoader ldr) {
-        if (dir == null) {
-            throw new IllegalArgumentException("basedir can't be NULL");
-        }
-        this.basedir = dir;
-        if (rep == null) {
-            throw new IllegalArgumentException("reporter can't be NULL");
-        }
-        this.reporter = rep;
-        if (ldr == null) {
-            throw new IllegalArgumentException("loader can't be NULL");
-        }
-        this.loader = ldr;
-    }
-
-    /**
-     * Get basedir.
-     * @return The directory
-     */
-    protected final File basedir() {
-        return this.basedir;
-    }
-
-    /**
-     * Get reporter.
-     * @return The reporter
-     */
-    protected final Reporter reporter() {
-        return this.reporter;
-    }
-
-    /**
-     * Get classloader.
-     * @return The classloader
-     */
-    protected final ClassLoader classloader() {
-        return this.loader;
-    }
-
-}
+</web-app>

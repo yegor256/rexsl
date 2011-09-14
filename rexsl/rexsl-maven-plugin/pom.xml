@@ -160,13 +160,11 @@
                     <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
                     <noLog>false</noLog>
                     <!--
-                    With this construct you can exclude certain IT projects.
-                    <pomExcludes>
-                        <pomExclude>*/pom.xml</pomExclude>
-                    </pomExcludes>
+                    With this construct you can include some projects,
+                    which you're interested in.
                     -->
                     <pomIncludes>
-                        <pomInclude>*/pom.xml</pomInclude>
+                        <pomInclude>script-failure/pom.xml</pomInclude>
                     </pomIncludes>
                     <postBuildHookScript>verify</postBuildHookScript>
                     <preBuildHookScript>setup</preBuildHookScript>

@@ -56,9 +56,11 @@ public final class FilesStructureCheck extends AbstractCheck {
      * Public ctor.
      * @param basedir Base directory of maven project
      * @param reporter The reporter to use
+     * @param loader The classloader
      */
-    public FilesStructureCheck(final File basedir, final Reporter reporter) {
-        super(basedir, reporter);
+    public FilesStructureCheck(final File basedir, final Reporter reporter,
+        final ClassLoader loader) {
+        super(basedir, reporter, loader);
     }
 
     /**

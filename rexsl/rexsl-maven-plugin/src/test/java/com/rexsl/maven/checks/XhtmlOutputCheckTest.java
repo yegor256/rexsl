@@ -63,7 +63,8 @@ public final class XhtmlOutputCheckTest {
         this.copy(basedir, "src/test/rexsl/xml/index.xml");
         this.copy(basedir, "src/test/rexsl/xhtml/index.groovy");
         final DummyReporter reporter = new DummyReporter();
-        final Check check = new XhtmlOutputCheck(basedir, reporter);
+        final Check check = new XhtmlOutputCheck(basedir, reporter,
+            this.getClass().getClassLoader());
         assertThat(
             check.validate(),
             describedAs(reporter.summary(), is(true))
@@ -80,7 +81,8 @@ public final class XhtmlOutputCheckTest {
         this.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         this.copy(basedir, "src/test/rexsl/xml/index.xml");
         final DummyReporter reporter = new DummyReporter();
-        final Check check = new XhtmlOutputCheck(basedir, reporter);
+        final Check check = new XhtmlOutputCheck(basedir, reporter,
+            this.getClass().getClassLoader());
         assertThat(
             check.validate(),
             describedAs(reporter.summary(), is(false))

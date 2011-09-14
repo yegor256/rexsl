@@ -53,12 +53,24 @@ import org.apache.commons.io.FileUtils;
 public final class XhtmlOutputCheck extends AbstractCheck {
 
     /**
+     * Directory with XML files.
+     */
+    private static final String XML_DIR = "src/test/rexsl/xml";
+
+    /**
+     * Directory with Groovy files.
+     */
+    private static final String GROOVY_DIR = "src/test/rexsl/xhtml";
+
+    /**
      * Public ctor.
      * @param basedir Base directory of maven project
      * @param reporter The reporter to use
+     * @param loader Class loader
      */
-    public XhtmlOutputCheck(final File basedir, final Reporter reporter) {
-        super(basedir, reporter);
+    public XhtmlOutputCheck(final File basedir, final Reporter reporter,
+        final ClassLoader loader) {
+        super(basedir, reporter, loader);
     }
 
     /**
@@ -66,11 +78,20 @@ public final class XhtmlOutputCheck extends AbstractCheck {
      */
     @Override
     public final boolean validate() {
-        final File dir = new File(this.basedir(), "src/test/rexsl/xml");
+        final File dir = new File(this.basedir(), this.XML_DIR);
+        if (!dir.exists()) {
+            this.reporter().report(
+                "%s directory is absent, no XHTML tests",
+                this.XML_DIR
+            );
+            return true;
+        }
         boolean success = true;
         for (File xml : FileUtils.listFiles(dir, new String[] {"xml"}, true)) {
             try {
+                this.reporter().report("Testing %s...", xml);
                 this.one(xml);
+                this.reporter().report("XML+XSL tested: %s", xml);
             } catch (InternalCheckException ex) {
                 final String msg = ex.getMessage();
                 if (!msg.isEmpty()) {
@@ -88,11 +109,21 @@ public final class XhtmlOutputCheck extends AbstractCheck {
      * @throws InternalCheckException If some failure inside
      */
     public final void one(final File file) throws InternalCheckException {
-        final File root = new File(this.basedir(), "src/test/rexsl/xhtml");
-        final String script = String.format(
-            "%s.groovy",
-            FilenameUtils.getBaseName(file.getPath())
-        );
+        final File root = new File(this.basedir(), this.GROOVY_DIR);
+        if (!root.exists()) {
+            throw new InternalCheckException(
+                "%s directory is absent",
+                this.GROOVY_DIR
+            );
+        }
+        final String basename = FilenameUtils.getBaseName(file.getPath());
+        if (!basename.matches("[a-zA-Z]\\w*")) {
+            throw new InternalCheckException(
+                "Illegal script name: %s (only letters allowed)",
+                basename
+            );
+        }
+        final String script = String.format("%s.groovy", basename);
         final File groovy = new File(root, script);
         if (!groovy.exists()) {
             throw new InternalCheckException(
@@ -104,7 +135,10 @@ public final class XhtmlOutputCheck extends AbstractCheck {
         final String xhtml = this.xhtml(file);
         GroovyScriptEngine gse;
         try {
-            gse = new GroovyScriptEngine(new String[] { root.getPath() });
+            gse = new GroovyScriptEngine(
+                new String[] { root.getPath() },
+                this.classloader()
+            );
         } catch (java.io.IOException ex) {
             throw new IllegalArgumentException(ex);
         }
@@ -113,9 +147,9 @@ public final class XhtmlOutputCheck extends AbstractCheck {
         try {
             gse.run(script, binding);
         } catch (groovy.util.ResourceException ex) {
-            throw new InternalCheckException(ex);
+            throw new IllegalArgumentException(ex);
         } catch (groovy.util.ScriptException ex) {
-            throw new InternalCheckException(ex);
+            throw new IllegalArgumentException(ex);
         }
     }
 

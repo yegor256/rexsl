@@ -29,6 +29,14 @@
  */
 package com.rexsl.maven;
 
+import com.rexsl.maven.checks.XhtmlOutputCheck;
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
@@ -92,13 +100,50 @@ public final class CheckMojo extends AbstractMojo {
             this.getLog().info("Execution skipped");
             return;
         }
-        // new XhtmlOutputCheck().validate()
+        final File basedir = this.project.getBasedir();
+        final Reporter reporter = new MavenReporter(this.getLog());
+        final ClassLoader loader = this.classloader();
+        new XhtmlOutputCheck(basedir, reporter, loader).validate();
         this.getLog().info(
             String.format(
                 "All ReXSL checks passed in '%s'",
                 this.project.getName()
             )
         );
+    }
+
+    /**
+     * Create classloader, from all artifacts available for this
+     * plugin in runtime (incl. "test").
+     * @return The classloader
+     * @see #execute()
+     */
+    private ClassLoader classloader() {
+        final List<String> paths = new ArrayList<String>();
+        try {
+            paths.addAll(this.project.getRuntimeClasspathElements());
+        } catch (DependencyResolutionRequiredException ex) {
+            throw new IllegalStateException("Failed to read classpath", ex);
+        }
+        for (Artifact artifact : this.project.getDependencyArtifacts()) {
+            paths.add(artifact.getFile().getPath());
+        }
+        final List<URL> urls = new ArrayList<URL>();
+        for (String path : paths) {
+            try {
+                urls.add(new File(path).toURI().toURL());
+            } catch (java.net.MalformedURLException ex) {
+                throw new IllegalStateException("Failed to build URL", ex);
+            }
+        }
+        final URLClassLoader loader = new URLClassLoader(
+            urls.toArray(new URL[] {}),
+            this.getClass().getClassLoader()
+        );
+        for (URL url : loader.getURLs()) {
+            this.getLog().debug("ReXSL runtime classpath: " + url);
+        }
+        return loader;
     }
 
 }

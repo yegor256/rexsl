@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven;
 
+import java.io.File;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
@@ -59,7 +60,9 @@ public final class CheckMojoTest extends AbstractMojoTestCase {
      */
     private CheckMojo mojo() throws Exception {
         final CheckMojo mojo = new CheckMojo();
-        mojo.setProject(Mockito.mock(MavenProject.class));
+        final MavenProject project = Mockito.mock(MavenProject.class);
+        Mockito.doReturn(new File(".")).when(project).getBasedir();
+        mojo.setProject(project);
         return mojo;
     }
 
