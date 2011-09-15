@@ -64,6 +64,11 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <!-- other details are in parent pom.xml -->
@@ -72,6 +77,20 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <!-- other details are in parent pom.xml -->
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <!-- other details are in parent pom.xml -->
+        </dependency>
+        <dependency>
+            <!--
+            Embedded Java Servlet Container, for tests only.
+            -->
+            <groupId>com.sun.grizzly</groupId>
+            <artifactId>grizzly-servlet-webserver</artifactId>
+            <version>1.9.10</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <!--
@@ -84,5 +103,37 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <grizzly.port>${grizzly.port}</grizzly.port>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version since="27 Jun 2011">1.6</version>
+                <executions>
+                    <execution>
+                        <id>reserve-port</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>reserve-network-port</goal>
+                        </goals>
+                        <configuration>
+                            <portNames>
+                                <portName>grizzly.port</portName>
+                            </portNames>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
