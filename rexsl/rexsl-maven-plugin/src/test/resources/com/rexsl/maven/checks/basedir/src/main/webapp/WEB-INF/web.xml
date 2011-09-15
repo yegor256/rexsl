@@ -1,4 +1,6 @@
-/**
+<?xml version="1.0"?>
+<!--
+ *
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -26,46 +28,29 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-package com.rexsl.maven;
-
-import java.io.File;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.apache.maven.project.MavenProject;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-/**
- * Test maven plugin single MOJO.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- */
-public final class CheckMojoTest extends AbstractMojoTestCase {
+ -->
+<web-app version="3.0"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
-    /**
-     * Test plugin for a single execution.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void testMojoGoal() throws Exception {
-        final CheckMojo mojo = this.mojo();
-        mojo.execute();
-    }
+    <listener>
+        <listener-class>com.rexsl.core.JerseyGuiceListener</listener-class>
+    </listener>
 
-    /**
-     * Create MOJO for tests.
-     * @return The MOJO just created
-     * @throws Exception If something goes wrong inside
-     */
-    private CheckMojo mojo() throws Exception {
-        final CheckMojo mojo = new CheckMojo();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn(new File(".")).when(project).getBasedir();
-        Mockito.doReturn("war").when(project).getPackaging();
-        mojo.setProject(project);
-        mojo.setWebappDirectory(".");
-        return mojo;
-    }
+    <filter>
+        <filter-name>GuiceFilter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
 
-}
+    <filter-mapping>
+        <filter-name>GuiceFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+
+</web-app>

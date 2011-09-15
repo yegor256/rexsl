@@ -69,21 +69,22 @@ public final class InContainerScriptsCheck implements Check {
         }
         env.reporter().report(
             "Starting embedded Grizzly web server in '%s'...",
-            webdir
+            env.webdir()
         );
         final Integer port = this.port();
-        final GrizzlyWebServer gws = this.gws(webdir, port);
-        final URI home = new URI(String.format("http://localhost:%d/", port));
+        final GrizzlyWebServer gws = this.gws(env.webdir(), port);
+        URI home;
+        try {
+            home = new URI(String.format("http://localhost:%d/", port));
+        } catch (java.net.URISyntaxException ex) {
+            throw new IllegalStateException(ex);
+        }
         boolean success = true;
         for (File script :
             FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
             try {
                 env.reporter().report("Testing %s...", script);
-                this.one(
-                    env,
-                    home,
-                    script.getPath().substring(this.GROOVY_DIR.length())
-                );
+                this.one(env, home, script);
                 env.reporter().report("Groovy test passed: %s", script);
             } catch (InternalCheckException ex) {
                 final String msg = ex.getMessage();
@@ -106,25 +107,12 @@ public final class InContainerScriptsCheck implements Check {
      * @throws InternalCheckException If some failure inside
      */
     public final void one(final Environment env, final URI home,
-        final String script) throws InternalCheckException {
-        GroovyScriptEngine gse;
-        try {
-            gse = new GroovyScriptEngine(
-                new String[] { this.GROOVY_DIR },
-                env.classloader()
-            );
-        } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(ex);
-        }
+        final File script) throws InternalCheckException {
         final Binding binding = new Binding();
         binding.setVariable("documentRoot", home);
-        try {
-            gse.run(script, binding);
-        } catch (groovy.util.ResourceException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (groovy.util.ScriptException ex) {
-            throw new IllegalArgumentException(ex);
-        }
+        env.reporter().log("Running %s", script);
+        final GroovyExecutor exec = new GroovyExecutor(env, binding);
+        exec.execute(script);
     }
 
     /**

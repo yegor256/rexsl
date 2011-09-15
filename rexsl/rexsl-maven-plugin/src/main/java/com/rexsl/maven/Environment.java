@@ -34,6 +34,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
@@ -57,13 +58,21 @@ public final class Environment {
     private final Reporter reporter;
 
     /**
+     * The list of properties from Maven plugin.
+     */
+    private final Properties properties;
+
+    /**
      * Ctor.
      * @param prj Maven project
      * @param rep The reporter
+     * @param props Properties
      */
-    public Environment(final MavenProject prj, final Reporter rep) {
+    public Environment(final MavenProject prj, final Reporter rep,
+        final Properties props) {
         this.project = prj;
         this.reporter = rep;
+        this.properties = props;
     }
 
     /**
@@ -72,6 +81,14 @@ public final class Environment {
      */
     public File basedir() {
         return this.project.getBasedir();
+    }
+
+    /**
+     * Get web root.
+     * @return The web dir
+     */
+    public File webdir() {
+        return new File(this.properties.getProperty("webappDirectory"));
     }
 
     /**

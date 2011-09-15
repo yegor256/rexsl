@@ -27,45 +27,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.checks;
 
 import java.io.File;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.apache.maven.project.MavenProject;
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.apache.commons.io.FileUtils;
 
 /**
- * Test maven plugin single MOJO.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class CheckMojoTest extends AbstractMojoTestCase {
+public final class Utils {
 
     /**
-     * Test plugin for a single execution.
-     * @throws Exception If something goes wrong inside
+     * Copy resource to file.
+     * @param basedir The directory to copy to
+     * @param name Name of resource
+     * @throws Exception If something goes wrong
      */
-    @Test
-    public void testMojoGoal() throws Exception {
-        final CheckMojo mojo = this.mojo();
-        mojo.execute();
-    }
-
-    /**
-     * Create MOJO for tests.
-     * @return The MOJO just created
-     * @throws Exception If something goes wrong inside
-     */
-    private CheckMojo mojo() throws Exception {
-        final CheckMojo mojo = new CheckMojo();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn(new File(".")).when(project).getBasedir();
-        Mockito.doReturn("war").when(project).getPackaging();
-        mojo.setProject(project);
-        mojo.setWebappDirectory(".");
-        return mojo;
+    public static void copy(final File basedir, final String name)
+        throws Exception {
+        final File dest = new File(basedir, name);
+        dest.getParentFile().mkdirs();
+        FileUtils.copyInputStreamToFile(
+            Utils.class.getResourceAsStream("basedir/" + name),
+            dest
+        );
     }
 
 }

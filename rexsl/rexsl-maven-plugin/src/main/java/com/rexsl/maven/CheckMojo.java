@@ -29,9 +29,7 @@
  */
 package com.rexsl.maven;
 
-import com.rexsl.maven.checks.FilesStructureCheck;
-import com.rexsl.maven.checks.InContainerScriptsCheck;
-import com.rexsl.maven.checks.XhtmlOutputCheck;
+import java.util.Properties;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
@@ -57,10 +55,17 @@ public final class CheckMojo extends AbstractMojo {
 
     /**
      * Shall we skip execution?
-     * @parameter expression="${qulice.skip}" default-value="false"
+     * @parameter expression="${rexsl.skip}" default-value="false"
      * @required
      */
     private boolean skip;
+
+    /**
+     * Webapp directory.
+     * @parameter expression="${rexsl.webappDirectory}" default-value="${project.build.directory}/${project.build.finalName}"
+     * @required
+     */
+    private String webappDirectory;
 
     /**
      * Public ctor.
@@ -87,24 +92,42 @@ public final class CheckMojo extends AbstractMojo {
     }
 
     /**
+     * Set webapp directory.
+     * @param dir The directory
+     */
+    public void setWebappDirectory(final String dir) {
+        this.webappDirectory = dir;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void execute() throws MojoFailureException {
         if (this.skip) {
-            this.getLog().info("Execution skipped");
+            this.getLog().info("execution skipped because of 'skip' option");
             return;
         }
         if (!this.project.getPackaging().equals("war")) {
             throw new IllegalStateException("project packaging is not WAR");
         }
+        final Properties properties = new Properties();
+        properties.setProperty("webappDirectory", this.webappDirectory);
         final Environment env = new Environment(
             this.project,
-            new MavenReporter(this.getLog())
+            new MavenReporter(this.getLog()),
+            properties
         );
-        new FilesStructureCheck().validate(env);
-        new XhtmlOutputCheck().validate(env);
-        new InContainerScriptsCheck().validate(env);
+        for (Check check : new CheckFactory().all()) {
+            if (!check.validate(env)) {
+                throw new MojoFailureException(
+                    String.format(
+                        "%s check failed",
+                        check.getClass().getName()
+                    )
+                );
+            }
+        }
         this.getLog().info(
             String.format(
                 "All ReXSL checks passed in '%s'",

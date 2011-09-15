@@ -27,45 +27,71 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.checks;
 
+import com.rexsl.maven.Environment;
+import groovy.lang.Binding;
+import groovy.util.GroovyScriptEngine;
 import java.io.File;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.apache.maven.project.MavenProject;
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.apache.commons.io.FilenameUtils;
 
 /**
- * Test maven plugin single MOJO.
+ * Groovy scripts executor.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CheckMojoTest extends AbstractMojoTestCase {
+public final class GroovyExecutor {
 
     /**
-     * Test plugin for a single execution.
-     * @throws Exception If something goes wrong inside
+     * Environment.
      */
-    @Test
-    public void testMojoGoal() throws Exception {
-        final CheckMojo mojo = this.mojo();
-        mojo.execute();
+    private final Environment environment;
+
+    /**
+     * Binding.
+     */
+    private final Binding binding;
+
+    /**
+     * Public ctor.
+     * @param env The environment
+     * @param bnd The binding
+     */
+    public GroovyExecutor(final Environment env, final Binding bnd) {
+        this.environment = env;
+        this.binding = bnd;
     }
 
     /**
-     * Create MOJO for tests.
-     * @return The MOJO just created
-     * @throws Exception If something goes wrong inside
+     * Run one script.
+     * @param file The file
+     * @throws InternalCheckException If some failure inside
      */
-    private CheckMojo mojo() throws Exception {
-        final CheckMojo mojo = new CheckMojo();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn(new File(".")).when(project).getBasedir();
-        Mockito.doReturn("war").when(project).getPackaging();
-        mojo.setProject(project);
-        mojo.setWebappDirectory(".");
-        return mojo;
+    public final void execute(final File file) throws InternalCheckException {
+        final String basename = FilenameUtils.getBaseName(file.getPath());
+        if (!basename.matches("[a-zA-Z]\\w*")) {
+            throw new InternalCheckException(
+                "Illegal script name: %s (only letters allowed)",
+                basename
+            );
+        }
+        GroovyScriptEngine gse;
+        try {
+            gse = new GroovyScriptEngine(
+                new String[] { file.getParent() },
+                this.environment.classloader()
+            );
+        } catch (java.io.IOException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        try {
+            gse.run(file.getName(), this.binding);
+        } catch (groovy.util.ResourceException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (groovy.util.ScriptException ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
 }

@@ -29,43 +29,29 @@
  */
 package com.rexsl.maven;
 
-import java.io.File;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.apache.maven.project.MavenProject;
-import org.junit.Test;
-import org.mockito.Mockito;
+import com.rexsl.maven.checks.FilesStructureCheck;
+import com.rexsl.maven.checks.InContainerScriptsCheck;
+import com.rexsl.maven.checks.XhtmlOutputCheck;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Test maven plugin single MOJO.
+ * Factory of checks.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CheckMojoTest extends AbstractMojoTestCase {
+public final class CheckFactory {
 
     /**
-     * Test plugin for a single execution.
-     * @throws Exception If something goes wrong inside
+     * Get full collection of checks.
      */
-    @Test
-    public void testMojoGoal() throws Exception {
-        final CheckMojo mojo = this.mojo();
-        mojo.execute();
-    }
-
-    /**
-     * Create MOJO for tests.
-     * @return The MOJO just created
-     * @throws Exception If something goes wrong inside
-     */
-    private CheckMojo mojo() throws Exception {
-        final CheckMojo mojo = new CheckMojo();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn(new File(".")).when(project).getBasedir();
-        Mockito.doReturn("war").when(project).getPackaging();
-        mojo.setProject(project);
-        mojo.setWebappDirectory(".");
-        return mojo;
+    public List<Check> all() {
+        final List<Check> checks = new ArrayList<Check>();
+        checks.add(new FilesStructureCheck());
+        checks.add(new XhtmlOutputCheck());
+        checks.add(new InContainerScriptsCheck());
+        return checks;
     }
 
 }

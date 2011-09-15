@@ -28,8 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import static com.rexsl.test.TestClient
-import static com.rexsl.test.XmlConverter.the
+import com.rexsl.test.TestClient
+import static com.rexsl.test.XhtmlConverter.the
 import static org.junit.Assert.assertThat
 import static org.junit.matchers.JUnitMatchers.*
 import static org.xmlmatchers.XmlMatchers.hasXPath

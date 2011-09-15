@@ -45,7 +45,7 @@ import static org.hamcrest.Matchers.*;
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class XhtmlOutputCheckTest {
+public final class InContainerScriptsCheckTest {
 
     /**
      * @checkstyle VisibilityModifier (3 lines)
@@ -62,36 +62,19 @@ public final class XhtmlOutputCheckTest {
         final File basedir = this.temp.newFolder("basedir");
         Utils.copy(basedir, "src/main/webapp/xsl/layout.xsl");
         Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
-        Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
-        Utils.copy(basedir, "src/test/rexsl/xhtml/index.groovy");
+        Utils.copy(basedir, "src/main/webapp/WEB-INF/web.xml");
+        Utils.copy(basedir, "src/test/rexsl/scripts/home.groovy");
         final DummyReporter reporter = new DummyReporter();
         final MavenProject project = Mockito.mock(MavenProject.class);
         Mockito.doReturn(basedir).when(project).getBasedir();
         final Properties props = new Properties();
+        props.setProperty("webappDirectory",
+            new File(basedir, "src/main/webapp").getPath());
         final Environment env = new Environment(project, reporter, props);
+        final Check check = new InContainerScriptsCheck();
         assertThat(
-            new XhtmlOutputCheck().validate(env),
+            check.validate(env),
             describedAs(reporter.summary(), is(true))
-        );
-    }
-
-    /**
-     * Validate incorrect XML+XSL transformation (layout file is missed).
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void textFalsePositiveValidation() throws Exception {
-        final File basedir = this.temp.newFolder("basedir");
-        Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
-        Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
-        final DummyReporter reporter = new DummyReporter();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn(basedir).when(project).getBasedir();
-        final Properties props = new Properties();
-        final Environment env = new Environment(project, reporter, props);
-        assertThat(
-            new XhtmlOutputCheck().validate(env),
-            describedAs(reporter.summary(), is(false))
         );
     }
 

@@ -33,7 +33,6 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Reporter;
 import groovy.lang.Binding;
-import groovy.util.GroovyScriptEngine;
 import java.io.File;
 import java.io.StringWriter;
 import javax.xml.transform.Source;
@@ -108,12 +107,6 @@ public final class XhtmlOutputCheck implements Check {
             );
         }
         final String basename = FilenameUtils.getBaseName(file.getPath());
-        if (!basename.matches("[a-zA-Z]\\w*")) {
-            throw new InternalCheckException(
-                "Illegal script name: %s (only letters allowed)",
-                basename
-            );
-        }
         final String script = String.format("%s.groovy", basename);
         final File groovy = new File(root, script);
         if (!groovy.exists()) {
@@ -124,24 +117,10 @@ public final class XhtmlOutputCheck implements Check {
             );
         }
         final String xhtml = this.xhtml(env, file);
-        GroovyScriptEngine gse;
-        try {
-            gse = new GroovyScriptEngine(
-                new String[] { root.getPath() },
-                env.classloader()
-            );
-        } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(ex);
-        }
         final Binding binding = new Binding();
         binding.setVariable("document", xhtml);
-        try {
-            gse.run(script, binding);
-        } catch (groovy.util.ResourceException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (groovy.util.ScriptException ex) {
-            throw new IllegalArgumentException(ex);
-        }
+        final GroovyExecutor exec = new GroovyExecutor(env, binding);
+        exec.execute(groovy);
     }
 
     /**
