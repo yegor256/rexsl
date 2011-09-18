@@ -87,6 +87,8 @@ public final class GroovyExecutor {
         }
         try {
             gse.run(file.getName(), this.binding);
+        } catch (AssertionError ex) {
+            throw new InternalCheckException(ex);
         } catch (groovy.util.ResourceException ex) {
             throw new IllegalArgumentException(ex);
         } catch (groovy.util.ScriptException ex) {

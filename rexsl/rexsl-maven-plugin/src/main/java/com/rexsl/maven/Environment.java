@@ -190,14 +190,14 @@ public final class Environment {
                         root.getType(),
                         root.getVersion()
                     ),
-                    JavaScopes.COMPILE
+                    JavaScopes.RUNTIME
                 )
             );
             for (RemoteRepository repo : this.project.getRemoteProjectRepositories()) {
                 crq.addRepository(repo);
             }
             final DependencyFilter filter =
-                DependencyFilterUtils.classpathFilter(JavaScopes.COMPILE);
+                DependencyFilterUtils.classpathFilter(JavaScopes.RUNTIME);
             final MavenRepositorySystemSession session =
                 new MavenRepositorySystemSession();
             final LocalRepository local = new LocalRepository(this.localRepo);

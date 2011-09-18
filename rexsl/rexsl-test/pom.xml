@@ -69,6 +69,34 @@
             <version>4.1.2</version>
         </dependency>
         <dependency>
+            <!--
+            Forward all calls to Commons Logging to SLF4j
+            @see http://www.slf4j.org/legacy.html
+            -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version since="19 Sep 2011">1.6.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!--
+            Forward all calls to SLF4J to LOG4J.
+            -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version since="19 Sep 2011">1.6.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!--
+            Use LOG4J logging facility for all loggings.
+            -->
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version since="19 Sep 2011">1.2.16</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <!-- other details are in parent pom.xml -->

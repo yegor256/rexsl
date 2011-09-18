@@ -79,17 +79,17 @@ public final class InContainerScriptsCheck implements Check {
         } catch (java.net.URISyntaxException ex) {
             throw new IllegalStateException(ex);
         }
+        env.reporter().report("Web front available at %s", home);
         boolean success = true;
         for (File script :
             FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
             try {
-                env.reporter().report("Testing %s...", script);
+                env.reporter().report("Testing '%s'...", script);
                 this.one(env, home, script);
-                env.reporter().report("Groovy test passed: %s", script);
             } catch (InternalCheckException ex) {
                 final String msg = ex.getMessage();
                 if (!msg.isEmpty()) {
-                    env.reporter().report(msg);
+                    env.reporter().report("Test failed: %s", msg);
                 }
                 success = false;
             }
