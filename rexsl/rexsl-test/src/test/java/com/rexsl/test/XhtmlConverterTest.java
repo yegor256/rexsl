@@ -55,4 +55,26 @@ public final class XhtmlConverterTest {
         );
     }
 
+    /**
+     * Let's use DOCTYPE, which may cause troubles.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testTextXhtmlWithDoctype() throws Exception {
+        final String text =
+            "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
+            + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+            + "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
+            + "<body><p>test</p></body>"
+            + "</html>";
+        Assert.assertThat(
+            XhtmlConverter.the(text),
+            XmlMatchers.hasXPath(
+                "/x:html/x:body/x:p[.='test']",
+                new org.xmlmatchers.namespace.SimpleNamespaceContext()
+                .withBinding("x", "http://www.w3.org/1999/xhtml")
+            )
+        );
+    }
+
 }

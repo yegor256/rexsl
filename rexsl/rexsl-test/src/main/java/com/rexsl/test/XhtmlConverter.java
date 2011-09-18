@@ -29,9 +29,12 @@
  */
 package com.rexsl.test;
 
+import java.io.ByteArrayInputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.io.IOUtils;
+import javax.xml.transform.dom.DOMSource;
+import org.w3c.dom.Document;
 
 /**
  * Convert a string to XML source.
@@ -55,7 +58,52 @@ public final class XhtmlConverter {
      * @throws Exception If anything goes wrong
      */
     public static Source the(final String text) throws Exception {
-        return new StreamSource(IOUtils.toInputStream(text));
+        return new XhtmlConverter.StringSource(text);
+    }
+
+    /**
+     * Private class for DOM to String converting.
+     */
+    private static final class StringSource extends DOMSource {
+        /**
+         * The XML itself.
+         */
+        private final String xml;
+        /**
+         * Public ctor.
+         * @param xml The content of the document
+         */
+        public StringSource(final String text) {
+            this.xml = text;
+            final DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+            try {
+                // @checkstyle LineLength (1 line)
+                factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (javax.xml.parsers.ParserConfigurationException ex) {
+                throw new IllegalStateException(ex);
+            }
+            factory.setNamespaceAware(true);
+            DocumentBuilder builder;
+            try {
+                builder = factory.newDocumentBuilder();
+            } catch (javax.xml.parsers.ParserConfigurationException ex) {
+                throw new IllegalStateException(ex);
+            }
+            Document dom;
+            try {
+                dom = builder.parse(new ByteArrayInputStream(text.getBytes()));
+            } catch (org.xml.sax.SAXException ex) {
+                throw new IllegalStateException(ex);
+            } catch (java.io.IOException ex) {
+                throw new IllegalStateException(ex);
+            }
+            this.setNode(dom);
+        }
+        @Override
+        public String toString() {
+            return this.xml;
+        }
     }
 
 }
