@@ -30,9 +30,11 @@
 package com.rexsl.maven;
 
 import java.util.Properties;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.sonatype.aether.RepositorySystemSession;
 
 /**
  * Test entire project against RESTful principles.
@@ -52,6 +54,13 @@ public final class CheckMojo extends AbstractMojo {
      * @readonly
      */
     private MavenProject project;
+
+    /**
+     * The current repository/network configuration of Maven.
+     * @parameter default-value="${repositorySystemSession}"
+     * @readonly
+     */
+    private RepositorySystemSession session;
 
     /**
      * Shall we skip execution?
@@ -100,6 +109,14 @@ public final class CheckMojo extends AbstractMojo {
     }
 
     /**
+     * Set repository system session.
+     * @param sess The session
+     */
+    public void setSession(final RepositorySystemSession sess) {
+        this.session = sess;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -117,6 +134,12 @@ public final class CheckMojo extends AbstractMojo {
             this.project,
             new MavenReporter(this.getLog()),
             properties
+        );
+        env.setLocalRepository(
+            this.session.getLocalRepository()
+                .getBasedir()
+                .toURI()
+                .toString()
         );
         for (Check check : new CheckFactory().all()) {
             if (!check.validate(env)) {

@@ -32,6 +32,8 @@ package com.rexsl.maven;
 import java.io.File;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
+import org.sonatype.aether.RepositorySystemSession;
+import org.sonatype.aether.repository.LocalRepository;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -63,8 +65,14 @@ public final class CheckMojoTest extends AbstractMojoTestCase {
         final MavenProject project = Mockito.mock(MavenProject.class);
         Mockito.doReturn(new File(".")).when(project).getBasedir();
         Mockito.doReturn("war").when(project).getPackaging();
+        Mockito.doReturn("war").when(project).getPackaging();
         mojo.setProject(project);
         mojo.setWebappDirectory(".");
+        final RepositorySystemSession session =
+            Mockito.mock(RepositorySystemSession.class);
+        final LocalRepository repo = new LocalRepository(new File("."));
+        Mockito.doReturn(repo).when(session).getLocalRepository();
+        mojo.setSession(session);
         return mojo;
     }
 
