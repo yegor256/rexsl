@@ -62,18 +62,22 @@ public final class XhtmlConverterTest {
     @Test
     public void testTextXhtmlWithDoctype() throws Exception {
         final String text =
-            "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
+            "<?xml version='1.0'?>"
+            + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
             + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
-            + "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
+            + "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">"
             + "<body><p>test</p></body>"
             + "</html>";
+        final javax.xml.namespace.NamespaceContext ctx =
+            new org.xmlmatchers.namespace.SimpleNamespaceContext()
+                .withBinding("x", "http://www.w3.org/1999/xhtml");
         Assert.assertThat(
             XhtmlConverter.the(text),
-            XmlMatchers.hasXPath(
-                "/x:html/x:body/x:p[.='test']",
-                new org.xmlmatchers.namespace.SimpleNamespaceContext()
-                .withBinding("x", "http://www.w3.org/1999/xhtml")
-            )
+            XmlMatchers.hasXPath("/x:html/x:body/x:p[.='test']", ctx)
+        );
+        Assert.assertThat(
+            XhtmlConverter.the(text),
+            XmlMatchers.hasXPath("//x:p[contains(., 't')]", ctx)
         );
     }
 

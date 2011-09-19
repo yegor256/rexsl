@@ -75,6 +75,21 @@ public final class XhtmlConverter {
          */
         public StringSource(final String text) {
             this.xml = text;
+            this.setNode(this.toDocument(text));
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return this.xml;
+        }
+        /**
+         * Convert text to DOM Document.
+         * @param xml The content of the document
+         * @return The DOM document
+         */
+        private Document toDocument(final String text) {
             final DocumentBuilderFactory factory =
                 DocumentBuilderFactory.newInstance();
             try {
@@ -98,11 +113,7 @@ public final class XhtmlConverter {
             } catch (java.io.IOException ex) {
                 throw new IllegalStateException(ex);
             }
-            this.setNode(dom);
-        }
-        @Override
-        public String toString() {
-            return this.xml;
+            return dom;
         }
     }
 

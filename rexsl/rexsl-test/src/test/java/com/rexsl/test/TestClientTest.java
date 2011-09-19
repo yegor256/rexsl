@@ -38,6 +38,7 @@ import java.net.URI;
 import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -61,14 +62,26 @@ public final class TestClientTest {
     private URI home;
 
     /**
+     * Port to work with.
+     */
+    private static Integer port;
+
+    /**
+     * Start Servlet container.
+     * @throws Exception If something goes wrong inside
+     */
+    @BeforeClass
+    public static void reservePort() throws Exception {
+        TestClientTest.port = new java.net.ServerSocket(0).getLocalPort();
+    }
+
+    /**
      * Start Servlet container.
      * @throws Exception If something goes wrong inside
      */
     @Before
     public void startContainer() throws Exception {
-        final Integer port =
-            Integer.valueOf(System.getProperty("grizzly.port"));
-        this.home = new URI(String.format("http://localhost:%d/", port));
+        this.home = new URI(String.format("http://localhost:%d/", this.port));
         this.gws = new GrizzlyWebServer(port);
         this.gws.addGrizzlyAdapter(
             new GrizzlyAdapter() {
