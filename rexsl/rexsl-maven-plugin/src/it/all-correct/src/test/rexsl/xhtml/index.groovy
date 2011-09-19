@@ -33,5 +33,12 @@ import static org.junit.Assert.assertThat
 import static org.junit.matchers.JUnitMatchers.containsString
 import static org.xmlmatchers.XmlMatchers.hasXPath
 
-assertThat(document, containsString('say hello'))
-assertThat(the(document), hasXPath("//div[contains(.,'say hello')]"))
+assertThat(document, containsString('hello'))
+assertThat(
+    the(document),
+    hasXPath(
+        "//x:div",
+        new org.xmlmatchers.namespace.SimpleNamespaceContext()
+        .withBinding("x", "http://www.w3.org/1999/xhtml")
+    )
+)

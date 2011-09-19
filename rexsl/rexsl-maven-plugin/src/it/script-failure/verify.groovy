@@ -31,4 +31,6 @@
  */
 
 def log = new File(basedir, "build.log")
-assert log.text.contains("failure")
+assert log.text.contains("InContainerScriptsCheck check failed")
+assert log.text.contains("Expected: <200>")
+assert log.text.contains("Embedded Grizzly web server stopped")

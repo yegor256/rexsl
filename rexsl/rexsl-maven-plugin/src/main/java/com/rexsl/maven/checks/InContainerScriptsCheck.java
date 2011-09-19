@@ -37,6 +37,7 @@ import com.sun.grizzly.http.servlet.ServletAdapter;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import java.io.File;
+import java.net.ServerSocket;
 import java.net.URI;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
@@ -140,7 +141,15 @@ public final class InContainerScriptsCheck implements Check {
      * @return The port number
      */
     private Integer port() {
-        return 9090;
+        Integer port;
+        try {
+            final ServerSocket socket = new ServerSocket(0);
+            port = socket.getLocalPort();
+            socket.close();
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException("Failed to reserve port", ex);
+        }
+        return port;
     }
 
 }
