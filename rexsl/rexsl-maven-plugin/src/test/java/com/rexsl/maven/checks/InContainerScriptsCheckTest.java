@@ -65,12 +65,13 @@ public final class InContainerScriptsCheckTest {
         Utils.copy(basedir, "src/main/webapp/WEB-INF/web.xml");
         Utils.copy(basedir, "src/test/rexsl/scripts/home.groovy");
         final DummyReporter reporter = new DummyReporter();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn(basedir).when(project).getBasedir();
-        final Properties props = new Properties();
-        props.setProperty("webappDirectory",
-            new File(basedir, "src/main/webapp").getPath());
-        final Environment env = new Environment(project, reporter, props);
+        final Environment env = Mockito.mock(Environment.class);
+        Mockito.doReturn(basedir).when(env).basedir();
+        Mockito.doReturn(new File(basedir, "src/main/webapp"))
+            .when(env).webdir();
+        Mockito.doReturn(reporter).when(env).reporter();
+        Mockito.doReturn(this.getClass().getClassLoader())
+            .when(env).classloader();
         final Check check = new InContainerScriptsCheck();
         assertThat(
             check.validate(env),

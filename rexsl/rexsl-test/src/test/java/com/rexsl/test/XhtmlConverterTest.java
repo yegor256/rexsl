@@ -68,17 +68,22 @@ public final class XhtmlConverterTest {
             + "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">"
             + "<body><p>test</p></body>"
             + "</html>";
-        final javax.xml.namespace.NamespaceContext ctx =
-            new org.xmlmatchers.namespace.SimpleNamespaceContext()
-                .withBinding("x", "http://www.w3.org/1999/xhtml");
-        Assert.assertThat(
-            XhtmlConverter.the(text),
-            XmlMatchers.hasXPath("/x:html/x:body/x:p[.='test']", ctx)
-        );
-        Assert.assertThat(
-            XhtmlConverter.the(text),
-            XmlMatchers.hasXPath("//x:p[contains(., 't')]", ctx)
-        );
+        final String[] paths = new String[] {
+            "/*",
+            "//*",
+            "/x:html/x:body/x:p[.='test']",
+            "//x:p[contains(., 't')]",
+        };
+        for (String path : paths) {
+            Assert.assertThat(
+                XhtmlConverter.the(text),
+                XmlMatchers.hasXPath(
+                    path,
+                    new org.xmlmatchers.namespace.SimpleNamespaceContext()
+                    .withBinding("x", "http://www.w3.org/1999/xhtml")
+                )
+            );
+        }
     }
 
 }

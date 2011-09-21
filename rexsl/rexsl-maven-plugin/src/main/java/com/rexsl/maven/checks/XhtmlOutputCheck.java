@@ -80,12 +80,8 @@ public final class XhtmlOutputCheck implements Check {
             try {
                 env.reporter().report("Testing %s...", xml);
                 this.one(env, xml);
-                env.reporter().report("XML+XSL tested: %s", xml);
             } catch (InternalCheckException ex) {
-                final String msg = ex.getMessage();
-                if (!msg.isEmpty()) {
-                    env.reporter().report(msg);
-                }
+                env.reporter().report("Failed: %s", ex.getMessage());
                 success = false;
             }
         }

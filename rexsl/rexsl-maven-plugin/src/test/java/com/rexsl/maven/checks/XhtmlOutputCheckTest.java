@@ -65,10 +65,11 @@ public final class XhtmlOutputCheckTest {
         Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
         Utils.copy(basedir, "src/test/rexsl/xhtml/index.groovy");
         final DummyReporter reporter = new DummyReporter();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn(basedir).when(project).getBasedir();
-        final Properties props = new Properties();
-        final Environment env = new Environment(project, reporter, props);
+        final Environment env = Mockito.mock(Environment.class);
+        Mockito.doReturn(basedir).when(env).basedir();
+        Mockito.doReturn(reporter).when(env).reporter();
+        Mockito.doReturn(this.getClass().getClassLoader())
+            .when(env).classloader();
         assertThat(
             new XhtmlOutputCheck().validate(env),
             describedAs(reporter.summary(), is(true))
@@ -85,10 +86,11 @@ public final class XhtmlOutputCheckTest {
         Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
         final DummyReporter reporter = new DummyReporter();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn(basedir).when(project).getBasedir();
-        final Properties props = new Properties();
-        final Environment env = new Environment(project, reporter, props);
+        final Environment env = Mockito.mock(Environment.class);
+        Mockito.doReturn(basedir).when(env).basedir();
+        Mockito.doReturn(reporter).when(env).reporter();
+        Mockito.doReturn(this.getClass().getClassLoader())
+            .when(env).classloader();
         assertThat(
             new XhtmlOutputCheck().validate(env),
             describedAs(reporter.summary(), is(false))

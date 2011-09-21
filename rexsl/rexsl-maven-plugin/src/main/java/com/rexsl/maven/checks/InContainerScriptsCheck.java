@@ -88,10 +88,7 @@ public final class InContainerScriptsCheck implements Check {
                 env.reporter().report("Testing '%s'...", script);
                 this.one(env, home, script);
             } catch (InternalCheckException ex) {
-                final String msg = ex.getMessage();
-                if (!msg.isEmpty()) {
-                    env.reporter().report("Test failed: %s", msg);
-                }
+                env.reporter().report("Test failed: %s", ex.getMessage());
                 success = false;
             }
         }

@@ -34,6 +34,7 @@ import com.sun.grizzly.http.servlet.ServletAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
+import java.net.ServerSocket;
 import java.net.URI;
 import org.apache.http.HttpStatus;
 import org.junit.After;
@@ -72,7 +73,9 @@ public final class TestClientTest {
      */
     @BeforeClass
     public static void reservePort() throws Exception {
-        TestClientTest.port = new java.net.ServerSocket(0).getLocalPort();
+        final ServerSocket socket = new ServerSocket(0);
+        TestClientTest.port = socket.getLocalPort();
+        socket.close();
     }
 
     /**

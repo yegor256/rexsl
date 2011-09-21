@@ -109,7 +109,10 @@ public final class XhtmlConverter {
             try {
                 dom = builder.parse(new ByteArrayInputStream(text.getBytes()));
             } catch (org.xml.sax.SAXException ex) {
-                throw new IllegalStateException(ex);
+                throw new IllegalStateException(
+                    String.format("Failed to parse XML: %s", text),
+                    ex
+                );
             } catch (java.io.IOException ex) {
                 throw new IllegalStateException(ex);
             }

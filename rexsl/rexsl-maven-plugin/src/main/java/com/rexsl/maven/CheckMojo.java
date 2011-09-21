@@ -130,16 +130,13 @@ public final class CheckMojo extends AbstractMojo {
         }
         final Properties properties = new Properties();
         properties.setProperty("webappDirectory", this.webappDirectory);
-        final Environment env = new Environment(
+        final Environment env = new MavenEnvironment(
             this.project,
             new MavenReporter(this.getLog()),
             properties
         );
         env.setLocalRepository(
-            this.session.getLocalRepository()
-                .getBasedir()
-                .toURI()
-                .toString()
+            this.session.getLocalRepository().getBasedir().getPath()
         );
         for (Check check : new CheckFactory().all()) {
             if (!check.validate(env)) {

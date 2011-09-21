@@ -33,6 +33,8 @@ import com.rexsl.maven.Environment;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -83,17 +85,29 @@ public final class GroovyExecutor {
                 this.environment.classloader()
             );
         } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalArgumentException(this.log(ex));
         }
         try {
             gse.run(file.getName(), this.binding);
         } catch (AssertionError ex) {
-            throw new InternalCheckException(ex);
+            throw new InternalCheckException(this.log(ex));
         } catch (groovy.util.ResourceException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalArgumentException(this.log(ex));
         } catch (groovy.util.ScriptException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalArgumentException(this.log(ex));
         }
+    }
+
+    /**
+     * Protocol one exception just happened, and return it.
+     * @param exception The exception to protocol
+     * @return The same exception object
+     */
+    private Throwable log(final Throwable exception) {
+        final StringWriter writer = new StringWriter();
+        exception.printStackTrace(new PrintWriter(writer));
+        this.environment.reporter().report(writer.toString());
+        return exception;
     }
 
 }
