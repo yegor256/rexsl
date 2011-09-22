@@ -28,32 +28,17 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-System.out.println("test")
-
-/*import static com.rexsl.test.XhtmlConverter.the
+import static com.rexsl.test.XhtmlConverter.the
 import static org.junit.Assert.assertThat
 import static org.junit.matchers.JUnitMatchers.containsString
 import static org.xmlmatchers.XmlMatchers.hasXPath
 
-
-def xpath = javax.xml.xpath.XPathFactory.newInstance().newXPath()
-def compiled = xpath.compile("/html")
-def transformer = javax.xml.transform.TransformerFactory.newInstance().newTransformer()
-def dom = new javax.xml.transform.dom.DOMResult();
-transformer.transform(the("<?xml version=\"1.0\" encoding=\"UTF-8\"?><html></html>"), dom)
-compiled.evaluate(dom.getNode(), XPathConstants.NODE);
-*/
-/*assertThat(document, containsString('hello'))*/
-/*assertThat(
-    the("<?xml version=\"1.0\" encoding=\"UTF-8\"?><html></html>"),
-    hasXPath("/html")
-)
+assertThat(document, containsString('hello'))
 assertThat(
     the(document),
     hasXPath(
-        "//html",
+        "//x:div[contains(.,'hello')]",
         new org.xmlmatchers.namespace.SimpleNamespaceContext()
         .withBinding("x", "http://www.w3.org/1999/xhtml")
     )
 )
-*/

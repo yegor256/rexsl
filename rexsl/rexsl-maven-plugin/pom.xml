@@ -179,11 +179,35 @@
         </dependency>
         <dependency>
             <!--
-            XSLT 2.0 transformer.
+            XSLT 2.0 transformer. In order to replace a default implementation
+            provided by JDK with Saxon we are using text files inside
+            "src/main/resources/META-INF/services" directory.
             -->
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon</artifactId>
             <version since="3 Sep 2011">8.7</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!--
+            DOM in Saxon. This dependency is required for XML-to-XHTML
+            transformation, performed by Saxon. XmlMatchers, for example,
+            user DOMResult as a target of transformation and main Saxon
+            artifact doesn't know how to work with this target. Saxon-dom knows.
+            If you remove this dependency all XmlMatchers
+            -->
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon-dom</artifactId>
+            <version since="3 Sep 2011">8.7</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!--
+            This artifact should go BEFORE Saxon.
+            -->
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.3.04</version>
         </dependency>
         <dependency>
             <!--

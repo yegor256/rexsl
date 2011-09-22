@@ -28,7 +28,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import static com.rexsl.test.TestClient
+import com.rexsl.test.TestClient
 import static com.rexsl.test.XhtmlConverter.the
 import static org.junit.Assert.assertThat
 import static org.junit.matchers.JUnitMatchers.*

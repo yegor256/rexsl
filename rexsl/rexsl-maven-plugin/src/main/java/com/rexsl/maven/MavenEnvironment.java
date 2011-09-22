@@ -160,10 +160,10 @@ public final class MavenEnvironment implements Environment {
         }
         final URLClassLoader loader = new URLClassLoader(
             urls.toArray(new URL[] {}),
-            null //this.getClass().getClassLoader()
+            this.getClass().getClassLoader()
         );
         for (URL url : loader.getURLs()) {
-            this.reporter.report("ReXSL classpath: %s", url);
+            this.reporter.log("ReXSL classpath: %s", url);
         }
         return loader;
     }
@@ -176,7 +176,7 @@ public final class MavenEnvironment implements Environment {
     private List<Artifact> artifacts() {
         final List<Artifact> artifacts = new ArrayList<Artifact>();
         for (Artifact root : this.roots()) {
-            this.reporter.report(
+            this.reporter.log(
                 "%s:%s:%s",
                 root.getGroupId(),
                 root.getArtifactId(),
@@ -192,7 +192,7 @@ public final class MavenEnvironment implements Environment {
                 }
                 if (!found) {
                     artifacts.add(dep);
-                    this.reporter.report(
+                    this.reporter.log(
                         "\t%s:%s:%s",
                         dep.getGroupId(),
                         dep.getArtifactId(),
