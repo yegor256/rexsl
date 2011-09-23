@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,34 +26,33 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.maven.tools;
+
+import java.net.ServerSocket;
+
+/**
+ * Reservers a new TPC port.
  *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<web-app version="3.0"
-    xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+ */
+public final class PortReserver {
 
-    <listener listener-class="com.rexsl.core.CoreListener">
-        <init-param title="Hello, World"/>
-    </listener>
+    /**
+     * Find and return the first available port.
+     * @return The port number
+     */
+    public Integer port() {
+        Integer port;
+        try {
+            final ServerSocket socket = new ServerSocket(0);
+            port = socket.getLocalPort();
+            socket.close();
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException("Failed to reserve port", ex);
+        }
+        return port;
+    }
 
-    <filter>
-        <filter-name>GuiceFilter</filter-name>
-        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>GuiceFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-
-    <mime-mapping>
-        <extension>xsl</extension>
-        <mime-type>text/xsl</mime-type>
-    </mime-mapping>
-
-</web-app>
+}

@@ -32,12 +32,12 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Reporter;
+import com.rexsl.maven.tools.Grizzly;
+import com.rexsl.maven.tools.PortReserver;
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
-import com.sun.grizzly.http.servlet.ServletAdapter;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import java.io.File;
-import java.net.ServerSocket;
 import java.net.URI;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
@@ -72,8 +72,8 @@ public final class InContainerScriptsCheck implements Check {
             "Starting embedded Grizzly web server in '%s'...",
             env.webdir()
         );
-        final Integer port = this.port();
-        final GrizzlyWebServer gws = this.gws(env.webdir(), port);
+        final Integer port = new PortReserver().port();
+        final GrizzlyWebServer gws = new Grizzly().gws(env.webdir(), port);
         URI home;
         try {
             home = new URI(String.format("http://localhost:%d/", port));
@@ -111,42 +111,6 @@ public final class InContainerScriptsCheck implements Check {
         env.reporter().log("Running %s", script);
         final GroovyExecutor exec = new GroovyExecutor(env, binding);
         exec.execute(script);
-    }
-
-    /**
-     * Create and start Grizzly container.
-     * @param webapp Location of WEB home
-     * @param port The port to mount to
-     * @return The container
-     */
-    private GrizzlyWebServer gws(final File webdir, final Integer port) {
-        final String context = "/";
-        final GrizzlyWebServer gws = new GrizzlyWebServer(
-            port,
-            webdir.getPath()
-        );
-        try {
-            gws.start();
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        }
-        return gws;
-    }
-
-    /**
-     * Find and return the first available port.
-     * @return The port number
-     */
-    private Integer port() {
-        Integer port;
-        try {
-            final ServerSocket socket = new ServerSocket(0);
-            port = socket.getLocalPort();
-            socket.close();
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException("Failed to reserve port", ex);
-        }
-        return port;
     }
 
 }

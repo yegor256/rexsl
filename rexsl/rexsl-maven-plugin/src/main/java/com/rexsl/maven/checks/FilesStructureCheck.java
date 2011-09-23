@@ -60,6 +60,7 @@ public final class FilesStructureCheck implements Check {
     public final boolean validate(final Environment env) {
         final String[] names = {
             "src/main/webapp/",
+            "src/main/webapp/robots.txt",
             "src/main/webapp/xsl/",
             "src/main/webapp/WEB-INF/web.xml",
             "src/test/rexsl/xml/",
