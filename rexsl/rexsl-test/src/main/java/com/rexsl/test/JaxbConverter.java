@@ -33,8 +33,6 @@ import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.io.IOUtils;
 
 /**
  * Convert an object to XML.
@@ -64,7 +62,7 @@ public final class JaxbConverter {
         final StringWriter writer = new StringWriter();
         mrsh.marshal(object, writer);
         final String xml = writer.toString();
-        return new StreamSource(IOUtils.toInputStream(xml));
+        return new StringSource(xml);
     }
 
 }

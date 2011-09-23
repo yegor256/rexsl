@@ -35,6 +35,9 @@ import com.sun.grizzly.http.webxml.schema.WebApp;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Start/stop grizzly container.
@@ -84,10 +87,7 @@ public final class Grizzly {
                 // path
                 new File(webdir, "WEB-INF/web.xml").getPath(),
                 // class loader
-                new URLClassLoader(
-                    new URL[] {},
-                    Grizzly.class.getClassLoader()
-                ),
+                Grizzly.classloader(webdir),
                 // parent web application
                 new WebApp()
             );
@@ -106,6 +106,38 @@ public final class Grizzly {
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex);
         }
+    }
+
+    /**
+     * Create classloader for web application.
+     * @param webapp Location of WEB home
+     * @return The classloader
+     */
+    private static URLClassLoader classloader(final File webdir) {
+        final List<File> paths = new ArrayList<File>();
+        paths.add(new File(webdir, "WEB-INF/classes"));
+        final File lib = new File(webdir, "WEB-INF/lib");
+        if (lib.exists()) {
+            for (File jar : FileUtils.listFiles(lib, new String[] {"jar"}, true)) {
+                paths.add(jar);
+            }
+        }
+        final List<URL> urls = new ArrayList<URL>();
+        for (File path : paths) {
+            if (!path.exists()) {
+                continue;
+            }
+            try {
+                urls.add(path.toURI().toURL());
+            } catch (java.net.MalformedURLException ex) {
+                throw new IllegalStateException("Failed to build URL", ex);
+            }
+        }
+        final URLClassLoader loader = new URLClassLoader(
+            urls.toArray(new URL[] {}),
+            Grizzly.class.getClassLoader()
+        );
+        return loader;
     }
 
 }

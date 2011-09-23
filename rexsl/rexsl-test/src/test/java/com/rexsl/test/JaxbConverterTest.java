@@ -37,6 +37,7 @@ import javax.xml.transform.Source;
 import org.junit.Test;
 import org.junit.Assert;
 import org.xmlmatchers.XmlMatchers;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Test JAXB converter.
@@ -56,6 +57,19 @@ public final class JaxbConverterTest {
         Assert.assertThat(
             JaxbConverter.the(object),
             XmlMatchers.hasXPath("/employee/name[.='John Doe']")
+        );
+    }
+
+    /**
+     * Testing that this converter returns properly formatted string.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testToStringConversion() throws Exception {
+        final Object object = new Employee();
+        Assert.assertThat(
+            JaxbConverter.the(object).toString(),
+            containsString("John Doe")
         );
     }
 
