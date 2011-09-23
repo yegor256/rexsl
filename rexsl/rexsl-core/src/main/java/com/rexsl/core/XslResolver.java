@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Produces;
@@ -91,6 +92,12 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                     this.classes.add(cls);
                     this.context = JAXBContext.newInstance(
                         this.classes.toArray(new Class[] {})
+                    );
+                    Logger.info(
+                        this,
+                        "#context(%s): added to JAXBContext (%d total)",
+                        cls.getName(),
+                        this.classes.size()
                     );
                 } catch (javax.xml.bind.JAXBException ex) {
                     throw new IllegalStateException(ex);

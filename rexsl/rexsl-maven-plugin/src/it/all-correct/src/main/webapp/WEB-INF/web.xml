@@ -38,7 +38,7 @@
     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
     <listener listener-class="com.rexsl.core.CoreListener">
-        <init-param title="Hello, World"/>
+        <init-param JSR311-packages="com.rexsl.foo"/>
     </listener>
 
     <filter>

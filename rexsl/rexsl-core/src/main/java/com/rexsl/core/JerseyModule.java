@@ -31,6 +31,7 @@ package com.rexsl.core;
 
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
+import com.ymock.util.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +44,19 @@ import java.util.Map;
 final class JerseyModule extends JerseyServletModule {
 
     /**
+     * Init parameters.
+     */
+    private final Map<String, String> params;
+
+    /**
+     * Public ctor.
+     * @param prms The params, provided by {@link CoreListener}
+     */
+    public JerseyModule(final Map<String, String> prms) {
+        this.params = prms;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -51,19 +65,24 @@ final class JerseyModule extends JerseyServletModule {
         this.filterRegex(
             String.format(
                 "^/(?!%s).*$",
-                "robots.txt|images/|css/"
+                "robots.txt|images/|css/|xsl/|favicon.ico"
             )
         ).through(XslBrowserFilter.class);
         final Map<String, String> params = new HashMap<String, String>();
         params.put(
             "com.sun.jersey.config.property.packages",
-            "com.rexsl"
+            this.params.get("JSR311-packages")
+        );
+        Logger.info(
+            this,
+            "#configureServlets(): JSR311 packages: '%s'",
+            this.params.get("JSR311-packages")
         );
         params.put(
             "com.sun.jersey.config.property.WebPageContentRegex",
             String.format(
                 "^/(%s).*$",
-                "robots.txt|images/|css/"
+                "robots.txt|images/|css/|xsl/|favicon.ico"
             )
         );
         params.put(

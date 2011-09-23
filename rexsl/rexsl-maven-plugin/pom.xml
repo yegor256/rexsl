@@ -253,7 +253,7 @@
                     which you're interested in.
                     -->
                     <pomIncludes>
-                        <pomInclude>all-correct/pom.xml</pomInclude>
+                        <!-- <pomInclude>all-correct/pom.xml</pomInclude> -->
                         <!-- <pomInclude>script-failure/pom.xml</pomInclude> -->
                         <!-- <pomInclude>xhtml-failure/pom.xml</pomInclude> -->
                     </pomIncludes>

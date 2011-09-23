@@ -32,6 +32,12 @@ package com.rexsl.core;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
+import com.ymock.util.Logger;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
 
 /**
  * Core listener to be used in web.xml.
@@ -42,11 +48,35 @@ import com.google.inject.servlet.GuiceServletContextListener;
 public final class CoreListener extends GuiceServletContextListener {
 
     /**
+     * Init parameters.
+     */
+    private final Map<String, String> params = new HashMap<String, String>();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void contextInitialized(final ServletContextEvent event) {
+        final ServletContext ctx = event.getServletContext();
+        for (Enumeration e = ctx.getInitParameterNames();
+            e.hasMoreElements(); ) {
+            final String name = (String) e.nextElement();
+            this.params.put(name, ctx.getInitParameter(name));
+            Logger.info(
+                this,
+                "#contextInitialized(): '%s' init param set to '%s'",
+                name,
+                ctx.getInitParameter(name)
+            );
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     protected Injector getInjector() {
-        return Guice.createInjector(new JerseyModule());
+        return Guice.createInjector(new JerseyModule(this.params));
     }
 
 }
