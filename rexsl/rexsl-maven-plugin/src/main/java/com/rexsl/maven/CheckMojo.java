@@ -121,6 +121,8 @@ public final class CheckMojo extends AbstractMojo {
      */
     @Override
     public void execute() throws MojoFailureException {
+        org.slf4j.impl.StaticLoggerBinder.getSingleton()
+            .setMavenLog(this.getLog());
         if (this.skip) {
             this.getLog().info("execution skipped because of 'skip' option");
             return;

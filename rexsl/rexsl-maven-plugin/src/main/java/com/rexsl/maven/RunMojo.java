@@ -91,6 +91,8 @@ public final class RunMojo extends AbstractMojo {
      */
     @Override
     public void execute() throws MojoFailureException {
+        org.slf4j.impl.StaticLoggerBinder.getSingleton()
+            .setMavenLog(this.getLog());
         if (!this.project.getPackaging().equals("war")) {
             throw new IllegalStateException("project packaging is not WAR");
         }

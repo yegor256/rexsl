@@ -76,6 +76,11 @@ public final class CoreListener extends GuiceServletContextListener {
      */
     @Override
     protected Injector getInjector() {
+        Logger.info(
+            this,
+            "#getInjector(): returning JerseyModule(%d params)",
+            this.params.size()
+        );
         return Guice.createInjector(new JerseyModule(this.params));
     }
 

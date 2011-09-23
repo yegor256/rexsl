@@ -73,6 +73,7 @@ public final class Grizzly {
      * @return The container
      */
     public static Grizzly start(final File webdir, final Integer port) {
+        Grizzly.julToSlf4j();
         final DeployerServerConfiguration conf =
             new DeployerServerConfiguration();
         conf.port = port;
@@ -106,6 +107,20 @@ public final class Grizzly {
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex);
         }
+    }
+
+    /**
+     * Initialize JUL-to-SLF4J bridge.
+     */
+    private static void julToSlf4j() {
+        final java.util.logging.Logger rootLogger =
+            java.util.logging.LogManager.getLogManager().getLogger("");
+        final java.util.logging.Handler[] handlers =
+            rootLogger.getHandlers();
+        for (int idx = 0; idx < handlers.length; idx += 1) {
+            rootLogger.removeHandler(handlers[idx]);
+        }
+        org.slf4j.bridge.SLF4JBridgeHandler.install();
     }
 
     /**

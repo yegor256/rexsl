@@ -35,8 +35,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.maven.plugin.logging.Log;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.Mockito;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -51,6 +53,12 @@ public final class GrizzlyTest {
      */
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
+
+    @BeforeClass
+    public static void initSlf4jBridge() {
+        org.slf4j.impl.StaticLoggerBinder.getSingleton()
+            .setMavenLog(Mockito.mock(Log.class));
+    }
 
     /**
      * Validate correct XML+XSL transformation.

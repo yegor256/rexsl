@@ -34,6 +34,7 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.Reporter;
 import java.io.File;
 import java.util.Properties;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
@@ -42,7 +43,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * @author Yegor Bugayenko (yegor@qulice.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class InContainerScriptsCheckTest {
@@ -52,6 +53,12 @@ public final class InContainerScriptsCheckTest {
      */
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
+
+    @BeforeClass
+    public static void initSlf4jBridge() {
+        org.slf4j.impl.StaticLoggerBinder.getSingleton()
+            .setMavenLog(Mockito.mock(Log.class));
+    }
 
     /**
      * Validate correct XML+XSL transformation.
