@@ -27,17 +27,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.maven.utils;
 
-import com.rexsl.maven.Check;
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.Reporter;
 import java.io.File;
-import java.util.Properties;
-import org.apache.maven.project.MavenProject;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -45,7 +44,7 @@ import static org.hamcrest.Matchers.*;
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class XhtmlOutputCheckTest {
+public final class GrizzlyTest {
 
     /**
      * @checkstyle VisibilityModifier (3 lines)
@@ -58,43 +57,21 @@ public final class XhtmlOutputCheckTest {
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testTruePositiveValidation() throws Exception {
-        final File basedir = this.temp.newFolder("basedir");
-        Utils.copy(basedir, "src/main/webapp/xsl/layout.xsl");
-        Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
-        Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
-        Utils.copy(basedir, "src/test/rexsl/xhtml/index.groovy");
-        final DummyReporter reporter = new DummyReporter();
-        final Environment env = Mockito.mock(Environment.class);
-        Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(reporter).when(env).reporter();
-        Mockito.doReturn(this.getClass().getClassLoader())
-            .when(env).classloader();
-        assertThat(
-            new XhtmlOutputCheck().validate(env),
-            describedAs(reporter.summary(), is(true))
+    public void testGrizzlyDeployment() throws Exception {
+        final File webdir = this.temp.newFolder("webdir");
+        FileUtils.writeStringToFile(
+            new File(webdir, "WEB-INF/web.xml"),
+            "<web-app version='3.0' metadata-complete='false'"
+            + " xmlns='http://java.sun.com/xml/ns/javaee'>"
+            + "<description>test</description>"
+            + "</web-app>"
         );
-    }
-
-    /**
-     * Validate incorrect XML+XSL transformation (layout file is missed).
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void testFalsePositiveValidation() throws Exception {
-        final File basedir = this.temp.newFolder("basedir");
-        Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
-        Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
-        final DummyReporter reporter = new DummyReporter();
-        final Environment env = Mockito.mock(Environment.class);
-        Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(reporter).when(env).reporter();
-        Mockito.doReturn(this.getClass().getClassLoader())
-            .when(env).classloader();
-        assertThat(
-            new XhtmlOutputCheck().validate(env),
-            describedAs(reporter.summary(), is(false))
-        );
+        final Integer port = new PortReserver().port();
+        final Grizzly grizzly = Grizzly.start(webdir, port);
+        final HttpClient client = new DefaultHttpClient();
+        final HttpResponse response =
+            client.execute(new HttpGet("http://localhost:" + port));
+        assertThat(response.getStatusLine().getStatusCode(), equalTo(200));
     }
 
 }

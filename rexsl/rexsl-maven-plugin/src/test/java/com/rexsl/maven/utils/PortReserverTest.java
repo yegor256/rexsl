@@ -29,30 +29,24 @@
  */
 package com.rexsl.maven.utils;
 
-import java.net.ServerSocket;
+import org.junit.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 /**
- * Reservers a new TPC port.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class PortReserver {
+public final class PortReserverTest {
 
     /**
-     * Find and return the first available port.
-     * @return The port number
+     * Let's try to reserver a port.
+     * @throws Exception If something goes wrong
      */
-    public Integer port() {
-        Integer port;
-        try {
-            final ServerSocket socket = new ServerSocket(0);
-            port = socket.getLocalPort();
-            socket.close();
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException("Failed to reserve port", ex);
-        }
-        return port;
+    @Test
+    public void testReservesPort() throws Exception {
+        final Integer port = new PortReserver().port();
+        assertThat(port, is(greaterThan(0)));
     }
 
 }

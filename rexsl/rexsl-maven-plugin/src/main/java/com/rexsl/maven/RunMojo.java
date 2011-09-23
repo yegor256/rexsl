@@ -29,8 +29,8 @@
  */
 package com.rexsl.maven;
 
-import com.rexsl.maven.tools.Grizzly;
-import com.rexsl.maven.tools.PortReserver;
+import com.rexsl.maven.utils.Grizzly;
+import com.rexsl.maven.utils.PortReserver;
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import java.io.File;
 import org.apache.maven.plugin.AbstractMojo;
@@ -94,17 +94,24 @@ public final class RunMojo extends AbstractMojo {
         if (!this.project.getPackaging().equals("war")) {
             throw new IllegalStateException("project packaging is not WAR");
         }
+        if (!new File(this.webapp).exists()) {
+            throw new IllegalStateException(
+                String.format(
+                    "Directory '%s' doesn't exist, package the project first",
+                    this.webapp
+                )
+            );
+        }
         this.getLog().info("Running WAR in Grizzly at " + this.webapp);
         final Integer port = new PortReserver().port();
-        final GrizzlyWebServer gws =
-            new Grizzly().gws(new File(this.webapp), port);
+        final Grizzly grizzly = Grizzly.start(new File(this.webapp), port);
         this.getLog().info("Web front available at http://localhost:" + port);
         this.getLog().info("Press Ctrl-C to stop...");
         while (true) {
             try {
                 Thread.sleep(1000);
             } catch (java.lang.InterruptedException ex) {
-                gws.stop();
+                grizzly.stop();
             }
         }
     }

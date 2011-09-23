@@ -32,9 +32,8 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Reporter;
-import com.rexsl.maven.tools.Grizzly;
-import com.rexsl.maven.tools.PortReserver;
-import com.sun.grizzly.http.embed.GrizzlyWebServer;
+import com.rexsl.maven.utils.Grizzly;
+import com.rexsl.maven.utils.PortReserver;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import java.io.File;
@@ -68,12 +67,19 @@ public final class InContainerScriptsCheck implements Check {
             );
             return true;
         }
+        if (!env.webdir().exists()) {
+            env.reporter().report(
+                "Webapp dir '%s' is absent, package the project first",
+                env.webdir()
+            );
+            return false;
+        }
         env.reporter().report(
             "Starting embedded Grizzly web server in '%s'...",
             env.webdir()
         );
         final Integer port = new PortReserver().port();
-        final GrizzlyWebServer gws = new Grizzly().gws(env.webdir(), port);
+        final Grizzly grizzly = Grizzly.start(env.webdir(), port);
         URI home;
         try {
             home = new URI(String.format("http://localhost:%d/", port));
@@ -92,7 +98,7 @@ public final class InContainerScriptsCheck implements Check {
                 success = false;
             }
         }
-        gws.stop();
+        grizzly.stop();
         env.reporter().report("Embedded Grizzly web server stopped");
         return success;
     }

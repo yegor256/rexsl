@@ -27,10 +27,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.tools;
+package com.rexsl.maven.utils;
 
-import com.sun.grizzly.http.embed.GrizzlyWebServer;
+import com.sun.grizzly.http.servlet.deployer.GrizzlyWebServerDeployer;
+import com.sun.grizzly.http.servlet.deployer.conf.DeployerServerConfiguration;
+import com.sun.grizzly.http.webxml.schema.WebApp;
 import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 /**
  * Start/stop grizzly container.
@@ -41,23 +45,67 @@ import java.io.File;
 public final class Grizzly {
 
     /**
+     * Deployer.
+     */
+    private static final GrizzlyWebServerDeployer DEPLOYER =
+        new GrizzlyWebServerDeployer();
+
+    /**
+     * Context.
+     */
+    private final String context;
+
+    /**
+     * Private ctor.
+     * @param ctx Web context
+     */
+    private Grizzly(final String ctx) {
+        this.context = ctx;
+    }
+
+    /**
      * Create and start Grizzly container.
      * @param webapp Location of WEB home
      * @param port The port to mount to
      * @return The container
      */
-    public GrizzlyWebServer gws(final File webdir, final Integer port) {
+    public static Grizzly start(final File webdir, final Integer port) {
+        final DeployerServerConfiguration conf =
+            new DeployerServerConfiguration();
+        conf.port = port;
+        Grizzly.DEPLOYER.launch(conf);
         final String context = "/";
-        final GrizzlyWebServer gws = new GrizzlyWebServer(
-            port,
-            webdir.getPath()
-        );
         try {
-            gws.start();
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
+            Grizzly.DEPLOYER.deploy(
+                // root folder
+                webdir.getPath(),
+                // context
+                context,
+                // path
+                new File(webdir, "WEB-INF/web.xml").getPath(),
+                // class loader
+                new URLClassLoader(
+                    new URL[] {},
+                    Grizzly.class.getClassLoader()
+                ),
+                // parent web application
+                new WebApp()
+            );
+        } catch (Exception ex) {
+            throw new IllegalArgumentException(ex);
         }
-        return gws;
+        return new Grizzly(context);
+    }
+
+    /**
+     * Stop this container.
+     */
+    public void stop() {
+        try {
+            this.DEPLOYER.undeployApplication(this.context);
+        } catch (Exception ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
 }

@@ -153,8 +153,14 @@
             Embedded Java Servlet Container
             -->
             <groupId>com.sun.grizzly</groupId>
-            <artifactId>grizzly-servlet-webserver</artifactId>
-            <version>1.9.10</version>
+            <artifactId>grizzly-http-servlet-deployer</artifactId>
+            <version since="23 Sep 2011">1.9.36</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.1.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -241,7 +247,7 @@
                     which you're interested in.
                     -->
                     <pomIncludes>
-                        <pomInclude>all-correct/pom.xml</pomInclude>
+                        <!-- <pomInclude>all-correct/pom.xml</pomInclude> -->
                         <!-- <pomInclude>script-failure/pom.xml</pomInclude> -->
                         <!-- <pomInclude>xhtml-failure/pom.xml</pomInclude> -->
                     </pomIncludes>

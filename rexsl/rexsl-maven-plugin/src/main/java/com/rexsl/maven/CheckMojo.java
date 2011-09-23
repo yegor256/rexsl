@@ -42,7 +42,7 @@ import org.sonatype.aether.RepositorySystemSession;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @goal check
- * @phase test
+ * @phase verify
  * @threadSafe
  */
 public final class CheckMojo extends AbstractMojo {
