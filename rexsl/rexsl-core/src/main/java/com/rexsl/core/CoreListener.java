@@ -33,7 +33,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.ymock.util.Logger;
-import java.util.Enumeration;
+import java.util.Collections;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletContext;
@@ -58,9 +59,9 @@ public final class CoreListener extends GuiceServletContextListener {
     @Override
     public void contextInitialized(final ServletContextEvent event) {
         final ServletContext ctx = event.getServletContext();
-        for (Enumeration e = ctx.getInitParameterNames();
-            e.hasMoreElements(); ) {
-            final String name = (String) e.nextElement();
+        final List<String> names =
+            Collections.list(ctx.getInitParameterNames());
+        for (String name : names) {
             this.params.put(name, ctx.getInitParameter(name));
             Logger.info(
                 this,
@@ -69,6 +70,19 @@ public final class CoreListener extends GuiceServletContextListener {
                 ctx.getInitParameter(name)
             );
         }
+        if (names.size() == 0) {
+            Logger.info(
+                this,
+                "#contextInitialized(): no init-params provided"
+            );
+        }
+        Logger.info(
+            this,
+            "#contextInitialized(%s): done",
+            event.getClass().getName()
+        );
+        this.params.put("JSR311-packages", "com.rexsl.foo");
+        super.contextInitialized(event);
     }
 
     /**
@@ -78,7 +92,7 @@ public final class CoreListener extends GuiceServletContextListener {
     protected Injector getInjector() {
         Logger.info(
             this,
-            "#getInjector(): returning JerseyModule(%d params)",
+            "#getInjector(): returning JerseyModule (%d params)",
             this.params.size()
         );
         return Guice.createInjector(new JerseyModule(this.params));

@@ -29,54 +29,40 @@
  */
 package com.rexsl.core;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import javax.servlet.ServletContext;
 import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
-import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
+import org.mockito.Mockito;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 /**
- * Resolves resources using ServletContext.
- *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class ContextResourceResolver implements URIResolver {
+public final class ContextResourceResolverTest {
 
-    /**
-     * Servlet Context.
-     */
-    private final ServletContext context;
-
-    /**
-     * Constructor.
-     * @param ctx Servlet Context.
-     */
-    public ContextResourceResolver(final ServletContext ctx) {
-        this.context = ctx;
+    @Test
+    public void testSimpleResolving() throws Exception {
+        final ServletContext ctx = Mockito.mock(ServletContext.class);
+        final String href = "/xsl/layout.xsl";
+        final InputStream stream = IOUtils.toInputStream("");
+        Mockito.doReturn(stream).when(ctx).getResourceAsStream(href);
+        final URIResolver resolver = new ContextResourceResolver(ctx);
+        final Source src = resolver.resolve(href, "/");
+        assertThat(src, is(notNullValue()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Source resolve(final String href, final String base)
-        throws TransformerException {
-        final InputStream stream = this.context.getResourceAsStream(href);
-        if (stream == null) {
-            throw new IllegalStateException(
-                String.format(
-                    "Can't resolve '%s' HREF",
-                    href
-                )
-            );
-        }
-        return new StreamSource(
-            new BufferedReader(new InputStreamReader(stream))
-        );
+    @Test(expected = IllegalStateException.class)
+    public void testWithAbsentResource() throws Exception {
+        final ServletContext ctx = Mockito.mock(ServletContext.class);
+        final String href = "/xsl/file.xsl";
+        Mockito.doReturn(null).when(ctx).getResourceAsStream(href);
+        final URIResolver resolver = new ContextResourceResolver(ctx);
+        resolver.resolve(href, "/");
     }
 
 }

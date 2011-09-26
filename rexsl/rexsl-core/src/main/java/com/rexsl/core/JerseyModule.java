@@ -32,8 +32,12 @@ package com.rexsl.core;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.ymock.util.Logger;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Basic configuration module.
@@ -42,6 +46,11 @@ import java.util.Map;
  * @version $Id$
  */
 final class JerseyModule extends JerseyServletModule {
+
+    /**
+     * Separator between Jersey package names.
+     */
+    private static final String COMMA = ",";
 
     /**
      * Init parameters.
@@ -71,12 +80,7 @@ final class JerseyModule extends JerseyServletModule {
         final Map<String, String> params = new HashMap<String, String>();
         params.put(
             "com.sun.jersey.config.property.packages",
-            this.params.get("JSR311-packages")
-        );
-        Logger.info(
-            this,
-            "#configureServlets(): JSR311 packages: '%s'",
-            this.params.get("JSR311-packages")
+            StringUtils.join(this.packages(), this.COMMA)
         );
         params.put(
             "com.sun.jersey.config.property.WebPageContentRegex",
@@ -94,6 +98,28 @@ final class JerseyModule extends JerseyServletModule {
             Boolean.TRUE.toString()
         );
         this.filter("/*").through(GuiceContainer.class, params);
+    }
+
+    /**
+     * Return a list of packages for Jersey.
+     * @return The list (names)
+     */
+    private List<String> packages() {
+        final String param = this.params.get("JSR311-packages");
+        if (param == null) {
+            throw new IllegalStateException(
+                "JSR311-packages init-param is absent"
+            );
+        }
+        final List<String> names = new ArrayList<String>();
+        names.addAll(Arrays.asList(StringUtils.split(param, this.COMMA)));
+        names.add(this.getClass().getPackage().getName());
+        Logger.info(
+            this,
+            "#packages(): JSR311 packages: '%s'",
+            StringUtils.join(names, this.COMMA)
+        );
+        return names;
     }
 
 }

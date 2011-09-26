@@ -49,8 +49,13 @@ public final class CoreListenerTest {
         final ServletContextEvent event = mock(ServletContextEvent.class);
         final ServletContext ctx = mock(ServletContext.class);
         doReturn(ctx).when(event).getServletContext();
-        final Hashtable<String, String> params = new Hashtable<String, String>();
+        final Hashtable<Integer, String> params =
+            new Hashtable<Integer, String>();
+        final String name = "JSR311-packages";
+        final String value = "com.rexsl.foo";
+        params.put(1, name);
         doReturn(params.elements()).when(ctx).getInitParameterNames();
+        doReturn(value).when(ctx).getInitParameter(name);
         final ServletContextListener listener = new CoreListener();
         listener.contextInitialized(event);
     }
