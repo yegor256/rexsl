@@ -41,7 +41,6 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.validation.Schema;
 
 /**
  * Replace standard marshaller.
@@ -55,9 +54,9 @@ import javax.xml.validation.Schema;
 public final class XslResolver implements ContextResolver<Marshaller> {
 
     /**
-     * XSD locator.
+     * Marshaller configurator.
      */
-    private static XsdLocator locator = null;
+    private static JaxbConfigurator configurator = null;
 
     /**
      * Classes to process.
@@ -70,11 +69,11 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     private JAXBContext context;
 
     /**
-     * Set locator.
-     * @param loc The locator
+     * Set configurator.
+     * @param cfg The configurator
      */
-    public static void setXsdLocator(final XsdLocator loc) {
-        XslResolver.locator = loc;
+    public static void setJaxbConfigurator(final JaxbConfigurator cfg) {
+        XslResolver.configurator = cfg;
     }
 
     /**
@@ -94,11 +93,8 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         } catch (javax.xml.bind.JAXBException ex) {
             throw new IllegalStateException(ex);
         }
-        if (this.locator != null) {
-            final Schema schema = this.locator.locate(type);
-            if (schema != null) {
-                mrsh.setSchema(schema);
-            }
+        if (this.configurator != null) {
+            mrsh = this.configurator.marshaller(mrsh, type);
         }
         return mrsh;
     }

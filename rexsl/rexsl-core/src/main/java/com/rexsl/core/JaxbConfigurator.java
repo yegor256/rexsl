@@ -29,7 +29,7 @@
  */
 package com.rexsl.core;
 
-import javax.xml.validation.Schema;
+import javax.xml.bind.Marshaller;
 
 /**
  * Locate and return XSD schema.
@@ -37,13 +37,14 @@ import javax.xml.validation.Schema;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public interface XsdLocator {
+public interface JaxbConfigurator {
 
     /**
-     * Locate XSD for the class.
+     * Configure marhaller and return a new one (or the same).
+     * @param mrsh The marshaller
      * @param type The class
-     * @return The schema or NULL, if nothing found
+     * @return The marshaller
      */
-    Schema locate(final Class<?> type);
+    Marshaller marshaller(final Marshaller mrsh, final Class<?> type);
 
 }

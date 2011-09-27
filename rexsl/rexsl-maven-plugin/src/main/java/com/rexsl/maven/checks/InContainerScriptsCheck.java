@@ -29,7 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.core.XsdLocator;
+import com.rexsl.core.JaxbConfigurator;
 import com.rexsl.core.XslResolver;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
@@ -40,7 +40,12 @@ import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.XMLConstants;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.ValidationEventHandler;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.apache.commons.io.FilenameUtils;
@@ -97,7 +102,11 @@ public final class InContainerScriptsCheck implements Check {
             throw new IllegalStateException(ex);
         }
         env.reporter().report("Web front available at %s", home);
-        this.validateXsd(env);
+        final InContainerScriptsCheck.EventHandler handler =
+            new InContainerScriptsCheck.EventHandler();
+        XslResolver.setJaxbConfigurator(
+            new InContainerScriptsCheck.Configurator(env, handler)
+        );
         boolean success = true;
         for (File script :
             FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
@@ -111,6 +120,12 @@ public final class InContainerScriptsCheck implements Check {
         }
         grizzly.stop();
         env.reporter().report("Embedded Grizzly web server stopped");
+        if (handler.events().size() > 0) {
+            for (ValidationEvent event : handler.events()) {
+                env.reporter().report("JAXB error: %s", event.getMessage());
+            }
+            success = false;
+        }
         return success;
     }
 
@@ -131,44 +146,32 @@ public final class InContainerScriptsCheck implements Check {
     }
 
     /**
-     * Configure XSD validation.
-     * @param env The environment
-     */
-    private void validateXsd(final Environment env) {
-        final File folder = new File(env.basedir(), this.XSD_DIR);
-        if (!folder.exists()) {
-            env.reporter().report(
-                "%s folder is absent, no XSD validation",
-                folder
-            );
-            return;
-        }
-        XslResolver.setXsdLocator(
-            new InContainerScriptsCheck.XsdSchemaLocator(env)
-        );
-        env.reporter().report("Using XSD schemas from %s", folder);
-    }
-
-    /**
      * The locator.
      */
-    private static final class XsdSchemaLocator implements XsdLocator {
+    private static final class Configurator implements JaxbConfigurator {
         /**
          * The environment.
          */
         private final Environment env;
         /**
+         * Event handler.
+         */
+        private final ValidationEventHandler handler;
+        /**
          * Public ctor.
          * @param environ The environment
          */
-        public XsdSchemaLocator(final Environment environ) {
+        public Configurator(final Environment environ,
+            final ValidationEventHandler hdlr) {
             this.env = environ;
+            this.handler = hdlr;
         }
         /**
          * {@inheritDoc}
          */
         @Override
-        public Schema locate(final Class<?> type) {
+        public Marshaller marshaller(final Marshaller mrsh,
+            final Class<?> type) {
             final String name = type.getName();
             final File xsd = new File(
                 String.format(
@@ -177,14 +180,18 @@ public final class InContainerScriptsCheck implements Check {
                     name
                 )
             );
-            Schema schema = null;
             if (xsd.exists()) {
                 final SchemaFactory factory = SchemaFactory.newInstance(
                     XMLConstants.W3C_XML_SCHEMA_NS_URI
                 );
                 try {
-                    schema = factory.newSchema(xsd);
+                    mrsh.setSchema(factory.newSchema(xsd));
                 } catch (org.xml.sax.SAXException ex) {
+                    throw new IllegalStateException(ex);
+                }
+                try {
+                    mrsh.setEventHandler(this.handler);
+                } catch (javax.xml.bind.JAXBException ex) {
                     throw new IllegalStateException(ex);
                 }
                 this.env.reporter().report(
@@ -195,7 +202,33 @@ public final class InContainerScriptsCheck implements Check {
             } else {
                 this.env.reporter().report("No XSD schema for '%s'", name);
             }
-            return schema;
+            return mrsh;
+        }
+    }
+
+    /**
+     * Handler of events.
+     */
+    private static final class EventHandler implements ValidationEventHandler {
+        /**
+         * Errors.
+         */
+        private final List<ValidationEvent> events =
+            new ArrayList<ValidationEvent>();
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean handleEvent(final ValidationEvent event) {
+            this.events.add(event);
+            return true;
+        }
+        /**
+         * Get list of events.
+         * @return The list of events
+         */
+        public List<ValidationEvent> events() {
+            return this.events;
         }
     }
 
