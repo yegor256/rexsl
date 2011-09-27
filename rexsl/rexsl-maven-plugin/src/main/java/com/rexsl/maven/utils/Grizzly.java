@@ -131,6 +131,7 @@ public final class Grizzly {
     private static URLClassLoader classloader(final File webdir) {
         final List<File> paths = new ArrayList<File>();
         paths.add(new File(webdir, "WEB-INF/classes"));
+        paths.add(webdir);
         final File lib = new File(webdir, "WEB-INF/lib");
         if (lib.exists()) {
             for (File jar : FileUtils.listFiles(lib, new String[] {"jar"}, true)) {
