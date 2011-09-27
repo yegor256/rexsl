@@ -31,14 +31,18 @@
  *
  * @version $Id: web.xml 9 2011-09-02 12:03:51Z yegor256@yahoo.com $
  -->
-<web-app version="3.0"
+<web-app version="3.0" metadata-complete="false"
     xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
     <listener>
-        <listener-class>com.rexsl.core.JerseyGuiceListener</listener-class>
+        <listener-class>com.rexsl.core.CoreListener</listener-class>
+        <init-param>
+            <param-name>JSR311-packages</param-name>
+            <param-value>com.rexsl.foo</param-value>
+        </init-param>
     </listener>
 
     <filter>

@@ -231,7 +231,8 @@
         </dependency>
         <dependency>
             <!--
-            This artifact contains SLF4J-to-MavenLog binding.
+            This artifact contains SLF4J-to-MavenLog binding. We need it
+            in "compile" scope.
             -->
             <groupId>com.rempl.plugins</groupId>
             <artifactId>rempl-maven-plugin</artifactId>
@@ -240,11 +241,22 @@
         </dependency>
         <dependency>
             <!--
-            This one is used to forward Grizzly logging to SLF4J.
+            This one is used to forward Grizzly logging to SLF4J. We need it
+            in "compile" scope.
             -->
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
             <version since="19 Sep 2011">1.6.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <!--
+            Forward all LOG4J calls to SLF4J.
+            -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version since="19 Sep 2011">1.6.2</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -270,9 +282,9 @@
                     which you're interested in.
                     -->
                     <pomIncludes>
-                        <!-- <pomInclude>all-correct/pom.xml</pomInclude> -->
-                        <!-- <pomInclude>script-failure/pom.xml</pomInclude> -->
-                        <!-- <pomInclude>xhtml-failure/pom.xml</pomInclude> -->
+                        <pomInclude>all-correct/pom.xml</pomInclude>
+                        <pomInclude>script-failure/pom.xml</pomInclude>
+                        <pomInclude>xhtml-failure/pom.xml</pomInclude>
                     </pomIncludes>
                     <postBuildHookScript>verify</postBuildHookScript>
                     <preBuildHookScript>setup</preBuildHookScript>

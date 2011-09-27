@@ -61,7 +61,7 @@ ReXSL, a framework for lightweight Java web apps
   (you can {{{http://svn.rexsl.com/rexsl/trunk/rexsl/rexsl-maven-plugin/src/it/all-correct}checkout}}
   a simple project):
 
----
++--
 /foo
   pom.xml
   /src
@@ -89,7 +89,7 @@ ReXSL, a framework for lightweight Java web apps
           home-page.groovy
         /xsd
           Home.xsd
----
++--
 
   Maven <<<pom.xml>>> should look like this (latest version of ReXSL
   is published in {{{http://repo1.maven.org/maven2/com/rexsl/rexsl/}Maven Central}}):
@@ -163,9 +163,13 @@ ReXSL, a framework for lightweight Java web apps
   <<<web.xml>>> should be simple:
 
 +--
-<web-app>
+<web-app version="3.0" metadata-complete="false"
+  xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
   <listener>
-    <listener-class>com.rexsl.core.RexslListener</listener-class>
+    <listener-class>com.rexsl.core.CoreListener</listener-class>
   </listener>
   <filter>
     <filter-name>GuiceFilter</filter-name>

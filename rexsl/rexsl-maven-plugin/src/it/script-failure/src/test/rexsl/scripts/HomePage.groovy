@@ -29,15 +29,12 @@
  */
 
 import com.rexsl.test.TestClient
-import static com.rexsl.test.XhtmlConverter.the
-import static org.hamcrest.CoreMatchers.*
 import static org.junit.Assert.assertThat
-import static org.junit.matchers.JUnitMatchers.*
-import static org.xmlmatchers.XmlMatchers.hasXPath
+import static org.hamcrest.Matchers.*
 
 def r1 = new TestClient(documentRoot)
     .header('Accept', 'application/xml')
     .header('User-agent', 'Safari')
     .get('/')
-assertThat(r1.status, equalTo(200))
-assertThat(the(r1.body), hasXPath("//div[contains(.,'world')]"))
+// we should fail here because status code is 200, not 404
+assertThat(r1.status, equalTo(404))
