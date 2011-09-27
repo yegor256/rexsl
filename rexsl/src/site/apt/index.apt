@@ -262,7 +262,14 @@ import static org.junit.Assert.assertThat
 import static org.junit.matchers.JUnitMatchers.containsString
 import static org.xmlmatchers.XmlMatchers.hasXPath
 assertThat(document, containsString('say hello'))
-assertThat(the(document), hasXPath("//div[contains(.,'say hello')]"))
+assertThat(
+    the(document),
+    hasXPath(
+        "//x:div[contains(.,'say hello')]",
+        new org.xmlmatchers.namespace.SimpleNamespaceContext()
+        .withBinding("x", "http://www.w3.org/1999/xhtml")
+    )
+)
 +--
 
   And now the most interesting part, a test
@@ -278,10 +285,16 @@ def r1 = new TestClient(documentRoot)
   .header('Accept', 'application/xml')
   .header('User-agent', 'Safari')
   .get('/')
-assertThat(the(r1.body), hasXPath("//div[contains(.,'world')]"))
+assertThat(
+    the(r1.body),
+    hasXPath(
+        "//x:div[contains(.,'world')]",
+        new org.xmlmatchers.namespace.SimpleNamespaceContext()
+        .withBinding("x", "http://www.w3.org/1999/xhtml")
+    )
+)
 assertThat(r1.status, equalTo(200))
 def r2 = new TestClient(documentRoot).get('/strange-address')
-assertThat(r2.body, containsString('Page not found'))
 assertThat(r2.status, equalTo(404))
 +--
 

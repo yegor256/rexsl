@@ -55,7 +55,6 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -285,6 +284,7 @@
                         <pomInclude>all-correct/pom.xml</pomInclude>
                         <pomInclude>script-failure/pom.xml</pomInclude>
                         <pomInclude>xhtml-failure/pom.xml</pomInclude>
+                        <pomInclude>xsd-failure/pom.xml</pomInclude>
                     </pomIncludes>
                     <postBuildHookScript>verify</postBuildHookScript>
                     <preBuildHookScript>setup</preBuildHookScript>

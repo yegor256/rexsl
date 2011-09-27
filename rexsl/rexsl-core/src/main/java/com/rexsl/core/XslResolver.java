@@ -30,15 +30,18 @@
 package com.rexsl.core;
 
 import com.ymock.util.Logger;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.validation.Schema;
 
 /**
  * Replace standard marshaller.
@@ -52,6 +55,11 @@ import javax.xml.bind.Marshaller;
 public final class XslResolver implements ContextResolver<Marshaller> {
 
     /**
+     * XSD locator.
+     */
+    private static XsdLocator locator = null;
+
+    /**
      * Classes to process.
      */
     private final List<Class> classes = new ArrayList<Class>();
@@ -62,22 +70,37 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     private JAXBContext context;
 
     /**
+     * Set locator.
+     * @param loc The locator
+     */
+    public static void setXsdLocator(final XsdLocator loc) {
+        XslResolver.locator = loc;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public Marshaller getContext(final Class<?> type) {
+        Marshaller mrsh;
         try {
-            final Marshaller mrsh = this.context(type).createMarshaller();
+            mrsh = this.context(type).createMarshaller();
             mrsh.setProperty(Marshaller.JAXB_FRAGMENT, true);
             final String header = String.format(
                 "<?xml version='1.0'?><?xml-stylesheet type='text/xml' href='/xsl/%s.xsl'?>",
                 type.getSimpleName()
             );
             mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
-            return mrsh;
         } catch (javax.xml.bind.JAXBException ex) {
             throw new IllegalStateException(ex);
         }
+        if (this.locator != null) {
+            final Schema schema = this.locator.locate(type);
+            if (schema != null) {
+                mrsh.setSchema(schema);
+            }
+        }
+        return mrsh;
     }
 
     /**
