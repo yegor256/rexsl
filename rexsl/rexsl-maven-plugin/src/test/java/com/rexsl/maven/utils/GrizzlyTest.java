@@ -36,24 +36,31 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.maven.plugin.logging.Log;
-import org.junit.*;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 /**
+ * Grizzly test case.
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
 public final class GrizzlyTest {
 
     /**
+     * Temporary folder.
      * @checkstyle VisibilityModifier (3 lines)
      */
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
 
+    /**
+     * Initialize SLF4J bridge.
+     */
     @BeforeClass
     public static void initSlf4jBridge() {
         org.slf4j.impl.StaticLoggerBinder.getSingleton()
@@ -79,7 +86,10 @@ public final class GrizzlyTest {
         final HttpClient client = new DefaultHttpClient();
         final HttpResponse response =
             client.execute(new HttpGet("http://localhost:" + port));
-        assertThat(response.getStatusLine().getStatusCode(), equalTo(200));
+        MatcherAssert.assertThat(
+            response.getStatusLine().getStatusCode(),
+            Matchers.equalTo(200)
+        );
     }
 
 }

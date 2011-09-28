@@ -31,29 +31,33 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.Reporter;
 import java.io.File;
-import java.util.Properties;
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
-import org.junit.*;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 /**
+ * InContainerScriptsCheck test case.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class InContainerScriptsCheckTest {
 
     /**
+     * Temporary folder.
      * @checkstyle VisibilityModifier (3 lines)
      */
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
 
+    /**
+     * Initialize SLF4J bridge.
+     */
     @BeforeClass
     public static void initSlf4jBridge() {
         org.slf4j.impl.StaticLoggerBinder.getSingleton()
@@ -80,9 +84,9 @@ public final class InContainerScriptsCheckTest {
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
         final Check check = new InContainerScriptsCheck();
-        assertThat(
+        MatcherAssert.assertThat(
             check.validate(env),
-            describedAs(reporter.summary(), is(true))
+            Matchers.describedAs(reporter.summary(), Matchers.is(true))
         );
     }
 

@@ -30,17 +30,22 @@
 package com.rexsl.core;
 
 import javax.servlet.http.HttpServletResponse;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 /**
+ * ByteArrayResponseWrapper test case.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class ByteArrayResponseWrapperTest {
 
+    /**
+     * Let's test how this wrapper can write to output stream.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testWritingToOutputStream() throws Exception {
         final ByteArrayResponseWrapper wrapper =
@@ -49,9 +54,9 @@ public final class ByteArrayResponseWrapperTest {
             );
         final String text = "this is some text string";
         wrapper.getOutputStream().write(text.getBytes());
-        assertThat(
+        MatcherAssert.assertThat(
             wrapper.getByteStream().toString(),
-            equalTo(text)
+            Matchers.equalTo(text)
         );
     }
 

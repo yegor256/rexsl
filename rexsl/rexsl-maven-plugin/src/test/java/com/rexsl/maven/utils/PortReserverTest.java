@@ -29,11 +29,12 @@
  */
 package com.rexsl.maven.utils;
 
-import org.junit.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
+ * PortReserver test case.
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
@@ -46,7 +47,7 @@ public final class PortReserverTest {
     @Test
     public void testReservesPort() throws Exception {
         final Integer port = new PortReserver().port();
-        assertThat(port, is(greaterThan(0)));
+        MatcherAssert.assertThat(port, Matchers.greaterThan(0));
     }
 
 }

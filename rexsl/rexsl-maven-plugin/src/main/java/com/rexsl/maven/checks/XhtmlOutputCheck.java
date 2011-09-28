@@ -31,7 +31,6 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.Reporter;
 import groovy.lang.Binding;
 import java.io.File;
 import java.io.StringWriter;
@@ -41,8 +40,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Validate XHTML output.
@@ -66,7 +65,7 @@ public final class XhtmlOutputCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public final boolean validate(final Environment env) {
+    public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), this.XML_DIR);
         if (!dir.exists()) {
             env.reporter().report(
@@ -90,10 +89,11 @@ public final class XhtmlOutputCheck implements Check {
 
     /**
      * Check one XML document.
+     * @param env Environment to work with
      * @param file Check this particular XML document
      * @throws InternalCheckException If some failure inside
      */
-    public final void one(final Environment env, final File file)
+    private void one(final Environment env, final File file)
         throws InternalCheckException {
         final File root = new File(env.basedir(), this.GROOVY_DIR);
         if (!root.exists()) {
@@ -123,9 +123,10 @@ public final class XhtmlOutputCheck implements Check {
      * Turn XML into XHTML.
      * @param env Environment
      * @param file XML document
+     * @return XHTML as text
      * @throws InternalCheckException If some failure inside
      */
-    public final String xhtml(final Environment env, final File file)
+    private String xhtml(final Environment env, final File file)
         throws InternalCheckException {
         final Source xml = new StreamSource(file);
         final TransformerFactory factory = TransformerFactory.newInstance();

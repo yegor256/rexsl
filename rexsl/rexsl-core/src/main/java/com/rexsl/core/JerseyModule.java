@@ -53,6 +53,12 @@ final class JerseyModule extends JerseyServletModule {
     private static final String COMMA = ",";
 
     /**
+     * Static files patterns.
+     */
+    private static final String STATIC =
+        "robots.txt|images/|css/|xsl/|favicon.ico";
+
+    /**
      * Init parameters.
      */
     private final Map<String, String> params;
@@ -72,32 +78,26 @@ final class JerseyModule extends JerseyServletModule {
     protected void configureServlets() {
         // add XML-to-XHTML filter
         this.filterRegex(
-            String.format(
-                "^/(?!%s).*$",
-                "robots.txt|images/|css/|xsl/|favicon.ico"
-            )
+            String.format("^/(?!%s).*$", this.STATIC)
         ).through(XslBrowserFilter.class);
-        final Map<String, String> params = new HashMap<String, String>();
-        params.put(
+        final Map<String, String> args = new HashMap<String, String>();
+        args.put(
             "com.sun.jersey.config.property.packages",
             StringUtils.join(this.packages(), this.COMMA)
         );
-        params.put(
+        args.put(
             "com.sun.jersey.config.property.WebPageContentRegex",
-            String.format(
-                "^/(%s).*$",
-                "robots.txt|images/|css/|xsl/|favicon.ico"
-            )
+            String.format("^/(%s).*$", this.STATIC)
         );
-        params.put(
+        args.put(
             "com.sun.jersey.config.feature.Redirect",
             Boolean.TRUE.toString()
         );
-        params.put(
+        args.put(
             "com.sun.jersey.config.feature.ImplicitViewables",
             Boolean.TRUE.toString()
         );
-        this.filter("/*").through(GuiceContainer.class, params);
+        this.filter("/*").through(GuiceContainer.class, args);
     }
 
     /**

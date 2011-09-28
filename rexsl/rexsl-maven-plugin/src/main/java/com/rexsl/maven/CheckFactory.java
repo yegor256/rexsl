@@ -45,6 +45,7 @@ public final class CheckFactory {
 
     /**
      * Get full collection of checks.
+     * @return List of checks
      */
     public List<Check> all() {
         final List<Check> checks = new ArrayList<Check>();

@@ -68,7 +68,7 @@ public final class Grizzly {
 
     /**
      * Create and start Grizzly container.
-     * @param webapp Location of WEB home
+     * @param webdir Location of WEB home
      * @param port The port to mount to
      * @return The container
      */
@@ -92,6 +92,7 @@ public final class Grizzly {
                 // parent web application
                 new WebApp()
             );
+        // @checkstyle IllegalCatch (1 line)
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex);
         }
@@ -104,6 +105,7 @@ public final class Grizzly {
     public void stop() {
         try {
             this.DEPLOYER.undeployApplication(this.context);
+        // @checkstyle IllegalCatch (1 line)
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex);
         }
@@ -125,7 +127,7 @@ public final class Grizzly {
 
     /**
      * Create classloader for web application.
-     * @param webapp Location of WEB home
+     * @param webdir Location of WEB home
      * @return The classloader
      */
     private static URLClassLoader classloader(final File webdir) {
@@ -134,7 +136,8 @@ public final class Grizzly {
         paths.add(webdir);
         final File lib = new File(webdir, "WEB-INF/lib");
         if (lib.exists()) {
-            for (File jar : FileUtils.listFiles(lib, new String[] {"jar"}, true)) {
+            for (File jar
+                : FileUtils.listFiles(lib, new String[] {"jar"}, true)) {
                 paths.add(jar);
             }
         }

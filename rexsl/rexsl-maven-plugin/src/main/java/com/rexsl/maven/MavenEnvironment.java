@@ -38,11 +38,16 @@ import java.util.List;
 import java.util.Properties;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.repository.internal.DefaultServiceLocator;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.apache.maven.wagon.Wagon;
+import org.apache.maven.wagon.providers.http.LightweightHttpWagon;
 import org.sonatype.aether.RepositorySystem;
-import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.collection.CollectRequest;
+import org.sonatype.aether.connector.file.FileRepositoryConnectorFactory;
+import org.sonatype.aether.connector.wagon.WagonProvider;
+import org.sonatype.aether.connector.wagon.WagonRepositoryConnectorFactory;
 import org.sonatype.aether.graph.Dependency;
 import org.sonatype.aether.graph.DependencyFilter;
 import org.sonatype.aether.repository.LocalRepository;
@@ -53,15 +58,7 @@ import org.sonatype.aether.resolution.DependencyResolutionException;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 import org.sonatype.aether.util.artifact.JavaScopes;
 import org.sonatype.aether.util.filter.DependencyFilterUtils;
-import org.apache.maven.repository.internal.DefaultServiceLocator;
-import org.sonatype.aether.RepositorySystem;
-import org.sonatype.aether.connector.file.FileRepositoryConnectorFactory;
-import org.sonatype.aether.connector.wagon.WagonProvider;
-import org.sonatype.aether.connector.wagon.WagonRepositoryConnectorFactory;
 import org.sonatype.aether.spi.connector.RepositoryConnectorFactory;
-import org.apache.maven.wagon.Wagon;
-import org.apache.maven.wagon.providers.http.LightweightHttpWagon;
-import org.sonatype.aether.connector.wagon.WagonProvider;
 
 /**
  * Environment proxy, between Maven plugin and checks.
@@ -241,8 +238,8 @@ public final class MavenEnvironment implements Environment {
                 "1.0-SNAPSHOT"
             )
         );
-        for (org.apache.maven.artifact.Artifact artf :
-            this.project.getDependencyArtifacts()) {
+        for (org.apache.maven.artifact.Artifact artf
+            : this.project.getDependencyArtifacts()) {
             roots.add(
                 new DefaultArtifact(
                     artf.getGroupId(),
@@ -258,13 +255,15 @@ public final class MavenEnvironment implements Environment {
 
     /**
      * List of transitive deps of the artifact.
+     * @param root The artifact to work with
      * @return The list of dependencies
      * @see #artifacts()
      */
     private List<Artifact> deps(final Artifact root) {
         final CollectRequest crq = new CollectRequest();
         crq.setRoot(new Dependency(root, JavaScopes.RUNTIME));
-        for (RemoteRepository repo : this.project.getRemoteProjectRepositories()) {
+        for (RemoteRepository repo
+            : this.project.getRemoteProjectRepositories()) {
             crq.addRepository(repo);
         }
         final DependencyFilter filter =

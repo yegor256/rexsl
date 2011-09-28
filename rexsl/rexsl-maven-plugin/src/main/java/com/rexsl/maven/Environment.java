@@ -41,7 +41,7 @@ public interface Environment {
 
     /**
      * Set location of local repository.
-     * @param url The directory of the repository
+     * @param dir The directory of the repository
      */
     void setLocalRepository(final String dir);
 

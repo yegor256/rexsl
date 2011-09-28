@@ -34,22 +34,23 @@ import java.io.StringWriter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import static org.mockito.Mockito.*;
 
 /**
+ * XslBrowserFilter test case.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
@@ -58,25 +59,42 @@ import static org.mockito.Mockito.*;
     StringWriter.class, TransformerFactory.class })
 public final class XslBrowserFilterTest {
 
+    /**
+     * HTTP "Accept" header.
+     */
     private static final String ACCEPT_BROWSER_WITHOUT_XML =
         "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8";
 
+    /**
+     * HTTP "Accept" header.
+     */
     private static final String ACCEPT_BROWSER_WITH_XML =
         "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 
+    /**
+     * HTTP "Accept" header.
+     */
     private static final String ACCEPT_XMLONLY =
         "application/xml;q=0.9,*/*;q=0.8";
 
+    /**
+     * XSLT transformer.
+     */
     private Transformer transformer;
 
+    /**
+     * Let's prepare a transformer.
+     * @throws Exception If something goes wrong
+     */
     @Before
     public void mockTransformer() throws Exception {
         PowerMockito.mockStatic(TransformerFactory.class);
-        final TransformerFactory factory = mock(TransformerFactory.class);
+        final TransformerFactory factory =
+            Mockito.mock(TransformerFactory.class);
         PowerMockito.when(TransformerFactory.newInstance())
             .thenReturn(factory);
-        this.transformer = mock(Transformer.class);
-        when(factory.newTransformer(any(Source.class)))
+        this.transformer = Mockito.mock(Transformer.class);
+        Mockito.when(factory.newTransformer(Mockito.any(Source.class)))
             .thenReturn(this.transformer);
         final StringWriter writer = PowerMockito.mock(StringWriter.class);
         PowerMockito.whenNew(StringWriter.class).withNoArguments()
@@ -85,6 +103,10 @@ public final class XslBrowserFilterTest {
             .thenReturn("<?xml version=\"1.0\"?>");
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testMissingUserAgentAcceptingXml1() throws Exception {
         this.filter(
@@ -92,10 +114,14 @@ public final class XslBrowserFilterTest {
             this.ACCEPT_BROWSER_WITH_XML,
             null
         );
-        verify(this.transformer, times(0))
-            .transform(any(Source.class), any(Result.class));
+        Mockito.verify(this.transformer, Mockito.times(0))
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testMissingUserAgentAcceptingXml2() throws Exception {
         this.filter(
@@ -103,10 +129,14 @@ public final class XslBrowserFilterTest {
             this.ACCEPT_XMLONLY,
             null
         );
-        verify(this.transformer, times(0))
-            .transform(any(Source.class), any(Result.class));
+        Mockito.verify(this.transformer, Mockito.times(0))
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testMissingUserAgentNotAcceptingXml() throws Exception {
         this.filter(
@@ -114,10 +144,14 @@ public final class XslBrowserFilterTest {
             this.ACCEPT_BROWSER_WITHOUT_XML,
             null
         );
-        verify(this.transformer)
-            .transform(any(Source.class), any(Result.class));
+        Mockito.verify(this.transformer)
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testMissingUserAgentAndMissingAcceptHeader() throws Exception {
         this.filter(
@@ -125,116 +159,145 @@ public final class XslBrowserFilterTest {
             null,
             null
         );
-        verify(this.transformer)
-            .transform(any(Source.class), any(Result.class));
+        Mockito.verify(this.transformer)
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testDoTransform() throws Exception {
         this.filter(
             "<?xml version='1.0'?><doc/>",
             this.ACCEPT_BROWSER_WITH_XML,
-            "Firefox"
+            "Firefox 3.0"
         );
-        verify(this.transformer)
-            .transform(any(Source.class), any(Result.class));
-        reset(this.transformer);
+        Mockito.verify(this.transformer)
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
+        Mockito.reset(this.transformer);
         this.filter(
             "<?xml version='1.0'?><documents/>",
             this.ACCEPT_XMLONLY,
-            "Firefox"
+            "Firefox 2.0"
         );
-        verify(this.transformer)
-            .transform(any(Source.class), any(Result.class));
-        reset(this.transformer);
+        Mockito.verify(this.transformer)
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
+        Mockito.reset(this.transformer);
         this.filter(
             "<?xml version='1.0'?><abc/>",
             this.ACCEPT_BROWSER_WITHOUT_XML,
-            "Chrome"
+            "Chrome 2.0"
         );
-        verify(this.transformer).transform(any(Source.class),
-            any(Result.class));
-        reset(this.transformer);
+        Mockito.verify(this.transformer)
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
+        Mockito.reset(this.transformer);
         this.filter(
             "<?xml version='1.0'?><test/>",
             null,
-            "Chrome"
+            "Chrome 9.0"
         );
-        verify(this.transformer)
-            .transform(any(Source.class), any(Result.class));
+        Mockito.verify(this.transformer)
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testDontTransform() throws Exception {
         this.filter(
             "<?xml version='1.0'?><data-module/>",
             this.ACCEPT_BROWSER_WITH_XML,
-            "Chrome"
+            "Chrome beta"
         );
-        verify(this.transformer, times(0))
-            .transform(any(Source.class), any(Result.class));
-        reset(this.transformer);
+        Mockito.verify(this.transformer, Mockito.times(0))
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
+        Mockito.reset(this.transformer);
         this.filter(
             "<?xml version='1.0'?><some-data/>",
             this.ACCEPT_XMLONLY,
             null
         );
-        verify(this.transformer, times(0))
-            .transform(any(Source.class), any(Result.class));
+        Mockito.verify(this.transformer, Mockito.times(0))
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testDontTransformEmptyDoc() throws Exception {
         this.filter(
             "",
             this.ACCEPT_BROWSER_WITH_XML,
-            "Firefox"
+            "Firefox 1.0"
         );
-        verify(this.transformer, times(0))
-            .transform(any(Source.class), any(Result.class));
+        Mockito.verify(this.transformer, Mockito.times(0))
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testDontTransformNonXmlDoc() throws Exception {
         this.filter(
             "some text",
             this.ACCEPT_BROWSER_WITH_XML,
-            "Firefox"
+            "Firefox 1a"
         );
-        verify(this.transformer, times(0))
-            .transform(any(Source.class), any(Result.class));
+        Mockito.verify(this.transformer, Mockito.times(0))
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test(expected = IllegalStateException.class)
     public void testTransformingWithTransformerException() throws Exception {
-        doThrow(new javax.xml.transform.TransformerException("some message"))
+        Mockito.doThrow(new TransformerException("some message"))
             .when(this.transformer)
-            .transform(any(Source.class), any(Result.class));
+            .transform(Mockito.any(Source.class), Mockito.any(Result.class));
         this.filter(
             "<?xml version='1.0'?><error/>",
             this.ACCEPT_BROWSER_WITH_XML,
-            "Firefox"
+            "Firefox 5.0"
         );
     }
 
+    /**
+     * Filter one resource.
+     * @param xml The XML
+     * @param accept Value of "Accept" HTTP header
+     * @param agent Value of "User-agent" HTTP header
+     * @throws Exception If something goes wrong
+     */
     private void filter(final String xml, final String accept,
         final String agent) throws Exception {
         final XslBrowserFilter filter = new XslBrowserFilter();
-        final FilterConfig config = mock(FilterConfig.class);
+        final FilterConfig config = Mockito.mock(FilterConfig.class);
         filter.init(config);
-        final FilterChain chain = mock(FilterChain.class);
-        final HttpServletRequest req = mock(HttpServletRequest.class);
-        when(req.getHeader("User-Agent")).thenReturn(agent);
-        when(req.getHeader("Accept")).thenReturn(accept);
-        final HttpServletResponse res = mock(HttpServletResponse.class);
-        doReturn(mock(ServletOutputStream.class)).when(res).getOutputStream();
+        final FilterChain chain = Mockito.mock(FilterChain.class);
+        final HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
+        Mockito.when(req.getHeader("User-Agent")).thenReturn(agent);
+        Mockito.when(req.getHeader("Accept")).thenReturn(accept);
+        final HttpServletResponse res = Mockito.mock(HttpServletResponse.class);
+        Mockito.doReturn(Mockito.mock(ServletOutputStream.class))
+            .when(res).getOutputStream();
         final ByteArrayResponseWrapper wrapper =
             PowerMockito.mock(ByteArrayResponseWrapper.class);
         PowerMockito.whenNew(ByteArrayResponseWrapper.class)
-            .withArguments(any(HttpServletResponse.class)).thenReturn(wrapper);
+            .withArguments(Mockito.any(HttpServletResponse.class))
+            .thenReturn(wrapper);
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
         stream.write(xml.getBytes());
-        when(wrapper.getByteStream()).thenReturn(stream);
+        Mockito.when(wrapper.getByteStream()).thenReturn(stream);
         filter.doFilter(req, res, chain);
         filter.destroy();
     }

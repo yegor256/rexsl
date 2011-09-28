@@ -31,19 +31,7 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.Reporter;
-import groovy.lang.Binding;
-import groovy.util.GroovyScriptEngine;
 import java.io.File;
-import java.io.StringWriter;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.FileUtils;
 
 /**
  * Validate location of files/dirs.
@@ -57,7 +45,7 @@ public final class FilesStructureCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public final boolean validate(final Environment env) {
+    public boolean validate(final Environment env) {
         final String[] names = {
             "src/main/webapp/",
             "src/main/webapp/robots.txt",
@@ -68,7 +56,7 @@ public final class FilesStructureCheck implements Check {
             "src/test/rexsl/scripts/",
             "src/test/rexsl/xsd/",
         };
-        boolean success = true;
+        final boolean success = true;
         for (String name : names) {
             try {
                 this.one(env.basedir(), name);
@@ -89,7 +77,7 @@ public final class FilesStructureCheck implements Check {
      * @param name The name of the file to check
      * @throws InternalCheckException If some failure inside
      */
-    public final void one(final File basedir, final String name)
+    private void one(final File basedir, final String name)
         throws InternalCheckException {
         final File file = new File(basedir, name);
         if (!file.exists()) {

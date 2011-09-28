@@ -31,31 +31,35 @@ package com.rexsl.core;
 
 import java.util.Hashtable;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
-import org.junit.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
+import javax.servlet.ServletContextListener;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
+ * CoreListener test case.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class CoreListenerTest {
 
+    /**
+     * Let's test how it initialized this listener with context.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testInitializesWithContext() throws Exception {
-        final ServletContextEvent event = mock(ServletContextEvent.class);
-        final ServletContext ctx = mock(ServletContext.class);
-        doReturn(ctx).when(event).getServletContext();
+        final ServletContextEvent event =
+            Mockito.mock(ServletContextEvent.class);
+        final ServletContext ctx = Mockito.mock(ServletContext.class);
+        Mockito.doReturn(ctx).when(event).getServletContext();
         final Hashtable<Integer, String> params =
             new Hashtable<Integer, String>();
         final String name = "JSR311-packages";
         final String value = "com.rexsl.foo";
         params.put(1, name);
-        doReturn(params.elements()).when(ctx).getInitParameterNames();
-        doReturn(value).when(ctx).getInitParameter(name);
+        Mockito.doReturn(params.elements()).when(ctx).getInitParameterNames();
+        Mockito.doReturn(value).when(ctx).getInitParameter(name);
         final ServletContextListener listener = new CoreListener();
         listener.contextInitialized(event);
     }

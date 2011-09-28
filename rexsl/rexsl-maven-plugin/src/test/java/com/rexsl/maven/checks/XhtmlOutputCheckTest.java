@@ -29,25 +29,24 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.Reporter;
 import java.io.File;
-import java.util.Properties;
-import org.apache.maven.project.MavenProject;
-import org.junit.*;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 /**
+ * XhtmlOutputCheck test case.
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
 public final class XhtmlOutputCheckTest {
 
     /**
+     * Temporary folder.
      * @checkstyle VisibilityModifier (3 lines)
      */
     @Rule
@@ -59,7 +58,8 @@ public final class XhtmlOutputCheckTest {
      */
     @Test
     public void testTruePositiveValidation() throws Exception {
-        final File basedir = this.temp.newFolder("basedir");
+        final File basedir = this.temp.newFolder("base-1");
+        // @checkstyle MultipleStringLiterals (4 lines)
         Utils.copy(basedir, "src/main/webapp/xsl/layout.xsl");
         Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
@@ -70,9 +70,9 @@ public final class XhtmlOutputCheckTest {
         Mockito.doReturn(reporter).when(env).reporter();
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
-        assertThat(
+        MatcherAssert.assertThat(
             new XhtmlOutputCheck().validate(env),
-            describedAs(reporter.summary(), is(true))
+            Matchers.describedAs(reporter.summary(), Matchers.is(true))
         );
     }
 
@@ -82,7 +82,8 @@ public final class XhtmlOutputCheckTest {
      */
     @Test
     public void testFalsePositiveValidation() throws Exception {
-        final File basedir = this.temp.newFolder("basedir");
+        final File basedir = this.temp.newFolder("base-2");
+        // @checkstyle MultipleStringLiterals (2 lines)
         Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
         final DummyReporter reporter = new DummyReporter();
@@ -91,9 +92,9 @@ public final class XhtmlOutputCheckTest {
         Mockito.doReturn(reporter).when(env).reporter();
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
-        assertThat(
+        MatcherAssert.assertThat(
             new XhtmlOutputCheck().validate(env),
-            describedAs(reporter.summary(), is(false))
+            Matchers.describedAs(reporter.summary(), Matchers.is(false))
         );
     }
 

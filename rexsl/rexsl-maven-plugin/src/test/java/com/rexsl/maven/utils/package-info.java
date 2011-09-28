@@ -27,52 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
-
-import java.io.File;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.apache.maven.project.MavenProject;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.sonatype.aether.RepositorySystemSession;
-import org.sonatype.aether.repository.LocalRepository;
 
 /**
- * Test maven plugin single MOJO.
+ * Supplementary utils.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CheckMojoTest extends AbstractMojoTestCase {
-
-    /**
-     * Test plugin for a single execution.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void testMojoGoal() throws Exception {
-        final CheckMojo mojo = this.mojo();
-        mojo.execute();
-    }
-
-    /**
-     * Create MOJO for tests.
-     * @return The MOJO just created
-     * @throws Exception If something goes wrong inside
-     */
-    private CheckMojo mojo() throws Exception {
-        final File basedir = new File(".");
-        final CheckMojo mojo = new CheckMojo();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn(basedir).when(project).getBasedir();
-        Mockito.doReturn("war").when(project).getPackaging();
-        mojo.setProject(project);
-        mojo.setWebappDirectory(basedir.getPath());
-        final RepositorySystemSession session =
-            Mockito.mock(RepositorySystemSession.class);
-        final LocalRepository repo = new LocalRepository(basedir);
-        Mockito.doReturn(repo).when(session).getLocalRepository();
-        mojo.setSession(session);
-        return mojo;
-    }
-
-}
+package com.rexsl.maven.utils;

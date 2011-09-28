@@ -37,16 +37,18 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.junit.*;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
 
 /**
+ * XslResolver test case.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
@@ -54,46 +56,65 @@ import static org.mockito.Mockito.*;
 @PrepareForTest({ XslResolver.class, JAXBContext.class })
 public final class XslResolverTest {
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testInstantiatesMarshaller() throws Exception {
         final ContextResolver<Marshaller> resolver = new XslResolver();
         final Marshaller mrsh = resolver.getContext(XslResolverTest.Page.class);
-        assertThat(mrsh, is(not(nullValue())));
+        MatcherAssert.assertThat(mrsh, Matchers.notNullValue());
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test(expected = IllegalStateException.class)
     public void testMarshallerException() throws Exception {
         PowerMockito.mockStatic(JAXBContext.class);
-        when(JAXBContext.newInstance((Class) anyObject()))
+        Mockito.when(JAXBContext.newInstance((Class) Mockito.anyObject()))
             .thenThrow(new JAXBException(""));
         new XslResolver().getContext(Object.class);
     }
 
+    /**
+     * Let's test.
+     * @throws Exception If something goes wrong
+     */
     @Test(expected = IllegalStateException.class)
     public void testCreateMarshallerException() throws Exception {
         PowerMockito.mockStatic(JAXBContext.class);
-        final JAXBContext context = mock(JAXBContext.class);
-        when(context.createMarshaller()).thenThrow(new JAXBException(""));
-        when(JAXBContext.newInstance((Class) anyObject())).thenReturn(context);
+        final JAXBContext context = Mockito.mock(JAXBContext.class);
+        Mockito.when(context.createMarshaller())
+            .thenThrow(new JAXBException(""));
+        Mockito.when(JAXBContext.newInstance(Mockito.any(Class.class)))
+            .thenReturn(context);
         new XslResolver().getContext(Object.class);
     }
 
-    // @todo #3 Let's implement it
-    // @Test
-    // public void testDuplicatedMarshallerCreation() throws Exception {
-    //     PowerMockito.mockStatic(JAXBContext.class);
-    //     final JAXBContext context = mock(JAXBContext.class);
-    //     final Marshaller mrsh = mock(Marshaller.class);
-    //     doReturn(mrsh).when(context).createMarshaller();
-    //     when(JAXBContext.newInstance(anyString())).thenReturn(context);
-    //     final XslResolver resolver = new XslResolver();
-    //     final XslResolver spy = spy(resolver);
-    //     spy.getContext(Object.class);
-    //     verify(spy, times(1)).createContext();
-    //     reset(spy);
-    //     spy.getContext(Object.class);
-    //     verify(spy, times(0)).createContext();
-    // }
+    /**
+     * Let's verify that JAXBContext is not created twice.
+     * @throws Exception If something goes wrong
+     * @todo #3 This test is not working at the moment.
+     */
+    @Ignore
+    @Test
+    public void testDuplicatedMarshallerCreation() throws Exception {
+        // PowerMockito.mockStatic(JAXBContext.class);
+        // final JAXBContext context = mock(JAXBContext.class);
+        // final Marshaller mrsh = mock(Marshaller.class);
+        // doReturn(mrsh).when(context).createMarshaller();
+        // when(JAXBContext.newInstance(anyString())).thenReturn(context);
+        // final XslResolver resolver = new XslResolver();
+        // final XslResolver spy = spy(resolver);
+        // spy.getContext(Object.class);
+        // verify(spy, times(1)).createContext();
+        // reset(spy);
+        // spy.getContext(Object.class);
+        // verify(spy, times(0)).createContext();
+    }
 
     @XmlRootElement(name = "page")
     @XmlAccessorType(XmlAccessType.NONE)

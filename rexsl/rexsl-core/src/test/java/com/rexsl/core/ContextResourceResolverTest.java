@@ -34,17 +34,22 @@ import javax.servlet.ServletContext;
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
 import org.apache.commons.io.IOUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 /**
+ * ContextResourceResolver test case.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class ContextResourceResolverTest {
 
+    /**
+     * Let's test simple resolving.
+     * @throws Exception If something goes wrong
+     */
     @Test
     public void testSimpleResolving() throws Exception {
         final ServletContext ctx = Mockito.mock(ServletContext.class);
@@ -53,9 +58,13 @@ public final class ContextResourceResolverTest {
         Mockito.doReturn(stream).when(ctx).getResourceAsStream(href);
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve(href, null);
-        assertThat(src, is(notNullValue()));
+        MatcherAssert.assertThat(src, Matchers.notNullValue());
     }
 
+    /**
+     * Let's test with absent resource.
+     * @throws Exception If something goes wrong
+     */
     @Test(expected = IllegalStateException.class)
     public void testWithAbsentResource() throws Exception {
         final ServletContext ctx = Mockito.mock(ServletContext.class);

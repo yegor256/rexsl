@@ -33,10 +33,18 @@ import java.io.File;
 import org.apache.commons.io.FileUtils;
 
 /**
+ * Supplementary test utils.
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
 public final class Utils {
+
+    /**
+     * Private ctor to avoid instantiation.
+     */
+    private Utils() {
+        // intentionally empty
+    }
 
     /**
      * Copy resource to file.

@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.regex.Pattern;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -75,7 +74,7 @@ final class XslBrowserFilter implements Filter {
      * {@inheritDoc}
      */
     @Override
-    public void init(final FilterConfig config) throws ServletException {
+    public void init(final FilterConfig config) {
         this.context = config.getServletContext();
     }
 

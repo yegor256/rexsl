@@ -30,16 +30,13 @@
 package com.rexsl.core;
 
 import com.ymock.util.Logger;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 /**
@@ -56,7 +53,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     /**
      * Marshaller configurator.
      */
-    private static JaxbConfigurator configurator = null;
+    private static JaxbConfigurator configurator;
 
     /**
      * Classes to process.
@@ -86,6 +83,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             mrsh = this.context(type).createMarshaller();
             mrsh.setProperty(Marshaller.JAXB_FRAGMENT, true);
             final String header = String.format(
+                // @checkstyle LineLength (1 line)
                 "<?xml version='1.0'?><?xml-stylesheet type='text/xml' href='/xsl/%s.xsl'?>",
                 type.getSimpleName()
             );

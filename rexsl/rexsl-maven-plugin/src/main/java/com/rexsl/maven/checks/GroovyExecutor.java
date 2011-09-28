@@ -70,7 +70,7 @@ public final class GroovyExecutor {
      * @param file The file
      * @throws InternalCheckException If some failure inside
      */
-    public final void execute(final File file) throws InternalCheckException {
+    public void execute(final File file) throws InternalCheckException {
         final String basename = FilenameUtils.getBaseName(file.getPath());
         if (!basename.matches("[a-zA-Z]\\w*")) {
             throw new InternalCheckException(
@@ -81,7 +81,7 @@ public final class GroovyExecutor {
         GroovyScriptEngine gse;
         try {
             gse = new GroovyScriptEngine(
-                new String[] { file.getParent() },
+                new String[] {file.getParent()},
                 this.environment.classloader()
             );
         } catch (java.io.IOException ex) {

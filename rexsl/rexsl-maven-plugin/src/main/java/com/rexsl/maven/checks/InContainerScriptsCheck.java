@@ -33,11 +33,9 @@ import com.rexsl.core.JaxbConfigurator;
 import com.rexsl.core.XslResolver;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.Reporter;
 import com.rexsl.maven.utils.Grizzly;
 import com.rexsl.maven.utils.PortReserver;
 import groovy.lang.Binding;
-import groovy.util.GroovyScriptEngine;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
@@ -46,9 +44,7 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
-import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -73,7 +69,7 @@ public final class InContainerScriptsCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public final boolean validate(final Environment env) {
+    public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), this.GROOVY_DIR);
         if (!dir.exists()) {
             env.reporter().report(
@@ -108,8 +104,8 @@ public final class InContainerScriptsCheck implements Check {
             new InContainerScriptsCheck.Configurator(env, handler)
         );
         boolean success = true;
-        for (File script :
-            FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
+        for (File script
+            : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
             try {
                 env.reporter().report("Testing '%s'...", script);
                 this.one(env, home, script);
@@ -136,7 +132,7 @@ public final class InContainerScriptsCheck implements Check {
      * @param script Check this particular Groovy script
      * @throws InternalCheckException If some failure inside
      */
-    public final void one(final Environment env, final URI home,
+    private void one(final Environment env, final URI home,
         final File script) throws InternalCheckException {
         final Binding binding = new Binding();
         binding.setVariable("documentRoot", home);
@@ -160,6 +156,7 @@ public final class InContainerScriptsCheck implements Check {
         /**
          * Public ctor.
          * @param environ The environment
+         * @param hdlr Handler of validation events
          */
         public Configurator(final Environment environ,
             final ValidationEventHandler hdlr) {
