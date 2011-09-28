@@ -29,10 +29,10 @@
  */
 package com.rexsl.test;
 
-import javax.xml.transform.Source;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 import org.xmlmatchers.XmlMatchers;
+import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
  * Test XHTML converter.
@@ -63,8 +63,8 @@ public final class XhtmlConverterTest {
     public void testTextXhtmlWithDoctype() throws Exception {
         final String text =
             "<?xml version='1.0'?>"
-            + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
-            + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+            + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
+            + " \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
             + "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">"
             + "<body><p>test</p></body>"
             + "</html>";
@@ -79,8 +79,9 @@ public final class XhtmlConverterTest {
                 XhtmlConverter.the(text),
                 XmlMatchers.hasXPath(
                     path,
-                    new org.xmlmatchers.namespace.SimpleNamespaceContext()
-                    .withBinding("x", "http://www.w3.org/1999/xhtml")
+                    new SimpleNamespaceContext().withBinding(
+                        "x", "http://www.w3.org/1999/xhtml"
+                    )
                 )
             );
         }

@@ -69,6 +69,11 @@
             <version>4.1.2</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+        <dependency>
             <!--
             Forward all calls to Commons Logging to SLF4j
             @see http://www.slf4j.org/legacy.html
@@ -143,6 +148,15 @@
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
             <version since="2 Mar 2011">2.9.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!--
+            XML APIs
+            -->
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version since="27 Sep 2011">1.3.04</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>

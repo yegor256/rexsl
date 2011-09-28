@@ -73,6 +73,7 @@ public final class TestClient {
      */
     public TestClient(final URI uri) {
         this.home = uri;
+        this.response = null;
     }
 
     /**

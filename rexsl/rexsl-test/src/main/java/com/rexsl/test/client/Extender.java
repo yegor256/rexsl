@@ -42,7 +42,6 @@ public interface Extender {
     /**
      * Extend HTTP request.
      * @param request HTTP request
-     * @return HTTP response
      */
     void extend(final HttpRequest request);
 

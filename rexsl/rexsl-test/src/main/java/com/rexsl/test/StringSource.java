@@ -32,7 +32,6 @@ package com.rexsl.test;
 import java.io.ByteArrayInputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 import org.w3c.dom.Document;
 
@@ -51,7 +50,7 @@ final class StringSource extends DOMSource {
 
     /**
      * Public ctor.
-     * @param xml The content of the document
+     * @param text The content of the document
      */
     public StringSource(final String text) {
         this.xml = text;
@@ -68,7 +67,7 @@ final class StringSource extends DOMSource {
 
     /**
      * Convert text to DOM Document.
-     * @param xml The content of the document
+     * @param text The content of the document
      * @return The DOM document
      */
     private Document toDocument(final String text) {

@@ -30,19 +30,18 @@
 package com.rexsl.test;
 
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
-import com.sun.grizzly.http.servlet.ServletAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import java.net.ServerSocket;
 import java.net.URI;
 import org.apache.http.HttpStatus;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 /**
  * Test HTTP client.
@@ -53,6 +52,11 @@ import static org.hamcrest.Matchers.*;
 public final class TestClientTest {
 
     /**
+     * Port to work with.
+     */
+    private static Integer port;
+
+    /**
      * Grizzly container, used for tests.
      */
     private GrizzlyWebServer gws;
@@ -61,11 +65,6 @@ public final class TestClientTest {
      * Where this Grizzly container is hosted.
      */
     private URI home;
-
-    /**
-     * Port to work with.
-     */
-    private static Integer port;
 
     /**
      * Start Servlet container.
@@ -85,7 +84,7 @@ public final class TestClientTest {
     @Before
     public void startContainer() throws Exception {
         this.home = new URI(String.format("http://localhost:%d/", this.port));
-        this.gws = new GrizzlyWebServer(port);
+        this.gws = new GrizzlyWebServer(this.port);
         this.gws.addGrizzlyAdapter(
             new GrizzlyAdapter() {
                 public void service(final GrizzlyRequest request,
@@ -120,8 +119,14 @@ public final class TestClientTest {
             .header("Accept", "application/json")
             .header("User-agent", "Some Text")
             .get("/");
-        assertThat(client.getBody(), containsString("works"));
-        assertThat(client.getStatus(), equalTo(HttpStatus.SC_OK));
+        MatcherAssert.assertThat(
+            client.getBody(),
+            Matchers.containsString("works")
+        );
+        MatcherAssert.assertThat(
+            client.getStatus(),
+            Matchers.equalTo(HttpStatus.SC_OK)
+        );
     }
 
 }
