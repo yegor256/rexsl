@@ -43,7 +43,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rexsl</groupId>
     <artifactId>rexsl</artifactId>
-    <version rexsl="yes">1.0-SNAPSHOT</version>
+    <version rexsl="yes">0.1</version>
     <packaging>pom</packaging>
     <name>rexsl</name>
 
@@ -189,12 +189,12 @@
                     <plugin>
                         <groupId>com.qulice</groupId>
                         <artifactId>qulice-maven-plugin</artifactId>
-                        <version since="2 Sep 2011">1.0-SNAPSHOT</version>
+                        <version since="2 Sep 2011">0.1.1</version>
                         <dependencies>
                             <dependency>
                                 <groupId>com.rexsl</groupId>
                                 <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
+                                <version rexsl="yes">0.1</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -224,7 +224,7 @@
                             <dependency>
                                 <groupId>com.rexsl</groupId>
                                 <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
+                                <version rexsl="yes">0.1</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -413,7 +413,7 @@
                             <dependency>
                                 <groupId>com.rexsl</groupId>
                                 <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
+                                <version rexsl="yes">0.1</version>
                             </dependency>
                         </dependencies>
                         <executions>
