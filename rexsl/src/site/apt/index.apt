@@ -61,7 +61,7 @@ ReXSL, a framework for lightweight Java web apps
   (you can {{{http://svn.rexsl.com/rexsl/trunk/rexsl/rexsl-maven-plugin/src/it/all-correct}checkout}}
   a simple project):
 
----
++--
 /foo
   pom.xml
   /src
@@ -89,7 +89,7 @@ ReXSL, a framework for lightweight Java web apps
           home-page.groovy
         /xsd
           Home.xsd
----
++--
 
   Maven <<<pom.xml>>> should look like this (latest version of ReXSL
   is published in {{{http://repo1.maven.org/maven2/com/rexsl/rexsl/}Maven Central}}):
@@ -163,9 +163,13 @@ ReXSL, a framework for lightweight Java web apps
   <<<web.xml>>> should be simple:
 
 +--
-<web-app>
+<web-app version="3.0" metadata-complete="false"
+  xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
   <listener>
-    <listener-class>com.rexsl.core.RexslListener</listener-class>
+    <listener-class>com.rexsl.core.CoreListener</listener-class>
   </listener>
   <filter>
     <filter-name>GuiceFilter</filter-name>
@@ -258,7 +262,14 @@ import static org.junit.Assert.assertThat
 import static org.junit.matchers.JUnitMatchers.containsString
 import static org.xmlmatchers.XmlMatchers.hasXPath
 assertThat(document, containsString('say hello'))
-assertThat(the(document), hasXPath("//div[contains(.,'say hello')]"))
+assertThat(
+    the(document),
+    hasXPath(
+        "//x:div[contains(.,'say hello')]",
+        new org.xmlmatchers.namespace.SimpleNamespaceContext()
+        .withBinding("x", "http://www.w3.org/1999/xhtml")
+    )
+)
 +--
 
   And now the most interesting part, a test
@@ -266,18 +277,24 @@ assertThat(the(document), hasXPath("//div[contains(.,'say hello')]"))
 
 +--
 import static com.rexsl.test.TestClient
-import static com.rexsl.test.XmlConverter.the
+import static com.rexsl.test.XhtmlConverter.the
 import static org.junit.Assert.assertThat
 import static org.junit.matchers.JUnitMatchers.*
 import static org.xmlmatchers.XmlMatchers.hasXPath
-def r1 = TestClient
+def r1 = new TestClient(documentRoot)
   .header('Accept', 'application/xml')
   .header('User-agent', 'Safari')
   .get('/')
-assertThat(the(r1), hasXPath("//div[contains(.,'world')]"))
+assertThat(
+    the(r1.body),
+    hasXPath(
+        "//x:div[contains(.,'world')]",
+        new org.xmlmatchers.namespace.SimpleNamespaceContext()
+        .withBinding("x", "http://www.w3.org/1999/xhtml")
+    )
+)
 assertThat(r1.status, equalTo(200))
-def r2 = TestClient.get('/strange-address')
-assertThat(r2.body, containsString('Page not found'))
+def r2 = new TestClient(documentRoot).get('/strange-address')
 assertThat(r2.status, equalTo(404))
 +--
 

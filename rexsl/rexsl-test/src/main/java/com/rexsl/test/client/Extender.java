@@ -27,20 +27,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.test.client;
 
-import static com.rexsl.test.TestClient
-import static com.rexsl.test.XmlConverter.the
-import static org.junit.Assert.assertThat
-import static org.junit.matchers.JUnitMatchers.*
-import static org.xmlmatchers.XmlMatchers.hasXPath
+import org.apache.http.HttpRequest;
 
-def r1 = TestClient
-  .header('Accept', 'application/xml')
-  .header('User-agent', 'Safari')
-  .get('/')
-assertThat(the(r1), hasXPath("//div[contains(.,'world')]"))
-assertThat(r1.status, equalTo(200))
+/**
+ * Extender.
+ *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @version $Id$
+ */
+public interface Extender {
 
-def r2 = TestClient.get('/strange-address')
-assertThat(r2.body, containsString('Page not found'))
-assertThat(r2.status, equalTo(404))
+    /**
+     * Extend HTTP request.
+     * @param request HTTP request
+     */
+    void extend(final HttpRequest request);
+
+}

@@ -33,9 +33,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.transform.Source;
-import org.junit.Test;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
+import org.junit.Test;
 import org.xmlmatchers.XmlMatchers;
 
 /**
@@ -59,9 +59,26 @@ public final class JaxbConverterTest {
         );
     }
 
+    /**
+     * Testing that this converter returns properly formatted string.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testToStringConversion() throws Exception {
+        final Object object = new Employee();
+        Assert.assertThat(
+            JaxbConverter.the(object).toString(),
+            Matchers.containsString("John")
+        );
+    }
+
     @XmlRootElement(name = "employee")
     @XmlAccessorType(XmlAccessType.NONE)
     private static final class Employee {
+        /**
+         * Returns a simple string.
+         * @return The text
+         */
         @XmlElement(name = "name")
         public String getName() {
             return "John Doe";

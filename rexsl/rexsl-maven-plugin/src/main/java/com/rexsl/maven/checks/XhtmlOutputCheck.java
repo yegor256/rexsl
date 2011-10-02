@@ -29,20 +29,12 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.AbstractCheck;
-import com.rexsl.maven.Reporter;
+import com.rexsl.maven.Check;
+import com.rexsl.maven.Environment;
 import groovy.lang.Binding;
-import groovy.util.GroovyScriptEngine;
 import java.io.File;
-import java.io.StringWriter;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Validate XHTML output.
@@ -50,32 +42,38 @@ import org.apache.commons.io.FileUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class XhtmlOutputCheck extends AbstractCheck {
+public final class XhtmlOutputCheck implements Check {
 
     /**
-     * Public ctor.
-     * @param basedir Base directory of maven project
-     * @param reporter The reporter to use
+     * Directory with XML files.
      */
-    public XhtmlOutputCheck(final File basedir, final Reporter reporter) {
-        super(basedir, reporter);
-    }
+    private static final String XML_DIR = "src/test/rexsl/xml";
+
+    /**
+     * Directory with Groovy files.
+     */
+    private static final String GROOVY_DIR = "src/test/rexsl/xhtml";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public final boolean validate() {
-        final File dir = new File(this.basedir(), "src/test/rexsl/xml");
+    public boolean validate(final Environment env) {
+        final File dir = new File(env.basedir(), this.XML_DIR);
+        if (!dir.exists()) {
+            env.reporter().report(
+                "%s directory is absent, no XHTML tests",
+                this.XML_DIR
+            );
+            return true;
+        }
         boolean success = true;
         for (File xml : FileUtils.listFiles(dir, new String[] {"xml"}, true)) {
             try {
-                this.one(xml);
+                env.reporter().report("Testing %s...", xml);
+                this.one(env, xml);
             } catch (InternalCheckException ex) {
-                final String msg = ex.getMessage();
-                if (!msg.isEmpty()) {
-                    this.reporter().report(msg);
-                }
+                env.reporter().report("Failed: %s", ex.getMessage());
                 success = false;
             }
         }
@@ -84,15 +82,21 @@ public final class XhtmlOutputCheck extends AbstractCheck {
 
     /**
      * Check one XML document.
+     * @param env Environment to work with
      * @param file Check this particular XML document
      * @throws InternalCheckException If some failure inside
      */
-    public final void one(final File file) throws InternalCheckException {
-        final File root = new File(this.basedir(), "src/test/rexsl/xhtml");
-        final String script = String.format(
-            "%s.groovy",
-            FilenameUtils.getBaseName(file.getPath())
-        );
+    private void one(final Environment env, final File file)
+        throws InternalCheckException {
+        final File root = new File(env.basedir(), this.GROOVY_DIR);
+        if (!root.exists()) {
+            throw new InternalCheckException(
+                "%s directory is absent",
+                this.GROOVY_DIR
+            );
+        }
+        final String basename = FilenameUtils.getBaseName(file.getPath());
+        final String script = String.format("%s.groovy", basename);
         final File groovy = new File(root, script);
         if (!groovy.exists()) {
             throw new InternalCheckException(
@@ -101,86 +105,11 @@ public final class XhtmlOutputCheck extends AbstractCheck {
                 file
             );
         }
-        final String xhtml = this.xhtml(file);
-        GroovyScriptEngine gse;
-        try {
-            gse = new GroovyScriptEngine(new String[] { root.getPath() });
-        } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(ex);
-        }
+        final String xhtml = new XhtmlTransformer().transform(env, file);
         final Binding binding = new Binding();
         binding.setVariable("document", xhtml);
-        try {
-            gse.run(script, binding);
-        } catch (groovy.util.ResourceException ex) {
-            throw new InternalCheckException(ex);
-        } catch (groovy.util.ScriptException ex) {
-            throw new InternalCheckException(ex);
-        }
-    }
-
-    /**
-     * Turn XML into XHTML.
-     * @param file XML document
-     * @throws InternalCheckException If some failure inside
-     */
-    public final String xhtml(final File file) throws InternalCheckException {
-        final Source xml = new StreamSource(file);
-        final TransformerFactory factory = TransformerFactory.newInstance();
-        factory.setURIResolver(
-            new XhtmlOutputCheck.InDirResolver(
-                new File(this.basedir(), "src/main/webapp")
-            )
-        );
-        Source xsl;
-        try {
-            xsl = factory.getAssociatedStylesheet(xml, null, null, null);
-        } catch (javax.xml.transform.TransformerConfigurationException ex) {
-            throw new InternalCheckException(ex);
-        }
-        if (xsl == null) {
-            throw new InternalCheckException(
-                "Associated XSL stylesheet not found in '%s'",
-                file
-            );
-        }
-        Transformer transformer;
-        try {
-            transformer = factory.newTransformer(xsl);
-        } catch (javax.xml.transform.TransformerConfigurationException ex) {
-            throw new InternalCheckException(ex);
-        }
-        final StringWriter writer = new StringWriter();
-        try {
-            transformer.transform(xml, new StreamResult(writer));
-        } catch (javax.xml.transform.TransformerException ex) {
-            throw new InternalCheckException(ex);
-        }
-        return writer.toString();
-    }
-
-    /**
-     * Resolve URLs to point them to directory.
-     */
-    private static final class InDirResolver implements URIResolver {
-        /**
-         * The directory to work in.
-         */
-        private final File dir;
-        /**
-         * Public ctor.
-         * @param path The directory
-         */
-        public InDirResolver(final File path) {
-            this.dir = path;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Source resolve(final String href, final String base) {
-            return new StreamSource(new File(this.dir, href));
-        }
+        final GroovyExecutor exec = new GroovyExecutor(env, binding);
+        exec.execute(groovy);
     }
 
 }

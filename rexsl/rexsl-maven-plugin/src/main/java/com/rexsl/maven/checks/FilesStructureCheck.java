@@ -29,20 +29,9 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.AbstractCheck;
-import com.rexsl.maven.Reporter;
-import groovy.lang.Binding;
-import groovy.util.GroovyScriptEngine;
+import com.rexsl.maven.Check;
+import com.rexsl.maven.Environment;
 import java.io.File;
-import java.io.StringWriter;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.FileUtils;
 
 /**
  * Validate location of files/dirs.
@@ -50,24 +39,16 @@ import org.apache.commons.io.FileUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class FilesStructureCheck extends AbstractCheck {
-
-    /**
-     * Public ctor.
-     * @param basedir Base directory of maven project
-     * @param reporter The reporter to use
-     */
-    public FilesStructureCheck(final File basedir, final Reporter reporter) {
-        super(basedir, reporter);
-    }
+public final class FilesStructureCheck implements Check {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public final boolean validate() {
+    public boolean validate(final Environment env) {
         final String[] names = {
             "src/main/webapp/",
+            "src/main/webapp/robots.txt",
             "src/main/webapp/xsl/",
             "src/main/webapp/WEB-INF/web.xml",
             "src/test/rexsl/xml/",
@@ -75,16 +56,16 @@ public final class FilesStructureCheck extends AbstractCheck {
             "src/test/rexsl/scripts/",
             "src/test/rexsl/xsd/",
         };
-        boolean success = true;
+        final boolean success = true;
         for (String name : names) {
             try {
-                this.one(name);
+                this.one(env.basedir(), name);
             } catch (InternalCheckException ex) {
                 final String msg = ex.getMessage();
                 if (!msg.isEmpty()) {
-                    this.reporter().report(msg);
+                    env.reporter().report(msg);
                 }
-                success = false;
+                // success = false;
             }
         }
         return success;
@@ -92,11 +73,13 @@ public final class FilesStructureCheck extends AbstractCheck {
 
     /**
      * Check for existence of this file/dir.
+     * @param basedir Project basedir
      * @param name The name of the file to check
      * @throws InternalCheckException If some failure inside
      */
-    public final void one(final String name) throws InternalCheckException {
-        final File file = new File(this.basedir(), name);
+    private void one(final File basedir, final String name)
+        throws InternalCheckException {
+        final File file = new File(basedir, name);
         if (!file.exists()) {
             throw new InternalCheckException(
                 "File '%s' is absent, but should be there",

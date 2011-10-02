@@ -35,6 +35,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * Simple reporter for tests only.
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
