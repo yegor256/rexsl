@@ -29,36 +29,17 @@
  */
 package com.rexsl.maven;
 
+import com.rexsl.maven.aether.DepsResolver;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.repository.internal.DefaultServiceLocator;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
-import org.apache.maven.wagon.Wagon;
-import org.apache.maven.wagon.providers.http.LightweightHttpWagon;
-import org.sonatype.aether.RepositorySystem;
 import org.sonatype.aether.artifact.Artifact;
-import org.sonatype.aether.collection.CollectRequest;
-import org.sonatype.aether.connector.file.FileRepositoryConnectorFactory;
-import org.sonatype.aether.connector.wagon.WagonProvider;
-import org.sonatype.aether.connector.wagon.WagonRepositoryConnectorFactory;
-import org.sonatype.aether.graph.Dependency;
-import org.sonatype.aether.graph.DependencyFilter;
-import org.sonatype.aether.repository.LocalRepository;
-import org.sonatype.aether.repository.RemoteRepository;
-import org.sonatype.aether.resolution.ArtifactResult;
-import org.sonatype.aether.resolution.DependencyRequest;
-import org.sonatype.aether.resolution.DependencyResolutionException;
-import org.sonatype.aether.spi.connector.RepositoryConnectorFactory;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
-import org.sonatype.aether.util.artifact.JavaScopes;
-import org.sonatype.aether.util.filter.DependencyFilterUtils;
 
 /**
  * Environment proxy, between Maven plugin and checks.
@@ -172,6 +153,8 @@ public final class MavenEnvironment implements Environment {
      */
     private List<Artifact> artifacts() {
         final List<Artifact> artifacts = new ArrayList<Artifact>();
+        final DepsResolver resolver =
+            new DepsResolver(this.project, this.localRepo);
         for (Artifact root : this.roots()) {
             this.reporter.log(
                 "%s:%s:%s",
@@ -179,7 +162,7 @@ public final class MavenEnvironment implements Environment {
                 root.getArtifactId(),
                 root.getVersion()
             );
-            for (Artifact dep : this.deps(root)) {
+            for (Artifact dep : resolver.deps(root)) {
                 boolean found = false;
                 for (Artifact exists : artifacts) {
                     if (dep.getArtifactId().equals(exists.getArtifactId())
@@ -199,27 +182,6 @@ public final class MavenEnvironment implements Environment {
             }
         }
         return artifacts;
-    }
-
-    /**
-     * Create Aether repository system.
-     * @return The repo system
-     */
-    private RepositorySystem system() {
-        final DefaultServiceLocator locator = new DefaultServiceLocator();
-        locator.addService(
-            RepositoryConnectorFactory.class,
-            FileRepositoryConnectorFactory.class
-        );
-        locator.addService(
-            RepositoryConnectorFactory.class,
-            WagonRepositoryConnectorFactory.class
-        );
-        locator.setServices(
-            WagonProvider.class,
-            new ManualWagonProvider()
-        );
-        return locator.getService(RepositorySystem.class);
     }
 
     /**
@@ -251,67 +213,6 @@ public final class MavenEnvironment implements Environment {
             );
         }
         return roots;
-    }
-
-    /**
-     * List of transitive deps of the artifact.
-     * @param root The artifact to work with
-     * @return The list of dependencies
-     * @see #artifacts()
-     */
-    private List<Artifact> deps(final Artifact root) {
-        final CollectRequest crq = new CollectRequest();
-        crq.setRoot(new Dependency(root, JavaScopes.RUNTIME));
-        for (RemoteRepository repo
-            : this.project.getRemoteProjectRepositories()) {
-            crq.addRepository(repo);
-        }
-        final DependencyFilter filter =
-            DependencyFilterUtils.classpathFilter(JavaScopes.RUNTIME);
-        final MavenRepositorySystemSession session =
-            new MavenRepositorySystemSession();
-        final LocalRepository local = new LocalRepository(this.localRepo);
-        session.setLocalRepositoryManager(
-            this.system().newLocalRepositoryManager(local)
-        );
-        Collection<ArtifactResult> results;
-        try {
-            results = this.system().resolveDependencies(
-                session,
-                new DependencyRequest(crq, filter)
-            ).getArtifactResults();
-        } catch (DependencyResolutionException ex) {
-            throw new IllegalStateException(ex);
-        }
-        final List<Artifact> deps = new ArrayList<Artifact>();
-        for (ArtifactResult res : results) {
-            deps.add(res.getArtifact());
-        }
-        return deps;
-    }
-
-    /**
-     * Private wagon provider.
-     */
-    private static final class ManualWagonProvider implements WagonProvider {
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Wagon lookup(final String roleHint) throws Exception {
-            if ("http".equals(roleHint)) {
-                return new LightweightHttpWagon();
-            }
-            return null;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void release(final Wagon wagon) {
-            // intentionally empty
-        }
-
     }
 
 }

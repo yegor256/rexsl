@@ -95,10 +95,22 @@ public final class CheckMojoTest {
         Mockito.doReturn(checks).when(provider).all();
         PowerMockito.whenNew(ChecksProvider.class).withNoArguments()
             .thenReturn(provider);
-        final CheckMojo mojo = new CheckMojo();
+        final CheckMojo mojo = this.mojo();
         final MavenProject project = Mockito.mock(MavenProject.class);
         Mockito.doReturn("war").when(project).getPackaging();
         mojo.setProject(project);
+        mojo.execute();
+        Mockito.verify(provider).all();
+        final Environment env = check.env();
+        MatcherAssert.assertThat(env, Matchers.notNullValue());
+    }
+
+    /**
+     * Create and return a MOJO.
+     * @return The mojo
+     */
+    private CheckMojo mojo() {
+        final CheckMojo mojo = new CheckMojo();
         mojo.setWebappDirectory("");
         final RepositorySystemSession session =
             Mockito.mock(RepositorySystemSession.class);
@@ -107,23 +119,40 @@ public final class CheckMojoTest {
         mojo.setSession(session);
         final Log log = Mockito.mock(Log.class);
         mojo.setLog(log);
-        mojo.execute();
-        Mockito.verify(provider).all();
-        final Environment env = check.env();
-        MatcherAssert.assertThat(env, Matchers.notNullValue());
+        return mojo;
     }
 
+    /**
+     * Sample check, used in tests.
+     */
     private static final class SpyCheck implements Check {
+        /**
+         * Environment.
+         */
         private Environment env;
+        /**
+         * Status to return, see ctor.
+         */
         private final boolean status;
+        /**
+         * Public ctor.
+         * @param sts Status to return
+         */
         public SpyCheck(final boolean sts) {
             this.status = sts;
         }
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean validate(final Environment environment) {
             this.env = environment;
             return this.status;
         }
+        /**
+         * Environment.
+         * @return Status
+         */
         public Environment env() {
             return this.env;
         }

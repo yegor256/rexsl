@@ -79,11 +79,12 @@ public final class InContainerScriptsCheck implements Check {
             return true;
         }
         if (!env.webdir().exists()) {
-            env.reporter().report(
-                "Webapp dir '%s' is absent, package the project first",
-                env.webdir()
+            throw new IllegalStateException(
+                String.format(
+                    "Webapp dir '%s' is absent, package the project first",
+                    env.webdir()
+                )
             );
-            return false;
         }
         env.reporter().report(
             "Starting embedded Grizzly web server in '%s'...",
@@ -91,18 +92,48 @@ public final class InContainerScriptsCheck implements Check {
         );
         final Integer port = new PortReserver().port();
         final Grizzly grizzly = Grizzly.start(env.webdir(), port);
-        URI home;
-        try {
-            home = new URI(String.format("http://localhost:%d/", port));
-        } catch (java.net.URISyntaxException ex) {
-            throw new IllegalStateException(ex);
-        }
+        final URI home = this.home(port);
         env.reporter().report("Web front available at %s", home);
         final InContainerScriptsCheck.EventHandler handler =
             new InContainerScriptsCheck.EventHandler();
         XslResolver.setJaxbConfigurator(
             new InContainerScriptsCheck.Configurator(env, handler)
         );
+        boolean success = this.run(dir, home, env);
+        grizzly.stop();
+        env.reporter().report("Embedded Grizzly web server stopped");
+        if (handler.events().size() > 0) {
+            for (ValidationEvent event : handler.events()) {
+                env.reporter().report("JAXB error: %s", event.getMessage());
+            }
+            success = false;
+        }
+        return success;
+    }
+
+    /**
+     * Calculate and return the address of home page.
+     * @param port Port number
+     * @return The URI
+     */
+    private URI home(final Integer port) {
+        URI home;
+        try {
+            home = new URI(String.format("http://localhost:%d/", port));
+        } catch (java.net.URISyntaxException ex) {
+            throw new IllegalStateException(ex);
+        }
+        return home;
+    }
+
+    /**
+     * Run all checks.
+     * @param dir Where script are located
+     * @param home Home page URI
+     * @param env Environment
+     * @return Was it successful?
+     */
+    private boolean run(final File dir, final URI home, final Environment env) {
         boolean success = true;
         for (File script
             : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
@@ -113,14 +144,6 @@ public final class InContainerScriptsCheck implements Check {
                 env.reporter().report("Test failed: %s", ex.getMessage());
                 success = false;
             }
-        }
-        grizzly.stop();
-        env.reporter().report("Embedded Grizzly web server stopped");
-        if (handler.events().size() > 0) {
-            for (ValidationEvent event : handler.events()) {
-                env.reporter().report("JAXB error: %s", event.getMessage());
-            }
-            success = false;
         }
         return success;
     }
