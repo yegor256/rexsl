@@ -29,7 +29,7 @@
  */
 package com.rexsl.core;
 
-import java.util.Hashtable;
+import java.util.Properties;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -53,8 +53,7 @@ public final class CoreListenerTest {
             Mockito.mock(ServletContextEvent.class);
         final ServletContext ctx = Mockito.mock(ServletContext.class);
         Mockito.doReturn(ctx).when(event).getServletContext();
-        final Hashtable<Integer, String> params =
-            new Hashtable<Integer, String>();
+        final Properties params = new Properties();
         final String name = "JSR311-packages";
         final String value = "com.rexsl.foo";
         params.put(1, name);
