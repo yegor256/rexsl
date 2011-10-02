@@ -33,13 +33,6 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import groovy.lang.Binding;
 import java.io.File;
-import java.io.StringWriter;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -112,78 +105,11 @@ public final class XhtmlOutputCheck implements Check {
                 file
             );
         }
-        final String xhtml = this.xhtml(env, file);
+        final String xhtml = new XhtmlTransformer().transform(env, file);
         final Binding binding = new Binding();
         binding.setVariable("document", xhtml);
         final GroovyExecutor exec = new GroovyExecutor(env, binding);
         exec.execute(groovy);
-    }
-
-    /**
-     * Turn XML into XHTML.
-     * @param env Environment
-     * @param file XML document
-     * @return XHTML as text
-     * @throws InternalCheckException If some failure inside
-     */
-    private String xhtml(final Environment env, final File file)
-        throws InternalCheckException {
-        final Source xml = new StreamSource(file);
-        final TransformerFactory factory = TransformerFactory.newInstance();
-        factory.setURIResolver(
-            new XhtmlOutputCheck.InDirResolver(
-                new File(env.basedir(), "src/main/webapp")
-            )
-        );
-        Source xsl;
-        try {
-            xsl = factory.getAssociatedStylesheet(xml, null, null, null);
-        } catch (javax.xml.transform.TransformerConfigurationException ex) {
-            throw new InternalCheckException(ex);
-        }
-        if (xsl == null) {
-            throw new InternalCheckException(
-                "Associated XSL stylesheet not found in '%s'",
-                file
-            );
-        }
-        Transformer transformer;
-        try {
-            transformer = factory.newTransformer(xsl);
-        } catch (javax.xml.transform.TransformerConfigurationException ex) {
-            throw new InternalCheckException(ex);
-        }
-        final StringWriter writer = new StringWriter();
-        try {
-            transformer.transform(xml, new StreamResult(writer));
-        } catch (javax.xml.transform.TransformerException ex) {
-            throw new InternalCheckException(ex);
-        }
-        return writer.toString();
-    }
-
-    /**
-     * Resolve URLs to point them to directory.
-     */
-    private static final class InDirResolver implements URIResolver {
-        /**
-         * The directory to work in.
-         */
-        private final File dir;
-        /**
-         * Public ctor.
-         * @param path The directory
-         */
-        public InDirResolver(final File path) {
-            this.dir = path;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Source resolve(final String href, final String base) {
-            return new StreamSource(new File(this.dir, href));
-        }
     }
 
 }
