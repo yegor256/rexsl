@@ -29,11 +29,18 @@
  */
 package com.rexsl.maven;
 
-import java.io.File;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.repository.LocalRepository;
 
@@ -42,37 +49,84 @@ import org.sonatype.aether.repository.LocalRepository;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CheckMojoTest extends AbstractMojoTestCase {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ CheckMojo.class, ChecksProvider.class })
+public final class CheckMojoTest {
 
     /**
-     * Test plugin for a single execution.
+     * Skip option should stop MOJO execution.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testMojoGoal() throws Exception {
-        final CheckMojo mojo = this.mojo();
+    public void testSkipOption() throws Exception {
+        final CheckMojo mojo = new CheckMojo();
+        mojo.setSkip(true);
+        final Log log = Mockito.mock(Log.class);
+        mojo.setLog(log);
+        mojo.execute();
+        Mockito.verify(log).info("execution skipped because of 'skip' option");
+    }
+
+    /**
+     * Non-WAR projects should be ignored.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testNonWarPackaging() throws Exception {
+        final CheckMojo mojo = new CheckMojo();
+        final MavenProject project = Mockito.mock(MavenProject.class);
+        Mockito.doReturn("jar").when(project).getPackaging();
+        mojo.setProject(project);
         mojo.execute();
     }
 
     /**
-     * Create MOJO for tests.
-     * @return The MOJO just created
+     * Validate using a collection of checks.
      * @throws Exception If something goes wrong inside
      */
-    private CheckMojo mojo() throws Exception {
-        final File basedir = new File(".");
+    @Test
+    public void testWithCollectionOfChecks() throws Exception {
+        PowerMockito.mockStatic(ChecksProvider.class);
+        final ChecksProvider provider =
+            PowerMockito.mock(ChecksProvider.class);
+        final List<Check> checks = new ArrayList<Check>();
+        final CheckMojoTest.SpyCheck check = new CheckMojoTest.SpyCheck(true);
+        checks.add(check);
+        Mockito.doReturn(checks).when(provider).all();
+        PowerMockito.whenNew(ChecksProvider.class).withNoArguments()
+            .thenReturn(provider);
         final CheckMojo mojo = new CheckMojo();
         final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn(basedir).when(project).getBasedir();
         Mockito.doReturn("war").when(project).getPackaging();
         mojo.setProject(project);
-        mojo.setWebappDirectory(basedir.getPath());
+        mojo.setWebappDirectory("");
         final RepositorySystemSession session =
             Mockito.mock(RepositorySystemSession.class);
-        final LocalRepository repo = new LocalRepository(basedir);
+        final LocalRepository repo = new LocalRepository(".");
         Mockito.doReturn(repo).when(session).getLocalRepository();
         mojo.setSession(session);
-        return mojo;
+        final Log log = Mockito.mock(Log.class);
+        mojo.setLog(log);
+        mojo.execute();
+        Mockito.verify(provider).all();
+        final Environment env = check.env();
+        MatcherAssert.assertThat(env, Matchers.notNullValue());
+    }
+
+    private static final class SpyCheck implements Check {
+        private Environment env;
+        private final boolean status;
+        public SpyCheck(final boolean sts) {
+            this.status = sts;
+        }
+        @Override
+        public boolean validate(final Environment environment) {
+            this.env = environment;
+            return this.status;
+        }
+        public Environment env() {
+            return this.env;
+        }
     }
 
 }

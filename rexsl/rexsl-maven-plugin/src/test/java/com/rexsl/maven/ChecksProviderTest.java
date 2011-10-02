@@ -29,30 +29,27 @@
  */
 package com.rexsl.maven;
 
-import com.rexsl.maven.checks.FilesStructureCheck;
-import com.rexsl.maven.checks.InContainerScriptsCheck;
-import com.rexsl.maven.checks.XhtmlOutputCheck;
-import java.util.ArrayList;
 import java.util.List;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
- * Factory of checks.
- *
+ * Test provider of checks.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CheckFactory {
+public final class ChecksProviderTest {
 
     /**
-     * Get full collection of checks.
-     * @return List of checks
+     * Factory should return a collection of checks.
+     * @throws Exception If something goes wrong inside
      */
-    public List<Check> all() {
-        final List<Check> checks = new ArrayList<Check>();
-        checks.add(new FilesStructureCheck());
-        checks.add(new XhtmlOutputCheck());
-        checks.add(new InContainerScriptsCheck());
-        return checks;
+    @Test
+    public void testChecksRetrieval() throws Exception {
+        final List<Check> checks = new ChecksProvider().all();
+        MatcherAssert.assertThat(checks, Matchers.notNullValue());
+        MatcherAssert.assertThat(checks.size(), Matchers.greaterThan(0));
     }
 
 }

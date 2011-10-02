@@ -27,30 +27,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.utils;
+package com.rexsl.maven;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import org.apache.maven.plugin.logging.Log;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
- * PortReserver test case.
- * @author Yegor Bugayenko (yegor@qulice.com)
+ * Test reporter.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class PortReserverTest {
+public final class MavenReporterTest {
 
     /**
-     * Let's try to reserver a port.
-     * @throws Exception If something goes wrong
+     * Reporter should pass log() and report() requests to Maven log.
+     * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testReservesPort() throws Exception {
-        final Integer port1 = new PortReserver().port();
-        MatcherAssert.assertThat(port1, Matchers.greaterThan(0));
-        final Integer port2 = new PortReserver().port();
-        MatcherAssert.assertThat(port2, Matchers.greaterThan(0));
-        MatcherAssert.assertThat(port1, Matchers.not(Matchers.equalTo(port2)));
+    public void testReportingOperations() throws Exception {
+        final Log log = Mockito.mock(Log.class);
+        final Reporter reporter = new MavenReporter(log);
+        reporter.report("a %d", 1);
+        Mockito.verify(log).info("a 1");
+        reporter.log("b %d", 1);
+        Mockito.verify(log).debug("b 1");
     }
 
 }

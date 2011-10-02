@@ -139,7 +139,7 @@ public final class CheckMojo extends AbstractMojo {
         env.setLocalRepository(
             this.session.getLocalRepository().getBasedir().getPath()
         );
-        for (Check check : new CheckFactory().all()) {
+        for (Check check : new ChecksProvider().all()) {
             if (!check.validate(env)) {
                 throw new MojoFailureException(
                     String.format(

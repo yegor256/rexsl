@@ -27,30 +27,32 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.utils;
+package com.rexsl.maven;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.Test;
+import com.rexsl.maven.checks.FilesStructureCheck;
+import com.rexsl.maven.checks.InContainerScriptsCheck;
+import com.rexsl.maven.checks.XhtmlOutputCheck;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * PortReserver test case.
- * @author Yegor Bugayenko (yegor@qulice.com)
+ * Provider of checks.
+ *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class PortReserverTest {
+public final class ChecksProvider {
 
     /**
-     * Let's try to reserver a port.
-     * @throws Exception If something goes wrong
+     * Get full collection of checks.
+     * @return List of checks
      */
-    @Test
-    public void testReservesPort() throws Exception {
-        final Integer port1 = new PortReserver().port();
-        MatcherAssert.assertThat(port1, Matchers.greaterThan(0));
-        final Integer port2 = new PortReserver().port();
-        MatcherAssert.assertThat(port2, Matchers.greaterThan(0));
-        MatcherAssert.assertThat(port1, Matchers.not(Matchers.equalTo(port2)));
+    public List<Check> all() {
+        final List<Check> checks = new ArrayList<Check>();
+        checks.add(new FilesStructureCheck());
+        checks.add(new XhtmlOutputCheck());
+        checks.add(new InContainerScriptsCheck());
+        return checks;
     }
 
 }

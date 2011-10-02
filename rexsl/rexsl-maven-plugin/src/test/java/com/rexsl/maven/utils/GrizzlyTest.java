@@ -32,6 +32,7 @@ package com.rexsl.maven.utils;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -88,7 +89,7 @@ public final class GrizzlyTest {
             client.execute(new HttpGet("http://localhost:" + port));
         MatcherAssert.assertThat(
             response.getStatusLine().getStatusCode(),
-            Matchers.equalTo(200)
+            Matchers.equalTo(HttpStatus.SC_OK)
         );
     }
 
