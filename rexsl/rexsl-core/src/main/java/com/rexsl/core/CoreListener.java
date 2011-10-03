@@ -65,7 +65,7 @@ public final class CoreListener extends GuiceServletContextListener {
             this.params.put(name, ctx.getInitParameter(name));
             Logger.info(
                 this,
-                "#contextInitialized(): '%s' init param set to '%s'",
+                "#contextInitialized(): '%s' init-param set to '%s' (web.xml)",
                 name,
                 ctx.getInitParameter(name)
             );
@@ -73,7 +73,7 @@ public final class CoreListener extends GuiceServletContextListener {
         if (names.size() == 0) {
             Logger.info(
                 this,
-                "#contextInitialized(): no init-params provided"
+                "#contextInitialized(): no init-params provided in web.xml"
             );
         }
         Logger.info(
@@ -81,7 +81,6 @@ public final class CoreListener extends GuiceServletContextListener {
             "#contextInitialized(%s): done",
             event.getClass().getName()
         );
-        this.params.put("JSR311-packages", "com.rexsl.foo");
         super.contextInitialized(event);
     }
 

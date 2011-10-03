@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -27,39 +26,59 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.maven;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+
+/**
+ * Package resources.
  *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<web-app version="3.0" metadata-complete="false"
-    xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-        http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+ * @goal package
+ * @phase process-resources
+ * @threadSafe
+ */
+public final class PackageMojo extends AbstractMojo {
 
-    <context-param>
-        <param-name>rexsl.packages</param-name>
-        <param-value>com.rexsl.foo</param-value>
-    </context-param>
+    /**
+     * Maven project, to be injected by Maven itself.
+     * @parameter expression="${project}"
+     * @required
+     * @readonly
+     */
+    private MavenProject project;
 
-    <listener>
-        <listener-class>com.rexsl.core.CoreListener</listener-class>
-    </listener>
+    /**
+     * Public ctor.
+     */
+    public PackageMojo() {
+        super();
+        this.project = null;
+    }
 
-    <filter>
-        <filter-name>GuiceFilter</filter-name>
-        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
-    </filter>
+    /**
+     * Set Maven Project (used mostly for unit testing).
+     * @param proj The project to set
+     */
+    public void setProject(final MavenProject proj) {
+        this.project = proj;
+    }
 
-    <filter-mapping>
-        <filter-name>GuiceFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void execute() throws MojoFailureException {
+        org.slf4j.impl.StaticLoggerBinder.getSingleton()
+            .setMavenLog(this.getLog());
+        if (!"war".equals(this.project.getPackaging())) {
+            throw new IllegalStateException("project packaging is not WAR");
+        }
+        this.getLog().info("Packaging completed");
+    }
 
-    <mime-mapping>
-        <extension>xsl</extension>
-        <mime-type>text/xsl</mime-type>
-    </mime-mapping>
-
-</web-app>
+}

@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -27,39 +26,12 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/**
+ * Test client, specific classes, tests.
  *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<web-app version="3.0" metadata-complete="false"
-    xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-        http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-
-    <context-param>
-        <param-name>rexsl.packages</param-name>
-        <param-value>com.rexsl.foo</param-value>
-    </context-param>
-
-    <listener>
-        <listener-class>com.rexsl.core.CoreListener</listener-class>
-    </listener>
-
-    <filter>
-        <filter-name>GuiceFilter</filter-name>
-        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>GuiceFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-
-    <mime-mapping>
-        <extension>xsl</extension>
-        <mime-type>text/xsl</mime-type>
-    </mime-mapping>
-
-</web-app>
+ */
+package com.rexsl.test.client;
