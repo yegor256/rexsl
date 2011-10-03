@@ -54,8 +54,7 @@ ReXSL, a framework for lightweight Java web apps
   {{{http://en.wikipedia.org/wiki/HATEOAS}HATEOAS}},
   {{{http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol}HTTP 1.1}}.
   If any of these technologies are new for you ReXSL won't work.
-
-  Let's create a new project on top of ReXSL.
+  Let's create a new project on top of ReXSL:
 
   Create a new Maven project with the following directory structure
   (you can {{{http://svn.rexsl.com/rexsl/trunk/rexsl/rexsl-maven-plugin/src/it/all-correct}checkout}}
@@ -86,9 +85,9 @@ ReXSL, a framework for lightweight Java web apps
         /xml
           index.xml
         /scripts
-          home-page.groovy
+          HomePage.groovy
         /xsd
-          Home.xsd
+          foo.Home.xsd
 +--
 
   Maven <<<pom.xml>>> should look like this (latest version of ReXSL
@@ -170,6 +169,10 @@ ReXSL, a framework for lightweight Java web apps
     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
   <listener>
     <listener-class>com.rexsl.core.CoreListener</listener-class>
+    <init-param>
+      <param-name>JSR311-packages</param-name>
+      <param-value>foo</param-value>
+    </init-param>
   </listener>
   <filter>
     <filter-name>GuiceFilter</filter-name>
@@ -257,45 +260,46 @@ public class HomeTest {
   Maven goal and validated by <<<src/test/rexsl/xhtml/index.groovy>>>:
 
 +--
-import static com.rexsl.test.XhtmlConverter.the
-import static org.junit.Assert.assertThat
-import static org.junit.matchers.JUnitMatchers.containsString
-import static org.xmlmatchers.XmlMatchers.hasXPath
-assertThat(document, containsString('say hello'))
-assertThat(
-    the(document),
-    hasXPath(
+import com.rexsl.test.XhtmlConverter
+import org.junit.Assert
+import org.junit.matchers.JUnitMatchers
+import org.xmlmatchers.XmlMatchers
+import org.xmlmatchers.namespace.SimpleNamespaceContext
+Assert.assertThat(document, JUnitMatchers.containsString('say hello'))
+Assert.assertThat(
+    XhtmlConverter.the(document),
+    XmlMatchers.hasXPath(
         "//x:div[contains(.,'say hello')]",
-        new org.xmlmatchers.namespace.SimpleNamespaceContext()
-        .withBinding("x", "http://www.w3.org/1999/xhtml")
+        new SimpleNamespaceContext().withBinding("x", "http://www.w3.org/1999/xhtml")
     )
 )
 +--
 
   And now the most interesting part, a test
-  script in <<<src/test/rexsl/scripts/home-page.groovy>>>:
+  script in <<<src/test/rexsl/scripts/HomePage.groovy>>>:
 
 +--
-import static com.rexsl.test.TestClient
-import static com.rexsl.test.XhtmlConverter.the
-import static org.junit.Assert.assertThat
-import static org.junit.matchers.JUnitMatchers.*
-import static org.xmlmatchers.XmlMatchers.hasXPath
+import com.rexsl.test.TestClient
+import com.rexsl.test.XhtmlConverter
+import org.junit.Assert
+import org.junit.matchers.JUnitMatchers
+import org.xmlmatchers.XmlMatchers
+import org.xmlmatchers.namespace.SimpleNamespaceContext
 def r1 = new TestClient(documentRoot)
   .header('Accept', 'application/xml')
   .header('User-agent', 'Safari')
   .get('/')
-assertThat(
-    the(r1.body),
-    hasXPath(
-        "//x:div[contains(.,'world')]",
-        new org.xmlmatchers.namespace.SimpleNamespaceContext()
-        .withBinding("x", "http://www.w3.org/1999/xhtml")
-    )
+Assert.assertThat(r1.status, JUnitMatchers.equalTo(200))
+Assert.assertThat(
+  XhtmlConverter.the(r1.body),
+  XmlMatchers.hasXPath(
+    "//x:div[contains(.,'world')]",
+    new SimpleNamespaceContext().withBinding("x", "http://www.w3.org/1999/xhtml")
+  )
 )
-assertThat(r1.status, equalTo(200))
-def r2 = new TestClient(documentRoot).get('/strange-address')
-assertThat(r2.status, equalTo(404))
+def r2 = new TestClient(documentRoot)
+  .get('/strange-address')
+Assert.assertThat(r2.status, JUnitMatchers.equalTo(404))
 +--
 
   Now let's create <<<src/main/webapp/xsl/layout.xsl>>>:
@@ -339,7 +343,7 @@ assertThat(r2.status, equalTo(404))
 </xsl:stylesheet>
 +--
 
-  The last step is to create <<<src/test/rexsl/xsd/Home.xsd>>>
+  The last step is to create <<<src/test/rexsl/xsd/foo.Home.xsd>>>
   in order to validate XML output on fly:
 
 +--

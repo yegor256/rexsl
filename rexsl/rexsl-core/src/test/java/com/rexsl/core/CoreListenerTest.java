@@ -34,14 +34,38 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
- * CoreListener test case.
+ * Test case for {@link CoreListener} class.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ CoreListener.class, JerseyModule.class })
 public final class CoreListenerTest {
+
+    /**
+     * Let's test how it initialized this listener with system property.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testInitializesSystemProperty() throws Exception {
+        final ServletContextEvent event =
+            Mockito.mock(ServletContextEvent.class);
+        final ServletContext ctx = Mockito.mock(ServletContext.class);
+        Mockito.doReturn(ctx).when(event).getServletContext();
+        final ServletContextListener listener = new CoreListener();
+        PowerMockito.mockStatic(JerseyModule.class);
+        PowerMockito.whenNew(JerseyModule.class).withArguments(any(Map.class))
+            .thenReturn(module);
+        PowerMockito.spy(JerseyModule.class);
+        listener.contextInitialized(event);
+    }
 
     /**
      * Let's test how it initialized this listener with context.

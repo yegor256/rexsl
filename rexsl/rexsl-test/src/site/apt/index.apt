@@ -1,9 +1,9 @@
  ------
- Usage of ReXSL Maven Plugin
+ Introduction to ReXSL
  ------
  Yegor Bugayenko
  ------
- 2011-09-3
+ 2011-08-21
  ------
 
 ~~
@@ -38,32 +38,8 @@
 ~~ @version $Id$
 ~~
 
-Usage
+ReXSL Test Facilitating Library
 
-  It's easy:
+  The library contains a collection of usable tools for testing of
+  ReXSL-powered application.
 
-+--
-<project>
-  [...]
-  <build>
-    <plugins>
-      [...]
-      <plugin>
-        <groupId>com.rexsl</groupId>
-        <artifactId>rexsl-maven-plugin</artifactId>
-        <version>0.1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-              <goal>package</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-</project>
-+--
-
-  Read more in {{{../index.html}intro page}}.

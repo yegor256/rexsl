@@ -35,13 +35,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
     http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="maven-rexsl-plugin">
+    name="rexsl-test">
 
     <body>
         <menu ref="parent" />
         <menu name="Overview">
             <item name="Introduction" href="index.html" />
-            <item name="Usage" href="usage.html" />
         </menu>
         <menu ref="reports" />
         <menu ref="modules" />

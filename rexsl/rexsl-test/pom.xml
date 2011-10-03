@@ -112,6 +112,11 @@
             <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <!-- other details are in parent pom.xml -->
+        </dependency>
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <!-- other details are in parent pom.xml -->

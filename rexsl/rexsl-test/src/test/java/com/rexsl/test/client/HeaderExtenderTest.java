@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,23 +26,34 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.test.client;
+
+import org.apache.http.HttpRequest;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+/**
+ * Test JAXB converter.
  *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
-    http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="maven-rexsl-plugin">
+ */
+public final class HeaderExtenderTest {
 
-    <body>
-        <menu ref="parent" />
-        <menu name="Overview">
-            <item name="Introduction" href="index.html" />
-            <item name="Usage" href="usage.html" />
-        </menu>
-        <menu ref="reports" />
-        <menu ref="modules" />
-    </body>
+    /**
+     * Test basic operation.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testExtendingOperation() throws Exception {
+        final HttpRequest request = Mockito.mock(HttpRequest.class);
+        final String name = "User-agent";
+        final String value = "Chrome";
+        final HeaderExtender extender = new HeaderExtender(name, value);
+        extender.extend(request);
+        Mockito.verify(request).setHeader(name, value);
+    }
 
-</project>
+}

@@ -81,7 +81,7 @@ public final class CoreListener extends GuiceServletContextListener {
             "#contextInitialized(%s): done",
             event.getClass().getName()
         );
-        this.params.put("JSR311-packages", "com.rexsl.foo");
+        this.addSystemProperty("JSR311-packages", "com.rexsl.foo");
         super.contextInitialized(event);
     }
 
@@ -96,6 +96,17 @@ public final class CoreListener extends GuiceServletContextListener {
             this.params.size()
         );
         return Guice.createInjector(new JerseyModule(this.params));
+    }
+
+    /**
+     * Add parameter, if it's not set yet.
+     * @param name Name of new param to set
+     * @param value Value to set
+     */
+    private void addSystemProperty(final String name, final String value) {
+        if (!this.params.containsKey(name)) {
+            this.params.put(name, System.getProperty(name, value));
+        }
     }
 
 }

@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,23 +26,59 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.maven;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+
+/**
+ * Package resources.
  *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
-    http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="maven-rexsl-plugin">
+ * @goal package
+ * @phase process-resources
+ * @threadSafe
+ */
+public final class PackageMojo extends AbstractMojo {
 
-    <body>
-        <menu ref="parent" />
-        <menu name="Overview">
-            <item name="Introduction" href="index.html" />
-            <item name="Usage" href="usage.html" />
-        </menu>
-        <menu ref="reports" />
-        <menu ref="modules" />
-    </body>
+    /**
+     * Maven project, to be injected by Maven itself.
+     * @parameter expression="${project}"
+     * @required
+     * @readonly
+     */
+    private MavenProject project;
 
-</project>
+    /**
+     * Public ctor.
+     */
+    public PackageMojo() {
+        super();
+        this.project = null;
+    }
+
+    /**
+     * Set Maven Project (used mostly for unit testing).
+     * @param proj The project to set
+     */
+    public void setProject(final MavenProject proj) {
+        this.project = proj;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void execute() throws MojoFailureException {
+        org.slf4j.impl.StaticLoggerBinder.getSingleton()
+            .setMavenLog(this.getLog());
+        if (!"war".equals(this.project.getPackaging())) {
+            throw new IllegalStateException("project packaging is not WAR");
+        }
+        this.getLog().info("Packaging completed");
+    }
+
+}
