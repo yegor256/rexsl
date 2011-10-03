@@ -81,7 +81,6 @@ public final class CoreListener extends GuiceServletContextListener {
             "#contextInitialized(%s): done",
             event.getClass().getName()
         );
-        this.addSystemProperty(JerseyModule.OPT_JSR311_PACKAGES);
         super.contextInitialized(event);
     }
 
@@ -96,23 +95,6 @@ public final class CoreListener extends GuiceServletContextListener {
             this.params.size()
         );
         return Guice.createInjector(new JerseyModule(this.params));
-    }
-
-    /**
-     * Add parameter, if it's not set yet.
-     * @param name Name of new param to set
-     */
-    private void addSystemProperty(final String name) {
-        if (!this.params.containsKey(name)) {
-            final String value = System.getProperty(name);
-            this.params.put(name, value);
-            Logger.info(
-                this,
-                "#addSystemProperty(%s): set to '%s'",
-                name,
-                value
-            );
-        }
     }
 
 }

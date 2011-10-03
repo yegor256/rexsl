@@ -30,7 +30,6 @@
 package com.rexsl.test.client;
 
 import org.apache.http.HttpRequest;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 

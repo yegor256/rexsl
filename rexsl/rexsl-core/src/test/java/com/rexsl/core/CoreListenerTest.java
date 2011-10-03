@@ -36,7 +36,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -56,19 +55,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public final class CoreListenerTest {
 
     /**
-     * Let's test how it initialized this listener with system property.
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void testInitializesSystemProperty() throws Exception {
-        final ServletContextListener listener = new CoreListener();
-        final String value = "com.rexsl.core";
-        System.setProperty(JerseyModule.OPT_JSR311_PACKAGES, value);
-        this.expect(value);
-        // listener.contextInitialized(this.event(new Properties()));
-    }
-
-    /**
      * Let's test how it initialized this listener with context.
      * @throws Exception If something goes wrong
      */
@@ -84,7 +70,9 @@ public final class CoreListenerTest {
 
     /**
      * Create context event.
-     * @param params Init params.
+     * @param props Init params.
+     * @return The event just created
+     * @throws Exception If something goes wrong
      */
     private ServletContextEvent event(final Properties props) throws Exception {
         final ServletContextEvent event =
@@ -106,6 +94,7 @@ public final class CoreListenerTest {
     /**
      * Expect JSR3-packages param to be set to this value.
      * @param value The value
+     * @throws Exception If something goes wrong
      */
     private void expect(final String value) throws Exception {
         PowerMockito.mockStatic(JerseyModule.class);
@@ -133,7 +122,8 @@ public final class CoreListenerTest {
          * {@inheritDoc}
          */
         @Override
-        public Object answer(final InvocationOnMock invocation) throws Exception {
+        public Object answer(final InvocationOnMock invocation)
+            throws Exception {
             final Object[] args = invocation.getArguments();
             final Map<String, String> params = (Map<String, String>) args[0];
             MatcherAssert.assertThat(

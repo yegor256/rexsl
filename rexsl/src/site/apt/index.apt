@@ -167,12 +167,12 @@ ReXSL, a framework for lightweight Java web apps
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <context-param>
+    <param-name>rexsl.packages</param-name>
+    <param-value>foo</param-value>
+  </context-param>
   <listener>
     <listener-class>com.rexsl.core.CoreListener</listener-class>
-    <init-param>
-      <param-name>JSR311-packages</param-name>
-      <param-value>foo</param-value>
-    </init-param>
   </listener>
   <filter>
     <filter-name>GuiceFilter</filter-name>
