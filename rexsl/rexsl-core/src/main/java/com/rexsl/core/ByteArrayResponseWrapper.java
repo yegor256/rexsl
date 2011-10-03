@@ -96,7 +96,7 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
              */
             @Override
             public void write(final int part) throws IOException {
-                ByteArrayResponseWrapper.this.outputStream.write(part);
+                ByteArrayResponseWrapper.this.stream.write(part);
             }
         };
     }
