@@ -65,7 +65,7 @@ public final class CoreListener extends GuiceServletContextListener {
             this.params.put(name, ctx.getInitParameter(name));
             Logger.info(
                 this,
-                "#contextInitialized(): '%s' init param set to '%s'",
+                "#contextInitialized(): '%s' init-param set to '%s' (web.xml)",
                 name,
                 ctx.getInitParameter(name)
             );
@@ -73,7 +73,7 @@ public final class CoreListener extends GuiceServletContextListener {
         if (names.size() == 0) {
             Logger.info(
                 this,
-                "#contextInitialized(): no init-params provided"
+                "#contextInitialized(): no init-params provided in web.xml"
             );
         }
         Logger.info(
@@ -81,7 +81,7 @@ public final class CoreListener extends GuiceServletContextListener {
             "#contextInitialized(%s): done",
             event.getClass().getName()
         );
-        this.addSystemProperty("JSR311-packages", "com.rexsl.foo");
+        this.addSystemProperty(JerseyModule.OPT_JSR311_PACKAGES);
         super.contextInitialized(event);
     }
 
@@ -101,11 +101,17 @@ public final class CoreListener extends GuiceServletContextListener {
     /**
      * Add parameter, if it's not set yet.
      * @param name Name of new param to set
-     * @param value Value to set
      */
-    private void addSystemProperty(final String name, final String value) {
+    private void addSystemProperty(final String name) {
         if (!this.params.containsKey(name)) {
-            this.params.put(name, System.getProperty(name, value));
+            final String value = System.getProperty(name);
+            this.params.put(name, value);
+            Logger.info(
+                this,
+                "#addSystemProperty(%s): set to '%s'",
+                name,
+                value
+            );
         }
     }
 

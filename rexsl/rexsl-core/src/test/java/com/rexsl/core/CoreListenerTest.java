@@ -29,13 +29,19 @@
  */
 package com.rexsl.core;
 
+import java.util.Map;
 import java.util.Properties;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -55,16 +61,11 @@ public final class CoreListenerTest {
      */
     @Test
     public void testInitializesSystemProperty() throws Exception {
-        final ServletContextEvent event =
-            Mockito.mock(ServletContextEvent.class);
-        final ServletContext ctx = Mockito.mock(ServletContext.class);
-        Mockito.doReturn(ctx).when(event).getServletContext();
         final ServletContextListener listener = new CoreListener();
-        PowerMockito.mockStatic(JerseyModule.class);
-        PowerMockito.whenNew(JerseyModule.class).withArguments(any(Map.class))
-            .thenReturn(module);
-        PowerMockito.spy(JerseyModule.class);
-        listener.contextInitialized(event);
+        final String value = "com.rexsl.core";
+        System.setProperty(JerseyModule.OPT_JSR311_PACKAGES, value);
+        this.expect(value);
+        // listener.contextInitialized(this.event(new Properties()));
     }
 
     /**
@@ -73,18 +74,79 @@ public final class CoreListenerTest {
      */
     @Test
     public void testInitializesWithContext() throws Exception {
+        final Properties params = new Properties();
+        final String value = "com.rexsl.test";
+        params.put(JerseyModule.OPT_JSR311_PACKAGES, value);
+        final ServletContextListener listener = new CoreListener();
+        this.expect(value);
+        // listener.contextInitialized(this.event(params));
+    }
+
+    /**
+     * Create context event.
+     * @param params Init params.
+     */
+    private ServletContextEvent event(final Properties props) throws Exception {
         final ServletContextEvent event =
             Mockito.mock(ServletContextEvent.class);
         final ServletContext ctx = Mockito.mock(ServletContext.class);
         Mockito.doReturn(ctx).when(event).getServletContext();
-        final Properties params = new Properties();
-        final String name = "JSR311-packages";
-        final String value = "com.rexsl.foo";
-        params.put(1, name);
-        Mockito.doReturn(params.elements()).when(ctx).getInitParameterNames();
-        Mockito.doReturn(value).when(ctx).getInitParameter(name);
-        final ServletContextListener listener = new CoreListener();
-        listener.contextInitialized(event);
+        final Properties names = new Properties();
+        Integer idx = 1;
+        for (Object key : props.keySet()) {
+            final String name = (String) key;
+            names.put(idx, name);
+            Mockito.doReturn(props.get(name)).when(ctx).getInitParameter(name);
+            idx += 1;
+        }
+        Mockito.doReturn(names.elements()).when(ctx).getInitParameterNames();
+        return event;
+    }
+
+    /**
+     * Expect JSR3-packages param to be set to this value.
+     * @param value The value
+     */
+    private void expect(final String value) throws Exception {
+        PowerMockito.mockStatic(JerseyModule.class);
+        PowerMockito.whenNew(JerseyModule.class)
+            .withArguments(Mockito.any(Map.class))
+            .thenAnswer(new CoreListenerTest.JerseyModuleAnswer(value));
+    }
+
+    /**
+     * Validator on JerseyModule invocation.
+     */
+    private static final class JerseyModuleAnswer implements Answer {
+        /**
+         * The value to check.
+         */
+        private final String value;
+        /**
+         * Public ctor.
+         * @param val The value to check
+         */
+        public JerseyModuleAnswer(final String val) {
+            this.value = val;
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Object answer(final InvocationOnMock invocation) throws Exception {
+            final Object[] args = invocation.getArguments();
+            final Map<String, String> params = (Map<String, String>) args[0];
+            MatcherAssert.assertThat(
+                params,
+                Matchers.hasEntry(JerseyModule.OPT_JSR311_PACKAGES, this.value)
+            );
+            // somehow we should reset PowerMockito
+            // @see http://stackoverflow.com/questions/7637651
+            // PowerMockito.whenNew(JerseyModule.class)
+            //     .withArguments(Mockito.any(Map.class))
+            //     .thenCallRealMethod();
+            return new JerseyModule(params);
+        }
     }
 
 }

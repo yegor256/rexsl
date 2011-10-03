@@ -48,6 +48,11 @@ import org.apache.commons.lang.StringUtils;
 final class JerseyModule extends JerseyServletModule {
 
     /**
+     * Option to configure packages.
+     */
+    public static final String OPT_JSR311_PACKAGES = "rexsl.packages";
+
+    /**
      * Separator between Jersey package names.
      */
     private static final String COMMA = ",";
@@ -105,10 +110,13 @@ final class JerseyModule extends JerseyServletModule {
      * @return The list (names)
      */
     private List<String> packages() {
-        final String param = this.params.get("JSR311-packages");
+        final String param = this.params.get(this.OPT_JSR311_PACKAGES);
         if (param == null) {
             throw new IllegalStateException(
-                "JSR311-packages init-param is absent"
+                String.format(
+                    "%s init-param is absent in web.xml",
+                    this.OPT_JSR311_PACKAGES
+                )
             );
         }
         final List<String> names = new ArrayList<String>();
