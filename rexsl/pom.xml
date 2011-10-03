@@ -153,7 +153,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.6</jdk.version>
         <!--
         ISO 8601, see http://en.wikipedia.org/wiki/ISO_8601. This
         property is defined in order to give us an ability to use ${maven.build.timestamp}
@@ -246,48 +245,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <!--
-                        This plugin will collect current build number
-                        from Subversion and save it into MANIFEST.MF. Later,
-                        this number is used by different java classes, mostly
-                        in order to expose it in web.
-                        -->
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>buildnumber-maven-plugin</artifactId>
-                        <version since="5 Jun 2011">1.0-beta-4</version>
-                        <configuration>
-                            <doCheck>false</doCheck>
-                            <doUpdate>false</doUpdate>
-                            <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>get-build-number</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>create</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <!--
-                        Here we add just generated {buildNumber}
-                        into the JAR MANIFEST.MF
-                        -->
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <version since="2 Sep 2011">2.1</version>
-                        <configuration>
-                            <archive>
-                                <manifestEntries>
-                                    <REXSL-Revision>${buildNumber}</REXSL-Revision>
-                                    <REXSL-Version>${project.version}</REXSL-Version>
-                                    <REXSL-Date>${maven.build.timestamp}</REXSL-Date>
-                                </manifestEntries>
-                            </archive>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -360,7 +317,7 @@
                                     <configuration>
                                         <failOnError>true</failOnError>
                                         <windowtitle>
-                                            ${project.name} ${project.version}/${buildNumber} API
+                                            ${project.name} ${project.version} API
                                         </windowtitle>
                                         <quiet>true</quiet>
                                         <tags>
@@ -609,8 +566,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version since="27 Oct 2010">2.3.2</version>
                     <configuration>
-                        <source>${jdk.version}</source>
-                        <target>${jdk.version}</target>
+                        <source>1.6</source>
+                        <target>1.6</target>
                         <optimize>true</optimize>
                         <showWarnings>true</showWarnings>
                         <showDeprecation>true</showDeprecation>
