@@ -38,17 +38,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
- * Wrapper that redirects all the writes to a ByteArrayOutputStream.
+ * Wrapper that redirects all the writes to {@link ByteArrayOutputStream}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see XslBrowserFilter#filter(HttpServletRequest,HttpServletResponse)
  */
 final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
 
     /**
      * Stream for keeping the servlet response.
      */
-    private final ByteArrayOutputStream outputStream =
+    private final ByteArrayOutputStream stream =
         new ByteArrayOutputStream();
 
     /**
@@ -57,13 +58,14 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
     private final PrintWriter writer;
 
     /**
-     * Constructor.
+     * Public ctor.
      * @param response Servlet response being wrapped.
+     * @see XslBrowserFilter#filter(HttpServletRequest,HttpServletResponse)
      */
     public ByteArrayResponseWrapper(final HttpServletResponse response) {
         super(response);
         this.writer = new PrintWriter(
-            new OutputStreamWriter(this.outputStream)
+            new OutputStreamWriter(this.stream)
         );
     }
 
@@ -72,7 +74,7 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
      * @return Byte stream that contains the response.
      */
     public ByteArrayOutputStream getByteStream() {
-        return this.outputStream;
+        return this.stream;
     }
 
     /**
@@ -94,7 +96,7 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
              */
             @Override
             public void write(final int part) throws IOException {
-                ByteArrayResponseWrapper.this.outputStream.write(part);
+                ByteArrayResponseWrapper.this.stream.write(part);
             }
         };
     }

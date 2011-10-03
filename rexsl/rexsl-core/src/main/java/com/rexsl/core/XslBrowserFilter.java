@@ -127,7 +127,7 @@ final class XslBrowserFilter implements Filter {
             final String accept = request.getHeader("Accept");
             String page = wrapper.getByteStream().toString(this.ENCODING);
             // let's check whether we should transform or not
-            if (!page.isEmpty() && page.startsWith("<?xml")
+            if (!page.isEmpty() && page.startsWith("<?xml ")
                 && !(this.isXsltCapable(agent) && this.isXmlAccepted(accept))) {
                 response.setContentType("text/html");
                 page = this.transform(page);
