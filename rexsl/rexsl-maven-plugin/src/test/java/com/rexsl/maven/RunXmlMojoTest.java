@@ -27,26 +27,42 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.maven;
 
-import com.rexsl.test.TestClient
-import com.rexsl.test.XhtmlConverter
-import org.junit.Assert
-import org.xmlmatchers.XmlMatchers
-import static org.hamcrest.Matchers.*
+import org.apache.maven.project.MavenProject;
+import org.junit.Test;
+import org.mockito.Mockito;
 
-def r1 = new TestClient(documentRoot)
-    .header('Accept', 'application/xml')
-    .header('User-agent', 'FireFox')
-    .get('/')
-Assert.assertThat(r1.status, equalTo(200))
-Assert.assertThat(
-    XhtmlConverter.the(r1.body),
-    XmlMatchers.hasXPath(
-        "//x:div[contains(.,'world')]",
-        new org.xmlmatchers.namespace.SimpleNamespaceContext()
-        .withBinding("x", "http://www.w3.org/1999/xhtml")
-    )
-)
+/**
+ * Test maven plugin single MOJO.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @version $Id$
+ */
+public final class RunXmlMojoTest {
 
-def r2 = new TestClient(documentRoot).get('/strange-address')
-Assert.assertThat(r2.status, equalTo(404))
+    /**
+     * Non-WAR projects should be ignored.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testNonWarPackaging() throws Exception {
+        final RunXmlMojo mojo = new RunXmlMojo();
+        final MavenProject project = Mockito.mock(MavenProject.class);
+        Mockito.doReturn("jar").when(project).getPackaging();
+        mojo.setProject(project);
+        mojo.execute();
+    }
+
+    /**
+     * RunMojo should never end, it has to wait in an endless cycle.
+     * @throws Exception If something goes wrong inside
+     * @todo #7 This test is not implemented yet, but has to
+     *  be implemented somehow. We should create a new thread and wait
+     *  there for RunMojo execution termination.
+     */
+    @Test
+    public void testEndlessWaitingCycle() throws Exception {
+        // not implemented yet
+    }
+
+}

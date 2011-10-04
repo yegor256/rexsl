@@ -1,4 +1,6 @@
-/**
+<?xml version="1.0"?>
+<!--
+ *
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -26,27 +28,18 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-import com.rexsl.test.TestClient
-import com.rexsl.test.XhtmlConverter
-import org.junit.Assert
-import org.xmlmatchers.XmlMatchers
-import static org.hamcrest.Matchers.*
-
-def r1 = new TestClient(documentRoot)
-    .header('Accept', 'application/xml')
-    .header('User-agent', 'FireFox')
-    .get('/')
-Assert.assertThat(r1.status, equalTo(200))
-Assert.assertThat(
-    XhtmlConverter.the(r1.body),
-    XmlMatchers.hasXPath(
-        "//x:div[contains(.,'world')]",
-        new org.xmlmatchers.namespace.SimpleNamespaceContext()
-        .withBinding("x", "http://www.w3.org/1999/xhtml")
-    )
-)
-
-def r2 = new TestClient(documentRoot).get('/strange-address')
-Assert.assertThat(r2.status, equalTo(404))
+ *
+ * @version $Id: site.xml 75 2011-10-03 17:19:05Z guard $
+ -->
+<faqs id="FAQ" title="Frequently Asked Questions">
+    <part id="General">
+        <faq id="question">
+            <question>Does it work with Maven 2.0?</question>
+            <answer>
+                <p>
+                    Yes
+                </p>
+            </answer>
+        </faq>
+    </part>
+</faqs>

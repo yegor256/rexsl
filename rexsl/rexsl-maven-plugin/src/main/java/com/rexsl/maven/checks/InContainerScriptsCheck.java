@@ -94,20 +94,9 @@ public final class InContainerScriptsCheck implements Check {
         final Grizzly grizzly = Grizzly.start(env.webdir(), port);
         final URI home = this.home(port);
         env.reporter().report("Web front available at %s", home);
-        final InContainerScriptsCheck.EventHandler handler =
-            new InContainerScriptsCheck.EventHandler();
-        XslResolver.setJaxbConfigurator(
-            new InContainerScriptsCheck.Configurator(env, handler)
-        );
-        boolean success = this.run(dir, home, env);
+        final boolean success = this.run(dir, home, env);
         grizzly.stop();
         env.reporter().report("Embedded Grizzly web server stopped");
-        if (handler.events().size() > 0) {
-            for (ValidationEvent event : handler.events()) {
-                env.reporter().report("JAXB error: %s", event.getMessage());
-            }
-            success = false;
-        }
         return success;
     }
 
@@ -137,11 +126,28 @@ public final class InContainerScriptsCheck implements Check {
         boolean success = true;
         for (File script
             : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
+            final InContainerScriptsCheck.EventHandler handler =
+                new InContainerScriptsCheck.EventHandler();
+            XslResolver.setJaxbConfigurator(
+                new InContainerScriptsCheck.Configurator(env, handler)
+            );
             try {
                 env.reporter().report("Testing '%s'...", script);
                 this.one(env, home, script);
             } catch (InternalCheckException ex) {
                 env.reporter().report("Test failed: %s", ex.getMessage());
+                success = false;
+            }
+            if (handler.events().size() > 0) {
+                for (ValidationEvent event : handler.events()) {
+                    env.reporter().report(
+                        "JAXB error: \"%s\" at '%s' [%d:%d]",
+                        event.getMessage(),
+                        event.getLocator().getURL(),
+                        event.getLocator().getLineNumber(),
+                        event.getLocator().getColumnNumber()
+                    );
+                }
                 success = false;
             }
         }
@@ -207,7 +213,13 @@ public final class InContainerScriptsCheck implements Check {
                 try {
                     mrsh.setSchema(factory.newSchema(xsd));
                 } catch (org.xml.sax.SAXException ex) {
-                    throw new IllegalStateException(ex);
+                    throw new IllegalStateException(
+                        String.format(
+                            "Failed to use XSD schema from '%s'",
+                            xsd
+                        ),
+                        ex
+                    );
                 }
                 try {
                     mrsh.setEventHandler(this.handler);
@@ -220,7 +232,11 @@ public final class InContainerScriptsCheck implements Check {
                     xsd
                 );
             } else {
-                this.env.reporter().report("No XSD schema for '%s'", name);
+                this.env.reporter().report(
+                    "No XSD schema for '%s' in '%s' file",
+                    name,
+                    xsd
+                );
             }
             return mrsh;
         }
