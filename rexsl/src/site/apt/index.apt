@@ -124,6 +124,13 @@ ReXSL, a framework for lightweight Java web apps
       <scope>test</scope>
     </dependency>
     <dependency>
+      <!-- Matchers for JUnit -->
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-all</artifactId>
+      <version>1.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <!-- XML matchers from http://code.google.com/p/xml-matchers/ -->
       <groupId>org.xmlmatchers</groupId>
       <artifactId>xml-matchers</artifactId>
@@ -262,10 +269,10 @@ public class HomeTest {
 +--
 import com.rexsl.test.XhtmlConverter
 import org.junit.Assert
-import org.junit.matchers.JUnitMatchers
 import org.xmlmatchers.XmlMatchers
 import org.xmlmatchers.namespace.SimpleNamespaceContext
-Assert.assertThat(document, JUnitMatchers.containsString('say hello'))
+import static org.hamcrest.Matchers.*
+Assert.assertThat(document, containsString('say hello'))
 Assert.assertThat(
     XhtmlConverter.the(document),
     XmlMatchers.hasXPath(
@@ -282,14 +289,14 @@ Assert.assertThat(
 import com.rexsl.test.TestClient
 import com.rexsl.test.XhtmlConverter
 import org.junit.Assert
-import org.junit.matchers.JUnitMatchers
 import org.xmlmatchers.XmlMatchers
 import org.xmlmatchers.namespace.SimpleNamespaceContext
+import static org.hamcrest.Matchers.*
 def r1 = new TestClient(documentRoot)
   .header('Accept', 'application/xml')
   .header('User-agent', 'Safari')
   .get('/')
-Assert.assertThat(r1.status, JUnitMatchers.equalTo(200))
+Assert.assertThat(r1.status, equalTo(200))
 Assert.assertThat(
   XhtmlConverter.the(r1.body),
   XmlMatchers.hasXPath(
@@ -299,7 +306,7 @@ Assert.assertThat(
 )
 def r2 = new TestClient(documentRoot)
   .get('/strange-address')
-Assert.assertThat(r2.status, JUnitMatchers.equalTo(404))
+Assert.assertThat(r2.status, equalTo(404))
 +--
 
   Now let's create <<<src/main/webapp/xsl/layout.xsl>>>:
