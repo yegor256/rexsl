@@ -32,6 +32,7 @@ package com.rexsl.maven;
 import com.rexsl.maven.utils.Grizzly;
 import com.rexsl.maven.utils.PortReserver;
 import java.io.File;
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
@@ -60,6 +61,12 @@ public final class RunMojo extends AbstractMojo {
      * @required
      */
     private String webapp;
+
+    /**
+     * TPC port to bind to.
+     * @parameter expression="${rexsl.port}"
+     */
+    private Integer port;
 
     /**
      * Public ctor.
@@ -103,15 +110,29 @@ public final class RunMojo extends AbstractMojo {
                 )
             );
         }
+        final File from = new File(this.project.getBasedir(), "src/test/rexsl/xml");
+        if (from.exists()) {
+            final File to = new File(this.webapp, "xml");
+            try {
+                FileUtils.copyDirectory(from, to);
+            } catch (java.io.IOException ex) {
+                throw new IllegalStateException(ex);
+            }
+            this.getLog().info("Copied XML files to webapp directory");
+        }
         this.getLog().info("Running WAR in Grizzly at " + this.webapp);
-        final Integer port = new PortReserver().port();
-        final Grizzly grizzly = Grizzly.start(new File(this.webapp), port);
-        this.getLog().info("Web front available at http://localhost:" + port);
+        if (this.port == null) {
+            this.port = new PortReserver().port();
+        }
+        final Grizzly grizzly = Grizzly.start(new File(this.webapp), this.port);
+        this.getLog().info("Available at http://localhost:" + this.port);
         this.getLog().info("Press Ctrl-C to stop...");
-        try {
-            Thread.sleep(0);
-        } catch (java.lang.InterruptedException ex) {
-            grizzly.stop();
+        while (true) {
+            try {
+                Thread.sleep(5000);
+            } catch (java.lang.InterruptedException ex) {
+                grizzly.stop();
+            }
         }
     }
 
