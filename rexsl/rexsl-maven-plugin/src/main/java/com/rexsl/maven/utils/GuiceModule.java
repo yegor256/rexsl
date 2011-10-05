@@ -27,36 +27,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.utils;
 
-import com.rexsl.maven.utils.Grizzly;
-import org.apache.maven.plugin.MojoFailureException;
+import com.sun.jersey.guice.JerseyServletModule;
+import com.ymock.util.Logger;
 
 /**
- * Run WAR as a web server.
+ * Testing configuration.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal run
- * @threadSafe
  */
-public final class RunMojo extends AbstractRexslMojo {
+final class GuiceModule extends JerseyServletModule {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void run() throws MojoFailureException {
-        final Grizzly grizzly = Grizzly.start(this.port(), this.env());
-        this.getLog().info("Available at http://localhost:" + this.port());
-        this.getLog().info("Press Ctrl-C to stop...");
-        while (true) {
-            try {
-                Thread.sleep(5000);
-            } catch (java.lang.InterruptedException ex) {
-                grizzly.stop();
-            }
-        }
+    protected void configureServlets() {
+        Logger.info(
+            this,
+            "#configureServlets(): configured!"
+        );
     }
 
 }

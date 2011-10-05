@@ -29,8 +29,10 @@
  */
 package com.rexsl.maven.utils;
 
+import com.rexsl.maven.Environment;
 import com.sun.grizzly.http.servlet.deployer.GrizzlyWebServerDeployer;
 import com.sun.grizzly.http.servlet.deployer.conf.DeployerServerConfiguration;
+import com.sun.grizzly.http.webxml.schema.ContextParam;
 import com.sun.grizzly.http.webxml.schema.WebApp;
 import java.io.File;
 import java.net.URL;
@@ -68,11 +70,11 @@ public final class Grizzly {
 
     /**
      * Create and start Grizzly container.
-     * @param webdir Location of WEB home
      * @param port The port to mount to
+     * @param env The environment
      * @return The container
      */
-    public static Grizzly start(final File webdir, final Integer port) {
+    public static Grizzly start(final Integer port, final Environment env) {
         Grizzly.julToSlf4j();
         final DeployerServerConfiguration conf =
             new DeployerServerConfiguration();
@@ -82,15 +84,15 @@ public final class Grizzly {
         try {
             Grizzly.DEPLOYER.deploy(
                 // root folder
-                webdir.getPath(),
+                env.webdir().getPath(),
                 // context
                 context,
                 // path
-                new File(webdir, "WEB-INF/web.xml").getPath(),
+                new File(env.webdir(), "WEB-INF/web.xml").getPath(),
                 // class loader
-                Grizzly.classloader(webdir),
+                Grizzly.classloader(env),
                 // parent web application
-                new WebApp()
+                Grizzly.webapp()
             );
         // @checkstyle IllegalCatch (1 line)
         } catch (Exception ex) {
@@ -126,15 +128,30 @@ public final class Grizzly {
     }
 
     /**
+     * Create parent webapp.
+     * @return The webapp
+     */
+    private static WebApp webapp() {
+        final WebApp webapp = new WebApp();
+        final ContextParam param = new ContextParam();
+        param.setParamName(com.rexsl.core.CoreListener.OPT_MODULES);
+        param.setParamValue(GuiceModule.class.getName());
+        final List<ContextParam> params = new ArrayList<ContextParam>();
+        params.add(param);
+        webapp.setContextParam(params);
+        return webapp;
+    }
+
+    /**
      * Create classloader for web application.
-     * @param webdir Location of WEB home
+     * @param env The environment
      * @return The classloader
      */
-    private static URLClassLoader classloader(final File webdir) {
+    private static URLClassLoader classloader(final Environment env) {
         final List<File> paths = new ArrayList<File>();
-        paths.add(new File(webdir, "WEB-INF/classes"));
-        paths.add(webdir);
-        final File lib = new File(webdir, "WEB-INF/lib");
+        paths.add(new File(env.webdir(), "WEB-INF/classes"));
+        paths.add(env.webdir());
+        final File lib = new File(env.webdir(), "WEB-INF/lib");
         if (lib.exists()) {
             for (File jar
                 : FileUtils.listFiles(lib, new String[] {"jar"}, true)) {
@@ -154,7 +171,8 @@ public final class Grizzly {
         }
         final URLClassLoader loader = new URLClassLoader(
             urls.toArray(new URL[] {}),
-            Grizzly.class.getClassLoader()
+            // Grizzly.class.getClassLoader()
+            env.classloader()
         );
         return loader;
     }

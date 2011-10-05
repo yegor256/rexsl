@@ -103,7 +103,11 @@ public final class MavenEnvironment implements Environment {
      */
     @Override
     public File webdir() {
-        return new File(this.properties.getProperty("webappDirectory"));
+        final String dir = this.properties.getProperty("webappDirectory");
+        if (dir == null) {
+            throw new IllegalStateException("webappDirectory property not set");
+        }
+        return new File(dir);
     }
 
     /**

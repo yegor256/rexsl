@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.rexsl.maven.Environment;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
@@ -82,8 +83,10 @@ public final class GrizzlyTest {
             + "<description>test</description>"
             + "</web-app>"
         );
+        final Environment env = Mockito.mock(Environment.class);
+        Mockito.doReturn(webdir).when(env).webdir();
         final Integer port = new PortReserver().port();
-        final Grizzly grizzly = Grizzly.start(webdir, port);
+        final Grizzly grizzly = Grizzly.start(port, env);
         final HttpClient client = new DefaultHttpClient();
         final HttpResponse response =
             client.execute(new HttpGet("http://localhost:" + port));

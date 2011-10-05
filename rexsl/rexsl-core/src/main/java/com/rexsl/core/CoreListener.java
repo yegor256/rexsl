@@ -31,14 +31,17 @@ package com.rexsl.core;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.ymock.util.Logger;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Core listener to be used in web.xml.
@@ -49,9 +52,19 @@ import javax.servlet.ServletContextEvent;
 public final class CoreListener extends GuiceServletContextListener {
 
     /**
+     * Option to configure additional Guice modules.
+     */
+    public static final String OPT_MODULES = "rexsl.modules";
+
+    /**
      * Init parameters.
      */
     private final Map<String, String> params = new HashMap<String, String>();
+
+    /**
+     * Guice modules.
+     */
+    private final List<Module> modules = new ArrayList<Module>();
 
     /**
      * {@inheritDoc}
@@ -76,6 +89,8 @@ public final class CoreListener extends GuiceServletContextListener {
                 "#contextInitialized(): no init-params provided in web.xml"
             );
         }
+        this.addModules();
+        this.modules.add(new JerseyModule(this.params));
         Logger.info(
             this,
             "#contextInitialized(%s): done",
@@ -91,10 +106,37 @@ public final class CoreListener extends GuiceServletContextListener {
     protected Injector getInjector() {
         Logger.info(
             this,
-            "#getInjector(): returning JerseyModule (%d params)",
-            this.params.size()
+            "#getInjector(): injecting %d modules",
+            this.modules.size()
         );
-        return Guice.createInjector(new JerseyModule(this.params));
+        return Guice.createInjector(this.modules);
+    }
+
+    /**
+     * Add custom modules, if necessary.
+     */
+    private void addModules() {
+        if (this.params.containsKey(this.OPT_MODULES)) {
+            for (String className
+                : StringUtils.split(this.params.get(this.OPT_MODULES))) {
+                try {
+                    this.modules.add(
+                        (Module) Class.forName(className).newInstance()
+                    );
+                } catch (ClassNotFoundException ex) {
+                    throw new IllegalStateException(ex);
+                } catch (InstantiationException ex) {
+                    throw new IllegalStateException(ex);
+                } catch (IllegalAccessException ex) {
+                    throw new IllegalStateException(ex);
+                }
+                Logger.info(
+                    this,
+                    "#addModules(): %s module added",
+                    className
+                );
+            }
+        }
     }
 
 }

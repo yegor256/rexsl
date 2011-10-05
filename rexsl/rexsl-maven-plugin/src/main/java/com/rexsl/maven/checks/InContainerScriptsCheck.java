@@ -91,7 +91,7 @@ public final class InContainerScriptsCheck implements Check {
             env.webdir()
         );
         final Integer port = new PortReserver().port();
-        final Grizzly grizzly = Grizzly.start(env.webdir(), port);
+        final Grizzly grizzly = Grizzly.start(port, env);
         final URI home = this.home(port);
         env.reporter().report("Web front available at %s", home);
         final boolean success = this.run(dir, home, env);

@@ -44,103 +44,15 @@ import org.sonatype.aether.RepositorySystemSession;
  * @phase verify
  * @threadSafe
  */
-public final class CheckMojo extends AbstractMojo {
-
-    /**
-     * Maven project, to be injected by Maven itself.
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
-     */
-    private MavenProject project;
-
-    /**
-     * The current repository/network configuration of Maven.
-     * @parameter default-value="${repositorySystemSession}"
-     * @readonly
-     */
-    private RepositorySystemSession session;
-
-    /**
-     * Shall we skip execution?
-     * @parameter expression="${rexsl.skip}" default-value="false"
-     * @required
-     */
-    private boolean skip;
-
-    /**
-     * Webapp directory.
-     * @parameter expression="${rexsl.webappDirectory}" default-value="${project.build.directory}/${project.build.finalName}"
-     * @required
-     */
-    private String webappDirectory;
-
-    /**
-     * Public ctor.
-     */
-    public CheckMojo() {
-        super();
-        this.project = null;
-    }
-
-    /**
-     * Set Maven Project (used mostly for unit testing).
-     * @param proj The project to set
-     */
-    public void setProject(final MavenProject proj) {
-        this.project = proj;
-    }
-
-    /**
-     * Set skip option.
-     * @param skp Shall we skip execution?
-     */
-    public void setSkip(final boolean skp) {
-        this.skip = skp;
-    }
-
-    /**
-     * Set webapp directory.
-     * @param dir The directory
-     */
-    public void setWebappDirectory(final String dir) {
-        this.webappDirectory = dir;
-    }
-
-    /**
-     * Set repository system session.
-     * @param sess The session
-     */
-    public void setSession(final RepositorySystemSession sess) {
-        this.session = sess;
-    }
+public final class CheckMojo extends AbstractRexslMojo {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void execute() throws MojoFailureException {
-        org.slf4j.impl.StaticLoggerBinder.getSingleton()
-            .setMavenLog(this.getLog());
-        if (this.skip) {
-            this.getLog().info("execution skipped because of 'skip' option");
-            return;
-        }
-        if (!"war".equals(this.project.getPackaging())) {
-            throw new IllegalStateException("project packaging is not WAR");
-        }
-        final Properties properties = new Properties();
-        properties.setProperty("webappDirectory", this.webappDirectory);
-        final Environment env = new MavenEnvironment(
-            this.project,
-            new MavenReporter(this.getLog()),
-            properties
-        );
-        env.setLocalRepository(
-            this.session.getLocalRepository().getBasedir().getPath()
-        );
+    protected void run() throws MojoFailureException {
         for (Check check : new ChecksProvider().all()) {
-            if (!check.validate(env)) {
+            if (!check.validate(this.env())) {
                 throw new MojoFailureException(
                     String.format(
                         "%s check failed",
@@ -152,7 +64,7 @@ public final class CheckMojo extends AbstractMojo {
         this.getLog().info(
             String.format(
                 "All ReXSL checks passed in '%s'",
-                this.project.getName()
+                this.project().getName()
             )
         );
     }
