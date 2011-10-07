@@ -34,7 +34,6 @@ import com.ymock.util.Logger;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -86,6 +85,8 @@ final class XslBrowserFilter implements Filter {
 
     /**
      * {@inheritDoc}
+     * @checkstyle ThrowsCount (6 lines)
+     * @checkstyle RedundantThrows (5 lines)
      */
     @Override
     public void doFilter(final ServletRequest req, final ServletResponse res,
@@ -114,6 +115,8 @@ final class XslBrowserFilter implements Filter {
      * @throws ServletException If something goes wrong
      * @throws IOException If something goes wrong
      * @see #doFilter(ServletRequest,ServletResponse,FilterChain)
+     * @checkstyle ThrowsCount (6 lines)
+     * @checkstyle RedundantThrows (5 lines)
      */
     private void filter(final HttpServletRequest request,
         final HttpServletResponse response, final FilterChain chain)
@@ -121,24 +124,20 @@ final class XslBrowserFilter implements Filter {
         final ByteArrayResponseWrapper wrapper =
             new ByteArrayResponseWrapper(response);
         chain.doFilter(request, wrapper);
-        // try {
-            if (response.isCommitted()) {
-                // we can't change response that is already finished
-                return;
-            }
-            final String agent = request.getHeader("User-Agent");
-            final String accept = request.getHeader("Accept");
-            String page = wrapper.getByteStream().toString(this.ENCODING);
-            // let's check whether we should transform or not
-            if (!page.isEmpty() && page.startsWith("<?xml ")
-                && !(this.isXsltCapable(agent) && this.isXmlAccepted(accept))) {
-                response.setContentType("text/html");
-                page = this.transform(page);
-            }
-            response.getOutputStream().write(page.getBytes(this.ENCODING));
-        // } catch (UnsupportedEncodingException ex) {
-        //     throw new IllegalStateException(ex);
-        // }
+        if (response.isCommitted()) {
+            // we can't change response that is already finished
+            return;
+        }
+        final String agent = request.getHeader("User-Agent");
+        final String accept = request.getHeader("Accept");
+        String page = wrapper.getByteStream().toString(this.ENCODING);
+        // let's check whether we should transform or not
+        if (!page.isEmpty() && page.startsWith("<?xml ")
+            && !(this.isXsltCapable(agent) && this.isXmlAccepted(accept))) {
+            response.setContentType("text/html");
+            page = this.transform(page);
+        }
+        response.getOutputStream().write(page.getBytes(this.ENCODING));
     }
 
     /**

@@ -31,7 +31,6 @@ package com.rexsl.core;
 
 import com.ymock.util.Logger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.servlet.ServletContext;
