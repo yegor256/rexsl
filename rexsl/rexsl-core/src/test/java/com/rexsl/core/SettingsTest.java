@@ -29,50 +29,71 @@
  */
 package com.rexsl.core;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
- * Test case for {@link CoreListener} class.
+ * Test case for {@link Settings} class.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ CoreListener.class, Guice.class })
-public final class CoreListenerTest {
+public final class SettingsTest {
 
     /**
-     * Guice has to be initialized.
+     * Let's test how it initialized this listener with context.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testGuiceInitialization() throws Exception {
-        final CoreListener listener = new CoreListener();
-        final ServletContextEvent event =
-            Mockito.mock(ServletContextEvent.class);
+    public void testResetWithListOfPackages() throws Exception {
+        final Properties params = new Properties();
+        final String value = "com.rexsl.test";
+        params.put("com.rexsl.PACKAGES", value);
+        Settings.INSTANCE.reset(this.context(params));
+        MatcherAssert.assertThat(
+            Settings.INSTANCE.packages(),
+            Matchers.hasItem(value)
+        );
+    }
+
+    /**
+     * Let's test how it initialized this listener with names of excludes.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testResetWithListOfExcludes() throws Exception {
+        final Properties params = new Properties();
+        final String value = "/rexsl/.*";
+        params.put("com.rexsl.EXCLUDES", value);
+        Settings.INSTANCE.reset(this.context(params));
+        MatcherAssert.assertThat(
+            Settings.INSTANCE.excludes(),
+            Matchers.hasItem(value)
+        );
+    }
+
+    /**
+     * Create context event.
+     * @param props Init params.
+     * @return The context just created
+     * @throws Exception If something goes wrong
+     */
+    private ServletContext context(final Properties props) throws Exception {
         final ServletContext ctx = Mockito.mock(ServletContext.class);
-        Mockito.doReturn(ctx).when(event).getServletContext();
-        Mockito.doReturn(new Properties().elements())
-            .when(ctx).getInitParameterNames();
-        final Injector injector = Guice.createInjector();
-        PowerMockito.mockStatic(Guice.class);
-        PowerMockito.when(Guice.createInjector(Mockito.any(List.class)))
-            .thenReturn(injector);
-        listener.contextInitialized(event);
-        PowerMockito.verifyStatic();
+        final Properties names = new Properties();
+        Integer idx = 1;
+        for (Object key : props.keySet()) {
+            final String name = (String) key;
+            names.put(idx, name);
+            Mockito.doReturn(props.get(name)).when(ctx).getInitParameter(name);
+            idx += 1;
+        }
+        Mockito.doReturn(names.elements()).when(ctx).getInitParameterNames();
+        return ctx;
     }
 
 }
