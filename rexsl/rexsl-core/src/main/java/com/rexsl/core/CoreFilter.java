@@ -30,8 +30,10 @@
 package com.rexsl.core;
 
 import com.google.inject.servlet.GuiceFilter;
+import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
@@ -53,11 +55,12 @@ public final class CoreFilter extends GuiceFilter {
 
     /**
      * {@inheritDoc}
+     * @checkstyle ThrowsCount (5 lines)
      */
     @Override
     public void doFilter(final ServletRequest request,
         final ServletResponse response, final FilterChain chain)
-        throws java.io.IOException, javax.servlet.ServletException {
+        throws ServletException, IOException {
         super.doFilter(request, response, chain);
     }
 

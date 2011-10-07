@@ -29,7 +29,6 @@
  */
 package com.rexsl.core;
 
-import java.util.Map;
 import java.util.Properties;
 import javax.servlet.ServletContext;
 import org.hamcrest.MatcherAssert;

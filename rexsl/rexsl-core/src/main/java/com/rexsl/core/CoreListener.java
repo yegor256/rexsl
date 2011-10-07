@@ -35,13 +35,8 @@ import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.ymock.util.Logger;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Core listener to be used in web.xml.

@@ -87,7 +87,9 @@ final class Settings {
         for (String name : names) {
             final String value = context.getInitParameter(name);
             if ("com.rexsl.PACKAGES".equals(name)) {
-                this.packages.addAll(Arrays.asList(StringUtils.split(value, this.COMMA)));
+                this.packages.addAll(
+                    Arrays.asList(StringUtils.split(value, this.COMMA))
+                );
                 Logger.info(
                     this,
                     "#reset(): '%s' packages added",
@@ -96,7 +98,9 @@ final class Settings {
                 continue;
             }
             if ("com.rexsl.EXCLUDES".equals(name)) {
-                this.excludes.addAll(Arrays.asList(StringUtils.split(value, this.COMMA)));
+                this.excludes.addAll(
+                    Arrays.asList(StringUtils.split(value, this.COMMA))
+                );
                 Logger.info(
                     this,
                     "#reset(): '%s' exclude regular expressions added",
