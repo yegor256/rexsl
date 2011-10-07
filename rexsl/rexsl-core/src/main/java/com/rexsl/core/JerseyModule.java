@@ -72,7 +72,7 @@ public final class JerseyModule extends JerseyServletModule {
         this.filter("/*").through(GuiceContainer.class, args);
         Logger.info(
             this,
-            "#configureServlets(%s): done"
+            "#configureServlets(): done"
         );
     }
 
