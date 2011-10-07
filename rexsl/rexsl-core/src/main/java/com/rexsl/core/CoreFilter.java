@@ -55,7 +55,8 @@ public final class CoreFilter extends GuiceFilter {
 
     /**
      * {@inheritDoc}
-     * @checkstyle ThrowsCount (5 lines)
+     * @checkstyle ThrowsCount (6 lines)
+     * @checkstyle RedundantThrows (5 lines)
      */
     @Override
     public void doFilter(final ServletRequest request,
