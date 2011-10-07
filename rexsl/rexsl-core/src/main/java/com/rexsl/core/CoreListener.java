@@ -52,16 +52,6 @@ import org.apache.commons.lang.StringUtils;
 public final class CoreListener extends GuiceServletContextListener {
 
     /**
-     * Option to configure additional Guice modules.
-     */
-    public static final String OPT_MODULES = "rexsl.modules";
-
-    /**
-     * Init parameters.
-     */
-    private final Map<String, String> params = new HashMap<String, String>();
-
-    /**
      * Guice modules.
      */
     private final List<Module> modules = new ArrayList<Module>();
@@ -71,31 +61,8 @@ public final class CoreListener extends GuiceServletContextListener {
      */
     @Override
     public void contextInitialized(final ServletContextEvent event) {
-        final ServletContext ctx = event.getServletContext();
-        final List<String> names =
-            Collections.list(ctx.getInitParameterNames());
-        for (String name : names) {
-            this.params.put(name, ctx.getInitParameter(name));
-            Logger.info(
-                this,
-                "#contextInitialized(): '%s' init-param set to '%s' (web.xml)",
-                name,
-                ctx.getInitParameter(name)
-            );
-        }
-        if (names.size() == 0) {
-            Logger.info(
-                this,
-                "#contextInitialized(): no init-params provided in web.xml"
-            );
-        }
-        this.addModules();
-        this.modules.add(new JerseyModule(this.params));
-        Logger.info(
-            this,
-            "#contextInitialized(%s): done",
-            event.getClass().getName()
-        );
+        Settings.INSTANCE.reset(event.getServletContext());
+        this.modules.add(new JerseyModule());
         super.contextInitialized(event);
     }
 
@@ -110,33 +77,6 @@ public final class CoreListener extends GuiceServletContextListener {
             this.modules.size()
         );
         return Guice.createInjector(this.modules);
-    }
-
-    /**
-     * Add custom modules, if necessary.
-     */
-    private void addModules() {
-        if (this.params.containsKey(this.OPT_MODULES)) {
-            for (String className
-                : StringUtils.split(this.params.get(this.OPT_MODULES))) {
-                try {
-                    this.modules.add(
-                        (Module) Class.forName(className).newInstance()
-                    );
-                } catch (ClassNotFoundException ex) {
-                    throw new IllegalStateException(ex);
-                } catch (InstantiationException ex) {
-                    throw new IllegalStateException(ex);
-                } catch (IllegalAccessException ex) {
-                    throw new IllegalStateException(ex);
-                }
-                Logger.info(
-                    this,
-                    "#addModules(): %s module added",
-                    className
-                );
-            }
-        }
     }
 
 }

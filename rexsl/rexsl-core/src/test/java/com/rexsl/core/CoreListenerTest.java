@@ -59,13 +59,33 @@ public final class CoreListenerTest {
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testInitializesWithContext() throws Exception {
+    public void testInitializesWithListOfPackages() throws Exception {
         final Properties params = new Properties();
         final String value = "com.rexsl.test";
-        params.put(JerseyModule.OPT_JSR311_PACKAGES, value);
+        params.put("com.rexsl.PACKAGES", value);
         final ServletContextListener listener = new CoreListener();
-        this.expect(value);
-        // listener.contextInitialized(this.event(params));
+        listener.contextInitialized(this.event(params));
+        MatcherAssert.assertThat(
+            Settings.INSTANCE.packages(),
+            Matchers.hasItem(value)
+        );
+    }
+
+    /**
+     * Let's test how it initialized this listener with names of excludes.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testInitializesWithListOfExcludes() throws Exception {
+        final Properties params = new Properties();
+        final String value = "/rexsl/.*";
+        params.put("com.rexsl.EXCLUDES", value);
+        final ServletContextListener listener = new CoreListener();
+        listener.contextInitialized(this.event(params));
+        MatcherAssert.assertThat(
+            Settings.INSTANCE.excludes(),
+            Matchers.hasItem(value)
+        );
     }
 
     /**
@@ -89,54 +109,6 @@ public final class CoreListenerTest {
         }
         Mockito.doReturn(names.elements()).when(ctx).getInitParameterNames();
         return event;
-    }
-
-    /**
-     * Expect JSR3-packages param to be set to this value.
-     * @param value The value
-     * @throws Exception If something goes wrong
-     */
-    private void expect(final String value) throws Exception {
-        PowerMockito.mockStatic(JerseyModule.class);
-        PowerMockito.whenNew(JerseyModule.class)
-            .withArguments(Mockito.any(Map.class))
-            .thenAnswer(new CoreListenerTest.JerseyModuleAnswer(value));
-    }
-
-    /**
-     * Validator on JerseyModule invocation.
-     */
-    private static final class JerseyModuleAnswer implements Answer {
-        /**
-         * The value to check.
-         */
-        private final String value;
-        /**
-         * Public ctor.
-         * @param val The value to check
-         */
-        public JerseyModuleAnswer(final String val) {
-            this.value = val;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Object answer(final InvocationOnMock invocation)
-            throws Exception {
-            final Object[] args = invocation.getArguments();
-            final Map<String, String> params = (Map<String, String>) args[0];
-            MatcherAssert.assertThat(
-                params,
-                Matchers.hasEntry(JerseyModule.OPT_JSR311_PACKAGES, this.value)
-            );
-            // somehow we should reset PowerMockito
-            // @see http://stackoverflow.com/questions/7637651
-            // PowerMockito.whenNew(JerseyModule.class)
-            //     .withArguments(Mockito.any(Map.class))
-            //     .thenCallRealMethod();
-            return new JerseyModule(params);
-        }
     }
 
 }

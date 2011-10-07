@@ -29,46 +29,36 @@
  */
 package com.rexsl.core;
 
-import com.sun.jersey.guice.JerseyServletModule;
-import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
-import java.util.HashMap;
-import java.util.Map;
-import org.apache.commons.lang.StringUtils;
+import com.google.inject.servlet.GuiceFilter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 /**
- * Basic configuration module.
+ * Core filter to be used in web.xml.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class JerseyModule extends JerseyServletModule {
+public final class CoreFilter extends GuiceFilter {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void configureServlets() {
-        this.filterRegex(
-            String.format("^(?!%s)$", Settings.INSTANCE.excludes())
-        ).through(XslBrowserFilter.class);
-        final Map<String, String> args = new HashMap<String, String>();
-        args.put(
-            "com.sun.jersey.config.property.packages",
-            StringUtils.join(Settings.INSTANCE.packages(), ",")
-        );
-        args.put(
-            "com.sun.jersey.config.property.WebPageContentRegex",
-            String.format("^(%s)$", Settings.INSTANCE.excludes())
-        );
-        args.put(
-            "com.sun.jersey.config.feature.Redirect",
-            Boolean.TRUE.toString()
-        );
-        args.put(
-            "com.sun.jersey.config.feature.ImplicitViewables",
-            Boolean.TRUE.toString()
-        );
-        this.filter("/*").through(GuiceContainer.class, args);
+    public void init(final FilterConfig config) {
+        Settings.INSTANCE.reset(config.getServletContext());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doFilter(final ServletRequest request,
+        final ServletResponse response, final FilterChain chain)
+        throws java.io.IOException, javax.servlet.ServletException {
+        super.doFilter(request, response, chain);
     }
 
 }
