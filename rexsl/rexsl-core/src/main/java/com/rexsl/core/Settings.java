@@ -75,6 +75,10 @@ final class Settings {
         this.excludes.add("/xsl/.*");
         this.excludes.add("/favicon.ico");
         this.packages.add(this.getClass().getPackage().getName());
+        Logger.info(
+            this,
+            "#Settings(): singleton initialized"
+        );
     }
 
     /**
@@ -87,28 +91,38 @@ final class Settings {
         for (String name : names) {
             final String value = context.getInitParameter(name);
             if ("com.rexsl.PACKAGES".equals(name)) {
-                this.packages.addAll(
-                    Arrays.asList(StringUtils.split(value, this.COMMA))
-                );
-                Logger.info(
-                    this,
-                    "#reset(): '%s' packages added",
-                    value
-                );
-                continue;
-            }
-            if ("com.rexsl.EXCLUDES".equals(name)) {
-                this.excludes.addAll(
-                    Arrays.asList(StringUtils.split(value, this.COMMA))
-                );
-                Logger.info(
-                    this,
-                    "#reset(): '%s' exclude regular expressions added",
-                    value
-                );
-                continue;
+                for (String pkg : StringUtils.split(value, this.COMMA)) {
+                    if (this.packages.contains(pkg)) {
+                        continue;
+                    }
+                    this.packages.add(pkg);
+                    Logger.info(
+                        this,
+                        "#reset(): '%s' package added (%d total)",
+                        pkg,
+                        this.packages.size()
+                    );
+                }
+            } else if ("com.rexsl.EXCLUDES".equals(name)) {
+                for (String regex : StringUtils.split(value, this.COMMA)) {
+                    if (this.excludes.contains(regex)) {
+                        continue;
+                    }
+                    this.excludes.add(regex);
+                    Logger.info(
+                        this,
+                        "#reset(): '%s' excluding RegEx added (%d total)",
+                        regex,
+                        this.excludes.size()
+                    );
+                }
             }
         }
+        Logger.info(
+            this,
+            "#reset(%s): done",
+            context.getClass().getName()
+        );
     }
 
     /**

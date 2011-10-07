@@ -59,6 +59,11 @@ public final class CoreListener extends GuiceServletContextListener {
         Settings.INSTANCE.reset(event.getServletContext());
         this.modules.add(new JerseyModule());
         super.contextInitialized(event);
+        Logger.info(
+            this,
+            "#contextInitialized(%s): done",
+            event.getClass().getName()
+        );
     }
 
     /**
@@ -68,7 +73,7 @@ public final class CoreListener extends GuiceServletContextListener {
     protected Injector getInjector() {
         Logger.info(
             this,
-            "#getInjector(): injecting %d modules",
+            "#getInjector(): injecting %d module(s)",
             this.modules.size()
         );
         return Guice.createInjector(this.modules);

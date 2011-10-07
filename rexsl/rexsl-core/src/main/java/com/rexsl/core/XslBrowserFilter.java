@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import com.google.inject.Singleton;
+import com.ymock.util.Logger;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -76,6 +77,11 @@ final class XslBrowserFilter implements Filter {
     @Override
     public void init(final FilterConfig config) {
         this.context = config.getServletContext();
+        Logger.info(
+            this,
+            "#init(%s): done",
+            config.getClass().getName()
+        );
     }
 
     /**
@@ -83,17 +89,11 @@ final class XslBrowserFilter implements Filter {
      */
     @Override
     public void doFilter(final ServletRequest req, final ServletResponse res,
-        final FilterChain chain) {
+        final FilterChain chain) throws ServletException, IOException {
         if (!(req instanceof HttpServletRequest)
             || !(res instanceof HttpServletResponse)) {
-            try {
-                chain.doFilter(req, res);
-                return;
-            } catch (ServletException ex) {
-                throw new IllegalStateException(ex);
-            } catch (IOException ex) {
-                throw new IllegalStateException(ex);
-            }
+            chain.doFilter(req, res);
+            return;
         }
         this.filter((HttpServletRequest) req, (HttpServletResponse) res, chain);
     }
@@ -111,14 +111,17 @@ final class XslBrowserFilter implements Filter {
      * @param request The request
      * @param response The response
      * @param chain Chain of filters
+     * @throws ServletException If something goes wrong
+     * @throws IOException If something goes wrong
      * @see #doFilter(ServletRequest,ServletResponse,FilterChain)
      */
     private void filter(final HttpServletRequest request,
-        final HttpServletResponse response, final FilterChain chain) {
+        final HttpServletResponse response, final FilterChain chain)
+        throws ServletException, IOException {
         final ByteArrayResponseWrapper wrapper =
             new ByteArrayResponseWrapper(response);
-        try {
-            chain.doFilter(request, wrapper);
+        chain.doFilter(request, wrapper);
+        // try {
             if (response.isCommitted()) {
                 // we can't change response that is already finished
                 return;
@@ -133,13 +136,9 @@ final class XslBrowserFilter implements Filter {
                 page = this.transform(page);
             }
             response.getOutputStream().write(page.getBytes(this.ENCODING));
-        } catch (UnsupportedEncodingException ex) {
-            throw new IllegalStateException(ex);
-        } catch (ServletException ex) {
-            throw new IllegalStateException(ex);
-        } catch (IOException ex) {
-            throw new IllegalStateException(ex);
-        }
+        // } catch (UnsupportedEncodingException ex) {
+        //     throw new IllegalStateException(ex);
+        // }
     }
 
     /**

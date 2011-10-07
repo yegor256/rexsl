@@ -31,6 +31,7 @@ package com.rexsl.core;
 
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
+import com.ymock.util.Logger;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
@@ -69,6 +70,10 @@ public final class JerseyModule extends JerseyServletModule {
             Boolean.TRUE.toString()
         );
         this.filter("/*").through(GuiceContainer.class, args);
+        Logger.info(
+            this,
+            "#configureServlets(%s): done"
+        );
     }
 
 }

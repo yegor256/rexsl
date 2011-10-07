@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import com.google.inject.servlet.GuiceFilter;
+import com.ymock.util.Logger;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -51,6 +52,7 @@ public final class CoreFilter extends GuiceFilter {
     @Override
     public void init(final FilterConfig config) {
         Settings.INSTANCE.reset(config.getServletContext());
+        Logger.info(this, "#init(%s): done", config.getClass().getName());
     }
 
     /**
