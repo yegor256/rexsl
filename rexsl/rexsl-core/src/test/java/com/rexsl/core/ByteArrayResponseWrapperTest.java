@@ -55,7 +55,7 @@ public final class ByteArrayResponseWrapperTest {
         final String text = "this is some text string";
         wrapper.getOutputStream().write(text.getBytes());
         MatcherAssert.assertThat(
-            wrapper.getByteStream().toString(),
+            wrapper.getByteStream().toString("UTF-8"),
             Matchers.equalTo(text)
         );
     }

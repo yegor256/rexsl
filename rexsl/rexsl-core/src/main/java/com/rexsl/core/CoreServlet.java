@@ -29,12 +29,18 @@
  */
 package com.rexsl.core;
 
+import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 import com.ymock.util.Logger;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
+import java.util.Vector;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -50,9 +56,14 @@ import org.apache.commons.lang.StringUtils;
 public final class CoreServlet extends HttpServlet {
 
     /**
+     * Comma.
+     */
+    private static final String COMMA = ",";
+
+    /**
      * Jersey servlet.
      */
-    private final HttpServlet jersey = new ServletContainer();
+    private final ServletContainer jersey = new ServletContainer();
 
     /**
      * XSL filter.
@@ -61,14 +72,15 @@ public final class CoreServlet extends HttpServlet {
 
     /**
      * {@inheritDoc}
+     * @checkstyle RedundantThrows (3 lines)
      */
     @Override
-    public void init(final ServletConfig config) {
+    public void init(final ServletConfig config) throws ServletException {
         final List<String> packages = new ArrayList<String>();
         packages.add(this.getClass().getPackage().getName());
         final String param = config.getInitParameter("com.rexsl.PACKAGES");
         if (param != null) {
-            for (String pkg : StringUtils.split(param, ",")) {
+            for (String pkg : StringUtils.split(param, this.COMMA)) {
                 if (packages.contains(pkg)) {
                     continue;
                 }
@@ -81,7 +93,12 @@ public final class CoreServlet extends HttpServlet {
                 );
             }
         }
-        // this.jersey.init(config);
+        final Properties props = new Properties();
+        props.setProperty(
+            PackagesResourceConfig.PROPERTY_PACKAGES,
+            StringUtils.join(packages, this.COMMA)
+        );
+        this.jersey.init(new ServletConfigWrapper(config, props));
         this.filter = new XslBrowserFilter(config.getServletContext());
     }
 
@@ -96,6 +113,71 @@ public final class CoreServlet extends HttpServlet {
         throws ServletException, IOException {
         this.jersey.service(request, response);
         this.filter.filter(request, response);
+    }
+
+    /**
+     * Custom filter config.
+     */
+    private static final class ServletConfigWrapper implements FilterConfig {
+        /**
+         * Wrapped config.
+         */
+        private final ServletConfig config;
+        /**
+         * Additional properties.
+         */
+        private final Properties properties;
+        /**
+         * Public ctor.
+         * @param cfg Servlet config
+         * @param props Properties to add to existing params
+         */
+        public ServletConfigWrapper(final ServletConfig cfg,
+            final Properties props) {
+            this.config = cfg;
+            this.properties = props;
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String getFilterName() {
+            return this.config.getServletName() + "-filter";
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String getInitParameter(final String name) {
+            String value = this.properties.getProperty(name);
+            if (value == null) {
+                value = this.config.getInitParameter(name);
+            }
+            return value;
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Enumeration<String> getInitParameterNames() {
+            // @checkstyle IllegalType (1 line)
+            final Vector<String> names = new Vector<String>();
+            for (Object name : this.properties.keySet()) {
+                names.add((String) name);
+            }
+            final Enumeration<String> enm = this.config.getInitParameterNames();
+            while (enm.hasMoreElements()) {
+                names.add(enm.nextElement());
+            }
+            return names.elements();
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public ServletContext getServletContext() {
+            return this.config.getServletContext();
+        }
     }
 
 }

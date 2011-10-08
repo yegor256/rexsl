@@ -152,8 +152,8 @@
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-bundle</artifactId>
-            <version since="22 Sep 2011">1.8-ea04</version>
+            <artifactId>jersey-server</artifactId>
+            <version since="22 Sep 2011">1.9-ea04</version>
         </dependency>
         <dependency>
             <!-- Forward all calls to SLF4J to LOG4J. -->
@@ -161,6 +161,16 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version since="19 Sep 2011">1.6.2</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!--
+            This one is used to forward Grizzly logging to SLF4J. We need it
+            in "compile" scope.
+            -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version since="19 Sep 2011">1.6.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <!-- Use LOG4J logging facility for all loggings. -->

@@ -29,14 +29,16 @@
  */
 package com.rexsl.core;
 
+import java.util.Vector;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -48,18 +50,50 @@ import org.mockito.Mockito;
 public final class CoreServletTest {
 
     /**
+     * Initialize JUL-to-SLF4J bridge.
+     */
+    @BeforeClass
+    public static void julToSlf4j() {
+        final java.util.logging.Logger rootLogger =
+            java.util.logging.LogManager.getLogManager().getLogger("");
+        final java.util.logging.Handler[] handlers =
+            rootLogger.getHandlers();
+        for (int idx = 0; idx < handlers.length; idx += 1) {
+            rootLogger.removeHandler(handlers[idx]);
+        }
+        org.slf4j.bridge.SLF4JBridgeHandler.install();
+    }
+
+    /**
      * Let's test.
      * @throws Exception If something goes wrong
      */
     @Test
     public void testJerseyInteractions() throws Exception {
         final ServletConfig config = Mockito.mock(ServletConfig.class);
+        Mockito.doReturn(new Vector<String>().elements())
+            .when(config).getInitParameterNames();
+        final ServletContext ctx = Mockito.mock(ServletContext.class);
+        Mockito.doReturn(ctx).when(config).getServletContext();
         final HttpServlet servlet = new CoreServlet();
         servlet.init(config);
         final HttpServletRequest request =
             Mockito.mock(HttpServletRequest.class);
+        final String root = "/";
+        Mockito.doReturn(root).when(request).getRequestURI();
+        Mockito.doReturn("").when(request).getContextPath();
+        Mockito.doReturn(root).when(request).getPathInfo();
+        Mockito.doReturn("").when(request).getServletPath();
+        Mockito.doReturn(new StringBuffer("http://localhost/"))
+            .when(request).getRequestURL();
+        Mockito.doReturn(new Vector<String>().elements())
+            .when(request).getHeaderNames();
+        Mockito.doReturn("GET").when(request).getMethod();
         final HttpServletResponse response =
             Mockito.mock(HttpServletResponse.class);
+        final ServletOutputStream stream =
+            Mockito.mock(ServletOutputStream.class);
+        Mockito.doReturn(stream).when(response).getOutputStream();
         servlet.service(request, response);
         Mockito.verify(response).setStatus(HttpServletResponse.SC_OK);
     }
