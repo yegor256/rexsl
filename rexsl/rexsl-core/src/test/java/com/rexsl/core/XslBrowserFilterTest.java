@@ -31,7 +31,6 @@ package com.rexsl.core;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;

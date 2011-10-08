@@ -78,6 +78,8 @@ final class XslBrowserFilter implements Filter {
 
     /**
      * {@inheritDoc}
+     * @checkstyle ThrowsCount (5 lines)
+     * @checkstyle RedundantThrows (4 lines)
      */
     @Override
     public void doFilter(final ServletRequest req, final ServletResponse res,
@@ -110,6 +112,9 @@ final class XslBrowserFilter implements Filter {
      * @param response The response
      * @param chain Filter chain
      * @throws IOException If something goes wrong
+     * @throws ServletException If something goes wrong
+     * @checkstyle ThrowsCount (6 lines)
+     * @checkstyle RedundantThrows (5 lines)
      */
     private void filter(final HttpServletRequest request,
         final HttpServletResponse response, final FilterChain chain)
@@ -199,9 +204,10 @@ final class XslBrowserFilter implements Filter {
         }
         Logger.debug(
             this,
-            "#tranform(%d bytes): %0.2f sec",
+            "#tranform(%d bytes): %.2f sec",
             xml.length(),
-            (double) (System.nanoTime() - start) / 1000 * 1000 * 1000
+            // @checkstyle MagicNumber (1 line)
+            (double) (System.nanoTime() - start) / (1000 * 1000 * 1000)
         );
         return writer.toString();
     }
