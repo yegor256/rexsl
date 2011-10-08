@@ -105,6 +105,7 @@ final class XslBrowserFilter implements Filter {
     @Override
     public void destroy() {
         this.context = null;
+        Logger.info(this, "#destroy(): done");
     }
 
     /**
@@ -144,9 +145,15 @@ final class XslBrowserFilter implements Filter {
      * Check if the XSLT transformation is required on the server side.
      * @param agent User agent string from the request.
      * @return If the transformation is needed.
+     * @todo #7 The implementation is very preliminary and should be refined.
+     *  Not all Chrome or Safari versions support XSLT 2.0. We should properly
+     *  parse the "Agent" header and understand versions.
      */
-    private boolean isXsltCapable(final String agent) {
-        return (agent == null) || agent.matches(".*(Chrome|Safari).*");
+    private Boolean isXsltCapable(final String agent) {
+        final Boolean cap = (agent == null)
+            || agent.matches(".*(Chrome|Safari).*");
+        Logger.debug(this, "#isXsltCapable('%s'): %b", agent, cap);
+        return cap;
     }
 
     /**
@@ -157,8 +164,11 @@ final class XslBrowserFilter implements Filter {
      *  should property parse "Accept" header and detect whether "XML" type
      *  is accepted there or not.
      */
-    private boolean isXmlAccepted(final String accept) {
-        return (accept != null) && (accept.contains("application/xml"));
+    private Boolean isXmlAccepted(final String accept) {
+        final Boolean accepted = (accept != null)
+            && (accept.contains("application/xml"));
+        Logger.debug(this, "#isXmlAccepted('%s'): %b", accept, accepted);
+        return accepted;
     }
 
     /**

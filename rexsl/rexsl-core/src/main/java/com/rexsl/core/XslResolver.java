@@ -94,6 +94,11 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         if (this.configurator != null) {
             mrsh = this.configurator.marshaller(mrsh, type);
         }
+        Logger.debug(
+            this,
+            "#getContext(%s): marshaller created",
+            type.getName()
+        );
         return mrsh;
     }
 
