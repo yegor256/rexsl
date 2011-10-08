@@ -29,59 +29,73 @@
  */
 package com.rexsl.core;
 
-import com.sun.jersey.guice.JerseyServletModule;
-import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
+import com.sun.jersey.spi.container.servlet.ServletContainer;
 import com.ymock.util.Logger;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Basic configuration module.
+ * Core servlet.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class JerseyModule extends JerseyServletModule {
+public final class CoreServlet extends HttpServlet {
+
+    /**
+     * Jersey servlet.
+     */
+    private final HttpServlet jersey = new ServletContainer();
+
+    /**
+     * XSL filter.
+     */
+    private XslBrowserFilter filter;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void configureServlets() {
-        final String joined = String.format(
-            "(%s)",
-            StringUtils.join(Settings.INSTANCE.excludes(), ")|(")
-        );
-        final String regex = String.format("^(?!%s)$", joined);
-        this.filterRegex(regex).through(XslBrowserFilter.class);
-        Logger.info(
-            this,
-            "#configureServlets(): filter through XSLT: %s",
-            regex
-        );
-        final Map<String, String> args = new HashMap<String, String>();
-        args.put(
-            "com.sun.jersey.config.property.packages",
-            StringUtils.join(Settings.INSTANCE.packages(), ",")
-        );
-        args.put(
-            "com.sun.jersey.config.property.WebPageContentRegex",
-            String.format("^%s$", joined)
-        );
-        args.put(
-            "com.sun.jersey.config.feature.Redirect",
-            Boolean.TRUE.toString()
-        );
-        args.put(
-            "com.sun.jersey.config.feature.ImplicitViewables",
-            Boolean.TRUE.toString()
-        );
-        this.filter("/*").through(GuiceContainer.class, args);
-        Logger.info(
-            this,
-            "#configureServlets(): filter /* through GuiceContainer"
-        );
+    public void init(final ServletConfig config) {
+        final List<String> packages = new ArrayList<String>();
+        packages.add(this.getClass().getPackage().getName());
+        final String param = config.getInitParameter("com.rexsl.PACKAGES");
+        if (param != null) {
+            for (String pkg : StringUtils.split(param, ",")) {
+                if (packages.contains(pkg)) {
+                    continue;
+                }
+                packages.add(pkg);
+                Logger.info(
+                    this,
+                    "#init(): '%s' package added (%d total)",
+                    pkg,
+                    packages.size()
+                );
+            }
+        }
+        // this.jersey.init(config);
+        this.filter = new XslBrowserFilter(config.getServletContext());
+    }
+
+    /**
+     * {@inheritDoc}
+     * @checkstyle ThrowsCount (6 lines)
+     * @checkstyle RedundantThrows (5 lines)
+     */
+    @Override
+    protected void service(final HttpServletRequest request,
+        final HttpServletResponse response)
+        throws ServletException, IOException {
+        this.jersey.service(request, response);
+        this.filter.filter(request, response);
     }
 
 }

@@ -29,18 +29,11 @@
  */
 package com.rexsl.core;
 
-import com.google.inject.Singleton;
 import com.ymock.util.Logger;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Source;
@@ -57,8 +50,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-@Singleton
-final class XslBrowserFilter implements Filter {
+final class XslBrowserFilter {
 
     /**
      * Character encoding of the page.
@@ -71,60 +63,23 @@ final class XslBrowserFilter implements Filter {
     private ServletContext context;
 
     /**
-     * {@inheritDoc}
+     * Public ctor.
+     * @param ctx Servlet context
      */
-    @Override
-    public void init(final FilterConfig config) {
-        this.context = config.getServletContext();
-        Logger.info(
-            this,
-            "#init(%s): done",
-            config.getClass().getName()
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     * @checkstyle ThrowsCount (6 lines)
-     * @checkstyle RedundantThrows (5 lines)
-     */
-    @Override
-    public void doFilter(final ServletRequest req, final ServletResponse res,
-        final FilterChain chain) throws ServletException, IOException {
-        if (!(req instanceof HttpServletRequest)
-            || !(res instanceof HttpServletResponse)) {
-            chain.doFilter(req, res);
-            return;
-        }
-        this.filter((HttpServletRequest) req, (HttpServletResponse) res, chain);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void destroy() {
-        this.context = null;
-        Logger.info(this, "#destroy(): done");
+    public XslBrowserFilter(final ServletContext ctx) {
+        this.context = ctx;
     }
 
     /**
      * Make filtering.
      * @param request The request
      * @param response The response
-     * @param chain Chain of filters
-     * @throws ServletException If something goes wrong
      * @throws IOException If something goes wrong
-     * @see #doFilter(ServletRequest,ServletResponse,FilterChain)
-     * @checkstyle ThrowsCount (6 lines)
-     * @checkstyle RedundantThrows (5 lines)
      */
-    private void filter(final HttpServletRequest request,
-        final HttpServletResponse response, final FilterChain chain)
-        throws ServletException, IOException {
+    public void filter(final HttpServletRequest request,
+        final HttpServletResponse response) throws IOException {
         final ByteArrayResponseWrapper wrapper =
             new ByteArrayResponseWrapper(response);
-        chain.doFilter(request, wrapper);
         if (response.isCommitted()) {
             // we can't change response that is already finished
             return;

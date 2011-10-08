@@ -29,70 +29,51 @@
  */
 package com.rexsl.core;
 
-import java.util.Properties;
-import javax.servlet.ServletContext;
+import javax.servlet.ServletConfig;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * Test case for {@link Settings} class.
+ * Testing {@link CoreServlet} class.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class SettingsTest {
+public final class CoreServletTest {
 
     /**
-     * Let's test how it initialized this listener with context.
+     * Let's test.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testResetWithListOfPackages() throws Exception {
-        final Properties params = new Properties();
-        final String value = "com.rexsl.test";
-        params.put("com.rexsl.PACKAGES", value);
-        Settings.INSTANCE.reset(this.context(params));
-        MatcherAssert.assertThat(
-            Settings.INSTANCE.packages(),
-            Matchers.hasItem(value)
-        );
+    public void testJerseyInteractions() throws Exception {
+        final ServletConfig config = Mockito.mock(ServletConfig.class);
+        final HttpServlet servlet = new CoreServlet();
+        servlet.init(config);
+        final HttpServletRequest request =
+            Mockito.mock(HttpServletRequest.class);
+        final HttpServletResponse response =
+            Mockito.mock(HttpServletResponse.class);
+        servlet.service(request, response);
+        Mockito.verify(response).setStatus(HttpServletResponse.SC_OK);
     }
 
-    /**
-     * Let's test how it initialized this listener with names of excludes.
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void testResetWithListOfExcludes() throws Exception {
-        final Properties params = new Properties();
-        final String value = "/rexsl/.*";
-        params.put("com.rexsl.EXCLUDES", value);
-        Settings.INSTANCE.reset(this.context(params));
-        MatcherAssert.assertThat(
-            Settings.INSTANCE.excludes(),
-            Matchers.hasItem(value)
-        );
-    }
-
-    /**
-     * Create context event.
-     * @param props Init params.
-     * @return The context just created
-     * @throws Exception If something goes wrong
-     */
-    private ServletContext context(final Properties props) throws Exception {
-        final ServletContext ctx = Mockito.mock(ServletContext.class);
-        final Properties names = new Properties();
-        Integer idx = 1;
-        for (Object key : props.keySet()) {
-            final String name = (String) key;
-            names.put(idx, name);
-            Mockito.doReturn(props.get(name)).when(ctx).getInitParameter(name);
-            idx += 1;
+    @Path("/")
+    public static final class FrontEnd {
+        /**
+         * Simple name.
+         * @return The name
+         */
+        @GET
+        public String getName() {
+            return "text";
         }
-        Mockito.doReturn(names.elements()).when(ctx).getInitParameterNames();
-        return ctx;
     }
 
 }
