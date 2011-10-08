@@ -32,6 +32,7 @@ package com.rexsl.core;
 import com.google.inject.servlet.GuiceFilter;
 import com.ymock.util.Logger;
 import java.io.IOException;
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -44,14 +45,20 @@ import javax.servlet.ServletResponse;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CoreFilter extends GuiceFilter {
+public final class CoreFilter implements Filter {
+
+    /**
+     * Filter to run.
+     */
+    private final Filter guice = new GuiceFilter();
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void init(final FilterConfig config) {
+    public void init(final FilterConfig config) throws ServletException {
         Settings.INSTANCE.reset(config.getServletContext());
+        this.guice.init(config);
         Logger.info(this, "#init(%s): done", config.getClass().getName());
     }
 
@@ -64,7 +71,16 @@ public final class CoreFilter extends GuiceFilter {
     public void doFilter(final ServletRequest request,
         final ServletResponse response, final FilterChain chain)
         throws ServletException, IOException {
-        super.doFilter(request, response, chain);
+        this.guice.doFilter(request, response, chain);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void destroy() {
+        this.guice.destroy();
+        Logger.info(this, "#destroy(): done");
     }
 
 }

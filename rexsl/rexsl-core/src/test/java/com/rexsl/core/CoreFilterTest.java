@@ -29,13 +29,14 @@
  */
 package com.rexsl.core;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import java.util.List;
+import com.google.inject.servlet.GuiceFilter;
 import java.util.Properties;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -49,27 +50,33 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * @version $Id$
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ CoreListener.class, Guice.class })
-public final class CoreListenerTest {
+@PrepareForTest({ CoreFilter.class, GuiceFilter.class })
+public final class CoreFilterTest {
 
     /**
      * Guice has to be initialized.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testGuiceInitialization() throws Exception {
-        final ServletContextListener listener = new CoreListener();
-        final ServletContextEvent event =
-            Mockito.mock(ServletContextEvent.class);
+    public void testServletFilterFullCycle() throws Exception {
+        final Filter filter = new CoreFilter();
+        final FilterConfig config = Mockito.mock(FilterConfig.class);
         final ServletContext ctx = Mockito.mock(ServletContext.class);
-        Mockito.doReturn(ctx).when(event).getServletContext();
+        Mockito.doReturn(ctx).when(config).getServletContext();
         Mockito.doReturn(new Properties().elements())
             .when(ctx).getInitParameterNames();
-        final Injector injector = Guice.createInjector();
-        PowerMockito.mockStatic(Guice.class);
-        PowerMockito.when(Guice.createInjector(Mockito.any(List.class)))
-            .thenReturn(injector);
-        listener.contextInitialized(event);
+        final GuiceFilter guice = Mockito.mock(GuiceFilter.class);
+        PowerMockito.mockStatic(GuiceFilter.class);
+        PowerMockito.whenNew(GuiceFilter.class)
+            .withNoArguments().thenReturn(guice);
+        filter.init(config);
+        final HttpServletRequest request =
+            Mockito.mock(HttpServletRequest.class);
+        final HttpServletResponse response =
+            Mockito.mock(HttpServletResponse.class);
+        final FilterChain chain = Mockito.mock(FilterChain.class);
+        filter.doFilter(request, response, chain);
+        filter.destroy();
         PowerMockito.verifyStatic();
     }
 
