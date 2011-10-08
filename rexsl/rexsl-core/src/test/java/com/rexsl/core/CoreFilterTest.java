@@ -72,6 +72,7 @@ public final class CoreFilterTest {
         filter.init(config);
         final HttpServletRequest request =
             Mockito.mock(HttpServletRequest.class);
+        Mockito.doReturn("/test").when(request).getRequestURI();
         final HttpServletResponse response =
             Mockito.mock(HttpServletResponse.class);
         final FilterChain chain = Mockito.mock(FilterChain.class);

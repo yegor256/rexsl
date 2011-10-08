@@ -49,9 +49,17 @@ public final class JerseyModule extends JerseyServletModule {
      */
     @Override
     protected void configureServlets() {
-        this.filterRegex(
-            String.format("^(?!%s)$", Settings.INSTANCE.excludes())
-        ).through(XslBrowserFilter.class);
+        final String joined = String.format(
+            "(%s)",
+            StringUtils.join(Settings.INSTANCE.excludes(), ")|(")
+        );
+        final String regex = String.format("^(?!%s)$", joined);
+        this.filterRegex(regex).through(XslBrowserFilter.class);
+        Logger.info(
+            this,
+            "#configureServlets(): filter through XSLT: %s",
+            regex
+        );
         final Map<String, String> args = new HashMap<String, String>();
         args.put(
             "com.sun.jersey.config.property.packages",
@@ -59,7 +67,7 @@ public final class JerseyModule extends JerseyServletModule {
         );
         args.put(
             "com.sun.jersey.config.property.WebPageContentRegex",
-            String.format("^(%s)$", Settings.INSTANCE.excludes())
+            String.format("^%s$", joined)
         );
         args.put(
             "com.sun.jersey.config.feature.Redirect",
@@ -72,7 +80,7 @@ public final class JerseyModule extends JerseyServletModule {
         this.filter("/*").through(GuiceContainer.class, args);
         Logger.info(
             this,
-            "#configureServlets(): done"
+            "#configureServlets(): filter /* through GuiceContainer"
         );
     }
 

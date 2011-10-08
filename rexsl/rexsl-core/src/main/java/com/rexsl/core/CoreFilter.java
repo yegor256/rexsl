@@ -38,6 +38,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Core filter to be used in web.xml.
@@ -73,6 +74,7 @@ public final class CoreFilter implements Filter {
         final ServletResponse response, final FilterChain chain)
         throws ServletException, IOException {
         this.guice.doFilter(request, response, chain);
+        Logger.debug(this, "#doFilter(%s): filtered", this.path(request));
     }
 
     /**
@@ -82,6 +84,16 @@ public final class CoreFilter implements Filter {
     public void destroy() {
         this.guice.destroy();
         Logger.info(this, "#destroy(): done");
+    }
+
+    /**
+     * Get requested URL/path from the request.
+     * @param request Servlet request
+     * @return The path
+     * @see #doFilter(ServletRequest, ServletResponse, FilterChain)
+     */
+    private String path(final ServletRequest request) {
+        return ((HttpServletRequest) request).getRequestURI();
     }
 
 }
