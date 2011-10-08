@@ -55,6 +55,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-test</artifactId>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <!--
             Logging facility.
             -->
@@ -62,13 +68,12 @@
             <artifactId>ymock-util</artifactId>
             <version since="22 Sep 2011">1.0</version>
         </dependency>
-        <dependency>
-            <!-- Servlet API 3.0 -->
+        <!-- <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>3.0-alpha-1</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency> -->
         <dependency>
             <!--
             JAXB 2.0 API.
@@ -178,6 +183,27 @@
             <artifactId>log4j</artifactId>
             <version since="19 Sep 2011">1.2.16</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- implementation of Javax Servlet API 3.0 -->
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.servlet</artifactId>
+            <version>3.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- implementation of Javax Mail API, required by Jersey -->
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Javax Servlet API 3.0 -->
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

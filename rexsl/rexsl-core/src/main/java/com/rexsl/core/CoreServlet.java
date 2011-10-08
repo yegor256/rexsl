@@ -38,6 +38,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
+import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -64,11 +65,6 @@ public final class CoreServlet extends HttpServlet {
      * Jersey servlet.
      */
     private final ServletContainer jersey = new ServletContainer();
-
-    /**
-     * XSL filter.
-     */
-    private XslBrowserFilter filter;
 
     /**
      * {@inheritDoc}
@@ -98,8 +94,11 @@ public final class CoreServlet extends HttpServlet {
             PackagesResourceConfig.PROPERTY_PACKAGES,
             StringUtils.join(packages, this.COMMA)
         );
-        this.jersey.init(new ServletConfigWrapper(config, props));
-        this.filter = new XslBrowserFilter(config.getServletContext());
+        final FilterConfig cfg = new ServletConfigWrapper(config, props);
+        this.jersey.init(cfg);
+        final Filter filter = new XslBrowserFilter();
+        filter.init(cfg);
+        config.getServletContext().addFilter("rexsl-filter", filter);
     }
 
     /**
@@ -112,7 +111,6 @@ public final class CoreServlet extends HttpServlet {
         final HttpServletResponse response)
         throws ServletException, IOException {
         this.jersey.service(request, response);
-        this.filter.filter(request, response);
     }
 
     /**

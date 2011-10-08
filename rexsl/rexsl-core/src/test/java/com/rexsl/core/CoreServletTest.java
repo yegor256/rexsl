@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.rexsl.test.XhtmlConverter;
 import java.util.Vector;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -38,9 +39,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.xmlmatchers.XmlMatchers;
 
 /**
  * Testing {@link CoreServlet} class.
@@ -48,6 +52,11 @@ import org.mockito.Mockito;
  * @version $Id$
  */
 public final class CoreServletTest {
+
+    /**
+     * A message.
+     */
+    private static final String MESSAGE = "some text";
 
     /**
      * Initialize JUL-to-SLF4J bridge.
@@ -70,13 +79,7 @@ public final class CoreServletTest {
      */
     @Test
     public void testJerseyInteractions() throws Exception {
-        final ServletConfig config = Mockito.mock(ServletConfig.class);
-        Mockito.doReturn(new Vector<String>().elements())
-            .when(config).getInitParameterNames();
-        final ServletContext ctx = Mockito.mock(ServletContext.class);
-        Mockito.doReturn(ctx).when(config).getServletContext();
-        final HttpServlet servlet = new CoreServlet();
-        servlet.init(config);
+        final HttpServlet servlet = this.servlet();
         final HttpServletRequest request =
             Mockito.mock(HttpServletRequest.class);
         final String root = "/";
@@ -91,11 +94,36 @@ public final class CoreServletTest {
         Mockito.doReturn("GET").when(request).getMethod();
         final HttpServletResponse response =
             Mockito.mock(HttpServletResponse.class);
-        final ServletOutputStream stream =
-            Mockito.mock(ServletOutputStream.class);
+        final Stream stream = new Stream();
         Mockito.doReturn(stream).when(response).getOutputStream();
         servlet.service(request, response);
         Mockito.verify(response).setStatus(HttpServletResponse.SC_OK);
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(stream.toString()),
+            XmlMatchers.hasXPath(
+                "//x:p[.='test']",
+                new org.xmlmatchers.namespace.SimpleNamespaceContext()
+                .withBinding("x", "http://www.w3.org/1999/xhtml")
+            )
+        );
+    }
+
+    /**
+     * Create and initialize servlet.
+     * @return The servlet for tests
+     * @throws Exception If something goes wrong
+     */
+    private HttpServlet servlet() throws Exception {
+        final ServletConfig config = Mockito.mock(ServletConfig.class);
+        Mockito.doReturn(new Vector<String>().elements())
+            .when(config).getInitParameterNames();
+        final ServletContext ctx = Mockito.mock(ServletContext.class);
+        Mockito.doReturn(ctx).when(config).getServletContext();
+        Mockito.doReturn(this.getClass().getResourceAsStream("main.xsl"))
+            .when(ctx).getResourceAsStream("/xsl/main.xsl");
+        final HttpServlet servlet = new CoreServlet();
+        servlet.init(config);
+        return servlet;
     }
 
     @Path("/")
@@ -106,7 +134,28 @@ public final class CoreServletTest {
          */
         @GET
         public String getName() {
-            return "text";
+            return "<?xml version='1.0'?><page>test</page>";
+        }
+    }
+
+    private static final class Stream extends ServletOutputStream {
+        /**
+         * Buffer to hold all output.
+         */
+        private final StringBuffer buffer = new StringBuffer();
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void write(final int data) {
+            this.buffer.append((char) data);
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return this.buffer.toString();
         }
     }
 

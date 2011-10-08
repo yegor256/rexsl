@@ -31,6 +31,9 @@ package com.rexsl.core;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -280,7 +283,10 @@ public final class XslBrowserFilterTest {
     private void filter(final String xml, final String accept,
         final String agent) throws Exception {
         final ServletContext context = Mockito.mock(ServletContext.class);
-        final XslBrowserFilter filter = new XslBrowserFilter(context);
+        final XslBrowserFilter filter = new XslBrowserFilter();
+        final FilterConfig config = Mockito.mock(FilterConfig.class);
+        Mockito.when(config.getServletContext()).thenReturn(context);
+        filter.init(config);
         final HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
         Mockito.when(req.getHeader("User-Agent")).thenReturn(agent);
         Mockito.when(req.getHeader("Accept")).thenReturn(accept);
@@ -295,7 +301,9 @@ public final class XslBrowserFilterTest {
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
         stream.write(xml.getBytes());
         Mockito.when(wrapper.getByteStream()).thenReturn(stream);
-        filter.filter(req, res);
+        final FilterChain chain = Mockito.mock(FilterChain.class);
+        filter.doFilter(req, res, chain);
+        filter.destroy();
     }
 
 }

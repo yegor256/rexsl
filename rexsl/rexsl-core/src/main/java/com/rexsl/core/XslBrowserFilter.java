@@ -33,7 +33,13 @@ import com.ymock.util.Logger;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Source;
@@ -50,7 +56,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class XslBrowserFilter {
+final class XslBrowserFilter implements Filter {
 
     /**
      * Character encoding of the page.
@@ -63,23 +69,54 @@ final class XslBrowserFilter {
     private ServletContext context;
 
     /**
-     * Public ctor.
-     * @param ctx Servlet context
+     * {@inheritDoc}
      */
-    public XslBrowserFilter(final ServletContext ctx) {
-        this.context = ctx;
+    @Override
+    public void init(final FilterConfig config) {
+        this.context = config.getServletContext();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doFilter(final ServletRequest req, final ServletResponse res,
+        final FilterChain chain) throws IOException, ServletException {
+        if (!(req instanceof HttpServletRequest)
+            || !(res instanceof HttpServletResponse)) {
+            try {
+                chain.doFilter(req, res);
+                return;
+            } catch (ServletException ex) {
+                throw new IllegalStateException(ex);
+            } catch (IOException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
+        this.filter((HttpServletRequest) req, (HttpServletResponse) res, chain);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void destroy() {
+        this.context = null;
     }
 
     /**
      * Make filtering.
      * @param request The request
      * @param response The response
+     * @param chain Filter chain
      * @throws IOException If something goes wrong
      */
-    public void filter(final HttpServletRequest request,
-        final HttpServletResponse response) throws IOException {
+    private void filter(final HttpServletRequest request,
+        final HttpServletResponse response, final FilterChain chain)
+        throws IOException, ServletException {
         final ByteArrayResponseWrapper wrapper =
             new ByteArrayResponseWrapper(response);
+        chain.doFilter(request, wrapper);
         if (response.isCommitted()) {
             // we can't change response that is already finished
             return;
@@ -92,6 +129,12 @@ final class XslBrowserFilter {
             && !(this.isXsltCapable(agent) && this.isXmlAccepted(accept))) {
             response.setContentType("text/html");
             page = this.transform(page);
+        } else {
+            Logger.debug(
+                this,
+                "#filter(%d bytes): no need to transform",
+                page.length()
+            );
         }
         response.getOutputStream().write(page.getBytes(this.ENCODING));
     }
@@ -132,6 +175,7 @@ final class XslBrowserFilter {
      * @return Resulting HTML page.
      */
     private String transform(final String xml) {
+        final long start = System.nanoTime();
         final StringWriter writer = new StringWriter();
         try {
             final TransformerFactory factory = TransformerFactory.newInstance();
@@ -153,6 +197,12 @@ final class XslBrowserFilter {
         } catch (TransformerException ex) {
             throw new IllegalStateException(ex);
         }
+        Logger.debug(
+            this,
+            "#tranform(%d bytes): %0.2f sec",
+            xml.length(),
+            (double) (System.nanoTime() - start) / 1000 * 1000 * 1000
+        );
         return writer.toString();
     }
 
