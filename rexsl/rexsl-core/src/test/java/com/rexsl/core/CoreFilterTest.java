@@ -31,10 +31,10 @@ package com.rexsl.core;
 
 import com.google.inject.servlet.GuiceFilter;
 import java.util.Properties;
-import javax.servlet.ServletContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.Test;

@@ -54,6 +54,7 @@ public final class CoreFilter implements Filter {
 
     /**
      * {@inheritDoc}
+     * @checkstyle RedundantThrows (3 lines)
      */
     @Override
     public void init(final FilterConfig config) throws ServletException {
