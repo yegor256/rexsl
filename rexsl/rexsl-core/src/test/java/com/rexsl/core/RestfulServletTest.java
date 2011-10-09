@@ -40,7 +40,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import org.hamcrest.MatcherAssert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.xmlmatchers.XmlMatchers;
@@ -56,21 +55,6 @@ public final class RestfulServletTest {
      * A message.
      */
     private static final String MESSAGE = "some text";
-
-    /**
-     * Initialize JUL-to-SLF4J bridge.
-     */
-    @BeforeClass
-    public static void julToSlf4j() {
-        final java.util.logging.Logger rootLogger =
-            java.util.logging.LogManager.getLogManager().getLogger("");
-        final java.util.logging.Handler[] handlers =
-            rootLogger.getHandlers();
-        for (int idx = 0; idx < handlers.length; idx += 1) {
-            rootLogger.removeHandler(handlers[idx]);
-        }
-        org.slf4j.bridge.SLF4JBridgeHandler.install();
-    }
 
     /**
      * Let's test.

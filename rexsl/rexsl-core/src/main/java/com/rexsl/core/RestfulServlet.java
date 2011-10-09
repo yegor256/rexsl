@@ -93,6 +93,7 @@ public final class RestfulServlet extends HttpServlet {
             PackagesResourceConfig.PROPERTY_PACKAGES,
             StringUtils.join(packages, this.COMMA)
         );
+        this.julToSlf4j();
         final FilterConfig cfg = new ServletConfigWrapper(config, props);
         this.jersey.init(cfg);
     }
@@ -107,6 +108,20 @@ public final class RestfulServlet extends HttpServlet {
         final HttpServletResponse response)
         throws ServletException, IOException {
         this.jersey.service(request, response);
+    }
+
+    /**
+     * Initialize JUL-to-SLF4J bridge.
+     */
+    private void julToSlf4j() {
+        final java.util.logging.Logger rootLogger =
+            java.util.logging.LogManager.getLogManager().getLogger("");
+        final java.util.logging.Handler[] handlers =
+            rootLogger.getHandlers();
+        for (int idx = 0; idx < handlers.length; idx += 1) {
+            rootLogger.removeHandler(handlers[idx]);
+        }
+        org.slf4j.bridge.SLF4JBridgeHandler.install();
     }
 
     /**
