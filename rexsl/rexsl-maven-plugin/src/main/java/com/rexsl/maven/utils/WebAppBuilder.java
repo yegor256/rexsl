@@ -27,42 +27,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.utils;
 
-import org.apache.maven.plugin.MojoFailureException;
+import com.sun.grizzly.http.webxml.schema.Filter;
+import com.sun.grizzly.http.webxml.schema.FilterMapping;
+import com.sun.grizzly.http.webxml.schema.WebApp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Test entire project against RESTful principles.
+ * Builder of {@link WebApp}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal check
- * @phase verify
- * @threadSafe
  */
-public final class CheckMojo extends AbstractRexslMojo {
+final class WebAppBuilder {
 
     /**
-     * {@inheritDoc}
+     * Create parent webapp.
+     * @return The webapp
      */
-    @Override
-    protected void run() throws MojoFailureException {
-        for (Check check : new ChecksProvider().all()) {
-            if (!check.validate(this.env())) {
-                throw new MojoFailureException(
-                    String.format(
-                        "%s check failed",
-                        check.getClass().getName()
-                    )
-                );
-            }
-        }
-        this.getLog().info(
-            String.format(
-                "All ReXSL checks passed in '%s'",
-                this.project().getName()
-            )
-        );
+    public WebApp build() {
+        final WebApp webapp = new WebApp();
+        final Filter filter = new Filter();
+        filter.setFilterClass(RuntimeFilter.class.getName());
+        final String name = "ReXSLRuntimeFilter";
+        filter.setFilterName(name);
+        final List<Filter> filters = new ArrayList<Filter>();
+        filters.add(filter);
+        webapp.setFilter(filters);
+        final FilterMapping mapping = new FilterMapping();
+        mapping.setFilterName(name);
+        final List<String> urls = new ArrayList<String>();
+        urls.add("/*");
+        mapping.setUrlPattern(urls);
+        final List<String> dispatchers = new ArrayList<String>();
+        dispatchers.add("REQUEST");
+        dispatchers.add("ERROR");
+        mapping.setDispatcher(dispatchers);
+        final List<FilterMapping> mappings = new ArrayList<FilterMapping>();
+        mappings.add(mapping);
+        webapp.setFilterMapping(mappings);
+        return webapp;
     }
 
 }

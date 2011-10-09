@@ -181,6 +181,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
 
     /**
      * Run this mojo.
+     * @throws MojoFailureException If some problem inside
      */
     protected abstract void run() throws MojoFailureException;
 

@@ -52,7 +52,8 @@ public final class RunMojo extends AbstractRexslMojo {
         this.getLog().info("Press Ctrl-C to stop...");
         while (true) {
             try {
-                Thread.sleep(5000);
+                // @checkstyle MagicNumber (1 line)
+                Thread.sleep(1000);
             } catch (java.lang.InterruptedException ex) {
                 grizzly.stop();
             }

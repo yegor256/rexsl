@@ -34,7 +34,10 @@ import org.junit.Assert
 import org.xmlmatchers.XmlMatchers
 import static org.hamcrest.Matchers.*
 
-def r1 = new TestClient(documentRoot).get('/rexsl/index.xml')
+def r1 = new TestClient(documentRoot)
+    .header('Accept', 'application/xml')
+    .header('User-agent', 'Chrome')
+    .get('/rexsl/index.xml')
 Assert.assertThat(r1.status, equalTo(200))
 Assert.assertThat(
     XhtmlConverter.the(r1.body),
