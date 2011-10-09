@@ -32,6 +32,8 @@ package com.rexsl.maven.utils;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -100,22 +102,27 @@ public final class RuntimeFilter implements Filter {
     private void filter(final HttpServletRequest request,
         final HttpServletResponse response, final FilterChain chain)
         throws IOException, ServletException {
+        final List<File> dirs = new ArrayList<File>();
+        dirs.add(new File("./src/test/rexsl"));
+        dirs.add(new File("./src/webapp"));
         final String path = request.getRequestURI();
-        if (path.equals("/rexsl/index.xml")) {
-            final File file = new File("src/test/rexsl/xml/index.xml");
-            response.getOutputStream().write(
-                FileUtils.readFileToString(file).getBytes()
-            );
-            Logger.info(
-                this,
-                "#filter(%s): fetched from %s (%d bytes)",
-                path,
-                file,
-                file.length()
-            );
-        } else {
-            chain.doFilter(request, response);
+        for (File dir : dirs) {
+            final File file = new File(dir, path);
+            if (file.exists() && !file.isDirectory()) {
+                response.getOutputStream().write(
+                    FileUtils.readFileToString(file).getBytes()
+                );
+                Logger.info(
+                    this,
+                    "#filter(%s): fetched from %s (%d bytes)",
+                    path,
+                    file,
+                    file.length()
+                );
+                return;
+            }
         }
+        chain.doFilter(request, response);
     }
 
 }

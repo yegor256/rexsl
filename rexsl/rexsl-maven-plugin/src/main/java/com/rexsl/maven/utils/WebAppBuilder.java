@@ -56,6 +56,17 @@ final class WebAppBuilder {
         final List<Filter> filters = new ArrayList<Filter>();
         filters.add(filter);
         webapp.setFilter(filters);
+        webapp.setFilterMapping(this.mappings(name));
+        return webapp;
+    }
+
+    /**
+     * Create mappings.
+     * @param name Name of filter
+     * @return The mappings
+     * @see #build()
+     */
+    private List<FilterMapping> mappings(final String name) {
         final FilterMapping mapping = new FilterMapping();
         mapping.setFilterName(name);
         final List<String> urls = new ArrayList<String>();
@@ -67,8 +78,7 @@ final class WebAppBuilder {
         mapping.setDispatcher(dispatchers);
         final List<FilterMapping> mappings = new ArrayList<FilterMapping>();
         mappings.add(mapping);
-        webapp.setFilterMapping(mappings);
-        return webapp;
+        return mappings;
     }
 
 }

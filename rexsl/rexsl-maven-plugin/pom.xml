@@ -304,9 +304,9 @@
                     -->
                     <pomIncludes>
                         <pomInclude>all-correct/pom.xml</pomInclude>
-                        <!-- <pomInclude>script-failure/pom.xml</pomInclude> -->
-                        <!-- <pomInclude>xhtml-failure/pom.xml</pomInclude> -->
-                        <!-- <pomInclude>xsd-failure/pom.xml</pomInclude> -->
+                        <pomInclude>script-failure/pom.xml</pomInclude>
+                        <pomInclude>xhtml-failure/pom.xml</pomInclude>
+                        <pomInclude>xsd-failure/pom.xml</pomInclude>
                     </pomIncludes>
                     <postBuildHookScript>verify</postBuildHookScript>
                     <preBuildHookScript>setup</preBuildHookScript>
