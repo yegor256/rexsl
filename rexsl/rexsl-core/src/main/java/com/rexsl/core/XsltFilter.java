@@ -56,7 +56,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class XslBrowserFilter implements Filter {
+final class XsltFilter implements Filter {
 
     /**
      * Character encoding of the page.

@@ -38,7 +38,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
-import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -96,9 +95,6 @@ public final class RestfulServlet extends HttpServlet {
         );
         final FilterConfig cfg = new ServletConfigWrapper(config, props);
         this.jersey.init(cfg);
-        final Filter filter = new XslBrowserFilter();
-        filter.init(cfg);
-        config.getServletContext().addFilter("rexsl-filter", filter);
     }
 
     /**

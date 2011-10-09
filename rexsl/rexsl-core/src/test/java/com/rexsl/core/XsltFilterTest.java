@@ -31,6 +31,7 @@ package com.rexsl.core;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
@@ -56,9 +57,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * @version $Id$
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ XslBrowserFilter.class, ByteArrayResponseWrapper.class,
+@PrepareForTest({ XsltFilter.class, ByteArrayResponseWrapper.class,
     StringWriter.class, TransformerFactory.class })
-public final class XslBrowserFilterTest {
+public final class XsltFilterTest {
 
     /**
      * HTTP "Accept" header.
@@ -282,7 +283,7 @@ public final class XslBrowserFilterTest {
     private void filter(final String xml, final String accept,
         final String agent) throws Exception {
         final ServletContext context = Mockito.mock(ServletContext.class);
-        final XslBrowserFilter filter = new XslBrowserFilter();
+        final Filter filter = new XsltFilter();
         final FilterConfig config = Mockito.mock(FilterConfig.class);
         Mockito.when(config.getServletContext()).thenReturn(context);
         filter.init(config);
