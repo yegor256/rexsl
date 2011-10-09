@@ -89,18 +89,16 @@ public final class XsltFilter implements Filter {
     @Override
     public void doFilter(final ServletRequest req, final ServletResponse res,
         final FilterChain chain) throws IOException, ServletException {
-        if (!(req instanceof HttpServletRequest)
-            || !(res instanceof HttpServletResponse)) {
-            try {
-                chain.doFilter(req, res);
-                return;
-            } catch (ServletException ex) {
-                throw new IllegalStateException(ex);
-            } catch (IOException ex) {
-                throw new IllegalStateException(ex);
-            }
+        if (req instanceof HttpServletRequest
+            && res instanceof HttpServletResponse) {
+            this.filter(
+                (HttpServletRequest) req,
+                (HttpServletResponse) res,
+                chain
+            );
+        } else {
+            chain.doFilter(req, res);
         }
-        this.filter((HttpServletRequest) req, (HttpServletResponse) res, chain);
     }
 
     /**
