@@ -192,6 +192,9 @@ public final class MavenEnvironment implements Environment {
      * List of root artifacts.
      * @return The list of root artifacts
      * @see #artifacts()
+     * @todo #7 The implementation is very rough now. We should not specify
+     *  coordinates of REXSL-MAVEN-PLUGIN explicitly here. Somehow we should
+     *  get this information in runtime.
      */
     private List<Artifact> roots() {
         final List<Artifact> roots = new ArrayList<Artifact>();

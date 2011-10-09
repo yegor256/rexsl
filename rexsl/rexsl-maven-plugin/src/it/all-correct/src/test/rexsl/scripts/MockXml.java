@@ -27,28 +27,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.utils;
 
-import com.sun.jersey.guice.JerseyServletModule;
-import com.ymock.util.Logger;
+import com.rexsl.test.TestClient
+import com.rexsl.test.XhtmlConverter
+import org.junit.Assert
+import org.xmlmatchers.XmlMatchers
+import static org.hamcrest.Matchers.*
 
-/**
- * Testing configuration.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- */
-final class GuiceModule extends JerseyServletModule {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void configureServlets() {
-        Logger.info(
-            this,
-            "#configureServlets(): configured!"
-        );
-    }
-
-}
+def r1 = new TestClient(documentRoot).get('/rexsl/index.xml')
+Assert.assertThat(r1.status, equalTo(200))
+Assert.assertThat(
+    XhtmlConverter.the(r1.body),
+    XmlMatchers.hasXPath("/page/text[contains(.,'hello')]")
+)

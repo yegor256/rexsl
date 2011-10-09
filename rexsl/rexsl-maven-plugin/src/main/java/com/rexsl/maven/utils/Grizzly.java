@@ -33,6 +33,8 @@ import com.rexsl.maven.Environment;
 import com.sun.grizzly.http.servlet.deployer.GrizzlyWebServerDeployer;
 import com.sun.grizzly.http.servlet.deployer.conf.DeployerServerConfiguration;
 import com.sun.grizzly.http.webxml.schema.ContextParam;
+import com.sun.grizzly.http.webxml.schema.Filter;
+import com.sun.grizzly.http.webxml.schema.FilterMapping;
 import com.sun.grizzly.http.webxml.schema.WebApp;
 import java.io.File;
 import java.net.URL;
@@ -133,12 +135,33 @@ public final class Grizzly {
      */
     private static WebApp webapp() {
         final WebApp webapp = new WebApp();
-        final ContextParam param = new ContextParam();
-        param.setParamName(com.rexsl.core.CoreListener.OPT_MODULES);
-        param.setParamValue(GuiceModule.class.getName());
-        final List<ContextParam> params = new ArrayList<ContextParam>();
-        params.add(param);
-        webapp.setContextParam(params);
+        // final ContextParam param = new ContextParam();
+        // param.setParamName("com.rexsl.EXCLUDES");
+        // param.setParamValue("/rexsl/.*");
+        // final List<ContextParam> params = new ArrayList<ContextParam>();
+        // params.add(param);
+        // webapp.setContextParam(params);
+        // // add filter
+        // final Filter filter = new Filter();
+        // filter.setFilterClass(RuntimeFilter.class.getName());
+        // final String name = "rexsl-runtime-filter";
+        // filter.setFilterName(name);
+        // final List<Filter> filters = new ArrayList<Filter>();
+        // filters.add(filter);
+        // webapp.setFilter(filters);
+        // // add mapping
+        // final FilterMapping mapping = new FilterMapping();
+        // mapping.setFilterName(name);
+        // final List<String> urls = new ArrayList<String>();
+        // urls.add("/rexsl/*");
+        // mapping.setUrlPattern(urls);
+        // // final List<String> dispatchers = new ArrayList<String>();
+        // // dispatchers.add("REQUEST");
+        // // dispatchers.add("FOD");
+        // // mapping.setDispatcher(dispatchers);
+        // final List<FilterMapping> mappings = new ArrayList<FilterMapping>();
+        // mappings.add(mapping);
+        // webapp.setFilterMapping(mappings);
         return webapp;
     }
 
@@ -171,7 +194,6 @@ public final class Grizzly {
         }
         final URLClassLoader loader = new URLClassLoader(
             urls.toArray(new URL[] {}),
-            // Grizzly.class.getClassLoader()
             env.classloader()
         );
         return loader;

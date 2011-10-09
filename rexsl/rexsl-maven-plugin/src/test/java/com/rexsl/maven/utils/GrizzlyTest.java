@@ -32,6 +32,7 @@ package com.rexsl.maven.utils;
 import com.rexsl.maven.Environment;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -85,6 +86,8 @@ public final class GrizzlyTest {
         );
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(webdir).when(env).webdir();
+        Mockito.doReturn(this.getClass().getClassLoader())
+            .when(env).classloader();
         final Integer port = new PortReserver().port();
         final Grizzly grizzly = Grizzly.start(port, env);
         final HttpClient client = new DefaultHttpClient();
@@ -92,7 +95,10 @@ public final class GrizzlyTest {
             client.execute(new HttpGet("http://localhost:" + port));
         MatcherAssert.assertThat(
             response.getStatusLine().getStatusCode(),
-            Matchers.equalTo(HttpStatus.SC_OK)
+            Matchers.describedAs(
+                IOUtils.toString(response.getEntity().getContent()),
+                Matchers.equalTo(HttpStatus.SC_OK)
+            )
         );
     }
 

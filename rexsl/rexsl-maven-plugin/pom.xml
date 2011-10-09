@@ -55,6 +55,7 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -296,7 +297,7 @@
                     <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                     <debug>false</debug>
                     <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-                    <noLog>false</noLog>
+                    <noLog>true</noLog>
                     <!--
                     With this construct you can include some projects,
                     which you're interested in.

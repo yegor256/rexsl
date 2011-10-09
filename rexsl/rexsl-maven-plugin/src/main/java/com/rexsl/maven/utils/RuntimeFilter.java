@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,42 +26,48 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.maven.utils;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+/**
+ * Start/stop grizzly container.
  *
- * @version $Id: web.xml 9 2011-09-02 12:03:51Z yegor256@yahoo.com $
- -->
-<web-app version="3.0" metadata-complete="false"
-    xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+ * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @version $Id$
+ */
+public final class RuntimeFilter implements Filter {
 
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>/xsl/*</url-pattern>
-    </servlet-mapping>
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void destroy() {
+        System.out.println("destroy()");
+    }
 
-    <filter>
-        <filter-name>XsltFilter</filter-name>
-        <filter-class>com.rexsl.core.XsltFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>XsltFilter</filter-name>
-        <servlet-name>RestfulServlet</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doFilter(final ServletRequest request,
+        final ServletResponse response, final FilterChain chain)
+        throws java.io.IOException, javax.servlet.ServletException {
+        System.out.println("doFilter()");
+        chain.doFilter(request, response);
+    }
 
-    <servlet>
-        <servlet-name>RestfulServlet</servlet-name>
-        <servlet-class>com.rexsl.core.RestfulServlet</servlet-class>
-        <init-param>
-            <param-name>com.rexsl.PACKAGES</param-name>
-            <param-value>com.rexsl.foo</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>RestfulServlet</servlet-name>
-        <url-pattern>/*</url-pattern>
-    </servlet-mapping>
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(final FilterConfig config) {
+        System.out.println("init()");
+    }
 
-</web-app>
+}
