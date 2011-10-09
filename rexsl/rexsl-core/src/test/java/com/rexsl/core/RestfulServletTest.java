@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.rexsl.test.XhtmlConverter;
 import java.util.Vector;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -38,16 +39,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.xmlmatchers.XmlMatchers;
 
 /**
- * Testing {@link CoreServlet} class.
+ * Testing {@link RestfulServlet} class.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CoreServletTest {
+public final class RestfulServletTest {
 
     /**
      * A message.
@@ -94,14 +98,10 @@ public final class CoreServletTest {
         Mockito.doReturn(stream).when(response).getOutputStream();
         servlet.service(request, response);
         Mockito.verify(response).setStatus(HttpServletResponse.SC_OK);
-        // MatcherAssert.assertThat(
-        //     XhtmlConverter.the(stream.toString()),
-        //     XmlMatchers.hasXPath(
-        //         "//x:p[.='test']",
-        //         new org.xmlmatchers.namespace.SimpleNamespaceContext()
-        //         .withBinding("x", "http://www.w3.org/1999/xhtml")
-        //     )
-        // );
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(stream.toString()),
+            XmlMatchers.hasXPath("/page[.='test']")
+        );
     }
 
     /**
@@ -117,7 +117,7 @@ public final class CoreServletTest {
         Mockito.doReturn(ctx).when(config).getServletContext();
         Mockito.doReturn(this.getClass().getResourceAsStream("main.xsl"))
             .when(ctx).getResourceAsStream("/xsl/main.xsl");
-        final HttpServlet servlet = new CoreServlet();
+        final HttpServlet servlet = new RestfulServlet();
         servlet.init(config);
         return servlet;
     }

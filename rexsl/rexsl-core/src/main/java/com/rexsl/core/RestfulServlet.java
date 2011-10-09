@@ -54,7 +54,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CoreServlet extends HttpServlet {
+public final class RestfulServlet extends HttpServlet {
 
     /**
      * Comma.
