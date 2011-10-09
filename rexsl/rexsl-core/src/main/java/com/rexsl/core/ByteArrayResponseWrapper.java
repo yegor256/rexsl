@@ -44,7 +44,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * @version $Id$
  * @see XslBrowserFilter#filter(HttpServletRequest,HttpServletResponse)
  */
-final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
+public final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
 
     /**
      * Stream for keeping the servlet response.

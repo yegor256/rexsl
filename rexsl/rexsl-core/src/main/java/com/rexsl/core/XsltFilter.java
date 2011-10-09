@@ -59,6 +59,11 @@ import javax.xml.transform.stream.StreamSource;
 public final class XsltFilter implements Filter {
 
     /**
+     * MIME type that we're looking for.
+     */
+    public static final String MIME_XML = "application/xml";
+
+    /**
      * Character encoding of the page.
      */
     private static final String ENCODING = "UTF-8";
@@ -137,19 +142,29 @@ public final class XsltFilter implements Filter {
         final String accept = request.getHeader("Accept");
         String page = wrapper.getByteStream().toString(this.ENCODING);
         // let's check whether we should transform or not
-        if (!page.isEmpty() && page.startsWith("<?xml ")
-            && !(this.isXsltCapable(agent) && this.isXmlAccepted(accept))) {
-            response.setContentType("text/html");
-            page = this.transform(page);
-        } else {
+        // @checkstyle BooleanExpressionComplexity (1 line)
+        final boolean dontTouch =
+            // page is empty
+            page.isEmpty()
+            // it doesn't contain XML
+            || !page.startsWith("<?xml ")
+            // it's a pure XML client, requesting XML format
+            || this.isXmlExplicitlyRequested(accept)
+            // the browser supports XSTL 2.0
+            || (this.isXsltCapable(agent) && this.acceptsXml(accept));
+        if (dontTouch) {
             Logger.debug(
                 this,
                 // @checkstyle LineLength (1 line)
-                "#filter(%d chars): User-Agent='%s', Accept='%s', no need to transform",
+                "#filter('%s': %d chars): User-Agent='%s', Accept='%s', no need to transform",
+                request.getRequestURI(),
                 page.length(),
                 agent,
                 accept
             );
+        } else {
+            response.setContentType("text/html");
+            page = this.transform(page);
         }
         response.getOutputStream().write(page.getBytes(this.ENCODING));
     }
@@ -163,33 +178,58 @@ public final class XsltFilter implements Filter {
      *  parse the "Agent" header and understand versions.
      */
     private Boolean isXsltCapable(final String agent) {
-        final Boolean cap = (agent == null)
-            || agent.matches(".*(Chrome|Safari).*");
+        final Boolean cap = (agent != null)
+            && agent.matches(".*(Chrome|Safari).*");
         Logger.debug(this, "#isXsltCapable('%s'): %b", agent, cap);
         return cap;
     }
 
     /**
-     * Check if the application/xml MIME type is present in given Accept header.
-     * @param accept Accept header string from the request.
-     * @return If the application/XML MIME type is present
-     * @todo #3 This implemenation is very rough, and should be improved. We
-     *  should property parse "Accept" header and detect whether "XML" type
-     *  is accepted there or not.
+     * Check if the application/xml MIME type is the only one there.
+     * @param header Accept header string from the request.
+     * @return If the application/XML MIME type is the one
      */
-    private Boolean isXmlAccepted(final String accept) {
-        final Boolean accepted = (accept != null)
-            && (accept.contains("application/xml"));
-        Logger.debug(this, "#isXmlAccepted('%s'): %b", accept, accepted);
-        return accepted;
+    private Boolean isXmlExplicitlyRequested(final String header) {
+        final Boolean requested = (header != null)
+            && (this.MIME_XML.equals(header));
+        Logger.debug(
+            this,
+            "#isXmlExplicitlyRequested('%s'): %b",
+            header,
+            requested
+        );
+        return requested;
+    }
+
+    /**
+     * Check if the "application/xml" MIME type is accepted.
+     * @param header Accept header string from the request.
+     * @return If the application/XML MIME type is present
+     * @todo #7 This implemetation is very very preliminary and should
+     *  be replaced with something more decent. I don't like the idea
+     *  of implementing this parsing functionality here. We should better
+     *  use some library: http://stackoverflow.com/questions/7705979
+     */
+    private Boolean acceptsXml(final String header) {
+        final Boolean accepts = (header != null)
+            && (header.contains(this.MIME_XML));
+        Logger.debug(
+            this,
+            "#acceptsXml('%s'): %b",
+            header,
+            accepts
+        );
+        return accepts;
     }
 
     /**
      * Transform XML into HTML.
      * @param xml XML page to be transformed.
      * @return Resulting HTML page.
+     * @throws ServletException If some problem inside
+     * @checkstyle RedundantThrows (2 lines)
      */
-    private String transform(final String xml) {
+    private String transform(final String xml) throws ServletException {
         final long start = System.nanoTime();
         final StringWriter writer = new StringWriter();
         try {
@@ -208,12 +248,12 @@ public final class XsltFilter implements Filter {
                 new StreamResult(writer)
             );
         } catch (TransformerConfigurationException ex) {
-            throw new IllegalStateException(
+            throw new ServletException(
                 "Failed to configure XSL transformer",
                 ex
             );
         } catch (TransformerException ex) {
-            throw new IllegalStateException(
+            throw new ServletException(
                 "Failed to transform XML document to XHTML",
                 ex
             );
