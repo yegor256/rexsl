@@ -96,6 +96,7 @@ public final class RestfulServlet extends HttpServlet {
         this.julToSlf4j();
         final FilterConfig cfg = new ServletConfigWrapper(config, props);
         this.jersey.init(cfg);
+        Logger.debug(this, "#init(): servlet initialized");
     }
 
     /**
@@ -108,6 +109,11 @@ public final class RestfulServlet extends HttpServlet {
         final HttpServletResponse response)
         throws ServletException, IOException {
         this.jersey.service(request, response);
+        Logger.debug(
+            this,
+            "#service(%s): processed by Jersey",
+            request.getRequestURI()
+        );
     }
 
     /**
