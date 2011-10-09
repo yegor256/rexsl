@@ -74,6 +74,11 @@ public final class XsltFilter implements Filter {
     @Override
     public void init(final FilterConfig config) {
         this.context = config.getServletContext();
+        Logger.debug(
+            this,
+            "#init(%s): configured",
+            config.getClass().getName()
+        );
     }
 
     /**
@@ -104,6 +109,10 @@ public final class XsltFilter implements Filter {
     @Override
     public void destroy() {
         this.context = null;
+        Logger.debug(
+            this,
+            "#destroy(): done"
+        );
     }
 
     /**
@@ -137,8 +146,11 @@ public final class XsltFilter implements Filter {
         } else {
             Logger.debug(
                 this,
-                "#filter(%d bytes): no need to transform",
-                page.length()
+                // @checkstyle LineLength (1 line)
+                "#filter(%d chars): User-Agent='%s', Accept='%s', no need to transform",
+                page.length(),
+                agent,
+                accept
             );
         }
         response.getOutputStream().write(page.getBytes(this.ENCODING));
@@ -198,18 +210,26 @@ public final class XsltFilter implements Filter {
                 new StreamResult(writer)
             );
         } catch (TransformerConfigurationException ex) {
-            throw new IllegalStateException(ex);
+            throw new IllegalStateException(
+                "Failed to configure XSL transformer",
+                ex
+            );
         } catch (TransformerException ex) {
-            throw new IllegalStateException(ex);
+            throw new IllegalStateException(
+                "Failed to transform XML document to XHTML",
+                ex
+            );
         }
+        final String output = writer.toString();
         Logger.debug(
             this,
-            "#tranform(%d bytes): %.2f sec",
+            "#tranform(%d chars): produced %d chars, %.2f sec",
             xml.length(),
+            output.length(),
             // @checkstyle MagicNumber (1 line)
             (double) (System.nanoTime() - start) / (1000 * 1000 * 1000)
         );
-        return writer.toString();
+        return output;
     }
 
 }
