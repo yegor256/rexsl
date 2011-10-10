@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.rexsl.core.ByteArrayResponseWrapper;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
@@ -53,11 +54,16 @@ import org.apache.commons.io.FileUtils;
 public final class RuntimeFilter implements Filter {
 
     /**
+     * Character encoding of the page.
+     */
+    private static final String ENCODING = "UTF-8";
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void destroy() {
-        // intentionally empty
+        Logger.debug(this, "#destroy(): runtime filter destroyed");
     }
 
     /**
@@ -69,6 +75,7 @@ public final class RuntimeFilter implements Filter {
     public void doFilter(final ServletRequest request,
         final ServletResponse response, final FilterChain chain)
         throws java.io.IOException, javax.servlet.ServletException {
+        Logger.debug(this, "#doFilter(..)");
         if (request instanceof HttpServletRequest
             && response instanceof HttpServletResponse) {
             this.filter(
@@ -86,7 +93,7 @@ public final class RuntimeFilter implements Filter {
      */
     @Override
     public void init(final FilterConfig config) {
-        // intentionally empty
+        Logger.debug(this, "#init(..): runtime filter initialized");
     }
 
     /**
@@ -102,16 +109,23 @@ public final class RuntimeFilter implements Filter {
     private void filter(final HttpServletRequest request,
         final HttpServletResponse response, final FilterChain chain)
         throws IOException, ServletException {
+        final ByteArrayResponseWrapper wrapper =
+            new ByteArrayResponseWrapper(response);
+        chain.doFilter(request, wrapper);
+        String content = wrapper.getByteStream().toString(this.ENCODING);
         final List<File> dirs = new ArrayList<File>();
         dirs.add(new File("./src/test/rexsl"));
-        dirs.add(new File("./src/webapp"));
+        dirs.add(new File("./src/main/webapp"));
         final String path = request.getRequestURI();
+        boolean found = false;
         for (File dir : dirs) {
             final File file = new File(dir, path);
-            if (file.exists() && !file.isDirectory()) {
-                response.getOutputStream().write(
-                    FileUtils.readFileToString(file).getBytes()
-                );
+            if (file.isDirectory()) {
+                continue;
+            }
+            if (file.exists()) {
+                content = FileUtils.readFileToString(file, this.ENCODING);
+                response.setStatus(HttpServletResponse.SC_OK);
                 Logger.info(
                     this,
                     "#filter(%s): fetched from %s (%d bytes)",
@@ -119,10 +133,13 @@ public final class RuntimeFilter implements Filter {
                     file,
                     file.length()
                 );
-                return;
+                found = true;
             }
         }
-        chain.doFilter(request, response);
+        if (!found) {
+            Logger.debug(this, "#filter(%s): no files found", path);
+        }
+        response.getOutputStream().write(content.getBytes(this.ENCODING));
     }
 
 }

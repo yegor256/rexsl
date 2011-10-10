@@ -54,6 +54,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 /**
  * XslBrowserFilter test case.
  * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
 @RunWith(PowerMockRunner.class)

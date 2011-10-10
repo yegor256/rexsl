@@ -67,16 +67,19 @@ final class WebAppBuilder {
      * @see #build()
      */
     private List<FilterMapping> mappings(final String name) {
+        final List<FilterMapping> mappings = new ArrayList<FilterMapping>();
         final FilterMapping mapping = new FilterMapping();
         mapping.setFilterName(name);
         final List<String> urls = new ArrayList<String>();
-        urls.add("/*");
+        urls.add("/css/*");
         mapping.setUrlPattern(urls);
+        final List<String> servlets = new ArrayList<String>();
+        servlets.add("default");
+        mapping.setServletName(servlets);
         final List<String> dispatchers = new ArrayList<String>();
         dispatchers.add("REQUEST");
         dispatchers.add("ERROR");
         mapping.setDispatcher(dispatchers);
-        final List<FilterMapping> mappings = new ArrayList<FilterMapping>();
         mappings.add(mapping);
         return mappings;
     }

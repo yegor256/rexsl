@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * Wrapper that redirects all the writes to {@link ByteArrayOutputStream}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  * @see XslBrowserFilter#filter(HttpServletRequest,HttpServletResponse)
  */

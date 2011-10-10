@@ -131,6 +131,7 @@ public final class RestfulServlet extends HttpServlet {
             rootLogger.removeHandler(handlers[idx]);
         }
         org.slf4j.bridge.SLF4JBridgeHandler.install();
+        Logger.debug(this, "#julToSlf4j(): JUL forwarded to SLF4j");
     }
 
     /**

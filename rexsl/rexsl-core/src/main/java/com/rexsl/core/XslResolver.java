@@ -43,6 +43,7 @@ import javax.xml.bind.Marshaller;
  * Replace standard marshaller.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  * @link <a href="http://markmail.org/search/?q=list%3Anet.java.dev.jersey.users+ContextResolver%3CMarshaller%3E#query:list%3Anet.java.dev.jersey.users%20ContextResolver%3CMarshaller%3E+page:1+mid:q4fkq6eqlgkzdodc+state:results">discussion</a>
  */

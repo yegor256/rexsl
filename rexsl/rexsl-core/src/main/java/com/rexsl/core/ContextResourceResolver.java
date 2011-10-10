@@ -42,6 +42,7 @@ import javax.xml.transform.stream.StreamSource;
  * Resolves resources using ServletContext.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
 final class ContextResourceResolver implements URIResolver {

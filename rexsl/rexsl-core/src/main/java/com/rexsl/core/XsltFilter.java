@@ -54,6 +54,7 @@ import javax.xml.transform.stream.StreamSource;
  * Converts XML to XHTML, if necessary.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
 public final class XsltFilter implements Filter {

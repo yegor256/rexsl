@@ -35,9 +35,54 @@
 ~~ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 ~~ OF THE POSSIBILITY OF SUCH DAMAGE.
 ~~
-~~ @version $Id$
-~~
 
 ReXSL core module
 
-  TBD...
+  There are two classes that you should use in your project (both
+  of them are mandatory in all cases):
+  {{{./apidocs/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} and
+  {{{./apidocs/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}}. Use them
+  in <<<web.xml>>>:
+
++--
+<filter>
+  <filter-name>XsltFilter</filter-name>
+  <filter-class>com.rexsl.core.XsltFilter</filter-class>
+</filter>
+<filter-mapping>
+  <filter-name>XsltFilter</filter-name>
+  <servlet-name>RestfulServlet</servlet-name>
+  <dispatcher>REQUEST</dispatcher>
+  <dispatcher>ERROR</dispatcher>
+</filter-mapping>
+<servlet>
+  <servlet-name>RestfulServlet</servlet-name>
+  <servlet-class>com.rexsl.core.RestfulServlet</servlet-class>
+  <init-param>
+    <param-name>com.rexsl.PACKAGES</param-name>
+    <param-value>com.example.foo</param-value>
+  </init-param>
+</servlet>
+<servlet-mapping>
+  <servlet-name>RestfulServlet</servlet-name>
+  <url-pattern>/*</url-pattern>
+</servlet-mapping>
++--
+
+  {{{./apidocs/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} is
+  responsible for handling of JAX-RS requests and converting your JAXB annotated
+  classes into XML documents.
+
+  {{{./apidocs/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}} is converting
+  XML output documents into XHTML when necessary.
+
+  This is what you include into your <<<pom.xml>>>:
+
++--
+<dependency>
+  <groupId>com.rexsl</groupId>
+  <artifactId>rexsl-core</artifactId>
+  <version>${project.version}</version>
+  <scope>runtime</scope>
+</dependency>
++--

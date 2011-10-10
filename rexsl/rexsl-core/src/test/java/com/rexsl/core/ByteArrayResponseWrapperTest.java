@@ -38,6 +38,7 @@ import org.mockito.Mockito;
 /**
  * ByteArrayResponseWrapper test case.
  * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
 public final class ByteArrayResponseWrapperTest {
