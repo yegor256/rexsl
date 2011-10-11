@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Properties;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
+import org.apache.commons.lang.StringUtils;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 
@@ -144,9 +145,11 @@ public final class MavenEnvironment implements Environment {
             urls.toArray(new URL[] {}),
             this.getClass().getClassLoader()
         );
+        final List<String> names = new ArrayList<String>();
         for (URL url : loader.getURLs()) {
-            this.reporter.log("ReXSL classpath: %s", url);
+            names.add(url.toString());
         }
+        this.reporter.log("ReXSL classpath: %s", StringUtils.join(names, ";"));
         return loader;
     }
 
@@ -159,9 +162,10 @@ public final class MavenEnvironment implements Environment {
         final List<Artifact> artifacts = new ArrayList<Artifact>();
         final DepsResolver resolver =
             new DepsResolver(this.project, this.localRepo);
+        this.reporter.log("Full tree of artifacts in classpath:");
         for (Artifact root : this.roots()) {
             this.reporter.log(
-                "%s:%s:%s",
+                "  %s:%s:%s",
                 root.getGroupId(),
                 root.getArtifactId(),
                 root.getVersion()
@@ -177,7 +181,7 @@ public final class MavenEnvironment implements Environment {
                 if (!found) {
                     artifacts.add(dep);
                     this.reporter.log(
-                        "\t%s:%s:%s",
+                        "    %s:%s:%s",
                         dep.getGroupId(),
                         dep.getArtifactId(),
                         dep.getVersion()

@@ -157,8 +157,6 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      */
     @Override
     public final void execute() throws MojoFailureException {
-        org.slf4j.impl.StaticLoggerBinder.getSingleton()
-            .setMavenLog(this.getLog());
         if (this.skip) {
             this.getLog().info("execution skipped because of 'skip' option");
             return;

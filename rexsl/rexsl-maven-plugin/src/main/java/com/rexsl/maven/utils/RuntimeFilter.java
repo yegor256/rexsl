@@ -29,7 +29,6 @@
  */
 package com.rexsl.maven.utils;
 
-import com.rexsl.core.ByteArrayResponseWrapper;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
@@ -75,9 +74,13 @@ public final class RuntimeFilter implements Filter {
     public void doFilter(final ServletRequest request,
         final ServletResponse response, final FilterChain chain)
         throws java.io.IOException, javax.servlet.ServletException {
-        Logger.debug(this, "#doFilter(..)");
         if (request instanceof HttpServletRequest
             && response instanceof HttpServletResponse) {
+            Logger.debug(
+                this,
+                "#doFilter(%s)",
+                ((HttpServletRequest) request).getRequestURI()
+            );
             this.filter(
                 (HttpServletRequest) request,
                 (HttpServletResponse) response,
@@ -93,7 +96,11 @@ public final class RuntimeFilter implements Filter {
      */
     @Override
     public void init(final FilterConfig config) {
-        Logger.debug(this, "#init(..): runtime filter initialized");
+        Logger.debug(
+            this,
+            "#init(%s): runtime filter initialized",
+            config.getClass().getName()
+        );
     }
 
     /**
@@ -109,8 +116,8 @@ public final class RuntimeFilter implements Filter {
     private void filter(final HttpServletRequest request,
         final HttpServletResponse response, final FilterChain chain)
         throws IOException, ServletException {
-        final ByteArrayResponseWrapper wrapper =
-            new ByteArrayResponseWrapper(response);
+        final RuntimeResponseWrapper wrapper =
+            new RuntimeResponseWrapper(response);
         chain.doFilter(request, wrapper);
         String content = wrapper.getByteStream().toString(this.ENCODING);
         final List<File> dirs = new ArrayList<File>();
@@ -128,7 +135,7 @@ public final class RuntimeFilter implements Filter {
                 response.setStatus(HttpServletResponse.SC_OK);
                 Logger.info(
                     this,
-                    "#filter(%s): fetched from %s (%d bytes)",
+                    "#filter(%s): re-fetched from %s (%d bytes)",
                     path,
                     file,
                     file.length()
@@ -137,6 +144,10 @@ public final class RuntimeFilter implements Filter {
             }
         }
         if (!found) {
+            final int status = wrapper.getStatus();
+            if (status > 0) {
+                response.setStatus(status);
+            }
             Logger.debug(this, "#filter(%s): no files found", path);
         }
         response.getOutputStream().write(content.getBytes(this.ENCODING));

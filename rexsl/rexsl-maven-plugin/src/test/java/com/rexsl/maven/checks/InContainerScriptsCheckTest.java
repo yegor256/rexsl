@@ -32,7 +32,6 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
-import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
@@ -54,15 +53,6 @@ public final class InContainerScriptsCheckTest {
      */
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Initialize SLF4J bridge.
-     */
-    @BeforeClass
-    public static void initSlf4jBridge() {
-        org.slf4j.impl.StaticLoggerBinder.getSingleton()
-            .setMavenLog(new SystemStreamLog());
-    }
 
     /**
      * Validate correct XML+XSL transformation.

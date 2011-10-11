@@ -73,18 +73,18 @@ public final class EmbeddedContainer {
         final Environment env) {
         final Server server = new Server(port);
         final WebAppContext ctx = new WebAppContext();
-        ctx.setWar(env.webdir().getPath());
         ctx.addFilter(
             RuntimeFilter.class,
             "/*",
             EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR)
         );
+        ctx.setWar(env.webdir().getPath());
         server.setHandler(ctx);
         try {
             server.start();
         // @checkstyle IllegalCatch (1 line)
         } catch (Exception ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalArgumentException("Failed to start Jetty", ex);
         }
         return new EmbeddedContainer(server);
     }
@@ -97,7 +97,7 @@ public final class EmbeddedContainer {
             this.server.stop();
         // @checkstyle IllegalCatch (1 line)
         } catch (Exception ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalArgumentException("Failed to stop Jetty", ex);
         }
     }
 

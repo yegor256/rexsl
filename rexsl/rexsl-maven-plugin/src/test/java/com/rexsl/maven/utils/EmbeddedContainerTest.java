@@ -39,7 +39,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
@@ -69,15 +68,6 @@ public final class EmbeddedContainerTest {
     public TemporaryFolder temp = new TemporaryFolder();
 
     /**
-     * Initialize SLF4J bridge.
-     */
-    @BeforeClass
-    public static void initSlf4jBridge() {
-        org.slf4j.impl.StaticLoggerBinder.getSingleton()
-            .setMavenLog(new SystemStreamLog());
-    }
-
-    /**
      * Validate correct XML+XSL transformation.
      * @throws Exception If something goes wrong
      */
@@ -93,7 +83,15 @@ public final class EmbeddedContainerTest {
             new File(webdir, "WEB-INF/web.xml"),
             "<web-app version='3.0' metadata-complete='false'"
             + " xmlns='http://java.sun.com/xml/ns/javaee'>"
-            + "<description>test</description>"
+            + "<filter>"
+            + " <filter-name>XsltFilter</filter-name>"
+            + " <filter-class>com.rexsl.core.XsltFilter</filter-class>"
+            + " </filter>"
+            + "<filter-mapping>"
+            + " <filter-name>XsltFilter</filter-name>"
+            + " <url-pattern>/*</url-pattern>"
+            + " <dispatcher>REQUEST</dispatcher>"
+            + "</filter-mapping>"
             + "</web-app>"
         );
         final Environment env = Mockito.mock(Environment.class);

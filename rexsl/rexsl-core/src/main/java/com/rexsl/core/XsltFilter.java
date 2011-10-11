@@ -80,7 +80,7 @@ public final class XsltFilter implements Filter {
     @Override
     public void init(final FilterConfig config) {
         this.context = config.getServletContext();
-        Logger.debug(
+        Logger.info(
             this,
             "#init(%s): configured",
             config.getClass().getName()
@@ -113,7 +113,7 @@ public final class XsltFilter implements Filter {
     @Override
     public void destroy() {
         this.context = null;
-        Logger.debug(
+        Logger.info(
             this,
             "#destroy(): done"
         );

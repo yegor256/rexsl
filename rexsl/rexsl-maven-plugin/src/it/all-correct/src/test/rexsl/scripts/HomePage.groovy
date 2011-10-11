@@ -35,7 +35,7 @@ import org.xmlmatchers.XmlMatchers
 import static org.hamcrest.Matchers.*
 
 def r1 = new TestClient(documentRoot)
-    .header('Accept', 'application/xml')
+    .header('Accept', 'text/plain,application/xml')
     .header('User-agent', 'FireFox')
     .get('/')
 Assert.assertThat(r1.status, equalTo(200))
