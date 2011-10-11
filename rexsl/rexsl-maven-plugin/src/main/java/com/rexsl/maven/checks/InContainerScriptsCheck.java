@@ -33,7 +33,7 @@ import com.rexsl.core.JaxbConfigurator;
 import com.rexsl.core.XslResolver;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.utils.Grizzly;
+import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.PortReserver;
 import groovy.lang.Binding;
 import java.io.File;
@@ -91,11 +91,11 @@ public final class InContainerScriptsCheck implements Check {
             env.webdir()
         );
         final Integer port = new PortReserver().port();
-        final Grizzly grizzly = Grizzly.start(port, env);
+        final EmbeddedContainer container = EmbeddedContainer.start(port, env);
         final URI home = this.home(port);
         env.reporter().report("Web front available at %s", home);
         final boolean success = this.run(dir, home, env);
-        grizzly.stop();
+        container.stop();
         env.reporter().report("Embedded Grizzly web server stopped");
         return success;
     }

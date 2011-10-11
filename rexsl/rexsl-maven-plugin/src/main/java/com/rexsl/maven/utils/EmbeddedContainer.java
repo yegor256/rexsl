@@ -29,59 +29,68 @@
  */
 package com.rexsl.maven.utils;
 
-import com.sun.grizzly.http.webxml.schema.Filter;
-import com.sun.grizzly.http.webxml.schema.FilterMapping;
-import com.sun.grizzly.http.webxml.schema.WebApp;
+import com.rexsl.maven.Environment;
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
- * Builder of {@link WebApp}.
+ * Start/stop grizzly container.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class WebAppBuilder {
+public final class EmbeddedContainer {
 
     /**
-     * Create parent webapp.
-     * @return The webapp
+     * The server just started.
      */
-    public WebApp build() {
-        final WebApp webapp = new WebApp();
-        final Filter filter = new Filter();
-        filter.setFilterClass(RuntimeFilter.class.getName());
-        final String name = "ReXSLRuntimeFilter";
-        filter.setFilterName(name);
-        final List<Filter> filters = new ArrayList<Filter>();
-        filters.add(filter);
-        webapp.setFilter(filters);
-        webapp.setFilterMapping(this.mappings(name));
-        return webapp;
+    private Server server;
+
+    /**
+     * Private ctor.
+     * @param srv The server just started
+     */
+    private EmbeddedContainer(final Server srv) {
+        this.server = srv;
     }
 
     /**
-     * Create mappings.
-     * @param name Name of filter
-     * @return The mappings
-     * @see #build()
+     * Create and start Grizzly container.
+     * @param port The port to mount to
+     * @param env The environment
+     * @return The container
      */
-    private List<FilterMapping> mappings(final String name) {
-        final List<FilterMapping> mappings = new ArrayList<FilterMapping>();
-        final FilterMapping mapping = new FilterMapping();
-        mapping.setFilterName(name);
-        final List<String> urls = new ArrayList<String>();
-        urls.add("/css/*");
-        mapping.setUrlPattern(urls);
-        final List<String> servlets = new ArrayList<String>();
-        servlets.add("default");
-        mapping.setServletName(servlets);
-        final List<String> dispatchers = new ArrayList<String>();
-        dispatchers.add("REQUEST");
-        dispatchers.add("ERROR");
-        mapping.setDispatcher(dispatchers);
-        mappings.add(mapping);
-        return mappings;
+    public static EmbeddedContainer start(final Integer port,
+        final Environment env) {
+        final Server server = new Server(port);
+        final WebAppContext ctx = new WebAppContext();
+        ctx.setWar(env.webdir().getPath());
+        server.setHandler(ctx);
+        try {
+            server.start();
+        // @checkstyle IllegalCatch (1 line)
+        } catch (Exception ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        return new EmbeddedContainer(server);
+    }
+
+    /**
+     * Stop this container.
+     */
+    public void stop() {
+        try {
+            this.server.stop();
+        // @checkstyle IllegalCatch (1 line)
+        } catch (Exception ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
 }

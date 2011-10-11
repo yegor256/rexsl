@@ -156,11 +156,19 @@
         </dependency>
         <dependency>
             <!--
-            Embedded Java Servlet Container
+            Embedded Jetty Java Servlet Container
             -->
-            <groupId>com.sun.grizzly</groupId>
-            <artifactId>grizzly-http-servlet-deployer</artifactId>
-            <version since="23 Sep 2011">1.9.36</version>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version since="11 Oct 2011">8.0.2.v20111006</version>
+        </dependency>
+        <dependency>
+            <!--
+            Embedded Jetty Java Servlet Container
+            -->
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version since="11 Oct 2011">8.0.2.v20111006</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

@@ -29,7 +29,7 @@
  */
 package com.rexsl.maven;
 
-import com.rexsl.maven.utils.Grizzly;
+import com.rexsl.maven.utils.EmbeddedContainer;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -47,7 +47,8 @@ public final class RunMojo extends AbstractRexslMojo {
      */
     @Override
     protected void run() throws MojoFailureException {
-        final Grizzly grizzly = Grizzly.start(this.port(), this.env());
+        final EmbeddedContainer container =
+            EmbeddedContainer.start(this.port(), this.env());
         this.getLog().info("Available at http://localhost:" + this.port());
         this.getLog().info("Press Ctrl-C to stop...");
         while (true) {
@@ -55,7 +56,7 @@ public final class RunMojo extends AbstractRexslMojo {
                 // @checkstyle MagicNumber (1 line)
                 Thread.sleep(1000);
             } catch (java.lang.InterruptedException ex) {
-                grizzly.stop();
+                container.stop();
             }
         }
     }

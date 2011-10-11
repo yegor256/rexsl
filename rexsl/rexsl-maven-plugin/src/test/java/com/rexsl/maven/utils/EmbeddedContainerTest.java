@@ -52,7 +52,7 @@ import org.mockito.Mockito;
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class GrizzlyTest {
+public final class EmbeddedContainerTest {
 
     /**
      * Temporary folder.
@@ -89,7 +89,7 @@ public final class GrizzlyTest {
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
         final Integer port = new PortReserver().port();
-        final Grizzly grizzly = Grizzly.start(port, env);
+        final EmbeddedContainer container = EmbeddedContainer.start(port, env);
         final HttpClient client = new DefaultHttpClient();
         final HttpResponse response =
             client.execute(new HttpGet("http://localhost:" + port));
