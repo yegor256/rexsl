@@ -32,7 +32,7 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
-import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
@@ -61,7 +61,7 @@ public final class InContainerScriptsCheckTest {
     @BeforeClass
     public static void initSlf4jBridge() {
         org.slf4j.impl.StaticLoggerBinder.getSingleton()
-            .setMavenLog(Mockito.mock(Log.class));
+            .setMavenLog(new SystemStreamLog());
     }
 
     /**

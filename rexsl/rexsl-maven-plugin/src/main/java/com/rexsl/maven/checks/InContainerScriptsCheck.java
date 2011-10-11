@@ -87,7 +87,7 @@ public final class InContainerScriptsCheck implements Check {
             );
         }
         env.reporter().report(
-            "Starting embedded Grizzly web server in '%s'...",
+            "Starting embedded servlet container in '%s'...",
             env.webdir()
         );
         final Integer port = new PortReserver().port();
@@ -96,7 +96,7 @@ public final class InContainerScriptsCheck implements Check {
         env.reporter().report("Web front available at %s", home);
         final boolean success = this.run(dir, home, env);
         container.stop();
-        env.reporter().report("Embedded Grizzly web server stopped");
+        env.reporter().report("Embedded servlet container stopped");
         return success;
     }
 
@@ -157,7 +157,7 @@ public final class InContainerScriptsCheck implements Check {
     /**
      * Check one script.
      * @param env The environment
-     * @param home URI of running Grizzly container
+     * @param home URI of running container
      * @param script Check this particular Groovy script
      * @throws InternalCheckException If some failure inside
      */

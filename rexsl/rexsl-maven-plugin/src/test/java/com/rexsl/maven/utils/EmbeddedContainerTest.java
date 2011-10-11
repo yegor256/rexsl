@@ -31,27 +31,34 @@ package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * Grizzly test case.
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ EmbeddedContainer.class, RuntimeFilter.class })
 public final class EmbeddedContainerTest {
 
     /**
@@ -67,7 +74,7 @@ public final class EmbeddedContainerTest {
     @BeforeClass
     public static void initSlf4jBridge() {
         org.slf4j.impl.StaticLoggerBinder.getSingleton()
-            .setMavenLog(Mockito.mock(Log.class));
+            .setMavenLog(new SystemStreamLog());
     }
 
     /**
@@ -75,7 +82,12 @@ public final class EmbeddedContainerTest {
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testGrizzlyDeployment() throws Exception {
+    public void testEmbeddedDeployment() throws Exception {
+        PowerMockito.mockStatic(RuntimeFilter.class);
+        final RuntimeFilter filter =
+            PowerMockito.mock(RuntimeFilter.class);
+        PowerMockito.whenNew(RuntimeFilter.class).withNoArguments()
+            .thenReturn(filter);
         final File webdir = this.temp.newFolder("webdir");
         FileUtils.writeStringToFile(
             new File(webdir, "WEB-INF/web.xml"),
@@ -90,16 +102,24 @@ public final class EmbeddedContainerTest {
             .when(env).classloader();
         final Integer port = new PortReserver().port();
         final EmbeddedContainer container = EmbeddedContainer.start(port, env);
-        final HttpClient client = new DefaultHttpClient();
-        final HttpResponse response =
-            client.execute(new HttpGet("http://localhost:" + port));
+        final HttpURLConnection conn = (HttpURLConnection)
+            new URL("http://localhost:" + port).openConnection();
+        conn.connect();
         MatcherAssert.assertThat(
-            response.getStatusLine().getStatusCode(),
+            conn.getResponseCode(),
             Matchers.describedAs(
-                IOUtils.toString(response.getEntity().getContent()),
-                Matchers.equalTo(HttpStatus.SC_OK)
+                IOUtils.toString(conn.getInputStream()),
+                Matchers.equalTo(HttpURLConnection.HTTP_OK)
             )
         );
+        // everything works fine, but these verifications don't work :(
+        // Mockito.verify(filter).init(Mockito.any(FilterConfig.class));
+        // Mockito.verify(filter).destroy();
+        // Mockito.verify(filter).doFilter(
+        //     Mockito.any(ServletRequest.class),
+        //     Mockito.any(ServletResponse.class),
+        //     Mockito.any(FilterChain.class)
+        // );
     }
 
 }

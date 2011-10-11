@@ -34,9 +34,12 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import javax.servlet.DispatcherType;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
@@ -71,6 +74,11 @@ public final class EmbeddedContainer {
         final Server server = new Server(port);
         final WebAppContext ctx = new WebAppContext();
         ctx.setWar(env.webdir().getPath());
+        ctx.addFilter(
+            RuntimeFilter.class,
+            "/*",
+            EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR)
+        );
         server.setHandler(ctx);
         try {
             server.start();
