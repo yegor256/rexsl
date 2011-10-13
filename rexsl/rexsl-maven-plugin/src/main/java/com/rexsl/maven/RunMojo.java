@@ -30,6 +30,7 @@
 package com.rexsl.maven;
 
 import com.rexsl.maven.utils.EmbeddedContainer;
+import com.ymock.util.Logger;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -49,8 +50,8 @@ public final class RunMojo extends AbstractRexslMojo {
     protected void run() throws MojoFailureException {
         final EmbeddedContainer container =
             EmbeddedContainer.start(this.port(), this.env());
-        this.getLog().info("Available at http://localhost:" + this.port());
-        this.getLog().info("Press Ctrl-C to stop...");
+        Logger.info(this, "Available at http://localhost:%d", this.port());
+        Logger.info(this, "Press Ctrl-C to stop...");
         while (true) {
             try {
                 // @checkstyle MagicNumber (1 line)

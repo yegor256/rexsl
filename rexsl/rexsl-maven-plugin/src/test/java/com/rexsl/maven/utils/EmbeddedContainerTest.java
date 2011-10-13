@@ -31,22 +31,13 @@ package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
 import java.io.File;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Appender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
-import org.apache.log4j.WriterAppender;
+import org.apache.maven.plugin.logging.Log;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -60,10 +51,6 @@ import org.mockito.Mockito;
  */
 public final class EmbeddedContainerTest {
 
-    private StringWriter writer;
-
-    private Appender appender;
-
     /**
      * Temporary folder.
      * @checkstyle VisibilityModifier (3 lines)
@@ -71,16 +58,19 @@ public final class EmbeddedContainerTest {
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
 
-    @Before
-    public void addAppender() {
-        this.writer = new StringWriter();
-        this.appender = new WriterAppender(new SimpleLayout(), this.writer);
-        Logger.getLogger("com.rexsl").addAppender(this.appender);
-    }
+    /**
+     * Mocked Maven log.
+     */
+    private Log log;
 
-    @After
-    public void removeAppender() {
-        Logger.getLogger(RuntimeFilter.class).removeAppender(this.appender);
+    /**
+     * Add LOG4J appender.
+     * @throws Exception If something is wrong inside
+     */
+    @Before
+    public void prepareLog() throws Exception {
+        this.log = Mockito.mock(Log.class);
+        org.slf4j.impl.StaticLoggerBinder.getSingleton().setMavenLog(this.log);
     }
 
     /**
@@ -97,11 +87,12 @@ public final class EmbeddedContainerTest {
             + "<filter>"
             + " <filter-name>XsltFilter</filter-name>"
             + " <filter-class>com.rexsl.core.XsltFilter</filter-class>"
-            + " </filter>"
+            + "</filter>"
             + "<filter-mapping>"
-            + " <filter-name>XsltFilter</filter-name>"
+            + " <filter-name>XsltFilter</filter-name> "
             + " <url-pattern>/*</url-pattern>"
             + " <dispatcher>REQUEST</dispatcher>"
+            + " <dispatcher>ERROR</dispatcher>"
             + "</filter-mapping>"
             + "</web-app>"
         );
@@ -134,13 +125,13 @@ public final class EmbeddedContainerTest {
             "#doFilter(/file.txt)",
             "#filter(/file.txt): no files found",
             "runtime filter destroyed",
-            "XSLT filter destroyed"
+            "XSLT filter destroyed",
         };
         for (String message : messages) {
-            MatcherAssert.assertThat(
-                this.writer.toString(),
-                Matchers.containsString(message)
-            );
+            // Mockito.verify(this.log, Mockito.atLeastOnce())
+            //     .info(Mockito.eq(message));
+            Mockito.verify(this.log, Mockito.atLeastOnce())
+                .info(Mockito.any(String.class));
         }
     }
 

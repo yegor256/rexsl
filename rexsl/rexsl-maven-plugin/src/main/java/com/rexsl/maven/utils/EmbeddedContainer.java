@@ -30,16 +30,9 @@
 package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 import javax.servlet.DispatcherType;
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**

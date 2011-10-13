@@ -30,15 +30,16 @@
 package com.rexsl.maven;
 
 import com.rexsl.maven.aether.DepsResolver;
+import com.ymock.util.Logger;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
-import org.apache.commons.lang.StringUtils;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 
@@ -56,11 +57,6 @@ public final class MavenEnvironment implements Environment {
     private final MavenProject project;
 
     /**
-     * The reporter.
-     */
-    private final Reporter reporter;
-
-    /**
      * The list of properties from Maven plugin.
      */
     private final Properties properties;
@@ -73,13 +69,11 @@ public final class MavenEnvironment implements Environment {
     /**
      * Ctor.
      * @param prj Maven project
-     * @param rep The reporter
      * @param props Properties
      */
-    public MavenEnvironment(final MavenProject prj, final Reporter rep,
+    public MavenEnvironment(final MavenProject prj,
         final Properties props) {
         this.project = prj;
-        this.reporter = rep;
         this.properties = props;
     }
 
@@ -115,14 +109,6 @@ public final class MavenEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
-    public Reporter reporter() {
-        return this.reporter;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public ClassLoader classloader() {
         final List<String> paths = new ArrayList<String>();
         try {
@@ -149,7 +135,11 @@ public final class MavenEnvironment implements Environment {
         for (URL url : loader.getURLs()) {
             names.add(url.toString());
         }
-        this.reporter.log("ReXSL classpath: %s", StringUtils.join(names, ";"));
+        Logger.debug(
+            this,
+            "ReXSL classpath: %s",
+            StringUtils.join(names, "\n")
+        );
         return loader;
     }
 
@@ -162,9 +152,10 @@ public final class MavenEnvironment implements Environment {
         final List<Artifact> artifacts = new ArrayList<Artifact>();
         final DepsResolver resolver =
             new DepsResolver(this.project, this.localRepo);
-        this.reporter.log("Full tree of artifacts in classpath:");
+        Logger.debug(this, "Full tree of artifacts in classpath:");
         for (Artifact root : this.roots()) {
-            this.reporter.log(
+            Logger.debug(
+                this,
                 "  %s:%s:%s",
                 root.getGroupId(),
                 root.getArtifactId(),
@@ -180,7 +171,8 @@ public final class MavenEnvironment implements Environment {
                 }
                 if (!found) {
                     artifacts.add(dep);
-                    this.reporter.log(
+                    Logger.debug(
+                        this,
                         "    %s:%s:%s",
                         dep.getGroupId(),
                         dep.getArtifactId(),
@@ -202,15 +194,6 @@ public final class MavenEnvironment implements Environment {
      */
     private List<Artifact> roots() {
         final List<Artifact> roots = new ArrayList<Artifact>();
-        roots.add(
-            new DefaultArtifact(
-                "com.rexsl",
-                "rexsl-maven-plugin",
-                "",
-                "jar",
-                "1.0-SNAPSHOT"
-            )
-        );
         for (org.apache.maven.artifact.Artifact artf
             : this.project.getDependencyArtifacts()) {
             roots.add(

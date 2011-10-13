@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven;
 
+import com.ymock.util.Logger;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -57,11 +58,10 @@ public final class CheckMojo extends AbstractRexslMojo {
                 );
             }
         }
-        this.getLog().info(
-            String.format(
-                "All ReXSL checks passed in '%s'",
-                this.project().getName()
-            )
+        Logger.info(
+            this,
+            "All ReXSL checks passed in '%s'",
+            this.project().getName()
         );
     }
 

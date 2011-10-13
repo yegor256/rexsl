@@ -30,6 +30,7 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
+import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import java.io.File;
@@ -106,7 +107,7 @@ public final class GroovyExecutor {
     private Throwable log(final Throwable exception) {
         final StringWriter writer = new StringWriter();
         exception.printStackTrace(new PrintWriter(writer));
-        this.environment.reporter().report(writer.toString());
+        Logger.warn(this, "%s", writer.toString());
         return exception;
     }
 

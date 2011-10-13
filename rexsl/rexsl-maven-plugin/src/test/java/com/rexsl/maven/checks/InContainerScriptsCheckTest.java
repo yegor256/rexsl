@@ -55,6 +55,15 @@ public final class InContainerScriptsCheckTest {
     public TemporaryFolder temp = new TemporaryFolder();
 
     /**
+     * Forward SLF4J to Maven Log.
+     * @throws Exception If something is wrong inside
+     */
+    @BeforeClass
+    public static void startLogging() throws Exception {
+        new com.rexsl.maven.LogStarter().start();
+    }
+
+    /**
      * Validate correct XML+XSL transformation.
      * @throws Exception If something goes wrong
      */
@@ -65,19 +74,14 @@ public final class InContainerScriptsCheckTest {
         Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         Utils.copy(basedir, "src/main/webapp/WEB-INF/web.xml");
         Utils.copy(basedir, "src/test/rexsl/scripts/home.groovy");
-        final DummyReporter reporter = new DummyReporter();
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(basedir).when(env).basedir();
         Mockito.doReturn(new File(basedir, "src/main/webapp"))
             .when(env).webdir();
-        Mockito.doReturn(reporter).when(env).reporter();
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
         final Check check = new InContainerScriptsCheck();
-        MatcherAssert.assertThat(
-            check.validate(env),
-            Matchers.describedAs(reporter.summary(), Matchers.is(true))
-        );
+        MatcherAssert.assertThat(check.validate(env), Matchers.is(true));
     }
 
 }

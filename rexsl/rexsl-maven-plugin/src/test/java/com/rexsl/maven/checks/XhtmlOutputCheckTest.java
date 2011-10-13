@@ -33,6 +33,7 @@ import com.rexsl.maven.Environment;
 import java.io.File;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -53,6 +54,15 @@ public final class XhtmlOutputCheckTest {
     public TemporaryFolder temp = new TemporaryFolder();
 
     /**
+     * Forward SLF4J to Maven Log.
+     * @throws Exception If something is wrong inside
+     */
+    @BeforeClass
+    public static void startLogging() throws Exception {
+        new com.rexsl.maven.LogStarter().start();
+    }
+
+    /**
      * Validate correct XML+XSL transformation.
      * @throws Exception If something goes wrong
      */
@@ -64,15 +74,13 @@ public final class XhtmlOutputCheckTest {
         Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
         Utils.copy(basedir, "src/test/rexsl/xhtml/index.groovy");
-        final DummyReporter reporter = new DummyReporter();
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(reporter).when(env).reporter();
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
         MatcherAssert.assertThat(
             new XhtmlOutputCheck().validate(env),
-            Matchers.describedAs(reporter.summary(), Matchers.is(true))
+            Matchers.is(true)
         );
     }
 
@@ -86,15 +94,13 @@ public final class XhtmlOutputCheckTest {
         // @checkstyle MultipleStringLiterals (2 lines)
         Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
-        final DummyReporter reporter = new DummyReporter();
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(reporter).when(env).reporter();
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
         MatcherAssert.assertThat(
             new XhtmlOutputCheck().validate(env),
-            Matchers.describedAs(reporter.summary(), Matchers.is(false))
+            Matchers.is(false)
         );
     }
 

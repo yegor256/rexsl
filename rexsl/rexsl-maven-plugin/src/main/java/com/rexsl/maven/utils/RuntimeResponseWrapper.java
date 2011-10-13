@@ -65,6 +65,11 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
     private int status;
 
     /**
+     * Error message.
+     */
+    private String message;
+
+    /**
      * Public ctor.
      * @param response Servlet response being wrapped.
      * @see XslBrowserFilter#filter(HttpServletRequest,HttpServletResponse)
@@ -96,16 +101,19 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      * {@inheritDoc}
      */
     @Override
-    public void setStatus(final int sts) {
-        this.status = sts;
+    public void sendError(final int stc, final String msg) {
+        this.status = stc;
+        this.message = msg;
     }
 
     /**
-     * {@inheritDoc}
+     * Pass through all sendError() calls.
+     * @throws IOException If there is some problem
      */
-    @Override
-    public int getStatus() {
-        return this.status;
+    public void passThrough() throws IOException {
+        if (this.status != 0) {
+            super.sendError(this.status, this.message);
+        }
     }
 
     /**

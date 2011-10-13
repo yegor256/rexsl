@@ -31,6 +31,7 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.ymock.util.Logger;
 import java.io.File;
 
 /**
@@ -63,7 +64,7 @@ public final class FilesStructureCheck implements Check {
             } catch (InternalCheckException ex) {
                 final String msg = ex.getMessage();
                 if (!msg.isEmpty()) {
-                    env.reporter().report(msg);
+                    Logger.warn(this, "%s", msg);
                 }
                 // success = false;
             }

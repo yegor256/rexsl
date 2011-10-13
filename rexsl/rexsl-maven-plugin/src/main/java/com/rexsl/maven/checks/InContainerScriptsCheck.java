@@ -35,6 +35,7 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.PortReserver;
+import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import java.io.File;
 import java.net.URI;
@@ -72,7 +73,8 @@ public final class InContainerScriptsCheck implements Check {
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), this.GROOVY_DIR);
         if (!dir.exists()) {
-            env.reporter().report(
+            Logger.info(
+                this,
                 "%s directory is absent, no scripts to run",
                 this.GROOVY_DIR
             );
@@ -86,17 +88,18 @@ public final class InContainerScriptsCheck implements Check {
                 )
             );
         }
-        env.reporter().report(
+        Logger.info(
+            this,
             "Starting embedded servlet container in '%s'...",
             env.webdir()
         );
         final Integer port = new PortReserver().port();
         final EmbeddedContainer container = EmbeddedContainer.start(port, env);
         final URI home = this.home(port);
-        env.reporter().report("Web front available at %s", home);
+        Logger.info(this, "Web front available at %s", home);
         final boolean success = this.run(dir, home, env);
         container.stop();
-        env.reporter().report("Embedded servlet container stopped");
+        Logger.info(this, "Embedded servlet container stopped");
         return success;
     }
 
@@ -132,15 +135,16 @@ public final class InContainerScriptsCheck implements Check {
                 new InContainerScriptsCheck.Configurator(env, handler)
             );
             try {
-                env.reporter().report("Testing '%s'...", script);
+                Logger.info(this, "Testing '%s'...", script);
                 this.one(env, home, script);
             } catch (InternalCheckException ex) {
-                env.reporter().report("Test failed: %s", ex.getMessage());
+                Logger.warn(this, "Test failed: %s", ex.getMessage());
                 success = false;
             }
             if (handler.events().size() > 0) {
                 for (ValidationEvent event : handler.events()) {
-                    env.reporter().report(
+                    Logger.warn(
+                        this,
                         "JAXB error: \"%s\" at '%s' [%d:%d]",
                         event.getMessage(),
                         event.getLocator().getURL(),
@@ -165,7 +169,7 @@ public final class InContainerScriptsCheck implements Check {
         final File script) throws InternalCheckException {
         final Binding binding = new Binding();
         binding.setVariable("documentRoot", home);
-        env.reporter().log("Running %s", script);
+        Logger.debug(this, "Running %s", script);
         final GroovyExecutor exec = new GroovyExecutor(env, binding);
         exec.execute(script);
     }
@@ -226,13 +230,15 @@ public final class InContainerScriptsCheck implements Check {
                 } catch (javax.xml.bind.JAXBException ex) {
                     throw new IllegalStateException(ex);
                 }
-                this.env.reporter().report(
+                Logger.info(
+                    this,
                     "'%s' to be validated with '%s'",
                     name,
                     xsd
                 );
             } else {
-                this.env.reporter().report(
+                Logger.info(
+                    this,
                     "No XSD schema for '%s' in '%s' file",
                     name,
                     xsd

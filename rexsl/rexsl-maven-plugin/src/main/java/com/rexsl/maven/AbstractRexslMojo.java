@@ -30,10 +30,12 @@
 package com.rexsl.maven;
 
 import com.rexsl.maven.utils.PortReserver;
+import com.ymock.util.Logger;
 import java.util.Properties;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.slf4j.impl.StaticLoggerBinder;
 import org.sonatype.aether.RepositorySystemSession;
 
 /**
@@ -139,7 +141,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
     protected final Integer port() {
         if (this.port == null) {
             this.port = new PortReserver().port();
-            this.getLog().info("Port reserved: " + this.port);
+            Logger.info(this, "Port reserved: %d", this.port);
         }
         return this.port;
     }
@@ -157,8 +159,9 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      */
     @Override
     public final void execute() throws MojoFailureException {
+        StaticLoggerBinder.getSingleton().setMavenLog(this.getLog());
         if (this.skip) {
-            this.getLog().info("execution skipped because of 'skip' option");
+            Logger.info(this, "execution skipped because of 'skip' option");
             return;
         }
         if (!"war".equals(this.project.getPackaging())) {
@@ -166,11 +169,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
         }
         final Properties properties = new Properties();
         properties.setProperty("webappDirectory", this.webappDirectory);
-        this.env = new MavenEnvironment(
-            this.project,
-            new MavenReporter(this.getLog()),
-            properties
-        );
+        this.env = new MavenEnvironment(this.project, properties);
         this.env.setLocalRepository(
             this.session.getLocalRepository().getBasedir().getPath()
         );

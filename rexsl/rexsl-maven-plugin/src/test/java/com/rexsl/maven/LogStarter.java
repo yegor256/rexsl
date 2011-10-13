@@ -30,50 +30,23 @@
 package com.rexsl.maven;
 
 import org.apache.maven.plugin.logging.Log;
+import org.mockito.Mockito;
+import org.slf4j.impl.StaticLoggerBinder;
 
 /**
- * Reporter through Maven log.
- *
+ * Start logging to a mock Maven log.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class MavenReporter implements Reporter {
+public final class LogStarter {
 
     /**
-     * The log.
+     * Start logging.
+     * @throws Exception If something goes wrong inside
      */
-    private Log log;
-
-    /**
-     * Public ctor.
-     * @param mlog Maven log
-     */
-    public MavenReporter(final Log mlog) {
-        this.log = mlog;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void report(final String line, final Object... args) {
-        if (args.length > 0) {
-            this.log.info(String.format(line, args));
-        } else {
-            this.log.info(line);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void log(final String line, final Object... args) {
-        if (args.length > 0) {
-            this.log.debug(String.format(line, args));
-        } else {
-            this.log.debug(line);
-        }
+    public void start() throws Exception {
+        final Log log = Mockito.mock(Log.class);
+        StaticLoggerBinder.getSingleton().setMavenLog(log);
     }
 
 }

@@ -72,6 +72,11 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      */
     public static void setJaxbConfigurator(final JaxbConfigurator cfg) {
         XslResolver.configurator = cfg;
+        Logger.debug(
+            XslResolver.class,
+            "#setJaxbConfigurator(%s): configurator set",
+            cfg.getClass().getName()
+        );
     }
 
     /**

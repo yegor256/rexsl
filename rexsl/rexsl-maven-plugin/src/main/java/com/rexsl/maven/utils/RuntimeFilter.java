@@ -96,7 +96,7 @@ public final class RuntimeFilter implements Filter {
      */
     @Override
     public void init(final FilterConfig config) {
-        Logger.debug(
+        Logger.info(
             this,
             "#init(%s): runtime filter initialized",
             config.getClass().getName()
@@ -120,11 +120,28 @@ public final class RuntimeFilter implements Filter {
             new RuntimeResponseWrapper(response);
         chain.doFilter(request, wrapper);
         String content = wrapper.getByteStream().toString(this.ENCODING);
+        final String path = request.getRequestURI();
+        final String replacement = this.fetch(path);
+        if (replacement != null) {
+            content = replacement;
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            wrapper.passThrough();
+        }
+        response.getOutputStream().write(content.getBytes(this.ENCODING));
+    }
+
+    /**
+     * Find file content by URL.
+     * @param path The path
+     * @return The content or NULL
+     * @throws IOException If something goes wrong
+     */
+    private String fetch(final String path) throws IOException {
+        String content = null;
         final List<File> dirs = new ArrayList<File>();
         dirs.add(new File("./src/test/rexsl"));
         dirs.add(new File("./src/main/webapp"));
-        final String path = request.getRequestURI();
-        boolean found = false;
         for (File dir : dirs) {
             final File file = new File(dir, path);
             if (file.isDirectory()) {
@@ -132,25 +149,16 @@ public final class RuntimeFilter implements Filter {
             }
             if (file.exists()) {
                 content = FileUtils.readFileToString(file, this.ENCODING);
-                response.setStatus(HttpServletResponse.SC_OK);
                 Logger.info(
                     this,
-                    "#filter(%s): re-fetched from %s (%d bytes)",
+                    "#fetch(%s): re-fetched from %s (%d bytes)",
                     path,
                     file,
                     file.length()
                 );
-                found = true;
             }
         }
-        if (!found) {
-            final int status = wrapper.getStatus();
-            if (status > 0) {
-                response.setStatus(status);
-            }
-            Logger.debug(this, "#filter(%s): no files found", path);
-        }
-        response.getOutputStream().write(content.getBytes(this.ENCODING));
+        return content;
     }
 
 }

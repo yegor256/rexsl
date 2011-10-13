@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven;
 
+import com.ymock.util.Logger;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -47,7 +48,7 @@ public final class PackageMojo extends AbstractRexslMojo {
      */
     @Override
     protected void run() throws MojoFailureException {
-        this.getLog().info("Packaging completed");
+        Logger.info(this, "Packaging completed");
     }
 
 }

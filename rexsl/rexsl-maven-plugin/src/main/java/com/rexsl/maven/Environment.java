@@ -58,12 +58,6 @@ public interface Environment {
     File webdir();
 
     /**
-     * Get reporter.
-     * @return The reporter
-     */
-    Reporter reporter();
-
-    /**
      * Create classloader, from all artifacts available for this
      * plugin in runtime (incl. "test").
      * @return The classloader
