@@ -31,6 +31,7 @@ package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
 import java.io.File;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.servlet.FilterChain;
@@ -39,26 +40,29 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Appender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
+import org.apache.log4j.WriterAppender;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * Grizzly test case.
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ EmbeddedContainer.class, RuntimeFilter.class })
 public final class EmbeddedContainerTest {
+
+    private StringWriter writer;
+
+    private Appender appender;
 
     /**
      * Temporary folder.
@@ -67,21 +71,28 @@ public final class EmbeddedContainerTest {
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
 
+    @Before
+    public void addAppender() {
+        this.writer = new StringWriter();
+        this.appender = new WriterAppender(new SimpleLayout(), this.writer);
+        Logger.getLogger("com.rexsl").addAppender(this.appender);
+    }
+
+    @After
+    public void removeAppender() {
+        Logger.getLogger(RuntimeFilter.class).removeAppender(this.appender);
+    }
+
     /**
      * Validate correct XML+XSL transformation.
      * @throws Exception If something goes wrong
      */
     @Test
     public void testEmbeddedDeployment() throws Exception {
-        PowerMockito.mockStatic(RuntimeFilter.class);
-        final RuntimeFilter filter =
-            PowerMockito.mock(RuntimeFilter.class);
-        PowerMockito.whenNew(RuntimeFilter.class).withNoArguments()
-            .thenReturn(filter);
         final File webdir = this.temp.newFolder("webdir");
         FileUtils.writeStringToFile(
             new File(webdir, "WEB-INF/web.xml"),
-            "<web-app version='3.0' metadata-complete='false'"
+            "<web-app version='3.0'"
             + " xmlns='http://java.sun.com/xml/ns/javaee'>"
             + "<filter>"
             + " <filter-name>XsltFilter</filter-name>"
@@ -110,14 +121,18 @@ public final class EmbeddedContainerTest {
                 Matchers.equalTo(HttpURLConnection.HTTP_OK)
             )
         );
-        // everything works fine, but these verifications don't work :(
-        // Mockito.verify(filter).init(Mockito.any(FilterConfig.class));
-        // Mockito.verify(filter).destroy();
-        // Mockito.verify(filter).doFilter(
-        //     Mockito.any(ServletRequest.class),
-        //     Mockito.any(ServletResponse.class),
-        //     Mockito.any(FilterChain.class)
-        // );
+        container.stop();
+        final String[] messages = new String[] {
+            "runtime filter initialized",
+            "XSLT filter initialized",
+            "XSLT filter destroyed"
+        };
+        for (String message : messages) {
+            MatcherAssert.assertThat(
+                this.writer.toString(),
+                Matchers.containsString(message)
+            );
+        }
     }
 
 }

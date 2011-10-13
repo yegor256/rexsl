@@ -82,7 +82,7 @@ public final class XsltFilter implements Filter {
         this.context = config.getServletContext();
         Logger.info(
             this,
-            "#init(%s): configured",
+            "#init(%s): XSLT filter initialized",
             config.getClass().getName()
         );
     }
@@ -115,7 +115,7 @@ public final class XsltFilter implements Filter {
         this.context = null;
         Logger.info(
             this,
-            "#destroy(): done"
+            "#destroy(): XSLT filter destroyed"
         );
     }
 
