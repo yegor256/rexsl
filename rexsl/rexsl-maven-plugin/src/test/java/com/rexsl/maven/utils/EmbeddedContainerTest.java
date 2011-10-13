@@ -105,6 +105,10 @@ public final class EmbeddedContainerTest {
             + "</filter-mapping>"
             + "</web-app>"
         );
+        FileUtils.writeStringToFile(
+            new File(webdir, "file.txt"),
+            "some test data"
+        );
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(webdir).when(env).webdir();
         Mockito.doReturn(this.getClass().getClassLoader())
@@ -112,19 +116,24 @@ public final class EmbeddedContainerTest {
         final Integer port = new PortReserver().port();
         final EmbeddedContainer container = EmbeddedContainer.start(port, env);
         final HttpURLConnection conn = (HttpURLConnection)
-            new URL("http://localhost:" + port).openConnection();
+            new URL("http://localhost:" + port + "/file.txt").openConnection();
         conn.connect();
+        final String content = IOUtils.toString(conn.getInputStream());
         MatcherAssert.assertThat(
             conn.getResponseCode(),
             Matchers.describedAs(
-                IOUtils.toString(conn.getInputStream()),
+                content,
                 Matchers.equalTo(HttpURLConnection.HTTP_OK)
             )
         );
+        MatcherAssert.assertThat(content, Matchers.containsString("data"));
         container.stop();
         final String[] messages = new String[] {
             "runtime filter initialized",
             "XSLT filter initialized",
+            "#doFilter(/file.txt)",
+            "#filter(/file.txt): no files found",
+            "runtime filter destroyed",
             "XSLT filter destroyed"
         };
         for (String message : messages) {
