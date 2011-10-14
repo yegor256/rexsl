@@ -51,7 +51,7 @@ Usage
       <plugin>
         <groupId>com.rexsl</groupId>
         <artifactId>rexsl-maven-plugin</artifactId>
-        <version>0.1</version>
+        <version>${project.version}</version>
         <executions>
           <execution>
             <goals>

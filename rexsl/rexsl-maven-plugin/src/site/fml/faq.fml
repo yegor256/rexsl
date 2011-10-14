@@ -37,7 +37,7 @@
             <question>Does it work with Maven 2.0?</question>
             <answer>
                 <p>
-                    Yes
+                    Yes, it should
                 </p>
             </answer>
         </faq>

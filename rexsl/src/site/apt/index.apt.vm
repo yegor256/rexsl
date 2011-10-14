@@ -89,7 +89,8 @@ ReXSL, a framework for lightweight Java web apps
 +--
 
   Maven <<<pom.xml>>> should look like this (latest version of ReXSL
-  is published in {{{http://repo1.maven.org/maven2/com/rexsl/rexsl/}Maven Central}}):
+  is published in
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl/}Maven Central}}):
 
 +--
 <project>
@@ -122,7 +123,7 @@ ReXSL, a framework for lightweight Java web apps
       <scope>test</scope>
     </dependency>
     <dependency>
-      <!-- Matchers for JUnit -->
+      <!-- Matchers for JUnit from http://code.google.com/p/hamcrest/ -->
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
       <version>1.1</version>
@@ -153,7 +154,7 @@ ReXSL, a framework for lightweight Java web apps
         <executions>
           <execution>
             <goals>
-              <goal>compress</goal>
+              <goal>package</goal>
               <goal>check</goal>
             </goals>
           </execution>
@@ -164,10 +165,11 @@ ReXSL, a framework for lightweight Java web apps
 </project>
 +--
 
-  <<<web.xml>>> should be simple:
+  <<<web.xml>>> should be simple and include one servlet and one
+  filter from ReXSL (it's Servlet API 3.0):
 
 +--
-<web-app version="3.0" metadata-complete="false"
+<web-app version="3.0"
   xmlns="http://java.sun.com/xml/ns/javaee"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
@@ -219,7 +221,7 @@ public class FrontEnd {
 }
 +--
 
-  And JAXB data class <<<Home.java>>>:
+  And JAXB-annotated data class <<<Home.java>>>:
 
 +--
 package foo;
@@ -242,7 +244,7 @@ public class Home {
 +--
 package foo;
 import com.rexsl.test.JaxbConverter;
-import org.junit.*;
+import org.junit.Test;
 import org.xmlmatchers.XmlMatchers;
 public class HomeTest {
   @Test
@@ -286,7 +288,8 @@ Assert.assertThat(
 +--
 
   And now the most interesting part, a test
-  script in <<<src/test/rexsl/scripts/HomePage.groovy>>>:
+  script in <<<src/test/rexsl/scripts/HomePage.groovy>>>
+  (<<<documentRoot>>> is provided by <<<rexsl-maven-plugin>>> executor):
 
 +--
 import com.rexsl.test.TestClient
@@ -372,5 +375,7 @@ Assert.assertThat(r2.status, equalTo(404))
   That's it. All you have to do now is to run <<<mvn package>>>
   and deploy your WAR to production server.
 
-  To test the system on your local machine run <<<mvn rexsl:run>>>
-  and use your favorite browser to test the system.
+  To test the system on your local machine run <<<mvn package rexsl:run>>>
+  and use your favorite browser to test the system. You can make
+  changes to your <<<webapp/*>>> files, they will become available
+  on-fly in web.
