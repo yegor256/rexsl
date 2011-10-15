@@ -54,11 +54,6 @@ import org.apache.commons.lang.StringUtils;
 public final class RuntimeFilter implements Filter {
 
     /**
-     * Character encoding of the page.
-     */
-    private static final String ENCODING = "UTF-8";
-
-    /**
      * Folders where we read files in runtime.
      */
     private final List<File> folders = new ArrayList<File>();
@@ -136,16 +131,16 @@ public final class RuntimeFilter implements Filter {
         final RuntimeResponseWrapper wrapper =
             new RuntimeResponseWrapper(response);
         chain.doFilter(request, wrapper);
-        String content = wrapper.getByteStream().toString(this.ENCODING);
+        byte[] content = wrapper.getByteStream().toByteArray();
         final String path = request.getRequestURI();
-        final String replacement = this.fetch(path);
+        final byte[] replacement = this.fetch(path);
         if (replacement != null) {
             content = replacement;
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
             wrapper.passThrough();
         }
-        response.getOutputStream().write(content.getBytes(this.ENCODING));
+        response.getOutputStream().write(content);
     }
 
     /**
@@ -154,15 +149,15 @@ public final class RuntimeFilter implements Filter {
      * @return The content or NULL
      * @throws IOException If something goes wrong
      */
-    private String fetch(final String path) throws IOException {
-        String content = null;
+    private byte[] fetch(final String path) throws IOException {
+        byte[] content = null;
         for (File dir : this.folders) {
             final File file = new File(dir, path);
             if (file.isDirectory()) {
                 continue;
             }
             if (file.exists()) {
-                content = FileUtils.readFileToString(file, this.ENCODING);
+                content = FileUtils.readFileToByteArray(file);
                 Logger.info(
                     this,
                     "#fetch(%s): re-fetched from %s (%d bytes)",
