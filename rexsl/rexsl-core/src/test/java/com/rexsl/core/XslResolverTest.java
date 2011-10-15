@@ -152,6 +152,7 @@ public final class XslResolverTest {
     }
 
     /**
+     * Mock of {@link JaxbConfigurator}.
      * @see #testContextInjection()
      */
     public static final class DummyConfigurator implements JaxbConfigurator {
@@ -164,14 +165,14 @@ public final class XslResolverTest {
          * @return The context from inside the class
          */
         public static ServletContext context() {
-            return DummyConfigurator.context;
+            return XslResolverTest.DummyConfigurator.context;
         }
         /**
          * {@inheritDoc}
          */
         @Override
         public void init(final ServletContext ctx) {
-            DummyConfigurator.context = ctx;
+            XslResolverTest.DummyConfigurator.context = ctx;
         }
         /**
          * {@inheritDoc}

@@ -99,11 +99,11 @@ public final class JaxbConverter {
      * artifact:
      * <pre>
      * {@code
-     * <dependency>
-     *   <groupId>org.xmlmatchers</groupId>
-     *   <artifactId>xml-matchers</artifactId>
-     *   <version>0.10</version>
-     * </dependency>
+     * &lt;dependency>
+     *   &lt;groupId>org.xmlmatchers&lt;/groupId>
+     *   &lt;artifactId>xml-matchers&lt;/artifactId>
+     *   &lt;version>0.10&lt;/version>
+     * &lt;/dependency>
      * }
      * </pre>
      *
