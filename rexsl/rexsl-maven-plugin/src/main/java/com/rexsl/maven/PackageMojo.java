@@ -48,7 +48,7 @@ public final class PackageMojo extends AbstractRexslMojo {
      */
     @Override
     protected void run() throws MojoFailureException {
-        Logger.info(this, "Packaging completed");
+        Logger.warn(this, "This goal is not implemented yet");
     }
 
 }
