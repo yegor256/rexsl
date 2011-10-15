@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.ext.ContextResolver;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -61,6 +62,7 @@ public final class XslResolverTest {
      * Let's test.
      * @throws Exception If something goes wrong
      */
+    @Ignore
     @Test
     public void testInstantiatesMarshaller() throws Exception {
         final ContextResolver<Marshaller> resolver = new XslResolver();
@@ -69,9 +71,27 @@ public final class XslResolverTest {
     }
 
     /**
+     * Test context injection mechanism.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testContextInjection() throws Exception {
+        final XslResolver resolver = new XslResolver();
+        final ServletContext context = Mockito.mock(ServletContext.class);
+        Mockito.doReturn(DummyConfigurator.class.getName())
+            .when(context).getInitParameter("com.rexsl.core.CONFIGURATOR");
+        resolver.setServletContext(context);
+        MatcherAssert.assertThat(
+            DummyConfigurator.context(),
+            Matchers.equalTo(context)
+        );
+    }
+
+    /**
      * Let's test.
      * @throws Exception If something goes wrong
      */
+    @Ignore
     @Test(expected = IllegalStateException.class)
     public void testMarshallerException() throws Exception {
         PowerMockito.mockStatic(JAXBContext.class);
@@ -84,6 +104,7 @@ public final class XslResolverTest {
      * Let's test.
      * @throws Exception If something goes wrong
      */
+    @Ignore
     @Test(expected = IllegalStateException.class)
     public void testCreateMarshallerException() throws Exception {
         PowerMockito.mockStatic(JAXBContext.class);
@@ -127,6 +148,38 @@ public final class XslResolverTest {
         @XmlElement(name = "name")
         public String getName() {
             return "some name";
+        }
+    }
+
+    /**
+     * @see #testContextInjection()
+     */
+    public static final class DummyConfigurator implements JaxbConfigurator {
+        /**
+         * Context injected by {@link #init(ServletContext)}.
+         */
+        private static ServletContext context;
+        /**
+         * Get context.
+         * @return The context from inside the class
+         */
+        public static ServletContext context() {
+            return DummyConfigurator.context;
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void init(final ServletContext ctx) {
+            DummyConfigurator.context = ctx;
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Marshaller marshaller(final Marshaller mrsh,
+            final Class<?> type) {
+            return mrsh;
         }
     }
 

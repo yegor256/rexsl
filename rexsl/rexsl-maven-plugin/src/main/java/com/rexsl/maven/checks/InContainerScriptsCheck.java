@@ -29,23 +29,15 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.core.JaxbConfigurator;
-import com.rexsl.core.XslResolver;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.PortReserver;
+import com.rexsl.maven.utils.XsdEventHandler;
 import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.XMLConstants;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
-import javax.xml.validation.SchemaFactory;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -60,11 +52,6 @@ public final class InContainerScriptsCheck implements Check {
      * Directory with Groovy files.
      */
     private static final String GROOVY_DIR = "src/test/rexsl/scripts";
-
-    /**
-     * Directory with XSD files.
-     */
-    private static final String XSD_DIR = "src/test/rexsl/xsd";
 
     /**
      * {@inheritDoc}
@@ -95,11 +82,16 @@ public final class InContainerScriptsCheck implements Check {
         );
         final Integer port = new PortReserver().port();
         final EmbeddedContainer container = EmbeddedContainer.start(port, env);
+        XsdEventHandler.reset();
         final URI home = this.home(port);
         Logger.info(this, "Web front available at %s", home);
-        final boolean success = this.run(dir, home, env);
+        boolean success = this.run(dir, home, env);
         container.stop();
         Logger.info(this, "Embedded servlet container stopped");
+        if (XsdEventHandler.hasEvents()) {
+            Logger.warn(this, "XSD failures experienced");
+            success = false;
+        }
         return success;
     }
 
@@ -129,29 +121,11 @@ public final class InContainerScriptsCheck implements Check {
         boolean success = true;
         for (File script
             : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
-            final InContainerScriptsCheck.EventHandler handler =
-                new InContainerScriptsCheck.EventHandler();
-            XslResolver.setJaxbConfigurator(
-                new InContainerScriptsCheck.Configurator(env, handler)
-            );
             try {
                 Logger.info(this, "Testing '%s'...", script);
                 this.one(env, home, script);
             } catch (InternalCheckException ex) {
                 Logger.warn(this, "Test failed: %s", ex.getMessage());
-                success = false;
-            }
-            if (handler.events().size() > 0) {
-                for (ValidationEvent event : handler.events()) {
-                    Logger.warn(
-                        this,
-                        "JAXB error: \"%s\" at '%s' [%d:%d]",
-                        event.getMessage(),
-                        event.getLocator().getURL(),
-                        event.getLocator().getLineNumber(),
-                        event.getLocator().getColumnNumber()
-                    );
-                }
                 success = false;
             }
         }
@@ -172,106 +146,6 @@ public final class InContainerScriptsCheck implements Check {
         Logger.debug(this, "Running %s", script);
         final GroovyExecutor exec = new GroovyExecutor(env, binding);
         exec.execute(script);
-    }
-
-    /**
-     * The locator.
-     */
-    private static final class Configurator implements JaxbConfigurator {
-        /**
-         * The environment.
-         */
-        private final Environment env;
-        /**
-         * Event handler.
-         */
-        private final ValidationEventHandler handler;
-        /**
-         * Public ctor.
-         * @param environ The environment
-         * @param hdlr Handler of validation events
-         */
-        public Configurator(final Environment environ,
-            final ValidationEventHandler hdlr) {
-            this.env = environ;
-            this.handler = hdlr;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Marshaller marshaller(final Marshaller mrsh,
-            final Class<?> type) {
-            final String name = type.getName();
-            final File xsd = new File(
-                String.format(
-                    "%s/%s.xsd",
-                    InContainerScriptsCheck.XSD_DIR,
-                    name
-                )
-            );
-            if (xsd.exists()) {
-                final SchemaFactory factory = SchemaFactory.newInstance(
-                    XMLConstants.W3C_XML_SCHEMA_NS_URI
-                );
-                try {
-                    mrsh.setSchema(factory.newSchema(xsd));
-                } catch (org.xml.sax.SAXException ex) {
-                    throw new IllegalStateException(
-                        String.format(
-                            "Failed to use XSD schema from '%s'",
-                            xsd
-                        ),
-                        ex
-                    );
-                }
-                try {
-                    mrsh.setEventHandler(this.handler);
-                } catch (javax.xml.bind.JAXBException ex) {
-                    throw new IllegalStateException(ex);
-                }
-                Logger.info(
-                    this,
-                    "'%s' to be validated with '%s'",
-                    name,
-                    xsd
-                );
-            } else {
-                Logger.info(
-                    this,
-                    "No XSD schema for '%s' in '%s' file",
-                    name,
-                    xsd
-                );
-            }
-            return mrsh;
-        }
-    }
-
-    /**
-     * Handler of events.
-     */
-    private static final class EventHandler implements ValidationEventHandler {
-        /**
-         * Errors.
-         */
-        private final List<ValidationEvent> events =
-            new ArrayList<ValidationEvent>();
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean handleEvent(final ValidationEvent event) {
-            this.events.add(event);
-            return true;
-        }
-        /**
-         * Get list of events.
-         * @return The list of events
-         */
-        public List<ValidationEvent> events() {
-            return this.events;
-        }
     }
 
 }

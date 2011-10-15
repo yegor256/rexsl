@@ -43,9 +43,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
- * Start/stop grizzly container.
+ * Filter used by embedded container in runtime.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -58,11 +59,16 @@ public final class RuntimeFilter implements Filter {
     private static final String ENCODING = "UTF-8";
 
     /**
+     * Folders where we read files in runtime.
+     */
+    private final List<File> folders = new ArrayList<File>();
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void destroy() {
-        Logger.debug(this, "#destroy(): runtime filter destroyed");
+        Logger.info(this, "#destroy(): runtime filter destroyed");
     }
 
     /**
@@ -96,6 +102,17 @@ public final class RuntimeFilter implements Filter {
      */
     @Override
     public void init(final FilterConfig config) {
+        final String param = config.getServletContext()
+            .getInitParameter("com.rexsl.maven.utils.RUNTIME_FOLDERS");
+        for (String name : StringUtils.split(param, ";")) {
+            this.folders.add(new File(name));
+            Logger.info(
+                this,
+                "#init(%s): runtime folder added: %s",
+                config.getClass().getName(),
+                name
+            );
+        }
         Logger.info(
             this,
             "#init(%s): runtime filter initialized",
@@ -139,10 +156,7 @@ public final class RuntimeFilter implements Filter {
      */
     private String fetch(final String path) throws IOException {
         String content = null;
-        final List<File> dirs = new ArrayList<File>();
-        dirs.add(new File("./src/test/rexsl"));
-        dirs.add(new File("./src/main/webapp"));
-        for (File dir : dirs) {
+        for (File dir : this.folders) {
             final File file = new File(dir, path);
             if (file.isDirectory()) {
                 continue;

@@ -32,7 +32,9 @@ package com.rexsl.core;
 import com.ymock.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.ServletContext;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
@@ -53,8 +55,9 @@ public final class XslResolver implements ContextResolver<Marshaller> {
 
     /**
      * Marshaller configurator.
+     * @see #setServletContext(ServletContext)
      */
-    private static JaxbConfigurator configurator;
+    private JaxbConfigurator configurator;
 
     /**
      * Classes to process.
@@ -67,15 +70,53 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     private JAXBContext context;
 
     /**
-     * Set configurator.
-     * @param cfg The configurator
+     * Set servlet context from container.
+     * @param ctx The context
      */
-    public static void setJaxbConfigurator(final JaxbConfigurator cfg) {
-        XslResolver.configurator = cfg;
-        Logger.debug(
-            XslResolver.class,
-            "#setJaxbConfigurator(%s): configurator set",
-            cfg.getClass().getName()
+    @Context
+    public void setServletContext(final ServletContext ctx) {
+        final String name = ctx.getInitParameter("com.rexsl.core.CONFIGURATOR");
+        if (name != null) {
+            Object cfg;
+            try {
+                cfg = Class.forName(name).newInstance();
+            } catch (ClassNotFoundException ex) {
+                throw new IllegalArgumentException(
+                    String.format("Not found '%s'", name),
+                    ex
+                );
+            } catch (InstantiationException ex) {
+                throw new IllegalArgumentException(
+                    String.format("Can't instantiate '%s'", name),
+                    ex
+                );
+            } catch (IllegalAccessException ex) {
+                throw new IllegalArgumentException(
+                    String.format("Can't access '%s'", name),
+                    ex
+                );
+            }
+            if (!(cfg instanceof JaxbConfigurator)) {
+                throw new IllegalArgumentException(
+                    String.format(
+                        "Class '%s' is not a child of JaxbConfigurator",
+                        name
+                    )
+                );
+            }
+            this.configurator = (JaxbConfigurator) cfg;
+            this.configurator.init(ctx);
+            Logger.info(
+                this,
+                "#setServletContext(%s): configurator %s set and initialized",
+                ctx.getClass().getName(),
+                cfg.getClass().getName()
+            );
+        }
+        Logger.info(
+            this,
+            "#setServletContext(%s): context injected by JAX-RS",
+            ctx.getClass().getName()
         );
     }
 
@@ -99,12 +140,21 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         }
         if (this.configurator != null) {
             mrsh = this.configurator.marshaller(mrsh, type);
+            Logger.debug(
+                this,
+                // @checkstyle LineLength (1 line)
+                "#getContext(%s): marshaller createa and configured through %s: %s",
+                type.getName(),
+                this.configurator.getClass().getName(),
+                mrsh.getClass().getName()
+            );
+        } else {
+            Logger.debug(
+                this,
+                "#getContext(%s): marshaller created (no configurator)",
+                type.getName()
+            );
         }
-        Logger.debug(
-            this,
-            "#getContext(%s): marshaller created",
-            type.getName()
-        );
         return mrsh;
     }
 

@@ -27,31 +27,55 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.core;
+package com.rexsl.maven.utils;
 
-import javax.servlet.ServletContext;
-import javax.xml.bind.Marshaller;
+import com.ymock.util.Logger;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.ValidationEventHandler;
 
 /**
- * Locate and return XSD schema.
+ * Handler of XSD events.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public interface JaxbConfigurator {
+public final class XsdEventHandler implements ValidationEventHandler {
 
     /**
-     * Initialize it.
-     * @param ctx The servlet context
+     * Did we see any events recently?
      */
-    void init(final ServletContext ctx);
+    private static boolean flag;
 
     /**
-     * Configure marhaller and return a new one (or the same).
-     * @param mrsh The marshaller
-     * @param type The class
-     * @return The marshaller
+     * Reset the flag.
      */
-    Marshaller marshaller(final Marshaller mrsh, final Class<?> type);
+    public static void reset() {
+        XsdEventHandler.flag = false;
+    }
+
+    /**
+     * Did we have any events?
+     * @return Did we?
+     */
+    public static boolean hasEvents() {
+        return XsdEventHandler.flag;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean handleEvent(final ValidationEvent event) {
+        XsdEventHandler.flag = true;
+        Logger.warn(
+            this,
+            "JAXB error: \"%s\" at '%s' [%d:%d]",
+            event.getMessage(),
+            event.getLocator().getURL(),
+            event.getLocator().getLineNumber(),
+            event.getLocator().getColumnNumber()
+        );
+        return true;
+    }
 
 }
