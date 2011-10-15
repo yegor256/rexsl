@@ -67,8 +67,8 @@ public final class GroovyExecutor {
     }
 
     /**
-     * Run one script.
-     * @param file The file
+     * Run one script from the file provided.
+     * @param file The groovy file with the script to run
      * @throws InternalCheckException If some failure inside
      */
     public void execute(final File file) throws InternalCheckException {
