@@ -113,7 +113,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 cfg.getClass().getName()
             );
         }
-        Logger.info(
+        Logger.debug(
             this,
             "#setServletContext(%s): context injected by JAX-RS",
             ctx.getClass().getName()

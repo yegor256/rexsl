@@ -107,12 +107,23 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setStatus(final int stc) {
+        this.status = stc;
+    }
+
+    /**
      * Pass through all sendError() calls.
      * @throws IOException If there is some problem
      */
     public void passThrough() throws IOException {
-        if (this.status != 0) {
+        if (this.message != null) {
             super.sendError(this.status, this.message);
+        }
+        if (this.status != 0) {
+            super.setStatus(this.status);
         }
     }
 

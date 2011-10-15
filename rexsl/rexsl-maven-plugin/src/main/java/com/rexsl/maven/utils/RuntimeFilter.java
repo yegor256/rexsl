@@ -33,6 +33,7 @@ import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -134,7 +135,7 @@ public final class RuntimeFilter implements Filter {
         byte[] content = wrapper.getByteStream().toByteArray();
         final String path = request.getRequestURI();
         final byte[] replacement = this.fetch(path);
-        if (replacement != null) {
+        if (replacement != null && !Arrays.equals(content, replacement)) {
             content = replacement;
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
