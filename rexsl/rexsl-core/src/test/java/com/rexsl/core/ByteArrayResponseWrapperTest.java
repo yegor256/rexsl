@@ -38,6 +38,7 @@ import org.mockito.Mockito;
 /**
  * ByteArrayResponseWrapper test case.
  * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
 public final class ByteArrayResponseWrapperTest {
@@ -55,7 +56,7 @@ public final class ByteArrayResponseWrapperTest {
         final String text = "this is some text string";
         wrapper.getOutputStream().write(text.getBytes());
         MatcherAssert.assertThat(
-            wrapper.getByteStream().toString(),
+            wrapper.getByteStream().toString("UTF-8"),
             Matchers.equalTo(text)
         );
     }

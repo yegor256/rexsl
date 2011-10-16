@@ -29,22 +29,15 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.core.JaxbConfigurator;
-import com.rexsl.core.XslResolver;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.utils.Grizzly;
+import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.PortReserver;
+import com.rexsl.maven.utils.XsdEventHandler;
+import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.XMLConstants;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
-import javax.xml.validation.SchemaFactory;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -61,18 +54,14 @@ public final class InContainerScriptsCheck implements Check {
     private static final String GROOVY_DIR = "src/test/rexsl/scripts";
 
     /**
-     * Directory with XSD files.
-     */
-    private static final String XSD_DIR = "src/test/rexsl/xsd";
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), this.GROOVY_DIR);
         if (!dir.exists()) {
-            env.reporter().report(
+            Logger.info(
+                this,
                 "%s directory is absent, no scripts to run",
                 this.GROOVY_DIR
             );
@@ -86,26 +75,21 @@ public final class InContainerScriptsCheck implements Check {
                 )
             );
         }
-        env.reporter().report(
-            "Starting embedded Grizzly web server in '%s'...",
+        Logger.info(
+            this,
+            "Starting embedded servlet container in '%s'...",
             env.webdir()
         );
         final Integer port = new PortReserver().port();
-        final Grizzly grizzly = Grizzly.start(env.webdir(), port);
+        final EmbeddedContainer container = EmbeddedContainer.start(port, env);
+        XsdEventHandler.reset();
         final URI home = this.home(port);
-        env.reporter().report("Web front available at %s", home);
-        final InContainerScriptsCheck.EventHandler handler =
-            new InContainerScriptsCheck.EventHandler();
-        XslResolver.setJaxbConfigurator(
-            new InContainerScriptsCheck.Configurator(env, handler)
-        );
+        Logger.info(this, "Web front available at %s", home);
         boolean success = this.run(dir, home, env);
-        grizzly.stop();
-        env.reporter().report("Embedded Grizzly web server stopped");
-        if (handler.events().size() > 0) {
-            for (ValidationEvent event : handler.events()) {
-                env.reporter().report("JAXB error: %s", event.getMessage());
-            }
+        container.stop();
+        Logger.info(this, "Embedded servlet container stopped");
+        if (XsdEventHandler.hasEvents()) {
+            Logger.warn(this, "XSD failures experienced");
             success = false;
         }
         return success;
@@ -138,10 +122,10 @@ public final class InContainerScriptsCheck implements Check {
         for (File script
             : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
             try {
-                env.reporter().report("Testing '%s'...", script);
+                Logger.info(this, "Testing '%s'...", script);
                 this.one(env, home, script);
             } catch (InternalCheckException ex) {
-                env.reporter().report("Test failed: %s", ex.getMessage());
+                Logger.warn(this, "Test failed: %s", ex.getMessage());
                 success = false;
             }
         }
@@ -151,7 +135,7 @@ public final class InContainerScriptsCheck implements Check {
     /**
      * Check one script.
      * @param env The environment
-     * @param home URI of running Grizzly container
+     * @param home URI of running container
      * @param script Check this particular Groovy script
      * @throws InternalCheckException If some failure inside
      */
@@ -159,97 +143,9 @@ public final class InContainerScriptsCheck implements Check {
         final File script) throws InternalCheckException {
         final Binding binding = new Binding();
         binding.setVariable("documentRoot", home);
-        env.reporter().log("Running %s", script);
+        Logger.debug(this, "Running %s", script);
         final GroovyExecutor exec = new GroovyExecutor(env, binding);
         exec.execute(script);
-    }
-
-    /**
-     * The locator.
-     */
-    private static final class Configurator implements JaxbConfigurator {
-        /**
-         * The environment.
-         */
-        private final Environment env;
-        /**
-         * Event handler.
-         */
-        private final ValidationEventHandler handler;
-        /**
-         * Public ctor.
-         * @param environ The environment
-         * @param hdlr Handler of validation events
-         */
-        public Configurator(final Environment environ,
-            final ValidationEventHandler hdlr) {
-            this.env = environ;
-            this.handler = hdlr;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Marshaller marshaller(final Marshaller mrsh,
-            final Class<?> type) {
-            final String name = type.getName();
-            final File xsd = new File(
-                String.format(
-                    "%s/%s.xsd",
-                    InContainerScriptsCheck.XSD_DIR,
-                    name
-                )
-            );
-            if (xsd.exists()) {
-                final SchemaFactory factory = SchemaFactory.newInstance(
-                    XMLConstants.W3C_XML_SCHEMA_NS_URI
-                );
-                try {
-                    mrsh.setSchema(factory.newSchema(xsd));
-                } catch (org.xml.sax.SAXException ex) {
-                    throw new IllegalStateException(ex);
-                }
-                try {
-                    mrsh.setEventHandler(this.handler);
-                } catch (javax.xml.bind.JAXBException ex) {
-                    throw new IllegalStateException(ex);
-                }
-                this.env.reporter().report(
-                    "'%s' to be validated with '%s'",
-                    name,
-                    xsd
-                );
-            } else {
-                this.env.reporter().report("No XSD schema for '%s'", name);
-            }
-            return mrsh;
-        }
-    }
-
-    /**
-     * Handler of events.
-     */
-    private static final class EventHandler implements ValidationEventHandler {
-        /**
-         * Errors.
-         */
-        private final List<ValidationEvent> events =
-            new ArrayList<ValidationEvent>();
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean handleEvent(final ValidationEvent event) {
-            this.events.add(event);
-            return true;
-        }
-        /**
-         * Get list of events.
-         * @return The list of events
-         */
-        public List<ValidationEvent> events() {
-            return this.events;
-        }
     }
 
 }

@@ -30,12 +30,14 @@
 package com.rexsl.maven;
 
 import com.rexsl.maven.aether.DepsResolver;
+import com.ymock.util.Logger;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 import org.sonatype.aether.artifact.Artifact;
@@ -55,11 +57,6 @@ public final class MavenEnvironment implements Environment {
     private final MavenProject project;
 
     /**
-     * The reporter.
-     */
-    private final Reporter reporter;
-
-    /**
      * The list of properties from Maven plugin.
      */
     private final Properties properties;
@@ -72,13 +69,11 @@ public final class MavenEnvironment implements Environment {
     /**
      * Ctor.
      * @param prj Maven project
-     * @param rep The reporter
      * @param props Properties
      */
-    public MavenEnvironment(final MavenProject prj, final Reporter rep,
+    public MavenEnvironment(final MavenProject prj,
         final Properties props) {
         this.project = prj;
-        this.reporter = rep;
         this.properties = props;
     }
 
@@ -103,15 +98,11 @@ public final class MavenEnvironment implements Environment {
      */
     @Override
     public File webdir() {
-        return new File(this.properties.getProperty("webappDirectory"));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Reporter reporter() {
-        return this.reporter;
+        final String dir = this.properties.getProperty("webappDirectory");
+        if (dir == null) {
+            throw new IllegalStateException("webappDirectory property not set");
+        }
+        return new File(dir);
     }
 
     /**
@@ -140,9 +131,15 @@ public final class MavenEnvironment implements Environment {
             urls.toArray(new URL[] {}),
             this.getClass().getClassLoader()
         );
+        final List<String> names = new ArrayList<String>();
         for (URL url : loader.getURLs()) {
-            this.reporter.log("ReXSL classpath: %s", url);
+            names.add(url.toString());
         }
+        Logger.debug(
+            this,
+            "ReXSL classpath: %s",
+            StringUtils.join(names, "\n")
+        );
         return loader;
     }
 
@@ -155,9 +152,11 @@ public final class MavenEnvironment implements Environment {
         final List<Artifact> artifacts = new ArrayList<Artifact>();
         final DepsResolver resolver =
             new DepsResolver(this.project, this.localRepo);
+        Logger.debug(this, "Full tree of artifacts in classpath:");
         for (Artifact root : this.roots()) {
-            this.reporter.log(
-                "%s:%s:%s",
+            Logger.debug(
+                this,
+                "  %s:%s:%s",
                 root.getGroupId(),
                 root.getArtifactId(),
                 root.getVersion()
@@ -172,8 +171,9 @@ public final class MavenEnvironment implements Environment {
                 }
                 if (!found) {
                     artifacts.add(dep);
-                    this.reporter.log(
-                        "\t%s:%s:%s",
+                    Logger.debug(
+                        this,
+                        "    %s:%s:%s",
                         dep.getGroupId(),
                         dep.getArtifactId(),
                         dep.getVersion()
@@ -188,18 +188,12 @@ public final class MavenEnvironment implements Environment {
      * List of root artifacts.
      * @return The list of root artifacts
      * @see #artifacts()
+     * @todo #7 The implementation is very rough now. We should not specify
+     *  coordinates of REXSL-MAVEN-PLUGIN explicitly here. Somehow we should
+     *  get this information in runtime.
      */
     private List<Artifact> roots() {
         final List<Artifact> roots = new ArrayList<Artifact>();
-        roots.add(
-            new DefaultArtifact(
-                "com.rexsl",
-                "rexsl-maven-plugin",
-                "",
-                "jar",
-                "1.0-SNAPSHOT"
-            )
-        );
         for (org.apache.maven.artifact.Artifact artf
             : this.project.getDependencyArtifacts()) {
             roots.add(

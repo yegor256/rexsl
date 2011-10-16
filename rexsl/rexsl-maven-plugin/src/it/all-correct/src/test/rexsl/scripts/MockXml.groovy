@@ -27,31 +27,19 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
 
-import org.apache.maven.plugin.logging.Log;
-import org.junit.Test;
-import org.mockito.Mockito;
+import com.rexsl.test.TestClient
+import com.rexsl.test.XhtmlConverter
+import org.junit.Assert
+import org.xmlmatchers.XmlMatchers
+import static org.hamcrest.Matchers.*
 
-/**
- * Test reporter.
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- */
-public final class MavenReporterTest {
-
-    /**
-     * Reporter should pass log() and report() requests to Maven log.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void testReportingOperations() throws Exception {
-        final Log log = Mockito.mock(Log.class);
-        final Reporter reporter = new MavenReporter(log);
-        reporter.report("a %d", 1);
-        Mockito.verify(log).info("a 1");
-        reporter.log("b %d", 1);
-        Mockito.verify(log).debug("b 1");
-    }
-
-}
+def r1 = new TestClient(documentRoot)
+    .header('Accept', 'text/plain,application/xml')
+    .header('User-agent', 'Chrome')
+    .get('/xml/index.xml')
+Assert.assertThat(r1.status, equalTo(200))
+Assert.assertThat(
+    XhtmlConverter.the(r1.body),
+    XmlMatchers.hasXPath("/page/text[contains(.,'hello')]")
+)

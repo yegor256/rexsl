@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.core;
+package com.rexsl.maven.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -38,14 +38,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
- * Wrapper that redirects all the writes to {@link ByteArrayOutputStream}.
+ * Runtime wrapper that redirects all the writes
+ * to {@link ByteArrayOutputStream}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
- * @see XsltFilter#doFilter(HttpServletRequest,HttpServletResponse,FilterChain)
+ * @see RuntimeFilter#filter(HttpServletRequest,HttpServletResponse)
  */
-public final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
+public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
 
     /**
      * Stream for keeping the servlet response.
@@ -59,11 +60,21 @@ public final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
     private final PrintWriter writer;
 
     /**
+     * HTTP status.
+     */
+    private int status;
+
+    /**
+     * Error message.
+     */
+    private String message;
+
+    /**
      * Public ctor.
      * @param response Servlet response being wrapped.
      * @see XslBrowserFilter#filter(HttpServletRequest,HttpServletResponse)
      */
-    public ByteArrayResponseWrapper(final HttpServletResponse response) {
+    public RuntimeResponseWrapper(final HttpServletResponse response) {
         super(response);
         this.writer = new PrintWriter(
             new OutputStreamWriter(this.stream)
@@ -90,6 +101,36 @@ public final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
      * {@inheritDoc}
      */
     @Override
+    public void sendError(final int stc, final String msg) {
+        this.status = stc;
+        this.message = msg;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setStatus(final int stc) {
+        this.status = stc;
+    }
+
+    /**
+     * Pass through all sendError() calls.
+     * @throws IOException If there is some problem
+     */
+    public void passThrough() throws IOException {
+        if (this.message != null) {
+            super.sendError(this.status, this.message);
+        }
+        if (this.status != 0) {
+            super.setStatus(this.status);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ServletOutputStream getOutputStream() throws IOException {
         return new ServletOutputStream() {
             /**
@@ -97,7 +138,7 @@ public final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
              */
             @Override
             public void write(final int part) throws IOException {
-                ByteArrayResponseWrapper.this.stream.write(part);
+                RuntimeResponseWrapper.this.stream.write(part);
             }
         };
     }

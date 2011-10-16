@@ -29,9 +29,8 @@
  */
 package com.rexsl.maven;
 
-import org.apache.maven.plugin.AbstractMojo;
+import com.ymock.util.Logger;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
 
 /**
  * Package resources.
@@ -42,43 +41,14 @@ import org.apache.maven.project.MavenProject;
  * @phase process-resources
  * @threadSafe
  */
-public final class PackageMojo extends AbstractMojo {
-
-    /**
-     * Maven project, to be injected by Maven itself.
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
-     */
-    private MavenProject project;
-
-    /**
-     * Public ctor.
-     */
-    public PackageMojo() {
-        super();
-        this.project = null;
-    }
-
-    /**
-     * Set Maven Project (used mostly for unit testing).
-     * @param proj The project to set
-     */
-    public void setProject(final MavenProject proj) {
-        this.project = proj;
-    }
+public final class PackageMojo extends AbstractRexslMojo {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void execute() throws MojoFailureException {
-        org.slf4j.impl.StaticLoggerBinder.getSingleton()
-            .setMavenLog(this.getLog());
-        if (!"war".equals(this.project.getPackaging())) {
-            throw new IllegalStateException("project packaging is not WAR");
-        }
-        this.getLog().info("Packaging completed");
+    protected void run() throws MojoFailureException {
+        Logger.warn(this, "This goal is not implemented yet");
     }
 
 }

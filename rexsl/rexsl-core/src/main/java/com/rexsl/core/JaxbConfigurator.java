@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import javax.servlet.ServletContext;
 import javax.xml.bind.Marshaller;
 
 /**
@@ -38,6 +39,12 @@ import javax.xml.bind.Marshaller;
  * @version $Id$
  */
 public interface JaxbConfigurator {
+
+    /**
+     * Initialize it.
+     * @param ctx The servlet context
+     */
+    void init(final ServletContext ctx);
 
     /**
      * Configure marhaller and return a new one (or the same).

@@ -37,25 +37,33 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
-    <context-param>
-        <param-name>rexsl.packages</param-name>
-        <param-value>com.rexsl.foo</param-value>
-    </context-param>
-
-    <listener>
-        <listener-class>com.rexsl.core.CoreListener</listener-class>
-    </listener>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/xsl/*</url-pattern>
+    </servlet-mapping>
 
     <filter>
-        <filter-name>GuiceFilter</filter-name>
-        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+        <filter-name>XsltFilter</filter-name>
+        <filter-class>com.rexsl.core.XsltFilter</filter-class>
     </filter>
-
     <filter-mapping>
-        <filter-name>GuiceFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <filter-name>XsltFilter</filter-name>
+        <servlet-name>RestfulServlet</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
+
+    <servlet>
+        <servlet-name>RestfulServlet</servlet-name>
+        <servlet-class>com.rexsl.core.RestfulServlet</servlet-class>
+        <init-param>
+            <param-name>com.rexsl.PACKAGES</param-name>
+            <param-value>com.rexsl.foo</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RestfulServlet</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
 
 </web-app>

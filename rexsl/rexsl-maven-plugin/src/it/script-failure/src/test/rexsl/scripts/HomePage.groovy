@@ -29,7 +29,7 @@
  */
 
 import com.rexsl.test.TestClient
-import static org.junit.Assert.assertThat
+import org.junit.Assert
 import static org.hamcrest.Matchers.*
 
 def r1 = new TestClient(documentRoot)
@@ -37,4 +37,4 @@ def r1 = new TestClient(documentRoot)
     .header('User-agent', 'Safari')
     .get('/')
 // we should fail here because status code is 200, not 404
-assertThat(r1.status, equalTo(404))
+Assert.assertThat(r1.status, equalTo(404))

@@ -31,6 +31,7 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
@@ -61,7 +62,8 @@ public final class XhtmlOutputCheck implements Check {
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), this.XML_DIR);
         if (!dir.exists()) {
-            env.reporter().report(
+            Logger.info(
+                this,
                 "%s directory is absent, no XHTML tests",
                 this.XML_DIR
             );
@@ -70,10 +72,10 @@ public final class XhtmlOutputCheck implements Check {
         boolean success = true;
         for (File xml : FileUtils.listFiles(dir, new String[] {"xml"}, true)) {
             try {
-                env.reporter().report("Testing %s...", xml);
+                Logger.info(this, "Testing %s...", xml);
                 this.one(env, xml);
             } catch (InternalCheckException ex) {
-                env.reporter().report("Failed: %s", ex.getMessage());
+                Logger.warn(this, "Failed: %s", ex.getMessage());
                 success = false;
             }
         }

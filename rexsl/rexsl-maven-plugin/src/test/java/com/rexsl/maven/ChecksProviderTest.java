@@ -32,6 +32,7 @@ package com.rexsl.maven;
 import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -40,6 +41,15 @@ import org.junit.Test;
  * @version $Id$
  */
 public final class ChecksProviderTest {
+
+    /**
+     * Forward SLF4J to Maven Log.
+     * @throws Exception If something is wrong inside
+     */
+    @BeforeClass
+    public static void startLogging() throws Exception {
+        new com.rexsl.maven.LogStarter().start();
+    }
 
     /**
      * Factory should return a collection of checks.

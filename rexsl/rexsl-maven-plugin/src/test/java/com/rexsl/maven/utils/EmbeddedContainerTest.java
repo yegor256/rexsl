@@ -29,17 +29,16 @@
  */
 package com.rexsl.maven.utils;
 
+import com.rexsl.maven.Environment;
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -50,7 +49,7 @@ import org.mockito.Mockito;
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class GrizzlyTest {
+public final class EmbeddedContainerTest {
 
     /**
      * Temporary folder.
@@ -60,12 +59,18 @@ public final class GrizzlyTest {
     public TemporaryFolder temp = new TemporaryFolder();
 
     /**
-     * Initialize SLF4J bridge.
+     * Mocked Maven log.
      */
-    @BeforeClass
-    public static void initSlf4jBridge() {
-        org.slf4j.impl.StaticLoggerBinder.getSingleton()
-            .setMavenLog(Mockito.mock(Log.class));
+    private Log log;
+
+    /**
+     * Add LOG4J appender.
+     * @throws Exception If something is wrong inside
+     */
+    @Before
+    public void prepareLog() throws Exception {
+        this.log = Mockito.mock(Log.class);
+        org.slf4j.impl.StaticLoggerBinder.getSingleton().setMavenLog(this.log);
     }
 
     /**
@@ -73,24 +78,61 @@ public final class GrizzlyTest {
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testGrizzlyDeployment() throws Exception {
+    public void testEmbeddedDeployment() throws Exception {
         final File webdir = this.temp.newFolder("webdir");
         FileUtils.writeStringToFile(
             new File(webdir, "WEB-INF/web.xml"),
-            "<web-app version='3.0' metadata-complete='false'"
+            "<web-app version='3.0'"
             + " xmlns='http://java.sun.com/xml/ns/javaee'>"
-            + "<description>test</description>"
+            + "<filter>"
+            + " <filter-name>XsltFilter</filter-name>"
+            + " <filter-class>com.rexsl.core.XsltFilter</filter-class>"
+            + "</filter>"
+            + "<filter-mapping>"
+            + " <filter-name>XsltFilter</filter-name> "
+            + " <url-pattern>/*</url-pattern>"
+            + " <dispatcher>REQUEST</dispatcher>"
+            + " <dispatcher>ERROR</dispatcher>"
+            + "</filter-mapping>"
             + "</web-app>"
         );
-        final Integer port = new PortReserver().port();
-        final Grizzly grizzly = Grizzly.start(webdir, port);
-        final HttpClient client = new DefaultHttpClient();
-        final HttpResponse response =
-            client.execute(new HttpGet("http://localhost:" + port));
-        MatcherAssert.assertThat(
-            response.getStatusLine().getStatusCode(),
-            Matchers.equalTo(HttpStatus.SC_OK)
+        FileUtils.writeStringToFile(
+            new File(webdir, "file.txt"),
+            "some test data"
         );
+        final Environment env = Mockito.mock(Environment.class);
+        Mockito.doReturn(webdir).when(env).webdir();
+        Mockito.doReturn(this.getClass().getClassLoader())
+            .when(env).classloader();
+        final Integer port = new PortReserver().port();
+        final EmbeddedContainer container = EmbeddedContainer.start(port, env);
+        final HttpURLConnection conn = (HttpURLConnection)
+            new URL("http://localhost:" + port + "/file.txt").openConnection();
+        conn.connect();
+        final String content = IOUtils.toString(conn.getInputStream());
+        MatcherAssert.assertThat(
+            conn.getResponseCode(),
+            Matchers.describedAs(
+                content,
+                Matchers.equalTo(HttpURLConnection.HTTP_OK)
+            )
+        );
+        MatcherAssert.assertThat(content, Matchers.containsString("data"));
+        container.stop();
+        final String[] messages = new String[] {
+            "runtime filter initialized",
+            "XSLT filter initialized",
+            "#doFilter(/file.txt)",
+            "#filter(/file.txt): no files found",
+            "runtime filter destroyed",
+            "XSLT filter destroyed",
+        };
+        for (String message : messages) {
+            // Mockito.verify(this.log, Mockito.atLeastOnce())
+            //     .info(Mockito.eq(message));
+            Mockito.verify(this.log, Mockito.atLeastOnce())
+                .info(Mockito.any(String.class));
+        }
     }
 
 }

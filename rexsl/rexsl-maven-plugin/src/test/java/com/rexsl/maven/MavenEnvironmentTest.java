@@ -34,6 +34,7 @@ import java.util.Properties;
 import org.apache.maven.project.MavenProject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -45,12 +46,20 @@ import org.mockito.Mockito;
 public final class MavenEnvironmentTest {
 
     /**
+     * Forward SLF4J to Maven Log.
+     * @throws Exception If something is wrong inside
+     */
+    @BeforeClass
+    public static void startLogging() throws Exception {
+        new com.rexsl.maven.LogStarter().start();
+    }
+
+    /**
      * Environment should return pre-set props.
      * @throws Exception If something goes wrong inside
      */
     @Test
     public void testStaticProperties() throws Exception {
-        final Reporter reporter = Mockito.mock(Reporter.class);
         final MavenProject project = Mockito.mock(MavenProject.class);
         final File basedir = Mockito.mock(File.class);
         Mockito.doReturn(basedir).when(project).getBasedir();
@@ -58,13 +67,12 @@ public final class MavenEnvironmentTest {
         final File webdir = Mockito.mock(File.class);
         Mockito.doReturn("some-dir").when(webdir).getPath();
         props.setProperty("webappDirectory", webdir.getPath());
-        final Environment env = new MavenEnvironment(project, reporter, props);
+        final Environment env = new MavenEnvironment(project, props);
         MatcherAssert.assertThat(env.basedir(), Matchers.equalTo(basedir));
         MatcherAssert.assertThat(
             env.webdir().getPath(),
             Matchers.equalTo(webdir.getPath())
         );
-        MatcherAssert.assertThat(env.reporter(), Matchers.equalTo(reporter));
     }
 
     /**
@@ -73,10 +81,9 @@ public final class MavenEnvironmentTest {
      */
     @Test
     public void testClassloaderBuilding() throws Exception {
-        final Reporter reporter = Mockito.mock(Reporter.class);
         final MavenProject project = Mockito.mock(MavenProject.class);
         final Properties props = new Properties();
-        final Environment env = new MavenEnvironment(project, reporter, props);
+        final Environment env = new MavenEnvironment(project, props);
         // todo...
     }
 

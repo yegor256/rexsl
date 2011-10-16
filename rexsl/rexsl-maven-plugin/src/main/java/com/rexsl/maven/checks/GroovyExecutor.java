@@ -30,6 +30,7 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
+import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import java.io.File;
@@ -66,8 +67,8 @@ public final class GroovyExecutor {
     }
 
     /**
-     * Run one script.
-     * @param file The file
+     * Run one script from the file provided.
+     * @param file The groovy file with the script to run
      * @throws InternalCheckException If some failure inside
      */
     public void execute(final File file) throws InternalCheckException {
@@ -106,7 +107,7 @@ public final class GroovyExecutor {
     private Throwable log(final Throwable exception) {
         final StringWriter writer = new StringWriter();
         exception.printStackTrace(new PrintWriter(writer));
-        this.environment.reporter().report(writer.toString());
+        Logger.warn(this, "%s", writer.toString());
         return exception;
     }
 

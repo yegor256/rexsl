@@ -29,12 +29,9 @@
  */
 package com.rexsl.maven;
 
-import com.rexsl.maven.utils.Grizzly;
-import com.rexsl.maven.utils.PortReserver;
-import java.io.File;
-import org.apache.maven.plugin.AbstractMojo;
+import com.rexsl.maven.utils.EmbeddedContainer;
+import com.ymock.util.Logger;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
 
 /**
  * Run WAR as a web server.
@@ -44,74 +41,24 @@ import org.apache.maven.project.MavenProject;
  * @goal run
  * @threadSafe
  */
-public final class RunMojo extends AbstractMojo {
-
-    /**
-     * Maven project, to be injected by Maven itself.
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
-     */
-    private MavenProject project;
-
-    /**
-     * Webapp directory.
-     * @parameter expression="${rexsl.webappDirectory}" default-value="${project.build.directory}/${project.build.finalName}"
-     * @required
-     */
-    private String webapp;
-
-    /**
-     * Public ctor.
-     */
-    public RunMojo() {
-        super();
-        this.project = null;
-    }
-
-    /**
-     * Set Maven Project (used mostly for unit testing).
-     * @param proj The project to set
-     */
-    public void setProject(final MavenProject proj) {
-        this.project = proj;
-    }
-
-    /**
-     * Set webapp directory.
-     * @param dir The directory
-     */
-    public void setWebapp(final String dir) {
-        this.webapp = dir;
-    }
+public final class RunMojo extends AbstractRexslMojo {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void execute() throws MojoFailureException {
-        org.slf4j.impl.StaticLoggerBinder.getSingleton()
-            .setMavenLog(this.getLog());
-        if (!"war".equals(this.project.getPackaging())) {
-            throw new IllegalStateException("project packaging is not WAR");
-        }
-        if (!new File(this.webapp).exists()) {
-            throw new IllegalStateException(
-                String.format(
-                    "Directory '%s' doesn't exist, package the project first",
-                    this.webapp
-                )
-            );
-        }
-        this.getLog().info("Running WAR in Grizzly at " + this.webapp);
-        final Integer port = new PortReserver().port();
-        final Grizzly grizzly = Grizzly.start(new File(this.webapp), port);
-        this.getLog().info("Web front available at http://localhost:" + port);
-        this.getLog().info("Press Ctrl-C to stop...");
-        try {
-            Thread.sleep(0);
-        } catch (java.lang.InterruptedException ex) {
-            grizzly.stop();
+    protected void run() throws MojoFailureException {
+        final EmbeddedContainer container =
+            EmbeddedContainer.start(this.port(), this.env());
+        Logger.info(this, "Available at http://localhost:%d", this.port());
+        Logger.info(this, "Press Ctrl-C to stop...");
+        while (true) {
+            try {
+                // @checkstyle MagicNumber (1 line)
+                Thread.sleep(1000);
+            } catch (java.lang.InterruptedException ex) {
+                container.stop();
+            }
         }
     }
 

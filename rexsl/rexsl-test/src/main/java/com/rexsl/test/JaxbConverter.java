@@ -35,7 +35,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.transform.Source;
 
 /**
- * Convert an object to XML.
+ * JAXB-empowered object to XML converting utility.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -43,14 +43,70 @@ import javax.xml.transform.Source;
 public final class JaxbConverter {
 
     /**
-     * Private ctor.
+     * Private ctor, to avoid direct instantiation of the class.
      */
     private JaxbConverter() {
         // intentionally empty
     }
 
     /**
-     * Convert it to XML.
+     * Convert it to XML. The object has to be annotated with JAXB annotations
+     * in order to be convertable.
+     *
+     * <p>Let's consider an example JAXB-annotated class:
+     *
+     * <pre>
+     * {@code
+     * import javax.xml.bind.annotation.XmlAccessType;
+     * import javax.xml.bind.annotation.XmlAccessorType;
+     * import javax.xml.bind.annotation.XmlElement;
+     * import javax.xml.bind.annotation.XmlRootElement;
+     * @XmlRootElement(name = "employee")
+     * @XmlAccessorType(XmlAccessType.NONE)
+     * private static final class Employee {
+     *   @XmlElement(name = "name")
+     *   public String getName() {
+     *     return "John Doe";
+     *   }
+     * }
+     * }
+     * </pre>
+     *
+     * <p>Now you want to test how it works with real data after convertion
+     * to XML (in a unit test):
+     *
+     * <pre>
+     * {@code
+     * import com.rexsl.test.JaxbConverter;
+     * import org.hamcrest.Matchers;
+     * import org.junit.Assert;
+     * import org.junit.Test;
+     * import org.xmlmatchers.XmlMatchers;
+     * public final class EmployeeTest {
+     *   @Test
+     *   public void testObjectToXmlConversion() throws Exception {
+     *     final Object object = new Employee();
+     *     Assert.assertThat(
+     *       JaxbConverter.the(object),
+     *       XmlMatchers.hasXPath("/employee/name[.='John Doe']")
+     *     );
+     *   }
+     * }
+     * }
+     * </pre>
+     *
+     * <p>We recommend to use <tt>XmlMatchers</tt> class from this Maven
+     * artifact:
+     * <pre>
+     * {@code
+     * &lt;dependency>
+     *   &lt;groupId>org.xmlmatchers&lt;/groupId>
+     *   &lt;artifactId>xml-matchers&lt;/artifactId>
+     *   &lt;version>0.10&lt;/version>
+     * &lt;/dependency>
+     * }
+     * </pre>
+     *
      * @param object The object to convert
      * @return DOM source/document
      * @throws Exception If anything goes wrong

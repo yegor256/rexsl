@@ -57,6 +57,12 @@
             <version rexsl="yes">1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <!-- Logging facility. -->
+            <groupId>com.ymock</groupId>
+            <artifactId>ymock-util</artifactId>
+            <version since="22 Sep 2011">1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
             <version since="22 Aug 2011">3.0.3</version>
@@ -154,24 +160,16 @@
             <version since="15 Sep 2011">1.0-beta-7</version>
         </dependency>
         <dependency>
-            <!--
-            Embedded Java Servlet Container
-            -->
-            <groupId>com.sun.grizzly</groupId>
-            <artifactId>grizzly-http-servlet-deployer</artifactId>
-            <version since="23 Sep 2011">1.9.36</version>
+            <!-- Embedded Jetty Java Servlet Container -->
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version since="11 Oct 2011">8.0.2.v20111006</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.1.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
-            <version>4.1.2</version>
-            <scope>test</scope>
+            <!-- Embedded Jetty Java Servlet Container -->
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version since="11 Oct 2011">8.0.2.v20111006</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -207,7 +205,6 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <!-- other details are in parent pom.xml -->
-            <scope>test</scope>
         </dependency>
         <dependency>
             <!--
@@ -234,45 +231,25 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!--
-            This artifact should go BEFORE Saxon.
-            -->
+            <!-- XML APIs -->
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>1.3.04</version>
         </dependency>
         <dependency>
-            <!--
-            Groovy engine.
-            -->
+            <!-- Groovy engine. -->
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all-minimal</artifactId>
             <version since="3 Sep 2011">1.5.8</version>
         </dependency>
         <dependency>
-            <!--
-            This artifact contains SLF4J-to-MavenLog binding. We need it
-            in "compile" scope.
-            -->
+            <!-- Forward all calls to SLF4J to Maven log. -->
             <groupId>com.rempl.plugins</groupId>
             <artifactId>rempl-maven-plugin</artifactId>
-            <version since="3 Sep 2011">1.1.3</version>
-            <scope>compile</scope>
+            <version since="19 Sep 2011">1.1.3</version>
         </dependency>
         <dependency>
-            <!--
-            This one is used to forward Grizzly logging to SLF4J. We need it
-            in "compile" scope.
-            -->
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <version since="19 Sep 2011">1.6.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <!--
-            Forward all LOG4J calls to SLF4J.
-            -->
+            <!-- Forward all calls to SLF4J to LOG4J. -->
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
             <version since="19 Sep 2011">1.6.2</version>
@@ -326,6 +303,22 @@
                 </executions>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version since="2 Sep 2011">3.0-beta-3</version>
+                    <configuration>
+                        <reportPlugins>
+                            <plugin>
+                                <artifactId>maven-plugin-plugin</artifactId>
+                                <version since="4 Oct 2011">2.9</version>
+                            </plugin>
+                        </reportPlugins>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>

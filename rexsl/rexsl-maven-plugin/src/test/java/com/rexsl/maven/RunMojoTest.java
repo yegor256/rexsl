@@ -53,4 +53,16 @@ public final class RunMojoTest {
         mojo.execute();
     }
 
+    /**
+     * RunMojo should never end, it has to wait in an endless cycle.
+     * @throws Exception If something goes wrong inside
+     * @todo #7 This test is not implemented yet, but has to
+     *  be implemented somehow. We should create a new thread and wait
+     *  there for RunMojo execution termination.
+     */
+    @Test
+    public void testEndlessWaitingCycle() throws Exception {
+        // not implemented yet
+    }
+
 }

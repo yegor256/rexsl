@@ -27,55 +27,26 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.maven;
 
-import com.rexsl.maven.Reporter;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.lang.StringUtils;
+import org.apache.maven.plugin.logging.Log;
+import org.mockito.Mockito;
+import org.slf4j.impl.StaticLoggerBinder;
 
 /**
- * Simple reporter for tests only.
- * @author Yegor Bugayenko (yegor@qulice.com)
+ * Start logging to a mock Maven log.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class DummyReporter implements Reporter {
+public final class LogStarter {
 
     /**
-     * Collection of lines reported.
+     * Start logging.
+     * @throws Exception If something goes wrong inside
      */
-    private final List<String> lines = new ArrayList<String>();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void report(final String line, final Object... args) {
-        String msg = line;
-        if (args.length > 0) {
-            msg = String.format(line, args);
-        }
-        this.lines.add("#report: " + msg);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void log(final String line, final Object... args) {
-        String msg = line;
-        if (args.length > 0) {
-            msg = String.format(line, args);
-        }
-        this.lines.add("#log: " + msg);
-    }
-
-    /**
-     * Get summary.
-     * @return The summary
-     */
-    public String summary() {
-        return StringUtils.join(this.lines, "\n");
+    public void start() throws Exception {
+        final Log log = Mockito.mock(Log.class);
+        StaticLoggerBinder.getSingleton().setMavenLog(log);
     }
 
 }

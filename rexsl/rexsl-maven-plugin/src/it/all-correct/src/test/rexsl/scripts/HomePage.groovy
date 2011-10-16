@@ -29,19 +29,19 @@
  */
 
 import com.rexsl.test.TestClient
-import static com.rexsl.test.XhtmlConverter.the
-import static org.junit.Assert.assertThat
+import com.rexsl.test.XhtmlConverter
+import org.junit.Assert
+import org.xmlmatchers.XmlMatchers
 import static org.hamcrest.Matchers.*
-import static org.xmlmatchers.XmlMatchers.hasXPath
 
 def r1 = new TestClient(documentRoot)
-    .header('Accept', 'application/xml')
+    .header('Accept', 'text/plain,application/xml')
     .header('User-agent', 'FireFox')
     .get('/')
-assertThat(r1.status, equalTo(200))
-assertThat(
-    the(r1.body),
-    hasXPath(
+Assert.assertThat(r1.status, equalTo(200))
+Assert.assertThat(
+    XhtmlConverter.the(r1.body),
+    XmlMatchers.hasXPath(
         "//x:div[contains(.,'world')]",
         new org.xmlmatchers.namespace.SimpleNamespaceContext()
         .withBinding("x", "http://www.w3.org/1999/xhtml")
@@ -49,4 +49,4 @@ assertThat(
 )
 
 def r2 = new TestClient(documentRoot).get('/strange-address')
-assertThat(r2.status, equalTo(404))
+Assert.assertThat(r2.status, equalTo(404))

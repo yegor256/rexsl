@@ -27,53 +27,17 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
 
-import org.apache.maven.plugin.logging.Log;
+import java.text.SimpleDateFormat
+import java.util.Date
+import com.rexsl.test.TestClient
+import org.junit.Assert
+import static org.hamcrest.Matchers.*
 
-/**
- * Reporter through Maven log.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- */
-public final class MavenReporter implements Reporter {
-
-    /**
-     * The log.
-     */
-    private Log log;
-
-    /**
-     * Public ctor.
-     * @param mlog Maven log
-     */
-    public MavenReporter(final Log mlog) {
-        this.log = mlog;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void report(final String line, final Object... args) {
-        if (args.length > 0) {
-            this.log.info(String.format(line, args));
-        } else {
-            this.log.info(line);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void log(final String line, final Object... args) {
-        if (args.length > 0) {
-            this.log.debug(String.format(line, args));
-        } else {
-            this.log.debug(line);
-        }
-    }
-
-}
+def r1 = new TestClient(documentRoot)
+    .header('Accept', 'text/plain,text/css')
+    .header('If-Modified-Since', new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").format(new Date()))
+    .header('User-agent', 'Chrome')
+    .get('/css/screen.css')
+Assert.assertThat(r1.status, equalTo(200))
+Assert.assertThat(r1.body.length(), greaterThan(0))

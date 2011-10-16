@@ -27,74 +27,55 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.core;
+package com.rexsl.maven.utils;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.servlet.GuiceServletContextListener;
 import com.ymock.util.Logger;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.ValidationEventHandler;
 
 /**
- * Core listener to be used in web.xml.
+ * Handler of XSD events.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CoreListener extends GuiceServletContextListener {
+public final class XsdEventHandler implements ValidationEventHandler {
 
     /**
-     * Init parameters.
+     * Did we see any events recently?
      */
-    private final Map<String, String> params = new HashMap<String, String>();
+    private static boolean flag;
 
     /**
-     * {@inheritDoc}
+     * Reset the flag.
      */
-    @Override
-    public void contextInitialized(final ServletContextEvent event) {
-        final ServletContext ctx = event.getServletContext();
-        final List<String> names =
-            Collections.list(ctx.getInitParameterNames());
-        for (String name : names) {
-            this.params.put(name, ctx.getInitParameter(name));
-            Logger.info(
-                this,
-                "#contextInitialized(): '%s' init-param set to '%s' (web.xml)",
-                name,
-                ctx.getInitParameter(name)
-            );
-        }
-        if (names.size() == 0) {
-            Logger.info(
-                this,
-                "#contextInitialized(): no init-params provided in web.xml"
-            );
-        }
-        Logger.info(
-            this,
-            "#contextInitialized(%s): done",
-            event.getClass().getName()
-        );
-        super.contextInitialized(event);
+    public static void reset() {
+        XsdEventHandler.flag = false;
+    }
+
+    /**
+     * Did we have any events?
+     * @return Did we?
+     */
+    public static boolean hasEvents() {
+        return XsdEventHandler.flag;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Injector getInjector() {
-        Logger.info(
+    public boolean handleEvent(final ValidationEvent event) {
+        XsdEventHandler.flag = true;
+        Logger.warn(
             this,
-            "#getInjector(): returning JerseyModule (%d params)",
-            this.params.size()
+            "JAXB error: \"%s\" at '%s' [%d:%d]",
+            event.getMessage(),
+            event.getLocator().getURL(),
+            event.getLocator().getLineNumber(),
+            event.getLocator().getColumnNumber()
         );
-        return Guice.createInjector(new JerseyModule(this.params));
+        return true;
     }
 
 }

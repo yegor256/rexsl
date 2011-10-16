@@ -32,6 +32,7 @@ package com.rexsl.maven;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -117,8 +118,7 @@ public final class CheckMojoTest {
         final LocalRepository repo = new LocalRepository(".");
         Mockito.doReturn(repo).when(session).getLocalRepository();
         mojo.setSession(session);
-        final Log log = Mockito.mock(Log.class);
-        mojo.setLog(log);
+        mojo.setLog(new SystemStreamLog());
         return mojo;
     }
 
