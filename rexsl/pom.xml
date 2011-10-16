@@ -43,7 +43,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rexsl</groupId>
     <artifactId>rexsl</artifactId>
-    <version rexsl="yes">1.0-SNAPSHOT</version>
+    <version rexsl="yes">0.2</version>
     <packaging>pom</packaging>
     <name>rexsl</name>
 
@@ -193,7 +193,7 @@
                             <dependency>
                                 <groupId>com.rexsl</groupId>
                                 <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
+                                <version rexsl="yes">0.2</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -223,7 +223,7 @@
                             <dependency>
                                 <groupId>com.rexsl</groupId>
                                 <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
+                                <version rexsl="yes">0.2</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -370,7 +370,7 @@
                             <dependency>
                                 <groupId>com.rexsl</groupId>
                                 <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
+                                <version rexsl="yes">0.2</version>
                             </dependency>
                         </dependencies>
                         <executions>
