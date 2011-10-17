@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import com.rexsl.test.client.Extender;
 import com.rexsl.test.client.HeaderExtender;
+import com.rexsl.test.client.Headers;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (200 lines)
  */
 public final class TestClient {
 
@@ -148,6 +150,14 @@ public final class TestClient {
             this.response.getStatusLine().getReasonPhrase(),
             this.response.getStatusLine().getStatusCode()
         );
+    }
+
+    /**
+     * Get a collection of all headers.
+     * @return The headers
+     */
+    public Headers getHeaders() {
+        return new Headers(this.response.getAllHeaders());
     }
 
     /**

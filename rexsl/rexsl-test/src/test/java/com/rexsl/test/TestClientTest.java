@@ -91,6 +91,7 @@ public final class TestClientTest {
                     final GrizzlyResponse response) {
                     try {
                         response.getWriter().println("works fine!");
+                        response.addHeader("Content-type", "text/plain");
                     } catch (java.io.IOException ex) {
                         throw new IllegalStateException(ex);
                     }
@@ -126,6 +127,10 @@ public final class TestClientTest {
         MatcherAssert.assertThat(
             client.getStatus(),
             Matchers.equalTo(HttpStatus.SC_OK)
+        );
+        MatcherAssert.assertThat(
+            client.getHeaders().get("content-type"),
+            Matchers.containsString("text")
         );
     }
 
