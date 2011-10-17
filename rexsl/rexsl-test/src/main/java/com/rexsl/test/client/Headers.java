@@ -87,6 +87,12 @@ public final class Headers {
     public String get(final String name) {
         for (Header header : this.headers) {
             if (header.getName().compareToIgnoreCase(name) == 0) {
+                Logger.info(
+                    this,
+                    "#get(%s): found among '%s'",
+                    name,
+                    this.summary()
+                );
                 return header.getValue();
             }
         }
