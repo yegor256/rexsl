@@ -126,6 +126,10 @@ public final class TestClientTest {
             Matchers.containsString("works")
         );
         MatcherAssert.assertThat(
+            client.getBody(),
+            Matchers.containsString("fine")
+        );
+        MatcherAssert.assertThat(
             client.getStatus(),
             Matchers.equalTo(HttpStatus.SC_OK)
         );

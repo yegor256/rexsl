@@ -71,6 +71,11 @@ public final class TestClient {
     private HttpResponse response;
 
     /**
+     * Returned body.
+     */
+    private String body;
+
+    /**
      * Public ctor.
      * @param uri Home of the server
      */
@@ -133,7 +138,12 @@ public final class TestClient {
      * @throws java.io.IOException If some IO problem inside
      */
     public String getBody() throws java.io.IOException {
-        return IOUtils.toString(this.response.getEntity().getContent());
+        if (this.body == null) {
+            this.body = IOUtils.toString(
+                this.response.getEntity().getContent()
+            );
+        }
+        return this.body;
     }
 
     /**
@@ -191,6 +201,7 @@ public final class TestClient {
      */
     private HttpResponse execute(final HttpRequest req)
         throws java.io.IOException {
+        this.body = null;
         for (Extender extender : this.extenders) {
             extender.extend(req);
         }
