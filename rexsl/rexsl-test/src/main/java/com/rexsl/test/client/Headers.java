@@ -89,8 +89,9 @@ public final class Headers {
             if (header.getName().compareToIgnoreCase(name) == 0) {
                 Logger.info(
                     this,
-                    "#get(%s): found among '%s'",
+                    "#get(%s): '%s' found among '%s'",
                     name,
+                    header.getValue(),
                     this.summary()
                 );
                 return header.getValue();

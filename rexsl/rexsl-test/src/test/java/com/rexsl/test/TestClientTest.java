@@ -91,7 +91,7 @@ public final class TestClientTest {
                     final GrizzlyResponse response) {
                     try {
                         response.addHeader("Content-type", "text/plain");
-                        response.addHeader("Content-length", "11");
+                        response.addHeader("Content-length", "12");
                         response.getWriter().println("works fine!");
                     } catch (java.io.IOException ex) {
                         throw new IllegalStateException(ex);
