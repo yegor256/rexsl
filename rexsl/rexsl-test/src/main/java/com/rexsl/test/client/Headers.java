@@ -29,8 +29,10 @@
  */
 package com.rexsl.test.client;
 
+import com.ymock.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 
 /**
@@ -60,13 +62,21 @@ public final class Headers {
      * @param name Header name
      * @return Yes or no
      */
-    public boolean has(final String name) {
+    public Boolean has(final String name) {
+        Boolean found = false;
         for (Header header : this.headers) {
             if (header.getName().compareToIgnoreCase(name) == 0) {
-                return true;
+                found = true;
             }
         }
-        return false;
+        Logger.info(
+            this,
+            "#has(%s): %s among '%s'",
+            name,
+            found.toString(),
+            this.summary()
+        );
+        return found;
     }
 
     /**
@@ -82,8 +92,9 @@ public final class Headers {
         }
         throw new IllegalArgumentException(
             String.format(
-                "Header %s not found",
-                name
+                "Header %s not found in '%s'",
+                name,
+                this.summary()
             )
         );
     }
@@ -100,7 +111,28 @@ public final class Headers {
                 values.add(header.getValue());
             }
         }
+        Logger.info(
+            this,
+            "#all(%s): %d found among '%s'",
+            name,
+            values.size(),
+            this.summary()
+        );
         return values;
+    }
+
+    /**
+     * Create a text summary of all headers here.
+     * @return The summary
+     */
+    private String summary() {
+        final List<String> lines = new ArrayList<String>();
+        for (Header header : this.headers) {
+            lines.add(
+                String.format("%s=%s", header.getName(), header.getValue())
+            );
+        }
+        return StringUtils.join(lines, ";");
     }
 
 }

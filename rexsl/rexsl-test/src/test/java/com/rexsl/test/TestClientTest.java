@@ -90,8 +90,9 @@ public final class TestClientTest {
                 public void service(final GrizzlyRequest request,
                     final GrizzlyResponse response) {
                     try {
-                        response.getWriter().println("works fine!");
                         response.addHeader("Content-type", "text/plain");
+                        response.addHeader("Content-length", "11");
+                        response.getWriter().println("works fine!");
                     } catch (java.io.IOException ex) {
                         throw new IllegalStateException(ex);
                     }
@@ -131,6 +132,14 @@ public final class TestClientTest {
         MatcherAssert.assertThat(
             client.getHeaders().get("content-type"),
             Matchers.containsString("text")
+        );
+        MatcherAssert.assertThat(
+            client.getHeaders().has("content-length"),
+            Matchers.equalTo(true)
+        );
+        MatcherAssert.assertThat(
+            client.getHeaders().all("Content-Type").size(),
+            Matchers.equalTo(1)
         );
     }
 
