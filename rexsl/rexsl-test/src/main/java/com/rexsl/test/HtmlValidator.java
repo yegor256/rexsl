@@ -27,17 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.test;
 
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import com.rexsl.test.TestClient
-import org.junit.Assert
-import static org.hamcrest.Matchers.*
+/**
+ * Validates HTML against W3C rules.
+ *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @version $Id$
+ * @see <a href="http://validator.w3.org/check">W3C Validator</a>
+ */
+public final class HtmlValidator {
 
-def r1 = new TestClient(documentRoot)
-    .header('Accept', 'text/plain,text/css')
-    .header('If-Modified-Since', new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").format(new Date()))
-    .header('User-agent', 'Chrome')
-    .get('/css/screen.css')
-Assert.assertThat(r1.status, equalTo(200))
+    /**
+     * Validate the HTML provided and throw an exception if there are
+     * any W3C violations. If there is no internet connection - we
+     * silently report a warning to log.
+     * @param html The HTML to validate.
+     */
+    public void validate(final String html) {
+        // not implemented yet
+    }
+
+}

@@ -39,6 +39,7 @@ def r1 = new TestClient(documentRoot)
     .header('User-agent', 'FireFox')
     .get('/')
 Assert.assertThat(r1.status, equalTo(200))
+Assert.assertThat(r1.headers.get("content-type"), equalTo("text/html"))
 Assert.assertThat(
     XhtmlConverter.the(r1.body),
     XmlMatchers.hasXPath(

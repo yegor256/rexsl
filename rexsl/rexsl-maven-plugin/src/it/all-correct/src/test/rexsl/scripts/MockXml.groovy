@@ -34,12 +34,17 @@ import org.junit.Assert
 import org.xmlmatchers.XmlMatchers
 import static org.hamcrest.Matchers.*
 
-def r1 = new TestClient(documentRoot)
-    .header('Accept', 'text/plain,application/xml')
-    .header('User-agent', 'Chrome')
-    .get('/xml/index.xml')
-Assert.assertThat(r1.status, equalTo(200))
-Assert.assertThat(
-    XhtmlConverter.the(r1.body),
-    XmlMatchers.hasXPath("/page/text[contains(.,'hello')]")
-)
+File xml = new File("./src/test/rexsl/xml/index.xml");
+for (int attempt = 0; attempt < 5; attempt += 1) {
+    def r1 = new TestClient(documentRoot)
+        .header('Accept', 'text/plain,application/xml')
+        .header('User-agent', 'Chrome')
+        .get('/xml/index.xml')
+    Assert.assertThat(r1.status, equalTo(200))
+    Assert.assertThat(r1.headers.get("content-length"), equalTo(xml.length().toString()))
+    Assert.assertThat(new Long(r1.body.length()), equalTo(xml.length()))
+    Assert.assertThat(
+        XhtmlConverter.the(r1.body),
+        XmlMatchers.hasXPath("/page/text[contains(.,'hello')]")
+    )
+}

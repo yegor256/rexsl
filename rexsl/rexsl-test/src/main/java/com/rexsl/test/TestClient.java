@@ -31,6 +31,8 @@ package com.rexsl.test;
 
 import com.rexsl.test.client.Extender;
 import com.rexsl.test.client.HeaderExtender;
+import com.rexsl.test.client.Headers;
+import com.ymock.util.Logger;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (200 lines)
  */
 public final class TestClient {
 
@@ -68,6 +71,11 @@ public final class TestClient {
     private HttpResponse response;
 
     /**
+     * Returned body.
+     */
+    private String body;
+
+    /**
      * Public ctor.
      * @param uri Home of the server
      */
@@ -83,6 +91,7 @@ public final class TestClient {
      * @return This object
      */
     public TestClient header(final String name, final String value) {
+        Logger.info(this, "#header(%s, %s)", name, value);
         this.extenders.add(new HeaderExtender(name, value));
         return this;
     }
@@ -94,6 +103,7 @@ public final class TestClient {
      * @throws Exception If something goes wrong
      */
     public TestClient get(final String path) throws Exception {
+        Logger.info(this, "#get(%s)", path);
         this.response = this.execute(new HttpGet(this.uri(path)));
         return this;
     }
@@ -105,6 +115,7 @@ public final class TestClient {
      * @throws Exception If something goes wrong
      */
     public TestClient post(final String path) throws Exception {
+        Logger.info(this, "#post(%s)", path);
         this.response = this.execute(new HttpPost(this.uri(path)));
         return this;
     }
@@ -116,6 +127,7 @@ public final class TestClient {
      * @throws Exception If something goes wrong
      */
     public TestClient put(final String path) throws Exception {
+        Logger.info(this, "#put(%s)", path);
         this.response = this.execute(new HttpPut(this.uri(path)));
         return this;
     }
@@ -126,7 +138,12 @@ public final class TestClient {
      * @throws java.io.IOException If some IO problem inside
      */
     public String getBody() throws java.io.IOException {
-        return IOUtils.toString(this.response.getEntity().getContent());
+        if (this.body == null) {
+            this.body = IOUtils.toString(
+                this.response.getEntity().getContent()
+            );
+        }
+        return this.body;
     }
 
     /**
@@ -148,6 +165,14 @@ public final class TestClient {
             this.response.getStatusLine().getReasonPhrase(),
             this.response.getStatusLine().getStatusCode()
         );
+    }
+
+    /**
+     * Get a collection of all headers.
+     * @return The headers
+     */
+    public Headers getHeaders() {
+        return new Headers(this.response.getAllHeaders());
     }
 
     /**
@@ -176,6 +201,7 @@ public final class TestClient {
      */
     private HttpResponse execute(final HttpRequest req)
         throws java.io.IOException {
+        this.body = null;
         for (Extender extender : this.extenders) {
             extender.extend(req);
         }

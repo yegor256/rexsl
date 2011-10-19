@@ -27,17 +27,43 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.test;
 
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import com.rexsl.test.TestClient
-import org.junit.Assert
-import static org.hamcrest.Matchers.*
+import org.junit.Test;
 
-def r1 = new TestClient(documentRoot)
-    .header('Accept', 'text/plain,text/css')
-    .header('If-Modified-Since', new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").format(new Date()))
-    .header('User-agent', 'Chrome')
-    .get('/css/screen.css')
-Assert.assertThat(r1.status, equalTo(200))
+/**
+ * Test HTML validator.
+ *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @version $Id$
+ */
+public final class HtmlValidatorTest {
+
+    /**
+     * Test simple validation.
+     * @throws Exception If something goes wrong inside
+     * @todo #9 The test doesn't work because the functionality is not
+     *  implemented yet. We should implement the validator.
+     */
+    @org.junit.Ignore
+    @Test(expected = IllegalArgumentException.class)
+    public void testHtmlValidationWithW3CWithProblems() throws Exception {
+        final String html = "<html><body><p>test</body></html>";
+        new HtmlValidator().validate(html);
+    }
+
+    /**
+     * Test simple validation, without any defect inside.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testHtmlValidationWithW3CWithoutProblems() throws Exception {
+        final String html = "<?xml version='1.0' encoding='UTF-8'?>"
+            + "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN'"
+            + " 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>"
+            + "<html xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>"
+            + "<head><title>no</title></head><body><p>test</p></body></html>";
+        new HtmlValidator().validate(html);
+    }
+
+}
