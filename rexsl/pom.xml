@@ -411,7 +411,7 @@
                 -->
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version since="28 Feb 2011">4.8.2</version>
+                <version since="19 Oct 2011">4.9</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
