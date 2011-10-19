@@ -47,8 +47,22 @@ public final class HtmlValidatorTest {
      */
     @org.junit.Ignore
     @Test(expected = IllegalArgumentException.class)
-    public void testHtmlValidationWithW3C() throws Exception {
+    public void testHtmlValidationWithW3CWithProblems() throws Exception {
         final String html = "<html><body><p>test</body></html>";
+        new HtmlValidator().validate(html);
+    }
+
+    /**
+     * Test simple validation, without any defect inside.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testHtmlValidationWithW3CWithoutProblems() throws Exception {
+        final String html = "<?xml version='1.0' encoding='UTF-8'?>"
+            + "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN'"
+            + " 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>"
+            + "<html xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>"
+            + "<head><title>no</title></head><body><p>test</p></body></html>";
         new HtmlValidator().validate(html);
     }
 
