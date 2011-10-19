@@ -218,7 +218,7 @@
                     </plugin>
                     <plugin>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version since="2 Sep 2011">2.2</version>
+                        <version since="19 Oct 2011">2.2.1</version>
                         <dependencies>
                             <dependency>
                                 <groupId>com.rexsl</groupId>
@@ -287,26 +287,6 @@
                                     </reportSets>
                                 </plugin>
                                 <plugin>
-                                    <groupId>org.codehaus.mojo</groupId>
-                                    <artifactId>taglist-maven-plugin</artifactId>
-                                    <version since="15 Nov 2010">2.4</version>
-                                    <configuration>
-                                        <tagListOptions>
-                                            <tagClasses>
-                                                <tagClass>
-                                                    <displayName>ToDo</displayName>
-                                                    <tags>
-                                                        <tag>
-                                                            <matchString>@todo</matchString>
-                                                            <matchType>exact</matchType>
-                                                        </tag>
-                                                    </tags>
-                                                </tagClass>
-                                            </tagClasses>
-                                        </tagListOptions>
-                                    </configuration>
-                                </plugin>
-                                <plugin>
                                     <!--
                                     API documentation builder. It will produce documentation
                                     which is then to be used in site:site. It will be
@@ -355,6 +335,7 @@
                                 <plugin>
                                     <groupId>org.codehaus.mojo</groupId>
                                     <artifactId>cobertura-maven-plugin</artifactId>
+                                    <version since="18 Oct 2011">2.5.1</version>
                                 </plugin>
                                 <plugin>
                                     <groupId>com.rempl.plugins</groupId>
@@ -403,7 +384,7 @@
                         @link http://www.sonatype.com/people/2010/01/how-to-generate-pgp-signatures-with-maven/
                         -->
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version since="21 Dec 2010">1.1</version>
+                        <version since="19 Oct 2011">1.4</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -555,7 +536,7 @@
                     to the STDOUT as well, not only to the file.
                     -->
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version since="15 May 2011">2.8.1</version>
+                    <version since="19 Oct 2011">2.9</version>
                     <configuration>
                         <useFile>false</useFile>
                         <runOrder>random</runOrder>
@@ -564,7 +545,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version since="27 Oct 2010">2.3.2</version>
+                    <version since="19 Oct 2011">2.3.2</version>
                     <configuration>
                         <source>1.6</source>
                         <target>1.6</target>
