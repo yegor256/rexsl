@@ -28,6 +28,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import com.rexsl.test.TestClient
@@ -40,4 +41,3 @@ def r1 = new TestClient(documentRoot)
     .header('User-agent', 'Chrome')
     .get('/css/screen.css')
 Assert.assertThat(r1.status, equalTo(200))
-Assert.assertThat(r1.body.length(), greaterThan(0))

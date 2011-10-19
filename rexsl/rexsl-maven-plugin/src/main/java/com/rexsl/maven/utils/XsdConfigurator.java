@@ -94,14 +94,14 @@ public final class XsdConfigurator implements JaxbConfigurator {
             } catch (javax.xml.bind.JAXBException ex) {
                 throw new IllegalStateException(ex);
             }
-            Logger.info(
+            Logger.debug(
                 this,
                 "'%s' will be validated with '%s' schema",
                 name,
                 xsd
             );
         } else {
-            Logger.info(
+            Logger.warn(
                 this,
                 "No XSD schema for '%s' in '%s' file",
                 name,

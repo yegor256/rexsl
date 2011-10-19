@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.ymock.util.Logger;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -102,6 +103,12 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      */
     @Override
     public void sendError(final int stc, final String msg) {
+        Logger.debug(
+            this,
+            "#sendError(%d, %s): swallowed",
+            stc,
+            msg
+        );
         this.status = stc;
         this.message = msg;
     }
@@ -111,7 +118,23 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      */
     @Override
     public void setStatus(final int stc) {
+        Logger.debug(
+            this,
+            "#setStatus(%d): swallowed",
+            stc
+        );
         this.status = stc;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void flushBuffer() throws IOException {
+        Logger.debug(
+            this,
+            "#flushBuffer(): swallowed in order to avoid Non-Modified flushing"
+        );
     }
 
     /**
@@ -120,9 +143,19 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      */
     public void passThrough() throws IOException {
         if (this.message != null) {
+            Logger.debug(
+                this,
+                "#passThrough(): super.sendError(%d, %s) called",
+                this.status,
+                this.message
+            );
             super.sendError(this.status, this.message);
-        }
-        if (this.status != 0) {
+        } else if (this.status != 0) {
+            Logger.debug(
+                this,
+                "#passThrough(): super.setStatus(%d) called",
+                this.status
+            );
             super.setStatus(this.status);
         }
     }

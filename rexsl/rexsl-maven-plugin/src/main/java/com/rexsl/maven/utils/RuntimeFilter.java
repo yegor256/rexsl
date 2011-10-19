@@ -132,12 +132,29 @@ public final class RuntimeFilter implements Filter {
         final RuntimeResponseWrapper wrapper =
             new RuntimeResponseWrapper(response);
         chain.doFilter(request, wrapper);
-        byte[] content = wrapper.getByteStream().toByteArray();
         final String path = request.getRequestURI();
+        byte[] content = wrapper.getByteStream().toByteArray();
+        Logger.debug(
+            this,
+            "#filter(%s): %d bytes of WEB-INF content retrieved",
+            path,
+            content.length
+        );
         final byte[] replacement = this.fetch(path);
         if (replacement != null && !Arrays.equals(content, replacement)) {
+            Logger.info(
+                this,
+                "#filter(%s): content replaced on-fly (%d bytes)",
+                path,
+                replacement.length
+            );
             content = replacement;
             response.setStatus(HttpServletResponse.SC_OK);
+            response.setIntHeader("Content-Length", content.length);
+            response.addHeader(
+                "Rexsl-Filtered",
+                String.format("%d bytes", content.length)
+            );
         } else {
             wrapper.passThrough();
         }
@@ -159,9 +176,9 @@ public final class RuntimeFilter implements Filter {
             }
             if (file.exists()) {
                 content = FileUtils.readFileToByteArray(file);
-                Logger.info(
+                Logger.debug(
                     this,
-                    "#fetch(%s): re-fetched from %s (%d bytes)",
+                    "#fetch(%s): fetched from %s (%d bytes)",
                     path,
                     file,
                     file.length()

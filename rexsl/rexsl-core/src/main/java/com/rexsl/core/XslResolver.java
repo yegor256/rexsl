@@ -106,7 +106,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             }
             this.configurator = (JaxbConfigurator) cfg;
             this.configurator.init(ctx);
-            Logger.info(
+            Logger.debug(
                 this,
                 "#setServletContext(%s): configurator %s set and initialized",
                 ctx.getClass().getName(),
