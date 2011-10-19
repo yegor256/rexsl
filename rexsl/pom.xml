@@ -456,13 +456,13 @@
             <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
-                <version since="15 Oct 2010">2.5</version>
+                <version since="19 Oct 2011">2.6</version>
             </dependency>
             <dependency>
                 <!-- for file/stream manipulations -->
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version since="7 Mar 2011">2.0.1</version>
+                <version since="19 Oct 2011">2.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
