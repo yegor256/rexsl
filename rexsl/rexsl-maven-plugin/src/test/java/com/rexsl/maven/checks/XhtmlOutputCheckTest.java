@@ -76,6 +76,7 @@ public final class XhtmlOutputCheckTest {
         Utils.copy(basedir, "src/test/rexsl/xhtml/index.groovy");
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(basedir).when(env).basedir();
+        Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
         MatcherAssert.assertThat(
@@ -96,12 +97,22 @@ public final class XhtmlOutputCheckTest {
         Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(basedir).when(env).basedir();
+        Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
         MatcherAssert.assertThat(
             new XhtmlOutputCheck().validate(env),
             Matchers.is(false)
         );
+    }
+
+    /**
+     * Build webdir out of basedir.
+     * @param basedir The basedir
+     * @return The webdir
+     */
+    private File webdir(final File basedir) {
+        return new File(basedir, "src/main/webapp");
     }
 
 }

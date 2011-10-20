@@ -29,7 +29,10 @@
  */
 package com.rexsl.maven;
 
+import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.logging.Log;
+import org.codehaus.plexus.logging.Logger;
+import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.mockito.Mockito;
 import org.slf4j.impl.StaticLoggerBinder;
 
@@ -45,7 +48,9 @@ public final class LogStarter {
      * @throws Exception If something goes wrong inside
      */
     public void start() throws Exception {
-        final Log log = Mockito.mock(Log.class);
+        final Log log = new DefaultLog(
+            new ConsoleLogger(Logger.LEVEL_INFO, "test")
+        );
         StaticLoggerBinder.getSingleton().setMavenLog(log);
     }
 

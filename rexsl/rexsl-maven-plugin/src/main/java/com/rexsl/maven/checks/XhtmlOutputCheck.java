@@ -31,9 +31,13 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.utils.EmbeddedContainer;
+import com.rexsl.maven.utils.PortReserver;
 import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -69,16 +73,31 @@ public final class XhtmlOutputCheck implements Check {
             );
             return true;
         }
+        Logger.info(
+            this,
+            "Starting embedded servlet container in '%s'...",
+            env.webdir()
+        );
+        final Integer port = new PortReserver().port();
+        final EmbeddedContainer container = EmbeddedContainer.start(port, env);
+        final String home = String.format("http://localhost:%d", port);
         boolean success = true;
         for (File xml : FileUtils.listFiles(dir, new String[] {"xml"}, true)) {
             try {
-                Logger.info(this, "Testing %s...", xml);
-                this.one(env, xml);
+                Logger.info(this, "Testing %s through %s...", xml, home);
+                this.one(env, xml, home);
             } catch (InternalCheckException ex) {
-                Logger.warn(this, "Failed: %s", ex.getMessage());
+                Logger.warn(
+                    this,
+                    "Failed: %s\n%s",
+                    ex.getMessage(),
+                    this.stacktrace(ex)
+                );
                 success = false;
             }
         }
+        container.stop();
+        Logger.info(this, "Embedded servlet container stopped");
         return success;
     }
 
@@ -86,9 +105,10 @@ public final class XhtmlOutputCheck implements Check {
      * Check one XML document.
      * @param env Environment to work with
      * @param file Check this particular XML document
+     * @param home Home page URI
      * @throws InternalCheckException If some failure inside
      */
-    private void one(final Environment env, final File file)
+    private void one(final Environment env, final File file, final String home)
         throws InternalCheckException {
         final File root = new File(env.basedir(), this.GROOVY_DIR);
         if (!root.exists()) {
@@ -107,11 +127,22 @@ public final class XhtmlOutputCheck implements Check {
                 file
             );
         }
-        final String xhtml = new XhtmlTransformer().transform(env, file);
+        final String xhtml = new XhtmlTransformer().transform(env, file, home);
         final Binding binding = new Binding();
         binding.setVariable("document", xhtml);
         final GroovyExecutor exec = new GroovyExecutor(env, binding);
         exec.execute(groovy);
+    }
+
+    /**
+     * Exception to string conversion.
+     * @param exp The exception
+     * @return Stacktrace
+     */
+    private String stacktrace(final Exception exp) {
+        final StringWriter writer = new StringWriter();
+        exp.printStackTrace(new PrintWriter(writer));
+        return writer.toString();
     }
 
 }
