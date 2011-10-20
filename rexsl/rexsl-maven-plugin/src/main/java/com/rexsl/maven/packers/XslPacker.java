@@ -27,39 +27,42 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.packers;
 
-import com.ymock.util.Logger;
+import com.rexsl.maven.Environment;
+import com.rexsl.maven.Packer;
 import java.io.File;
 
 /**
- * Package resources.
+ * Packager of XSL files.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal package
- * @phase process-resources
- * @threadSafe
  */
-public final class PackageMojo extends AbstractRexslMojo {
+public final class XslPacker implements Packer {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void run() {
-        final long start = System.nanoTime();
-        for (Packer packer : new PackersProvider().all()) {
-            final File src = packer.source(this.env());
-            final File dest = packer.destination(this.env());
-            packer.pack(src, dest);
-        }
-        Logger.info(
-            this,
-            "Packaging finished in %.3fsec",
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000 * 1000)
-        );
+    public File source(final Environment env) {
+        return new File(env.basedir(), "src/main/webapp/xsl");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public File destination(final Environment env) {
+        return new File(env.webdir(), "xsl");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void pack(final File src, final File dest) {
+        // to be implemented
     }
 
 }

@@ -27,39 +27,51 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.packers;
 
-import com.ymock.util.Logger;
+import com.rexsl.maven.Packer;
 import java.io.File;
+import org.apache.commons.io.FileUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
- * Package resources.
- *
+ * Test case for {@link JsPacker}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal package
- * @phase process-resources
- * @threadSafe
  */
-public final class PackageMojo extends AbstractRexslMojo {
+public final class JsPackerTest {
 
     /**
-     * {@inheritDoc}
+     * Temporary folder.
+     * @checkstyle VisibilityModifier (3 lines)
      */
-    @Override
-    protected void run() {
-        final long start = System.nanoTime();
-        for (Packer packer : new PackersProvider().all()) {
-            final File src = packer.source(this.env());
-            final File dest = packer.destination(this.env());
-            packer.pack(src, dest);
-        }
-        Logger.info(
-            this,
-            "Packaging finished in %.3fsec",
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000 * 1000)
+    @Rule
+    public TemporaryFolder temp = new TemporaryFolder();
+
+    /**
+     * Simple packaging.
+     * @throws Exception If something goes wrong inside
+     * @todo #6 This test doesn't work because the Packer is not implemented.
+     */
+    @Test
+    public void testJssPackaging() throws Exception {
+        final File src = this.temp.newFolder("src");
+        final File dest = this.temp.newFolder("dest");
+        final String name = "test.js";
+        FileUtils.writeStringToFile(
+            new File(src, name),
+            "/* test */ void func() { }"
         );
+        final Packer packer = new JsPacker();
+        packer.pack(src, dest);
+        // MatcherAssert.assertThat(
+        //     FileUtils.readFileToString(new File(dest, name)),
+        //     Matchers.equalTo("void func() {}")
+        // );
     }
 
 }

@@ -29,37 +29,35 @@
  */
 package com.rexsl.maven;
 
-import com.ymock.util.Logger;
 import java.io.File;
 
 /**
- * Package resources.
+ * Single packer to be executed by {@link PackageMojo}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal package
- * @phase process-resources
- * @threadSafe
  */
-public final class PackageMojo extends AbstractRexslMojo {
+public interface Packer {
 
     /**
-     * {@inheritDoc}
+     * Build location of sources.
+     * @param env The environment
+     * @return The folder
      */
-    @Override
-    protected void run() {
-        final long start = System.nanoTime();
-        for (Packer packer : new PackersProvider().all()) {
-            final File src = packer.source(this.env());
-            final File dest = packer.destination(this.env());
-            packer.pack(src, dest);
-        }
-        Logger.info(
-            this,
-            "Packaging finished in %.3fsec",
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000 * 1000)
-        );
-    }
+    File source(final Environment env);
+
+    /**
+     * Build location of destinations.
+     * @param env The environment
+     * @return The folder
+     */
+    File destination(final Environment env);
+
+    /**
+     * Package files from source folder to destination folder.
+     * @param src Source folder
+     * @param dest Destination folder
+     */
+    void pack(final File src, final File dest);
 
 }

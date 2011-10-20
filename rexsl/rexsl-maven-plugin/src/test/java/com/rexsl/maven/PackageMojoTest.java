@@ -53,4 +53,18 @@ public final class PackageMojoTest {
         mojo.execute();
     }
 
+    /**
+     * Normal packaging.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testNormalPackaging() throws Exception {
+        final PackageMojo mojo = new PackageMojo();
+        mojo.setWebappDirectory(".");
+        final MavenProject project = Mockito.mock(MavenProject.class);
+        Mockito.doReturn("war").when(project).getPackaging();
+        mojo.setProject(project);
+        mojo.execute();
+    }
+
 }
