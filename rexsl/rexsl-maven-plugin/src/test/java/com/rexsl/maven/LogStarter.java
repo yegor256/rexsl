@@ -33,7 +33,6 @@ import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
-import org.mockito.Mockito;
 import org.slf4j.impl.StaticLoggerBinder;
 
 /**

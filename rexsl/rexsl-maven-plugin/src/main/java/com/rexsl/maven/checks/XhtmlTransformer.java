@@ -42,7 +42,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.io.IOUtils;
 
 /**
  * Transform XML to XHTML through XSL.

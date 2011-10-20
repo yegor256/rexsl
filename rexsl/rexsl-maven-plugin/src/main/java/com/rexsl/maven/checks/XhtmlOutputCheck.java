@@ -46,6 +46,7 @@ import org.apache.commons.io.FilenameUtils;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (2 lines)
  */
 public final class XhtmlOutputCheck implements Check {
 
