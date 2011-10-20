@@ -54,6 +54,7 @@ public final class CssPackerTest {
      * Simple packaging.
      * @throws Exception If something goes wrong inside
      * @todo #6 This test doesn't work because the Packer is not implemented.
+     *  We should package CSS files and compress them.
      */
     @Test
     public void testCssPackaging() throws Exception {

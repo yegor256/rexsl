@@ -54,6 +54,7 @@ public final class XslPackerTest {
      * Simple packaging.
      * @throws Exception If something goes wrong inside
      * @todo #6 This test doesn't work because the Packer is not implemented.
+     *  XSL files should be compressed (all comments and spaces removed).
      */
     @Test
     public void testXslPackaging() throws Exception {

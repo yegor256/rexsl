@@ -54,6 +54,7 @@ public final class JsPackerTest {
      * Simple packaging.
      * @throws Exception If something goes wrong inside
      * @todo #6 This test doesn't work because the Packer is not implemented.
+     *  Javascript files should be packaged and compressed.
      */
     @Test
     public void testJssPackaging() throws Exception {
