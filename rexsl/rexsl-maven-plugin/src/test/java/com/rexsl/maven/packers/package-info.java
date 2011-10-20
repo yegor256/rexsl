@@ -27,50 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.packers;
-
-import com.rexsl.maven.Packer;
-import java.io.File;
-import org.apache.commons.io.FileUtils;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 /**
- * Test case for {@link JsPacker}.
+ * Tests for packers.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class JsPackerTest {
-
-    /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Simple packaging.
-     * @throws Exception If something goes wrong inside
-     * @todo #6 This test doesn't work because the Packer is not implemented.
-     */
-    @Test
-    public void testJssPackaging() throws Exception {
-        final File src = this.temp.newFolder("src");
-        final File dest = this.temp.newFolder("dest");
-        final String name = "test.js";
-        FileUtils.writeStringToFile(
-            new File(src, name),
-            "/* test "
-            + "*/ void func() { }"
-        );
-        final Packer packer = new JsPacker();
-        packer.pack(src, dest);
-        // MatcherAssert.assertThat(
-        //     FileUtils.readFileToString(new File(dest, name)),
-        //     Matchers.equalTo("void func() {}")
-        // );
-    }
-
-}
+package com.rexsl.maven.packers;

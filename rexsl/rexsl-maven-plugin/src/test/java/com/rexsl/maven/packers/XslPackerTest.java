@@ -32,8 +32,6 @@ package com.rexsl.maven.packers;
 import com.rexsl.maven.Packer;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

@@ -32,8 +32,6 @@ package com.rexsl.maven.packers;
 import com.rexsl.maven.Packer;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -64,7 +62,8 @@ public final class CssPackerTest {
         final String name = "screen.css";
         FileUtils.writeStringToFile(
             new File(src, name),
-            "/* test */ a: { color: red; }"
+            "/* test "
+            + "*/ a: { color: red; }"
         );
         final Packer packer = new CssPacker();
         packer.pack(src, dest);
