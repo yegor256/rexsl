@@ -29,37 +29,30 @@
  */
 package com.rexsl.maven;
 
-import com.ymock.util.Logger;
-import java.io.File;
+import com.rexsl.maven.packers.CssPacker;
+import com.rexsl.maven.packers.JsPacker;
+import com.rexsl.maven.packers.XslPacker;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Package resources.
+ * Provider of a collection of all packers.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal package
- * @phase process-resources
- * @threadSafe
  */
-public final class PackageMojo extends AbstractRexslMojo {
+public final class PackersProvider {
 
     /**
-     * {@inheritDoc}
+     * Get full collection of packers.
+     * @return List of packers
      */
-    @Override
-    protected void run() {
-        final long start = System.nanoTime();
-        for (Packer packer : new PackersProvider().all()) {
-            final File src = packer.source(this.env());
-            final File dest = packer.destination(this.env());
-            packer.pack(src, dest);
-        }
-        Logger.info(
-            this,
-            "Packaging finished in %.3fsec",
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000 * 1000)
-        );
+    public List<Packer> all() {
+        final List<Packer> packers = new ArrayList<Packer>();
+        packers.add(new CssPacker());
+        packers.add(new JsPacker());
+        packers.add(new XslPacker());
+        return packers;
     }
 
 }

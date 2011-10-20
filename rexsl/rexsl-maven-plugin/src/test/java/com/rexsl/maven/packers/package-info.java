@@ -27,39 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
-
-import com.ymock.util.Logger;
-import java.io.File;
 
 /**
- * Package resources.
+ * Tests for packers.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal package
- * @phase process-resources
- * @threadSafe
  */
-public final class PackageMojo extends AbstractRexslMojo {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void run() {
-        final long start = System.nanoTime();
-        for (Packer packer : new PackersProvider().all()) {
-            final File src = packer.source(this.env());
-            final File dest = packer.destination(this.env());
-            packer.pack(src, dest);
-        }
-        Logger.info(
-            this,
-            "Packaging finished in %.3fsec",
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000 * 1000)
-        );
-    }
-
-}
+package com.rexsl.maven.packers;

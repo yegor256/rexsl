@@ -170,9 +170,11 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
         final Properties properties = new Properties();
         properties.setProperty("webappDirectory", this.webappDirectory);
         this.env = new MavenEnvironment(this.project, properties);
-        this.env.setLocalRepository(
-            this.session.getLocalRepository().getBasedir().getPath()
-        );
+        if (this.session != null) {
+            this.env.setLocalRepository(
+                this.session.getLocalRepository().getBasedir().getPath()
+            );
+        }
         this.run();
     }
 
