@@ -147,8 +147,10 @@ public final class XsltFilter implements Filter {
         final boolean dontTouch =
             // page is empty
             page.isEmpty()
-            // it doesn't contain XML
+            // it doesn't look like XML
             || !page.startsWith("<?xml ")
+            // it doesn't refer to any stylesheet
+            || !page.contains("<?xml-stylesheet ")
             // it's a pure XML client, requesting XML format
             || this.isXmlExplicitlyRequested(accept)
             // the browser supports XSTL 2.0

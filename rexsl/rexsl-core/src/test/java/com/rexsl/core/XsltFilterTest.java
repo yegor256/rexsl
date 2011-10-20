@@ -160,6 +160,21 @@ public final class XsltFilterTest {
     }
 
     /**
+     * XSL documents shouldn't be transformed.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testDontTransformXSL() throws Exception {
+        this.filter(
+            "<?xml version='1.0'?><xsl:stylesheet"
+            + " xmlns:xsl='http://www.w3.org/1999/XSL/Transform'"
+            + " version='2.0' exclude-result-prefixes='xs xsl xhtml'>"
+            + "</xsl:stylesheet>"
+        );
+        this.verifyNoTransformation();
+    }
+
+    /**
      * Let's test.
      * @throws Exception If something goes wrong
      */
@@ -197,7 +212,12 @@ public final class XsltFilterTest {
      */
     private void filter(final String accept, final String agent)
         throws Exception {
-        this.filter("<?xml version='1.0'?><test/>", accept, agent);
+        this.filter(
+            // @checkstyle LineLength (1 line)
+            "<?xml version='1.0'?><?xml-stylesheet href='/foo.xsl' type='text/xsl' ?><test/>",
+            accept,
+            agent
+        );
     }
 
     /**
@@ -210,7 +230,7 @@ public final class XsltFilterTest {
             content,
             "application/xml,text/plain;q=0.9,*/*;q=0.8",
             // @checkstyle LineLength (1 line)
-            "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1"
+            "Firefox 1.5.0.12 - Windows --- Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.12) Gecko/20070508 Firefox/1.5.0.12"
         );
     }
 
