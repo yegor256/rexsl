@@ -30,10 +30,14 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
+import com.ymock.util.Logger;
 import java.io.File;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
@@ -51,18 +55,15 @@ public final class XhtmlTransformer {
      * Turn XML into XHTML.
      * @param env Environment
      * @param file XML document
+     * @param home Home page of the website
      * @return XHTML as text
      * @throws InternalCheckException If some failure inside
      */
-    public String transform(final Environment env, final File file)
-        throws InternalCheckException {
+    public String transform(final Environment env, final File file,
+        final String home) throws InternalCheckException {
         final Source xml = new StreamSource(file);
         final TransformerFactory factory = TransformerFactory.newInstance();
-        factory.setURIResolver(
-            new XhtmlTransformer.InDirResolver(
-                new File(env.basedir(), "src/main/webapp")
-            )
-        );
+        factory.setURIResolver(new XhtmlTransformer.RuntimeResolver(home));
         Source xsl;
         try {
             xsl = factory.getAssociatedStylesheet(xml, null, null, null);
@@ -93,24 +94,63 @@ public final class XhtmlTransformer {
     /**
      * Resolve URLs to point them to directory.
      */
-    private static final class InDirResolver implements URIResolver {
+    private static final class RuntimeResolver implements URIResolver {
         /**
-         * The directory to work in.
+         * Home page of the site.
          */
-        private final File dir;
+        private final String home;
         /**
          * Public ctor.
-         * @param path The directory
+         * @param uri The home page of the site
          */
-        public InDirResolver(final File path) {
-            this.dir = path;
+        public RuntimeResolver(final String uri) {
+            this.home = uri;
         }
         /**
          * {@inheritDoc}
          */
         @Override
-        public Source resolve(final String href, final String base) {
-            return new StreamSource(new File(this.dir, href));
+        public Source resolve(final String href, final String base)
+            throws TransformerException {
+            URL url;
+            try {
+                url = new URL(this.home + href);
+            } catch (java.net.MalformedURLException ex) {
+                throw new TransformerException(ex);
+            }
+            HttpURLConnection conn;
+            int code;
+            try {
+                conn = (HttpURLConnection) url.openConnection();
+                conn.connect();
+                code = conn.getResponseCode();
+            } catch (java.io.IOException ex) {
+                throw new TransformerException(ex);
+            }
+            if (code != HttpURLConnection.HTTP_OK) {
+                throw new TransformerException(
+                    String.format(
+                        "URL %s returned %d code (instead of %d)",
+                        url,
+                        code,
+                        HttpURLConnection.HTTP_OK
+                    )
+                );
+            }
+            Source src;
+            try {
+                src = new StreamSource(conn.getInputStream());
+            } catch (java.io.IOException ex) {
+                throw new TransformerException(ex);
+            }
+            Logger.info(
+                this,
+                "#resolve(%s, %s): resolved from %s",
+                href,
+                base,
+                url
+            );
+            return src;
         }
     }
 
