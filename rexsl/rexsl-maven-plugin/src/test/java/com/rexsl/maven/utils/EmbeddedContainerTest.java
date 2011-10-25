@@ -102,6 +102,7 @@ public final class EmbeddedContainerTest {
         );
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(webdir).when(env).webdir();
+        Mockito.doReturn(webdir).when(env).basedir();
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
         final Integer port = new PortReserver().port();

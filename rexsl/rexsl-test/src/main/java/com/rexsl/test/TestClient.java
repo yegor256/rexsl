@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.rexsl.test.client.BodyExtender;
 import com.rexsl.test.client.Extender;
 import com.rexsl.test.client.HeaderExtender;
 import com.rexsl.test.client.Headers;
@@ -37,6 +38,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -97,6 +99,17 @@ public final class TestClient {
     }
 
     /**
+     * Set body as a string.
+     * @param text The body to use for requests
+     * @return This object
+     */
+    public TestClient body(final String text) {
+        Logger.info(this, "#body(%s)", text);
+        this.extenders.add(new BodyExtender(text));
+        return this;
+    }
+
+    /**
      * Execute GET request.
      * @param path The URL
      * @return This object
@@ -139,9 +152,10 @@ public final class TestClient {
      */
     public String getBody() throws java.io.IOException {
         if (this.body == null) {
-            this.body = IOUtils.toString(
-                this.response.getEntity().getContent()
-            );
+            final HttpEntity entity = this.response.getEntity();
+            if (entity != null) {
+                this.body = IOUtils.toString(entity.getContent());
+            }
         }
         return this.body;
     }

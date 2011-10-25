@@ -30,6 +30,8 @@
 package com.rexsl.foo;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -45,6 +47,11 @@ public class FrontEnd {
     @Produces(MediaType.APPLICATION_XML)
     public Home home() {
         return new Home();
+    }
+
+    @POST
+    public void submit(@FormParam("text") final String text) {
+        Data.INSTANCE.set(text);
     }
 
 }

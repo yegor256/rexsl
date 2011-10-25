@@ -32,6 +32,7 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.EmbeddedContainer;
+import com.rexsl.maven.utils.GroovyExecutor;
 import com.rexsl.maven.utils.PortReserver;
 import com.ymock.util.Logger;
 import groovy.lang.Binding;
@@ -132,7 +133,11 @@ public final class XhtmlOutputCheck implements Check {
         final Binding binding = new Binding();
         binding.setVariable("document", xhtml);
         final GroovyExecutor exec = new GroovyExecutor(env, binding);
-        exec.execute(groovy);
+        try {
+            exec.execute(groovy);
+        } catch (com.rexsl.maven.utils.GroovyException ex) {
+            throw new InternalCheckException(ex);
+        }
     }
 
     /**

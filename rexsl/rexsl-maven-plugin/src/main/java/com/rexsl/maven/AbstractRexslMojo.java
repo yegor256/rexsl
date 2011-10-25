@@ -84,7 +84,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
     /**
      * Environment.
      */
-    private Environment env;
+    private MavenEnvironment env;
 
     /**
      * Public ctor.
@@ -150,7 +150,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * Get access to environment.
      * @return The environment
      */
-    protected final Environment env() {
+    protected final MavenEnvironment env() {
         return this.env;
     }
 

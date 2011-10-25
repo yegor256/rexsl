@@ -27,40 +27,72 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.utils;
 
-import com.rexsl.maven.utils.EmbeddedContainer;
 import com.ymock.util.Logger;
-import org.apache.maven.plugin.MojoFailureException;
+import groovy.lang.Binding;
+import java.io.File;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import org.apache.commons.io.FileUtils;
 
 /**
- * Run WAR as a web server.
+ * To be executed before all other code.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal run
- * @threadSafe
  */
-public final class RunMojo extends AbstractRexslMojo {
+public final class RuntimeListener implements ServletContextListener {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void run() throws MojoFailureException {
-        this.env().setRuntimeFiltering(true);
-        final EmbeddedContainer container =
-            EmbeddedContainer.start(this.port(), this.env());
-        Logger.info(this, "Available at http://localhost:%d", this.port());
-        Logger.info(this, "Press Ctrl-C to stop...");
-        while (true) {
-            try {
-                // @checkstyle MagicNumber (1 line)
-                Thread.sleep(1000);
-            } catch (java.lang.InterruptedException ex) {
-                container.stop();
-            }
+    public void contextInitialized(final ServletContextEvent event) {
+        final File dir = new File(
+            new File(
+                event.getServletContext()
+                    .getInitParameter("com.rexsl.maven.utils.BASEDIR")
+            ),
+            "src/test/rexsl/bootstrap"
+        );
+        if (!dir.exists()) {
+            Logger.info(
+                this,
+                "%s directory is absent, no bootstrap scripts to run",
+                dir
+            );
+            return;
         }
+        int counter = 0;
+        for (File script
+            : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
+            Logger.info(this, "Running '%s'...", script);
+            final GroovyExecutor exec = new GroovyExecutor(
+                event.getServletContext().getClassLoader(),
+                new Binding()
+            );
+            try {
+                exec.execute(script);
+            } catch (com.rexsl.maven.utils.GroovyException ex) {
+                throw new IllegalStateException(ex);
+            }
+            counter += 1;
+        }
+        Logger.info(
+            this,
+            "#contextInitialized(%s): initialized with %d script(s)",
+            event.getClass().getName(),
+            counter
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void contextDestroyed(final ServletContextEvent event) {
+        Logger.info(this, "#contextDestroyed(): destroyed");
     }
 
 }

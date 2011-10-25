@@ -27,41 +27,46 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.test.client;
 
-import java.io.File;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpRequest;
+import org.apache.http.entity.StringEntity;
 
 /**
- * Environment proxy.
+ * HTTP Request body extender.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public interface Environment {
+public final class BodyExtender implements Extender {
 
     /**
-     * Get basedir of the project.
-     * @return The basedir
+     * Body content.
      */
-    File basedir();
+    private final String body;
 
     /**
-     * Get web root.
-     * @return The web dir
+     * Public ctor.
+     * @param text The body content
      */
-    File webdir();
+    public BodyExtender(final String text) {
+        this.body = text;
+    }
 
     /**
-     * Create classloader, from all artifacts available for this
-     * plugin in runtime (incl. "test").
-     * @return The classloader
+     * {@inheritDoc}
      */
-    ClassLoader classloader();
-
-    /**
-     * Shall we use runtime filtering of resources?
-     * @return Shall we?
-     */
-    boolean useRuntimeFiltering();
+    @Override
+    public void extend(final HttpRequest request) {
+        HttpEntity entity;
+        try {
+            entity = new StringEntity(this.body, "UTF-8");
+        } catch (java.io.UnsupportedEncodingException ex) {
+            throw new IllegalStateException(ex);
+        }
+        ((HttpEntityEnclosingRequest) request).setEntity(entity);
+    }
 
 }

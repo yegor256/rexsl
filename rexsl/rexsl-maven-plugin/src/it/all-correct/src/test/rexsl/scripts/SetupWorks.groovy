@@ -27,41 +27,23 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
 
-import java.io.File;
+import com.rexsl.test.TestClient
+import com.rexsl.test.XhtmlConverter
+import org.junit.Assert
+import org.xmlmatchers.XmlMatchers
+import static org.hamcrest.Matchers.*
 
 /**
- * Environment proxy.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
+ * Here we're validating that setup mechanism works and
+ * groovy scripts from src/test/rexsl/setup have been executed
+ * before this script.
  */
-public interface Environment {
-
-    /**
-     * Get basedir of the project.
-     * @return The basedir
-     */
-    File basedir();
-
-    /**
-     * Get web root.
-     * @return The web dir
-     */
-    File webdir();
-
-    /**
-     * Create classloader, from all artifacts available for this
-     * plugin in runtime (incl. "test").
-     * @return The classloader
-     */
-    ClassLoader classloader();
-
-    /**
-     * Shall we use runtime filtering of resources?
-     * @return Shall we?
-     */
-    boolean useRuntimeFiltering();
-
-}
+def r1 = new TestClient(documentRoot)
+    .header('Accept', 'application/xml')
+    .header('User-agent', 'Chrome')
+    .get('/')
+Assert.assertThat(
+    XhtmlConverter.the(r1.body),
+    XmlMatchers.hasXPath("/page/text[.='injected']")
+)

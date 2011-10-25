@@ -30,13 +30,20 @@
 package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
+import com.ymock.util.Logger;
+import groovy.lang.Binding;
 import java.io.File;
+import java.net.URI;
+import java.security.Permission;
+import java.security.Policy;
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.DispatcherType;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -46,6 +53,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (3 lines)
  */
 public final class EmbeddedContainer {
 
@@ -76,23 +84,34 @@ public final class EmbeddedContainer {
         // Maven classloader and Jetty WebApp classloader
         // @see http://docs.codehaus.org/display/JETTY/Classloading
         ctx.setParentLoaderPriority(true);
-        ctx.addFilter(
-            RuntimeFilter.class,
-            "/*",
-            EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR)
-        );
+        if (env.useRuntimeFiltering()) {
+            ctx.addFilter(
+                RuntimeFilter.class,
+                "/*",
+                EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR)
+            );
+        }
         for (Map.Entry<String, String> entry
             : EmbeddedContainer.params(env).entrySet()) {
             ctx.setInitParameter(entry.getKey(), entry.getValue());
         }
         ctx.setWar(env.webdir().getPath());
+        ctx.addEventListener(new RuntimeListener());
         server.setHandler(ctx);
+        Policy.setPolicy(new EmbeddedContainer.FreePolicy());
         try {
             server.start();
         // @checkstyle IllegalCatch (1 line)
         } catch (Exception ex) {
             throw new IllegalArgumentException("Failed to start Jetty", ex);
         }
+        URI home;
+        try {
+            home = new URI(String.format("http://localhost:%d", port));
+        } catch (java.net.URISyntaxException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        EmbeddedContainer.setup(env, home);
         return new EmbeddedContainer(server);
     }
 
@@ -119,6 +138,10 @@ public final class EmbeddedContainer {
         folders.add(new File(env.basedir(), "src/test/rexsl").getPath());
         final Map<String, String> params = new HashMap<String, String>();
         params.put(
+            "com.rexsl.maven.utils.BASEDIR",
+            env.basedir().getAbsolutePath()
+        );
+        params.put(
             "com.rexsl.maven.utils.RUNTIME_FOLDERS",
             StringUtils.join(folders, ";")
         );
@@ -131,6 +154,52 @@ public final class EmbeddedContainer {
             XsdConfigurator.class.getName()
         );
         return params;
+    }
+
+    /**
+     * Run setup Groovy scripts.
+     * @param env The environment
+     * @param home Home URL
+     */
+    private static void setup(final Environment env, final URI home) {
+        final File dir = new File(env.basedir(), "src/test/rexsl/setup");
+        if (!dir.exists()) {
+            Logger.info(
+                EmbeddedContainer.class,
+                "%s directory is absent, no setup scripts to run",
+                dir
+            );
+        } else {
+            for (File script
+                : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
+                Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
+                final Binding binding = new Binding();
+                binding.setVariable("documentRoot", home);
+                final GroovyExecutor exec = new GroovyExecutor(
+                    env.classloader(),
+                    binding
+                );
+                try {
+                    exec.execute(script);
+                } catch (com.rexsl.maven.utils.GroovyException ex) {
+                    throw new IllegalStateException(ex);
+                }
+            }
+        }
+    }
+
+    /**
+     * Custom security policy that allows access to classloader.
+     */
+    private static final class FreePolicy extends Policy {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean implies(final ProtectionDomain domain,
+            final Permission perm) {
+            return "getClassLoader".equals(perm.getName());
+        }
     }
 
 }

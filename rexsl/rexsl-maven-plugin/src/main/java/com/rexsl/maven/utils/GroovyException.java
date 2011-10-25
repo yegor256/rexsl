@@ -27,41 +27,38 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
-
-import java.io.File;
+package com.rexsl.maven.utils;
 
 /**
- * Environment proxy.
+ * Groovy-generated exception.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public interface Environment {
+public final class GroovyException extends Exception {
 
     /**
-     * Get basedir of the project.
-     * @return The basedir
+     * Default ctor.
      */
-    File basedir();
+    public GroovyException() {
+        super();
+    }
 
     /**
-     * Get web root.
-     * @return The web dir
+     * Ctor.
+     * @param cause The cause
      */
-    File webdir();
+    public GroovyException(final Throwable cause) {
+        super(cause);
+    }
 
     /**
-     * Create classloader, from all artifacts available for this
-     * plugin in runtime (incl. "test").
-     * @return The classloader
+     * Ctor.
+     * @param cause The cause
+     * @param args Agruments for String.format()
      */
-    ClassLoader classloader();
-
-    /**
-     * Shall we use runtime filtering of resources?
-     * @return Shall we?
-     */
-    boolean useRuntimeFiltering();
+    public GroovyException(final String cause, final Object... args) {
+        super(String.format(cause, args));
+    }
 
 }

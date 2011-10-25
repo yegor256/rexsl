@@ -143,7 +143,7 @@ public final class XhtmlTransformer {
             } catch (java.io.IOException ex) {
                 throw new TransformerException(ex);
             }
-            Logger.info(
+            Logger.debug(
                 this,
                 "#resolve(%s, %s): resolved from %s",
                 href,
