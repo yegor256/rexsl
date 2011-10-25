@@ -27,41 +27,18 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
 
-import java.io.File;
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import com.rexsl.test.TestClient
+import org.junit.Assert
+import static org.hamcrest.Matchers.*
 
-/**
- * Environment proxy.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- */
-public interface Environment {
-
-    /**
-     * Get basedir of the project.
-     * @return The basedir
-     */
-    File basedir();
-
-    /**
-     * Get web root.
-     * @return The web dir
-     */
-    File webdir();
-
-    /**
-     * Create classloader, from all artifacts available for this
-     * plugin in runtime (incl. "test").
-     * @return The classloader
-     */
-    ClassLoader classloader();
-
-    /**
-     * Shall we use runtime filtering of resources?
-     * @return Shall we?
-     */
-    boolean useRuntimeFiltering();
-
-}
+def r1 = new TestClient(documentRoot)
+    .header('Accept', 'text/plain,text/css')
+    .header('If-Modified-Since', new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").format(new Date()))
+    .header('User-agent', 'Chrome')
+    .get('/css/screen.css')
+Assert.assertThat(r1.status, equalTo(200))
+Assert.assertThat(r1.body.length(), greaterThan(0))

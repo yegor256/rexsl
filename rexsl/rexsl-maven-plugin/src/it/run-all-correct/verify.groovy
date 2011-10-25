@@ -26,42 +26,11 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-package com.rexsl.maven;
-
-import java.io.File;
-
-/**
- * Environment proxy.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ *
+ * Validate that the build really validated XSL files.
  */
-public interface Environment {
 
-    /**
-     * Get basedir of the project.
-     * @return The basedir
-     */
-    File basedir();
-
-    /**
-     * Get web root.
-     * @return The web dir
-     */
-    File webdir();
-
-    /**
-     * Create classloader, from all artifacts available for this
-     * plugin in runtime (incl. "test").
-     * @return The classloader
-     */
-    ClassLoader classloader();
-
-    /**
-     * Shall we use runtime filtering of resources?
-     * @return Shall we?
-     */
-    boolean useRuntimeFiltering();
-
-}
+def log = new File(basedir, "build.log")
+//assert log.text.contains("All ReXSL checks passed")

@@ -44,7 +44,7 @@ public class Home {
 
     @XmlElement(name = "text")
     public String getText() {
-        return "Hello, world!";
+        return Data.INSTANCE.get();
     }
 
 }

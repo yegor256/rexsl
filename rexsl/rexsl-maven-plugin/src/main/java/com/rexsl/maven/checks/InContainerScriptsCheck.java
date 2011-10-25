@@ -32,6 +32,7 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.EmbeddedContainer;
+import com.rexsl.maven.utils.GroovyExecutor;
 import com.rexsl.maven.utils.PortReserver;
 import com.rexsl.maven.utils.XsdEventHandler;
 import com.ymock.util.Logger;
@@ -49,21 +50,16 @@ import org.apache.commons.io.FileUtils;
 public final class InContainerScriptsCheck implements Check {
 
     /**
-     * Directory with Groovy files.
-     */
-    private static final String GROOVY_DIR = "src/test/rexsl/scripts";
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public boolean validate(final Environment env) {
-        final File dir = new File(env.basedir(), this.GROOVY_DIR);
+        final File dir = new File(env.basedir(), "src/test/rexsl/scripts");
         if (!dir.exists()) {
             Logger.info(
                 this,
                 "%s directory is absent, no scripts to run",
-                this.GROOVY_DIR
+                dir
             );
             return true;
         }
@@ -145,7 +141,11 @@ public final class InContainerScriptsCheck implements Check {
         binding.setVariable("documentRoot", home);
         Logger.debug(this, "Running %s", script);
         final GroovyExecutor exec = new GroovyExecutor(env, binding);
-        exec.execute(script);
+        try {
+            exec.execute(script);
+        } catch (com.rexsl.maven.utils.GroovyException ex) {
+            throw new InternalCheckException(ex);
+        }
     }
 
 }

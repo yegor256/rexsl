@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
@@ -47,9 +47,9 @@ import org.apache.commons.io.FilenameUtils;
 public final class GroovyExecutor {
 
     /**
-     * Environment.
+     * The classloader to use.
      */
-    private final Environment environment;
+    private final ClassLoader classloader;
 
     /**
      * Binding.
@@ -58,11 +58,21 @@ public final class GroovyExecutor {
 
     /**
      * Public ctor.
+     * @param ldr The classloader
+     * @param bnd The binding
+     */
+    public GroovyExecutor(final ClassLoader ldr, final Binding bnd) {
+        this.classloader = ldr;
+        this.binding = bnd;
+    }
+
+    /**
+     * Public ctor.
      * @param env The environment
      * @param bnd The binding
      */
     public GroovyExecutor(final Environment env, final Binding bnd) {
-        this.environment = env;
+        this.classloader = env.classloader();
         this.binding = bnd;
     }
 
@@ -71,10 +81,10 @@ public final class GroovyExecutor {
      * @param file The groovy file with the script to run
      * @throws InternalCheckException If some failure inside
      */
-    public void execute(final File file) throws InternalCheckException {
+    public void execute(final File file) throws GroovyException {
         final String basename = FilenameUtils.getBaseName(file.getPath());
         if (!basename.matches("[a-zA-Z]\\w*")) {
-            throw new InternalCheckException(
+            throw new GroovyException(
                 "Illegal script name: %s (only letters allowed)",
                 basename
             );
@@ -83,7 +93,7 @@ public final class GroovyExecutor {
         try {
             gse = new GroovyScriptEngine(
                 new String[] {file.getParent()},
-                this.environment.classloader()
+                this.classloader
             );
         } catch (java.io.IOException ex) {
             throw new IllegalArgumentException(this.log(ex));
@@ -91,7 +101,7 @@ public final class GroovyExecutor {
         try {
             gse.run(file.getName(), this.binding);
         } catch (AssertionError ex) {
-            throw new InternalCheckException(this.log(ex));
+            throw new GroovyException(this.log(ex));
         } catch (groovy.util.ResourceException ex) {
             throw new IllegalArgumentException(this.log(ex));
         } catch (groovy.util.ScriptException ex) {

@@ -38,6 +38,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -151,9 +152,10 @@ public final class TestClient {
      */
     public String getBody() throws java.io.IOException {
         if (this.body == null) {
-            this.body = IOUtils.toString(
-                this.response.getEntity().getContent()
-            );
+            final HttpEntity entity = this.response.getEntity();
+            if (entity != null) {
+                this.body = IOUtils.toString(entity.getContent());
+            }
         }
         return this.body;
     }

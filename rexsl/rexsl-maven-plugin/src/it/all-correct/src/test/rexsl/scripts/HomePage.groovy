@@ -43,7 +43,7 @@ Assert.assertThat(r1.headers.get("content-type"), equalTo("text/html"))
 Assert.assertThat(
     XhtmlConverter.the(r1.body),
     XmlMatchers.hasXPath(
-        "//x:div[contains(.,'world')]",
+        "//x:div",
         new org.xmlmatchers.namespace.SimpleNamespaceContext()
         .withBinding("x", "http://www.w3.org/1999/xhtml")
     )

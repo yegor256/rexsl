@@ -27,41 +27,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
 
-import java.io.File;
+import com.rexsl.foo.Data
 
-/**
- * Environment proxy.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- */
-public interface Environment {
-
-    /**
-     * Get basedir of the project.
-     * @return The basedir
-     */
-    File basedir();
-
-    /**
-     * Get web root.
-     * @return The web dir
-     */
-    File webdir();
-
-    /**
-     * Create classloader, from all artifacts available for this
-     * plugin in runtime (incl. "test").
-     * @return The classloader
-     */
-    ClassLoader classloader();
-
-    /**
-     * Shall we use runtime filtering of resources?
-     * @return Shall we?
-     */
-    boolean useRuntimeFiltering();
-
-}
+assert Data.INSTANCE.get().equals("Hello, world!")
+Data.INSTANCE.set("bootstrapped")

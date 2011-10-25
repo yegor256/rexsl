@@ -48,6 +48,7 @@ public final class RunMojo extends AbstractRexslMojo {
      */
     @Override
     protected void run() throws MojoFailureException {
+        this.env().setRuntimeFiltering(true);
         final EmbeddedContainer container =
             EmbeddedContainer.start(this.port(), this.env());
         Logger.info(this, "Available at http://localhost:%d", this.port());

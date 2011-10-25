@@ -244,7 +244,7 @@
             <version since="19 Sep 2011">1.1.3</version>
         </dependency>
         <dependency>
-            <!-- Forward all calls to SLF4J to LOG4J. -->
+            <!-- Forward all LOG4J calls to SLF4J -->
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
             <version since="19 Sep 2011">1.6.2</version>
@@ -270,9 +270,12 @@
                     <!--
                     It's kind of bug in invoker plugin: http://jira.codehaus.org/browse/MINVOKER-107
                     Because of this defect we can't specify local repository
-                    here, but that would be a desired feature.
+                    here, but that would be a desired feature. We actually can't
+                    remove this line because we will have another problem,
+                    with commons-logging artifact. I don't know what to do at
+                    the moment. Let's leave it as is.
                     -->
-                    <!-- <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath> -->
+                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
                     <noLog>false</noLog>
                     <!--
                     With this construct you can include some projects,

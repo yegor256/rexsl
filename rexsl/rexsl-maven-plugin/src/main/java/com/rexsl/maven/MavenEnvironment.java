@@ -67,6 +67,11 @@ public final class MavenEnvironment implements Environment {
     private String localRepo;
 
     /**
+     * Shall we use runtime filtering?
+     */
+    private boolean runtimeFiltering;
+
+    /**
      * Ctor.
      * @param prj Maven project
      * @param props Properties
@@ -78,9 +83,17 @@ public final class MavenEnvironment implements Environment {
     }
 
     /**
-     * {@inheritDoc}
+     * Shall we do runtime filtering?
+     * @param filtering Shall we?
      */
-    @Override
+    public void setRuntimeFiltering(final boolean filtering) {
+        this.runtimeFiltering = filtering;
+    }
+
+    /**
+     * Set location of local repository.
+     * @param dir The directory of the repository
+     */
     public void setLocalRepository(final String dir) {
         this.localRepo = dir;
     }
@@ -111,11 +124,11 @@ public final class MavenEnvironment implements Environment {
     @Override
     public ClassLoader classloader() {
         final List<String> paths = new ArrayList<String>();
-        try {
-            paths.addAll(this.project.getRuntimeClasspathElements());
-        } catch (DependencyResolutionRequiredException ex) {
-            throw new IllegalStateException("Failed to read classpath", ex);
-        }
+        // try {
+        //     paths.addAll(this.project.getRuntimeClasspathElements());
+        // } catch (DependencyResolutionRequiredException ex) {
+        //     throw new IllegalStateException("Failed to read classpath", ex);
+        // }
         for (Artifact artifact : this.artifacts()) {
             paths.add(artifact.getFile().getPath());
         }
@@ -141,6 +154,14 @@ public final class MavenEnvironment implements Environment {
             StringUtils.join(names, "\n")
         );
         return loader;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean useRuntimeFiltering() {
+        return this.runtimeFiltering;
     }
 
     /**
