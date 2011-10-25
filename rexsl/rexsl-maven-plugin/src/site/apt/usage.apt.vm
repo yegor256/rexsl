@@ -51,7 +51,7 @@ Usage
       <plugin>
         <groupId>com.rexsl</groupId>
         <artifactId>rexsl-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version>0.2.1</version>
         <executions>
           <execution>
             <goals>
@@ -67,3 +67,27 @@ Usage
 +--
 
   Read more in {{{../index.html}intro page}}.
+
+* Cutting Edge Version
+
+  If you want to use current version of the product, you can do it with
+  this configuration in your <<<pom.xml>>>:
+
++--
+<pluginRepositories>
+  <pluginRepository>
+    <id>sonatype.snapshots</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+  </pluginRepository>
+</pluginRepositories>
+<build>
+  <plugins>
+    <plugin>
+      <groupId>com.rexsl</groupId>
+      <artifactId>rexsl-maven-plugin</artifactId>
+      <version>${project.version}</version>
+      [...]
+    </plugin>
+  </plugins>
+</build>
++--

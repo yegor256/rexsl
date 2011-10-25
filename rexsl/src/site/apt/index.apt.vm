@@ -150,7 +150,7 @@ ReXSL, a framework for lightweight Java web apps
       <plugin>
         <groupId>com.rexsl</groupId>
         <artifactId>rexsl-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version>0.2.1</version>
         <executions>
           <execution>
             <goals>
@@ -174,6 +174,14 @@ ReXSL, a framework for lightweight Java web apps
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/css/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/xsl/*</url-pattern>
+  </servlet-mapping>
   <filter>
     <filter-name>XsltFilter</filter-name>
     <filter-class>com.rexsl.core.XsltFilter</filter-class>
