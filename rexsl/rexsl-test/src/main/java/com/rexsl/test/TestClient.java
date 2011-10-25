@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.rexsl.test.client.BodyExtender;
 import com.rexsl.test.client.Extender;
 import com.rexsl.test.client.HeaderExtender;
 import com.rexsl.test.client.Headers;
@@ -93,6 +94,17 @@ public final class TestClient {
     public TestClient header(final String name, final String value) {
         Logger.info(this, "#header(%s, %s)", name, value);
         this.extenders.add(new HeaderExtender(name, value));
+        return this;
+    }
+
+    /**
+     * Set body as a string.
+     * @param text The body to use for requests
+     * @return This object
+     */
+    public TestClient body(final String text) {
+        Logger.info(this, "#body(%s)", text);
+        this.extenders.add(new BodyExtender(text));
         return this;
     }
 

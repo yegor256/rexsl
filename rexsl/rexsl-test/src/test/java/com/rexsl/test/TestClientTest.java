@@ -147,4 +147,19 @@ public final class TestClientTest {
         );
     }
 
+    /**
+     * Test POST HTTP request with body.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testPostRequestWithBody() throws Exception {
+        final TestClient client = new TestClient(this.home)
+            .body("hello")
+            .post("/test");
+        MatcherAssert.assertThat(
+            client.getBody(),
+            Matchers.containsString("works fine")
+        );
+    }
+
 }
