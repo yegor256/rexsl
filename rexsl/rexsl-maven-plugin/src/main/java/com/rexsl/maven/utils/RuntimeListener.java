@@ -31,10 +31,9 @@ package com.rexsl.maven.utils;
 
 import com.ymock.util.Logger;
 import groovy.lang.Binding;
-import javax.servlet.ServletContext;
+import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.io.File;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -70,7 +69,7 @@ public final class RuntimeListener implements ServletContextListener {
             : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
             Logger.info(this, "Running '%s'...", script);
             final GroovyExecutor exec = new GroovyExecutor(
-                this.classloader(event.getServletContext()),
+                event.getServletContext().getClassLoader(),
                 new Binding()
             );
             try {
@@ -94,25 +93,6 @@ public final class RuntimeListener implements ServletContextListener {
     @Override
     public void contextDestroyed(final ServletContextEvent event) {
         Logger.info(this, "#contextDestroyed(): destroyed");
-    }
-
-    /**
-     * Get web application wide class loader.
-     * @param ctx Servlet context
-     * @return The classloader
-     */
-    private ClassLoader classloader(final ServletContext ctx) {
-        return (ClassLoader) java.security.AccessController.doPrivileged(new Action(ctx));
-    }
-
-    private static final class Action implements java.security.PrivilegedAction {
-        private final ServletContext context;
-        public Action(final ServletContext ctx) {
-            this.context = ctx;
-        }
-        public Object run() {
-            return this.context.getClassLoader();
-        }
     }
 
 }

@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
@@ -124,11 +123,6 @@ public final class MavenEnvironment implements Environment {
     @Override
     public ClassLoader classloader() {
         final List<String> paths = new ArrayList<String>();
-        // try {
-        //     paths.addAll(this.project.getRuntimeClasspathElements());
-        // } catch (DependencyResolutionRequiredException ex) {
-        //     throw new IllegalStateException("Failed to read classpath", ex);
-        // }
         for (Artifact artifact : this.artifacts()) {
             paths.add(artifact.getFile().getPath());
         }

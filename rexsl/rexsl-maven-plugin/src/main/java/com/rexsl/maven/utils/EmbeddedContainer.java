@@ -39,13 +39,11 @@ import java.security.Policy;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.DispatcherType;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -55,6 +53,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (3 lines)
  */
 public final class EmbeddedContainer {
 
@@ -199,7 +198,7 @@ public final class EmbeddedContainer {
         @Override
         public boolean implies(final ProtectionDomain domain,
             final Permission perm) {
-            return perm.getName() == "getClassLoader";
+            return "getClassLoader".equals(perm.getName());
         }
     }
 

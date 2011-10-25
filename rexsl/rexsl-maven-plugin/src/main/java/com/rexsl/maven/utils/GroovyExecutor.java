@@ -79,7 +79,7 @@ public final class GroovyExecutor {
     /**
      * Run one script from the file provided.
      * @param file The groovy file with the script to run
-     * @throws InternalCheckException If some failure inside
+     * @throws GroovyException If some failure inside
      */
     public void execute(final File file) throws GroovyException {
         final String basename = FilenameUtils.getBaseName(file.getPath());

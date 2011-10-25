@@ -32,15 +32,21 @@ import com.rexsl.test.TestClient
 import org.junit.Assert
 import static org.hamcrest.Matchers.*
 
-// inject new data value
+// let's validate how data were injected in bootstrap
 def r1 = new TestClient(documentRoot)
+    .get('/')
+Assert.assertThat(r1.status, equalTo(200))
+Assert.assertThat(r1.body, containsString("bootstrapped"))
+
+// inject new data value
+def r2 = new TestClient(documentRoot)
     .header('Content-Type', 'application/x-www-form-urlencoded')
     .body('text=injected')
     .post('/')
-Assert.assertThat(r1.status, equalTo(204))
+Assert.assertThat(r2.status, equalTo(204))
 
 // let's validate that it's there
-def r2 = new TestClient(documentRoot)
+def r3 = new TestClient(documentRoot)
     .get('/')
-Assert.assertThat(r2.status, equalTo(200))
-Assert.assertThat(r2.body, containsString("injected"))
+Assert.assertThat(r3.status, equalTo(200))
+Assert.assertThat(r3.body, containsString("injected"))
