@@ -159,6 +159,11 @@
         later in the file
         -->
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+        <!--
+        This property has to be updated every time you release
+        a new version to Maven Central
+        -->
+        <rexsl.release>0.2.3</rexsl.release>
     </properties>
     <repositories>
         <!--
