@@ -69,7 +69,7 @@ public final class Headers {
                 found = true;
             }
         }
-        Logger.info(
+        Logger.debug(
             this,
             "#has(%s): %s among '%s'",
             name,
@@ -87,7 +87,7 @@ public final class Headers {
     public String get(final String name) {
         for (Header header : this.headers) {
             if (header.getName().compareToIgnoreCase(name) == 0) {
-                Logger.info(
+                Logger.debug(
                     this,
                     "#get(%s): '%s' found among '%s'",
                     name,
@@ -118,7 +118,7 @@ public final class Headers {
                 values.add(header.getValue());
             }
         }
-        Logger.info(
+        Logger.debug(
             this,
             "#all(%s): %d found among '%s'",
             name,

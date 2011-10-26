@@ -64,4 +64,10 @@ public interface Environment {
      */
     boolean useRuntimeFiltering();
 
+    /**
+     * Get port number.
+     * @return The port number
+     */
+    Integer port();
+
 }

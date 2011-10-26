@@ -93,7 +93,7 @@ public final class TestClient {
      * @return This object
      */
     public TestClient header(final String name, final String value) {
-        Logger.info(this, "#header(%s, %s)", name, value);
+        Logger.debug(this, "#header(%s, %s)", name, value);
         this.extenders.add(new HeaderExtender(name, value));
         return this;
     }
@@ -104,7 +104,7 @@ public final class TestClient {
      * @return This object
      */
     public TestClient body(final String text) {
-        Logger.info(this, "#body(%s)", text);
+        Logger.debug(this, "#body(%s)", text);
         this.extenders.add(new BodyExtender(text));
         return this;
     }

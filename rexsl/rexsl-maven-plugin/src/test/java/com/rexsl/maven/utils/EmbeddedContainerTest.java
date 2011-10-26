@@ -105,10 +105,11 @@ public final class EmbeddedContainerTest {
         Mockito.doReturn(webdir).when(env).basedir();
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();
-        final Integer port = new PortReserver().port();
-        final EmbeddedContainer container = EmbeddedContainer.start(port, env);
+        Mockito.doReturn(new PortReserver().port()).when(env).port();
+        final EmbeddedContainer container = EmbeddedContainer.start(env);
         final HttpURLConnection conn = (HttpURLConnection)
-            new URL("http://localhost:" + port + "/file.txt").openConnection();
+            new URL("http://localhost:" + env.port() + "/file.txt")
+                .openConnection();
         conn.connect();
         final String content = IOUtils.toString(conn.getInputStream());
         MatcherAssert.assertThat(

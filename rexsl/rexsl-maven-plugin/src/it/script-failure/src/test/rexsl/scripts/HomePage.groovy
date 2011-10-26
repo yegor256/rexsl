@@ -32,7 +32,7 @@ import com.rexsl.test.TestClient
 import org.junit.Assert
 import static org.hamcrest.Matchers.*
 
-def r1 = new TestClient(documentRoot)
+def r1 = new TestClient(rexsl.home)
     .header('Accept', 'application/xml')
     .header('User-agent', 'Safari')
     .get('/')

@@ -34,6 +34,7 @@ import com.ymock.util.Logger;
 import java.io.File;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -55,14 +56,19 @@ public final class XhtmlTransformer {
      * Turn XML into XHTML.
      * @param env Environment
      * @param file XML document
-     * @param home Home page of the website
      * @return XHTML as text
      * @throws InternalCheckException If some failure inside
      */
-    public String transform(final Environment env, final File file,
-        final String home) throws InternalCheckException {
+    public String transform(final Environment env, final File file)
+        throws InternalCheckException {
         final Source xml = new StreamSource(file);
         final TransformerFactory factory = TransformerFactory.newInstance();
+        URI home;
+        try {
+            home = new URI(String.format("http://localhost:%d", env.port()));
+        } catch (java.net.URISyntaxException ex) {
+            throw new IllegalArgumentException(ex);
+        }
         factory.setURIResolver(new XhtmlTransformer.RuntimeResolver(home));
         Source xsl;
         try {
@@ -98,12 +104,12 @@ public final class XhtmlTransformer {
         /**
          * Home page of the site.
          */
-        private final String home;
+        private final URI home;
         /**
          * Public ctor.
          * @param uri The home page of the site
          */
-        public RuntimeResolver(final String uri) {
+        public RuntimeResolver(final URI uri) {
             this.home = uri;
         }
         /**
@@ -114,7 +120,7 @@ public final class XhtmlTransformer {
             throws TransformerException {
             URL url;
             try {
-                url = new URL(this.home + href);
+                url = new URL(this.home.toString() + href);
             } catch (java.net.MalformedURLException ex) {
                 throw new TransformerException(ex);
             }

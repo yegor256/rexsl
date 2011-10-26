@@ -39,7 +39,7 @@ import static org.hamcrest.Matchers.*
  * groovy scripts from src/test/rexsl/setup have been executed
  * before this script.
  */
-def r1 = new TestClient(documentRoot)
+def r1 = new TestClient(rexsl.home)
     .header('Accept', 'application/xml')
     .header('User-agent', 'Chrome')
     .get('/')

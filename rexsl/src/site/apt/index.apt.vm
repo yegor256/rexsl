@@ -112,14 +112,14 @@ ReXSL, a framework for lightweight Java web apps
       <!-- ReXSL runtime library -->
       <groupId>com.rexsl</groupId>
       <artifactId>rexsl-core</artifactId>
-      <version>${rexsl.release}</version>
+      <version>${releasedVersion}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <!-- ReXSL test harness -->
       <groupId>com.rexsl</groupId>
       <artifactId>rexsl-test</artifactId>
-      <version>${rexsl.release}</version>
+      <version>${releasedVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -150,7 +150,7 @@ ReXSL, a framework for lightweight Java web apps
       <plugin>
         <groupId>com.rexsl</groupId>
         <artifactId>rexsl-maven-plugin</artifactId>
-        <version>${rexsl.release}</version>
+        <version>${releasedVersion}</version>
         <executions>
           <execution>
             <goals>
@@ -285,9 +285,9 @@ import org.junit.Assert
 import org.xmlmatchers.XmlMatchers
 import org.xmlmatchers.namespace.SimpleNamespaceContext
 import static org.hamcrest.Matchers.*
-Assert.assertThat(document, containsString('say hello'))
+Assert.assertThat(rexsl.document, containsString('say hello'))
 Assert.assertThat(
-    XhtmlConverter.the(document),
+    XhtmlConverter.the(rexsl.document),
     XmlMatchers.hasXPath(
         "//x:div[contains(.,'say hello')]",
         new SimpleNamespaceContext().withBinding("x", "http://www.w3.org/1999/xhtml")
@@ -297,7 +297,7 @@ Assert.assertThat(
 
   And now the most interesting part, a test
   script in <<<src/test/rexsl/scripts/HomePage.groovy>>>
-  (<<<documentRoot>>> is provided by <<<rexsl-maven-plugin>>> executor):
+  (<<<rexsl.home>>> is provided by <<<rexsl-maven-plugin>>> executor):
 
 +--
 import com.rexsl.test.TestClient
@@ -306,7 +306,7 @@ import org.junit.Assert
 import org.xmlmatchers.XmlMatchers
 import org.xmlmatchers.namespace.SimpleNamespaceContext
 import static org.hamcrest.Matchers.*
-def r1 = new TestClient(documentRoot)
+def r1 = new TestClient(rexsl.home)
   .header('Accept', 'application/xml')
   .header('User-agent', 'Safari')
   .get('/')
@@ -318,7 +318,7 @@ Assert.assertThat(
     new SimpleNamespaceContext().withBinding("x", "http://www.w3.org/1999/xhtml")
   )
 )
-def r2 = new TestClient(documentRoot)
+def r2 = new TestClient(rexsl.home)
   .get('/strange-address')
 Assert.assertThat(r2.status, equalTo(404))
 +--

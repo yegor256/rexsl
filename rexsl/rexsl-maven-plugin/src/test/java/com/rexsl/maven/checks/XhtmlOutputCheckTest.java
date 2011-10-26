@@ -30,6 +30,7 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.utils.PortReserver;
 import java.io.File;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -76,6 +77,7 @@ public final class XhtmlOutputCheckTest {
         Utils.copy(basedir, "src/test/rexsl/xhtml/index.groovy");
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(basedir).when(env).basedir();
+        Mockito.doReturn(new PortReserver().port()).when(env).port();
         Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
         Mockito.doReturn(this.getClass().getClassLoader())
             .when(env).classloader();

@@ -27,43 +27,63 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.utils;
 
-import com.rexsl.maven.utils.EmbeddedContainer;
-import com.ymock.util.Logger;
-import org.apache.maven.plugin.MojoFailureException;
+import com.rexsl.maven.Environment;
+import groovy.lang.Binding;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Run WAR as a web server.
+ * Builder of binding for {@link GroovyExecutor}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @goal run
- * @threadSafe
  */
-public final class RunMojo extends AbstractRexslMojo {
+public final class BindingBuilder {
 
     /**
-     * {@inheritDoc}
+     * Properties.
      */
-    @Override
-    protected void run() throws MojoFailureException {
-        this.env().setRuntimeFiltering(true);
-        final EmbeddedContainer container = EmbeddedContainer.start(this.env());
-        Logger.info(
-            this,
-            "Available at http://localhost:%d",
-            this.env().port()
-        );
-        Logger.info(this, "Press Ctrl-C to stop...");
-        while (true) {
-            try {
-                // @checkstyle MagicNumber (1 line)
-                Thread.sleep(1000);
-            } catch (java.lang.InterruptedException ex) {
-                container.stop();
-            }
+    private final Map<String, Object> props = new HashMap<String, Object>();
+
+    /**
+     * Public ctor.
+     * @param env The environment
+     */
+    public BindingBuilder(final Environment env) {
+        URI home;
+        try {
+            home = new URI(String.format("http://localhost:%d", env.port()));
+        } catch (java.net.URISyntaxException ex) {
+            throw new IllegalArgumentException(ex);
         }
+        this.props.put("home", home);
+        this.props.put("basedir", env.basedir());
+        this.props.put("webdir", env.webdir());
+        this.props.put("port", env.port());
+    }
+
+    /**
+     * Build a new {@link Binding}.
+     * @return The binding
+     */
+    public Binding build() {
+        final Binding binding = new Binding();
+        binding.setVariable("rexsl", this.props);
+        return binding;
+    }
+
+    /**
+     * Add a new property there.
+     * @param name Name of the property
+     * @param value The value
+     * @return This object
+     */
+    public BindingBuilder add(final String name, final Object value) {
+        this.props.put(name, value);
+        return this;
     }
 
 }

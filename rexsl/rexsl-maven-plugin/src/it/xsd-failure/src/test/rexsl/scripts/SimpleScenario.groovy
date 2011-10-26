@@ -30,7 +30,7 @@
 
 import com.rexsl.test.TestClient
 
-def r1 = new TestClient(documentRoot)
+def r1 = new TestClient(rexsl.home)
     .header('Accept', 'application/xml')
     .header('User-agent', 'Safari')
     .get('/')
