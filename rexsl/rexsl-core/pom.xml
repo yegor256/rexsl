@@ -61,25 +61,19 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!--
-            Logging facility.
-            -->
+            <!-- Logging facility. -->
             <groupId>com.ymock</groupId>
             <artifactId>ymock-util</artifactId>
             <version since="22 Sep 2011">1.0</version>
         </dependency>
         <dependency>
-            <!--
-            JAXB 2.0 API.
-            -->
+            <!-- JAXB 2.0 API. -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version since="2 Sep 2011">2.0</version>
         </dependency>
         <dependency>
-            <!--
-            JAXB 2.0 implementation, required in runtime.
-            -->
+            <!-- JAXB 2.0 implementation, required in runtime. -->
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
             <version since="2 Sep 2011">2.2.4-1</version>
@@ -133,9 +127,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!--
-            Saxon for XSLT 2.0
-            -->
+            <!-- Saxon for XSLT 2.0 -->
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon</artifactId>
             <version since="22 Sep 2011">8.7</version>
@@ -158,7 +150,13 @@
             <!-- JAX-RS implementation -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version since="22 Sep 2011">1.9-ea04</version>
+            <version since="26 Oct 2011">1.9.1</version>
+        </dependency>
+        <dependency>
+            <!-- JAX-RS implementation, core library -->
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-core</artifactId>
+            <version since="26 Oct 2011">1.9.1</version>
         </dependency>
         <dependency>
             <!-- Forward all calls to SLF4J to LOG4J. -->
@@ -188,21 +186,21 @@
             <!-- implementation of Javax Servlet API 3.0 -->
             <groupId>org.glassfish</groupId>
             <artifactId>javax.servlet</artifactId>
-            <version>3.0</version>
+            <version since="26 Oct 2011">3.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- implementation of Javax Mail API, required by Jersey -->
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4</version>
+            <version since="26 Oct 2011">1.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- Javax Servlet API 3.0 -->
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>6.0</version>
+            <version since="26 Oct 2011">6.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -43,7 +43,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
- * @see XsltFilter#doFilter(HttpServletRequest,HttpServletResponse,FilterChain)
+ * @see XsltFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
  */
 public final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
 
@@ -61,7 +61,7 @@ public final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
     /**
      * Public ctor.
      * @param response Servlet response being wrapped.
-     * @see XslBrowserFilter#filter(HttpServletRequest,HttpServletResponse)
+     * @see XsltFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
      */
     public ByteArrayResponseWrapper(final HttpServletResponse response) {
         super(response);

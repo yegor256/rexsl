@@ -40,7 +40,7 @@
     <artifactId>run-all-correct</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
-    <name>run0all-correct</name>
+    <name>run-all-correct</name>
 
     <dependencies>
         <dependency>

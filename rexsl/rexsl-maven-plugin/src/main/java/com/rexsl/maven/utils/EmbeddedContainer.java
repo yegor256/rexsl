@@ -78,6 +78,15 @@ public final class EmbeddedContainer {
      */
     public static EmbeddedContainer start(final Integer port,
         final Environment env) {
+        if (!env.webdir().exists()) {
+            throw new IllegalArgumentException(
+                String.format(
+                    // @checkstyle LineLength (1 line)
+                    "Directory %s is absent, maybe you forgot to 'package' the project?",
+                    env.webdir()
+                )
+            );
+        }
         final Server server = new Server(port);
         final WebAppContext ctx = new WebAppContext();
         // it is required because of classloading conflict between
