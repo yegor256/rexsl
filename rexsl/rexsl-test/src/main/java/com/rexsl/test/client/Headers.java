@@ -40,7 +40,7 @@ import org.apache.http.Header;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see com.rexsl.test.TestClient#headers()
+ * @see com.rexsl.test.TestClient#getHeaders()
  */
 public final class Headers {
 
