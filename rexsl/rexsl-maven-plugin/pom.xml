@@ -318,14 +318,6 @@
                 <configuration>
                     <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                     <debug>false</debug>
-                    <!--
-                    It's kind of bug in invoker plugin: http://jira.codehaus.org/browse/MINVOKER-107
-                    Because of this defect we can't specify local repository
-                    here, but that would be a desired feature. We actually can't
-                    remove this line because we will have another problem,
-                    with commons-logging artifact. I don't know what to do at
-                    the moment. Let's leave it as is.
-                    -->
                     <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
                     <noLog>false</noLog>
                     <!--
@@ -355,9 +347,41 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>integration-test</id>
+                        <id>install-invoker</id>
                         <goals>
                             <goal>install</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                    </execution>
+                    <execution>
+                        <id>run-invoker</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!--
+                @todo #30 This is a workaround until they fix maven-invoker-plugin,
+                 see the ticket #30 for more information.
+                -->
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version since="26 Oct 2011">1.6</version>
+                <executions>
+                    <execution>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <target>
+                                <copy verbose="true"
+                                    file="${basedir}/../pom.xml"
+                                    tofile="${project.build.directory}/local-repo/com/rexsl/rexsl/${project.version}/rexsl-${project.version}.pom"/>
+                                <copy verbose="true"
+                                    file="${com.rexsl:rexsl-core:jar}"
+                                    tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-core/${project.version}/rexsl-core-${project.version}.jar"/>
+                            </target>
+                        </configuration>
+                        <goals>
                             <goal>run</goal>
                         </goals>
                     </execution>
