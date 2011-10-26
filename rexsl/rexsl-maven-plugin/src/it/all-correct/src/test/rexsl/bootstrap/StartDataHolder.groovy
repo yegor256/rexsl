@@ -32,3 +32,9 @@ import com.rexsl.foo.Data
 
 assert Data.INSTANCE.get().equals("Hello, world!")
 Data.INSTANCE.set("bootstrapped")
+
+// these properties should be injected by maven plugin
+assert rexsl.basedir.exists()
+assert rexsl.webdir.exists()
+assert rexsl.port > 0
+assert rexsl.home != null

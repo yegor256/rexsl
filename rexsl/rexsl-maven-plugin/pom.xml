@@ -373,10 +373,10 @@
                         <phase>pre-integration-test</phase>
                         <configuration>
                             <target>
-                                <copy verbose="true"
+                                <copy verbose="yes" overwrite="yes"
                                     file="${basedir}/../pom.xml"
                                     tofile="${project.build.directory}/local-repo/com/rexsl/rexsl/${project.version}/rexsl-${project.version}.pom"/>
-                                <copy verbose="true"
+                                <copy verbose="yes" overwrite="yes"
                                     file="${com.rexsl:rexsl-core:jar}"
                                     tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-core/${project.version}/rexsl-core-${project.version}.jar"/>
                             </target>

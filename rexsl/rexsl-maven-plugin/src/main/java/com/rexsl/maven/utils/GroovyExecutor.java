@@ -85,7 +85,7 @@ public final class GroovyExecutor {
         final String basename = FilenameUtils.getBaseName(file.getPath());
         if (!basename.matches("[a-zA-Z]\\w*")) {
             throw new GroovyException(
-                "Illegal script name: %s (only letters allowed)",
+                "Illegal script name: '%s' (only letters allowed)",
                 basename
             );
         }
