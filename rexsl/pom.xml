@@ -163,7 +163,7 @@
         This property has to be updated every time you release
         a new version to Maven Central
         -->
-        <rexsl.release>0.2.3</rexsl.release>
+        <releasedVersion>0.2.3</releasedVersion>
     </properties>
     <repositories>
         <!--
