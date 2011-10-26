@@ -31,7 +31,6 @@ package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
-import groovy.lang.Binding;
 import java.io.File;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
