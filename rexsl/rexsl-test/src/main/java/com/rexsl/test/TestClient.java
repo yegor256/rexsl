@@ -116,8 +116,15 @@ public final class TestClient {
      * @throws Exception If something goes wrong
      */
     public TestClient get(final String path) throws Exception {
-        Logger.info(this, "#get(%s)", path);
+        final long start = System.nanoTime();
         this.response = this.execute(new HttpGet(this.uri(path)));
+        Logger.info(
+            this,
+            "#get(%s): completed in %.3fms",
+            path,
+            // @checkstyle MagicNumber (1 line)
+            (double) (System.nanoTime() - start) / (1000L * 1000)
+        );
         return this;
     }
 
@@ -128,8 +135,15 @@ public final class TestClient {
      * @throws Exception If something goes wrong
      */
     public TestClient post(final String path) throws Exception {
-        Logger.info(this, "#post(%s)", path);
+        final long start = System.nanoTime();
         this.response = this.execute(new HttpPost(this.uri(path)));
+        Logger.info(
+            this,
+            "#post(%s): completed in %.3fms",
+            path,
+            // @checkstyle MagicNumber (1 line)
+            (double) (System.nanoTime() - start) / (1000L * 1000)
+        );
         return this;
     }
 
@@ -140,8 +154,15 @@ public final class TestClient {
      * @throws Exception If something goes wrong
      */
     public TestClient put(final String path) throws Exception {
-        Logger.info(this, "#put(%s)", path);
+        final long start = System.nanoTime();
         this.response = this.execute(new HttpPut(this.uri(path)));
+        Logger.info(
+            this,
+            "#put(%s): completed in %.3fms",
+            path,
+            // @checkstyle MagicNumber (1 line)
+            (double) (System.nanoTime() - start) / (1000L * 1000)
+        );
         return this;
     }
 

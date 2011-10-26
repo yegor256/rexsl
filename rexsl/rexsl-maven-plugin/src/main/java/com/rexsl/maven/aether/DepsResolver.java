@@ -79,7 +79,6 @@ public final class DepsResolver {
      * List of transitive deps of the artifact.
      * @param root The artifact to work with
      * @return The list of dependencies
-     * @see #artifacts()
      */
     public List<Artifact> deps(final Artifact root) {
         final CollectRequest crq = new CollectRequest();

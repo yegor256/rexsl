@@ -205,6 +205,27 @@
                         </executions>
                     </plugin>
                     <plugin>
+                        <!--
+                        @todo #26 This is a temporary measure, until
+                         Qulice implements this validation. Once it's implemented
+                         in qulice - just remove this plugin from here.
+                        -->
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>analyze-only</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>analyze-only</goal>
+                                </goals>
+                                <configuration>
+                                    <ignoreNonCompile>true</ignoreNonCompile>
+                                    <failOnWarning>true</failOnWarning>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version since="2 Sep 2011">2.8</version>
                         <executions>
@@ -311,17 +332,6 @@
                                                 <head>To do:</head>
                                             </tag>
                                         </tags>
-                                        <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
-                                        <docletArtifact>
-                                            <groupId>org.umlgraph</groupId>
-                                            <artifactId>doclet</artifactId>
-                                            <version>5.1</version>
-                                        </docletArtifact>
-                                        <additionalparam>
-                                            -views
-                                            -all
-                                        </additionalparam>
-                                        <useStandardDocletOptions>true</useStandardDocletOptions>
                                     </configuration>
                                     <reportSets>
                                         <reportSet>

@@ -115,6 +115,18 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.sonatype.sisu</groupId>
+            <artifactId>sisu-inject-plexus</artifactId>
+            <version since="15 Sep 2011">2.1.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-container-default</artifactId>
+            <version since="15 Sep 2011">1.0-beta-3.0.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>org.sonatype.aether</groupId>
             <artifactId>aether-api</artifactId>
             <version since="15 Sep 2011">1.11</version>
@@ -127,11 +139,6 @@
         <dependency>
             <groupId>org.sonatype.aether</groupId>
             <artifactId>aether-util</artifactId>
-            <version since="15 Sep 2011">1.11</version>
-        </dependency>
-        <dependency>
-            <groupId>org.sonatype.aether</groupId>
-            <artifactId>aether-impl</artifactId>
             <version since="15 Sep 2011">1.11</version>
         </dependency>
         <dependency>
@@ -162,14 +169,32 @@
         <dependency>
             <!-- Embedded Jetty Java Servlet Container -->
             <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
+            <artifactId>jetty-webapp</artifactId>
             <version since="11 Oct 2011">8.0.2.v20111006</version>
         </dependency>
         <dependency>
             <!-- Embedded Jetty Java Servlet Container -->
             <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
+            <artifactId>jetty-server</artifactId>
             <version since="11 Oct 2011">8.0.2.v20111006</version>
+            <exclusions>
+                <exclusion>
+                    <!-- we want to replace it with proper Servlet API artifact -->
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <!-- JAXB 2.0 API. -->
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version since="2 Sep 2011">2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -199,6 +224,11 @@
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
+            <!-- other details are in parent pom.xml -->
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
             <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
@@ -250,6 +280,27 @@
             <version since="19 Sep 2011">1.6.2</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <!-- implementation of Javax Servlet API 3.0, required for Jetty in runtime -->
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.servlet</artifactId>
+            <version since="26 Oct 2011">3.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!-- Javax.el implementation, required for Jetty in tests -->
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>el-impl</artifactId>
+            <version since="26 Oct 2011">2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Javax Servlet API 3.0 -->
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version since="26 Oct 2011">6.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -282,6 +333,7 @@
                     which you're interested in.
                     -->
                     <pomIncludes>
+                        <pomInclude>run-all-correct/pom.xml</pomInclude>
                         <pomInclude>all-correct/pom.xml</pomInclude>
                         <pomInclude>script-failure/pom.xml</pomInclude>
                         <pomInclude>xhtml-failure/pom.xml</pomInclude>

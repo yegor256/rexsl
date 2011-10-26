@@ -27,20 +27,21 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo;
 
-import com.rexsl.test.TestClient
-import com.rexsl.test.XhtmlConverter
-import org.junit.Assert
-import org.xmlmatchers.XmlMatchers
-import static org.hamcrest.Matchers.*
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 
-File original = new File("./src/test/rexsl/scripts/MockXml.groovy");
-for (int attempt = 0; attempt < 5; attempt += 1) {
-    def r1 = new TestClient(documentRoot)
-        .header('Accept', 'text/plain,application/xml')
-        .header('User-agent', 'Chrome')
-        .get('/scripts/MockXml.groovy')
-    Assert.assertThat(r1.status, equalTo(200))
-    Assert.assertThat(r1.headers.get("content-length"), equalTo(original.length().toString()))
-    Assert.assertThat(new Long(r1.body.length()), equalTo(original.length()))
+/**
+ * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @version $Id: FrontEnd.java 176 2011-10-25 18:09:33Z guard $
+ */
+@Path("/")
+public class FrontEnd {
+
+    @GET
+    public String home() {
+        return "Hello, world!";
+    }
+
 }
