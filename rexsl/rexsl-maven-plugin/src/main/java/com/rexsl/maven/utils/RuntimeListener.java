@@ -29,9 +29,10 @@
  */
 package com.rexsl.maven.utils;
 
+import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
-import groovy.lang.Binding;
 import java.io.File;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.apache.commons.io.FileUtils;
@@ -49,13 +50,10 @@ public final class RuntimeListener implements ServletContextListener {
      */
     @Override
     public void contextInitialized(final ServletContextEvent event) {
-        final File dir = new File(
-            new File(
-                event.getServletContext()
-                    .getInitParameter("com.rexsl.maven.utils.BASEDIR")
-            ),
-            "src/test/rexsl/bootstrap"
+        final Environment env = new RuntimeListener.RuntimeEnvironment(
+            event.getServletContext()
         );
+        final File dir = new File(env.basedir(), "src/test/rexsl/bootstrap");
         if (!dir.exists()) {
             Logger.info(
                 this,
@@ -69,8 +67,8 @@ public final class RuntimeListener implements ServletContextListener {
             : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
             Logger.info(this, "Running '%s'...", script);
             final GroovyExecutor exec = new GroovyExecutor(
-                event.getServletContext().getClassLoader(),
-                new Binding()
+                env.classloader(),
+                new BindingBuilder(env).build()
             );
             try {
                 exec.execute(script);
@@ -79,7 +77,7 @@ public final class RuntimeListener implements ServletContextListener {
             }
             counter += 1;
         }
-        Logger.info(
+        Logger.debug(
             this,
             "#contextInitialized(%s): initialized with %d script(s)",
             event.getClass().getName(),
@@ -92,7 +90,65 @@ public final class RuntimeListener implements ServletContextListener {
      */
     @Override
     public void contextDestroyed(final ServletContextEvent event) {
-        Logger.info(this, "#contextDestroyed(): destroyed");
+        Logger.debug(this, "#contextDestroyed(): destroyed");
+    }
+
+    /**
+     * Runtime environment.
+     */
+    private static final class RuntimeEnvironment implements Environment {
+        /**
+         * Servlet context.
+         */
+        private final ServletContext context;
+        /**
+         * Public ctor.
+         * @param ctx Context
+         */
+        public RuntimeEnvironment(final ServletContext ctx) {
+            this.context = ctx;
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public File basedir() {
+            return new File(
+                this.context.getInitParameter("com.rexsl.maven.utils.BASEDIR")
+            );
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public File webdir() {
+            return new File(
+                this.context.getInitParameter("com.rexsl.maven.utils.WEBDIR")
+            );
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public ClassLoader classloader() {
+            return this.context.getClassLoader();
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean useRuntimeFiltering() {
+            throw new IllegalStateException("#useRuntimeFiltering");
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Integer port() {
+            return Integer.valueOf(
+                this.context.getInitParameter("com.rexsl.maven.utils.PORT")
+            );
+        }
     }
 
 }

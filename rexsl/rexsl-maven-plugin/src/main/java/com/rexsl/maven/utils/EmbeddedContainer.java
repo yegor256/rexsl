@@ -141,6 +141,14 @@ public final class EmbeddedContainer {
             env.basedir().getAbsolutePath()
         );
         params.put(
+            "com.rexsl.maven.utils.WEBDIR",
+            env.basedir().getAbsolutePath()
+        );
+        params.put(
+            "com.rexsl.maven.utils.PORT",
+            env.port().toString()
+        );
+        params.put(
             "com.rexsl.maven.utils.RUNTIME_FOLDERS",
             StringUtils.join(folders, ";")
         );
