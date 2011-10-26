@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.ymock.util.Logger;
 import java.net.ServerSocket;
 
 /**
@@ -52,6 +53,7 @@ public final class PortReserver {
         } catch (java.io.IOException ex) {
             throw new IllegalStateException("Failed to reserve port", ex);
         }
+        Logger.info(this, "Port reserved: %d", port);
         return port;
     }
 

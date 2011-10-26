@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.*
 
 File original = new File("./src/test/rexsl/scripts/MockXml.groovy");
 for (int attempt = 0; attempt < 5; attempt += 1) {
-    def r1 = new TestClient(documentRoot)
+    def r1 = new TestClient(rexsl.home)
         .header('Accept', 'text/plain,application/xml')
         .header('User-agent', 'Chrome')
         .get('/scripts/MockXml.groovy')

@@ -71,6 +71,11 @@ public final class MavenEnvironment implements Environment {
     private boolean runtimeFiltering;
 
     /**
+     * Port number.
+     */
+    private Integer port;
+
+    /**
      * Ctor.
      * @param prj Maven project
      * @param props Properties
@@ -79,6 +84,14 @@ public final class MavenEnvironment implements Environment {
         final Properties props) {
         this.project = prj;
         this.properties = props;
+    }
+
+    /**
+     * Set port number or set default.
+     * @param prt The port number
+     */
+    public void setPort(final Integer prt) {
+        this.port = prt;
     }
 
     /**
@@ -103,6 +116,14 @@ public final class MavenEnvironment implements Environment {
     @Override
     public File basedir() {
         return this.project.getBasedir();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer port() {
+        return this.port;
     }
 
     /**

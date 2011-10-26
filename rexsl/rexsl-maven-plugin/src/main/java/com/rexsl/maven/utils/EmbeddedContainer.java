@@ -31,9 +31,7 @@ package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
-import groovy.lang.Binding;
 import java.io.File;
-import java.net.URI;
 import java.security.Permission;
 import java.security.Policy;
 import java.security.ProtectionDomain;
@@ -72,12 +70,10 @@ public final class EmbeddedContainer {
 
     /**
      * Create and start Grizzly container.
-     * @param port The port to mount to
      * @param env The environment
      * @return The container
      */
-    public static EmbeddedContainer start(final Integer port,
-        final Environment env) {
+    public static EmbeddedContainer start(final Environment env) {
         if (!env.webdir().exists()) {
             throw new IllegalArgumentException(
                 String.format(
@@ -87,7 +83,7 @@ public final class EmbeddedContainer {
                 )
             );
         }
-        final Server server = new Server(port);
+        final Server server = new Server(env.port());
         final WebAppContext ctx = new WebAppContext();
         // it is required because of classloading conflict between
         // Maven classloader and Jetty WebApp classloader
@@ -114,13 +110,7 @@ public final class EmbeddedContainer {
         } catch (Exception ex) {
             throw new IllegalArgumentException("Failed to start Jetty", ex);
         }
-        URI home;
-        try {
-            home = new URI(String.format("http://localhost:%d", port));
-        } catch (java.net.URISyntaxException ex) {
-            throw new IllegalArgumentException(ex);
-        }
-        EmbeddedContainer.setup(env, home);
+        EmbeddedContainer.setup(env);
         return new EmbeddedContainer(server);
     }
 
@@ -168,9 +158,8 @@ public final class EmbeddedContainer {
     /**
      * Run setup Groovy scripts.
      * @param env The environment
-     * @param home Home URL
      */
-    private static void setup(final Environment env, final URI home) {
+    private static void setup(final Environment env) {
         final File dir = new File(env.basedir(), "src/test/rexsl/setup");
         if (!dir.exists()) {
             Logger.info(
@@ -182,11 +171,9 @@ public final class EmbeddedContainer {
             for (File script
                 : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
                 Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
-                final Binding binding = new Binding();
-                binding.setVariable("documentRoot", home);
                 final GroovyExecutor exec = new GroovyExecutor(
                     env.classloader(),
-                    binding
+                    new BindingBuilder(env).build()
                 );
                 try {
                     exec.execute(script);

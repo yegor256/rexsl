@@ -135,18 +135,6 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
     }
 
     /**
-     * Get access to port.
-     * @return The port
-     */
-    protected final Integer port() {
-        if (this.port == null) {
-            this.port = new PortReserver().port();
-            Logger.info(this, "Port reserved: %d", this.port);
-        }
-        return this.port;
-    }
-
-    /**
      * Get access to environment.
      * @return The environment
      */
@@ -174,6 +162,11 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
             this.env.setLocalRepository(
                 this.session.getLocalRepository().getBasedir().getPath()
             );
+        }
+        if (this.port != null) {
+            this.env.setPort(this.port);
+        } else {
+            this.env.setPort(new PortReserver().port());
         }
         this.run();
     }

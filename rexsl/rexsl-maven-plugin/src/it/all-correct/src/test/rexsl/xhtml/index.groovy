@@ -33,9 +33,9 @@ import static org.junit.Assert.assertThat
 import static org.junit.matchers.JUnitMatchers.containsString
 import static org.xmlmatchers.XmlMatchers.hasXPath
 
-assertThat(document, containsString('hello'))
+assertThat(rexsl.document, containsString('hello'))
 assertThat(
-    the(document),
+    the(rexsl.document),
     hasXPath(
         "//x:div[contains(.,'hello')]",
         new org.xmlmatchers.namespace.SimpleNamespaceContext()

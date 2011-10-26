@@ -31,11 +31,10 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.GroovyExecutor;
-import com.rexsl.maven.utils.PortReserver;
 import com.ymock.util.Logger;
-import groovy.lang.Binding;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -80,14 +79,12 @@ public final class XhtmlOutputCheck implements Check {
             "Starting embedded servlet container in '%s'...",
             env.webdir()
         );
-        final Integer port = new PortReserver().port();
-        final EmbeddedContainer container = EmbeddedContainer.start(port, env);
-        final String home = String.format("http://localhost:%d", port);
+        final EmbeddedContainer container = EmbeddedContainer.start(env);
         boolean success = true;
         for (File xml : FileUtils.listFiles(dir, new String[] {"xml"}, true)) {
             try {
-                Logger.info(this, "Testing %s through %s...", xml, home);
-                this.one(env, xml, home);
+                Logger.info(this, "Testing %s through...", xml);
+                this.one(env, xml);
             } catch (InternalCheckException ex) {
                 Logger.warn(
                     this,
@@ -107,10 +104,9 @@ public final class XhtmlOutputCheck implements Check {
      * Check one XML document.
      * @param env Environment to work with
      * @param file Check this particular XML document
-     * @param home Home page URI
      * @throws InternalCheckException If some failure inside
      */
-    private void one(final Environment env, final File file, final String home)
+    private void one(final Environment env, final File file)
         throws InternalCheckException {
         final File root = new File(env.basedir(), this.GROOVY_DIR);
         if (!root.exists()) {
@@ -129,10 +125,11 @@ public final class XhtmlOutputCheck implements Check {
                 file
             );
         }
-        final String xhtml = new XhtmlTransformer().transform(env, file, home);
-        final Binding binding = new Binding();
-        binding.setVariable("document", xhtml);
-        final GroovyExecutor exec = new GroovyExecutor(env, binding);
+        final String xhtml = new XhtmlTransformer().transform(env, file);
+        final GroovyExecutor exec = new GroovyExecutor(
+            env,
+            new BindingBuilder(env).add("document", xhtml).build()
+        );
         try {
             exec.execute(groovy);
         } catch (com.rexsl.maven.utils.GroovyException ex) {

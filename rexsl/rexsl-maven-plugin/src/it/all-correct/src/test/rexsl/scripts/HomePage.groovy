@@ -34,7 +34,7 @@ import org.junit.Assert
 import org.xmlmatchers.XmlMatchers
 import static org.hamcrest.Matchers.*
 
-def r1 = new TestClient(documentRoot)
+def r1 = new TestClient(rexsl.home)
     .header('Accept', 'text/plain,application/xml')
     .header('User-agent', 'FireFox')
     .get('/')
@@ -49,5 +49,5 @@ Assert.assertThat(
     )
 )
 
-def r2 = new TestClient(documentRoot).get('/strange-address')
+def r2 = new TestClient(rexsl.home).get('/strange-address')
 Assert.assertThat(r2.status, equalTo(404))
