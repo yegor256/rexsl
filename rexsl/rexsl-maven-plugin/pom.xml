@@ -338,6 +338,7 @@
                          because I don't know how to stop its execution. It starts
                          Jetty and stays waiting. There should be some way of
                          canceling it somehow...
+                        -->
                         <!-- <pomInclude>run-all-correct/pom.xml</pomInclude> -->
                         <pomInclude>all-correct/pom.xml</pomInclude>
                         <pomInclude>script-failure/pom.xml</pomInclude>
