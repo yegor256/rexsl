@@ -306,13 +306,6 @@
     <build>
         <plugins>
             <plugin>
-                <!--
-                @todo #2 This plugin won't work when a local repository is clean
-                 and you're running it for the first time. I think that it's
-                 a defect in plugin itself. Just run "mvn install" and ignore the
-                 error message. Run "mvn install" again and everything will be
-                 fine. And I don't know how to fix this defect.
-                -->
                 <artifactId>maven-invoker-plugin</artifactId>
                 <version since="22 Mar 2011">1.5</version>
                 <configuration>
@@ -363,8 +356,8 @@
             </plugin>
             <plugin>
                 <!--
-                @todo #30 This is a workaround until they fix maven-invoker-plugin,
-                 see the ticket #30 for more information.
+                This is a workaround until they fix maven-invoker-plugin,
+                see the ticket #30 for more information.
                 -->
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version since="26 Oct 2011">1.6</version>

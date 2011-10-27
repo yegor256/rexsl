@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,29 +26,16 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
-    http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="maven-rexsl-plugin">
+ */
 
-    <body>
-        <menu ref="parent" />
-        <menu name="Overview">
-            <item name="Introduction" href="./index.html" />
-            <item name="Usage" href="./usage.html" />
-            <item name="Goals" href="./plugin-info.html" />
-            <item name="FAQ" href="./faq.html" />
-        </menu>
-        <menu name="Cookbook">
-            <item name="Setup scripts" href="./setup.html" />
-            <item name="Test stubs" href="./stubs.html" />
-        </menu>
-        <menu ref="reports" />
-        <menu ref="modules" />
-    </body>
+import com.rexsl.test.TestClient
+import org.junit.Assert
+import static org.hamcrest.Matchers.*
 
-</project>
+// This URL (/stub) is not available in production version of the system,
+// but during tests it should be available because of "src/test/java/com/rexsl/foo/Stub.java"
+// class and its test resources
+def r1 = new TestClient(rexsl.home)
+    .get('/stub')
+Assert.assertThat(r1.status, equalTo(200))
+Assert.assertThat(r1.body.length, greaterThan(0))

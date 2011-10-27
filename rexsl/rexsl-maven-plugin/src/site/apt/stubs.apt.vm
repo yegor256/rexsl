@@ -1,9 +1,9 @@
  ------
- Introduction to ReXSL
+ Run-time stubs
  ------
  Yegor Bugayenko
  ------
- 2011-08-21
+ 2011-10-27
  ------
 
 ~~
@@ -38,19 +38,57 @@
 ~~ @version $Id$
 ~~
 
-ReXSL Maven Plugin
+How to add extra functionality during tests?
 
-  This plugin is helping you to test your ReXSL-powered
-  web application and perform some pre-packaging changes to your
-  web assets (like CSS/XSL stylesheets, JavaScript code, images, etc.)
+  For example, you want to test your application's behavior when
+  some unexpected runtime exception is happening. You need to inject
+  a special block of code into your application during tests that will
+  throw such an exception, and your test scripts will validate application
+  behavior. We can do it with test stubs located together with your test
+  classes:
 
-  Read more about its {{{./usage.html}usage}}.
++--
+/foo
+  pom.xml
+  /src
+    /main
+    /test
+      /java
+        /foo
+          HomeTest.java
+          RuntimeExceptionStub.java
+      /rexsl
+        /scripts
+          WhatIfRuntimeException.groovy
++--
 
-  There are a number of cookbook advices, which will help:
+  This is how <<<RuntimeExceptionStub.java>> may look like:
 
-   * {{{./setup.html}How to add application data before tests?}}
++--
+package foo;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+@Path("/runtime-exception")
+public class RuntimeExceptionStub {
+  @GET
+  public String throwIt() {
+    throw new IllegalStateException("hello, world!");
+  }
+}
++--
 
-   * {{{./bootstrap.html}How to pre-configure the application and mock resources?}}
+  This is how we may test it from <<<WhatIfRuntimeException.groovy>>>:
 
-   * {{{./stubs.html}How to add extra functionality during tests?}}
++--
+import com.rexsl.test.TestClient
+import org.junit.Assert
+import static org.hamcrest.Matchers.*
+def r = new TestClient(rexsl.home)
+    .get('/runtime-exception')
+Assert.assertThat(r.status, equalTo(500))
++--
+
+  The test should pass, and may be extended with additional validations. We
+  may check what exactly is returned, how this page is formatted, etc. The
+  same way as you check regular pages/responses.
 

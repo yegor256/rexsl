@@ -36,6 +36,10 @@ import groovy.util.GroovyScriptEngine;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -72,7 +76,18 @@ public final class GroovyExecutor {
      * @param bnd The binding
      */
     public GroovyExecutor(final Environment env, final Binding bnd) {
-        this.classloader = env.classloader();
+        final List<URL> urls = new ArrayList<URL>();
+        for (File path : env.classpath(false)) {
+            try {
+                urls.add(path.toURI().toURL());
+            } catch (java.net.MalformedURLException ex) {
+                throw new IllegalArgumentException(ex);
+            }
+        }
+        this.classloader = new URLClassLoader(
+            urls.toArray(new URL[] {}),
+            this.getClass().getClassLoader()
+        );
         this.binding = bnd;
     }
 

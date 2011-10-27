@@ -79,8 +79,6 @@ public final class XhtmlOutputCheckTest {
         Mockito.doReturn(basedir).when(env).basedir();
         Mockito.doReturn(new PortReserver().port()).when(env).port();
         Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
-        Mockito.doReturn(this.getClass().getClassLoader())
-            .when(env).classloader();
         MatcherAssert.assertThat(
             new XhtmlOutputCheck().validate(env),
             Matchers.is(true)
@@ -100,8 +98,6 @@ public final class XhtmlOutputCheckTest {
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(basedir).when(env).basedir();
         Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
-        Mockito.doReturn(this.getClass().getClassLoader())
-            .when(env).classloader();
         MatcherAssert.assertThat(
             new XhtmlOutputCheck().validate(env),
             Matchers.is(false)

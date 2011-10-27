@@ -180,7 +180,7 @@ public final class EmbeddedContainer {
                 : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
                 Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
                 final GroovyExecutor exec = new GroovyExecutor(
-                    env.classloader(),
+                    env,
                     new BindingBuilder(env).build()
                 );
                 try {

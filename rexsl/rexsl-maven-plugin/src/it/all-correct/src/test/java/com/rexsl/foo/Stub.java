@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,29 +26,29 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ */
+package com.rexsl.foo;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import org.apache.commons.io.IOUtils;
+
+/**
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
-    http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="maven-rexsl-plugin">
+ */
+@Path("/stub")
+public class Stub {
 
-    <body>
-        <menu ref="parent" />
-        <menu name="Overview">
-            <item name="Introduction" href="./index.html" />
-            <item name="Usage" href="./usage.html" />
-            <item name="Goals" href="./plugin-info.html" />
-            <item name="FAQ" href="./faq.html" />
-        </menu>
-        <menu name="Cookbook">
-            <item name="Setup scripts" href="./setup.html" />
-            <item name="Test stubs" href="./stubs.html" />
-        </menu>
-        <menu ref="reports" />
-        <menu ref="modules" />
-    </body>
+    @GET
+    public String stub() {
+        try {
+            return IOUtils.toString(
+                this.getClass().getResourceAsStream("stub.txt")
+            );
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
 
-</project>
+}

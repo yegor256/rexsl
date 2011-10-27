@@ -142,33 +142,25 @@ public final class MavenEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
-    public ClassLoader classloader() {
+    public List<File> classpath(final boolean testOnly) {
         final List<String> paths = new ArrayList<String>();
-        for (Artifact artifact : this.artifacts()) {
+        for (Artifact artifact : this.artifacts(testOnly)) {
             paths.add(artifact.getFile().getPath());
         }
-        final List<URL> urls = new ArrayList<URL>();
+        final List<File> files = new ArrayList<File>();
         for (String path : paths) {
-            try {
-                urls.add(new File(path).toURI().toURL());
-            } catch (java.net.MalformedURLException ex) {
-                throw new IllegalStateException("Failed to build URL", ex);
-            }
+            files.add(new File(path));
+            Logger.debug(
+                this,
+                "ReXSL classpath: %s",
+                path
+            );
         }
-        final URLClassLoader loader = new URLClassLoader(
-            urls.toArray(new URL[] {}),
-            this.getClass().getClassLoader()
-        );
-        final List<String> names = new ArrayList<String>();
-        for (URL url : loader.getURLs()) {
-            names.add(url.toString());
-        }
-        Logger.debug(
-            this,
-            "ReXSL classpath: %s",
-            StringUtils.join(names, "\n")
-        );
-        return loader;
+        // final URLClassLoader loader = new URLClassLoader(
+        //     urls.toArray(new URL[] {}),
+        //     this.getClass().getClassLoader()
+        // );
+        return files;
     }
 
     /**
@@ -181,15 +173,16 @@ public final class MavenEnvironment implements Environment {
 
     /**
      * List of artifacts, which should be available in classpath.
+     * @param testOnly Are interested in artifacts in "test" scope only?
      * @return The list of artifacts
      * @see #classloader()
      */
-    private List<Artifact> artifacts() {
+    private List<Artifact> artifacts(final boolean testOnly) {
         final List<Artifact> artifacts = new ArrayList<Artifact>();
         final DepsResolver resolver =
             new DepsResolver(this.project, this.localRepo);
         Logger.debug(this, "Full tree of artifacts in classpath:");
-        for (Artifact root : this.roots()) {
+        for (Artifact root : this.roots(testOnly)) {
             Logger.debug(
                 this,
                 "  %s:%s:%s",
@@ -222,16 +215,18 @@ public final class MavenEnvironment implements Environment {
 
     /**
      * List of root artifacts.
+     * @param testOnly Are interested in artifacts in "test" scope only?
      * @return The list of root artifacts
      * @see #artifacts()
-     * @todo #7 The implementation is very rough now. We should not specify
-     *  coordinates of REXSL-MAVEN-PLUGIN explicitly here. Somehow we should
-     *  get this information in runtime.
      */
-    private List<Artifact> roots() {
+    private List<Artifact> roots(final boolean testOnly) {
         final List<Artifact> roots = new ArrayList<Artifact>();
         for (org.apache.maven.artifact.Artifact artf
             : this.project.getDependencyArtifacts()) {
+            if (!org.apache.maven.artifact.Artifact.SCOPE_TEST
+                .equals(artf.getScope()) && testOnly) {
+                continue;
+            }
             roots.add(
                 new DefaultArtifact(
                     artf.getGroupId(),
