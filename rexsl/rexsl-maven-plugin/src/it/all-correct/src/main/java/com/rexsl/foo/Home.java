@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Home {
+public final class Home {
 
     @XmlElement(name = "text")
     public String getText() {

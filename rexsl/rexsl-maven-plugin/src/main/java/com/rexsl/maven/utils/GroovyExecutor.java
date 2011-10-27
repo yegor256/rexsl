@@ -115,12 +115,9 @@ public final class GroovyExecutor {
         }
         try {
             gse.run(file.getName(), this.binding);
-        } catch (AssertionError ex) {
+        // @checkstyle IllegalCatch (1 line)
+        } catch (Throwable ex) {
             throw new GroovyException(this.log(ex));
-        } catch (groovy.util.ResourceException ex) {
-            throw new IllegalArgumentException(this.log(ex));
-        } catch (groovy.util.ScriptException ex) {
-            throw new IllegalArgumentException(this.log(ex));
         }
     }
 

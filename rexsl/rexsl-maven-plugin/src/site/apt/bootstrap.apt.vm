@@ -58,4 +58,7 @@ How to pre-configure the application?
 +--
 
   The script is able to work with application classes (all other Groovy
-  scripts don't have this ability).
+  scripts don't have this ability). All bootstrap scripts are executed from
+  a context listener inside a container. That's why they can do anything
+  your real application can do.
+

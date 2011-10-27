@@ -38,7 +38,7 @@ import org.apache.commons.io.IOUtils;
  * @version $Id$
  */
 @Path("/stub")
-public class Stub {
+public final class Stub {
 
     @GET
     public String stub() {
