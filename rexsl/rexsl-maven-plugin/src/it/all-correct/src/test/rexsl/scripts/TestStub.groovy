@@ -30,12 +30,12 @@
 
 import com.rexsl.test.TestClient
 import org.junit.Assert
-import static org.hamcrest.Matchers.*
+import org.hamcrest.Matchers
 
 // This URL (/stub) is not available in production version of the system,
 // but during tests it should be available because of "src/test/java/com/rexsl/foo/Stub.java"
 // class and its test resources
 def r1 = new TestClient(rexsl.home)
     .get('/stub')
-Assert.assertThat(r1.status, equalTo(200))
-Assert.assertThat(r1.body.length, greaterThan(0))
+Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_OK))
+Assert.assertThat(r1.body.length, Matchers.greaterThan(0))
