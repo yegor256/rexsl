@@ -28,4 +28,4 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-assert "a".equals("a")
+assert true

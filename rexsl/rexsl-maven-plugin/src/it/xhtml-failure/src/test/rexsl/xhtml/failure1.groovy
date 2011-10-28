@@ -28,10 +28,13 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import static com.rexsl.test.XhtmlConverter.the
-import static org.junit.Assert.assertThat
-import static org.junit.matchers.JUnitMatchers.containsString
-import static org.xmlmatchers.XmlMatchers.hasXPath
+import com.rexsl.test.XhtmlConverter
+import org.junit.Assert
+import org.junit.matchers.JUnitMatchers
+import org.xmlmatchers.XmlMatchers
 
-assertThat(rexsl.document, containsString('say hello'))
-assertThat(the(rexsl.document), hasXPath("//div[contains(.,'say hello')]"))
+Assert.assertThat(rexsl.document, JUnitMatchers.containsString('say hello'))
+Assert.assertThat(
+    XhtmlConverter.the(rexsl.document),
+    XmlMatchers.hasXPath("//div[contains(.,'say hello')]")
+)
