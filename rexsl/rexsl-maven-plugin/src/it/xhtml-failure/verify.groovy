@@ -30,5 +30,5 @@
  * @version $Id$
  */
 
-def log = new File(basedir, "build.log")
-assert log.text.contains("Expected: a string containing \"say hello\"")
+def log = new File(basedir, 'build.log')
+assert log.text.contains('Expected: a string containing "say hello"')

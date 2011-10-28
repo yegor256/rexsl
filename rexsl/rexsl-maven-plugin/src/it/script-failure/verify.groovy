@@ -30,6 +30,6 @@
  * @version $Id: verify.groovy 25 2011-09-03 20:32:41Z guard $
  */
 
-def log = new File(basedir, "build.log")
-assert log.text.contains("InContainerScriptsCheck check failed")
-assert log.text.contains("Expected: <404>")
+def log = new File(basedir, 'build.log')
+assert log.text.contains('InContainerScriptsCheck check failed')
+assert log.text.contains('Expected: <404>')
