@@ -30,10 +30,10 @@
 
 import com.rexsl.test.TestClient
 import org.junit.Assert
-import static org.hamcrest.Matchers.*
+import org.hamcrest.Matchers
 
 def r1 = new TestClient(rexsl.home)
     .header('Accept', 'text/plain,application/xml')
     .header('User-agent', 'Chrome')
     .get('/xml/index.xml')
-Assert.assertThat(r1.status, equalTo(404))
+Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_NOT_FOUND))

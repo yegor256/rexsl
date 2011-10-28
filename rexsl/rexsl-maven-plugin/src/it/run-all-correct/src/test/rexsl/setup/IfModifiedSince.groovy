@@ -28,7 +28,6 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.io.File
 import java.text.SimpleDateFormat
 import com.rexsl.test.TestClient
 import org.junit.Assert
@@ -43,5 +42,5 @@ def r1 = new TestClient(rexsl.home)
     )
     .header('User-agent', 'Chrome')
     .get('/css/screen.css')
-Assert.assertThat(r1.status, Matchers.equalTo(200))
+Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_OK))
 Assert.assertThat(r1.body.length(), Matchers.greaterThan(0))

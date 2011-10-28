@@ -38,7 +38,7 @@ for (int attempt = 0; attempt < 5; attempt += 1) {
         .header('Accept', 'text/plain,application/xml')
         .header('User-agent', 'Chrome')
         .get('/scripts/MockXml.groovy')
-    Assert.assertThat(r1.status, Matchers.equalTo(200))
+    Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_OK))
     Assert.assertThat(r1.headers.get('content-length'), Matchers.equalTo(original.length().toString()))
     Assert.assertThat(new Long(r1.body.length()), Matchers.equalTo(original.length()))
 }
