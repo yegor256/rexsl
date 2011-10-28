@@ -28,17 +28,18 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.io.File
 import java.text.SimpleDateFormat
-import java.util.Date
 import com.rexsl.test.TestClient
 import org.junit.Assert
-import static org.hamcrest.Matchers.*
+import org.hamcrest.Matchers
 
 def r1 = new TestClient(rexsl.home)
     .header('Accept', 'text/plain,text/css')
-    .header('If-Modified-Since', new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").format(new Date()))
+    .header('If-Modified-Since',
+        new SimpleDateFormat('EEE, dd MMM yyyy HH:mm:ss zzz', Locale.ENGLISH)
+            .format(new Date())
+    )
     .header('User-agent', 'Chrome')
     .get('/css/screen.css')
-Assert.assertThat(r1.status, equalTo(304))
-Assert.assertThat(r1.body, is(nullValue()))
+Assert.assertThat(r1.status, Matchers.equalTo(304))
+Assert.assertThat(r1.body, Matchers.is(Matchers.nullValue()))

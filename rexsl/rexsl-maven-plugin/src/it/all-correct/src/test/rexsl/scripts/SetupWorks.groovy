@@ -32,7 +32,6 @@ import com.rexsl.test.TestClient
 import com.rexsl.test.XhtmlConverter
 import org.junit.Assert
 import org.xmlmatchers.XmlMatchers
-import static org.hamcrest.Matchers.*
 
 /**
  * Here we're validating that setup mechanism works and

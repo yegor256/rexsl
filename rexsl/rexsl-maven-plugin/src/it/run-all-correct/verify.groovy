@@ -32,5 +32,5 @@
  * Validate that the build really validated XSL files.
  */
 
-def log = new File(basedir, "build.log")
-//assert log.text.contains("All ReXSL checks passed")
+//def log = new File(basedir, 'build.log')
+//assert log.text.contains('All ReXSL checks passed')

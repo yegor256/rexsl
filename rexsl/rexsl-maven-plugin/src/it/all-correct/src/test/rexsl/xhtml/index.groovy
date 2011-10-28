@@ -28,17 +28,17 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import static com.rexsl.test.XhtmlConverter.the
-import static org.junit.Assert.assertThat
-import static org.junit.matchers.JUnitMatchers.containsString
-import static org.xmlmatchers.XmlMatchers.hasXPath
+import com.rexsl.test.XhtmlConverter
+import org.junit.Assert
+import org.junit.matchers.JUnitMatchers
+import org.xmlmatchers.XmlMatchers
 
-assertThat(rexsl.document, containsString('hello'))
-assertThat(
-    the(rexsl.document),
-    hasXPath(
+Assert.assertThat(rexsl.document, JUnitMatchers.containsString('hello'))
+Assert.assertThat(
+    XhtmlConverter.the(rexsl.document),
+    XmlMatchers.hasXPathhasXPath(
         "//x:div[contains(.,'hello')]",
         new org.xmlmatchers.namespace.SimpleNamespaceContext()
-        .withBinding("x", "http://www.w3.org/1999/xhtml")
+        .withBinding('x', 'http://www.w3.org/1999/xhtml')
     )
 )

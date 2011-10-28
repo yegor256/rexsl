@@ -30,8 +30,8 @@
 
 import com.rexsl.foo.Data
 
-assert Data.INSTANCE.get().equals("Hello, world!")
-Data.INSTANCE.set("bootstrapped")
+assert Data.INSTANCE.get() == 'Hello, world!'
+Data.INSTANCE.set('bootstrapped')
 
 // these properties should be injected by maven plugin
 assert rexsl.basedir.exists()

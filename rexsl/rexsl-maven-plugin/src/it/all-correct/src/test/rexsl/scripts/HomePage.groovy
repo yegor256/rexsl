@@ -32,22 +32,22 @@ import com.rexsl.test.TestClient
 import com.rexsl.test.XhtmlConverter
 import org.junit.Assert
 import org.xmlmatchers.XmlMatchers
-import static org.hamcrest.Matchers.*
+import org.hamcrest.Matchers
 
 def r1 = new TestClient(rexsl.home)
     .header('Accept', 'text/plain,application/xml')
     .header('User-agent', 'FireFox')
     .get('/')
-Assert.assertThat(r1.status, equalTo(200))
-Assert.assertThat(r1.headers.get("content-type"), equalTo("text/html"))
+Assert.assertThat(r1.status, Matchers.equalTo(200))
+Assert.assertThat(r1.headers.get('content-type'), Matchers.equalTo('text/html'))
 Assert.assertThat(
     XhtmlConverter.the(r1.body),
     XmlMatchers.hasXPath(
         "//x:div",
         new org.xmlmatchers.namespace.SimpleNamespaceContext()
-        .withBinding("x", "http://www.w3.org/1999/xhtml")
+        .withBinding('x', 'http://www.w3.org/1999/xhtml')
     )
 )
 
 def r2 = new TestClient(rexsl.home).get('/strange-address')
-Assert.assertThat(r2.status, equalTo(404))
+Assert.assertThat(r2.status, Matchers.equalTo(404))
