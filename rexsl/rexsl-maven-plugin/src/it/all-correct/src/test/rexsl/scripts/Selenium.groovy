@@ -26,31 +26,23 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * @version $Id$
  */
 
-* {
-    font-family: Arial;
-    font-size: 18px;
-}
+// doesn't work at the moment: http://stackoverflow.com/questions/7947505
 
-input {
-    border: 1px solid gray;
-    padding: 0.5em;
-}
+/*
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-    input[type="submit"]:hover {
-        background-color: black;
-        color: white;
-        cursor: pointer;
-    }
+def driver = new HtmlUnitDriver()
+driver.setJavascriptEnabled(true)
+driver.navigate().to(rexsl.home.toString())
+assert driver.getTitle() == 'home'
 
-div#content {
-    margin-left: auto;
-    margin-right: auto;
-    clear: both;
-    width: 40em;
-    text-align: center;
-    padding-top: 5em;
-}
+def element = driver.findElement(By.name("text"))
+element.sendKeys("hello, dude!")
+element.submit()
+assert element.getText().contains('dude')
+*/

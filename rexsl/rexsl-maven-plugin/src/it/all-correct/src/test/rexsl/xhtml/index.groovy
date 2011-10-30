@@ -37,7 +37,7 @@ Assert.assertThat(rexsl.document, JUnitMatchers.containsString('hello'))
 Assert.assertThat(
     XhtmlConverter.the(rexsl.document),
     XmlMatchers.hasXPath(
-        "//x:div[contains(.,'hello')]",
+        "//x:input[contains(@value,'hello')]",
         new org.xmlmatchers.namespace.SimpleNamespaceContext()
         .withBinding('x', 'http://www.w3.org/1999/xhtml')
     )

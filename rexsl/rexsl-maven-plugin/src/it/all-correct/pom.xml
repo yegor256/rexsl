@@ -95,6 +95,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <!-- Selenium web testing framework, see Selenium.groovy -->
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version since="30 Oct 2011">2.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <!-- Forward all calls to SLF4J to LOG4J. -->
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>

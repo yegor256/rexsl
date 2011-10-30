@@ -42,7 +42,14 @@
     <xsl:include href="/xsl/layout.xsl"/>
 
     <xsl:template name="content">
-        <xsl:value-of select="/page/text" />
+        <form method="post" action="">
+            <input name="text" maxlength="50">
+                <xsl:attribute name="value">
+                    <xsl:value-of select="/page/text" />
+                </xsl:attribute>
+            </input>
+            <input value="Set" type="submit" />
+        </form>
     </xsl:template>
 
 </xsl:stylesheet>
