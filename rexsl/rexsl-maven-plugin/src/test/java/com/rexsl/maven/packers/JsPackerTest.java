@@ -29,12 +29,15 @@
  */
 package com.rexsl.maven.packers;
 
+import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link JsPacker}.
@@ -51,6 +54,15 @@ public final class JsPackerTest {
     public TemporaryFolder temp = new TemporaryFolder();
 
     /**
+     * Forward SLF4J to Maven Log.
+     * @throws Exception If something is wrong inside
+     */
+    @BeforeClass
+    public static void startLogging() throws Exception {
+        new com.rexsl.maven.LogStarter().start();
+    }
+
+    /**
      * Simple packaging.
      * @throws Exception If something goes wrong inside
      * @todo #6 This test doesn't work because the Packer is not implemented.
@@ -58,18 +70,20 @@ public final class JsPackerTest {
      */
     @Test
     public void testJssPackaging() throws Exception {
-        final File src = this.temp.newFolder("src");
-        final File dest = this.temp.newFolder("dest");
-        final String name = "test.js";
+        final Environment env = Mockito.mock(Environment.class);
+        final File dest = this.temp.newFolder("webdir");
+        Mockito.doReturn(dest).when(env).webdir();
+        final File script = new File(dest, JsPacker.FOLDER + "/test.js");
+        script.getParentFile().mkdirs();
         FileUtils.writeStringToFile(
-            new File(src, name),
+            script,
             "/* test "
             + "*/ void func() { }"
         );
         final Packer packer = new JsPacker();
-        packer.pack(src, dest);
+        packer.pack(env);
         // MatcherAssert.assertThat(
-        //     FileUtils.readFileToString(new File(dest, name)),
+        //     FileUtils.readFileToString(script),
         //     Matchers.equalTo("void func() {}")
         // );
     }

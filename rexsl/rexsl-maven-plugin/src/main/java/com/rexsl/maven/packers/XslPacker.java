@@ -31,10 +31,12 @@ package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
+import com.ymock.util.Logger;
 import java.io.File;
+import org.apache.commons.io.FileUtils;
 
 /**
- * Packager of XSL files.
+ * Packager of XSL files. All XML comments and unnecessary spaces are removed.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -42,27 +44,31 @@ import java.io.File;
 public final class XslPacker implements Packer {
 
     /**
-     * {@inheritDoc}
+     * The folder where all XSL files should be stored.
+     * @checkstyle MultipleStringLiterals (2 lines)
      */
-    @Override
-    public File source(final Environment env) {
-        return new File(env.basedir(), "src/main/webapp/xsl");
-    }
+    public static final String FOLDER = "xsl";
+
+    /**
+     * Extensions to process.
+     * @checkstyle MultipleStringLiterals (2 lines)
+     */
+    public static final String[] EXTS = new String[] {"xsl"};
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public File destination(final Environment env) {
-        return new File(env.webdir(), "xsl");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void pack(final File src, final File dest) {
-        // to be implemented
+    public void pack(final Environment env) {
+        final File dir = new File(env.webdir(), this.FOLDER);
+        if (!dir.exists()) {
+            Logger.info(this, "#pack(): %s directory is absent", dir);
+            return;
+        }
+        for (File xsl : FileUtils.listFiles(dir, this.EXTS, true)) {
+            // it's a temporary warning, until we implement packing
+            Logger.warn(this, "#pack(): %s was NOT packed", xsl);
+        }
     }
 
 }

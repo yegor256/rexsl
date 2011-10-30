@@ -116,13 +116,11 @@
                 <groupId>com.rexsl</groupId>
                 <artifactId>rexsl-maven-plugin</artifactId>
                 <version rexsl="yes">1.0-SNAPSHOT</version>
-                <configuration>
-                    <!-- ... to be continued ... -->
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>check</goal>
+                            <goal>package</goal>
                         </goals>
                     </execution>
                 </executions>
