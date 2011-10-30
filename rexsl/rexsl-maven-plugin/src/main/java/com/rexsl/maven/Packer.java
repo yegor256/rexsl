@@ -29,8 +29,6 @@
  */
 package com.rexsl.maven;
 
-import java.io.File;
-
 /**
  * Single packer to be executed by {@link PackageMojo}.
  *
@@ -40,24 +38,9 @@ import java.io.File;
 public interface Packer {
 
     /**
-     * Build location of sources.
+     * Package files inside the destination folder.
      * @param env The environment
-     * @return The folder
      */
-    File source(final Environment env);
-
-    /**
-     * Build location of destinations.
-     * @param env The environment
-     * @return The folder
-     */
-    File destination(final Environment env);
-
-    /**
-     * Package files from source folder to destination folder.
-     * @param src Source folder
-     * @param dest Destination folder
-     */
-    void pack(final File src, final File dest);
+    void pack(final Environment env);
 
 }

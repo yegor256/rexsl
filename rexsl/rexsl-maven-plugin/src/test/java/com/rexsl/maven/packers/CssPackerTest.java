@@ -29,12 +29,15 @@
  */
 package com.rexsl.maven.packers;
 
+import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link CssPacker}.
@@ -51,6 +54,15 @@ public final class CssPackerTest {
     public TemporaryFolder temp = new TemporaryFolder();
 
     /**
+     * Forward SLF4J to Maven Log.
+     * @throws Exception If something is wrong inside
+     */
+    @BeforeClass
+    public static void startLogging() throws Exception {
+        new com.rexsl.maven.LogStarter().start();
+    }
+
+    /**
      * Simple packaging.
      * @throws Exception If something goes wrong inside
      * @todo #6 This test doesn't work because the Packer is not implemented.
@@ -58,18 +70,20 @@ public final class CssPackerTest {
      */
     @Test
     public void testCssPackaging() throws Exception {
-        final File src = this.temp.newFolder("src");
-        final File dest = this.temp.newFolder("dest");
-        final String name = "screen.css";
+        final Environment env = Mockito.mock(Environment.class);
+        final File dest = this.temp.newFolder("webdir");
+        Mockito.doReturn(dest).when(env).webdir();
+        final File css = new File(dest, CssPacker.FOLDER + "/screen.css");
+        css.getParentFile().mkdirs();
         FileUtils.writeStringToFile(
-            new File(src, name),
+            css,
             "/* test "
             + "*/ a: { color: red; }"
         );
         final Packer packer = new CssPacker();
-        packer.pack(src, dest);
+        packer.pack(env);
         // MatcherAssert.assertThat(
-        //     FileUtils.readFileToString(new File(dest, name)),
+        //     FileUtils.readFileToString(css),
         //     Matchers.equalTo("a: {color: red;}")
         // );
     }
