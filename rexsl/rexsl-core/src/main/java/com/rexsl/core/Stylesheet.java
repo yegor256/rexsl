@@ -41,6 +41,8 @@ import java.lang.annotation.Target;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 public @interface Stylesheet {
 
     /**

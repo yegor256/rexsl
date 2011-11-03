@@ -38,6 +38,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -146,11 +147,16 @@ public final class XslResolverTest {
     @Test
     public void testDynamicallyExtendableObject() throws Exception {
         final XslResolver resolver = new XslResolver();
-        resolver.add(XslResolverTest.Foo.class);
+        resolver.add(XslResolverTest.Injectable.class);
         final Marshaller mrsh = resolver.getContext(Page.class);
         final Page page = new XslResolverTest.Page();
-        page.inject(new XslResolverTest.Foo());
-        mrsh.marshal(page, new StringWriter());
+        page.inject(new XslResolverTest.Injectable());
+        final StringWriter writer = new StringWriter();
+        mrsh.marshal(page, writer);
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(writer.toString()),
+            XmlMatchers.hasXPath("/page/injectable/name")
+        );
     }
 
     /**
@@ -160,14 +166,14 @@ public final class XslResolverTest {
     @Test
     public void testDefaultStylesheetPI() throws Exception {
         final XslResolver resolver = new XslResolver();
-        final Marshaller mrsh = resolver.getContext(Page.class);
+        final Marshaller mrsh = resolver.getContext(XslResolverTest.Page.class);
         final Page page = new XslResolverTest.Page();
         final StringWriter writer = new StringWriter();
         mrsh.marshal(page, writer);
         MatcherAssert.assertThat(
             XhtmlConverter.the(writer.toString()),
             XmlMatchers.hasXPath(
-                "/processing-instruction('xml-stylesheet')[@type='text/xml' and @href='/xsl/XslResolverTest$Page.xsl']"
+                "/processing-instruction('xml-stylesheet')[contains(.,'Page.xsl')]"
             )
         );
     }
@@ -179,14 +185,14 @@ public final class XslResolverTest {
     @Test
     public void testStylesheetAnnotation() throws Exception {
         final XslResolver resolver = new XslResolver();
-        final Marshaller mrsh = resolver.getContext(Page.class);
+        final Marshaller mrsh = resolver.getContext(XslResolverTest.Bar.class);
         final Bar bar = new XslResolverTest.Bar();
         final StringWriter writer = new StringWriter();
         mrsh.marshal(bar, writer);
         MatcherAssert.assertThat(
             XhtmlConverter.the(writer.toString()),
             XmlMatchers.hasXPath(
-                "/processing-instruction('xml-stylesheet')[@type='text/xml' and @href='/xsl/test.xsl']"
+                "/processing-instruction('xml-stylesheet')[contains(.,'test.xsl')]"
             )
         );
     }
@@ -197,7 +203,7 @@ public final class XslResolverTest {
         /**
          * Injected object.
          */
-        private Object injected = "some text";
+        private Object injected = null;
         /**
          * Inject an object.
          * @param obj The object to inject
@@ -217,15 +223,15 @@ public final class XslResolverTest {
          * Injected object.
          * @return The object
          */
-        @XmlElement
+        @XmlAnyElement(lax=true)
         public Object getInjected() {
             return this.injected;
         }
     }
 
-    @XmlType(name = "foo")
+    @XmlRootElement(name = "injectable")
     @XmlAccessorType(XmlAccessType.NONE)
-    public static final class Foo {
+    public static final class Injectable {
         /**
          * Simple name.
          * @return The name
