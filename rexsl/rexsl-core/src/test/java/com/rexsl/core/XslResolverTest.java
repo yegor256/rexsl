@@ -143,9 +143,11 @@ public final class XslResolverTest {
      */
     @Test
     public void testDynamicallyExtendableObject() throws Exception {
-        final Marshaller mrsh = new XslResolver().getContext(Page.class);
-        final Page page = new Page();
-        page.inject(new Foo());
+        final XslResolver resolver = new XslResolver();
+        resolver.add(XslResolverTest.Foo.class);
+        final Marshaller mrsh = resolver.getContext(Page.class);
+        final Page page = new XslResolverTest.Page();
+        page.inject(new XslResolverTest.Foo());
         mrsh.marshal(page, new StringWriter());
     }
 
