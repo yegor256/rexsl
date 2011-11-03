@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.rexsl.test.XhtmlConverter;
 import java.io.StringWriter;
 import javax.servlet.ServletContext;
 import javax.ws.rs.ext.ContextResolver;
@@ -49,6 +50,7 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.xmlmatchers.XmlMatchers;
 
 /**
  * XslResolver test case.
@@ -151,6 +153,44 @@ public final class XslResolverTest {
         mrsh.marshal(page, new StringWriter());
     }
 
+    /**
+     * By default stylesheet processing instruction should be injected.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testDefaultStylesheetPI() throws Exception {
+        final XslResolver resolver = new XslResolver();
+        final Marshaller mrsh = resolver.getContext(Page.class);
+        final Page page = new XslResolverTest.Page();
+        final StringWriter writer = new StringWriter();
+        mrsh.marshal(page, writer);
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(writer.toString()),
+            XmlMatchers.hasXPath(
+                "/processing-instruction('xml-stylesheet')[@type='text/xml' and @href='/xsl/XslResolverTest$Page.xsl']"
+            )
+        );
+    }
+
+    /**
+     * Stylesheet annotation should change the stylesheet injection.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testStylesheetAnnotation() throws Exception {
+        final XslResolver resolver = new XslResolver();
+        final Marshaller mrsh = resolver.getContext(Page.class);
+        final Bar bar = new XslResolverTest.Bar();
+        final StringWriter writer = new StringWriter();
+        mrsh.marshal(bar, writer);
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(writer.toString()),
+            XmlMatchers.hasXPath(
+                "/processing-instruction('xml-stylesheet')[@type='text/xml' and @href='/xsl/test.xsl']"
+            )
+        );
+    }
+
     @XmlRootElement(name = "page")
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Page {
@@ -193,6 +233,20 @@ public final class XslResolverTest {
         @XmlElement
         public String getName() {
             return "some foo name";
+        }
+    }
+
+    @XmlRootElement(name = "page")
+    @XmlAccessorType(XmlAccessType.NONE)
+    @Stylesheet("test")
+    public static final class Bar {
+        /**
+         * Simple name.
+         * @return The name
+         */
+        @XmlElement
+        public String getName() {
+            return "another name";
         }
     }
 
