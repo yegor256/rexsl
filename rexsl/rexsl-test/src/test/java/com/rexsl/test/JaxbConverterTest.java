@@ -34,8 +34,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
 import org.xmlmatchers.XmlMatchers;
 
@@ -54,7 +54,7 @@ public final class JaxbConverterTest {
     @Test
     public void testObjectToXmlConversion() throws Exception {
         final Object object = new Employee();
-        Assert.assertThat(
+        MatcherAssert.assertThat(
             JaxbConverter.the(object),
             XmlMatchers.hasXPath("/employee/name[.='John Doe']")
         );
@@ -67,7 +67,7 @@ public final class JaxbConverterTest {
     @Test
     public void testToStringConversion() throws Exception {
         final Object object = new Employee();
-        Assert.assertThat(
+        MatcherAssert.assertThat(
             JaxbConverter.the(object).toString(),
             Matchers.containsString("John")
         );
@@ -81,7 +81,7 @@ public final class JaxbConverterTest {
     public void testDynamicallyExtendableObject() throws Exception {
         final Employee employee = new Employee();
         employee.inject(new Foo());
-        Assert.assertThat(
+        MatcherAssert.assertThat(
             JaxbConverter.the(employee, Foo.class),
             XmlMatchers.hasXPath("/employee/injected/name")
         );

@@ -56,6 +56,22 @@ public final class XhtmlConverterTest {
     }
 
     /**
+     * Processing instructions should be preserved.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testProcessingInstructionsPreserving() throws Exception {
+        final String text =
+            "<?xml version='1.0'?><?pi name='foo'?><page><a>123</a></page>";
+        Assert.assertThat(
+            XhtmlConverter.the(text),
+            XmlMatchers.hasXPath(
+                "/processing-instruction('pi')[contains(.,'foo')]"
+            )
+        );
+    }
+
+    /**
      * Let's use DOCTYPE, which may cause troubles.
      * @throws Exception If something goes wrong inside
      */

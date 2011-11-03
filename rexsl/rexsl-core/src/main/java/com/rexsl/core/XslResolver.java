@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import com.ymock.util.Logger;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
@@ -128,11 +129,10 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         Marshaller mrsh;
         try {
             mrsh = this.context(type).createMarshaller();
-            mrsh.setProperty(Marshaller.JAXB_FRAGMENT, true);
+            mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             final String header = String.format(
-                // @checkstyle LineLength (1 line)
-                "<?xml version='1.0'?><?xml-stylesheet type='text/xml' href='/xsl/%s.xsl'?>",
-                type.getSimpleName()
+                "<?xml-stylesheet type='text/xml' href='/xsl/%s.xsl'?>",
+                this.stylesheet(type)
             );
             mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
         } catch (javax.xml.bind.JAXBException ex) {
@@ -191,6 +191,29 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     private JAXBContext context(final Class cls) {
         this.add(cls);
         return this.context;
+    }
+
+    /**
+     * Returns the name of XSL stylesheet for this type.
+     * @param type The class
+     * @return The name of stylesheet
+     * @see #getContext(Class)
+     */
+    private String stylesheet(final Class<?> type) {
+        final Annotation antn = type.getAnnotation(Stylesheet.class);
+        String stylesheet;
+        if (antn == null) {
+            stylesheet = type.getSimpleName();
+        } else {
+            stylesheet = ((Stylesheet) antn).value();
+        }
+        Logger.debug(
+            this,
+            "#stylesheet(%s): '%s' stylesheet discovered",
+            type.getName(),
+            stylesheet
+        );
+        return stylesheet;
     }
 
 }

@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.rexsl.test.XhtmlConverter;
 import java.io.StringWriter;
 import javax.servlet.ServletContext;
 import javax.ws.rs.ext.ContextResolver;
@@ -37,9 +38,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
@@ -49,6 +50,7 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.xmlmatchers.XmlMatchers;
 
 /**
  * XslResolver test case.
@@ -144,11 +146,56 @@ public final class XslResolverTest {
     @Test
     public void testDynamicallyExtendableObject() throws Exception {
         final XslResolver resolver = new XslResolver();
-        resolver.add(XslResolverTest.Foo.class);
+        resolver.add(XslResolverTest.Injectable.class);
         final Marshaller mrsh = resolver.getContext(Page.class);
         final Page page = new XslResolverTest.Page();
-        page.inject(new XslResolverTest.Foo());
-        mrsh.marshal(page, new StringWriter());
+        page.inject(new XslResolverTest.Injectable());
+        final StringWriter writer = new StringWriter();
+        mrsh.marshal(page, writer);
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(writer.toString()),
+            XmlMatchers.hasXPath("/page/injectable/name")
+        );
+    }
+
+    /**
+     * By default stylesheet processing instruction should be injected.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testDefaultStylesheetPI() throws Exception {
+        final XslResolver resolver = new XslResolver();
+        final Marshaller mrsh = resolver.getContext(XslResolverTest.Page.class);
+        final Page page = new XslResolverTest.Page();
+        final StringWriter writer = new StringWriter();
+        mrsh.marshal(page, writer);
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(writer.toString()),
+            XmlMatchers.hasXPath(
+                // @checkstyle LineLength (1 line)
+                "/processing-instruction('xml-stylesheet')[contains(.,'Page.xsl')]"
+            )
+        );
+    }
+
+    /**
+     * Stylesheet annotation should change the stylesheet injection.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testStylesheetAnnotation() throws Exception {
+        final XslResolver resolver = new XslResolver();
+        final Marshaller mrsh = resolver.getContext(XslResolverTest.Bar.class);
+        final Bar bar = new XslResolverTest.Bar();
+        final StringWriter writer = new StringWriter();
+        mrsh.marshal(bar, writer);
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(writer.toString()),
+            XmlMatchers.hasXPath(
+                // @checkstyle LineLength (1 line)
+                "/processing-instruction('xml-stylesheet')[contains(.,'test.xsl')]"
+            )
+        );
     }
 
     @XmlRootElement(name = "page")
@@ -157,7 +204,7 @@ public final class XslResolverTest {
         /**
          * Injected object.
          */
-        private Object injected = "some text";
+        private Object injected;
         /**
          * Inject an object.
          * @param obj The object to inject
@@ -177,15 +224,15 @@ public final class XslResolverTest {
          * Injected object.
          * @return The object
          */
-        @XmlElement
+        @XmlAnyElement(lax = true)
         public Object getInjected() {
             return this.injected;
         }
     }
 
-    @XmlType(name = "foo")
+    @XmlRootElement(name = "injectable")
     @XmlAccessorType(XmlAccessType.NONE)
-    public static final class Foo {
+    public static final class Injectable {
         /**
          * Simple name.
          * @return The name
@@ -193,6 +240,20 @@ public final class XslResolverTest {
         @XmlElement
         public String getName() {
             return "some foo name";
+        }
+    }
+
+    @XmlRootElement(name = "page")
+    @XmlAccessorType(XmlAccessType.NONE)
+    @Stylesheet("test")
+    public static final class Bar {
+        /**
+         * Simple name.
+         * @return The name
+         */
+        @XmlElement
+        public String getName() {
+            return "another name";
         }
     }
 
