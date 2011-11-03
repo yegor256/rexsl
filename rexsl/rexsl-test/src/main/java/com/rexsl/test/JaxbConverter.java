@@ -108,11 +108,18 @@ public final class JaxbConverter {
      * </pre>
      *
      * @param object The object to convert
+     * @param deps Dependencies that we should take into account
      * @return DOM source/document
      * @throws Exception If anything goes wrong
      */
-    public static Source the(final Object object) throws Exception {
-        final JAXBContext ctx = JAXBContext.newInstance(object.getClass());
+    public static Source the(final Object object,
+        final Class... deps) throws Exception {
+        final Class[] classes = new Class[deps.length + 1];
+        classes[0] = object.getClass();
+        for (int pos = 0; pos < deps.length; pos += 1) {
+            classes[pos + 1] = deps[pos];
+        }
+        final JAXBContext ctx = JAXBContext.newInstance(classes);
         final Marshaller mrsh = ctx.createMarshaller();
         mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         final StringWriter writer = new StringWriter();

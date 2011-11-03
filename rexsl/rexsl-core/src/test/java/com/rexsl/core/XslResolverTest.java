@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import java.io.StringWriter;
 import javax.servlet.ServletContext;
 import javax.ws.rs.ext.ContextResolver;
 import javax.xml.bind.JAXBContext;
@@ -38,6 +39,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
@@ -62,7 +64,6 @@ public final class XslResolverTest {
      * Let's test.
      * @throws Exception If something goes wrong
      */
-    @Ignore
     @Test
     public void testInstantiatesMarshaller() throws Exception {
         final ContextResolver<Marshaller> resolver = new XslResolver();
@@ -91,7 +92,6 @@ public final class XslResolverTest {
      * Let's test.
      * @throws Exception If something goes wrong
      */
-    @Ignore
     @Test(expected = IllegalStateException.class)
     public void testMarshallerException() throws Exception {
         PowerMockito.mockStatic(JAXBContext.class);
@@ -104,7 +104,6 @@ public final class XslResolverTest {
      * Let's test.
      * @throws Exception If something goes wrong
      */
-    @Ignore
     @Test(expected = IllegalStateException.class)
     public void testCreateMarshallerException() throws Exception {
         PowerMockito.mockStatic(JAXBContext.class);
@@ -138,16 +137,62 @@ public final class XslResolverTest {
         // verify(spy, times(0)).createContext();
     }
 
+    /**
+     * Create a marshaller for dynamically extendable object.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testDynamicallyExtendableObject() throws Exception {
+        final XslResolver resolver = new XslResolver();
+        resolver.add(XslResolverTest.Foo.class);
+        final Marshaller mrsh = resolver.getContext(Page.class);
+        final Page page = new XslResolverTest.Page();
+        page.inject(new XslResolverTest.Foo());
+        mrsh.marshal(page, new StringWriter());
+    }
+
     @XmlRootElement(name = "page")
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Page {
         /**
+         * Injected object.
+         */
+        private Object injected = "some text";
+        /**
+         * Inject an object.
+         * @param obj The object to inject
+         */
+        public void inject(final Object obj) {
+            this.injected = obj;
+        }
+        /**
          * Simple name.
          * @return The name
          */
-        @XmlElement(name = "name")
+        @XmlElement
         public String getName() {
             return "some name";
+        }
+        /**
+         * Injected object.
+         * @return The object
+         */
+        @XmlElement
+        public Object getInjected() {
+            return this.injected;
+        }
+    }
+
+    @XmlType(name = "foo")
+    @XmlAccessorType(XmlAccessType.NONE)
+    public static final class Foo {
+        /**
+         * Simple name.
+         * @return The name
+         */
+        @XmlElement
+        public String getName() {
+            return "some foo name";
         }
     }
 

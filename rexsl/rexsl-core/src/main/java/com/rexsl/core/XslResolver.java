@@ -159,11 +159,10 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     }
 
     /**
-     * Create and return a context.
-     * @param cls The class we should process
-     * @return The context
+     * Add new class to context.
+     * @param cls The class we should add
      */
-    private JAXBContext context(final Class cls) {
+    public void add(final Class cls) {
         synchronized (this) {
             if (!this.classes.contains(cls)) {
                 try {
@@ -173,7 +172,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                     );
                     Logger.info(
                         this,
-                        "#context(%s): added to JAXBContext (%d total)",
+                        "#add(%s): added to JAXBContext (%d total)",
                         cls.getName(),
                         this.classes.size()
                     );
@@ -181,8 +180,17 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                     throw new IllegalStateException(ex);
                 }
             }
-            return this.context;
         }
+    }
+
+    /**
+     * Create and return a context.
+     * @param cls The class we should process
+     * @return The context
+     */
+    private JAXBContext context(final Class cls) {
+        this.add(cls);
+        return this.context;
     }
 
 }
