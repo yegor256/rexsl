@@ -41,7 +41,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
@@ -173,6 +172,7 @@ public final class XslResolverTest {
         MatcherAssert.assertThat(
             XhtmlConverter.the(writer.toString()),
             XmlMatchers.hasXPath(
+                // @checkstyle LineLength (1 line)
                 "/processing-instruction('xml-stylesheet')[contains(.,'Page.xsl')]"
             )
         );
@@ -192,6 +192,7 @@ public final class XslResolverTest {
         MatcherAssert.assertThat(
             XhtmlConverter.the(writer.toString()),
             XmlMatchers.hasXPath(
+                // @checkstyle LineLength (1 line)
                 "/processing-instruction('xml-stylesheet')[contains(.,'test.xsl')]"
             )
         );
@@ -203,7 +204,7 @@ public final class XslResolverTest {
         /**
          * Injected object.
          */
-        private Object injected = null;
+        private Object injected;
         /**
          * Inject an object.
          * @param obj The object to inject
@@ -223,7 +224,7 @@ public final class XslResolverTest {
          * Injected object.
          * @return The object
          */
-        @XmlAnyElement(lax=true)
+        @XmlAnyElement(lax = true)
         public Object getInjected() {
             return this.injected;
         }

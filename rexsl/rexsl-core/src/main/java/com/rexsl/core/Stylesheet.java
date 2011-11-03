@@ -47,7 +47,6 @@ public @interface Stylesheet {
 
     /**
      * Get it's value.
-     * @return The value
      */
     String value();
 
