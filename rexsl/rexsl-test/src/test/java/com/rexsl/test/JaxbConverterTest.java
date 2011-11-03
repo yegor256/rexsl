@@ -82,7 +82,7 @@ public final class JaxbConverterTest {
         final Employee employee = new Employee();
         employee.inject(new Foo());
         Assert.assertThat(
-            JaxbConverter.the(employee),
+            JaxbConverter.the(employee, Foo.class),
             XmlMatchers.hasXPath("/employee/injected/name")
         );
     }
