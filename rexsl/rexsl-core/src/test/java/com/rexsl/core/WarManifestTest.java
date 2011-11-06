@@ -46,8 +46,8 @@ public final class WarManifestTest {
      */
     @Test
     public void testPropertyReading() throws Exception {
-        final String value = WarManifest.INSTANCE.read("Manifest-Version");
-        MatcherAssert.assertThat(value, Matchers.notNullValue());
+        final String value = WarManifest.INSTANCE.read("REXSL-Test-Attribute");
+        MatcherAssert.assertThat(value, Matchers.equalTo("works"));
     }
 
     /**

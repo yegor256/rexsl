@@ -57,6 +57,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
+ * @since 0.2
  */
 public final class XsltFilter implements Filter {
 
@@ -69,6 +70,13 @@ public final class XsltFilter implements Filter {
      * Context for the filter.
      */
     private ServletContext context;
+
+    /**
+     * Public ctor.
+     */
+    public XsltFilter() {
+        // intentionally empty
+    }
 
     /**
      * {@inheritDoc}

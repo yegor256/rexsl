@@ -49,6 +49,7 @@ import javax.xml.bind.Marshaller;
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  * @link <a href="http://markmail.org/search/?q=list%3Anet.java.dev.jersey.users+ContextResolver%3CMarshaller%3E#query:list%3Anet.java.dev.jersey.users%20ContextResolver%3CMarshaller%3E+page:1+mid:q4fkq6eqlgkzdodc+state:results">discussion</a>
+ * @since 0.2
  */
 @Provider
 @Produces(MediaType.APPLICATION_XML)
@@ -69,6 +70,13 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * JAXB context.
      */
     private JAXBContext context;
+
+    /**
+     * Public ctor.
+     */
+    public XslResolver() {
+        // intentionally empty
+    }
 
     /**
      * Set servlet context from container.

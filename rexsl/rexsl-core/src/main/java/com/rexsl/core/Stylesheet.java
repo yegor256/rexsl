@@ -40,6 +40,7 @@ import java.lang.annotation.Target;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @since 0.3
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

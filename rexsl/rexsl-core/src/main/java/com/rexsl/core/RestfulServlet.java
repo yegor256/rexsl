@@ -53,6 +53,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see <a href="http://www.rexsl.com">Introduction to ReXSL</a>
+ * @since 0.2
  */
 public final class RestfulServlet extends HttpServlet {
 
@@ -65,6 +66,13 @@ public final class RestfulServlet extends HttpServlet {
      * Jersey servlet.
      */
     private final ServletContainer jersey = new ServletContainer();
+
+    /**
+     * Public ctor.
+     */
+    public RestfulServlet() {
+        super();
+    }
 
     /**
      * {@inheritDoc}

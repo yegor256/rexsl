@@ -47,6 +47,7 @@ import javax.xml.bind.Marshaller;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see XslResolver#getContext(Class)
+ * @since 0.2
  */
 public interface JaxbConfigurator {
 

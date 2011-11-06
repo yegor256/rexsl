@@ -1,0 +1,2 @@
+Comment: This file is used by WarManifestTest.java
+REXSL-Test-Attribute: works

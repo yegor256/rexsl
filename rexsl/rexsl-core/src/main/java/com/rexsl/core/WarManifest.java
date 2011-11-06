@@ -44,11 +44,63 @@ import org.apache.commons.lang.StringUtils;
  * Wrapper around <tt>MANIFEST.MF</tt> files.
  *
  * The class will read all <tt>MANIFEST.MF</tt> files available in classpath
- * and all properties from them.
+ * and all properties from them. This mechanism is very useful for sending
+ * information from continuous integration environment to the production
+ * environment. For example, you want you site to show project version and
+ * date of when WAR file was packaged. First, you configure
+ * <tt>maven-war-plugin</tt> to add this information to <tt>MANIFEST.MF</tt>:
+ *
+ * <pre>
+ * {@code
+ * <plugin>
+ *  <artifactId>maven-war-plugin</artifactId>
+ *  <configuration>
+ *   <archive>
+ *    <manifestEntries>
+ *     <Foo-Version>$&#123;project.version&#125;</Foo-Version>
+ *     <Foo-Date>$&#123;maven.build.timestamp&#125;</Foo-Date>
+ *    </manifestEntries>
+ *   </archive>
+ *  </configuration>
+ * </plugin>
+ * }
+ * </pre>
+ *
+ * <p>The plugin will add these attributes to your <tt>MANIFEST.MF</tt> and the
+ * project will be deployed to the production environment. Then, you can read
+ * them where it's necessary (in one of your JAXB annotated objects,
+ * for example) and show to users:
+ *
+ * <pre>
+ * {@code
+ * import com.rexsl.core.WarManifest.
+ * import java.text.SimpleDateFormat;
+ * import java.util.Date;
+ * import java.util.Locale;
+ * import javax.xml.bind.annotation.XmlElement;
+ * import javax.xml.bind.annotation.XmlRootElement;
+ * &#64;XmlRootElement
+ * public final class Page &#123;
+ *   &#64;XmlElement
+ *   public String version() &#123;
+ *    return WarManifest.INSTANCE.read("Foo-Version");
+ *   &#125;
+ *   &#64;XmlElement
+ *   public Date date() &#123;
+ *    return new SimpleDateFormat("yyyy.MM.dd", Locale.ENGLISH).parse(
+ *     WarManifest.INSTANCE.read("Foo-Date");
+ *    );
+ *   &#125;
+ * &#125;
+ * }
+ * </pre>
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Prasath Premkumar (popprem@gmail.com)
  * @version $Id$
+ * @see <a href="http://download.oracle.com/javase/1,5.0/docs/guide/jar/jar.html#JAR%20Manifest">JAR Manifest</a>
+ * @see <a href="http://maven.apache.org/shared/maven-archiver/index.html">Maven Archiver</a>
+ * @since 0.3
  */
 public final class WarManifest {
 
