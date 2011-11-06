@@ -48,10 +48,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Core servlet.
+ * The only and the main servlet from ReXSL framework.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see <a href="http://www.rexsl.com">Introduction to ReXSL</a>
  */
 public final class RestfulServlet extends HttpServlet {
 

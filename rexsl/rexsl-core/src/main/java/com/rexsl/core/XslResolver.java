@@ -43,7 +43,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
 /**
- * Replace standard marshaller.
+ * Provider of JAXB {@link Marshaller} for JAX-RS framework.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)

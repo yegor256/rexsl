@@ -42,6 +42,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -58,11 +59,6 @@ import javax.xml.transform.stream.StreamSource;
  * @version $Id$
  */
 public final class XsltFilter implements Filter {
-
-    /**
-     * MIME type that we're looking for.
-     */
-    public static final String MIME_XML = "application/xml";
 
     /**
      * Character encoding of the page.
@@ -194,7 +190,7 @@ public final class XsltFilter implements Filter {
      */
     private Boolean isXmlExplicitlyRequested(final String header) {
         final Boolean requested = (header != null)
-            && (this.MIME_XML.equals(header));
+            && (MediaType.APPLICATION_XML.equals(header));
         Logger.debug(
             this,
             "#isXmlExplicitlyRequested('%s'): %b",
@@ -215,7 +211,7 @@ public final class XsltFilter implements Filter {
      */
     private Boolean acceptsXml(final String header) {
         final Boolean accepts = (header != null)
-            && (header.contains(this.MIME_XML));
+            && (header.contains(MediaType.APPLICATION_XML));
         Logger.debug(
             this,
             "#acceptsXml('%s'): %b",
