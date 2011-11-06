@@ -146,9 +146,8 @@ public final class RestfulServlet extends HttpServlet {
         this.jersey.service(request, response);
         Logger.debug(
             this,
-            "#service(%s): status %d by Jersey in %.3f sec",
+            "#service(%s): by Jersey in %.3f sec",
             request.getRequestURI(),
-            response.getStatus(),
             // @checkstyle MagicNumber (1 line)
             (double) (System.nanoTime() - start) / (1000 * 1000 * 1000)
         );
