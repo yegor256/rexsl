@@ -45,10 +45,12 @@ import javax.xml.bind.Marshaller;
 /**
  * Provider of JAXB {@link Marshaller} for JAX-RS framework.
  *
+ * <p>You don't need to use this class directly. It is made public only becuase
+ * JAX-RS implementation should be able to discover it in classpath.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
- * @link <a href="http://markmail.org/search/?q=list%3Anet.java.dev.jersey.users+ContextResolver%3CMarshaller%3E#query:list%3Anet.java.dev.jersey.users%20ContextResolver%3CMarshaller%3E+page:1+mid:q4fkq6eqlgkzdodc+state:results">discussion</a>
  * @since 0.2
  */
 @Provider

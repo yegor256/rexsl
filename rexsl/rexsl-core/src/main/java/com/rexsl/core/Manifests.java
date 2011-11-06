@@ -96,6 +96,7 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  * @see <a href="http://download.oracle.com/javase/1,5.0/docs/guide/jar/jar.html#JAR%20Manifest">JAR Manifest</a>
  * @see <a href="http://maven.apache.org/shared/maven-archiver/index.html">Maven Archiver</a>
+ * @see <a href="http://trac.fazend.com/rexsl/ticket/55">Class was introduced in ticket #55</a>
  * @since 0.3
  */
 public final class Manifests {
@@ -121,7 +122,7 @@ public final class Manifests {
     }
 
     /**
-     * Read one property and convert to the type requested.
+     * Read one property available in one of <tt>MANIFEST.MF</tt> files.
      *
      * <p>If such a property doesn't exist {@link IllegalArgumentException}
      * will be thrown.

@@ -54,6 +54,24 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * Converts XML to XHTML, if necessary.
  *
+ * <p>You don't need to instantiate this class directly. It is instantiated
+ * by servlet container according to configuration from <tt>web.xml</tt>.
+ * Should be used in <tt>web.xml</tt> (together with {@link RestfulServlet})
+ * like this:
+ *
+ * <pre>
+ * &lt;filter>
+ *  &lt;filter-name>XsltFilter&lt;/filter-name>
+ *  &lt;filter-class>com.rexsl.core.XsltFilter&lt;/filter-class>
+ * &lt;/filter>
+ * &lt;filter-mapping>
+ *  &lt;filter-name>XsltFilter&lt;/filter-name>
+ *  &lt;servlet-name>RestfulServlet&lt;/servlet-name>
+ *  &lt;dispatcher>REQUEST&lt;/dispatcher>
+ *  &lt;dispatcher>ERROR&lt;/dispatcher>
+ * &lt;/filter-mapping>
+ * </pre>
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
