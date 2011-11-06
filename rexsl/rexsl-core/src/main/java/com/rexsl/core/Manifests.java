@@ -73,7 +73,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * <pre>
  * {@code
- * import com.rexsl.core.WarManifest.
+ * import com.rexsl.core.Manifests.
  * import java.text.SimpleDateFormat;
  * import java.util.Date;
  * import java.util.Locale;
@@ -83,12 +83,12 @@ import org.apache.commons.lang.StringUtils;
  * public final class Page &#123;
  *   &#64;XmlElement
  *   public String version() &#123;
- *    return WarManifest.INSTANCE.read("Foo-Version");
+ *    return Manifests.INSTANCE.read("Foo-Version");
  *   &#125;
  *   &#64;XmlElement
  *   public Date date() &#123;
  *    return new SimpleDateFormat("yyyy.MM.dd", Locale.ENGLISH).parse(
- *     WarManifest.INSTANCE.read("Foo-Date");
+ *     Manifests.INSTANCE.read("Foo-Date");
  *    );
  *   &#125;
  * &#125;
@@ -102,12 +102,12 @@ import org.apache.commons.lang.StringUtils;
  * @see <a href="http://maven.apache.org/shared/maven-archiver/index.html">Maven Archiver</a>
  * @since 0.3
  */
-public final class WarManifest {
+public final class Manifests {
 
     /**
      * Singleton instance.
      */
-    public static final WarManifest INSTANCE = new WarManifest();
+    public static final Manifests INSTANCE = new Manifests();
 
     /**
      * Properties retrieved from all existing <tt>MANIFEST.MF</tt> files.
@@ -118,7 +118,7 @@ public final class WarManifest {
     /**
      * Private ctor.
      */
-    private WarManifest() {
+    private Manifests() {
         synchronized (this) {
             this.properties = this.load();
         }
@@ -149,6 +149,7 @@ public final class WarManifest {
     /**
      * Load properties from all files.
      * @return The properties loaded
+     * @see #Manifests()
      */
     private Map<String, String> load() {
         final Map<String, String> props = new HashMap<String, String>();
@@ -178,6 +179,7 @@ public final class WarManifest {
      * Load properties from one file.
      * @param url The URL of it
      * @return The properties loaded
+     * @see #load()
      */
     private Map<String, String> loadOneFile(final URL url) {
         final Map<String, String> props = new HashMap<String, String>();

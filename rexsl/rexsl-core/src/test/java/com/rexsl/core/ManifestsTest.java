@@ -34,11 +34,11 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link WarManifest}.
+ * Test case for {@link Manifests}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class WarManifestTest {
+public final class ManifestsTest {
 
     /**
      * Read single property, which always exist in MANIFEST.MF.
@@ -46,7 +46,7 @@ public final class WarManifestTest {
      */
     @Test
     public void testPropertyReading() throws Exception {
-        final String value = WarManifest.INSTANCE.read("REXSL-Test-Attribute");
+        final String value = Manifests.INSTANCE.read("REXSL-Test-Attribute");
         MatcherAssert.assertThat(value, Matchers.equalTo("works"));
     }
 
@@ -56,7 +56,7 @@ public final class WarManifestTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testAbsentPropertyReading() throws Exception {
-        final String value = WarManifest.INSTANCE.read("absent-property");
+        final String value = Manifests.INSTANCE.read("absent-property");
     }
 
 }
