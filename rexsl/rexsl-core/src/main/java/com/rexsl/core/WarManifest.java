@@ -59,6 +59,7 @@ public final class WarManifest {
 
     /**
      * Properties retrieved from all existing <tt>MANIFEST.MF</tt> files.
+     * @see #load()
      */
     private final Map<String, String> properties;
 
@@ -85,7 +86,7 @@ public final class WarManifest {
         if (value == null) {
             throw new IllegalArgumentException(
                 String.format(
-                    "Property '%s' not found in MANIFEST.MF",
+                    "Property '%s' not found in any MANIFEST.MF file",
                     name
                 )
             );
