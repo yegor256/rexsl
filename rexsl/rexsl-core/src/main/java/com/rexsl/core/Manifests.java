@@ -51,19 +51,17 @@ import org.apache.commons.lang.StringUtils;
  * <tt>maven-war-plugin</tt> to add this information to <tt>MANIFEST.MF</tt>:
  *
  * <pre>
- * {@code
- * <plugin>
- *  <artifactId>maven-war-plugin</artifactId>
- *  <configuration>
- *   <archive>
- *    <manifestEntries>
- *     <Foo-Version>$&#123;project.version&#125;</Foo-Version>
- *     <Foo-Date>$&#123;maven.build.timestamp&#125;</Foo-Date>
- *    </manifestEntries>
- *   </archive>
- *  </configuration>
- * </plugin>
- * }
+ * &lt;plugin>
+ *  &lt;artifactId>maven-war-plugin&lt;/artifactId>
+ *  &lt;configuration>
+ *   &lt;archive>
+ *    &lt;manifestEntries>
+ *     &lt;Foo-Version>${project.version}&lt;/Foo-Version>
+ *     &lt;Foo-Date>${maven.build.timestamp}&lt;/Foo-Date>
+ *    &lt;/manifestEntries>
+ *   &lt;/archive>
+ *  &lt;/configuration>
+ * &lt;/plugin>
  * </pre>
  *
  * <p>The plugin will add these attributes to your <tt>MANIFEST.MF</tt> and the
@@ -72,7 +70,6 @@ import org.apache.commons.lang.StringUtils;
  * for example) and show to users:
  *
  * <pre>
- * {@code
  * import com.rexsl.core.Manifests.
  * import java.text.SimpleDateFormat;
  * import java.util.Date;
@@ -80,18 +77,17 @@ import org.apache.commons.lang.StringUtils;
  * import javax.xml.bind.annotation.XmlElement;
  * import javax.xml.bind.annotation.XmlRootElement;
  * &#64;XmlRootElement
- * public final class Page &#123;
+ * public final class Page {
  *   &#64;XmlElement
- *   public String version() &#123;
+ *   public String version() {
  *    return Manifests.INSTANCE.read("Foo-Version");
- *   &#125;
+ *   }
  *   &#64;XmlElement
- *   public Date date() &#123;
+ *   public Date date() {
  *    return new SimpleDateFormat("yyyy.MM.dd", Locale.ENGLISH).parse(
  *     Manifests.INSTANCE.read("Foo-Date");
  *    );
- *   &#125;
- * &#125;
+ *   }
  * }
  * </pre>
  *
