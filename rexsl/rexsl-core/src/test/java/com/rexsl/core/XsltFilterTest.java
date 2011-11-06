@@ -38,6 +38,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -101,7 +102,7 @@ public final class XsltFilterTest {
         Mockito.reset(this.transformer);
         // the agent is not provided, but it explicitly is asking
         // for clear XML - we provide it
-        this.filter(XsltFilter.MIME_XML, null);
+        this.filter(MediaType.APPLICATION_XML, null);
         this.verifyNoTransformation();
         Mockito.reset(this.transformer);
         // the agent didn't provide any information about itself,

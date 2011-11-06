@@ -56,19 +56,17 @@ public final class JaxbConverter {
      * <p>Let's consider an example JAXB-annotated class:
      *
      * <pre>
-     * {@code
      * import javax.xml.bind.annotation.XmlAccessType;
      * import javax.xml.bind.annotation.XmlAccessorType;
      * import javax.xml.bind.annotation.XmlElement;
      * import javax.xml.bind.annotation.XmlRootElement;
-     * @XmlRootElement(name = "employee")
-     * @XmlAccessorType(XmlAccessType.NONE)
+     * &#64;XmlRootElement(name = "employee")
+     * &#64;XmlAccessorType(XmlAccessType.NONE)
      * private static final class Employee {
-     *   @XmlElement(name = "name")
+     *   &#64;XmlElement(name = "name")
      *   public String getName() {
      *     return "John Doe";
      *   }
-     * }
      * }
      * </pre>
      *
@@ -76,14 +74,13 @@ public final class JaxbConverter {
      * to XML (in a unit test):
      *
      * <pre>
-     * {@code
      * import com.rexsl.test.JaxbConverter;
      * import org.hamcrest.Matchers;
      * import org.junit.Assert;
      * import org.junit.Test;
      * import org.xmlmatchers.XmlMatchers;
      * public final class EmployeeTest {
-     *   @Test
+     *   &#64;Test
      *   public void testObjectToXmlConversion() throws Exception {
      *     final Object object = new Employee();
      *     Assert.assertThat(
@@ -92,19 +89,17 @@ public final class JaxbConverter {
      *     );
      *   }
      * }
-     * }
      * </pre>
      *
      * <p>We recommend to use <tt>XmlMatchers</tt> class from this Maven
      * artifact:
+     *
      * <pre>
-     * {@code
      * &lt;dependency>
      *   &lt;groupId>org.xmlmatchers&lt;/groupId>
      *   &lt;artifactId>xml-matchers&lt;/artifactId>
      *   &lt;version>0.10&lt;/version>
      * &lt;/dependency>
-     * }
      * </pre>
      *
      * @param object The object to convert

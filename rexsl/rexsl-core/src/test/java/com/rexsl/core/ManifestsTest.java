@@ -27,15 +27,36 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.core;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
- * Core artifact of ReXSL framework.
- *
- * <p>Read <a href="http://www.rexsl.com">Introduction to ReXSL</a> to get
- * better understanding of how it works.
- *
+ * Test case for {@link Manifests}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://www.rexsl.com">Introduction to ReXSL</a>
  */
-package com.rexsl.core;
+public final class ManifestsTest {
+
+    /**
+     * Read single property, which always exist in MANIFEST.MF.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testPropertyReading() throws Exception {
+        final String value = Manifests.INSTANCE.read("REXSL-Test-Attribute");
+        MatcherAssert.assertThat(value, Matchers.equalTo("works"));
+    }
+
+    /**
+     * Read non-existing property.
+     * @throws Exception If something goes wrong
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAbsentPropertyReading() throws Exception {
+        final String value = Manifests.INSTANCE.read("absent-property");
+    }
+
+}
