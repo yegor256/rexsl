@@ -62,7 +62,7 @@ How to add extra functionality during tests?
           WhatIfRuntimeException.groovy
 +--
 
-  This is how <<<RuntimeExceptionStub.java>> may look like:
+  This is how <<<RuntimeExceptionStub.java>>> may look like:
 
 +--
 package foo;
