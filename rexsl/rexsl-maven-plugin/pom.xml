@@ -55,6 +55,7 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <!-- Logging facility. -->
@@ -184,12 +185,6 @@
                     <artifactId>servlet-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <!-- JAXB 2.0 API. -->
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version since="2 Sep 2011">2.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

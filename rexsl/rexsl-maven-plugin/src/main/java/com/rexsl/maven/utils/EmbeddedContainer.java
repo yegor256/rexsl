@@ -88,7 +88,7 @@ public final class EmbeddedContainer {
         // it is required because of classloading conflict between
         // Maven classloader and Jetty WebApp classloader
         // @see http://docs.codehaus.org/display/JETTY/Classloading
-        ctx.setParentLoaderPriority(true);
+        ctx.setParentLoaderPriority(false);
         if (env.useRuntimeFiltering()) {
             ctx.addFilter(
                 RuntimeFilter.class,
@@ -154,12 +154,9 @@ public final class EmbeddedContainer {
             StringUtils.join(folders, ";")
         );
         params.put(
-            "com.rexsl.maven.utils.XSD_FOLDER",
+            // this parameter is used by com.rexsl.core.XslResolver
+            "com.rexsl.core.XSD_FOLDER",
             new File(env.basedir(), "src/test/rexsl/xsd").getPath()
-        );
-        params.put(
-            "com.rexsl.core.CONFIGURATOR",
-            XsdConfigurator.class.getName()
         );
         return params;
     }
