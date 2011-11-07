@@ -29,8 +29,12 @@
  */
 package com.rexsl.maven;
 
+import java.io.File;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
 /**
@@ -39,6 +43,13 @@ import org.mockito.Mockito;
  * @version $Id$
  */
 public final class PackageMojoTest {
+
+    /**
+     * Temporary folder.
+     * @checkstyle VisibilityModifier (3 lines)
+     */
+    @Rule
+    public TemporaryFolder temp = new TemporaryFolder();
 
     /**
      * Non-WAR projects should be ignored.
@@ -59,10 +70,13 @@ public final class PackageMojoTest {
      */
     @Test
     public void testNormalPackaging() throws Exception {
+        final File webdir = this.temp.newFolder("webdir");
         final PackageMojo mojo = new PackageMojo();
-        mojo.setWebappDirectory(".");
+        mojo.setWebappDirectory(webdir.getAbsolutePath());
         final MavenProject project = Mockito.mock(MavenProject.class);
         Mockito.doReturn("war").when(project).getPackaging();
+        final Log log = Mockito.mock(Log.class);
+        mojo.setLog(log);
         mojo.setProject(project);
         mojo.execute();
     }

@@ -48,10 +48,37 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Core servlet.
+ * The only and the main servlet from ReXSL framework.
+ *
+ * <p>You don't need to instantiate this class directly. It is instantiated
+ * by servlet container according to configuration from <tt>web.xml</tt>.
+ * Should be used in <tt>web.xml</tt> (together with {@link XsltFilter})
+ * like that:
+ *
+ * <pre>
+ * &lt;servlet>
+ *  &lt;servlet-name>RestfulServlet&lt;/servlet-name>
+ *  &lt;servlet-class>com.rexsl.core.RestfulServlet&lt;/servlet-class>
+ *  &lt;init-param>
+ *   &lt;param-name>com.rexsl.PACKAGES&lt;/param-name>
+ *   &lt;param-value>com.rexsl.foo&lt;/param-value>
+ *  &lt;/init-param>
+ * &lt;/servlet>
+ * &lt;servlet-mapping>
+ *  &lt;servlet-name>RestfulServlet&lt;/servlet-name>
+ *  &lt;url-pattern>/*&lt;/url-pattern>
+ * &lt;/servlet-mapping>
+ * </pre>
+ *
+ * <p><tt>com.rexsl.PACKAGES</tt> init parameter should contain comma-separated
+ * list of packages where JAX-RS annotated resources are located and should be
+ * discovered.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see <a href="http://www.rexsl.com">Introduction to ReXSL</a>
+ * @see <a href="http://www.oracle.com/technetwork/java/javaee/servlet/index.html">Java Servlet Technology</a>
+ * @since 0.2
  */
 public final class RestfulServlet extends HttpServlet {
 
@@ -64,6 +91,13 @@ public final class RestfulServlet extends HttpServlet {
      * Jersey servlet.
      */
     private final ServletContainer jersey = new ServletContainer();
+
+    /**
+     * Public ctor.
+     */
+    public RestfulServlet() {
+        super();
+    }
 
     /**
      * {@inheritDoc}
@@ -112,9 +146,8 @@ public final class RestfulServlet extends HttpServlet {
         this.jersey.service(request, response);
         Logger.debug(
             this,
-            "#service(%s): status %d by Jersey in %.3f sec",
+            "#service(%s): by Jersey in %.3f sec",
             request.getRequestURI(),
-            response.getStatus(),
             // @checkstyle MagicNumber (1 line)
             (double) (System.nanoTime() - start) / (1000 * 1000 * 1000)
         );

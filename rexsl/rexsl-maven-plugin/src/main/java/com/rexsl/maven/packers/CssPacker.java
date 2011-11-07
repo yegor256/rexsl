@@ -31,10 +31,12 @@ package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
+import com.ymock.util.Logger;
 import java.io.File;
+import org.apache.commons.io.FileUtils;
 
 /**
- * Packager of CSS files.
+ * Packager of CSS files. All comments and unnecessary spaces are removed.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -42,27 +44,31 @@ import java.io.File;
 public final class CssPacker implements Packer {
 
     /**
-     * {@inheritDoc}
+     * The folder where all CSS files should be stored.
+     * @checkstyle MultipleStringLiterals (2 lines)
      */
-    @Override
-    public File source(final Environment env) {
-        return new File(env.basedir(), "src/main/webapp/css");
-    }
+    public static final String FOLDER = "css";
+
+    /**
+     * Extensions to process.
+     * @checkstyle MultipleStringLiterals (2 lines)
+     */
+    public static final String[] EXTS = new String[] {"css"};
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public File destination(final Environment env) {
-        return new File(env.webdir(), "css");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void pack(final File src, final File dest) {
-        // to be implemented
+    public void pack(final Environment env) {
+        final File dir = new File(env.webdir(), this.FOLDER);
+        if (!dir.exists()) {
+            Logger.info(this, "#pack(): %s directory is absent", dir);
+            return;
+        }
+        for (File css : FileUtils.listFiles(dir, this.EXTS, true)) {
+            // it's a temporary warning, until we implement packing
+            Logger.warn(this, "#pack(): %s was NOT packed", css);
+        }
     }
 
 }

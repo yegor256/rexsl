@@ -42,6 +42,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -53,16 +54,30 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * Converts XML to XHTML, if necessary.
  *
+ * <p>You don't need to instantiate this class directly. It is instantiated
+ * by servlet container according to configuration from <tt>web.xml</tt>.
+ * Should be used in <tt>web.xml</tt> (together with {@link RestfulServlet})
+ * like this:
+ *
+ * <pre>
+ * &lt;filter>
+ *  &lt;filter-name>XsltFilter&lt;/filter-name>
+ *  &lt;filter-class>com.rexsl.core.XsltFilter&lt;/filter-class>
+ * &lt;/filter>
+ * &lt;filter-mapping>
+ *  &lt;filter-name>XsltFilter&lt;/filter-name>
+ *  &lt;servlet-name>RestfulServlet&lt;/servlet-name>
+ *  &lt;dispatcher>REQUEST&lt;/dispatcher>
+ *  &lt;dispatcher>ERROR&lt;/dispatcher>
+ * &lt;/filter-mapping>
+ * </pre>
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
+ * @since 0.2
  */
 public final class XsltFilter implements Filter {
-
-    /**
-     * MIME type that we're looking for.
-     */
-    public static final String MIME_XML = "application/xml";
 
     /**
      * Character encoding of the page.
@@ -73,6 +88,13 @@ public final class XsltFilter implements Filter {
      * Context for the filter.
      */
     private ServletContext context;
+
+    /**
+     * Public ctor.
+     */
+    public XsltFilter() {
+        // intentionally empty
+    }
 
     /**
      * {@inheritDoc}
@@ -194,7 +216,7 @@ public final class XsltFilter implements Filter {
      */
     private Boolean isXmlExplicitlyRequested(final String header) {
         final Boolean requested = (header != null)
-            && (this.MIME_XML.equals(header));
+            && (MediaType.APPLICATION_XML.equals(header));
         Logger.debug(
             this,
             "#isXmlExplicitlyRequested('%s'): %b",
@@ -215,7 +237,7 @@ public final class XsltFilter implements Filter {
      */
     private Boolean acceptsXml(final String header) {
         final Boolean accepts = (header != null)
-            && (header.contains(this.MIME_XML));
+            && (header.contains(MediaType.APPLICATION_XML));
         Logger.debug(
             this,
             "#acceptsXml('%s'): %b",

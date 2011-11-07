@@ -30,7 +30,6 @@
 package com.rexsl.maven;
 
 import com.ymock.util.Logger;
-import java.io.File;
 
 /**
  * Package resources.
@@ -50,9 +49,7 @@ public final class PackageMojo extends AbstractRexslMojo {
     protected void run() {
         final long start = System.nanoTime();
         for (Packer packer : new PackersProvider().all()) {
-            final File src = packer.source(this.env());
-            final File dest = packer.destination(this.env());
-            packer.pack(src, dest);
+            packer.pack(this.env());
         }
         Logger.info(
             this,

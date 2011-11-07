@@ -120,10 +120,11 @@ public final class TestClient {
         this.response = this.execute(new HttpGet(this.uri(path)));
         Logger.info(
             this,
-            "#get(%s): completed in %.3fms",
+            "#get(%s): completed in %.3fms [%s]",
             path,
             // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000)
+            (double) (System.nanoTime() - start) / (1000L * 1000),
+            this.response.getStatusLine()
         );
         return this;
     }
@@ -139,10 +140,11 @@ public final class TestClient {
         this.response = this.execute(new HttpPost(this.uri(path)));
         Logger.info(
             this,
-            "#post(%s): completed in %.3fms",
+            "#post(%s): completed in %.3fms [%s]",
             path,
             // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000)
+            (double) (System.nanoTime() - start) / (1000L * 1000),
+            this.response.getStatusLine()
         );
         return this;
     }
@@ -158,10 +160,11 @@ public final class TestClient {
         this.response = this.execute(new HttpPut(this.uri(path)));
         Logger.info(
             this,
-            "#put(%s): completed in %.3fms",
+            "#put(%s): completed in %.3fms [%s]",
             path,
             // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000)
+            (double) (System.nanoTime() - start) / (1000L * 1000),
+            this.response.getStatusLine()
         );
         return this;
     }

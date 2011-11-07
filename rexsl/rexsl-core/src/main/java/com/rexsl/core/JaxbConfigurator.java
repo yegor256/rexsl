@@ -33,24 +33,39 @@ import javax.servlet.ServletContext;
 import javax.xml.bind.Marshaller;
 
 /**
- * Locate and return XSD schema.
+ * Configures {@link Marshaller} according to custom login/rules.
+ *
+ * An instance of this class is used by {@link XslResolver}, if configured.
+ * {@link Marshaller} will be configured before returning to JAX-RS. Normally
+ * you should not use this class. It is used by <tt>rexsl-maven-plugin</tt> in
+ * order to validate compliance of your XML responses with XSD schemas.
+ *
+ * <p>In order to inform {@link XslResolver} which implementation of this
+ * interface to use you should configure <tt>com.rexsl.core.CONFIGURATOR</tt>
+ * servlet <tt>init-param</tt> with a name of the implementaiton class.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see XslResolver#getContext(Class)
+ * @since 0.2
  */
 public interface JaxbConfigurator {
 
     /**
-     * Initialize it.
+     * Initialize it, to be called by
+     * {@link XslResolver#setServletContext(ServletContext)}.
      * @param ctx The servlet context
+     * @see XslResolver#setServletContext(ServletContext)
      */
     void init(final ServletContext ctx);
 
     /**
-     * Configure marhaller and return a new one (or the same).
-     * @param mrsh The marshaller
-     * @param type The class
-     * @return The marshaller
+     * Configure marhaller and return a new one (or the same), to be called by
+     * {@link XslResolver#getContext(Class)}.
+     * @param mrsh The marshaller, already created and ready to marshal
+     * @param type The class to be marshalled
+     * @return New marshalled to be used instead
+     * @see XslResolver#getContext(Class)
      */
     Marshaller marshaller(final Marshaller mrsh, final Class<?> type);
 
