@@ -30,6 +30,7 @@
 package com.rexsl.maven;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Environment proxy.
@@ -52,11 +53,12 @@ public interface Environment {
     File webdir();
 
     /**
-     * Create classloader, from all artifacts available for this
-     * plugin in runtime (incl. "test").
-     * @return The classloader
+     * Return a list of artifacts (JARs and dirs) that should be available
+     * for all "running-as-remote" Groovy scripts.
+     * @param testOnly The list should include ONLY test-related artifacts?
+     * @return The list of JARs and directories
      */
-    ClassLoader classloader();
+    List<File> classpath(final boolean testOnly);
 
     /**
      * Shall we use runtime filtering of resources?

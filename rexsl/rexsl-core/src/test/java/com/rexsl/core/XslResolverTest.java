@@ -120,7 +120,8 @@ public final class XslResolverTest {
     /**
      * Let's verify that JAXBContext is not created twice.
      * @throws Exception If something goes wrong
-     * @todo #3 This test is not working at the moment.
+     * @todo #3 This test is not working at the moment, but it should. We have
+     *  to confirm that Marshaller is created only once per class.
      */
     @Ignore
     @Test

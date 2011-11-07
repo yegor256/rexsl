@@ -104,6 +104,7 @@ public final class EmbeddedContainer {
         ctx.addEventListener(new RuntimeListener());
         server.setHandler(ctx);
         Policy.setPolicy(new EmbeddedContainer.FreePolicy());
+        ctx.setExtraClasspath(EmbeddedContainer.testClasspath(env));
         try {
             server.start();
         // @checkstyle IllegalCatch (1 line)
@@ -180,7 +181,7 @@ public final class EmbeddedContainer {
                 : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
                 Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
                 final GroovyExecutor exec = new GroovyExecutor(
-                    env.classloader(),
+                    env,
                     new BindingBuilder(env).build()
                 );
                 try {
@@ -190,6 +191,29 @@ public final class EmbeddedContainer {
                 }
             }
         }
+    }
+
+    /**
+     * Build and return test classpath, for WebAppContext.
+     * @param env The environment
+     * @return Extra classpath to be used in tests
+     * @see #start(Environment)
+     */
+    private static String testClasspath(final Environment env) {
+        final List<String> urls = new ArrayList<String>();
+        for (File path : env.classpath(true)) {
+            if (path.isDirectory()) {
+                urls.add(path.getAbsolutePath() + "/");
+            } else {
+                urls.add(path.getAbsolutePath());
+            }
+            Logger.debug(
+                EmbeddedContainer.class,
+                "#testClasspath(): %s",
+                path
+            );
+        }
+        return StringUtils.join(urls, ",");
     }
 
     /**

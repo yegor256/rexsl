@@ -29,22 +29,26 @@
  */
 package com.rexsl.foo;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import org.apache.commons.io.IOUtils;
 
 /**
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-@XmlRootElement(name = "page")
-@XmlAccessorType(XmlAccessType.NONE)
-public final class Home {
+@Path("/stub")
+public final class Stub {
 
-    @XmlElement(name = "text")
-    public String getText() {
-        return Data.INSTANCE.get();
+    @GET
+    public String stub() {
+        try {
+            return IOUtils.toString(
+                this.getClass().getResourceAsStream("stub.txt")
+            );
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
 }

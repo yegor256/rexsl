@@ -27,24 +27,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.foo;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.rexsl.test.TestClient
+import org.junit.Assert
+import org.hamcrest.Matchers
 
-/**
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- */
-@XmlRootElement(name = "page")
-@XmlAccessorType(XmlAccessType.NONE)
-public final class Home {
-
-    @XmlElement(name = "text")
-    public String getText() {
-        return Data.INSTANCE.get();
-    }
-
-}
+// This URL (/stub) is not available in production version of the system,
+// but during tests it should be available because of "src/test/java/com/rexsl/foo/Stub.java"
+// class and its test resources
+def r1 = new TestClient(rexsl.home)
+    .get('/stub')
+Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_OK))
+// This text is from src/test/resources/com/rexsl/foo/stub.txt
+Assert.assertThat(r1.body, Matchers.containsString('stubbing works fine!'))

@@ -1,9 +1,9 @@
  ------
- Introduction to ReXSL
+ Setup scripts
  ------
  Yegor Bugayenko
  ------
- 2011-08-21
+ 2011-10-27
  ------
 
 ~~
@@ -38,19 +38,22 @@
 ~~ @version $Id$
 ~~
 
-ReXSL Maven Plugin
+How to initialize the application?
 
-  This plugin is helping you to test your ReXSL-powered
-  web application and perform some pre-packaging changes to your
-  web assets (like CSS/XSL stylesheets, JavaScript code, images, etc.)
+  Let's say you want to add initial data into your application before
+  all other tests are performed. For example, you need to fill the
+  database somehow. It's all can be done by a setup script:
 
-  Read more about its {{{./usage.html}usage}}.
++--
+/foo
+  pom.xml
+  /src
+    /main
+    /test
+      /rexsl
+        /setup
+          AddSomeData.groovy
++--
 
-  There are a number of cookbook advices, which will help:
-
-   * {{{./setup.html}How to add application data before tests?}}
-
-   * {{{./bootstrap.html}How to pre-configure the application and mock resources?}}
-
-   * {{{./stubs.html}How to add extra functionality during tests?}}
-
+  The script will be called right after the application is started
+  in servlet container.

@@ -1,9 +1,9 @@
  ------
- Introduction to ReXSL
+ Bootstrap scripts
  ------
  Yegor Bugayenko
  ------
- 2011-08-21
+ 2011-10-27
  ------
 
 ~~
@@ -38,19 +38,27 @@
 ~~ @version $Id$
 ~~
 
-ReXSL Maven Plugin
+How to pre-configure the application?
 
-  This plugin is helping you to test your ReXSL-powered
-  web application and perform some pre-packaging changes to your
-  web assets (like CSS/XSL stylesheets, JavaScript code, images, etc.)
+  Very often you need to pre-configure the application before tests,
+  in order to mock connections to some resources. The best example is
+  a database server, which you don't have in tests. The application
+  has to be pre-configured to work with another database. You can do all
+  this in a bootstrap Groovy script:
 
-  Read more about its {{{./usage.html}usage}}.
++--
+/foo
+  pom.xml
+  /src
+    /main
+    /test
+      /rexsl
+        /bootstrap
+          ConfigureDatabaseConnection.groovy
++--
 
-  There are a number of cookbook advices, which will help:
-
-   * {{{./setup.html}How to add application data before tests?}}
-
-   * {{{./bootstrap.html}How to pre-configure the application and mock resources?}}
-
-   * {{{./stubs.html}How to add extra functionality during tests?}}
+  The script is able to work with application classes (all other Groovy
+  scripts don't have this ability). All bootstrap scripts are executed from
+  a context listener inside a container. That's why they can do anything
+  your real application can do.
 

@@ -45,6 +45,10 @@
             <item name="Goals" href="./plugin-info.html" />
             <item name="FAQ" href="./faq.html" />
         </menu>
+        <menu name="Cookbook">
+            <item name="Setup scripts" href="./setup.html" />
+            <item name="Test stubs" href="./stubs.html" />
+        </menu>
         <menu ref="reports" />
         <menu ref="modules" />
     </body>

@@ -78,8 +78,6 @@ public final class InContainerScriptsCheckTest {
         Mockito.doReturn(basedir).when(env).basedir();
         Mockito.doReturn(new File(basedir, "src/main/webapp"))
             .when(env).webdir();
-        Mockito.doReturn(this.getClass().getClassLoader())
-            .when(env).classloader();
         final Check check = new InContainerScriptsCheck();
         MatcherAssert.assertThat(check.validate(env), Matchers.is(true));
     }
