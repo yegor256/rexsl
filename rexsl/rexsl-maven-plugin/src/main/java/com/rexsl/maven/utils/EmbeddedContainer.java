@@ -196,6 +196,7 @@ public final class EmbeddedContainer {
     /**
      * Build and return test classpath, for WebAppContext.
      * @param env The environment
+     * @return Extra classpath to be used in tests
      * @see #start(Environment)
      */
     private static String testClasspath(final Environment env) {
@@ -206,7 +207,11 @@ public final class EmbeddedContainer {
             } else {
                 urls.add(path.getAbsolutePath());
             }
-            Logger.info(EmbeddedContainer.class, "#testClasspath(): %s", path);
+            Logger.debug(
+                EmbeddedContainer.class,
+                "#testClasspath(): %s",
+                path
+            );
         }
         return StringUtils.join(urls, ",");
     }

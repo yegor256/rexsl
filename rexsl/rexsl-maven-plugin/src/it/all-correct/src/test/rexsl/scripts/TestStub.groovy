@@ -38,4 +38,5 @@ import org.hamcrest.Matchers
 def r1 = new TestClient(rexsl.home)
     .get('/stub')
 Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_OK))
-Assert.assertThat(r1.body.length, Matchers.greaterThan(0))
+// This text is from src/test/resources/com/rexsl/foo/stub.txt
+Assert.assertThat(r1.body, Matchers.containsString('stubbing works fine!'))
