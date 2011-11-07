@@ -27,9 +27,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.utils;
+package com.rexsl.core;
 
-import com.ymock.util.Logger;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 
@@ -39,43 +38,22 @@ import javax.xml.bind.ValidationEventHandler;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class XsdEventHandler implements ValidationEventHandler {
-
-    /**
-     * Did we see any events recently?
-     */
-    private static boolean flag;
-
-    /**
-     * Reset the flag.
-     */
-    public static void reset() {
-        XsdEventHandler.flag = false;
-    }
-
-    /**
-     * Did we have any events?
-     * @return Did we?
-     */
-    public static boolean hasEvents() {
-        return XsdEventHandler.flag;
-    }
+final class XsdEventHandler implements ValidationEventHandler {
 
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean handleEvent(final ValidationEvent event) {
-        XsdEventHandler.flag = true;
-        Logger.warn(
-            this,
-            "JAXB error: \"%s\" at '%s' [%d:%d]",
-            event.getMessage(),
-            event.getLocator().getURL(),
-            event.getLocator().getLineNumber(),
-            event.getLocator().getColumnNumber()
+        throw new IllegalStateException(
+            String.format(
+                "JAXB error: \"%s\" at '%s' [%d:%d]",
+                event.getMessage(),
+                event.getLocator().getURL(),
+                event.getLocator().getLineNumber(),
+                event.getLocator().getColumnNumber()
+            )
         );
-        return true;
     }
 
 }

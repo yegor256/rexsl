@@ -31,7 +31,6 @@ package com.rexsl.core;
 
 import com.rexsl.test.XhtmlConverter;
 import java.io.StringWriter;
-import javax.servlet.ServletContext;
 import javax.ws.rs.ext.ContextResolver;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -71,23 +70,6 @@ public final class XslResolverTest {
         final ContextResolver<Marshaller> resolver = new XslResolver();
         final Marshaller mrsh = resolver.getContext(XslResolverTest.Page.class);
         MatcherAssert.assertThat(mrsh, Matchers.notNullValue());
-    }
-
-    /**
-     * Test context injection mechanism.
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void testContextInjection() throws Exception {
-        final XslResolver resolver = new XslResolver();
-        final ServletContext context = Mockito.mock(ServletContext.class);
-        Mockito.doReturn(DummyConfigurator.class.getName())
-            .when(context).getInitParameter("com.rexsl.core.CONFIGURATOR");
-        resolver.setServletContext(context);
-        MatcherAssert.assertThat(
-            DummyConfigurator.context(),
-            Matchers.equalTo(context)
-        );
     }
 
     /**
@@ -255,39 +237,6 @@ public final class XslResolverTest {
         @XmlElement
         public String getName() {
             return "another name";
-        }
-    }
-
-    /**
-     * Mock of {@link JaxbConfigurator}.
-     * @see #testContextInjection()
-     */
-    public static final class DummyConfigurator implements JaxbConfigurator {
-        /**
-         * Context injected by {@link #init(ServletContext)}.
-         */
-        private static ServletContext context;
-        /**
-         * Get context.
-         * @return The context from inside the class
-         */
-        public static ServletContext context() {
-            return XslResolverTest.DummyConfigurator.context;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void init(final ServletContext ctx) {
-            XslResolverTest.DummyConfigurator.context = ctx;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Marshaller marshaller(final Marshaller mrsh,
-            final Class<?> type) {
-            return mrsh;
         }
     }
 
