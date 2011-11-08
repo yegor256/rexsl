@@ -80,12 +80,12 @@ import org.apache.commons.lang.StringUtils;
  * public final class Page {
  *   &#64;XmlElement
  *   public String version() {
- *    return Manifests.INSTANCE.read("Foo-Version");
+ *    return Manifests.read("Foo-Version");
  *   }
  *   &#64;XmlElement
  *   public Date date() {
  *    return new SimpleDateFormat("yyyy.MM.dd", Locale.ENGLISH).parse(
- *     Manifests.INSTANCE.read("Foo-Date");
+ *     Manifests.read("Foo-Date");
  *    );
  *   }
  * }
@@ -102,23 +102,16 @@ import org.apache.commons.lang.StringUtils;
 public final class Manifests {
 
     /**
-     * Singleton instance.
-     */
-    public static final Manifests INSTANCE = new Manifests();
-
-    /**
      * Properties retrieved from all existing <tt>MANIFEST.MF</tt> files.
      * @see #load()
      */
-    private final Map<String, String> properties;
+    private static Map<String, String> properties = Manifests.load();
 
     /**
-     * Private ctor.
+     * It's a utility class.
      */
     private Manifests() {
-        synchronized (this) {
-            this.properties = this.load();
-        }
+        // intentionally empty
     }
 
     /**
@@ -130,8 +123,8 @@ public final class Manifests {
      * @param name Name of the property
      * @return The value of the property retrieved
      */
-    public String read(final String name) {
-        final String value = this.properties.get(name);
+    public static String read(final String name) {
+        final String value = Manifests.properties.get(name);
         if (value == null) {
             throw new IllegalArgumentException(
                 String.format(
@@ -148,22 +141,22 @@ public final class Manifests {
      * @return The properties loaded
      * @see #Manifests()
      */
-    private Map<String, String> load() {
+    private static Map<String, String> load() {
         final Map<String, String> props = new HashMap<String, String>();
         Enumeration<URL> resources;
         try {
-            resources = this.getClass().getClassLoader()
+            resources = Manifests.class.getClassLoader()
                 .getResources("META-INF/MANIFEST.MF");
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
         Integer count = 0;
         while (resources.hasMoreElements()) {
-            props.putAll(this.loadOneFile(resources.nextElement()));
+            props.putAll(Manifests.loadOneFile(resources.nextElement()));
             count += 1;
         }
         Logger.debug(
-            this,
+            Manifests.class,
             "#load(): %d properties loaded from %d URL(s): %s",
             props.size(),
             count,
@@ -178,7 +171,7 @@ public final class Manifests {
      * @return The properties loaded
      * @see #load()
      */
-    private Map<String, String> loadOneFile(final URL url) {
+    private static Map<String, String> loadOneFile(final URL url) {
         final Map<String, String> props = new HashMap<String, String>();
         InputStream stream;
         try {
@@ -200,7 +193,7 @@ public final class Manifests {
                 stream.close();
             } catch (java.io.IOException ex) {
                 Logger.error(
-                    this,
+                    Manifests.class,
                     "#loadOneFile('%s'): %s",
                     url,
                     ex.getMessage()
@@ -208,7 +201,7 @@ public final class Manifests {
             }
         }
         Logger.debug(
-            this,
+            Manifests.class,
             "#loadOneFile('%s'): %d properties loaded",
             url,
             props.size()

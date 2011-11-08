@@ -46,7 +46,7 @@ public final class ManifestsTest {
      */
     @Test
     public void testPropertyReading() throws Exception {
-        final String value = Manifests.INSTANCE.read("REXSL-Test-Attribute");
+        final String value = Manifests.read("REXSL-Test-Attribute");
         MatcherAssert.assertThat(value, Matchers.equalTo("works"));
     }
 
@@ -56,7 +56,7 @@ public final class ManifestsTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testAbsentPropertyReading() throws Exception {
-        final String value = Manifests.INSTANCE.read("absent-property");
+        final String value = Manifests.read("absent-property");
     }
 
 }
