@@ -44,7 +44,7 @@ import org.apache.commons.lang.StringUtils;
  * Wrapper around <tt>MANIFEST.MF</tt> files.
  *
  * The class will read all <tt>MANIFEST.MF</tt> files available in classpath
- * and all properties from them. This mechanism is very useful for sending
+ * and all attributes from them. This mechanism is very useful for sending
  * information from continuous integration environment to the production
  * environment. For example, you want you site to show project version and
  * date of when WAR file was packaged. First, you configure
@@ -105,7 +105,13 @@ public final class Manifests {
      * Properties retrieved from all existing <tt>MANIFEST.MF</tt> files.
      * @see #load()
      */
-    private static Map<String, String> properties = Manifests.load();
+    private static final Map<String, String> LOADED = Manifests.load();
+
+    /**
+     * Failures registered during loading.
+     * @see #load()
+     */
+    private static Map<URL, String> failures;
 
     /**
      * It's a utility class.
@@ -124,16 +130,18 @@ public final class Manifests {
      * @return The value of the property retrieved
      */
     public static String read(final String name) {
-        final String value = Manifests.properties.get(name);
-        if (value == null) {
+        if (!Manifests.LOADED.containsKey(name)) {
             throw new IllegalArgumentException(
                 String.format(
-                    "Property '%s' not found in any MANIFEST.MF file",
-                    name
+                    // @checkstyle LineLength (1 line)
+                    "Atribute '%s' not found in MANIFEST.MF files among %d other attributes, failed files: %s",
+                    name,
+                    Manifests.LOADED.size(),
+                    StringUtils.join(Manifests.failures.keySet(), "; ")
                 )
             );
         }
-        return value;
+        return Manifests.LOADED.get(name);
     }
 
     /**
@@ -142,6 +150,7 @@ public final class Manifests {
      * @see #Manifests()
      */
     private static Map<String, String> load() {
+        Manifests.failures = new HashMap<URL, String>();
         final Map<String, String> props = new HashMap<String, String>();
         Enumeration<URL> resources;
         try {
@@ -152,7 +161,19 @@ public final class Manifests {
         }
         Integer count = 0;
         while (resources.hasMoreElements()) {
-            props.putAll(Manifests.loadOneFile(resources.nextElement()));
+            final URL url = resources.nextElement();
+            try {
+                props.putAll(Manifests.loadOneFile(url));
+            // @checkstyle IllegalCatch (1 line)
+            } catch (Exception ex) {
+                Manifests.failures.put(url, ex.getMessage());
+                Logger.error(
+                    Manifests.class,
+                    "#load(): '%s' failed %s",
+                    url,
+                    ex.getMessage()
+                );
+            }
             count += 1;
         }
         Logger.debug(
@@ -186,6 +207,12 @@ public final class Manifests {
                 final String value = attrs.getValue((Name) key);
                 props.put(key.toString(), value);
             }
+            Logger.debug(
+                Manifests.class,
+                "#loadOneFile('%s'): %d properties loaded",
+                url,
+                props.size()
+            );
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         } finally {
@@ -200,12 +227,6 @@ public final class Manifests {
                 );
             }
         }
-        Logger.debug(
-            Manifests.class,
-            "#loadOneFile('%s'): %d properties loaded",
-            url,
-            props.size()
-        );
         return props;
     }
 

@@ -1,2 +1,2 @@
 Comment: This file is used by ManifestsTest.java
-REXSL-Test-Attribute: works
+REXSL-Test-Empty-Attribute:

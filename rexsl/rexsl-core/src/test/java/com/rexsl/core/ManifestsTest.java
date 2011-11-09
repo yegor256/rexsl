@@ -41,21 +41,35 @@ import org.junit.Test;
 public final class ManifestsTest {
 
     /**
-     * Read single property, which always exist in MANIFEST.MF.
+     * Read single attribute, which always exist in MANIFEST.MF.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testPropertyReading() throws Exception {
-        final String value = Manifests.read("REXSL-Test-Attribute");
-        MatcherAssert.assertThat(value, Matchers.equalTo("works"));
+    public void testAttributeReading() throws Exception {
+        MatcherAssert.assertThat(
+            Manifests.read("Class-Path"),
+            Matchers.notNullValue()
+        );
     }
 
     /**
-     * Read non-existing property.
+     * Empty attribute.
      * @throws Exception If something goes wrong
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testAbsentPropertyReading() throws Exception {
+    public void testEmptyAttributeReading() throws Exception {
+        MatcherAssert.assertThat(
+            Manifests.read("REXSL-Test-Empty-Attribute"),
+            Matchers.equalTo("")
+        );
+    }
+
+    /**
+     * Read non-existing attribute.
+     * @throws Exception If something goes wrong
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAbsentAttributeReading() throws Exception {
         final String value = Manifests.read("absent-property");
     }
 
