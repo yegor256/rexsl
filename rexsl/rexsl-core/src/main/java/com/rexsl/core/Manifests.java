@@ -32,12 +32,16 @@ package com.rexsl.core;
 import com.ymock.util.Logger;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
+import javax.servlet.ServletContext;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -105,13 +109,17 @@ public final class Manifests {
      * Properties retrieved from all existing <tt>MANIFEST.MF</tt> files.
      * @see #load()
      */
-    private static final Map<String, String> LOADED = Manifests.load();
+    private static Map<String, String> attributes;
 
     /**
      * Failures registered during loading.
      * @see #load()
      */
     private static Map<URL, String> failures;
+
+    static {
+        Manifests.load();
+    }
 
     /**
      * It's a utility class.
@@ -130,40 +138,59 @@ public final class Manifests {
      * @return The value of the property retrieved
      */
     public static String read(final String name) {
-        if (!Manifests.LOADED.containsKey(name)) {
+        if (Manifests.attributes == null) {
             throw new IllegalArgumentException(
-                String.format(
-                    // @checkstyle LineLength (1 line)
-                    "Atribute '%s' not found in MANIFEST.MF files among %d other attributes, failed files: %s",
-                    name,
-                    Manifests.LOADED.size(),
-                    StringUtils.join(Manifests.failures.keySet(), "; ")
-                )
+                "Manifests haven't been loaded yet by request from XsltFilter"
             );
         }
-        return Manifests.LOADED.get(name);
+        if (!Manifests.attributes.containsKey(name)) {
+            final StringBuilder bldr = new StringBuilder(
+                String.format(
+                    // @checkstyle LineLength (1 line)
+                    "Atribute '%s' not found in MANIFEST.MF files among %d other attributes (%s)",
+                    name,
+                    Manifests.attributes.size(),
+                    Manifests.group(Manifests.attributes.keySet())
+                )
+            );
+            if (!Manifests.failures.isEmpty()) {
+                bldr.append("; failures: ").append(
+                    Manifests.group(Manifests.failures.keySet())
+                );
+            }
+            throw new IllegalArgumentException(bldr.toString());
+        }
+        return Manifests.attributes.get(name);
     }
 
     /**
-     * Load properties from all files.
-     * @return The properties loaded
+     * Append properties from the web application <tt>MANIFEST.MF</tt>,
+     * {@link XsltFilter#init(FilterConfig)}.
+     * @param ctx Servlet context
      * @see #Manifests()
      */
-    private static Map<String, String> load() {
-        Manifests.failures = new HashMap<URL, String>();
-        final Map<String, String> props = new HashMap<String, String>();
-        Enumeration<URL> resources;
+    protected static void append(final ServletContext ctx) {
+        URL main;
         try {
-            resources = Manifests.class.getClassLoader()
-                .getResources("META-INF/MANIFEST.MF");
-        } catch (java.io.IOException ex) {
+            main = ctx.getResource("/META-INF/MANIFEST.MF");
+        } catch (java.net.MalformedURLException ex) {
             throw new IllegalStateException(ex);
         }
+        if (main != null) {
+            Manifests.attributes.putAll(Manifests.loadOneFile(main));
+        }
+    }
+
+    /**
+     * Load attributes from classpath.
+     */
+    private static void load() {
+        Manifests.attributes = new HashMap<String, String>();
+        Manifests.failures = new HashMap<URL, String>();
         Integer count = 0;
-        while (resources.hasMoreElements()) {
-            final URL url = resources.nextElement();
+        for (URL url : Manifests.urls()) {
             try {
-                props.putAll(Manifests.loadOneFile(url));
+                Manifests.attributes.putAll(Manifests.loadOneFile(url));
             // @checkstyle IllegalCatch (1 line)
             } catch (Exception ex) {
                 Manifests.failures.put(url, ex.getMessage());
@@ -179,11 +206,30 @@ public final class Manifests {
         Logger.debug(
             Manifests.class,
             "#load(): %d properties loaded from %d URL(s): %s",
-            props.size(),
+            Manifests.attributes.size(),
             count,
-            StringUtils.join(props.keySet(), ", ")
+            Manifests.group(Manifests.attributes.keySet())
         );
-        return props;
+    }
+
+    /**
+     * Find all URLs.
+     * @return The list of URLs
+     * @see #load()
+     */
+    private static Set<URL> urls() {
+        final Set<URL> urls = new HashSet<URL>();
+        Enumeration<URL> resources;
+        try {
+            resources = Manifests.class.getClassLoader()
+                .getResources("META-INF/MANIFEST.MF");
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
+        while (resources.hasMoreElements()) {
+            urls.add(resources.nextElement());
+        }
+        return urls;
     }
 
     /**
@@ -209,9 +255,10 @@ public final class Manifests {
             }
             Logger.debug(
                 Manifests.class,
-                "#loadOneFile('%s'): %d properties loaded",
+                "#loadOneFile('%s'): %d properties loaded (%s)",
                 url,
-                props.size()
+                props.size(),
+                Manifests.group(props.keySet())
             );
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
@@ -228,6 +275,15 @@ public final class Manifests {
             }
         }
         return props;
+    }
+
+    /**
+     * Convert collection of objects into text.
+     * @param group The objects
+     * @return The text
+     */
+    private static String group(final Collection group) {
+        return StringUtils.join(group, ", ");
     }
 
 }
