@@ -102,6 +102,7 @@ public final class XsltFilter implements Filter {
     @Override
     public void init(final FilterConfig config) {
         this.context = config.getServletContext();
+        Manifests.append(this.context);
         Logger.debug(
             this,
             "#init(%s): XSLT filter initialized",
