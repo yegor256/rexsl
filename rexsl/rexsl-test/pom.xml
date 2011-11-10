@@ -200,9 +200,9 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>jsr311-api</artifactId>
-            <version>1.0</version>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-core</artifactId>
+            <version>1.9.1</version>
         </dependency>
     </dependencies>
 
