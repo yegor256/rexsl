@@ -29,16 +29,19 @@
  */
 package com.rexsl.test;
 
+import com.rexsl.test.client.Headers;
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import java.net.ServerSocket;
 import java.net.URI;
+import javax.ws.rs.core.NewCookie;
 import org.apache.http.HttpStatus;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -50,6 +53,11 @@ import org.junit.Test;
  * @version $Id$
  */
 public final class TestClientTest {
+
+    /**
+     * HTTP cookie header.
+     */
+    private static final String COOKIE_HEADER = "Set-Cookie";
 
     /**
      * Port to work with.
@@ -162,4 +170,20 @@ public final class TestClientTest {
         );
     }
 
+    /**
+     * Tests setting new cookie.
+     * @throws Exception If something goes wrong inside.
+     * @todo #68 Implement TestClient.cookie();
+     */
+    @org.junit.Ignore
+    @Test
+    public void testCookie() throws Exception {
+        final TestClient client = new TestClient(this.home);
+        final NewCookie newCookie = new NewCookie("a", "c");
+        client.cookie(newCookie);
+        final Headers headers = client.getHeaders();
+        Assert.assertTrue(headers.has(this.COOKIE_HEADER));
+        final String value = headers.get(this.COOKIE_HEADER);
+        Assert.assertEquals("a=c", value);
+    }
 }

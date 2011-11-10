@@ -37,6 +37,7 @@ import com.ymock.util.Logger;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ws.rs.core.NewCookie;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
@@ -247,4 +248,12 @@ public final class TestClient {
         return client.execute((HttpUriRequest) req);
     }
 
+    /**
+     * Sets new cookie.
+     * @param cookie New cookie to be set.
+     * @return This object.
+     */
+    public TestClient cookie(final NewCookie cookie) {
+        return null;
+    }
 }
