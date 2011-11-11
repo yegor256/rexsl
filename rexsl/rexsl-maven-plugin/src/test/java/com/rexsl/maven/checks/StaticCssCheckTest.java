@@ -41,7 +41,7 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
 /**
- * StaticSccCheck test case.
+ * StaticCssCheck test case.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
