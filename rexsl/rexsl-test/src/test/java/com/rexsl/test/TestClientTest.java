@@ -37,6 +37,7 @@ import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import java.net.ServerSocket;
 import java.net.URI;
 import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.HttpHeaders;
 import org.apache.http.HttpStatus;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -53,11 +54,6 @@ import org.junit.Test;
  * @version $Id$
  */
 public final class TestClientTest {
-
-    /**
-     * HTTP cookie header.
-     */
-    private static final String COOKIE_HEADER = "Set-Cookie";
 
     /**
      * Port to work with.
@@ -182,8 +178,8 @@ public final class TestClientTest {
         final NewCookie newCookie = new NewCookie("a", "c");
         client.cookie(newCookie);
         final Headers headers = client.getHeaders();
-        Assert.assertTrue(headers.has(this.COOKIE_HEADER));
-        final String value = headers.get(this.COOKIE_HEADER);
+        Assert.assertTrue(headers.has(HttpHeaders.SET_COOKIE));
+        final String value = headers.get(HttpHeaders.SET_COOKIE);
         Assert.assertEquals("a=c", value);
     }
 }
