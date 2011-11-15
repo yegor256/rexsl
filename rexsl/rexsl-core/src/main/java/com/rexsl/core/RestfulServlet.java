@@ -127,7 +127,7 @@ public final class RestfulServlet extends HttpServlet {
             PackagesResourceConfig.PROPERTY_PACKAGES,
             StringUtils.join(packages, this.COMMA)
         );
-        this.julToSlf4j();
+        this.reconfigureJUL();
         final FilterConfig cfg = new ServletConfigWrapper(config, props);
         this.jersey.init(cfg);
         Logger.debug(this, "#init(): servlet initialized");
@@ -155,8 +155,9 @@ public final class RestfulServlet extends HttpServlet {
 
     /**
      * Initialize JUL-to-SLF4J bridge.
+     * @see #init(ServletConfig)
      */
-    private void julToSlf4j() {
+    private void reconfigureJUL() {
         final java.util.logging.Logger rootLogger =
             java.util.logging.LogManager.getLogManager().getLogger("");
         final java.util.logging.Handler[] handlers =
@@ -195,7 +196,7 @@ public final class RestfulServlet extends HttpServlet {
          */
         @Override
         public String getFilterName() {
-            return this.config.getServletName() + "-filter";
+            return String.format("%s-filter", this.config.getServletName());
         }
         /**
          * {@inheritDoc}

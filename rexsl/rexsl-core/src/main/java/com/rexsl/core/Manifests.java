@@ -34,10 +34,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
@@ -74,7 +74,7 @@ import org.apache.commons.lang.StringUtils;
  * for example) and show to users:
  *
  * <pre>
- * import com.rexsl.core.Manifests.
+ * import com.rexsl.core.Manifest;
  * import java.text.SimpleDateFormat;
  * import java.util.Date;
  * import java.util.Locale;
@@ -95,6 +95,14 @@ import org.apache.commons.lang.StringUtils;
  * }
  * </pre>
  *
+ * <p>In unit and integration tests you may need to inject some values
+ * to <tt>MANIFEST.MF</tt> in runtime:
+ *
+ * <pre>
+ * import com.rexsl.core.Manifests
+ * Manifests.inject("Foo-URL", "http://localhost/abc");
+ * </pre>
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Prasath Premkumar (popprem@gmail.com)
  * @version $Id$
@@ -106,16 +114,23 @@ import org.apache.commons.lang.StringUtils;
 public final class Manifests {
 
     /**
-     * Properties retrieved from all existing <tt>MANIFEST.MF</tt> files.
+     * Injected attributes.
+     * @see #inject(String,String)
+     */
+    private static final ConcurrentMap<String, String> INJECTED =
+        new ConcurrentHashMap<String, String>();
+
+    /**
+     * Attributes retrieved from all existing <tt>MANIFEST.MF</tt> files.
      * @see #load()
      */
-    private static Map<String, String> attributes;
+    private static ConcurrentMap<String, String> attributes;
 
     /**
      * Failures registered during loading.
      * @see #load()
      */
-    private static Map<URL, String> failures;
+    private static ConcurrentMap<URL, String> failures;
 
     static {
         Manifests.load();
@@ -143,14 +158,15 @@ public final class Manifests {
                 "Manifests haven't been loaded yet by request from XsltFilter"
             );
         }
-        if (!Manifests.attributes.containsKey(name)) {
+        if (!Manifests.exists(name)) {
             final StringBuilder bldr = new StringBuilder(
                 String.format(
                     // @checkstyle LineLength (1 line)
-                    "Atribute '%s' not found in MANIFEST.MF files among %d other attributes (%s)",
+                    "Atribute '%s' not found in MANIFEST.MF file(s) among %d other attribute(s) [%s] and %d injection(s)",
                     name,
                     Manifests.attributes.size(),
-                    Manifests.group(Manifests.attributes.keySet())
+                    Manifests.group(Manifests.attributes.keySet()),
+                    Manifests.INJECTED.size()
                 )
             );
             if (!Manifests.failures.isEmpty()) {
@@ -159,6 +175,9 @@ public final class Manifests {
                 );
             }
             throw new IllegalArgumentException(bldr.toString());
+        }
+        if (Manifests.INJECTED.containsKey(name)) {
+            return Manifests.INJECTED.get(name);
         }
         return Manifests.attributes.get(name);
     }
@@ -169,7 +188,23 @@ public final class Manifests {
      * @param value The value of the attribute being injected
      */
     public static void inject(final String name, final String value) {
-        // todo
+        if (Manifests.INJECTED.containsKey(name)) {
+            Logger.info(
+                Manifests.class,
+                "#inject(%s, '%s'): replaced previous injection '%s'",
+                name,
+                value,
+                Manifests.INJECTED.get(name)
+            );
+        } else {
+            Logger.info(
+                Manifests.class,
+                "#inject(%s, '%s'): injected",
+                name,
+                value
+            );
+        }
+        Manifests.INJECTED.put(name, value);
     }
 
     /**
@@ -178,12 +213,12 @@ public final class Manifests {
      * @return It exists?
      */
     public static boolean exists(final String name) {
-        // todo
-        return true;
+        return Manifests.attributes.containsKey(name)
+            || Manifests.INJECTED.containsKey(name);
     }
 
     /**
-     * Append properties from the web application <tt>MANIFEST.MF</tt>,
+     * Append attributes from the web application <tt>MANIFEST.MF</tt>,
      * {@link XsltFilter#init(FilterConfig)}.
      * @param ctx Servlet context
      * @see #Manifests()
@@ -204,8 +239,8 @@ public final class Manifests {
      * Load attributes from classpath.
      */
     private static void load() {
-        Manifests.attributes = new HashMap<String, String>();
-        Manifests.failures = new HashMap<URL, String>();
+        Manifests.attributes = new ConcurrentHashMap<String, String>();
+        Manifests.failures = new ConcurrentHashMap<URL, String>();
         Integer count = 0;
         for (URL url : Manifests.urls()) {
             try {
@@ -224,7 +259,7 @@ public final class Manifests {
         }
         Logger.debug(
             Manifests.class,
-            "#load(): %d properties loaded from %d URL(s): %s",
+            "#load(): %d attributes loaded from %d URL(s): %s",
             Manifests.attributes.size(),
             count,
             Manifests.group(Manifests.attributes.keySet())
@@ -252,13 +287,14 @@ public final class Manifests {
     }
 
     /**
-     * Load properties from one file.
+     * Load attributes from one file.
      * @param url The URL of it
-     * @return The properties loaded
+     * @return The attributes loaded
      * @see #load()
      */
-    private static Map<String, String> loadOneFile(final URL url) {
-        final Map<String, String> props = new HashMap<String, String>();
+    private static ConcurrentMap<String, String> loadOneFile(final URL url) {
+        final ConcurrentMap<String, String> props =
+            new ConcurrentHashMap<String, String>();
         InputStream stream;
         try {
             stream = url.openStream();
@@ -274,7 +310,7 @@ public final class Manifests {
             }
             Logger.debug(
                 Manifests.class,
-                "#loadOneFile('%s'): %d properties loaded (%s)",
+                "#loadOneFile('%s'): %d attributes loaded (%s)",
                 url,
                 props.size(),
                 Manifests.group(props.keySet())
