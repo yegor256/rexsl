@@ -126,6 +126,7 @@ public final class XhtmlOutputCheck implements Check {
             );
         }
         final String xhtml = new XhtmlTransformer().transform(env, file);
+        validate(xhtml);
         final GroovyExecutor exec = new GroovyExecutor(
             env,
             new BindingBuilder(env).add("document", xhtml).build()
@@ -135,6 +136,15 @@ public final class XhtmlOutputCheck implements Check {
         } catch (com.rexsl.maven.utils.GroovyException ex) {
             throw new InternalCheckException(ex);
         }
+    }
+
+    /**
+     * Validates XHTML file.
+     * @param xhtml Contains XHTML file to validate.
+     * @throws InternalCheckException If file is invalid.
+     */
+    private void validate(String xhtml) throws InternalCheckException {
+        throw new InternalCheckException();
     }
 
     /**
