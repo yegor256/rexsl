@@ -129,13 +129,13 @@ public final class Manifests {
     }
 
     /**
-     * Read one property available in one of <tt>MANIFEST.MF</tt> files.
+     * Read one attribute available in one of <tt>MANIFEST.MF</tt> files.
      *
-     * <p>If such a property doesn't exist {@link IllegalArgumentException}
+     * <p>If such a attribute doesn't exist {@link IllegalArgumentException}
      * will be thrown.
      *
-     * @param name Name of the property
-     * @return The value of the property retrieved
+     * @param name Name of the attribute
+     * @return The value of the attribute retrieved
      */
     public static String read(final String name) {
         if (Manifests.attributes == null) {
@@ -161,6 +161,25 @@ public final class Manifests {
             throw new IllegalArgumentException(bldr.toString());
         }
         return Manifests.attributes.get(name);
+    }
+
+    /**
+     * Inject new attribute.
+     * @param name Name of the attribute
+     * @param value The value of the attribute being injected
+     */
+    public static void inject(final String name, final String value) {
+        // todo
+    }
+
+    /**
+     * Check whether attribute exists in any of <tt>MANIFEST.MF</tt> files.
+     * @param name Name of the attribute
+     * @return It exists?
+     */
+    public static boolean exists(final String name) {
+        // todo
+        return true;
     }
 
     /**
