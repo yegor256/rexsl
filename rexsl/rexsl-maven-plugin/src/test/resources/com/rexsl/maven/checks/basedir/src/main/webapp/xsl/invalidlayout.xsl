@@ -11,12 +11,12 @@
         <html xml:lang="en">
             <head>
                 <link href="/css/screen.css" rel="stylesheet" type="text/css"></link>
-                <meta http-equiv="content-type" content="text/html; charset=utf-8">
             </head>
             <body>
                 <div id="content">
                     <xsl:call-template name="content" />
                 </div>
+                <img src="angry.gif"/>
             </body>
         </html>
     </xsl:template>
