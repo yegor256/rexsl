@@ -105,6 +105,30 @@ public final class XhtmlOutputCheckTest {
     }
 
     /**
+     * Validate incorrect XHTML.
+     * @throws Exception If something goes wrong
+     * @todo #11 Implement XHTML validation in XhtmlOutputCheck class.
+     */
+    @org.junit.Ignore
+    @Test
+    public void testIncorrectXHTMLValidation() throws Exception {
+        final File basedir = this.temp.newFolder("base-3");
+        // @checkstyle MultipleStringLiterals (4 lines)
+        Utils.copy(basedir, "src/main/webapp/xsl/layout.xsl");
+        Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
+        Utils.copy(basedir, "src/test/rexsl/xml/invalidindex.xml");
+        Utils.copy(basedir, "src/test/rexsl/xhtml/invalidindex.groovy");
+        final Environment env = Mockito.mock(Environment.class);
+        Mockito.doReturn(basedir).when(env).basedir();
+        Mockito.doReturn(new PortReserver().port()).when(env).port();
+        Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
+        MatcherAssert.assertThat(
+            new XhtmlOutputCheck().validate(env),
+            Matchers.is(false)
+        );
+    }
+
+    /**
      * Build webdir out of basedir.
      * @param basedir The basedir
      * @return The webdir
