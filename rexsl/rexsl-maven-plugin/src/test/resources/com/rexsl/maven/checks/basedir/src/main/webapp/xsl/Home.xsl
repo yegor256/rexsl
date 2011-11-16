@@ -8,5 +8,6 @@
     <xsl:include href="/xsl/layout.xsl"/>
     <xsl:template name="content">
         <xsl:value-of select="/page/text" />
+        <xsl:copy-of select="/page/img" />
     </xsl:template>
 </xsl:stylesheet>

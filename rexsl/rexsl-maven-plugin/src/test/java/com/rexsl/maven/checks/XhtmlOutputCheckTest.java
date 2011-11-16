@@ -114,8 +114,8 @@ public final class XhtmlOutputCheckTest {
     public void testIncorrectXHTMLValidation() throws Exception {
         final File basedir = this.temp.newFolder("base-3");
         // @checkstyle MultipleStringLiterals (4 lines)
-        Utils.copy(basedir, "src/main/webapp/xsl/invalidlayout.xsl");
-        Utils.copy(basedir, "src/main/webapp/xsl/InvalidHome.xsl");
+        Utils.copy(basedir, "src/main/webapp/xsl/layout.xsl");
+        Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         Utils.copy(basedir, "src/test/rexsl/xml/invalidindex.xml");
         Utils.copy(basedir, "src/test/rexsl/xhtml/invalidindex.groovy");
         final Environment env = Mockito.mock(Environment.class);
