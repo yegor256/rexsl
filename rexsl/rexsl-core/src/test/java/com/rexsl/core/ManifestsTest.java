@@ -53,15 +53,35 @@ public final class ManifestsTest {
     }
 
     /**
+     * Injected attribute can be read.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void testAttributeInjecting() throws Exception {
+        final String name = "Foo-Attribute";
+        final String value = "some special value";
+        MatcherAssert.assertThat(
+            Manifests.exists(name),
+            Matchers.equalTo(false)
+        );
+        Manifests.inject(name, value);
+        MatcherAssert.assertThat(
+            Manifests.exists(name),
+            Matchers.equalTo(true)
+        );
+        MatcherAssert.assertThat(
+            Manifests.read(name),
+            Matchers.equalTo(value)
+        );
+    }
+
+    /**
      * Empty attribute.
      * @throws Exception If something goes wrong
      */
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyAttributeReading() throws Exception {
-        MatcherAssert.assertThat(
-            Manifests.read("REXSL-Test-Empty-Attribute"),
-            Matchers.equalTo("")
-        );
+        Manifests.read("REXSL-Test-Empty-Attribute");
     }
 
     /**
@@ -70,7 +90,7 @@ public final class ManifestsTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testAbsentAttributeReading() throws Exception {
-        final String value = Manifests.read("absent-property");
+        Manifests.read("absent-property");
     }
 
 }
