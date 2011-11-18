@@ -256,4 +256,24 @@ public final class TestClient {
     public TestClient cookie(final NewCookie cookie) {
         return null;
     }
+
+    /**
+     * Checks client status.
+     * @param status Expected status.
+     * @return True if current status is equal to expected status, otherwise -
+     * <code>false</code>.
+     */
+    public boolean expectedStatus(final int status) {
+        return false;
+    }
+
+    /**
+     * Checks client body structure.
+     * @param xpath XPath value to check.
+     * @return True if client body contains expected XPath value, otherwise -
+     * <code>false</code>.
+     */
+    public boolean expectedXPath(final String xpath) {
+        return false;
+    }
 }
