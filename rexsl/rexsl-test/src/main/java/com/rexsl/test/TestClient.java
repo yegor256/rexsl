@@ -260,20 +260,20 @@ public final class TestClient {
     /**
      * Checks client status.
      * @param status Expected status.
-     * @return True if current status is equal to expected status, otherwise -
-     * <code>false</code>.
+     * @return This object if it's status equal to the expected one, else -
+     * throws exception.
      */
-    public boolean expectedStatus(final int status) {
-        return false;
+    public TestClient expectedStatus(final int status) {
+        return null;
     }
 
     /**
      * Checks client body structure.
      * @param xpath XPath value to check.
-     * @return True if client body contains expected XPath value, otherwise -
-     * <code>false</code>.
+     * @return This object if it contains expected path, else - throws
+     * exception.
      */
-    public boolean expectedXPath(final String xpath) {
-        return false;
+    public TestClient expectedXPath(final String xpath) {
+        throw null;
     }
 }

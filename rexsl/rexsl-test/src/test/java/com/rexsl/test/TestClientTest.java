@@ -67,6 +67,11 @@ public final class TestClientTest {
         "<?xml version=\"1.0\"?><root>test</root>";
 
     /**
+     * Error message.
+     */
+    private static final String ERROR_MESSAGE = "Error expected.";
+
+    /**
      * Port to work with.
      */
     private static Integer port;
@@ -204,7 +209,7 @@ public final class TestClientTest {
     public void testTrueExpectedStatus() throws Exception {
         TestClient client = new TestClient(this.home);
         client = client.get(this.ROOT);
-        Assert.assertTrue(client.expectedStatus(HttpStatus.SC_OK));
+        Assert.assertNotNull(client.expectedStatus(HttpStatus.SC_OK));
     }
 
     /**
@@ -217,7 +222,12 @@ public final class TestClientTest {
     public void testFalseExpectedStatus() throws Exception {
         TestClient client = new TestClient(this.home);
         client = client.get(this.ROOT);
-        Assert.assertFalse(client.expectedStatus(HttpStatus.SC_NOT_FOUND));
+        try {
+            client.expectedStatus(HttpStatus.SC_NOT_FOUND);
+        } catch (Error error) {
+            return;
+        }
+        Assert.fail(this.ERROR_MESSAGE);
     }
 
     /**
@@ -230,7 +240,7 @@ public final class TestClientTest {
     public void testTrueExpectedXPath() throws Exception {
         final TestClient client = new TestClient(this.home);
         client.body(this.TEST_BODY);
-        Assert.assertTrue(client.expectedXPath("/root[.='test']"));
+        Assert.assertNotNull(client.expectedXPath("/root[.='test']"));
     }
 
     /**
@@ -243,6 +253,11 @@ public final class TestClientTest {
     public void testFalseExpectedXPath() throws Exception {
         final TestClient client = new TestClient(this.home);
         client.body(this.TEST_BODY);
-        Assert.assertFalse(client.expectedXPath("/root[.='test1']"));
+        try {
+            client.expectedXPath("/root[.='test1']");
+        } catch (Error error) {
+            return;
+        }
+        Assert.fail(this.ERROR_MESSAGE);
     }
 }
