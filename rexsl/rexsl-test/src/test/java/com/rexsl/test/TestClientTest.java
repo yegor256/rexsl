@@ -218,16 +218,10 @@ public final class TestClientTest {
      * @todo #75 Implement TestClient.expectedStatus().
      */
     @org.junit.Ignore
-    @Test
+    @Test(expected = AssertionError.class)
     public void testFalseExpectedStatus() throws Exception {
         TestClient client = new TestClient(this.home);
         client = client.get(this.ROOT);
-        try {
-            client.expectedStatus(HttpStatus.SC_NOT_FOUND);
-        } catch (Error error) {
-            return;
-        }
-        Assert.fail(this.ERROR_MESSAGE);
     }
 
     /**
@@ -249,15 +243,9 @@ public final class TestClientTest {
      * @throws Exception If something goes wrong inside.
      */
     @org.junit.Ignore
-    @Test
+    @Test(expected = AssertionError.class)
     public void testFalseExpectedXPath() throws Exception {
         final TestClient client = new TestClient(this.home);
         client.body(this.TEST_BODY);
-        try {
-            client.expectedXPath("/root[.='test1']");
-        } catch (Error error) {
-            return;
-        }
-        Assert.fail(this.ERROR_MESSAGE);
     }
 }
