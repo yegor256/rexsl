@@ -117,7 +117,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             mrsh = this.context(type).createMarshaller();
             mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             final String header = String.format(
-                "<?xml-stylesheet type='text/xml' href='/xsl/%s.xsl'?>",
+                "<?xml-stylesheet type='text/xml' href='%s'?>",
                 this.stylesheet(type)
             );
             mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
@@ -181,7 +181,10 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         final Annotation antn = type.getAnnotation(Stylesheet.class);
         String stylesheet;
         if (antn == null) {
-            stylesheet = type.getSimpleName();
+            stylesheet = String.format(
+                "/xsl/%s.xsl",
+                type.getSimpleName()
+            );
         } else {
             stylesheet = ((Stylesheet) antn).value();
         }
