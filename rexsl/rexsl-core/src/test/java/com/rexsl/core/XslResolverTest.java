@@ -175,8 +175,7 @@ public final class XslResolverTest {
         MatcherAssert.assertThat(
             XhtmlConverter.the(writer.toString()),
             XmlMatchers.hasXPath(
-                // @checkstyle LineLength (1 line)
-                "/processing-instruction('xml-stylesheet')[contains(.,'test.xsl')]"
+                "/processing-instruction('xml-stylesheet')[contains(.,'test')]"
             )
         );
     }
