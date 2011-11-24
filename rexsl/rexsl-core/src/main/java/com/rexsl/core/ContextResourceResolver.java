@@ -93,13 +93,16 @@ final class ContextResourceResolver implements URIResolver {
                 );
             }
         }
+        Source source;
         try {
-            return new StreamSource(
+             source = new StreamSource(
                 new BufferedReader(new InputStreamReader(stream))
             );
         } finally {
             IOUtils.closeQuietly(stream);
         }
+        source.setSystemId(href);
+        return source;
     }
 
     /**

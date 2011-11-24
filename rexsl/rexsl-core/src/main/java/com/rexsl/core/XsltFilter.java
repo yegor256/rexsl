@@ -268,10 +268,26 @@ public final class XsltFilter implements Filter {
         try {
             final Source stylesheet = this.tfactory.getAssociatedStylesheet(
                 new StreamSource(new StringReader(xml)),
-                null, null, null
+                null,
+                null,
+                null
+            );
+            if (stylesheet == null) {
+                throw new ServletException(
+                    String.format(
+                        "No associated stylesheet found at '%s'",
+                        xml
+                    )
+                );
+            }
+            Logger.debug(
+                this,
+                "#tranform(%d chars): found '%s' associated stylesheet by %s",
+                xml.length(),
+                stylesheet.getSystemId(),
+                this.tfactory.getClass().getName()
             );
             final Transformer trans = this.tfactory.newTransformer(stylesheet);
-            trans.setURIResolver(new ContextResourceResolver(this.context));
             trans.transform(
                 new StreamSource(new StringReader(xml)),
                 new StreamResult(writer)

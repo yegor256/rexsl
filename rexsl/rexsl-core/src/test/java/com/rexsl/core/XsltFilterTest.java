@@ -78,11 +78,18 @@ public final class XsltFilterTest {
         PowerMockito.mockStatic(TransformerFactory.class);
         final TransformerFactory factory =
             Mockito.mock(TransformerFactory.class);
+        final Source stylesheet = Mockito.mock(Source.class);
+        Mockito.doReturn(stylesheet).when(factory).getAssociatedStylesheet(
+            Mockito.any(Source.class),
+            Mockito.anyString(),
+            Mockito.anyString(),
+            Mockito.anyString()
+        );
         PowerMockito.when(TransformerFactory.newInstance())
             .thenReturn(factory);
         this.transformer = Mockito.mock(Transformer.class);
-        Mockito.when(factory.newTransformer(Mockito.any(Source.class)))
-            .thenReturn(this.transformer);
+        Mockito.doReturn(this.transformer).when(factory)
+            .newTransformer(Mockito.any(Source.class));
         final StringWriter writer = PowerMockito.mock(StringWriter.class);
         PowerMockito.whenNew(StringWriter.class).withNoArguments()
             .thenReturn(writer);

@@ -69,7 +69,7 @@ public final class ContextResourceResolverTest {
         Mockito.doReturn(stream).when(ctx).getResourceAsStream(href);
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve(href, null);
-        MatcherAssert.assertThat(src, Matchers.notNullValue());
+        MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(href));
     }
 
     /**
