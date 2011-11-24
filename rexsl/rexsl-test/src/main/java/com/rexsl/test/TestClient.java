@@ -253,4 +253,24 @@ public final class TestClient {
     public TestClient cookie(final NewCookie cookie) {
         return null;
     }
+
+    /**
+     * Checks client status.
+     * @param status Expected status.
+     * @return This object if it's status equal to the expected one, else -
+     * throws <code>AssertionError</code>.
+     */
+    public TestClient expectedStatus(final int status) {
+        return null;
+    }
+
+    /**
+     * Checks client body structure.
+     * @param xpath XPath value to check.
+     * @return This object if it contains expected path, else - throws an
+     * <code>AssertionError</code>.
+     */
+    public TestClient expectedXPath(final String xpath) {
+        throw null;
+    }
 }

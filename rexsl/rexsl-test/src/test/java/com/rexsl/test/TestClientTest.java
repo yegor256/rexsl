@@ -56,6 +56,22 @@ import org.junit.Test;
 public final class TestClientTest {
 
     /**
+     * Root path.
+     */
+    private static final String ROOT = "/";
+
+    /**
+     * Test client body.
+     */
+    private static final String TEST_BODY =
+        "<?xml version=\"1.0\"?><root>test</root>";
+
+    /**
+     * Error message.
+     */
+    private static final String ERROR_MESSAGE = "Error expected.";
+
+    /**
      * Port to work with.
      */
     private static Integer port;
@@ -124,7 +140,7 @@ public final class TestClientTest {
         final TestClient client = new TestClient(this.home)
             .header("Accept", "application/json")
             .header("User-agent", "Some Text")
-            .get("/");
+            .get(this.ROOT);
         MatcherAssert.assertThat(
             client.getBody(),
             Matchers.containsString("works")
@@ -181,5 +197,61 @@ public final class TestClientTest {
         Assert.assertTrue(headers.has(HttpHeaders.SET_COOKIE));
         final String value = headers.get(HttpHeaders.SET_COOKIE);
         Assert.assertEquals("a=c", value);
+    }
+
+    /**
+     * Tests expectedStatus method.
+     * @throws Exception If something goes wrong inside.
+     * @todo #75 Implement TestClient.expectedStatus(): It must return
+     *  <code>TestClient</code>.
+     */
+    @org.junit.Ignore
+    @Test
+    public void testTrueExpectedStatus() throws Exception {
+        TestClient client = new TestClient(this.home);
+        client = client.get(this.ROOT);
+        Assert.assertNotNull(client.expectedStatus(HttpStatus.SC_OK));
+    }
+
+    /**
+     * Tests expectedStatus method.
+     * @throws Exception If something goes wrong inside.
+     * @todo #75 Implement TestClient.expectedStatus(): It must throw an
+     *  <code>AssertionError</code>.
+     */
+    @org.junit.Ignore
+    @Test(expected = AssertionError.class)
+    public void testFalseExpectedStatus() throws Exception {
+        TestClient client = new TestClient(this.home);
+        client = client.get(this.ROOT);
+        Assert.assertNotNull(client.expectedStatus(HttpStatus.SC_BAD_REQUEST));
+    }
+
+    /**
+     * Tests expectedXPath method.
+     * @todo #75 Implement TestClient.expectedXPath(): It must return
+     *  <code>TestClient</code>.
+     * @throws Exception If something goes wrong inside.
+     */
+    @org.junit.Ignore
+    @Test
+    public void testTrueExpectedXPath() throws Exception {
+        final TestClient client = new TestClient(this.home);
+        client.body(this.TEST_BODY);
+        Assert.assertNotNull(client.expectedXPath("/root[.='test']"));
+    }
+
+    /**
+     * Tests expectedXPath method.
+     * @todo #75 Implement TestClient.expectedXPath(): It must throw an
+     *  <code>AssertionError</code>.
+     * @throws Exception If something goes wrong inside.
+     */
+    @org.junit.Ignore
+    @Test(expected = AssertionError.class)
+    public void testFalseExpectedXPath() throws Exception {
+        final TestClient client = new TestClient(this.home);
+        client.body(this.TEST_BODY);
+        Assert.assertNotNull(client.expectedXPath("/root[.='test1']"));
     }
 }
