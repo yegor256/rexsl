@@ -30,16 +30,21 @@
 package com.rexsl.core;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URI;
 import javax.servlet.ServletContext;
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.io.IOUtils;
 
 /**
- * Resolves resources using ServletContext.
+ * Resolves resources using {@link ServletContext}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
@@ -66,18 +71,56 @@ final class ContextResourceResolver implements URIResolver {
     @Override
     public Source resolve(final String href, final String base)
         throws TransformerException {
-        final InputStream stream = this.context.getResourceAsStream(href);
+        InputStream stream = null;
+        if (href.startsWith("/")) {
+            stream = this.context.getResourceAsStream(href);
+        }
+        final URI uri = UriBuilder.fromUri(href).build();
         if (stream == null) {
-            throw new IllegalStateException(
+            if (uri.isAbsolute()) {
+                try {
+                    stream = this.fetch(uri);
+                } catch (IOException ex) {
+                    throw new TransformerException(ex);
+                }
+            } else {
+                throw new TransformerException(
+                    String.format(
+                        "URI '%s' is not absolute, can't be resolved",
+                        uri
+                    )
+                );
+            }
+        }
+        try {
+            return new StreamSource(
+                new BufferedReader(new InputStreamReader(stream))
+            );
+        } finally {
+            IOUtils.closeQuietly(stream);
+        }
+    }
+
+    /**
+     * Load stream from URI.
+     * @param uri The URI to load from
+     * @return The stream opened
+     * @throws IOException If some problem happens
+     */
+    private InputStream fetch(final URI uri) throws IOException {
+        final HttpURLConnection conn =
+            (HttpURLConnection) uri.toURL().openConnection();
+        conn.connect();
+        final int code = conn.getResponseCode();
+        if (code != HttpURLConnection.HTTP_OK) {
+            throw new IOException(
                 String.format(
-                    "Can't resolve '%s' HREF",
-                    href
+                    "Invalid HTTP response code: %d",
+                    code
                 )
             );
         }
-        return new StreamSource(
-            new BufferedReader(new InputStreamReader(stream))
-        );
+        return conn.getInputStream();
     }
 
 }

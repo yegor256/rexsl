@@ -87,7 +87,9 @@ import java.lang.annotation.Target;
  * <p>Then, this XML is sent to the browser and it converts it to XHTML using
  * provided stylesheet: <tt>/xsl/Front.xsl</tt>. This stylesheet should be
  * available in <tt>webapp</tt> directory. The name of stylesheet is constructed
- * from a simple name of the class <tt>Front</tt>. What if we want to use
+ * from a simple name of the class <tt>Front</tt>.
+ *
+ * <p>What if we want to use
  * another XSL stylesheet for this class? Then we need <tt>&#64;Stylesheet</tt>
  * annotation:
  *
@@ -95,7 +97,7 @@ import java.lang.annotation.Target;
  * import javax.xml.bind.annotation.XmlElement;
  * import javax.xml.bind.annotation.XmlRootElement;
  * &#64;XmlRootElement(name = "front")
- * &#64;Stylesheet("custom-stylesheet")
+ * &#64;Stylesheet("http://example.com/custom-stylesheet.xsl")
  * public final class Front {
  *  &#64;XmlElement
  *  public String title() {
@@ -108,13 +110,11 @@ import java.lang.annotation.Target;
  *
  * <pre>
  * &lt;?xml version="1.0"?>
- * &lt;?xml-stylesheet href="/xsl/custom-stylesheet.xsl" type="text/xsl"?>
+ * &lt;?xml-stylesheet href="http://example.com/custom-stylesheet.xsl" type="text/xsl"?>
  * &lt;front>
  *  &lt;title>hello, world!&lt;/title>
  * &lt;/front>
  * </pre>
- *
- * <p>You can't change the <tt>/xsl</tt> prefix.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
