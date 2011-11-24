@@ -74,7 +74,7 @@ final class ContextResourceResolver implements URIResolver {
         throws TransformerException {
         InputStream stream = null;
         if (href.startsWith("/")) {
-            stream = this.context.getResourceAsStream(href);
+            stream = this.local(href);
         }
         final URI uri = UriBuilder.fromUri(href).build();
         if (stream == null) {
@@ -100,6 +100,23 @@ final class ContextResourceResolver implements URIResolver {
         } finally {
             IOUtils.closeQuietly(stream);
         }
+    }
+
+    /**
+     * Load stream from local address.
+     * @param path The path to resource to load from
+     * @return The stream opened or NULL if nothing found
+     */
+    private InputStream local(final String path) {
+        final InputStream stream = this.context.getResourceAsStream(path);
+        if (stream != null) {
+            Logger.debug(
+                this,
+                "#local('%s'): found local resource",
+                path
+            );
+        }
+        return stream;
     }
 
     /**
