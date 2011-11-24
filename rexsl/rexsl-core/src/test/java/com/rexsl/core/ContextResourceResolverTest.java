@@ -36,6 +36,7 @@ import java.net.URL;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.transform.Source;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.MatcherAssert;
@@ -85,9 +86,15 @@ public final class ContextResourceResolverTest {
         final HttpURLConnection conn = this.mockConnection(href);
         Mockito.doReturn(HttpURLConnection.HTTP_OK)
             .when(conn).getResponseCode();
-        Mockito.doReturn(IOUtils.toInputStream("")).when(conn).getInputStream();
+        Mockito.doReturn(
+            IOUtils.toInputStream(
+                "<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform'/>"
+            )
+        )
+            .when(conn).getInputStream();
         final Source src = resolver.resolve(href, null);
         MatcherAssert.assertThat(src, Matchers.notNullValue());
+        TransformerFactory.newInstance().newTransformer(src);
     }
 
     /**

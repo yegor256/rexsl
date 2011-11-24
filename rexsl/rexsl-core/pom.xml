@@ -88,6 +88,7 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <!-- other details are in parent pom.xml -->
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

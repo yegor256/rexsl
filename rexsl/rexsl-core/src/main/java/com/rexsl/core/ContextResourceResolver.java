@@ -42,7 +42,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.io.IOUtils;
 
 /**
  * Resolves resources using {@link ServletContext}.
@@ -93,14 +92,9 @@ final class ContextResourceResolver implements URIResolver {
                 );
             }
         }
-        Source source;
-        try {
-             source = new StreamSource(
-                new BufferedReader(new InputStreamReader(stream))
-            );
-        } finally {
-            IOUtils.closeQuietly(stream);
-        }
+        final Source source = new StreamSource(
+            new BufferedReader(new InputStreamReader(stream))
+        );
         source.setSystemId(href);
         return source;
     }
