@@ -79,7 +79,7 @@ public final class XslResolverTest {
     @Test(expected = IllegalStateException.class)
     public void testMarshallerException() throws Exception {
         PowerMockito.mockStatic(JAXBContext.class);
-        Mockito.when(JAXBContext.newInstance((Class) Mockito.anyObject()))
+        Mockito.when(JAXBContext.newInstance(Mockito.any(Class.class)))
             .thenThrow(new JAXBException(""));
         new XslResolver().getContext(Object.class);
     }

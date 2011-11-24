@@ -48,7 +48,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      */
     @Override
     protected void run() throws MojoFailureException {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         for (Check check : new ChecksProvider().all()) {
             if (!check.validate(this.env())) {
                 throw new MojoFailureException(
@@ -61,9 +61,8 @@ public final class CheckMojo extends AbstractRexslMojo {
         }
         Logger.info(
             this,
-            "All ReXSL checks passed in %.3fsec",
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000 * 1000)
+            "All ReXSL checks passed in %dms",
+            System.currentTimeMillis() - start
         );
     }
 

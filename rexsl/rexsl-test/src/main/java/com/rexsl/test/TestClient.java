@@ -117,14 +117,13 @@ public final class TestClient {
      * @throws Exception If something goes wrong
      */
     public TestClient get(final String path) throws Exception {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         this.response = this.execute(new HttpGet(this.uri(path)));
         Logger.info(
             this,
-            "#get(%s): completed in %.3fms [%s]",
+            "#get(%s): completed in %dms [%s]",
             path,
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000),
+            System.currentTimeMillis() - start,
             this.response.getStatusLine()
         );
         return this;
@@ -137,14 +136,13 @@ public final class TestClient {
      * @throws Exception If something goes wrong
      */
     public TestClient post(final String path) throws Exception {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         this.response = this.execute(new HttpPost(this.uri(path)));
         Logger.info(
             this,
-            "#post(%s): completed in %.3fms [%s]",
+            "#post(%s): completed in %dms [%s]",
             path,
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000),
+            System.currentTimeMillis() - start,
             this.response.getStatusLine()
         );
         return this;
@@ -157,14 +155,13 @@ public final class TestClient {
      * @throws Exception If something goes wrong
      */
     public TestClient put(final String path) throws Exception {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         this.response = this.execute(new HttpPut(this.uri(path)));
         Logger.info(
             this,
-            "#put(%s): completed in %.3fms [%s]",
+            "#put(%s): completed in %dms [%s]",
             path,
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000),
+            System.currentTimeMillis() - start,
             this.response.getStatusLine()
         );
         return this;
