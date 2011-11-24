@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -108,6 +109,7 @@ final class ContextResourceResolver implements URIResolver {
      * @throws IOException If some problem happens
      */
     private InputStream fetch(final URI uri) throws IOException {
+        final long start = System.currentTimeMillis();
         final HttpURLConnection conn =
             (HttpURLConnection) uri.toURL().openConnection();
         conn.connect();
@@ -120,6 +122,14 @@ final class ContextResourceResolver implements URIResolver {
                 )
             );
         }
+        Logger.debug(
+            this,
+            "#fetch('%s'): retrieved %d bytes of type '%s' [%dms]",
+            uri,
+            conn.getContentLength(),
+            conn.getContentType(),
+            System.currentTimeMillis() - start
+        );
         return conn.getInputStream();
     }
 

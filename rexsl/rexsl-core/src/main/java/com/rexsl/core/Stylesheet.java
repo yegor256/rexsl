@@ -110,7 +110,8 @@ import java.lang.annotation.Target;
  *
  * <pre>
  * &lt;?xml version="1.0"?>
- * &lt;?xml-stylesheet href="http://example.com/custom-stylesheet.xsl" type="text/xsl"?>
+ * &lt;?xml-stylesheet href="http://example.com/custom-stylesheet.xsl"
+ *   type="text/xsl"?>
  * &lt;front>
  *  &lt;title>hello, world!&lt;/title>
  * &lt;/front>

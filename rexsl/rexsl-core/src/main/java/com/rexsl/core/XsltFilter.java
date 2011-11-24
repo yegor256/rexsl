@@ -256,7 +256,7 @@ public final class XsltFilter implements Filter {
      * @checkstyle RedundantThrows (2 lines)
      */
     private String transform(final String xml) throws ServletException {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         final StringWriter writer = new StringWriter();
         try {
             final TransformerFactory factory = TransformerFactory.newInstance();
@@ -287,11 +287,10 @@ public final class XsltFilter implements Filter {
         final String output = writer.toString();
         Logger.debug(
             this,
-            "#tranform(%d chars): produced %d chars, %.2f sec",
+            "#tranform(%d chars): produced %d chars [%dms]",
             xml.length(),
             output.length(),
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000 * 1000 * 1000)
+            System.currentTimeMillis() - start
         );
         return output;
     }
