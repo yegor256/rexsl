@@ -202,7 +202,8 @@ public final class TestClientTest {
     /**
      * Tests expectedStatus method.
      * @throws Exception If something goes wrong inside.
-     * @todo #75 Implement TestClient.expectedStatus().
+     * @todo #75 Implement TestClient.expectedStatus(): It must return
+     *  <code>TestClient</code>.
      */
     @org.junit.Ignore
     @Test
@@ -215,18 +216,21 @@ public final class TestClientTest {
     /**
      * Tests expectedStatus method.
      * @throws Exception If something goes wrong inside.
-     * @todo #75 Implement TestClient.expectedStatus().
+     * @todo #75 Implement TestClient.expectedStatus(): It must throw an
+     *  <code>AssertionError</code>.
      */
     @org.junit.Ignore
     @Test(expected = AssertionError.class)
     public void testFalseExpectedStatus() throws Exception {
         TestClient client = new TestClient(this.home);
         client = client.get(this.ROOT);
+        Assert.assertNotNull(client.expectedStatus(HttpStatus.SC_BAD_REQUEST));
     }
 
     /**
      * Tests expectedXPath method.
-     * @todo #75 Implement TestClient.expectedXPath().
+     * @todo #75 Implement TestClient.expectedXPath(): It must return
+     *  <code>TestClient</code>.
      * @throws Exception If something goes wrong inside.
      */
     @org.junit.Ignore
@@ -239,7 +243,8 @@ public final class TestClientTest {
 
     /**
      * Tests expectedXPath method.
-     * @todo #75 Implement TestClient.expectedXPath().
+     * @todo #75 Implement TestClient.expectedXPath(): It must throw an
+     *  <code>AssertionError</code>.
      * @throws Exception If something goes wrong inside.
      */
     @org.junit.Ignore
@@ -247,5 +252,6 @@ public final class TestClientTest {
     public void testFalseExpectedXPath() throws Exception {
         final TestClient client = new TestClient(this.home);
         client.body(this.TEST_BODY);
+        Assert.assertNotNull(client.expectedXPath("/root[.='test1']"));
     }
 }

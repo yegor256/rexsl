@@ -261,7 +261,7 @@ public final class TestClient {
      * Checks client status.
      * @param status Expected status.
      * @return This object if it's status equal to the expected one, else -
-     * throws exception.
+     * throws <code>AssertionError</code>.
      */
     public TestClient expectedStatus(final int status) {
         return null;
@@ -270,8 +270,8 @@ public final class TestClient {
     /**
      * Checks client body structure.
      * @param xpath XPath value to check.
-     * @return This object if it contains expected path, else - throws
-     * exception.
+     * @return This object if it contains expected path, else - throws an
+     * <code>AssertionError</code>.
      */
     public TestClient expectedXPath(final String xpath) {
         throw null;
