@@ -79,7 +79,7 @@ public final class XslResolverTest {
     @Test(expected = IllegalStateException.class)
     public void testMarshallerException() throws Exception {
         PowerMockito.mockStatic(JAXBContext.class);
-        Mockito.when(JAXBContext.newInstance((Class) Mockito.anyObject()))
+        Mockito.when(JAXBContext.newInstance(Mockito.any(Class.class)))
             .thenThrow(new JAXBException(""));
         new XslResolver().getContext(Object.class);
     }
@@ -175,8 +175,7 @@ public final class XslResolverTest {
         MatcherAssert.assertThat(
             XhtmlConverter.the(writer.toString()),
             XmlMatchers.hasXPath(
-                // @checkstyle LineLength (1 line)
-                "/processing-instruction('xml-stylesheet')[contains(.,'test.xsl')]"
+                "/processing-instruction('xml-stylesheet')[contains(.,'test')]"
             )
         );
     }

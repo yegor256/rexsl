@@ -85,6 +85,11 @@ public final class XsltFilter implements Filter {
     private static final String ENCODING = "UTF-8";
 
     /**
+     * XSLT factory.
+     */
+    private TransformerFactory tfactory;
+
+    /**
      * Context for the filter.
      */
     private ServletContext context;
@@ -102,6 +107,8 @@ public final class XsltFilter implements Filter {
     @Override
     public void init(final FilterConfig config) {
         this.context = config.getServletContext();
+        this.tfactory = TransformerFactory.newInstance();
+        this.tfactory.setURIResolver(new ContextResourceResolver(this.context));
         Manifests.append(this.context);
         Logger.debug(
             this,
@@ -256,42 +263,59 @@ public final class XsltFilter implements Filter {
      * @checkstyle RedundantThrows (2 lines)
      */
     private String transform(final String xml) throws ServletException {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         final StringWriter writer = new StringWriter();
         try {
-            final TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setURIResolver(
-                new ContextResourceResolver(this.context)
-            );
-            final Source stylesheet = factory.getAssociatedStylesheet(
+            final Source stylesheet = this.tfactory.getAssociatedStylesheet(
                 new StreamSource(new StringReader(xml)),
-                null, null, null
+                null,
+                null,
+                null
             );
-            final Transformer trans = factory.newTransformer(stylesheet);
-            trans.setURIResolver(new ContextResourceResolver(this.context));
+            if (stylesheet == null) {
+                throw new ServletException(
+                    String.format(
+                        "No associated stylesheet found at '%s'",
+                        xml
+                    )
+                );
+            }
+            Logger.debug(
+                this,
+                "#tranform(%d chars): found '%s' associated stylesheet by %s",
+                xml.length(),
+                stylesheet.getSystemId(),
+                this.tfactory.getClass().getName()
+            );
+            final Transformer trans = this.tfactory.newTransformer(stylesheet);
             trans.transform(
                 new StreamSource(new StringReader(xml)),
                 new StreamResult(writer)
             );
         } catch (TransformerConfigurationException ex) {
             throw new ServletException(
-                "Failed to configure XSL transformer",
+                String.format(
+                    "Failed to configure XSL transformer: '%s'",
+                    xml
+                ),
                 ex
             );
         } catch (TransformerException ex) {
             throw new ServletException(
-                "Failed to transform XML document to XHTML",
+                String.format(
+                    "Failed to transform XML to XHTML: '%s'",
+                    xml
+                ),
                 ex
             );
         }
         final String output = writer.toString();
         Logger.debug(
             this,
-            "#tranform(%d chars): produced %d chars, %.2f sec",
+            "#tranform(%d chars): produced %d chars [%dms]",
             xml.length(),
             output.length(),
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000 * 1000 * 1000)
+            System.currentTimeMillis() - start
         );
         return output;
     }
