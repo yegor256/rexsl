@@ -85,6 +85,11 @@ public final class XsltFilter implements Filter {
     private static final String ENCODING = "UTF-8";
 
     /**
+     * XSLT factory.
+     */
+    private TransformerFactory tfactory;
+
+    /**
      * Context for the filter.
      */
     private ServletContext context;
@@ -102,6 +107,8 @@ public final class XsltFilter implements Filter {
     @Override
     public void init(final FilterConfig config) {
         this.context = config.getServletContext();
+        this.tfactory = TransformerFactory.newInstance();
+        this.tfactory.setURIResolver(new ContextResourceResolver(this.context));
         Manifests.append(this.context);
         Logger.debug(
             this,
@@ -259,15 +266,11 @@ public final class XsltFilter implements Filter {
         final long start = System.currentTimeMillis();
         final StringWriter writer = new StringWriter();
         try {
-            final TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setURIResolver(
-                new ContextResourceResolver(this.context)
-            );
-            final Source stylesheet = factory.getAssociatedStylesheet(
+            final Source stylesheet = this.tfactory.getAssociatedStylesheet(
                 new StreamSource(new StringReader(xml)),
                 null, null, null
             );
-            final Transformer trans = factory.newTransformer(stylesheet);
+            final Transformer trans = this.tfactory.newTransformer(stylesheet);
             trans.setURIResolver(new ContextResourceResolver(this.context));
             trans.transform(
                 new StreamSource(new StringReader(xml)),
