@@ -57,7 +57,7 @@ import javax.xml.validation.SchemaFactory;
  * @since 0.2
  */
 @Provider
-@Produces(MediaType.APPLICATION_XML)
+@Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
 public final class XslResolver implements ContextResolver<Marshaller> {
 
     /**
