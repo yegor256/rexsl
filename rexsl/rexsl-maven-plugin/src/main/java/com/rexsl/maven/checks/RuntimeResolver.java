@@ -29,67 +29,82 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.Environment;
-import java.io.File;
-import java.io.StringWriter;
+import com.ymock.util.Logger;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
 /**
- * Transform XML to XHTML through XSL.
+ * Resolver of resources.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class XhtmlTransformer {
+final class RuntimeResolver implements URIResolver {
 
     /**
-     * Turn XML into XHTML.
-     * @param env Environment
-     * @param file XML document
-     * @return XHTML as text
-     * @throws InternalCheckException If some failure inside
+     * Home page of the site.
      */
-    public String transform(final Environment env, final File file)
-        throws InternalCheckException {
-        final Source xml = new StreamSource(file);
-        final TransformerFactory factory = TransformerFactory.newInstance();
-        URI home;
+    private final URI home;
+
+    /**
+     * Public ctor.
+     * @param uri The home page of the site
+     */
+    public RuntimeResolver(final URI uri) {
+        this.home = uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Source resolve(final String href, final String base)
+        throws TransformerException {
+        URL url;
         try {
-            home = new URI(String.format("http://localhost:%d", env.port()));
-        } catch (java.net.URISyntaxException ex) {
-            throw new IllegalArgumentException(ex);
+            url = new URL(this.home.toString() + href);
+        } catch (java.net.MalformedURLException ex) {
+            throw new TransformerException(ex);
         }
-        factory.setURIResolver(new RuntimeResolver(home));
-        Source xsl;
+        HttpURLConnection conn;
+        int code;
         try {
-            xsl = factory.getAssociatedStylesheet(xml, null, null, null);
-        } catch (javax.xml.transform.TransformerConfigurationException ex) {
-            throw new InternalCheckException(ex);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.connect();
+            code = conn.getResponseCode();
+        } catch (java.io.IOException ex) {
+            throw new TransformerException(ex);
         }
-        if (xsl == null) {
-            throw new InternalCheckException(
-                "Associated XSL stylesheet not found in '%s'",
-                file
+        if (code != HttpURLConnection.HTTP_OK) {
+            throw new TransformerException(
+                String.format(
+                    "URL %s returned %d code (instead of %d)",
+                    url,
+                    code,
+                    HttpURLConnection.HTTP_OK
+                )
             );
         }
-        Transformer transformer;
+        Source src;
         try {
-            transformer = factory.newTransformer(xsl);
-        } catch (javax.xml.transform.TransformerConfigurationException ex) {
-            throw new InternalCheckException(ex);
+            src = new StreamSource(conn.getInputStream());
+        } catch (java.io.IOException ex) {
+            throw new TransformerException(ex);
         }
-        final StringWriter writer = new StringWriter();
-        try {
-            transformer.transform(xml, new StreamResult(writer));
-        } catch (javax.xml.transform.TransformerException ex) {
-            throw new InternalCheckException(ex);
-        }
-        return writer.toString();
+        src.setSystemId(href);
+        Logger.debug(
+            this,
+            "#resolve(%s, %s): resolved from %s",
+            href,
+            base,
+            url
+        );
+        return src;
     }
 
 }
