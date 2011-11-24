@@ -275,12 +275,18 @@ public final class XsltFilter implements Filter {
             );
         } catch (TransformerConfigurationException ex) {
             throw new ServletException(
-                "Failed to configure XSL transformer",
+                String.format(
+                    "Failed to configure XSL transformer: '%s'",
+                    xml
+                ),
                 ex
             );
         } catch (TransformerException ex) {
             throw new ServletException(
-                "Failed to transform XML document to XHTML",
+                String.format(
+                    "Failed to transform XML to XHTML: '%s'",
+                    xml
+                ),
                 ex
             );
         }
