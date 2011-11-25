@@ -27,27 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo.scripts
 
 import com.rexsl.test.TestClient
-import com.rexsl.test.XhtmlConverter
+import javax.ws.rs.core.HttpHeaders
+import javax.ws.rs.core.MediaType
 import org.junit.Assert
-import org.xmlmatchers.XmlMatchers
 import org.hamcrest.Matchers
 
-def r1 = new TestClient(rexsl.home)
-    .header('Accept', 'text/plain,application/xml')
-    .header('User-agent', 'FireFox')
+def r = new TestClient(rexsl.home)
+    .header(HttpHeaders.ACCEPT, 'text/plain,application/xml')
+    .header(HttpHeaders.USER_AGENT, 'FireFox')
     .get('/')
-Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_OK))
-Assert.assertThat(r1.headers.get('content-type'), Matchers.equalTo('text/html'))
+    .assertStatus(HttpURLConnection.HTTP_OK)
+    .assertXPath('//xhtml:div')
 Assert.assertThat(
-    XhtmlConverter.the(r1.body),
-    XmlMatchers.hasXPath(
-        '//x:div',
-        new org.xmlmatchers.namespace.SimpleNamespaceContext()
-        .withBinding('x', 'http://www.w3.org/1999/xhtml')
-    )
+    r.headers.get(HttpHeaders.CONTENT_TYPE),
+    Matchers.equalTo(MediaType.TEXT_HTML)
 )
 
-def r2 = new TestClient(rexsl.home).get('/strange-address')
-Assert.assertThat(r2.status, Matchers.equalTo(HttpURLConnection.HTTP_NOT_FOUND))
+new TestClient(rexsl.home)
+    .get('/strange-address')
+    .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)

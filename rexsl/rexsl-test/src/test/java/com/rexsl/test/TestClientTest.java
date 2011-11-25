@@ -39,6 +39,7 @@ import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.UriBuilder;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.AfterClass;
@@ -152,7 +153,6 @@ public final class TestClientTest {
      * @throws Exception If something goes wrong inside.
      */
     @Test
-    @org.junit.Ignore
     public void testCookie() throws Exception {
         new TestClient(TestClientTest.home)
             .cookie(new NewCookie("a", "c"));
@@ -190,6 +190,21 @@ public final class TestClientTest {
         new TestClient(TestClientTest.home)
             .get("/some-xml-path")
             .assertXPath("/a[contains(.,'works')]");
+    }
+
+    /**
+     * Test how URI is constructed.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testURIConstructingMechanism() throws Exception {
+        final URI base = UriBuilder.fromUri(TestClientTest.home)
+            .queryParam("some-param", "some-value")
+            .path("/some/extra/path")
+            .build();
+        final TestClient client = new TestClient(base).get(
+            UriBuilder.fromPath("suffix").queryParam("alpha", "554").build()
+        );
     }
 
 }

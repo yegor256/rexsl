@@ -27,28 +27,30 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo.setup
 
 import com.rexsl.test.TestClient
-import org.junit.Assert
+import javax.ws.rs.core.HttpHeaders
+import javax.ws.rs.core.MediaType
 import org.hamcrest.Matchers
 
 def home = '/'
 
 // let's validate how data were injected in bootstrap
-def r1 = new TestClient(rexsl.home)
+new TestClient(rexsl.home)
     .get(home)
-Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_OK))
-Assert.assertThat(r1.body, Matchers.containsString('bootstrapped'))
+    .assertStatus(HttpURLConnection.HTTP_OK)
+    .assertBody(Matchers.containsString('bootstrapped'))
 
 // inject new data value
-def r2 = new TestClient(rexsl.home)
-    .header('Content-Type', 'application/x-www-form-urlencoded')
+new TestClient(rexsl.home)
+    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
     .body('text=injected')
     .post(home)
-Assert.assertThat(r2.status, Matchers.equalTo(HttpURLConnection.HTTP_NO_CONTENT))
+    .assertStatus(HttpURLConnection.HTTP_NO_CONTENT)
 
 // let's validate that it's there
-def r3 = new TestClient(rexsl.home)
+new TestClient(rexsl.home)
     .get(home)
-Assert.assertThat(r3.status, Matchers.equalTo(HttpURLConnection.HTTP_OK))
-Assert.assertThat(r3.body, Matchers.containsString('injected'))
+    .assertStatus(HttpURLConnection.HTTP_OK)
+    .assertBody(Matchers.containsString('injected'))

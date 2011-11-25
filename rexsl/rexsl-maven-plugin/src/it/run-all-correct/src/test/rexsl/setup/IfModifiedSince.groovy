@@ -29,18 +29,18 @@
  */
 
 import java.text.SimpleDateFormat
+import javax.ws.rs.core.HttpHeaders
 import com.rexsl.test.TestClient
-import org.junit.Assert
 import org.hamcrest.Matchers
 
-def r1 = new TestClient(rexsl.home)
-    .header('Accept', 'text/plain,text/css')
+new TestClient(rexsl.home)
+    .header(HttpHeaders.ACCEPT, 'text/plain,text/css')
     .header(
-        'If-Modified-Since',
+        HttpHeaders.IF_MODIFIED_SINCE,
         new SimpleDateFormat('EEE, dd MMM yyyy HH:mm:ss zzz', Locale.ENGLISH)
             .format(new Date())
     )
-    .header('User-agent', 'Chrome')
+    .header(HttpHeaders.USER_AGENT, 'Chrome')
     .get('/css/screen.css')
-Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_OK))
-Assert.assertThat(r1.body.length(), Matchers.greaterThan(0))
+    .assertStatus(HttpURLConnection.HTTP_OK)
+    .assertBody(Matchers.containsString('font-family'))

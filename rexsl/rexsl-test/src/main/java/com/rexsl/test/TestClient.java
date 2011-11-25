@@ -36,10 +36,12 @@ import com.rexsl.test.client.Headers;
 import com.ymock.util.Logger;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
@@ -50,9 +52,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
 import org.xmlmatchers.XmlMatchers;
@@ -121,11 +123,9 @@ public final class TestClient {
     /**
      * Public ctor.
      * @param uri Home of the server
-     * @throws java.net.URISyntaxException If some problem with the URI
      */
-    public TestClient(final String uri) throws java.net.URISyntaxException {
-        this.home = new URI(uri);
-        this.response = null;
+    public TestClient(final String uri) {
+        this(UriBuilder.fromUri(uri).build());
     }
 
     /**
@@ -153,89 +153,89 @@ public final class TestClient {
 
     /**
      * Execute GET request.
-     * @param path The URL
+     * @param path The relative path on the server
      * @return This object
      * @throws Exception If something goes wrong
      */
-    public TestClient get(final String path) throws Exception {
-        final long start = System.currentTimeMillis();
-        this.response = this.execute(new HttpGet(this.uri(path)));
-        Logger.info(
-            this,
-            "#get(%s): completed in %dms [%s]",
-            path,
-            System.currentTimeMillis() - start,
-            this.response.getStatusLine()
-        );
-        return this;
+    public TestClient get(final URI path) throws Exception {
+        return this.method(path, HttpGet.class);
     }
 
     /**
      * Execute GET request.
-     * @param uri The URI
+     * @param path The relative path on the server
      * @return This object
      * @throws Exception If something goes wrong
      */
-    public TestClient get(final URI uri) throws Exception {
-        return this.get(uri.toString());
+    public TestClient get(final String path) throws Exception {
+        return this.get(UriBuilder.fromPath(path).build());
+    }
+
+    /**
+     * Execute GET request.
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    public TestClient get() throws Exception {
+        return this.get("");
     }
 
     /**
      * Execute POST request.
-     * @param path The URL
+     * @param path The path on the server
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    public TestClient post(final URI path) throws Exception {
+        return this.method(path, HttpPost.class);
+    }
+
+    /**
+     * Execute POST request.
+     * @param path The path on the server
      * @return This object
      * @throws Exception If something goes wrong
      */
     public TestClient post(final String path) throws Exception {
-        final long start = System.currentTimeMillis();
-        this.response = this.execute(new HttpPost(this.uri(path)));
-        Logger.info(
-            this,
-            "#post(%s): completed in %dms [%s]",
-            path,
-            System.currentTimeMillis() - start,
-            this.response.getStatusLine()
-        );
-        return this;
+        return this.post(UriBuilder.fromPath(path).build());
     }
 
     /**
      * Execute POST request.
-     * @param uri The URI
      * @return This object
      * @throws Exception If something goes wrong
      */
-    public TestClient post(final URI uri) throws Exception {
-        return this.post(uri.toString());
+    public TestClient post() throws Exception {
+        return this.post("");
     }
 
     /**
      * Execute PUT request.
-     * @param path The URL
+     * @param path The path on the server
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    public TestClient put(final URI path) throws Exception {
+        return this.method(path, HttpPut.class);
+    }
+
+    /**
+     * Execute PUT request.
+     * @param path The path on the server
      * @return This object
      * @throws Exception If something goes wrong
      */
     public TestClient put(final String path) throws Exception {
-        final long start = System.currentTimeMillis();
-        this.response = this.execute(new HttpPut(this.uri(path)));
-        Logger.info(
-            this,
-            "#put(%s): completed in %dms [%s]",
-            path,
-            System.currentTimeMillis() - start,
-            this.response.getStatusLine()
-        );
-        return this;
+        return this.put(UriBuilder.fromPath(path).build());
     }
 
     /**
      * Execute PUT request.
-     * @param uri The URI
      * @return This object
      * @throws Exception If something goes wrong
      */
-    public TestClient put(final URI uri) throws Exception {
-        return this.put(uri.toString());
+    public TestClient put() throws Exception {
+        return this.put("");
     }
 
     /**
@@ -280,24 +280,6 @@ public final class TestClient {
      */
     public Headers getHeaders() {
         return new Headers(this.response.getAllHeaders());
-    }
-
-    /**
-     * Build URI to request.
-     * @param path The path to request
-     * @return The URI
-     * @throws java.net.URISyntaxException If there is some problem
-     */
-    private URI uri(final String path) throws java.net.URISyntaxException {
-        return new URI(
-            String.format(
-                "%s://%s:%d%s",
-                this.home.getScheme(),
-                this.home.getHost(),
-                this.home.getPort(),
-                path
-            )
-        );
     }
 
     /**
@@ -362,6 +344,33 @@ public final class TestClient {
     }
 
     /**
+     * Execute one request.
+     * @param path The path
+     * @param type Type of request
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    private TestClient method(final URI path,
+        final Class<? extends HttpUriRequest> type) throws Exception {
+        final long start = System.currentTimeMillis();
+        final URI absolute = this.absolute(path);
+        final HttpUriRequest request = type
+            .getConstructor(URI.class)
+            .newInstance(absolute);
+        this.response = this.execute(request);
+        Logger.info(
+            this,
+            "#%s(%s): completed in %dms [%s]: %s",
+            request.getMethod(),
+            path,
+            System.currentTimeMillis() - start,
+            this.response.getStatusLine(),
+            absolute
+        );
+        return this;
+    }
+
+    /**
      * Execute request and return response.
      * @param req The request
      * @return The response
@@ -378,6 +387,16 @@ public final class TestClient {
             final HttpClient client = new DefaultHttpClient(params);
             return client.execute((HttpUriRequest) req);
         }
+    }
+
+    /**
+     * Build absolute URI from <tt>this.home</tt> and provided <tt>path</tt>.
+     * @param path Relative path
+     * @return Absolute URI
+     * @throws Exception If some problem inside
+     */
+    private URI absolute(final URI path) throws Exception {
+        return new URL(this.home.toURL(), path.toString()).toURI();
     }
 
 }

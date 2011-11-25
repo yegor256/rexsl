@@ -27,22 +27,19 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo.scripts
 
 import com.rexsl.test.TestClient
-import com.rexsl.test.XhtmlConverter
-import org.junit.Assert
-import org.xmlmatchers.XmlMatchers
+import javax.ws.rs.core.HttpHeaders
+import javax.ws.rs.core.MediaType
 
 /**
  * Here we're validating that setup mechanism works and
  * groovy scripts from src/test/rexsl/setup have been executed
  * before this script.
  */
-def r1 = new TestClient(rexsl.home)
-    .header('Accept', 'application/xml')
-    .header('User-agent', 'Chrome')
+new TestClient(rexsl.home)
+    .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
+    .header(HttpHeaders.USER_AGENT, 'Chrome')
     .get('/')
-Assert.assertThat(
-    XhtmlConverter.the(r1.body),
-    XmlMatchers.hasXPath("/page/text[.='injected']")
-)
+    .assertXPath("/page/text[.='injected']")

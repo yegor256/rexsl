@@ -53,6 +53,13 @@
             <version since="25 Nov 2011">1.1.1</version>
         </dependency>
         <dependency>
+            <!-- JAX-RS implementation, core library -->
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version since="26 Oct 2011">1.9.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <!--
             JAXB 2.0 API.
             -->
