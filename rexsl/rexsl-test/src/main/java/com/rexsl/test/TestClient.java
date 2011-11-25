@@ -304,7 +304,7 @@ public final class TestClient {
      * @return This object
      */
     public TestClient assertStatus(final int status) {
-        Assert.assertEquals(new Long(this.getStatus()), new Long(status));
+        Assert.assertEquals(new Long(status), new Long(this.getStatus()));
         return this;
     }
 
