@@ -49,6 +49,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
@@ -112,6 +115,16 @@ public final class TestClient {
      */
     public TestClient(final URI uri) {
         this.home = uri;
+        this.response = null;
+    }
+
+    /**
+     * Public ctor.
+     * @param uri Home of the server
+     * @throws java.net.URISyntaxException If some problem with the URI
+     */
+    public TestClient(final String uri) throws java.net.URISyntaxException {
+        this.home = new URI(uri);
         this.response = null;
     }
 
@@ -360,7 +373,9 @@ public final class TestClient {
             for (Extender extender : this.extenders) {
                 extender.extend(req);
             }
-            final HttpClient client = new DefaultHttpClient();
+            final HttpParams params = new BasicHttpParams();
+            params.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, false);
+            final HttpClient client = new DefaultHttpClient(params);
             return client.execute((HttpUriRequest) req);
         }
     }
