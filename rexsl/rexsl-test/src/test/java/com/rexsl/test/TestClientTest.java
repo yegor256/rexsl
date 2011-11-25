@@ -29,7 +29,6 @@
  */
 package com.rexsl.test;
 
-import com.rexsl.test.client.Headers;
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
@@ -119,8 +118,7 @@ public final class TestClientTest {
         final TestClient client = new TestClient(TestClientTest.home)
             .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
             .header(HttpHeaders.USER_AGENT, "Some Text")
-            .get("/some-path")
-            .assertBody(Matchers.containsString("works"))
+            .get("/the-path")
             .assertBody(Matchers.containsString("fine"))
             .assertStatus(HttpURLConnection.HTTP_OK);
         MatcherAssert.assertThat(

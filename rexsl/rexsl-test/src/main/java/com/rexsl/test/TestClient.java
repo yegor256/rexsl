@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.NewCookie;
-import javax.xml.transform.Source;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
@@ -189,7 +188,7 @@ public final class TestClient {
 
     /**
      * Execute POST request.
-     * @param path The URL
+     * @param uri The URI
      * @return This object
      * @throws Exception If something goes wrong
      */
@@ -218,7 +217,7 @@ public final class TestClient {
 
     /**
      * Execute PUT request.
-     * @param path The URL
+     * @param uri The URI
      * @return This object
      * @throws Exception If something goes wrong
      */
