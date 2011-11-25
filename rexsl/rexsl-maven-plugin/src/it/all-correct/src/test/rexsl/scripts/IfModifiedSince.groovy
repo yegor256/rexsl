@@ -27,19 +27,20 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo.scripts
 
 import java.text.SimpleDateFormat
 import com.rexsl.test.TestClient
-import org.junit.Assert
+import javax.ws.rs.core.HttpHeaders
 import org.hamcrest.Matchers
 
-def r1 = new TestClient(rexsl.home)
-    .header('Accept', 'text/plain,text/css')
-    .header('If-Modified-Since',
-        new SimpleDateFormat('EEE, dd MMM yyyy HH:mm:ss zzz', Locale.ENGLISH)
-            .format(new Date())
+new TestClient(rexsl.home)
+    .header(HttpHeaders.ACCEPT, 'text/plain,text/css')
+    .header(
+        HttpHeaders.IF_MODIFIED_SINCE,
+        new SimpleDateFormat('EEE, dd MMM yyyy HH:mm:ss zzz', Locale.ENGLISH).format(new Date())
     )
-    .header('User-agent', 'Chrome')
+    .header(HttpHeaders.USER_AGENT, 'Chrome')
     .get('/css/screen.css')
-Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_NOT_MODIFIED))
-Assert.assertThat(r1.body, Matchers.is(Matchers.nullValue()))
+    .assertStatus(HttpURLConnection.HTTP_NOT_MODIFIED)
+    .assertBody(Matchers.nullValue())

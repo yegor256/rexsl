@@ -331,7 +331,7 @@
                     <settingsFile>${basedir}/src/it/settings.xml</settingsFile>
                     <showErrors>true</showErrors>
                     <showVersion>false</showVersion>
-                    <streamLogs>false</streamLogs>
+                    <streamLogs>true</streamLogs>
                 </configuration>
                 <executions>
                     <execution>

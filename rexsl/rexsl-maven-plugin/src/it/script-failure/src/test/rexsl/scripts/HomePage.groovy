@@ -29,12 +29,10 @@
  */
 
 import com.rexsl.test.TestClient
-import org.junit.Assert
-import org.hamcrest.Matchers
 
-def r1 = new TestClient(rexsl.home)
+new TestClient(rexsl.home)
     .header('Accept', 'application/xml')
     .header('User-agent', 'Safari')
     .get('/')
-// we should fail here because status code is 200, not 404
-Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_NOT_FOUND))
+    // we should fail here because status code is 200, not 404
+    .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)

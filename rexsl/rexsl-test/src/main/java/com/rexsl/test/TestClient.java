@@ -34,10 +34,14 @@ import com.rexsl.test.client.Extender;
 import com.rexsl.test.client.HeaderExtender;
 import com.rexsl.test.client.Headers;
 import com.ymock.util.Logger;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
@@ -47,10 +51,39 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.params.ClientPNames;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.hamcrest.Matcher;
+import org.junit.Assert;
+import org.xmlmatchers.XmlMatchers;
+import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
- * Test HTTP client.
+ * A universal class for in-container testing of your web application.
+ *
+ * <p>For example (in your Groovy script):
+ *
+ * <pre>
+ * import java.net.HttpURLConnection
+ * import javax.ws.rs.core.HttpHeaders
+ * import javax.ws.rs.core.MediaType
+ * import org.xmlmatchers.XmlMatchers
+ * import org.hamcrest.Matchers
+ * new TestClient(rexsl.home)
+ *   .header(HttpHeaders.USER_AGENT, 'Safari 4')
+ *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
+ *   .body('name=John Doe')
+ *   .post(UriBuilder.fromUri('/{id}').build(number))
+ *   .assertStatus(HttpURLConnection.HTTP_OK)
+ *   .assertBody(XmlMatchers.hasXPath('/data/user[.="John Doe"]'))
+ *   .assertBody(Matchers.containsString('xml'))
+ * </pre>
+ *
+ * <p>This example will make a <tt>POST</tt> request to the URI pre-built
+ * by <tt>UriBuilder</tt>, providing headers and request body. Response will
+ * be validated with matchers. You got it.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -76,7 +109,7 @@ public final class TestClient {
     /**
      * Returned body.
      */
-    private String body;
+    private String rbody;
 
     /**
      * Public ctor.
@@ -85,6 +118,14 @@ public final class TestClient {
     public TestClient(final URI uri) {
         this.home = uri;
         this.response = null;
+    }
+
+    /**
+     * Public ctor.
+     * @param uri Home of the server
+     */
+    public TestClient(final String uri) {
+        this(UriBuilder.fromUri(uri).build());
     }
 
     /**
@@ -112,74 +153,104 @@ public final class TestClient {
 
     /**
      * Execute GET request.
-     * @param path The URL
+     * @param path The relative path on the server
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    public TestClient get(final URI path) throws Exception {
+        return this.method(path, HttpGet.class);
+    }
+
+    /**
+     * Execute GET request.
+     * @param path The relative path on the server
      * @return This object
      * @throws Exception If something goes wrong
      */
     public TestClient get(final String path) throws Exception {
-        final long start = System.currentTimeMillis();
-        this.response = this.execute(new HttpGet(this.uri(path)));
-        Logger.info(
-            this,
-            "#get(%s): completed in %dms [%s]",
-            path,
-            System.currentTimeMillis() - start,
-            this.response.getStatusLine()
-        );
-        return this;
+        return this.get(UriBuilder.fromPath(path).build());
+    }
+
+    /**
+     * Execute GET request.
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    public TestClient get() throws Exception {
+        return this.get("");
     }
 
     /**
      * Execute POST request.
-     * @param path The URL
+     * @param path The path on the server
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    public TestClient post(final URI path) throws Exception {
+        return this.method(path, HttpPost.class);
+    }
+
+    /**
+     * Execute POST request.
+     * @param path The path on the server
      * @return This object
      * @throws Exception If something goes wrong
      */
     public TestClient post(final String path) throws Exception {
-        final long start = System.currentTimeMillis();
-        this.response = this.execute(new HttpPost(this.uri(path)));
-        Logger.info(
-            this,
-            "#post(%s): completed in %dms [%s]",
-            path,
-            System.currentTimeMillis() - start,
-            this.response.getStatusLine()
-        );
-        return this;
+        return this.post(UriBuilder.fromPath(path).build());
+    }
+
+    /**
+     * Execute POST request.
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    public TestClient post() throws Exception {
+        return this.post("");
     }
 
     /**
      * Execute PUT request.
-     * @param path The URL
+     * @param path The path on the server
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    public TestClient put(final URI path) throws Exception {
+        return this.method(path, HttpPut.class);
+    }
+
+    /**
+     * Execute PUT request.
+     * @param path The path on the server
      * @return This object
      * @throws Exception If something goes wrong
      */
     public TestClient put(final String path) throws Exception {
-        final long start = System.currentTimeMillis();
-        this.response = this.execute(new HttpPut(this.uri(path)));
-        Logger.info(
-            this,
-            "#put(%s): completed in %dms [%s]",
-            path,
-            System.currentTimeMillis() - start,
-            this.response.getStatusLine()
-        );
-        return this;
+        return this.put(UriBuilder.fromPath(path).build());
+    }
+
+    /**
+     * Execute PUT request.
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    public TestClient put() throws Exception {
+        return this.put("");
     }
 
     /**
      * Get body as a string.
      * @return The body
-     * @throws java.io.IOException If some IO problem inside
+     * @throws IOException If some IO problem inside
      */
-    public String getBody() throws java.io.IOException {
-        if (this.body == null) {
+    public String getBody() throws IOException {
+        if (this.rbody == null) {
             final HttpEntity entity = this.response.getEntity();
             if (entity != null) {
-                this.body = IOUtils.toString(entity.getContent());
+                this.rbody = IOUtils.toString(entity.getContent());
             }
         }
-        return this.body;
+        return this.rbody;
     }
 
     /**
@@ -212,65 +283,120 @@ public final class TestClient {
     }
 
     /**
-     * Build URI to request.
-     * @param path The path to request
-     * @return The URI
-     * @throws java.net.URISyntaxException If there is some problem
+     * Sets new cookie.
+     * @param cookie New cookie to be set.
+     * @return This object.
      */
-    private URI uri(final String path) throws java.net.URISyntaxException {
-        return new URI(
-            String.format(
-                "%s://%s:%d%s",
-                this.home.getScheme(),
-                this.home.getHost(),
-                this.home.getPort(),
-                path
-            )
+    public TestClient cookie(final NewCookie cookie) {
+        this.header(HttpHeaders.SET_COOKIE, cookie.toString());
+        return this;
+    }
+
+    /**
+     * Verifies HTTP response status code against the provided absolute value,
+     * and throws {@link AssertionError} in case of mismatch.
+     * @param status Expected status code
+     * @return This object
+     */
+    public TestClient assertStatus(final int status) {
+        Assert.assertEquals(new Long(status), new Long(this.getStatus()));
+        return this;
+    }
+
+    /**
+     * Verifies HTTP response status code against the provided matcher.
+     * @param matcher Matcher to validate status code
+     * @return This object
+     */
+    public TestClient assertStatus(final Matcher<Integer> matcher) {
+        Assert.assertThat(this.getStatus(), matcher);
+        return this;
+    }
+
+    /**
+     * Verifies HTTP response body content against provided matcher.
+     * @param matcher The matcher to use
+     * @return This object
+     * @throws IOException If some problem with body retrieval
+     */
+    public TestClient assertBody(final Matcher<String> matcher)
+        throws IOException {
+        Assert.assertThat(this.getBody(), matcher);
+        return this;
+    }
+
+    /**
+     * Verifies HTTP response body XHTML/XML content against XPath query.
+     * @param xpath Query to use
+     * @return This object
+     * @throws Exception If some problem with body retrieval or conversion
+     */
+    public TestClient assertXPath(final String xpath) throws Exception {
+        final SimpleNamespaceContext context = new SimpleNamespaceContext()
+            .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
+            .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
+            .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
+        Assert.assertThat(
+            XhtmlConverter.the(this.getBody()),
+            XmlMatchers.hasXPath(xpath, context)
         );
+        return this;
+    }
+
+    /**
+     * Execute one request.
+     * @param path The path
+     * @param type Type of request
+     * @return This object
+     * @throws Exception If something goes wrong
+     */
+    private TestClient method(final URI path,
+        final Class<? extends HttpUriRequest> type) throws Exception {
+        final long start = System.currentTimeMillis();
+        final URI absolute = this.absolute(path);
+        final HttpUriRequest request = type
+            .getConstructor(URI.class)
+            .newInstance(absolute);
+        this.response = this.execute(request);
+        Logger.info(
+            this,
+            "#%s(%s): completed in %dms [%s]: %s",
+            request.getMethod(),
+            path,
+            System.currentTimeMillis() - start,
+            this.response.getStatusLine(),
+            absolute
+        );
+        return this;
     }
 
     /**
      * Execute request and return response.
      * @param req The request
      * @return The response
-     * @throws java.io.IOException If some IO problem
+     * @throws IOException If some IO problem
      */
-    private HttpResponse execute(final HttpRequest req)
-        throws java.io.IOException {
-        this.body = null;
-        for (Extender extender : this.extenders) {
-            extender.extend(req);
+    private HttpResponse execute(final HttpRequest req) throws IOException {
+        synchronized (this) {
+            this.rbody = null;
+            for (Extender extender : this.extenders) {
+                extender.extend(req);
+            }
+            final HttpParams params = new BasicHttpParams();
+            params.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, false);
+            final HttpClient client = new DefaultHttpClient(params);
+            return client.execute((HttpUriRequest) req);
         }
-        final HttpClient client = new DefaultHttpClient();
-        return client.execute((HttpUriRequest) req);
     }
 
     /**
-     * Sets new cookie.
-     * @param cookie New cookie to be set.
-     * @return This object.
+     * Build absolute URI from <tt>this.home</tt> and provided <tt>path</tt>.
+     * @param path Relative path
+     * @return Absolute URI
+     * @throws Exception If some problem inside
      */
-    public TestClient cookie(final NewCookie cookie) {
-        return null;
+    private URI absolute(final URI path) throws Exception {
+        return new URL(this.home.toURL(), path.toString()).toURI();
     }
 
-    /**
-     * Checks client status.
-     * @param status Expected status.
-     * @return This object if it's status equal to the expected one, else -
-     * throws <code>AssertionError</code>.
-     */
-    public TestClient expectedStatus(final int status) {
-        return null;
-    }
-
-    /**
-     * Checks client body structure.
-     * @param xpath XPath value to check.
-     * @return This object if it contains expected path, else - throws an
-     * <code>AssertionError</code>.
-     */
-    public TestClient expectedXPath(final String xpath) {
-        throw null;
-    }
 }

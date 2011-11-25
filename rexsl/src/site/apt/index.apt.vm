@@ -1,5 +1,5 @@
  ------
- Introduction to ReXSL
+ Introduction to ReXSL, Quick Start
  ------
  Yegor Bugayenko
  ------
@@ -41,6 +41,7 @@ ReXSL, a framework for lightweight Java web apps
   You should be familiar
   with
   {{{http://www.oracle.com/technetwork/java/javase/overview/index-jsp-136246.html}Java 6}},
+  {{{http://groovy.codehaus.org/}Groovy}},
   {{{http://maven.apache.org/}Apache Maven}},
   {{{http://www.w3.org/XML/}XML}},
   {{{http://www.w3.org/TR/xslt20/}XSL 2.0}},
@@ -52,9 +53,17 @@ ReXSL, a framework for lightweight Java web apps
   {{{http://en.wikipedia.org/wiki/HATEOAS}HATEOAS}},
   {{{http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol}HTTP 1.1}}.
   If any of these technologies are new for you ReXSL won't work.
-  Let's create a new project on top of ReXSL:
 
-  Create a new Maven project with the following directory structure
+  This article is a "quick start guide". There are a number of other useful
+  articles:
+
+   * {{{rexsl-test/apidocs/com/rexsl/test/TestClient.html}<<<com.rexsl.test.TestClient>>>}}
+     for convenient in-container testing
+
+   * {{{rexsl-maven-plugin/index.html}<<<rexsl-maven-plugin>>> cookbook}}
+
+  Let's create a new project on top of ReXSL.
+  Start with a new Maven project with the following directory structure
   (you can {{{http://svn.rexsl.com/rexsl/trunk/rexsl/rexsl-maven-plugin/src/it/all-correct}checkout}}
   a simple project):
 
@@ -301,26 +310,17 @@ Assert.assertThat(
 
 +--
 import com.rexsl.test.TestClient
-import com.rexsl.test.XhtmlConverter
-import org.junit.Assert
-import org.xmlmatchers.XmlMatchers
-import org.xmlmatchers.namespace.SimpleNamespaceContext
-import static org.hamcrest.Matchers.*
-def r1 = new TestClient(rexsl.home)
-  .header('Accept', 'application/xml')
-  .header('User-agent', 'Safari')
+import javax.ws.rs.core.HttpHeaders
+import javax.ws.rs.core.MediaType
+new TestClient(rexsl.home)
+  .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
+  .header(HttpHeaders.USER_AGENT, 'Safari')
   .get('/')
-Assert.assertThat(r1.status, equalTo(200))
-Assert.assertThat(
-  XhtmlConverter.the(r1.body),
-  XmlMatchers.hasXPath(
-    "//x:div[contains(.,'world')]",
-    new SimpleNamespaceContext().withBinding("x", "http://www.w3.org/1999/xhtml")
-  )
-)
-def r2 = new TestClient(rexsl.home)
+  .assertStatus(HttpURLConnection.HTTP_OK)
+  .assertXPath"//xhtml:div[contains(.,'world')]")
+new TestClient(rexsl.home)
   .get('/strange-address')
-Assert.assertThat(r2.status, equalTo(404))
+  .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
 +--
 
   Now let's create <<<src/main/webapp/xsl/layout.xsl>>>:

@@ -29,11 +29,9 @@
  */
 
 import com.rexsl.test.TestClient
-import org.junit.Assert
-import org.hamcrest.Matchers
 
 new TestClient(rexsl.home)
     .header('Accept', 'application/xml')
     .header('User-agent', 'Safari')
     .get('/')
-Assert.assertThat(r1.status, Matchers.equalTo(HttpURLConnection.HTTP_OK))
+    .assertStatus(HttpURLConnection.HTTP_OK)

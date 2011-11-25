@@ -435,7 +435,7 @@
                 -->
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version since="19 Oct 2011">4.9</version>
+                <version since="25 Nov 2011">4.10</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

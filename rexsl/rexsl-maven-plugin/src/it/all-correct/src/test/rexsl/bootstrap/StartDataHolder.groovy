@@ -27,6 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo.bootstrap
 
 // This class is accessible from a bootstrap script, since it's executed
 // (the script) from servlet context listener injected into the application
