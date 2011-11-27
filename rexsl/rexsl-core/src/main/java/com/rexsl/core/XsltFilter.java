@@ -42,6 +42,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -53,16 +54,30 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * Converts XML to XHTML, if necessary.
  *
+ * <p>You don't need to instantiate this class directly. It is instantiated
+ * by servlet container according to configuration from <tt>web.xml</tt>.
+ * Should be used in <tt>web.xml</tt> (together with {@link RestfulServlet})
+ * like this:
+ *
+ * <pre>
+ * &lt;filter>
+ *  &lt;filter-name>XsltFilter&lt;/filter-name>
+ *  &lt;filter-class>com.rexsl.core.XsltFilter&lt;/filter-class>
+ * &lt;/filter>
+ * &lt;filter-mapping>
+ *  &lt;filter-name>XsltFilter&lt;/filter-name>
+ *  &lt;servlet-name>RestfulServlet&lt;/servlet-name>
+ *  &lt;dispatcher>REQUEST&lt;/dispatcher>
+ *  &lt;dispatcher>ERROR&lt;/dispatcher>
+ * &lt;/filter-mapping>
+ * </pre>
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
+ * @since 0.2
  */
 public final class XsltFilter implements Filter {
-
-    /**
-     * MIME type that we're looking for.
-     */
-    public static final String MIME_XML = "application/xml";
 
     /**
      * Character encoding of the page.
@@ -70,9 +85,21 @@ public final class XsltFilter implements Filter {
     private static final String ENCODING = "UTF-8";
 
     /**
+     * XSLT factory.
+     */
+    private TransformerFactory tfactory;
+
+    /**
      * Context for the filter.
      */
     private ServletContext context;
+
+    /**
+     * Public ctor.
+     */
+    public XsltFilter() {
+        // intentionally empty
+    }
 
     /**
      * {@inheritDoc}
@@ -80,6 +107,9 @@ public final class XsltFilter implements Filter {
     @Override
     public void init(final FilterConfig config) {
         this.context = config.getServletContext();
+        this.tfactory = TransformerFactory.newInstance();
+        this.tfactory.setURIResolver(new ContextResourceResolver(this.context));
+        Manifests.append(this.context);
         Logger.debug(
             this,
             "#init(%s): XSLT filter initialized",
@@ -194,7 +224,7 @@ public final class XsltFilter implements Filter {
      */
     private Boolean isXmlExplicitlyRequested(final String header) {
         final Boolean requested = (header != null)
-            && (this.MIME_XML.equals(header));
+            && (MediaType.APPLICATION_XML.equals(header));
         Logger.debug(
             this,
             "#isXmlExplicitlyRequested('%s'): %b",
@@ -215,7 +245,7 @@ public final class XsltFilter implements Filter {
      */
     private Boolean acceptsXml(final String header) {
         final Boolean accepts = (header != null)
-            && (header.contains(this.MIME_XML));
+            && (header.contains(MediaType.APPLICATION_XML));
         Logger.debug(
             this,
             "#acceptsXml('%s'): %b",
@@ -233,42 +263,59 @@ public final class XsltFilter implements Filter {
      * @checkstyle RedundantThrows (2 lines)
      */
     private String transform(final String xml) throws ServletException {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         final StringWriter writer = new StringWriter();
         try {
-            final TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setURIResolver(
-                new ContextResourceResolver(this.context)
-            );
-            final Source stylesheet = factory.getAssociatedStylesheet(
+            final Source stylesheet = this.tfactory.getAssociatedStylesheet(
                 new StreamSource(new StringReader(xml)),
-                null, null, null
+                null,
+                null,
+                null
             );
-            final Transformer trans = factory.newTransformer(stylesheet);
-            trans.setURIResolver(new ContextResourceResolver(this.context));
+            if (stylesheet == null) {
+                throw new ServletException(
+                    String.format(
+                        "No associated stylesheet found at '%s'",
+                        xml
+                    )
+                );
+            }
+            Logger.debug(
+                this,
+                "#tranform(%d chars): found '%s' associated stylesheet by %s",
+                xml.length(),
+                stylesheet.getSystemId(),
+                this.tfactory.getClass().getName()
+            );
+            final Transformer trans = this.tfactory.newTransformer(stylesheet);
             trans.transform(
                 new StreamSource(new StringReader(xml)),
                 new StreamResult(writer)
             );
         } catch (TransformerConfigurationException ex) {
             throw new ServletException(
-                "Failed to configure XSL transformer",
+                String.format(
+                    "Failed to configure XSL transformer: '%s'",
+                    xml
+                ),
                 ex
             );
         } catch (TransformerException ex) {
             throw new ServletException(
-                "Failed to transform XML document to XHTML",
+                String.format(
+                    "Failed to transform XML to XHTML: '%s'",
+                    xml
+                ),
                 ex
             );
         }
         final String output = writer.toString();
         Logger.debug(
             this,
-            "#tranform(%d chars): produced %d chars, %.2f sec",
+            "#tranform(%d chars): produced %d chars [%dms]",
             xml.length(),
             output.length(),
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000 * 1000 * 1000)
+            System.currentTimeMillis() - start
         );
         return output;
     }

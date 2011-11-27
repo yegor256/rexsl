@@ -1,0 +1,8 @@
+/**
+ * Example of invalid CSS file. For test usage only.
+ * @todo #10 write invalid css example.
+ */
+html, body{        
+	color: black;
+} 
+

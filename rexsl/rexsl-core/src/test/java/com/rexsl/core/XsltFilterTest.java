@@ -38,6 +38,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -76,11 +78,18 @@ public final class XsltFilterTest {
         PowerMockito.mockStatic(TransformerFactory.class);
         final TransformerFactory factory =
             Mockito.mock(TransformerFactory.class);
+        final Source stylesheet = Mockito.mock(Source.class);
+        Mockito.doReturn(stylesheet).when(factory).getAssociatedStylesheet(
+            Mockito.any(Source.class),
+            Mockito.anyString(),
+            Mockito.anyString(),
+            Mockito.anyString()
+        );
         PowerMockito.when(TransformerFactory.newInstance())
             .thenReturn(factory);
         this.transformer = Mockito.mock(Transformer.class);
-        Mockito.when(factory.newTransformer(Mockito.any(Source.class)))
-            .thenReturn(this.transformer);
+        Mockito.doReturn(this.transformer).when(factory)
+            .newTransformer(Mockito.any(Source.class));
         final StringWriter writer = PowerMockito.mock(StringWriter.class);
         PowerMockito.whenNew(StringWriter.class).withNoArguments()
             .thenReturn(writer);
@@ -101,7 +110,7 @@ public final class XsltFilterTest {
         Mockito.reset(this.transformer);
         // the agent is not provided, but it explicitly is asking
         // for clear XML - we provide it
-        this.filter(XsltFilter.MIME_XML, null);
+        this.filter(MediaType.APPLICATION_XML, null);
         this.verifyNoTransformation();
         Mockito.reset(this.transformer);
         // the agent didn't provide any information about itself,
@@ -166,6 +175,7 @@ public final class XsltFilterTest {
     @Test
     public void testDontTransformXSL() throws Exception {
         this.filter(
+            // @checkstyle StringLiteralsConcatenation (4 lines)
             "<?xml version='1.0'?><xsl:stylesheet"
             + " xmlns:xsl='http://www.w3.org/1999/XSL/Transform'"
             + " version='2.0' exclude-result-prefixes='xs xsl xhtml'>"
@@ -183,7 +193,7 @@ public final class XsltFilterTest {
         Mockito.doThrow(new TransformerException("some message"))
             .when(this.transformer)
             .transform(Mockito.any(Source.class), Mockito.any(Result.class));
-        this.filter("text/plain", "some agent");
+        this.filter(MediaType.TEXT_PLAIN, "some agent");
     }
 
     /**
@@ -249,8 +259,8 @@ public final class XsltFilterTest {
         Mockito.doReturn(context).when(config).getServletContext();
         filter.init(config);
         final HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
-        Mockito.doReturn(agent).when(req).getHeader("User-Agent");
-        Mockito.doReturn(accept).when(req).getHeader("Accept");
+        Mockito.doReturn(agent).when(req).getHeader(HttpHeaders.USER_AGENT);
+        Mockito.doReturn(accept).when(req).getHeader(HttpHeaders.ACCEPT);
         Mockito.doReturn("/").when(req).getRequestURI();
         final HttpServletResponse res = Mockito.mock(HttpServletResponse.class);
         Mockito.doReturn(Mockito.mock(ServletOutputStream.class))

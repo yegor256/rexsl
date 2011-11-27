@@ -32,6 +32,7 @@ package com.rexsl.maven.utils;
 import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
 import java.io.File;
+import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -67,7 +68,7 @@ public final class RuntimeListener implements ServletContextListener {
             : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
             Logger.info(this, "Running '%s'...", script);
             final GroovyExecutor exec = new GroovyExecutor(
-                env.classloader(),
+                event.getServletContext().getClassLoader(),
                 new BindingBuilder(env).build()
             );
             try {
@@ -130,8 +131,8 @@ public final class RuntimeListener implements ServletContextListener {
          * {@inheritDoc}
          */
         @Override
-        public ClassLoader classloader() {
-            return this.context.getClassLoader();
+        public List<File> classpath(final boolean testOnly) {
+            throw new IllegalStateException("#classpath");
         }
         /**
          * {@inheritDoc}

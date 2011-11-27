@@ -47,15 +47,14 @@ public final class PackageMojo extends AbstractRexslMojo {
      */
     @Override
     protected void run() {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         for (Packer packer : new PackersProvider().all()) {
             packer.pack(this.env());
         }
         Logger.info(
             this,
-            "Packaging finished in %.3fsec",
-            // @checkstyle MagicNumber (1 line)
-            (double) (System.nanoTime() - start) / (1000L * 1000 * 1000)
+            "Packaging finished in %dms",
+            System.currentTimeMillis() - start
         );
     }
 

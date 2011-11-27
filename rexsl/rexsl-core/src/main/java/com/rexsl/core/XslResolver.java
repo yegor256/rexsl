@@ -30,6 +30,8 @@
 package com.rexsl.core;
 
 import com.ymock.util.Logger;
+import java.io.File;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
@@ -38,26 +40,31 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
+import javax.xml.validation.SchemaFactory;
 
 /**
- * Replace standard marshaller.
+ * Provider of JAXB {@link Marshaller} for JAX-RS framework.
+ *
+ * <p>You don't need to use this class directly. It is made public only becuase
+ * JAX-RS implementation should be able to discover it in classpath.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
- * @link <a href="http://markmail.org/search/?q=list%3Anet.java.dev.jersey.users+ContextResolver%3CMarshaller%3E#query:list%3Anet.java.dev.jersey.users%20ContextResolver%3CMarshaller%3E+page:1+mid:q4fkq6eqlgkzdodc+state:results">discussion</a>
+ * @since 0.2
  */
 @Provider
-@Produces(MediaType.APPLICATION_XML)
+@Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
 public final class XslResolver implements ContextResolver<Marshaller> {
 
     /**
-     * Marshaller configurator.
+     * Folder with XSD files.
      * @see #setServletContext(ServletContext)
      */
-    private JaxbConfigurator configurator;
+    private File xsdFolder;
 
     /**
      * Classes to process.
@@ -70,47 +77,27 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     private JAXBContext context;
 
     /**
-     * Set servlet context from container.
+     * Public ctor.
+     */
+    public XslResolver() {
+        // intentionally empty
+    }
+
+    /**
+     * Set servlet context from container, to be called by JAX-RS framework
+     * because of {@link Context} annotation.
      * @param ctx The context
      */
     @Context
     public void setServletContext(final ServletContext ctx) {
-        final String name = ctx.getInitParameter("com.rexsl.core.CONFIGURATOR");
+        final String name = ctx.getInitParameter("com.rexsl.core.XSD_FOLDER");
         if (name != null) {
-            Object cfg;
-            try {
-                cfg = Class.forName(name).newInstance();
-            } catch (ClassNotFoundException ex) {
-                throw new IllegalArgumentException(
-                    String.format("Not found '%s'", name),
-                    ex
-                );
-            } catch (InstantiationException ex) {
-                throw new IllegalArgumentException(
-                    String.format("Can't instantiate '%s'", name),
-                    ex
-                );
-            } catch (IllegalAccessException ex) {
-                throw new IllegalArgumentException(
-                    String.format("Can't access '%s'", name),
-                    ex
-                );
-            }
-            if (!(cfg instanceof JaxbConfigurator)) {
-                throw new IllegalArgumentException(
-                    String.format(
-                        "Class '%s' is not a child of JaxbConfigurator",
-                        name
-                    )
-                );
-            }
-            this.configurator = (JaxbConfigurator) cfg;
-            this.configurator.init(ctx);
+            this.xsdFolder = new File(name);
             Logger.debug(
                 this,
-                "#setServletContext(%s): configurator %s set and initialized",
+                "#setServletContext(%s): XSD folder set to '%s'",
                 ctx.getClass().getName(),
-                cfg.getClass().getName()
+                this.xsdFolder
             );
         }
         Logger.debug(
@@ -128,30 +115,21 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         Marshaller mrsh;
         try {
             mrsh = this.context(type).createMarshaller();
-            mrsh.setProperty(Marshaller.JAXB_FRAGMENT, true);
+            mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             final String header = String.format(
-                // @checkstyle LineLength (1 line)
-                "<?xml version='1.0'?><?xml-stylesheet type='text/xml' href='/xsl/%s.xsl'?>",
-                type.getSimpleName()
+                "<?xml-stylesheet type='text/xml' href='%s'?>",
+                this.stylesheet(type)
             );
             mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
         } catch (javax.xml.bind.JAXBException ex) {
             throw new IllegalStateException(ex);
         }
-        if (this.configurator != null) {
-            mrsh = this.configurator.marshaller(mrsh, type);
-            Logger.debug(
-                this,
-                // @checkstyle LineLength (1 line)
-                "#getContext(%s): marshaller createa and configured through %s: %s",
-                type.getName(),
-                this.configurator.getClass().getName(),
-                mrsh.getClass().getName()
-            );
+        if (this.xsdFolder != null) {
+            mrsh = this.addXsdValidator(mrsh, type);
         } else {
             Logger.debug(
                 this,
-                "#getContext(%s): marshaller created (no configurator)",
+                "#getContext(%s): marshaller created (no XSD validator)",
                 type.getName()
             );
         }
@@ -159,11 +137,10 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     }
 
     /**
-     * Create and return a context.
-     * @param cls The class we should process
-     * @return The context
+     * Add new class to context.
+     * @param cls The class we should add
      */
-    private JAXBContext context(final Class cls) {
+    public void add(final Class cls) {
         synchronized (this) {
             if (!this.classes.contains(cls)) {
                 try {
@@ -173,7 +150,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                     );
                     Logger.info(
                         this,
-                        "#context(%s): added to JAXBContext (%d total)",
+                        "#add(%s): added to JAXBContext (%d total)",
                         cls.getName(),
                         this.classes.size()
                     );
@@ -181,8 +158,95 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                     throw new IllegalStateException(ex);
                 }
             }
-            return this.context;
         }
+    }
+
+    /**
+     * Create and return a context.
+     * @param cls The class we should process
+     * @return The context
+     */
+    private JAXBContext context(final Class cls) {
+        this.add(cls);
+        return this.context;
+    }
+
+    /**
+     * Returns the name of XSL stylesheet for this type.
+     * @param type The class
+     * @return The name of stylesheet
+     * @see #getContext(Class)
+     */
+    private String stylesheet(final Class<?> type) {
+        final Annotation antn = type.getAnnotation(Stylesheet.class);
+        String stylesheet;
+        if (antn == null) {
+            stylesheet = String.format(
+                "/xsl/%s.xsl",
+                type.getSimpleName()
+            );
+        } else {
+            stylesheet = ((Stylesheet) antn).value();
+        }
+        Logger.debug(
+            this,
+            "#stylesheet(%s): '%s' stylesheet discovered",
+            type.getName(),
+            stylesheet
+        );
+        return stylesheet;
+    }
+
+    /**
+     * Configure marhaller and return a new one (or the same).
+     * @param mrsh The marshaller, already created and ready to marshal
+     * @param type The class to be marshalled
+     * @return New marshalled to be used instead
+     * @see #getContext(Class)
+     */
+    private Marshaller addXsdValidator(final Marshaller mrsh,
+        final Class<?> type) {
+        final String name = type.getName();
+        final File xsd = new File(
+            this.xsdFolder,
+            String.format("%s.xsd", name)
+        );
+        if (xsd.exists()) {
+            final SchemaFactory factory = SchemaFactory.newInstance(
+                XMLConstants.W3C_XML_SCHEMA_NS_URI
+            );
+            try {
+                mrsh.setSchema(factory.newSchema(xsd));
+            } catch (org.xml.sax.SAXException ex) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Failed to use XSD schema from '%s' for class '%s'",
+                        xsd,
+                        name
+                    ),
+                    ex
+                );
+            }
+            try {
+                mrsh.setEventHandler(new XsdEventHandler());
+            } catch (javax.xml.bind.JAXBException ex) {
+                throw new IllegalStateException(ex);
+            }
+            Logger.debug(
+                this,
+                "'%s' will be validated with '%s' schema",
+                name,
+                xsd
+            );
+        } else {
+            Logger.warn(
+                this,
+                "No XSD schema for '%s' in '%s' file",
+                name,
+                xsd
+            );
+        }
+        return mrsh;
     }
 
 }

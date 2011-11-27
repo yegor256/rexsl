@@ -2,4 +2,5 @@
 <?xml-stylesheet href='/xsl/Home.xsl' type='text/xsl' ?>
 <page>
     <text>hello, world! :)</text>
+    <img src="angry.gif" alt="angry"/>
 </page>

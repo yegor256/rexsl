@@ -88,7 +88,7 @@ public final class EmbeddedContainer {
         // it is required because of classloading conflict between
         // Maven classloader and Jetty WebApp classloader
         // @see http://docs.codehaus.org/display/JETTY/Classloading
-        ctx.setParentLoaderPriority(true);
+        ctx.setParentLoaderPriority(false);
         if (env.useRuntimeFiltering()) {
             ctx.addFilter(
                 RuntimeFilter.class,
@@ -104,6 +104,7 @@ public final class EmbeddedContainer {
         ctx.addEventListener(new RuntimeListener());
         server.setHandler(ctx);
         Policy.setPolicy(new EmbeddedContainer.FreePolicy());
+        ctx.setExtraClasspath(EmbeddedContainer.testClasspath(env));
         try {
             server.start();
         // @checkstyle IllegalCatch (1 line)
@@ -153,12 +154,9 @@ public final class EmbeddedContainer {
             StringUtils.join(folders, ";")
         );
         params.put(
-            "com.rexsl.maven.utils.XSD_FOLDER",
+            // this parameter is used by com.rexsl.core.XslResolver
+            "com.rexsl.core.XSD_FOLDER",
             new File(env.basedir(), "src/test/rexsl/xsd").getPath()
-        );
-        params.put(
-            "com.rexsl.core.CONFIGURATOR",
-            XsdConfigurator.class.getName()
         );
         return params;
     }
@@ -180,7 +178,7 @@ public final class EmbeddedContainer {
                 : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
                 Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
                 final GroovyExecutor exec = new GroovyExecutor(
-                    env.classloader(),
+                    env,
                     new BindingBuilder(env).build()
                 );
                 try {
@@ -190,6 +188,29 @@ public final class EmbeddedContainer {
                 }
             }
         }
+    }
+
+    /**
+     * Build and return test classpath, for WebAppContext.
+     * @param env The environment
+     * @return Extra classpath to be used in tests
+     * @see #start(Environment)
+     */
+    private static String testClasspath(final Environment env) {
+        final List<String> urls = new ArrayList<String>();
+        for (File path : env.classpath(true)) {
+            if (path.isDirectory()) {
+                urls.add(path.getAbsolutePath() + "/");
+            } else {
+                urls.add(path.getAbsolutePath());
+            }
+            Logger.debug(
+                EmbeddedContainer.class,
+                "#testClasspath(): %s",
+                path
+            );
+        }
+        return StringUtils.join(urls, ",");
     }
 
     /**

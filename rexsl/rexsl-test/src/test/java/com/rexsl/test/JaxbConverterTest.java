@@ -33,8 +33,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
 import org.xmlmatchers.XmlMatchers;
 
@@ -53,7 +54,7 @@ public final class JaxbConverterTest {
     @Test
     public void testObjectToXmlConversion() throws Exception {
         final Object object = new Employee();
-        Assert.assertThat(
+        MatcherAssert.assertThat(
             JaxbConverter.the(object),
             XmlMatchers.hasXPath("/employee/name[.='John Doe']")
         );
@@ -66,9 +67,23 @@ public final class JaxbConverterTest {
     @Test
     public void testToStringConversion() throws Exception {
         final Object object = new Employee();
-        Assert.assertThat(
+        MatcherAssert.assertThat(
             JaxbConverter.the(object).toString(),
             Matchers.containsString("John")
+        );
+    }
+
+    /**
+     * Test dynamically extendable objects.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testDynamicallyExtendableObject() throws Exception {
+        final Employee employee = new Employee();
+        employee.inject(new Foo());
+        MatcherAssert.assertThat(
+            JaxbConverter.the(employee, Foo.class),
+            XmlMatchers.hasXPath("/employee/injected/name")
         );
     }
 
@@ -76,12 +91,44 @@ public final class JaxbConverterTest {
     @XmlAccessorType(XmlAccessType.NONE)
     private static final class Employee {
         /**
+         * Injected object.
+         */
+        private Object injected = "some text";
+        /**
+         * Inject an object.
+         * @param obj The object to inject
+         */
+        public void inject(final Object obj) {
+            this.injected = obj;
+        }
+        /**
+         * Injected object.
+         * @return The object
+         */
+        @XmlElement
+        public Object getInjected() {
+            return this.injected;
+        }
+        /**
          * Returns a simple string.
          * @return The text
          */
         @XmlElement(name = "name")
         public String getName() {
             return "John Doe";
+        }
+    }
+
+    @XmlType(name = "foo")
+    @XmlAccessorType(XmlAccessType.NONE)
+    public static final class Foo {
+        /**
+         * Simple name.
+         * @return The name
+         */
+        @XmlElement
+        public String getName() {
+            return "some foo name";
         }
     }
 

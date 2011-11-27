@@ -27,55 +27,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.utils;
+package com.rexsl.foo.scripts
 
-import com.ymock.util.Logger;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
+import com.rexsl.test.TestClient
+import org.hamcrest.Matchers
 
-/**
- * Handler of XSD events.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- */
-public final class XsdEventHandler implements ValidationEventHandler {
-
-    /**
-     * Did we see any events recently?
-     */
-    private static boolean flag;
-
-    /**
-     * Reset the flag.
-     */
-    public static void reset() {
-        XsdEventHandler.flag = false;
-    }
-
-    /**
-     * Did we have any events?
-     * @return Did we?
-     */
-    public static boolean hasEvents() {
-        return XsdEventHandler.flag;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean handleEvent(final ValidationEvent event) {
-        XsdEventHandler.flag = true;
-        Logger.warn(
-            this,
-            "JAXB error: \"%s\" at '%s' [%d:%d]",
-            event.getMessage(),
-            event.getLocator().getURL(),
-            event.getLocator().getLineNumber(),
-            event.getLocator().getColumnNumber()
-        );
-        return true;
-    }
-
-}
+// This URL (/stub) is not available in production version of the system,
+// but during tests it should be available because of "src/test/java/com/rexsl/foo/Stub.java"
+// class and its test resources
+new TestClient(rexsl.home)
+    .get('/stub')
+    .assertStatus(HttpURLConnection.HTTP_OK)
+    // This text is from src/test/resources/com/rexsl/foo/stub.txt
+    .assertBody(Matchers.containsString('stubbing works fine!'))

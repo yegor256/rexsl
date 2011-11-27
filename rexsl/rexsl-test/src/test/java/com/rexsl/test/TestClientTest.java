@@ -33,13 +33,16 @@ import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
+import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.URI;
-import org.apache.http.HttpStatus;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.UriBuilder;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -52,63 +55,59 @@ import org.junit.Test;
 public final class TestClientTest {
 
     /**
-     * Port to work with.
-     */
-    private static Integer port;
-
-    /**
      * Grizzly container, used for tests.
      */
-    private GrizzlyWebServer gws;
+    private static GrizzlyWebServer gws;
 
     /**
      * Where this Grizzly container is hosted.
      */
-    private URI home;
+    private static URI home;
 
     /**
      * Start Servlet container.
      * @throws Exception If something goes wrong inside
      */
     @BeforeClass
-    public static void reservePort() throws Exception {
+    public static void startContainer() throws Exception {
         final ServerSocket socket = new ServerSocket(0);
-        TestClientTest.port = socket.getLocalPort();
+        final Integer port = socket.getLocalPort();
         socket.close();
-    }
-
-    /**
-     * Start Servlet container.
-     * @throws Exception If something goes wrong inside
-     */
-    @Before
-    public void startContainer() throws Exception {
-        this.home = new URI(String.format("http://localhost:%d/", this.port));
-        this.gws = new GrizzlyWebServer(this.port);
-        this.gws.addGrizzlyAdapter(
+        TestClientTest.home =
+            new URI(String.format("http://localhost:%d/", port));
+        TestClientTest.gws = new GrizzlyWebServer(port);
+        TestClientTest.gws.addGrizzlyAdapter(
             new GrizzlyAdapter() {
+                @Override
                 public void service(final GrizzlyRequest request,
                     final GrizzlyResponse response) {
+                    final String content = "<a>works fine!</a>";
                     try {
-                        response.addHeader("Content-type", "text/plain");
-                        response.addHeader("Content-length", "12");
-                        response.getWriter().println("works fine!");
+                        response.addHeader(
+                            HttpHeaders.CONTENT_TYPE,
+                            MediaType.TEXT_PLAIN
+                        );
+                        response.addHeader(
+                            HttpHeaders.CONTENT_LENGTH,
+                            String.valueOf(content.length())
+                        );
+                        response.getWriter().println(content);
                     } catch (java.io.IOException ex) {
                         throw new IllegalStateException(ex);
                     }
                 }
             }
         );
-        this.gws.start();
+        TestClientTest.gws.start();
     }
 
     /**
      * Stop Servlet container.
      * @throws Exception If something goes wrong inside
      */
-    @After
-    public void stopContainer() throws Exception {
-        this.gws.stop();
+    @AfterClass
+    public static void stopContainer() throws Exception {
+        TestClientTest.gws.stop();
     }
 
     /**
@@ -117,32 +116,22 @@ public final class TestClientTest {
      */
     @Test
     public void testHTTPRequests() throws Exception {
-        final TestClient client = new TestClient(this.home)
-            .header("Accept", "application/json")
-            .header("User-agent", "Some Text")
-            .get("/");
+        final TestClient client = new TestClient(TestClientTest.home)
+            .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+            .header(HttpHeaders.USER_AGENT, "Some Text")
+            .get("/the-path")
+            .assertBody(Matchers.containsString("fine"))
+            .assertStatus(HttpURLConnection.HTTP_OK);
         MatcherAssert.assertThat(
-            client.getBody(),
-            Matchers.containsString("works")
+            client.getHeaders().get(HttpHeaders.CONTENT_TYPE),
+            Matchers.containsString(MediaType.TEXT_PLAIN)
         );
         MatcherAssert.assertThat(
-            client.getBody(),
-            Matchers.containsString("fine")
-        );
-        MatcherAssert.assertThat(
-            client.getStatus(),
-            Matchers.equalTo(HttpStatus.SC_OK)
-        );
-        MatcherAssert.assertThat(
-            client.getHeaders().get("content-type"),
-            Matchers.containsString("text")
-        );
-        MatcherAssert.assertThat(
-            client.getHeaders().has("content-length"),
+            client.getHeaders().has(HttpHeaders.CONTENT_LENGTH),
             Matchers.equalTo(true)
         );
         MatcherAssert.assertThat(
-            client.getHeaders().all("Content-Type").size(),
+            client.getHeaders().all(HttpHeaders.CONTENT_TYPE).size(),
             Matchers.equalTo(1)
         );
     }
@@ -153,12 +142,68 @@ public final class TestClientTest {
      */
     @Test
     public void testPostRequestWithBody() throws Exception {
-        final TestClient client = new TestClient(this.home)
+        new TestClient(TestClientTest.home)
             .body("hello")
-            .post("/test");
-        MatcherAssert.assertThat(
-            client.getBody(),
-            Matchers.containsString("works fine")
+            .post("/test")
+            .assertBody(Matchers.containsString("works"));
+    }
+
+    /**
+     * Tests setting new cookie.
+     * @throws Exception If something goes wrong inside.
+     */
+    @Test
+    public void testCookie() throws Exception {
+        new TestClient(TestClientTest.home)
+            .cookie(new NewCookie("a", "c"));
+    }
+
+    /**
+     * Test <tt>assertStatus()</tt> methods.
+     * @throws Exception If something goes wrong inside.
+     */
+    @Test
+    public void testStatusAssertions() throws Exception {
+        new TestClient(TestClientTest.home)
+            .get("/some-path")
+            .assertStatus(HttpURLConnection.HTTP_OK)
+            .assertStatus(Matchers.equalTo(HttpURLConnection.HTTP_OK));
+    }
+
+    /**
+     * Test <tt>assertBody()</tt> method.
+     * @throws Exception If something goes wrong inside.
+     */
+    @Test
+    public void testBodyAssertions() throws Exception {
+        new TestClient(TestClientTest.home)
+            .get("/some-other-path")
+            .assertBody(Matchers.containsString("<a>"));
+    }
+
+    /**
+     * Test <tt>assertXPath()</tt> method.
+     * @throws Exception If something goes wrong inside.
+     */
+    @Test
+    public void testXPathAssertions() throws Exception {
+        new TestClient(TestClientTest.home)
+            .get("/some-xml-path")
+            .assertXPath("/a[contains(.,'works')]");
+    }
+
+    /**
+     * Test how URI is constructed.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void testURIConstructingMechanism() throws Exception {
+        final URI base = UriBuilder.fromUri(TestClientTest.home)
+            .queryParam("some-param", "some-value")
+            .path("/some/extra/path")
+            .build();
+        final TestClient client = new TestClient(base).get(
+            UriBuilder.fromPath("suffix").queryParam("alpha", "554").build()
         );
     }
 

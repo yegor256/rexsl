@@ -41,7 +41,7 @@ import javax.ws.rs.core.MediaType;
  * @version $Id$
  */
 @Path("/")
-public class FrontEnd {
+public final class FrontEnd {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)

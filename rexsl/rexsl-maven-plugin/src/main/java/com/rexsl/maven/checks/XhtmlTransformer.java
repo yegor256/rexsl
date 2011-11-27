@@ -30,17 +30,12 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
-import com.ymock.util.Logger;
 import java.io.File;
 import java.io.StringWriter;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -69,7 +64,7 @@ public final class XhtmlTransformer {
         } catch (java.net.URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }
-        factory.setURIResolver(new XhtmlTransformer.RuntimeResolver(home));
+        factory.setURIResolver(new RuntimeResolver(home));
         Source xsl;
         try {
             xsl = factory.getAssociatedStylesheet(xml, null, null, null);
@@ -95,69 +90,6 @@ public final class XhtmlTransformer {
             throw new InternalCheckException(ex);
         }
         return writer.toString();
-    }
-
-    /**
-     * Resolve URLs to point them to directory.
-     */
-    private static final class RuntimeResolver implements URIResolver {
-        /**
-         * Home page of the site.
-         */
-        private final URI home;
-        /**
-         * Public ctor.
-         * @param uri The home page of the site
-         */
-        public RuntimeResolver(final URI uri) {
-            this.home = uri;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Source resolve(final String href, final String base)
-            throws TransformerException {
-            URL url;
-            try {
-                url = new URL(this.home.toString() + href);
-            } catch (java.net.MalformedURLException ex) {
-                throw new TransformerException(ex);
-            }
-            HttpURLConnection conn;
-            int code;
-            try {
-                conn = (HttpURLConnection) url.openConnection();
-                conn.connect();
-                code = conn.getResponseCode();
-            } catch (java.io.IOException ex) {
-                throw new TransformerException(ex);
-            }
-            if (code != HttpURLConnection.HTTP_OK) {
-                throw new TransformerException(
-                    String.format(
-                        "URL %s returned %d code (instead of %d)",
-                        url,
-                        code,
-                        HttpURLConnection.HTTP_OK
-                    )
-                );
-            }
-            Source src;
-            try {
-                src = new StreamSource(conn.getInputStream());
-            } catch (java.io.IOException ex) {
-                throw new TransformerException(ex);
-            }
-            Logger.debug(
-                this,
-                "#resolve(%s, %s): resolved from %s",
-                href,
-                base,
-                url
-            );
-            return src;
-        }
     }
 
 }

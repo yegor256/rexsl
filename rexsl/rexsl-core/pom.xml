@@ -61,6 +61,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <!-- JAX-RS API -->
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>jsr311-api</artifactId>
+            <version since="25 Nov 2011">1.1.1</version>
+        </dependency>
+        <dependency>
             <!-- Logging facility. -->
             <groupId>com.ymock</groupId>
             <artifactId>ymock-util</artifactId>
@@ -157,6 +163,7 @@
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
             <version since="26 Oct 2011">1.9.1</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <!-- Forward all calls to SLF4J to LOG4J. -->
@@ -176,17 +183,17 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <!-- Use LOG4J logging facility for all loggings. -->
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version since="19 Sep 2011">1.2.16</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <!-- implementation of Javax Servlet API 3.0 -->
             <groupId>org.glassfish</groupId>
             <artifactId>javax.servlet</artifactId>
             <version since="26 Oct 2011">3.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Use LOG4J logging facility for all loggings. -->
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version since="19 Sep 2011">1.2.16</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -197,10 +204,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- Javax Servlet API 3.0 -->
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version since="26 Oct 2011">6.0</version>
+            <!--
+            Javax Servlet API 2.3. We're using this old version intentionally,
+            in order to make the framework compatible with all possible (incl.
+            very old) web containers. See ticket #42 for more information.
+            -->
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version since="26 Oct 2011">2.3</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

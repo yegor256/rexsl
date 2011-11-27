@@ -41,7 +41,16 @@
 ReXSL Maven Plugin
 
   This plugin is helping you to test your ReXSL-powered
-  web application and perform some per-packaging changes to your
+  web application and perform some pre-packaging changes to your
   web assets (like CSS/XSL stylesheets, JavaScript code, images, etc.)
 
   Read more about its {{{./usage.html}usage}}.
+
+  There are a number of cookbook advices, which will help:
+
+   * {{{./setup.html}How to add application data before tests?}}
+
+   * {{{./bootstrap.html}How to pre-configure the application and mock resources?}}
+
+   * {{{./stubs.html}How to add extra functionality during tests?}}
+

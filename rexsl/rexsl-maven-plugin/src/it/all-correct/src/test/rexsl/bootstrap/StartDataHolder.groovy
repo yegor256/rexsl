@@ -27,13 +27,18 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo.bootstrap
 
+// This class is accessible from a bootstrap script, since it's executed
+// (the script) from servlet context listener injected into the application
+// by embedded container on-fly.
 import com.rexsl.foo.Data
 
 assert Data.INSTANCE.get() == 'Hello, world!'
 Data.INSTANCE.set('bootstrapped')
 
-// these properties should be injected by maven plugin
+// These properties should be injected by maven plugin, we're validating
+// this behavior here
 assert rexsl.basedir.exists()
 assert rexsl.webdir.exists()
 assert rexsl.port > 0

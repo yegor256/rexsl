@@ -47,6 +47,19 @@
 
     <dependencies>
         <dependency>
+            <!-- JAX-RS API -->
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>jsr311-api</artifactId>
+            <version since="25 Nov 2011">1.1.1</version>
+        </dependency>
+        <dependency>
+            <!-- JAX-RS implementation, core library -->
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version since="26 Oct 2011">1.9.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <!--
             JAXB 2.0 API.
             -->
@@ -62,6 +75,25 @@
             <artifactId>jaxb-impl</artifactId>
             <version since="2 Sep 2011">2.2.4-1</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!--
+            This dependency is required in "compile" scope for org.hamcrest.*
+            classes.
+            -->
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <!--
+            XML matchers, in "compile" scope for hasXPath() matchers.
+            @link http://code.google.com/p/xml-matchers/
+            -->
+            <groupId>org.xmlmatchers</groupId>
+            <artifactId>xml-matchers</artifactId>
+            <version since="26 Jun 2011">0.10</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -118,11 +150,6 @@
             <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <!-- other details are in parent pom.xml -->
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <!-- other details are in parent pom.xml -->
@@ -139,16 +166,6 @@
             <groupId>com.sun.grizzly</groupId>
             <artifactId>grizzly-servlet-webserver</artifactId>
             <version>1.9.10</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!--
-            XML matchers.
-            @link http://code.google.com/p/xml-matchers/
-            -->
-            <groupId>org.xmlmatchers</groupId>
-            <artifactId>xml-matchers</artifactId>
-            <version since="26 Jun 2011">0.10</version>
             <scope>test</scope>
         </dependency>
         <dependency>

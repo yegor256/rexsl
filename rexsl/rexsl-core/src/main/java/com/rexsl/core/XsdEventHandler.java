@@ -29,29 +29,31 @@
  */
 package com.rexsl.core;
 
-import javax.servlet.ServletContext;
-import javax.xml.bind.Marshaller;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.ValidationEventHandler;
 
 /**
- * Locate and return XSD schema.
+ * Handler of XSD events.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public interface JaxbConfigurator {
+final class XsdEventHandler implements ValidationEventHandler {
 
     /**
-     * Initialize it.
-     * @param ctx The servlet context
+     * {@inheritDoc}
      */
-    void init(final ServletContext ctx);
-
-    /**
-     * Configure marhaller and return a new one (or the same).
-     * @param mrsh The marshaller
-     * @param type The class
-     * @return The marshaller
-     */
-    Marshaller marshaller(final Marshaller mrsh, final Class<?> type);
+    @Override
+    public boolean handleEvent(final ValidationEvent event) {
+        throw new IllegalStateException(
+            String.format(
+                "JAXB error: \"%s\" at '%s' [%d:%d]",
+                event.getMessage(),
+                event.getLocator().getURL(),
+                event.getLocator().getLineNumber(),
+                event.getLocator().getColumnNumber()
+            )
+        );
+    }
 
 }

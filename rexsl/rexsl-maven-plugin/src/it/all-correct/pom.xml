@@ -115,6 +115,13 @@
             <version since="19 Sep 2011">1.2.16</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <!-- for file/stream manipulations in tests -->
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version since="19 Oct 2011">2.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

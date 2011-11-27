@@ -102,14 +102,14 @@ public final class RuntimeFilter implements Filter {
             .getInitParameter("com.rexsl.maven.utils.RUNTIME_FOLDERS");
         for (String name : StringUtils.split(param, ";")) {
             this.folders.add(new File(name));
-            Logger.info(
+            Logger.debug(
                 this,
                 "#init(%s): runtime folder added: %s",
                 config.getClass().getName(),
                 name
             );
         }
-        Logger.info(
+        Logger.debug(
             this,
             "#init(%s): runtime filter initialized",
             config.getClass().getName()

@@ -34,7 +34,6 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.GroovyExecutor;
-import com.rexsl.maven.utils.XsdEventHandler;
 import com.ymock.util.Logger;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
@@ -75,14 +74,9 @@ public final class InContainerScriptsCheck implements Check {
             env.webdir()
         );
         final EmbeddedContainer container = EmbeddedContainer.start(env);
-        XsdEventHandler.reset();
-        boolean success = this.run(dir, env);
+        final boolean success = this.run(dir, env);
         container.stop();
         Logger.info(this, "Embedded servlet container stopped");
-        if (XsdEventHandler.hasEvents()) {
-            Logger.warn(this, "XSD failures experienced");
-            success = false;
-        }
         return success;
     }
 

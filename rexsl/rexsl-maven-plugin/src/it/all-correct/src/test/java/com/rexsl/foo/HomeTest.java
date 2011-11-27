@@ -38,7 +38,7 @@ import org.xmlmatchers.XmlMatchers;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public class HomeTest {
+public final class HomeTest {
 
     @Test
     public void testXmlContents() throws Exception {

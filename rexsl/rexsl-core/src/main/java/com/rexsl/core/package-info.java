@@ -29,9 +29,13 @@
  */
 
 /**
- * Core web component.
+ * Core artifact of ReXSL framework.
+ *
+ * <p>Read <a href="http://www.rexsl.com">Introduction to ReXSL</a> to get
+ * better understanding of how it works.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see <a href="http://www.rexsl.com">Introduction to ReXSL</a>
  */
 package com.rexsl.core;
