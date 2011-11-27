@@ -132,12 +132,16 @@ public final class Manifests {
      */
     private static ConcurrentMap<URL, String> failures;
 
+    /**
+     * Load add available data on first loading of this class
+     * into JVM.
+     */
     static {
         Manifests.load();
     }
 
     /**
-     * It's a utility class.
+     * It's a utility class, can't be instantiated.
      */
     private Manifests() {
         // intentionally empty
@@ -223,7 +227,7 @@ public final class Manifests {
      * @param ctx Servlet context
      * @see #Manifests()
      */
-    protected static void append(final ServletContext ctx) {
+    static void append(final ServletContext ctx) {
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
