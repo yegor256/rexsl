@@ -30,9 +30,9 @@
 package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.Packer;
 import com.ymock.util.Logger;
 import java.io.File;
+import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -41,34 +41,23 @@ import org.apache.commons.io.FileUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CssPacker implements Packer {
-
-    /**
-     * The folder where all CSS files should be stored.
-     * @checkstyle MultipleStringLiterals (2 lines)
-     */
-    public static final String FOLDER = "css";
-
-    /**
-     * Extensions to process.
-     * @checkstyle MultipleStringLiterals (2 lines)
-     */
-    public static final String[] EXTS = new String[] {"css"};
+public final class CssPacker extends AbstractPacker {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void pack(final Environment env) {
-        final File dir = new File(env.webdir(), this.FOLDER);
-        if (!dir.exists()) {
-            Logger.info(this, "#pack(): %s directory is absent", dir);
-            return;
-        }
-        for (File css : FileUtils.listFiles(dir, this.EXTS, true)) {
-            // it's a temporary warning, until we implement packing
-            Logger.warn(this, "#pack(): %s was NOT packed", css);
-        }
+    protected String extension() {
+        return "css";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void pack(final File src, final File dest) throws IOException {
+        FileUtils.copyFile(src, dest);
+        Logger.warn(this, "#pack(%s, %s): no packing, just copied", src, dest);
     }
 
 }

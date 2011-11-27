@@ -45,6 +45,7 @@ import org.mockito.Mockito;
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
+ * @todo #10 Implement CSS validation and enable all test methods in this class
  */
 public final class StaticCssCheckTest {
 
@@ -67,13 +68,11 @@ public final class StaticCssCheckTest {
     /**
      * Validates correct CSS files.
      * @throws Exception If something goes wrong
-     * @todo #10 Implement CSS validation.
      */
     @org.junit.Ignore
     @Test
     public void testTruePositiveValidation() throws Exception {
         final File basedir = this.temp.newFolder("base-1");
-        // @checkstyle MultipleStringLiterals (1 lines)
         Utils.copy(basedir, "src/main/webapp/css/valid.css");
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(basedir).when(env).basedir();
@@ -88,13 +87,11 @@ public final class StaticCssCheckTest {
     /**
      * Validates wrong CSS files (against CSS 2.1).
      * @throws Exception If something goes wrong
-     * @todo #10 Implement CSS validation.
      */
     @org.junit.Ignore
     @Test
     public void testFalsePositiveValidation() throws Exception {
         final File basedir = this.temp.newFolder("base-2");
-        // @checkstyle MultipleStringLiterals (1 lines)
         Utils.copy(basedir, "src/main/webapp/css/invalid.css");
         final Environment env = Mockito.mock(Environment.class);
         Mockito.doReturn(basedir).when(env).basedir();

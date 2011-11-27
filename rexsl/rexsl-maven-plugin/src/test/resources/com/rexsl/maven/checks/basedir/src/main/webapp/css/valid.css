@@ -1,7 +1,12 @@
 /**
  * Example of valid CSS file. For test usage only.
  */
-html, body{
-	color: black;
-} 
+html,
+body {
+    color: black;
+    background-color: white;
+}
 
+a {
+    color: red;
+}

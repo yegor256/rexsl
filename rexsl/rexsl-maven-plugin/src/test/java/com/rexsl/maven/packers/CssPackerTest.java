@@ -69,21 +69,23 @@ public final class CssPackerTest {
      *  We should package CSS files and compress them.
      */
     @Test
-    public void testCssPackaging() throws Exception {
+    public void testCssPacking() throws Exception {
         final Environment env = Mockito.mock(Environment.class);
-        final File dest = this.temp.newFolder("webdir");
-        Mockito.doReturn(dest).when(env).webdir();
-        final File css = new File(dest, CssPacker.FOLDER + "/screen.css");
-        css.getParentFile().mkdirs();
+        final File basedir = this.temp.newFolder("basedir");
+        Mockito.doReturn(basedir).when(env).basedir();
+        final File webdir = new File(basedir, "target/webdir");
+        Mockito.doReturn(webdir).when(env).webdir();
+        final File src = new File(basedir, "src/main/webapp/css/screen.css");
+        final File dest = new File(webdir, "css/screen.css");
+        src.getParentFile().mkdirs();
         FileUtils.writeStringToFile(
-            css,
-            "/* test "
-            + "*/ a: { color: red; }"
+            src,
+            "\u002F* test */ a: { color: red; }"
         );
         final Packer packer = new CssPacker();
         packer.pack(env);
         // MatcherAssert.assertThat(
-        //     FileUtils.readFileToString(css),
+        //     FileUtils.readFileToString(dest),
         //     Matchers.equalTo("a: {color: red;}")
         // );
     }

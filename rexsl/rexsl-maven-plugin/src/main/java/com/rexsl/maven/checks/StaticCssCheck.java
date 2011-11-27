@@ -37,7 +37,6 @@ import com.rexsl.maven.Environment;
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id: StaticCssCheck.java 204 2011-10-26 21:15:28Z guard $
- * @checkstyle ClassDataAbstractionCoupling (2 lines)
  */
 public final class StaticCssCheck implements Check {
 

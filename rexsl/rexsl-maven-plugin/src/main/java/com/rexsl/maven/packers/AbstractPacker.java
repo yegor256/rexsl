@@ -31,63 +31,73 @@ package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
+import com.ymock.util.Logger;
 import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
 import org.apache.commons.io.FileUtils;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 
 /**
- * Test case for {@link XslPacker}.
+ * Abstract packer.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class XslPackerTest {
+abstract class AbstractPacker implements Packer {
 
     /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
+     * {@inheritDoc}
      */
-    @Rule
-    public TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
+    @Override
+    public final void pack(final Environment env) {
+        final File srcdir = new File(
+            env.basedir(),
+            String.format("src/main/webapp/%s", this.extension())
+        );
+        final File destdir = this.ddir(env);
+        if (srcdir.exists()) {
+            final Collection<File> files = FileUtils.listFiles(
+                srcdir,
+                new String[] {this.extension()},
+                true
+            );
+            for (File src : files) {
+                final File dest = new File(destdir, src.getName());
+                try {
+                    this.pack(src, dest);
+                } catch (IOException ex) {
+                    throw new IllegalArgumentException(ex);
+                }
+            }
+        } else {
+            Logger.info(this, "#pack(): %s directory is absent", srcdir);
+        }
     }
 
     /**
-     * Simple packaging.
-     * @throws Exception If something goes wrong inside
-     * @todo #6 This test doesn't work because the Packer is not implemented.
-     *  XSL files should be compressed (all comments and spaces removed).
+     * Get extension of files (and directory name).
+     * @return The suffix
      */
-    @Test
-    public void testXslPackaging() throws Exception {
-        final Environment env = Mockito.mock(Environment.class);
-        final File basedir = this.temp.newFolder("basedir");
-        Mockito.doReturn(basedir).when(env).basedir();
-        final File webdir = new File(basedir, "target/webdir");
-        Mockito.doReturn(webdir).when(env).webdir();
-        final File src = new File(basedir, "src/main/webapp/xsl/layout.xsl");
-        final File dest = new File(webdir, "xsl/layout.xsl");
-        src.getParentFile().mkdirs();
-        FileUtils.writeStringToFile(
-            src,
-            "<stylesheet><!-- some text --></stylesheet>"
-        );
-        final Packer packer = new XslPacker();
-        packer.pack(env);
-        // MatcherAssert.assertThat(
-        //     FileUtils.readFileToString(dest),
-        //     Matchers.equalTo("<stylesheet></stylesheet>")
-        // );
+    abstract protected String extension();
+
+    /**
+     * Pack one file from source to destination.
+     * @param src Source file
+     * @param dest Destination file
+     */
+    abstract protected void pack(File src, File dest) throws IOException ;
+
+    /**
+     * Prepare and return destination dir.
+     * @param env The environment
+     * @return The directory ready to save files
+     */
+    private File ddir(final Environment env) {
+        final File dir = new File(env.webdir(), this.extension());
+        if (dir.mkdirs()) {
+            Logger.info(this, "#ddir(): %s directory created", dir);
+        }
+        return dir;
     }
 
 }
