@@ -29,34 +29,76 @@
  */
 package com.rexsl.maven.packers;
 
+import com.rexsl.maven.Environment;
+import com.rexsl.maven.Packer;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Packager of XSL files. All XML comments and unnecessary spaces are removed.
+ * Abstract packer.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class XslPacker extends AbstractPacker {
+abstract class AbstractPacker implements Packer {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected String extension() {
-        return "xsl";
+    public final void pack(final Environment env) {
+        final File srcdir = new File(
+            env.basedir(),
+            String.format("src/main/webapp/%s", this.extension())
+        );
+        final File destdir = this.ddir(env);
+        if (srcdir.exists()) {
+            final Collection<File> files = FileUtils.listFiles(
+                srcdir,
+                new String[] {this.extension()},
+                true
+            );
+            for (File src : files) {
+                final File dest = new File(destdir, src.getName());
+                try {
+                    this.pack(src, dest);
+                } catch (IOException ex) {
+                    throw new IllegalArgumentException(ex);
+                }
+            }
+        } else {
+            Logger.info(this, "#pack(): %s directory is absent", srcdir);
+        }
     }
 
     /**
-     * {@inheritDoc}
+     * Get extension of files (and directory name).
+     * @return The suffix
      */
-    @Override
-    protected void pack(final File src, final File dest) throws IOException {
-        FileUtils.copyFile(src, dest);
-        Logger.warn(this, "#pack(%s, %s): no packing, just copied", src, dest);
+    protected abstract String extension();
+
+    /**
+     * Pack one file from source to destination.
+     * @param src Source file
+     * @param dest Destination file
+     * @throws IOException If some IO problem inside
+     */
+    protected abstract void pack(File src, File dest) throws IOException;
+
+    /**
+     * Prepare and return destination dir.
+     * @param env The environment
+     * @return The directory ready to save files
+     */
+    private File ddir(final Environment env) {
+        final File dir = new File(env.webdir(), this.extension());
+        if (dir.mkdirs()) {
+            Logger.info(this, "#ddir(): %s directory created", dir);
+        }
+        return dir;
     }
 
 }

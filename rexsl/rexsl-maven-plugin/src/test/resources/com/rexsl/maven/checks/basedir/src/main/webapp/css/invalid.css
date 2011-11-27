@@ -1,8 +1,19 @@
 /**
  * Example of invalid CSS file. For test usage only.
- * @todo #10 write invalid css example.
  */
-html, body{        
-	color: black;
-} 
 
+/* all-tags qualifier shouldn't be used */
+* {
+    color: black;
+}
+
+/* ID and tag name shouldn't be used together */
+div#test {
+    color: red;
+}
+
+/* all in one line */
+span { color: red; }
+
+/* empty body */
+textarea { }

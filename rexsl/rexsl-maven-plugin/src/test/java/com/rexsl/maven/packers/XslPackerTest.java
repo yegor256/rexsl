@@ -33,6 +33,8 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -71,18 +73,22 @@ public final class XslPackerTest {
     @Test
     public void testXslPackaging() throws Exception {
         final Environment env = Mockito.mock(Environment.class);
-        final File dest = this.temp.newFolder("webdir");
-        Mockito.doReturn(dest).when(env).webdir();
-        final File xsl = new File(dest, XslPacker.FOLDER + "/layout.xsl");
-        xsl.getParentFile().mkdirs();
+        final File basedir = this.temp.newFolder("basedir");
+        Mockito.doReturn(basedir).when(env).basedir();
+        final File webdir = new File(basedir, "target/webdir");
+        Mockito.doReturn(webdir).when(env).webdir();
+        final File src = new File(basedir, "src/main/webapp/xsl/layout.xsl");
+        final File dest = new File(webdir, "xsl/layout.xsl");
+        src.getParentFile().mkdirs();
         FileUtils.writeStringToFile(
-            xsl,
+            src,
             "<stylesheet><!-- some text --></stylesheet>"
         );
         final Packer packer = new XslPacker();
         packer.pack(env);
+        MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
         // MatcherAssert.assertThat(
-        //     FileUtils.readFileToString(xsl),
+        //     FileUtils.readFileToString(dest),
         //     Matchers.equalTo("<stylesheet></stylesheet>")
         // );
     }

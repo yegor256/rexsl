@@ -33,6 +33,8 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -71,19 +73,22 @@ public final class JsPackerTest {
     @Test
     public void testJssPackaging() throws Exception {
         final Environment env = Mockito.mock(Environment.class);
-        final File dest = this.temp.newFolder("webdir");
-        Mockito.doReturn(dest).when(env).webdir();
-        final File script = new File(dest, JsPacker.FOLDER + "/test.js");
-        script.getParentFile().mkdirs();
+        final File basedir = this.temp.newFolder("basedir");
+        Mockito.doReturn(basedir).when(env).basedir();
+        final File webdir = new File(basedir, "target/webdir");
+        Mockito.doReturn(webdir).when(env).webdir();
+        final File src = new File(basedir, "src/main/webapp/js/simple.js");
+        final File dest = new File(webdir, "js/simple.js");
+        src.getParentFile().mkdirs();
         FileUtils.writeStringToFile(
-            script,
-            "/* test "
-            + "*/ void func() { }"
+            src,
+            "\u002F* test */ void func() { }"
         );
         final Packer packer = new JsPacker();
         packer.pack(env);
+        MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
         // MatcherAssert.assertThat(
-        //     FileUtils.readFileToString(script),
+        //     FileUtils.readFileToString(dest),
         //     Matchers.equalTo("void func() {}")
         // );
     }
