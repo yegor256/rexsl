@@ -37,7 +37,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver
 def driver = new HtmlUnitDriver()
 driver.setJavascriptEnabled(true)
 driver.navigate().to(rexsl.home.toString())
-MatcherAssert.assertThat(driver.getTitle(), Matchers.equalTo('home'))
+MatcherAssert.assertThat(driver.title, Matchers.equalTo('home'))
 
 def element = driver.findElement(By.name('text'))
 def value = element.getAttribute('value')

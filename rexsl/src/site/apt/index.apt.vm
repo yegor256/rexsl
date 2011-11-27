@@ -52,7 +52,7 @@ ReXSL, a framework for lightweight Java web apps
   {{{http://en.wikipedia.org/wiki/Representational_State_Transfer}REST}},
   {{{http://en.wikipedia.org/wiki/HATEOAS}HATEOAS}},
   {{{http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol}HTTP 1.1}}.
-  If any of these technologies are new for you ReXSL won't work.
+  If any of these technologies are new for you - ReXSL won't work.
 
   This article is a "quick start guide". There are a number of other useful
   articles:
@@ -290,11 +290,11 @@ public class HomeTest {
 
 +--
 import com.rexsl.test.XhtmlConverter
+import org.hamcrest.Matchers
 import org.junit.Assert
 import org.xmlmatchers.XmlMatchers
 import org.xmlmatchers.namespace.SimpleNamespaceContext
-import static org.hamcrest.Matchers.*
-Assert.assertThat(rexsl.document, containsString('say hello'))
+Assert.assertThat(rexsl.document, Matchers.containsString('say hello'))
 Assert.assertThat(
     XhtmlConverter.the(rexsl.document),
     XmlMatchers.hasXPath(
@@ -317,7 +317,7 @@ new TestClient(rexsl.home)
   .header(HttpHeaders.USER_AGENT, 'Safari')
   .get('/')
   .assertStatus(HttpURLConnection.HTTP_OK)
-  .assertXPath"//xhtml:div[contains(.,'world')]")
+  .assertXPath("//xhtml:div[contains(.,'world')]")
 new TestClient(rexsl.home)
   .get('/strange-address')
   .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)

@@ -82,7 +82,7 @@ ReXSL core module
 <dependency>
   <groupId>com.rexsl</groupId>
   <artifactId>rexsl-core</artifactId>
-  <version>${rexsl.release}</version>
+  <version>${releasedVersion}</version>
   <scope>runtime</scope>
 </dependency>
 +--
