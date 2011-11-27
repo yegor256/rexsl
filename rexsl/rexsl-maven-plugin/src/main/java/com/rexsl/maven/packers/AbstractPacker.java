@@ -78,14 +78,15 @@ abstract class AbstractPacker implements Packer {
      * Get extension of files (and directory name).
      * @return The suffix
      */
-    abstract protected String extension();
+    protected abstract String extension();
 
     /**
      * Pack one file from source to destination.
      * @param src Source file
      * @param dest Destination file
+     * @throws IOException If some IO problem inside
      */
-    abstract protected void pack(File src, File dest) throws IOException ;
+    protected abstract void pack(File src, File dest) throws IOException;
 
     /**
      * Prepare and return destination dir.
