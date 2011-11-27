@@ -27,22 +27,24 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo.scripts
 
 // doesn't work at the moment: http://stackoverflow.com/questions/7947505
 
-/*
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.hamcrest.MatcherAssert
+import org.hamcrest.Matchers
+import org.openqa.selenium.By
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.WebElement
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.cyberneko.html.HTMLComponent
 
 def driver = new HtmlUnitDriver()
 driver.setJavascriptEnabled(true)
 driver.navigate().to(rexsl.home.toString())
-assert driver.getTitle() == 'home'
+MatcherAssert.assertThat(driver.getTitle(), Matchers.equalTo('home'))
 
 def element = driver.findElement(By.name("text"))
 element.sendKeys("hello, dude!")
 element.submit()
-assert element.getText().contains('dude')
-*/
+MatcherAssert.assertThat(element.getText(), Matchers.containsString('dude'))
