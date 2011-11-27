@@ -33,6 +33,8 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -84,6 +86,7 @@ public final class CssPackerTest {
         );
         final Packer packer = new CssPacker();
         packer.pack(env);
+        MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
         // MatcherAssert.assertThat(
         //     FileUtils.readFileToString(dest),
         //     Matchers.equalTo("a: {color: red;}")
