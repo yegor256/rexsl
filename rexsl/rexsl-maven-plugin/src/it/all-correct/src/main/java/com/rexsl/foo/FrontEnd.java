@@ -50,8 +50,10 @@ public final class FrontEnd {
     }
 
     @POST
-    public void submit(@FormParam("text") final String text) {
+    @Produces(MediaType.APPLICATION_XML)
+    public Home submit(@FormParam("text") final String text) {
         Data.INSTANCE.set(text);
+        return this.home();
     }
 
 }

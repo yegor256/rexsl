@@ -57,10 +57,10 @@ ReXSL, a framework for lightweight Java web apps
   This article is a "quick start guide". There are a number of other useful
   articles:
 
-   * {{{rexsl-test/apidocs/com/rexsl/test/TestClient.html}<<<com.rexsl.test.TestClient>>>}}
+   * {{{./rexsl-test/apidocs/com/rexsl/test/TestClient.html}<<<com.rexsl.test.TestClient>>>}}
      for convenient in-container testing
 
-   * {{{rexsl-maven-plugin/index.html}<<<rexsl-maven-plugin>>> cookbook}}
+   * {{{./rexsl-maven-plugin/index.html}<<<rexsl-maven-plugin>>> cookbook}}
 
   Let's create a new project on top of ReXSL.
   Start with a new Maven project with the following directory structure

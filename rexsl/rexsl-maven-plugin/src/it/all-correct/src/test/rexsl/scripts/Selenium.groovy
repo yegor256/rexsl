@@ -37,14 +37,19 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.cyberneko.html.HTMLComponent
 
 def driver = new HtmlUnitDriver()
 driver.setJavascriptEnabled(true)
 driver.navigate().to(rexsl.home.toString())
 MatcherAssert.assertThat(driver.getTitle(), Matchers.equalTo('home'))
 
-def element = driver.findElement(By.name("text"))
-element.sendKeys("hello, dude!")
+def element = driver.findElement(By.name('text'))
+def value = element.getAttribute('value')
+element.clear()
+element.sendKeys('submitted by Selenium.groovy')
 element.submit()
-MatcherAssert.assertThat(element.getText(), Matchers.containsString('dude'))
+
+def again = driver.findElement(By.id('data'))
+again.clear()
+again.sendKeys(value)
+again.submit()

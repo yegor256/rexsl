@@ -43,7 +43,7 @@
 
     <xsl:template name="content">
         <form method="post" action="">
-            <input name="text" maxlength="50">
+            <input name="text" maxlength="50" id="data">
                 <xsl:attribute name="value">
                     <xsl:value-of select="/page/text" />
                 </xsl:attribute>

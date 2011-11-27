@@ -47,7 +47,7 @@ new TestClient(rexsl.home)
     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
     .body('text=injected')
     .post(home)
-    .assertStatus(HttpURLConnection.HTTP_NO_CONTENT)
+    .assertStatus(HttpURLConnection.HTTP_OK)
 
 // let's validate that it's there
 new TestClient(rexsl.home)
