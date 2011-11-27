@@ -48,6 +48,8 @@
         <menu name="Cookbook">
             <item name="Setup scripts" href="./setup.html" />
             <item name="Test stubs" href="./stubs.html" />
+            <item name="Bootstrap" href="./bootstrap.html" />
+            <item name="Selenium" href="./selenium.html" />
         </menu>
         <menu ref="reports" />
         <menu ref="modules" />

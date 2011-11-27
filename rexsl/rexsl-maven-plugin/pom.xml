@@ -166,6 +166,13 @@
             <groupId>org.apache.maven.wagon</groupId>
             <artifactId>wagon-http-lightweight</artifactId>
             <version since="15 Sep 2011">1.0-beta-7</version>
+            <exclusions>
+                <exclusion>
+                    <!-- it's an old version -->
+                    <groupId>nekohtml</groupId>
+                    <artifactId>nekohtml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <!-- Embedded Jetty Java Servlet Container -->

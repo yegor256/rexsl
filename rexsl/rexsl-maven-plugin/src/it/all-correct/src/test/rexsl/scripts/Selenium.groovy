@@ -27,33 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.foo;
+package com.rexsl.foo.scripts
 
-import javax.ws.rs.GET;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import org.hamcrest.MatcherAssert
+import org.hamcrest.Matchers
+import org.openqa.selenium.By
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
-/**
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- */
-@Path("/")
-public final class FrontEnd {
+def driver = new HtmlUnitDriver()
+driver.setJavascriptEnabled(true)
+driver.navigate().to(rexsl.home.toString())
+MatcherAssert.assertThat(driver.title, Matchers.equalTo('home'))
 
-    @GET
-    @Produces(MediaType.APPLICATION_XML)
-    public Home home() {
-        return new Home();
-    }
+def element = driver.findElement(By.name('text'))
+def value = element.getAttribute('value')
+element.clear()
+element.sendKeys('submitted by Selenium.groovy')
+element.submit()
 
-    @POST
-    @Produces(MediaType.APPLICATION_XML)
-    public Home submit(@FormParam("text") final String text) {
-        Data.INSTANCE.set(text);
-        return this.home();
-    }
-
-}
+def again = driver.findElement(By.id('data'))
+again.clear()
+again.sendKeys(value)
+again.submit()

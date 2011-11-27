@@ -1,9 +1,9 @@
  ------
- Introduction to ReXSL
+ ReXSL and Selenium
  ------
  Yegor Bugayenko
  ------
- 2011-08-21
+ 2011-11-27
  ------
 
 ~~
@@ -38,21 +38,41 @@
 ~~ @version $Id$
 ~~
 
-ReXSL Maven Plugin
+How to use Selenium in ReXSL testing?
 
-  This plugin is helping you to test your ReXSL-powered
-  web application and perform some pre-packaging changes to your
-  web assets (like CSS/XSL stylesheets, JavaScript code, images, etc.)
+  First, add Selenium dependency to <<<pom.xml>>>:
 
-  Read more about its {{{./usage.html}usage}}.
++--
+<dependency>
+  <groupId>org.seleniumhq.selenium</groupId>
+  <artifactId>selenium-java</artifactId>
+  <version>2.9.0</version>
+  <scope>test</scope>
+</dependency>
++--
 
-  There are a number of cookbook advices, which will help:
+  Create a normal groovy script in <<<src/test/rexsl/scripts>>> directory:
 
-   * {{{./setup.html}How to add application data before tests?}}
++--
+/foo
+  pom.xml
+  /src
+    /main
+    /test
+      /rexsl
+        /scripts
+          WithSelenium.groovy
++--
 
-   * {{{./bootstrap.html}How to pre-configure the application and mock resources?}}
+  Implement test scenario in it, for example:
 
-   * {{{./stubs.html}How to add extra functionality during tests?}}
++--
+import org.hamcrest.MatcherAssert
+import org.hamcrest.Matchers
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
-   * {{{./selenium.html}How to use Selenium in ReXSL testing?}}
+def driver = new HtmlUnitDriver()
+driver.navigate().to(rexsl.home.toString())
+MatcherAssert.assertThat(driver.getTitle(), Matchers.equalTo('home'))
++--
 

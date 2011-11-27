@@ -34,13 +34,10 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 import com.ymock.util.Logger;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -166,71 +163,6 @@ public final class RestfulServlet extends HttpServlet {
         }
         org.slf4j.bridge.SLF4JBridgeHandler.install();
         Logger.debug(this, "#julToSlf4j(): JUL forwarded to SLF4j");
-    }
-
-    /**
-     * Custom filter config.
-     */
-    private static final class ServletConfigWrapper implements FilterConfig {
-        /**
-         * Wrapped config.
-         */
-        private final ServletConfig config;
-        /**
-         * Additional properties.
-         */
-        private final Properties properties;
-        /**
-         * Public ctor.
-         * @param cfg Servlet config
-         * @param props Properties to add to existing params
-         */
-        public ServletConfigWrapper(final ServletConfig cfg,
-            final Properties props) {
-            this.config = cfg;
-            this.properties = props;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String getFilterName() {
-            return String.format("%s-filter", this.config.getServletName());
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String getInitParameter(final String name) {
-            String value = this.properties.getProperty(name);
-            if (value == null) {
-                value = this.config.getInitParameter(name);
-            }
-            return value;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Enumeration<String> getInitParameterNames() {
-            // @checkstyle IllegalType (1 line)
-            final Vector<String> names = new Vector<String>();
-            for (Object name : this.properties.keySet()) {
-                names.add((String) name);
-            }
-            final Enumeration<String> enm = this.config.getInitParameterNames();
-            while (enm.hasMoreElements()) {
-                names.add(enm.nextElement());
-            }
-            return names.elements();
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public ServletContext getServletContext() {
-            return this.config.getServletContext();
-        }
     }
 
 }

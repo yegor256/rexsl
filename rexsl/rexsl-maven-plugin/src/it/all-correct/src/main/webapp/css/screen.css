@@ -32,4 +32,25 @@
 
 * {
     font-family: Arial;
+    font-size: 18px;
+}
+
+input {
+    border: 1px solid gray;
+    padding: 0.5em;
+}
+
+    input[type="submit"]:hover {
+        background-color: black;
+        color: white;
+        cursor: pointer;
+    }
+
+div#content {
+    margin-left: auto;
+    margin-right: auto;
+    clear: both;
+    width: 40em;
+    text-align: center;
+    padding-top: 5em;
 }

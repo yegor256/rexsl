@@ -43,9 +43,15 @@
 
     <xsl:template match="/" xml:lang="en">
         <html>
-            <div id="content">
-                <xsl:call-template name="content" />
-            </div>
+            <head>
+                <title>home</title>
+                <link href="/css/screen.css" rel="stylesheet" type="text/css"></link>
+            </head>
+            <body>
+                <div id="content">
+                    <xsl:call-template name="content" />
+                </div>
+            </body>
         </html>
     </xsl:template>
 
