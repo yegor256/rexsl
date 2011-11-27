@@ -29,13 +29,9 @@
  */
 package com.rexsl.foo.scripts
 
-// doesn't work at the moment: http://stackoverflow.com/questions/7947505
-
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
 def driver = new HtmlUnitDriver()
