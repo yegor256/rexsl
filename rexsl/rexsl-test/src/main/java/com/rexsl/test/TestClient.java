@@ -102,6 +102,11 @@ public final class TestClient {
     private final List<Extender> extenders = new ArrayList<Extender>();
 
     /**
+     * HTTP request params.
+     */
+    private HttpParams params = new BasicHttpParams();
+
+    /**
      * HTTP response.
      */
     private HttpResponse response;
@@ -118,6 +123,7 @@ public final class TestClient {
     public TestClient(final URI uri) {
         this.home = uri;
         this.response = null;
+        this.followRedirects(false);
     }
 
     /**
@@ -148,6 +154,16 @@ public final class TestClient {
     public TestClient body(final String text) {
         Logger.debug(this, "#body(%s)", text);
         this.extenders.add(new BodyExtender(text));
+        return this;
+    }
+
+    /**
+     * Follow redirects.
+     * @param follow Should we follow redirects?
+     * @return This object
+     */
+    public TestClient followRedirects(final boolean follow) {
+        this.params.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, follow);
         return this;
     }
 
@@ -382,9 +398,7 @@ public final class TestClient {
             for (Extender extender : this.extenders) {
                 extender.extend(req);
             }
-            final HttpParams params = new BasicHttpParams();
-            params.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, false);
-            final HttpClient client = new DefaultHttpClient(params);
+            final HttpClient client = new DefaultHttpClient(this.params);
             return client.execute((HttpUriRequest) req);
         }
     }
