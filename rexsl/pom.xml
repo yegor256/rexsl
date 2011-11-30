@@ -193,7 +193,7 @@
                     <plugin>
                         <groupId>com.qulice</groupId>
                         <artifactId>qulice-maven-plugin</artifactId>
-                        <version since="25 Oct 2011">0.1.5</version>
+                        <version since="25 Oct 2011">0.1.7</version>
                         <dependencies>
                             <dependency>
                                 <groupId>com.rexsl</groupId>
