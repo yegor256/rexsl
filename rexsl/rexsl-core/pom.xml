@@ -233,7 +233,7 @@
                         <artifactId>qulice-maven-plugin</artifactId>
                         <version since="25 Oct 2011">0.1.7</version>
                         <configuration>
-                            <!-- @todo refs #72:1hr Fix all checkstyle errors and enable qulice -->
+                            <!-- @todo #72:1hr Fix all checkstyle errors and enable qulice -->
                             <skip>true</skip>
                         </configuration>
                         <executions>
