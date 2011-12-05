@@ -29,10 +29,16 @@
  */
 package com.rexsl.maven.packers;
 
-import com.ymock.util.Logger;
+import com.yahoo.platform.yui.compressor.CssCompressor;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import org.apache.commons.io.FileUtils;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Packager of CSS files. All comments and unnecessary spaces are removed.
@@ -41,6 +47,11 @@ import org.apache.commons.io.FileUtils;
  * @version $Id$
  */
 public final class CssPacker extends AbstractPacker {
+
+    /**
+     * Encoding.
+     */
+    private static final String ENCODING = "UTF-8";
 
     /**
      * {@inheritDoc}
@@ -55,8 +66,22 @@ public final class CssPacker extends AbstractPacker {
      */
     @Override
     protected void pack(final File src, final File dest) throws IOException {
-        FileUtils.copyFile(src, dest);
-        Logger.warn(this, "#pack(%s, %s): no packing, just copied", src, dest);
+        Reader in = null;
+        Writer out = null;
+        try {
+            in = new InputStreamReader(
+                new FileInputStream(src),
+                this.ENCODING
+            );
+            CssCompressor compressor = new CssCompressor(in);
+            out = new OutputStreamWriter(
+                new FileOutputStream(dest),
+                this.ENCODING
+            );
+            compressor.compress(out, -1);
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
+        }
     }
-
 }
