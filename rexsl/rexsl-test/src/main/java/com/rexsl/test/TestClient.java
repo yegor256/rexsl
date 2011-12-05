@@ -34,6 +34,8 @@ import com.rexsl.test.client.Extender;
 import com.rexsl.test.client.HeaderExtender;
 import com.rexsl.test.client.Headers;
 import com.ymock.util.Logger;
+import groovy.util.XmlSlurper;
+import groovy.util.slurpersupport.GPathResult;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -121,6 +123,15 @@ public final class TestClient {
      * @param uri Home of the server
      */
     public TestClient(final URI uri) {
+        if (!uri.isAbsolute()) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "URI '%s' is not absolute, can't be used with %s",
+                    uri,
+                    this.getClass().getName()
+                )
+            );
+        }
         this.home = uri;
         this.response = null;
         this.followRedirects(false);
@@ -275,6 +286,15 @@ public final class TestClient {
      */
     public Integer getStatus() {
         return this.response.getStatusLine().getStatusCode();
+    }
+
+    /**
+     * Get body as {@link GPathResult}.
+     * @return The GPath result
+     * @throws Exception If some problem inside
+     */
+    public GPathResult getGpath() throws Exception {
+        return new XmlSlurper().parseText(this.getBody());
     }
 
     /**
