@@ -87,10 +87,10 @@ public final class CssPackerTest {
         final Packer packer = new CssPacker();
         packer.pack(env);
         MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
-        // MatcherAssert.assertThat(
-        //     FileUtils.readFileToString(dest),
-        //     Matchers.equalTo("a: {color: red;}")
-        // );
+        MatcherAssert.assertThat(
+            FileUtils.readFileToString(dest),
+            Matchers.equalTo("a:{color:red}")
+        );
     }
 
 }
