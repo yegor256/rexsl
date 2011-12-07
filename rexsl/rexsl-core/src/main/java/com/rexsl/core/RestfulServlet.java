@@ -127,7 +127,11 @@ public final class RestfulServlet extends HttpServlet {
         this.reconfigureJUL();
         final FilterConfig cfg = new ServletConfigWrapper(config, props);
         this.jersey.init(cfg);
-        Logger.debug(this, "#init(): servlet initialized");
+        Logger.info(
+            this,
+            "#init(%s): servlet initialized",
+            config.getClass().getName()
+        );
     }
 
     /**

@@ -234,8 +234,23 @@ public final class Manifests {
         } catch (java.net.MalformedURLException ex) {
             throw new IllegalStateException(ex);
         }
-        if (main != null) {
-            Manifests.attributes.putAll(Manifests.loadOneFile(main));
+        if (main == null) {
+            Logger.warn(
+                Manifests.class,
+                "#append(%s): MANIFEST.MF not found in WAR package",
+                ctx.getClass().getName()
+            );
+        } else {
+            final ConcurrentMap<String, String> attrs =
+                Manifests.loadOneFile(main);
+            Manifests.attributes.putAll(attrs);
+            Logger.info(
+                Manifests.class,
+                "#append(%s): %d attributes loaded from %s",
+                ctx.getClass().getName(),
+                attrs.size(),
+                main
+            );
         }
     }
 
@@ -243,6 +258,7 @@ public final class Manifests {
      * Load attributes from classpath.
      */
     private static void load() {
+        final long start = System.currentTimeMillis();
         Manifests.attributes = new ConcurrentHashMap<String, String>();
         Manifests.failures = new ConcurrentHashMap<URL, String>();
         Integer count = 0;
@@ -261,11 +277,12 @@ public final class Manifests {
             }
             count += 1;
         }
-        Logger.debug(
+        Logger.info(
             Manifests.class,
-            "#load(): %d attributes loaded from %d URL(s): %s",
+            "#load(): %d attributes loaded from %d URL(s) in %dms: %s",
             Manifests.attributes.size(),
             count,
+            System.currentTimeMillis() - start,
             Manifests.group(Manifests.attributes.keySet())
         );
     }
