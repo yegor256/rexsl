@@ -32,16 +32,25 @@ package com.rexsl.maven.packers;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
-import org.apache.commons.io.FileUtils;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  * Packager of XSL files. All XML comments and unnecessary spaces are removed.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
  */
 public final class XslPacker extends AbstractPacker {
-
     /**
      * {@inheritDoc}
      */
@@ -49,14 +58,45 @@ public final class XslPacker extends AbstractPacker {
     protected String extension() {
         return "xsl";
     }
-
     /**
      * {@inheritDoc}
      */
     @Override
     protected void pack(final File src, final File dest) throws IOException {
-        FileUtils.copyFile(src, dest);
-        Logger.warn(this, "#pack(%s, %s): no packing, just copied", src, dest);
+        DocumentBuilderFactory factory =
+            DocumentBuilderFactory.newInstance();
+        factory.setIgnoringElementContentWhitespace(true);
+        DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException exception) {
+            Logger.error(this, "Cannot instantiate parser.");
+        }
+        Document document = null;
+        try {
+            document = builder.parse(src);
+        } catch (SAXException exception) {
+            Logger.error(this, "Cannot parse file: %s", src.getAbsolutePath());
+        }
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = null;
+        try {
+            transformer = transformerFactory.newTransformer();
+        } catch (TransformerConfigurationException exception) {
+            Logger.error(this, "Cannot instantiate transformer.");
+        }
+        // Initialize StreamResult with File object to save to file.
+        StreamResult result = new StreamResult(dest);
+        DOMSource source = new DOMSource(document);
+        try {
+            transformer.transform(source, result);
+        } catch (TransformerException exception) {
+            Logger.error(
+                this,
+                "Cannot perform transforming: from %s to %s",
+                src.getAbsolutePath(),
+                dest.getAbsolutePath()
+            );
+        }
     }
-
 }
