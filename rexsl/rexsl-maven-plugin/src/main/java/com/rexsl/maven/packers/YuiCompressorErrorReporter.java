@@ -29,62 +29,60 @@
  */
 package com.rexsl.maven.packers;
 
-import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import org.apache.commons.io.IOUtils;
+import com.ymock.util.Logger;
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 
 /**
- * Packager of JS files. All comments, spaces, and unnecessary language
- * constructs are removed.
+ * Error reporter of Javascript compressor.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
+ * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @version $Id: YuiCompressorErrorReporter.java 370 2011-11-27 16:36:01Z guard $
  */
-public final class JsPacker extends AbstractPacker {
-
-    /**
-     * Encoding.
-     */
-    private static final String ENCODING = "UTF-8";
-
+public class YuiCompressorErrorReporter implements ErrorReporter {
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected String extension() {
-        return "js";
+    public void warning(
+        final String message,
+        final String sourceName,
+        final int line,
+        final String lineSource,
+        final int lineOffset
+        ) {
+        if (line < 0) {
+            Logger.warn(this, message);
+        } else {
+            Logger.warn(this, line + ':' + lineOffset + ':' + message);
+        }
     }
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected void pack(final File src, final File dest) throws IOException {
-        Reader in = null;
-        Writer out = null;
-        try {
-            in = new InputStreamReader(
-                new FileInputStream(src),
-                this.ENCODING
-            );
-            JavaScriptCompressor compressor = new JavaScriptCompressor(
-                in,
-                new YuiCompressorErrorReporter()
-            );
-            out = new OutputStreamWriter(
-                new FileOutputStream(dest),
-                this.ENCODING
-            );
-            compressor.compress(out, -1, true, false, false, false);
-        } finally {
-            IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(out);
+    public void error(
+        final String message,
+        final String sourceName,
+        final int line,
+        final String lineSource,
+        final int lineOffset
+        ) {
+        if (line < 0) {
+            Logger.error(this, message);
+        } else {
+            Logger.error(this, line + ':' + lineOffset + ':' + message);
         }
+    }
+    /**
+     * {@inheritDoc}
+     */
+    public EvaluatorException runtimeError(
+        final String message,
+        final String sourceName,
+        final int line,
+        final String lineSource,
+        final int lineOffset
+        ) {
+        error(message, sourceName, line, lineSource, lineOffset);
+        return new EvaluatorException(message);
     }
 }
