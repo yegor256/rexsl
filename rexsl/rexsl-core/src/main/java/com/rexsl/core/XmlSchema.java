@@ -27,61 +27,39 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.packers;
+package com.rexsl.core;
 
-import com.yahoo.platform.yui.compressor.CssCompressor;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import org.apache.commons.io.IOUtils;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Packager of CSS files. All comments and unnecessary spaces are removed.
+ * Annotation for a class, to indicate which XML Schema to validate its
+ * XML output against.
+ *
+ * <p>If this annotation is omitted ReXSL assumes that XML Schema is named
+ * after class full name plus <tt>.xsd</tt> extenstion.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see <a href="http://trac.fazend.com/rexsl/ticket/47">Feature was introduced in ticket #47</a>
+ * @since 0.3
  */
-public final class CssPacker extends AbstractPacker {
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface XmlSchema {
 
     /**
-     * Encoding.
+     * Get it's value.
      */
-    private static final String ENCODING = "UTF-8";
+    String value();
 
     /**
-     * {@inheritDoc}
+     * Should we ignore this schema validation?
      */
-    @Override
-    protected String extension() {
-        return "css";
-    }
+    boolean ignore() default false;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void pack(final File src, final File dest) throws IOException {
-        Reader in = null;
-        Writer out = null;
-        try {
-            in = new InputStreamReader(
-                new FileInputStream(src),
-                this.ENCODING
-            );
-            CssCompressor compressor = new CssCompressor(in);
-            out = new OutputStreamWriter(
-                new FileOutputStream(dest),
-                this.ENCODING
-            );
-            compressor.compress(out, -1);
-        } finally {
-            IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(out);
-        }
-    }
 }

@@ -117,7 +117,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             mrsh = this.context(type).createMarshaller();
             mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             final String header = String.format(
-                "<?xml-stylesheet type='text/xml' href='%s'?>",
+                "\n<?xml-stylesheet type='text/xml' href='%s'?>",
                 this.stylesheet(type)
             );
             mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
@@ -206,47 +206,78 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      */
     private Marshaller addXsdValidator(final Marshaller mrsh,
         final Class<?> type) {
-        final String name = type.getName();
-        final File xsd = new File(
-            this.xsdFolder,
-            String.format("%s.xsd", name)
-        );
-        if (xsd.exists()) {
-            final SchemaFactory factory = SchemaFactory.newInstance(
-                XMLConstants.W3C_XML_SCHEMA_NS_URI
-            );
-            try {
-                mrsh.setSchema(factory.newSchema(xsd));
-            } catch (org.xml.sax.SAXException ex) {
-                throw new IllegalStateException(
-                    String.format(
-                        "Failed to use XSD schema from '%s' for class '%s'",
-                        xsd,
-                        name
-                    ),
-                    ex
-                );
-            }
-            try {
-                mrsh.setEventHandler(new XsdEventHandler());
-            } catch (javax.xml.bind.JAXBException ex) {
-                throw new IllegalStateException(ex);
-            }
+        final String name = this.schema(type);
+        if (name.isEmpty()) {
             Logger.debug(
                 this,
-                "'%s' will be validated with '%s' schema",
-                name,
-                xsd
+                "Schema validation turned off for class '%s'",
+                type.getName()
             );
         } else {
-            Logger.warn(
-                this,
-                "No XSD schema for '%s' in '%s' file",
-                name,
-                xsd
-            );
+            final File xsd = new File(this.xsdFolder, name);
+            if (xsd.exists()) {
+                final SchemaFactory factory = SchemaFactory.newInstance(
+                    XMLConstants.W3C_XML_SCHEMA_NS_URI
+                );
+                try {
+                    mrsh.setSchema(factory.newSchema(xsd));
+                } catch (org.xml.sax.SAXException ex) {
+                    throw new IllegalStateException(
+                        String.format(
+                            "Failed to use XSD schema from '%s' for class '%s'",
+                            xsd,
+                            type.getName()
+                        ),
+                        ex
+                    );
+                }
+                try {
+                    mrsh.setEventHandler(new XsdEventHandler());
+                } catch (javax.xml.bind.JAXBException ex) {
+                    throw new IllegalStateException(ex);
+                }
+                Logger.debug(
+                    this,
+                    "Class '%s' will be validated with '%s' schema",
+                    type.getName(),
+                    xsd
+                );
+            } else {
+                Logger.warn(
+                    this,
+                    "No XSD schema for class '%s' in '%s' file",
+                    type.getName(),
+                    xsd
+                );
+            }
         }
         return mrsh;
+    }
+
+    /**
+     * Returns the name of XSD schema for this type.
+     * @param type The class
+     * @return The name of XSD file
+     */
+    private String schema(final Class<?> type) {
+        final Annotation antn = type.getAnnotation(XmlSchema.class);
+        String schema;
+        if (antn == null) {
+            schema = String.format("%s.xsd", type.getName());
+        } else {
+            if (((XmlSchema) antn).ignore()) {
+                schema = "";
+            } else {
+                schema = ((XmlSchema) antn).value();
+            }
+        }
+        Logger.debug(
+            this,
+            "#schema(%s): '%s' schema discovered",
+            type.getName(),
+            schema
+        );
+        return schema;
     }
 
 }
