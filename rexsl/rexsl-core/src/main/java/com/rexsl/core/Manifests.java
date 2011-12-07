@@ -329,7 +329,7 @@ public final class Manifests {
                 final String value = attrs.getValue((Name) key);
                 props.put(key.toString(), value);
             }
-            Logger.debug(
+            Logger.trace(
                 Manifests.class,
                 "#loadOneFile('%s'): %d attributes loaded (%s)",
                 url,
