@@ -32,6 +32,7 @@ package com.rexsl.maven.packers;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
 import java.io.File;
+import javax.validation.constraints.AssertFalse;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -48,11 +49,6 @@ import org.mockito.Mockito;
  */
 public final class XslPackerTest {
 
-    /**
-     * XML header.
-     */
-    private static final String XML_HEADER = "<?xml version=\"1.0\" "
-        + "encoding=\"UTF-8\"?>";
     /**
      * Temporary folder.
      * @checkstyle VisibilityModifier (3 lines)
@@ -72,9 +68,10 @@ public final class XslPackerTest {
     /**
      * Simple packaging.
      * @throws Exception If something goes wrong inside
-     * @todo #37 Remove comments from the output file.
-     *  XSL files should be compressed (all comments and spaces removed).
+     * @todo #37:1h Remove comments from the output file.
+     * XSL files should be compressed (all comments and spaces removed).
      */
+    @org.junit.Ignore
     @Test
     public void testXslPackaging() throws Exception {
         final Environment env = Mockito.mock(Environment.class);
@@ -87,15 +84,15 @@ public final class XslPackerTest {
         src.getParentFile().mkdirs();
         FileUtils.writeStringToFile(
             src,
-            this.XML_HEADER + "<stylesheet><!-- some text --></stylesheet>"
+            "<stylesheet><!-- some text --></stylesheet>"
         );
         final Packer packer = new XslPacker();
         packer.pack(env);
         MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
-//        MatcherAssert.assertThat(
-//             FileUtils.readFileToString(dest),
-//             Matchers.equalTo(this.XML_HEADER + "<stylesheet></stylesheet>")
-//         );
+        MatcherAssert.assertThat(
+             FileUtils.readFileToString(dest),
+             Matchers.equalTo("<stylesheet></stylesheet>")
+        );
     }
 
 }
