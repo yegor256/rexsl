@@ -36,6 +36,7 @@ import com.rexsl.test.client.Headers;
 import com.ymock.util.Logger;
 import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -44,6 +45,9 @@ import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
@@ -59,6 +63,8 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xmlmatchers.XmlMatchers;
 import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
@@ -359,6 +365,34 @@ public final class TestClient {
         throws IOException {
         Assert.assertThat(this.getBody(), matcher);
         return this;
+    }
+
+    /**
+     * Find link in XML and return new client with this link as URI.
+     * @param xpath The path of the link
+     * @return New client
+     * @throws Exception If some problem inside
+     */
+    public TestClient rel(final String xpath) throws Exception {
+        final Document document = DocumentBuilderFactory.newInstance()
+            .newDocumentBuilder()
+            .parse(new ByteArrayInputStream(this.getBody().getBytes()));
+        final NodeList nodes = (NodeList) XPathFactory.newInstance()
+            .newXPath()
+            .evaluate(xpath, document, XPathConstants.NODESET);
+        if (nodes.getLength() != 1) {
+            throw new AssertionError(
+                String.format(
+                    "XPath '%s' not found in document at '%s'",
+                    xpath,
+                    this.home
+                )
+            );
+        }
+        final URI uri = UriBuilder
+            .fromUri(nodes.item(0).getNodeValue())
+            .build();
+        return new TestClient(uri);
     }
 
     /**
