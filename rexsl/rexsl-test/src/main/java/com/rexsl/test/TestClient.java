@@ -49,6 +49,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -341,7 +342,11 @@ public final class TestClient {
      * @return This object
      */
     public TestClient assertStatus(final int status) {
-        Assert.assertEquals(new Long(status), new Long(this.getStatus()));
+        Assert.assertEquals(
+            String.format("Invalid HTTP response code in%n%s", this.asText()),
+            new Long(status),
+            new Long(this.getStatus())
+        );
         return this;
     }
 
@@ -351,7 +356,11 @@ public final class TestClient {
      * @return This object
      */
     public TestClient assertStatus(final Matcher<Integer> matcher) {
-        Assert.assertThat(this.getStatus(), matcher);
+        Assert.assertThat(
+            String.format("Invalid HTTP response code in%n%s", this.asText()),
+            this.getStatus(),
+            matcher
+        );
         return this;
     }
 
@@ -363,7 +372,11 @@ public final class TestClient {
      */
     public TestClient assertBody(final Matcher<String> matcher)
         throws IOException {
-        Assert.assertThat(this.getBody(), matcher);
+        Assert.assertThat(
+            String.format("Invalid content in%n%s", this.asText()),
+            this.getBody(),
+            matcher
+        );
         return this;
     }
 
@@ -407,6 +420,7 @@ public final class TestClient {
             .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
             .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
         Assert.assertThat(
+            String.format("XPath can't be evaluated in%n%s", this.asText()),
             XhtmlConverter.the(this.getBody()),
             XmlMatchers.hasXPath(xpath, context)
         );
@@ -465,6 +479,25 @@ public final class TestClient {
      */
     private URI absolute(final URI path) throws Exception {
         return new URL(this.home.toURL(), path.toString()).toURI();
+    }
+
+    /**
+     * Show response as text.
+     * @return The text
+     */
+    private String asText() {
+        final StringBuilder builder = new StringBuilder();
+        for (Header header : this.response.getAllHeaders()) {
+            builder.append(
+                String.format(
+                    "%s: %s%n",
+                    header.getName(),
+                    header.getValue()
+                )
+            );
+        }
+        builder.append(this.response.getEntity().toString());
+        return builder.toString();
     }
 
 }
