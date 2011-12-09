@@ -110,7 +110,7 @@ public final class XsltFilter implements Filter {
         this.tfactory = TransformerFactory.newInstance();
         this.tfactory.setURIResolver(new ContextResourceResolver(this.context));
         Manifests.append(this.context);
-        Logger.debug(
+        Logger.info(
             this,
             "#init(%s): XSLT filter initialized",
             config.getClass().getName()
@@ -143,7 +143,7 @@ public final class XsltFilter implements Filter {
     @Override
     public void destroy() {
         this.context = null;
-        Logger.debug(
+        Logger.info(
             this,
             "#destroy(): XSLT filter destroyed"
         );
