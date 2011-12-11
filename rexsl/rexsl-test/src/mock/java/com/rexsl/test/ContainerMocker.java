@@ -74,6 +74,7 @@ public final class ContainerMocker {
      */
     public ContainerMocker expectRequestUri(final Matcher<String> matcher) {
         this.adapter.setRequestUriMatcher(matcher);
+        return this;
     }
 
     /**
@@ -83,6 +84,7 @@ public final class ContainerMocker {
      */
     public ContainerMocker returnBody(final String body) {
         this.adapter.setBody(body);
+        return this;
     }
 
     /**
@@ -93,6 +95,7 @@ public final class ContainerMocker {
      */
     public ContainerMocker returnHeader(final String name, final String value) {
         this.adapter.addHeader(name, value);
+        return this;
     }
 
     /**
@@ -102,6 +105,7 @@ public final class ContainerMocker {
      */
     public ContainerMocker returnStatus(final int code) {
         this.adapter.setStatus(code);
+        return this;
     }
 
     /**
@@ -129,8 +133,8 @@ public final class ContainerMocker {
      * Get its home.
      * @throws Exception If something goes wrong inside
      */
-    public URI home() {
-        return UriBuilder.fromUri("http://localhost:{port}/").build(this.port);
+    public URI home() throws Exception {
+        return new URI("http", "", "localhost", this.port, "", "", "");
     }
 
     /**

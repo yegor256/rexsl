@@ -126,7 +126,16 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse get() throws Exception {
-        return this.method("get");
+        final long start = System.currentTimeMillis();
+        final ClientResponse resp = this.resource.get(ClientResponse.class);
+        Logger.info(
+            this,
+            "#get(%s): completed in %dms [%s]",
+            this.resource.getURI().getPath(),
+            System.currentTimeMillis() - start,
+            resp.getClientResponseStatus()
+        );
+        return new JerseyTestResponse(resp);
     }
 
     /**
@@ -134,7 +143,17 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse post() throws Exception {
-        return this.method("post");
+        final long start = System.currentTimeMillis();
+        final ClientResponse resp =
+            this.resource.post(ClientResponse.class, this.requestEntity);
+        Logger.info(
+            this,
+            "#post(%s): completed in %dms [%s]",
+            this.resource.getURI().getPath(),
+            System.currentTimeMillis() - start,
+            resp.getClientResponseStatus()
+        );
+        return new JerseyTestResponse(resp);
     }
 
     /**
@@ -142,24 +161,12 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse put() throws Exception {
-        return this.method("put");
-    }
-
-    /**
-     * Execute one request.
-     * @param name Name of the method to call
-     * @return This object
-     * @throws Exception If something goes wrong
-     */
-    private TestResponse method(final String name) throws Exception {
         final long start = System.currentTimeMillis();
-        final ClientResponse resp = (ClientResponse) this.resource.getClass()
-            .getMethod(name, Class.class, Object.class)
-            .invoke(this.resource, ClientResponse.class, this.requestEntity);
+        final ClientResponse resp =
+            this.resource.put(ClientResponse.class, this.requestEntity);
         Logger.info(
             this,
-            "#%s(%s): completed in %dms [%s]",
-            name,
+            "#put(%s): completed in %dms [%s]",
             this.resource.getURI().getPath(),
             System.currentTimeMillis() - start,
             resp.getClientResponseStatus()

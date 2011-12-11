@@ -85,7 +85,7 @@ public final class XhtmlConverterTest {
         final String[] paths = new String[] {
             "/*",
             "//*",
-            "/xhtml:html/xhtml:body/xthml:p[.='test']",
+            "/xhtml:html/xhtml:body/xhtml:p[.='test']",
             "//xhtml:p[contains(., 't')]",
         };
         for (String path : paths) {

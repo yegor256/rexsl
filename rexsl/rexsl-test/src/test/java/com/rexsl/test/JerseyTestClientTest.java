@@ -58,11 +58,12 @@ public final class JerseyTestClientTest {
     @Test
     public void sendsHttpRequestAndProcessesHttpResponse() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectRequestUri(Matchers.containsString("path"))
+            .expectRequestUri(Matchers.containsString("foo"))
             .returnBody("works fine")
             .mock();
-        final TestClient client = RestTester.start(container.home())
-            .get("/the-path")
+        RestTester
+            .start(UriBuilder.fromUri(container.home()).path("/foo").build())
+            .get()
             .assertBody(Matchers.containsString("fine"))
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
