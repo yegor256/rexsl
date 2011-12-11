@@ -29,17 +29,18 @@
  */
 package com.rexsl.foo.scripts
 
-import com.rexsl.test.TestClient
+import com.rexsl.test.RestTester
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.UriBuilder
 
 /**
  * Here we're validating that setup mechanism works and
  * groovy scripts from src/test/rexsl/setup have been executed
  * before this script.
  */
-new TestClient(rexsl.home)
+RestTester.start(rexsl.home)
     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
     .header(HttpHeaders.USER_AGENT, 'Chrome')
-    .get('/')
+    .get()
     .assertXPath("/page/text[.='injected']")

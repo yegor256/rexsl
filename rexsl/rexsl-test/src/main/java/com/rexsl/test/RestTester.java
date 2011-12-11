@@ -96,4 +96,13 @@ public final class RestTester {
         return new JerseyTestClient(Client.create(config).resource(dest));
     }
 
+    /**
+     * Start new session.
+     * @param builder Home URI builder
+     * @return The client ready to process the request
+     */
+    public static TestClient start(final UriBuilder builder) {
+        return RestTester.start(builder.build());
+    }
+
 }

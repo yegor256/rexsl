@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.NONE)
 public final class Home {
 
-    @XmlElement(name = "text")
+    @XmlElement(name = "text", nillable = false)
     public String getText() {
         return Data.INSTANCE.get();
     }

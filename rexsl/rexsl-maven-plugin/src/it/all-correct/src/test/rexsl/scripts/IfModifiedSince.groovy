@@ -30,17 +30,18 @@
 package com.rexsl.foo.scripts
 
 import java.text.SimpleDateFormat
-import com.rexsl.test.TestClient
+import com.rexsl.test.RestTester
 import javax.ws.rs.core.HttpHeaders
+import javax.ws.rs.core.UriBuilder
 import org.hamcrest.Matchers
 
-new TestClient(rexsl.home)
+RestTester.start(UriBuilder.fromUri(rexsl.home).path('/css/screen.css'))
     .header(HttpHeaders.ACCEPT, 'text/plain,text/css')
     .header(
         HttpHeaders.IF_MODIFIED_SINCE,
         new SimpleDateFormat('EEE, dd MMM yyyy HH:mm:ss zzz', Locale.ENGLISH).format(new Date())
     )
     .header(HttpHeaders.USER_AGENT, 'Chrome')
-    .get('/css/screen.css')
+    .get()
     .assertStatus(HttpURLConnection.HTTP_NOT_MODIFIED)
     .assertBody(Matchers.nullValue())

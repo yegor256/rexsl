@@ -29,28 +29,26 @@
  */
 package com.rexsl.foo.setup
 
-import com.rexsl.test.TestClient
+import com.rexsl.test.RestTester
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.UriBuilder
 import org.hamcrest.Matchers
 
-def home = '/'
-
 // let's validate how data were injected in bootstrap
-new TestClient(rexsl.home)
-    .get(home)
+RestTester.start(rexsl.home)
+    .get()
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString('bootstrapped'))
 
 // inject new data value
-new TestClient(rexsl.home)
+RestTester.start(rexsl.home)
     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
-    .body('text=injected')
-    .post(home)
+    .post('text=injected')
     .assertStatus(HttpURLConnection.HTTP_OK)
 
 // let's validate that it's there
-new TestClient(rexsl.home)
-    .get(home)
+RestTester.start(rexsl.home)
+    .get()
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString('injected'))
