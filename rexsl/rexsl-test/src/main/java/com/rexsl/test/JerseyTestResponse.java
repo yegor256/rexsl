@@ -49,7 +49,8 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
-import org.junit.Assert;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xmlmatchers.XmlMatchers;
@@ -66,7 +67,12 @@ final class JerseyTestResponse implements TestResponse {
     /**
      * The response.
      */
-    private final ClientResponse response;
+    private final transient ClientResponse response;
+
+    /**
+     * The body of response.
+     */
+    private final transient String body;
 
     /**
      * Public ctor.
@@ -74,6 +80,11 @@ final class JerseyTestResponse implements TestResponse {
      */
     public JerseyTestResponse(final ClientResponse resp) {
         this.response = resp;
+        if (this.response.hasEntity()) {
+            this.body = this.response.getEntity(String.class);
+        } else {
+            this.body = "";
+        }
     }
 
     /**
@@ -115,7 +126,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public String getBody() throws IOException {
-        return this.response.getEntity(String.class);
+        return this.body;
     }
 
     /**
@@ -158,11 +169,11 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertStatus(final int status) {
-        Assert.assertEquals(
-            String.format("Invalid HTTP response code in%n%s", this.asText()),
-            new Long(status),
-            new Long(this.getStatus())
+    public TestResponse assertStatus(final int status) throws IOException {
+        MatcherAssert.assertThat(
+            String.format("Invalid HTTP response code in:%n%s", this.asText()),
+            status,
+            Matchers.equalTo(this.getStatus())
         );
         return this;
     }
@@ -171,9 +182,10 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertStatus(final Matcher<Integer> matcher) {
-        Assert.assertThat(
-            String.format("Invalid HTTP response code in%n%s", this.asText()),
+    public TestResponse assertStatus(final Matcher<Integer> matcher)
+        throws IOException {
+        MatcherAssert.assertThat(
+            String.format("Invalid HTTP response code in:%n%s", this.asText()),
             this.getStatus(),
             matcher
         );
@@ -186,8 +198,8 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public TestResponse assertBody(final Matcher<String> matcher)
         throws IOException {
-        Assert.assertThat(
-            String.format("Invalid content in%n%s", this.asText()),
+        MatcherAssert.assertThat(
+            String.format("Invalid content in:%n%s", this.asText()),
             this.getBody(),
             matcher
         );
@@ -203,8 +215,8 @@ final class JerseyTestResponse implements TestResponse {
             .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
             .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
             .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
-        Assert.assertThat(
-            String.format("XPath can't be evaluated in%n%s", this.asText()),
+        MatcherAssert.assertThat(
+            String.format("XPath can't be evaluated in:%n%s", this.asText()),
             XhtmlConverter.the(this.getBody()),
             XmlMatchers.hasXPath(xpath, context)
         );
@@ -214,19 +226,25 @@ final class JerseyTestResponse implements TestResponse {
     /**
      * Show response as text.
      * @return The text
+     * @throws IOException If some problem inside
      */
-    private String asText() {
+    private String asText() throws IOException {
         final StringBuilder builder = new StringBuilder();
+        builder.append("\t---\n");
         for (MultivaluedMap.Entry<String, List<String>> header
             : this.response.getHeaders().entrySet()) {
             builder.append(
                 String.format(
-                    "%s: %s%n",
+                    "\t%s: %s\n",
                     header.getKey(),
                     StringUtils.join(header.getValue(), ", ")
                 )
             );
         }
+        builder
+            .append("\n\t")
+            .append(this.getBody().replace("\n", "\n\t"))
+            .append("\n\t---");
         return builder.toString();
     }
 

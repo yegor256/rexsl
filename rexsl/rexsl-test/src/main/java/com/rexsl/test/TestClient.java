@@ -72,28 +72,6 @@ interface TestClient {
     TestClient header(String name, String value);
 
     /**
-     * Add query parameter.
-     * @param name Header name
-     * @param value Value of the header to set
-     * @return This object
-     */
-    TestClient queryParam(String name, String value);
-
-    /**
-     * Set body as a string.
-     * @param text The body to use for requests
-     * @return This object
-     */
-    TestClient body(String text);
-
-    /**
-     * Sets new cookie.
-     * @param cookie New cookie to be set.
-     * @return This object.
-     */
-    TestClient cookie(NewCookie cookie);
-
-    /**
      * Execute GET request.
      * @return This object
      * @throws Exception If something goes wrong
@@ -102,16 +80,18 @@ interface TestClient {
 
     /**
      * Execute POST request.
+     * @param body Request entity as a string
      * @return This object
      * @throws Exception If something goes wrong
      */
-    TestResponse post() throws Exception;
+    TestResponse post(String body) throws Exception;
 
     /**
      * Execute PUT request.
+     * @param body Request entity as a string
      * @return This object
      * @throws Exception If something goes wrong
      */
-    TestResponse put() throws Exception;
+    TestResponse put(String body) throws Exception;
 
 }

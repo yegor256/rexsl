@@ -88,11 +88,11 @@ public final class RestTester {
         final ClientConfig config = new DefaultClientConfig();
         config.getProperties()
             .put(ClientConfig.PROPERTY_FOLLOW_REDIRECTS, false);
-        return new JerseyTestClient(
-            Client.create(config).resource(
-                UriBuilder.fromUri(uri).path("/").build()
-            )
-        );
+        URI dest = uri;
+        if ("".equals(dest.getPath())) {
+            dest = UriBuilder.fromUri(uri).path("/").build();
+        }
+        return new JerseyTestClient(Client.create(config).resource(dest));
     }
 
 }

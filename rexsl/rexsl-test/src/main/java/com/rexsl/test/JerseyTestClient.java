@@ -66,19 +66,20 @@ final class JerseyTestClient implements TestClient {
     /**
      * Jersey web resource.
      */
-    private transient WebResource resource;
+    private transient WebResource.Builder builder;
 
     /**
-     * Request entity.
+     * Entry point.
      */
-    private transient String requestEntity;
+    private final transient URI home;
 
     /**
      * Public ctor.
      * @param res The resource to work with
      */
     public JerseyTestClient(final WebResource res) {
-        this.resource = res;
+        this.builder = res.getRequestBuilder();
+        this.home = res.getURI();
     }
 
     /**
@@ -86,38 +87,8 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestClient header(final String name, final String value) {
-        Logger.debug(this, "#header(%s, %s)", name, value);
-        this.resource.header(name, value);
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public TestClient queryParam(final String name, final String value) {
-        Logger.debug(this, "#queryParam(%s, %s)", name, value);
-        this.resource = this.resource.queryParam(name, value);
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public TestClient body(final String text) {
-        Logger.debug(this, "#body(%s)", text);
-        this.requestEntity = text;
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public TestClient cookie(final NewCookie cookie) {
-        Logger.debug(this, "#cookie(%s)", cookie);
-        this.header(HttpHeaders.SET_COOKIE, cookie.toString());
+        Logger.debug(this, "#header('%s', '%s'): set", name, value);
+        this.builder.header(name, value);
         return this;
     }
 
@@ -126,49 +97,46 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse get() throws Exception {
-        final long start = System.currentTimeMillis();
-        final ClientResponse resp = this.resource.get(ClientResponse.class);
-        Logger.info(
-            this,
-            "#get(%s): completed in %dms [%s]",
-            this.resource.getURI().getPath(),
-            System.currentTimeMillis() - start,
-            resp.getClientResponseStatus()
-        );
-        return new JerseyTestResponse(resp);
+        return this.method("GET", "");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public TestResponse post() throws Exception {
-        final long start = System.currentTimeMillis();
-        final ClientResponse resp =
-            this.resource.post(ClientResponse.class, this.requestEntity);
-        Logger.info(
-            this,
-            "#post(%s): completed in %dms [%s]",
-            this.resource.getURI().getPath(),
-            System.currentTimeMillis() - start,
-            resp.getClientResponseStatus()
-        );
-        return new JerseyTestResponse(resp);
+    public TestResponse post(final String body) throws Exception {
+        return this.method("POST", body);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public TestResponse put() throws Exception {
+    public TestResponse put(final String body) throws Exception {
+        return this.method("PUT", body);
+    }
+
+    /**
+     * Run this method.
+     * @param name The name of HTTP method
+     * @param body Body of HTTP request
+     * @return The response
+     */
+    public TestResponse method(final String name, final String body)
+        throws Exception {
         final long start = System.currentTimeMillis();
-        final ClientResponse resp =
-            this.resource.put(ClientResponse.class, this.requestEntity);
+        final ClientResponse resp = this.builder.method(
+            name,
+            ClientResponse.class,
+            body
+        );
         Logger.info(
             this,
-            "#put(%s): completed in %dms [%s]",
-            this.resource.getURI().getPath(),
+            "#%s(%s): completed in %dms [%d %s]",
+            name,
+            this.home.getPath(),
             System.currentTimeMillis() - start,
+            resp.getStatus(),
             resp.getClientResponseStatus()
         );
         return new JerseyTestResponse(resp);

@@ -108,15 +108,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.ymock</groupId>
-            <artifactId>ymock-util</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <!-- other details are in parent pom.xml -->
-        </dependency>
-        <dependency>
             <!-- Forward all calls to SLF4J to LOG4J. -->
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -131,6 +122,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.ymock</groupId>
+            <artifactId>ymock-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
@@ -141,6 +140,7 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <!-- Groovy engine. -->

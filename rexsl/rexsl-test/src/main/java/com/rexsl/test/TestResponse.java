@@ -114,14 +114,14 @@ interface TestResponse {
      * @param status Expected status code
      * @return This object
      */
-    TestResponse assertStatus(int status);
+    TestResponse assertStatus(int status) throws IOException;
 
     /**
      * Verifies HTTP response status code against the provided matcher.
      * @param matcher Matcher to validate status code
      * @return This object
      */
-    TestResponse assertStatus(Matcher<Integer> matcher);
+    TestResponse assertStatus(Matcher<Integer> matcher) throws IOException;
 
     /**
      * Verifies HTTP response body content against provided matcher.
