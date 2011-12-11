@@ -44,6 +44,7 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.validation.SchemaFactory;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Provider of JAXB {@link Marshaller} for JAX-RS framework.
@@ -118,7 +119,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             final String header = String.format(
                 "\n<?xml-stylesheet type='text/xml' href='%s'?>",
-                this.stylesheet(type)
+                StringEscapeUtils.escapeXml(this.stylesheet(type))
             );
             mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
         } catch (javax.xml.bind.JAXBException ex) {
