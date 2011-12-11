@@ -75,6 +75,7 @@ public final class RestTester {
     /**
      * Start new session.
      * @param uri Home URI
+     * @return The client ready to process the request
      */
     public static TestClient start(final URI uri) {
         if (!uri.isAbsolute()) {

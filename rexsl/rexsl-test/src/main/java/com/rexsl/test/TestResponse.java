@@ -29,29 +29,10 @@
  */
 package com.rexsl.test;
 
-import com.ymock.util.Logger;
-import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.UriBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matcher;
-import org.junit.Assert;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xmlmatchers.XmlMatchers;
-import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
  * Resonse returned by {@link TestClient}.
@@ -64,7 +45,6 @@ interface TestResponse {
     /**
      * Follow the LOCATION header.
      * @return New client
-     * @throws Exception If some problem inside
      */
     TestClient follow();
 
@@ -113,6 +93,7 @@ interface TestResponse {
      * and throws {@link AssertionError} in case of mismatch.
      * @param status Expected status code
      * @return This object
+     * @throws IOException If some problem with body retrieval
      */
     TestResponse assertStatus(int status) throws IOException;
 
@@ -120,6 +101,7 @@ interface TestResponse {
      * Verifies HTTP response status code against the provided matcher.
      * @param matcher Matcher to validate status code
      * @return This object
+     * @throws IOException If some problem with body retrieval
      */
     TestResponse assertStatus(Matcher<Integer> matcher) throws IOException;
 

@@ -33,6 +33,7 @@ import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
+import com.ymock.util.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.ServerSocket;
@@ -59,17 +60,18 @@ public final class ContainerMocker {
     /**
      * Grizzly adapter.
      */
-    private ContainerMocker.Adapter adapter = new ContainerMocker.Adapter();
+    private final transient ContainerMocker.Adapter adapter =
+        new ContainerMocker.Adapter();
 
     /**
      * Grizzly container.
      */
-    private GrizzlyWebServer gws;
+    private transient GrizzlyWebServer gws;
 
     /**
      * Port where it works.
      */
-    private Integer port;
+    private transient Integer port;
 
     /**
      * Expect body.
@@ -142,9 +144,21 @@ public final class ContainerMocker {
         this.port = this.reservePort();
         this.gws = new GrizzlyWebServer(this.port);
         this.gws.addGrizzlyAdapter(this.adapter, new String[] {"/"});
-        // this.adapter.setContainerMocker(this);
-        this.gws.start();
+        this.start();
         return this;
+    }
+
+    /**
+     * Mock it, and return this object.
+     * @throws Exception If something goes wrong inside
+     */
+    public void start() throws Exception {
+        this.gws.start();
+        Logger.debug(
+            this,
+            "#start(): Grizzly started at port #%s",
+            this.port
+        );
     }
 
     /**
@@ -153,6 +167,11 @@ public final class ContainerMocker {
      */
     public void stop() throws Exception {
         this.gws.stop();
+        Logger.debug(
+            this,
+            "#stop(): Grizzly stopped at port #%s",
+            this.port
+        );
     }
 
     /**

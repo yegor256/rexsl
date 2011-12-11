@@ -29,18 +29,9 @@
  */
 package com.rexsl.test;
 
-import com.sun.grizzly.http.embed.GrizzlyWebServer;
-import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
-import com.sun.grizzly.tcp.http11.GrizzlyRequest;
-import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 

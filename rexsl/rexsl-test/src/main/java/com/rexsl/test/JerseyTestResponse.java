@@ -30,23 +30,17 @@
 package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
-import com.ymock.util.Logger;
 import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -171,7 +165,7 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public TestResponse assertStatus(final int status) throws IOException {
         MatcherAssert.assertThat(
-            String.format("Invalid HTTP response code in:%n%s", this.asText()),
+            String.format("Invalid HTTP code in:%n%s", this.asText()),
             status,
             Matchers.equalTo(this.getStatus())
         );
@@ -242,7 +236,8 @@ final class JerseyTestResponse implements TestResponse {
             );
         }
         builder
-            .append("\n\t")
+            .append("\n ")
+            .append("\t")
             .append(this.getBody().replace("\n", "\n\t"))
             .append("\n\t---");
         return builder.toString();

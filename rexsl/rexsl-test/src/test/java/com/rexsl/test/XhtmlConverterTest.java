@@ -76,6 +76,7 @@ public final class XhtmlConverterTest {
     @Test
     public void processesDocumentsWithDoctype() throws Exception {
         final String text =
+            // @checkstyle StringLiteralsConcatenation (6 lines)
             "<?xml version='1.0'?>"
             + "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'"
             + " 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>"
@@ -88,15 +89,12 @@ public final class XhtmlConverterTest {
             "/xhtml:html/xhtml:body/xhtml:p[.='test']",
             "//xhtml:p[contains(., 't')]",
         };
+        final SimpleNamespaceContext context = new SimpleNamespaceContext()
+            .withBinding("xhtml", "http://www.w3.org/1999/xhtml");
         for (String path : paths) {
             Assert.assertThat(
                 XhtmlConverter.the(text),
-                XmlMatchers.hasXPath(
-                    path,
-                    new SimpleNamespaceContext().withBinding(
-                        "xhtml", "http://www.w3.org/1999/xhtml"
-                    )
-                )
+                XmlMatchers.hasXPath(path, context)
             );
         }
     }

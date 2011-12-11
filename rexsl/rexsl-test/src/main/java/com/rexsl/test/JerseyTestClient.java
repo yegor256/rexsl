@@ -32,27 +32,7 @@ package com.rexsl.test;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.ymock.util.Logger;
-import groovy.util.XmlSlurper;
-import groovy.util.slurpersupport.GPathResult;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.UriBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matcher;
-import org.junit.Assert;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xmlmatchers.XmlMatchers;
-import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
  * Implementation of {@link TestClient}.
@@ -66,7 +46,7 @@ final class JerseyTestClient implements TestClient {
     /**
      * Jersey web resource.
      */
-    private transient WebResource.Builder builder;
+    private final transient WebResource.Builder builder;
 
     /**
      * Entry point.
@@ -121,6 +101,7 @@ final class JerseyTestClient implements TestClient {
      * @param name The name of HTTP method
      * @param body Body of HTTP request
      * @return The response
+     * @throws Exception If some problem inside
      */
     public TestResponse method(final String name, final String body)
         throws Exception {

@@ -29,31 +29,6 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.ymock.util.Logger;
-import groovy.util.XmlSlurper;
-import groovy.util.slurpersupport.GPathResult;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.UriBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matcher;
-import org.junit.Assert;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xmlmatchers.XmlMatchers;
-import org.xmlmatchers.namespace.SimpleNamespaceContext;
-
 /**
  * A universal class for in-container testing of your web application.
  *

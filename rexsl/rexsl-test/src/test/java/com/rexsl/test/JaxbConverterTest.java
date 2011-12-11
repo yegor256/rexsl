@@ -94,7 +94,7 @@ public final class JaxbConverterTest {
         /**
          * Injected object.
          */
-        private Object injected = "some text";
+        private transient Object injected = "some text";
         /**
          * Inject an object.
          * @param obj The object to inject
