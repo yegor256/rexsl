@@ -535,6 +535,13 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <!-- Logging facility. -->
+                <groupId>com.ymock</groupId>
+                <artifactId>ymock-util</artifactId>
+                <version since="22 Sep 2011">1.0</version>
+            </dependency>
+            <dependency>
+                <!-- String manipulations -->
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version since="19 Oct 2011">2.6</version>

@@ -67,10 +67,8 @@
             <version since="25 Nov 2011">1.1.1</version>
         </dependency>
         <dependency>
-            <!-- Logging facility. -->
             <groupId>com.ymock</groupId>
             <artifactId>ymock-util</artifactId>
-            <version since="22 Sep 2011">1.0</version>
         </dependency>
         <dependency>
             <!-- JAXB 2.0 API. -->

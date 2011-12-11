@@ -29,8 +29,6 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import com.ymock.util.Logger;
 import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
@@ -41,6 +39,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -55,63 +54,89 @@ import org.xmlmatchers.XmlMatchers;
 import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
- * A universal class for in-container testing of your web application.
+ * Resonse returned by {@link TestClient}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @checkstyle ClassDataAbstractionCoupling (200 lines)
  */
-interface TestClient {
+interface TestResponse {
 
     /**
-     * Set request header.
-     * @param name Header name
-     * @param value Value of the header to set
+     * Follow the LOCATION header.
+     * @return New client
+     * @throws Exception If some problem inside
+     */
+    TestClient follow();
+
+    /**
+     * Find link in XML and return new client with this link as URI.
+     * @param xpath The path of the link
+     * @return New client
+     * @throws Exception If some problem inside
+     */
+    TestClient rel(String xpath) throws Exception;
+
+    /**
+     * Get body as a string.
+     * @return The body
+     * @throws IOException If some IO problem inside
+     */
+    String getBody() throws IOException;
+
+    /**
+     * Get status of the response as a number.
+     * @return The status
+     */
+    Integer getStatus();
+
+    /**
+     * Get body as {@link GPathResult}.
+     * @return The GPath result
+     * @throws Exception If some problem inside
+     */
+    GPathResult getGpath() throws Exception;
+
+    /**
+     * Get status line of the response.
+     * @return The status line
+     */
+    String getStatusLine();
+
+    /**
+     * Get a collection of all headers.
+     * @return The headers
+     */
+    MultivaluedMap<String, String> getHeaders();
+
+    /**
+     * Verifies HTTP response status code against the provided absolute value,
+     * and throws {@link AssertionError} in case of mismatch.
+     * @param status Expected status code
      * @return This object
      */
-    TestClient header(String name, String value);
+    TestResponse assertStatus(int status);
 
     /**
-     * Add query parameter.
-     * @param name Header name
-     * @param value Value of the header to set
+     * Verifies HTTP response status code against the provided matcher.
+     * @param matcher Matcher to validate status code
      * @return This object
      */
-    TestClient queryParam(String name, String value);
+    TestResponse assertStatus(Matcher<Integer> matcher);
 
     /**
-     * Set body as a string.
-     * @param text The body to use for requests
+     * Verifies HTTP response body content against provided matcher.
+     * @param matcher The matcher to use
      * @return This object
+     * @throws IOException If some problem with body retrieval
      */
-    TestClient body(String text);
+    TestResponse assertBody(Matcher<String> matcher) throws IOException;
 
     /**
-     * Sets new cookie.
-     * @param cookie New cookie to be set.
-     * @return This object.
-     */
-    TestClient cookie(NewCookie cookie);
-
-    /**
-     * Execute GET request.
+     * Verifies HTTP response body XHTML/XML content against XPath query.
+     * @param xpath Query to use
      * @return This object
-     * @throws Exception If something goes wrong
+     * @throws Exception If some problem with body retrieval or conversion
      */
-    TestResponse get() throws Exception;
-
-    /**
-     * Execute POST request.
-     * @return This object
-     * @throws Exception If something goes wrong
-     */
-    TestResponse post() throws Exception;
-
-    /**
-     * Execute PUT request.
-     * @return This object
-     * @throws Exception If something goes wrong
-     */
-    TestResponse put() throws Exception;
+    TestResponse assertXPath(String xpath) throws Exception;
 
 }

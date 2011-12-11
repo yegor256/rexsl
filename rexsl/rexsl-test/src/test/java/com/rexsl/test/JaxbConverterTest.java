@@ -40,20 +40,19 @@ import org.junit.Test;
 import org.xmlmatchers.XmlMatchers;
 
 /**
- * Test JAXB converter.
- *
+ * Test case for {@link JaxbConverter}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class JaxbConverterTest {
 
     /**
-     * Test simple conversion.
+     * JaxbConverter can convert a JAXB-annotated object to XML.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testObjectToXmlConversion() throws Exception {
-        final Object object = new Employee();
+    public void convertsJaxbObjectToXml() throws Exception {
+        final Object object = new JaxbConverterTest.Employee();
         MatcherAssert.assertThat(
             JaxbConverter.the(object),
             XmlMatchers.hasXPath("/employee/name[.='John Doe']")
@@ -61,12 +60,12 @@ public final class JaxbConverterTest {
     }
 
     /**
-     * Testing that this converter returns properly formatted string.
+     * JaxbConverter can convert an object to XML, renderable as a string.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testToStringConversion() throws Exception {
-        final Object object = new Employee();
+    public void convertsObjectToSourceRenderableAsText() throws Exception {
+        final Object object = new JaxbConverterTest.Employee();
         MatcherAssert.assertThat(
             JaxbConverter.the(object).toString(),
             Matchers.containsString("John")
@@ -74,15 +73,17 @@ public final class JaxbConverterTest {
     }
 
     /**
-     * Test dynamically extendable objects.
+     * JaxbConverter can convert an object with other objects injected
+     * in runtime.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testDynamicallyExtendableObject() throws Exception {
-        final Employee employee = new Employee();
-        employee.inject(new Foo());
+    public void convertsAnObjectThatHasOthersInjected() throws Exception {
+        final JaxbConverterTest.Employee employee =
+            new JaxbConverterTest.Employee();
+        employee.inject(new JaxbConverterTest.Foo());
         MatcherAssert.assertThat(
-            JaxbConverter.the(employee, Foo.class),
+            JaxbConverter.the(employee, JaxbConverterTest.Foo.class),
             XmlMatchers.hasXPath("/employee/injected/name")
         );
     }

@@ -55,63 +55,116 @@ import org.xmlmatchers.XmlMatchers;
 import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
- * A universal class for in-container testing of your web application.
+ * Implementation of {@link TestClient}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (200 lines)
  */
-interface TestClient {
+final class JerseyTestClient implements TestClient {
 
     /**
-     * Set request header.
-     * @param name Header name
-     * @param value Value of the header to set
-     * @return This object
+     * Jersey web resource.
      */
-    TestClient header(String name, String value);
+    private transient WebResource resource;
 
     /**
-     * Add query parameter.
-     * @param name Header name
-     * @param value Value of the header to set
-     * @return This object
+     * Request entity.
      */
-    TestClient queryParam(String name, String value);
+    private transient String requestEntity;
 
     /**
-     * Set body as a string.
-     * @param text The body to use for requests
-     * @return This object
+     * Public ctor.
+     * @param res The resource to work with
      */
-    TestClient body(String text);
+    public JerseyTestClient(final WebResource res) {
+        this.resource = res;
+    }
 
     /**
-     * Sets new cookie.
-     * @param cookie New cookie to be set.
-     * @return This object.
+     * {@inheritDoc}
      */
-    TestClient cookie(NewCookie cookie);
+    @Override
+    public TestClient header(final String name, final String value) {
+        Logger.debug(this, "#header(%s, %s)", name, value);
+        this.resource.header(name, value);
+        return this;
+    }
 
     /**
-     * Execute GET request.
+     * {@inheritDoc}
+     */
+    @Override
+    public TestClient queryParam(final String name, final String value) {
+        Logger.debug(this, "#queryParam(%s, %s)", name, value);
+        this.resource = this.resource.queryParam(name, value);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestClient body(final String text) {
+        Logger.debug(this, "#body(%s)", text);
+        this.requestEntity = text;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestClient cookie(final NewCookie cookie) {
+        Logger.debug(this, "#cookie(%s)", cookie);
+        this.header(HttpHeaders.SET_COOKIE, cookie.toString());
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse get() throws Exception {
+        return this.method("get");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse post() throws Exception {
+        return this.method("post");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse put() throws Exception {
+        return this.method("put");
+    }
+
+    /**
+     * Execute one request.
+     * @param name Name of the method to call
      * @return This object
      * @throws Exception If something goes wrong
      */
-    TestResponse get() throws Exception;
-
-    /**
-     * Execute POST request.
-     * @return This object
-     * @throws Exception If something goes wrong
-     */
-    TestResponse post() throws Exception;
-
-    /**
-     * Execute PUT request.
-     * @return This object
-     * @throws Exception If something goes wrong
-     */
-    TestResponse put() throws Exception;
+    private TestResponse method(final String name) throws Exception {
+        final long start = System.currentTimeMillis();
+        final ClientResponse resp = (ClientResponse) this.resource.getClass()
+            .getMethod(name, Class.class, Object.class)
+            .invoke(this.resource, ClientResponse.class, this.requestEntity);
+        Logger.info(
+            this,
+            "#%s(%s): completed in %dms [%s]",
+            name,
+            this.resource.getURI().getPath(),
+            System.currentTimeMillis() - start,
+            resp.getClientResponseStatus()
+        );
+        return new JerseyTestResponse(resp);
+    }
 
 }

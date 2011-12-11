@@ -35,19 +35,18 @@ import org.xmlmatchers.XmlMatchers;
 import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
- * Test XHTML converter.
- *
+ * Test case for {@link XhtmlConverter}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class XhtmlConverterTest {
 
     /**
-     * Test simple conversion.
+     * XhtmlConverter can convert text to XML.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testTextToXmlConversion() throws Exception {
+    public void convertsTextToXml() throws Exception {
         final String text = "<html><body><p>test</p></body></html>";
         Assert.assertThat(
             XhtmlConverter.the(text),
@@ -56,13 +55,12 @@ public final class XhtmlConverterTest {
     }
 
     /**
-     * Processing instructions should be preserved.
+     * XhtmlConverter can handle processing instructions.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testProcessingInstructionsPreserving() throws Exception {
-        final String text =
-            "<?xml version='1.0'?><?pi name='foo'?><page><a>123</a></page>";
+    public void preservesProcessingInstructions() throws Exception {
+        final String text = "<?xml version='1.0'?><?pi name='foo'?><a/>";
         Assert.assertThat(
             XhtmlConverter.the(text),
             XmlMatchers.hasXPath(
@@ -72,23 +70,23 @@ public final class XhtmlConverterTest {
     }
 
     /**
-     * Let's use DOCTYPE, which may cause troubles.
+     * XhtmlConverter can handle DOCTYPE, which potentially may cause troubles.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testTextXhtmlWithDoctype() throws Exception {
+    public void processesDocumentsWithDoctype() throws Exception {
         final String text =
             "<?xml version='1.0'?>"
-            + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
-            + " \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
-            + "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">"
+            + "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'"
+            + " 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>"
+            + "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>"
             + "<body><p>test</p></body>"
             + "</html>";
         final String[] paths = new String[] {
             "/*",
             "//*",
-            "/x:html/x:body/x:p[.='test']",
-            "//x:p[contains(., 't')]",
+            "/xhtml:html/xhtml:body/xthml:p[.='test']",
+            "//xhtml:p[contains(., 't')]",
         };
         for (String path : paths) {
             Assert.assertThat(
@@ -96,7 +94,7 @@ public final class XhtmlConverterTest {
                 XmlMatchers.hasXPath(
                     path,
                     new SimpleNamespaceContext().withBinding(
-                        "x", "http://www.w3.org/1999/xhtml"
+                        "xhtml", "http://www.w3.org/1999/xhtml"
                     )
                 )
             );

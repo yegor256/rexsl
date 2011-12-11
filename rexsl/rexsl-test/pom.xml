@@ -60,17 +60,19 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!--
-            JAXB 2.0 API.
-            -->
+            <!-- Jersey client -->
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version since="26 Oct 2011">1.9.1</version>
+        </dependency>
+        <dependency>
+            <!-- JAXB 2.0 API. -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version since="2 Sep 2011">2.0</version>
         </dependency>
         <dependency>
-            <!--
-            JAXB 2.0 implementation, required in runtime.
-            -->
+            <!-- JAXB 2.0 implementation, required in runtime. -->
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
             <version since="2 Sep 2011">2.2.4-1</version>
@@ -96,16 +98,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
-            <version>4.1.2</version>
-        </dependency>
-        <dependency>
             <!--
             Forward all calls to Commons Logging to SLF4j
             @see http://www.slf4j.org/legacy.html
@@ -116,10 +108,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- Logging facility. -->
             <groupId>com.ymock</groupId>
             <artifactId>ymock-util</artifactId>
-            <version since="22 Sep 2011">1.0</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -127,18 +117,14 @@
             <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
-            <!--
-            Forward all calls to SLF4J to LOG4J.
-            -->
+            <!-- Forward all calls to SLF4J to LOG4J. -->
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version since="19 Sep 2011">1.6.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!--
-            Use LOG4J logging facility for all loggings.
-            -->
+            <!-- Use LOG4J logging facility for all loggings. -->
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version since="19 Sep 2011">1.2.16</version>
@@ -147,17 +133,14 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
-            <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
             <!-- Groovy engine. -->
@@ -167,9 +150,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <!--
-            Embedded Java Servlet Container, for tests only.
-            -->
+            <!-- Embedded Java Servlet Container, for tests only. -->
             <groupId>com.sun.grizzly</groupId>
             <artifactId>grizzly-servlet-webserver</artifactId>
             <version>1.9.10</version>
@@ -191,9 +172,7 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!--
-            XML APIs
-            -->
+            <!-- XML APIs. -->
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version since="27 Sep 2011">1.3.04</version>
@@ -224,38 +203,5 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
-    <profiles>
-        <profile>
-            <!--
-            Continuous integration specific settings.
-            -->
-            <id>ci</id>
-            <activation>
-                <property>
-                    <name>ci</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.qulice</groupId>
-                        <artifactId>qulice-maven-plugin</artifactId>
-                        <version since="25 Oct 2011">0.1.7</version>
-                        <configuration>
-                            <!-- @todo #72:1hr Fix all checkstyle errors and enable qulice -->
-                            <skip>true</skip>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                                <phase>none</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+
 </project>
