@@ -106,6 +106,16 @@ interface TestResponse {
     TestResponse assertStatus(Matcher<Integer> matcher) throws IOException;
 
     /**
+     * Verifies HTTP header against provided matcher.
+     * @param name Name of the header to match
+     * @param matcher The matcher to use
+     * @return This object
+     * @throws IOException If some problem with body retrieval
+     */
+    TestResponse assertHeader(String name, Matcher<String> matcher)
+        throws IOException;
+
+    /**
      * Verifies HTTP response body content against provided matcher.
      * @param matcher The matcher to use
      * @return This object

@@ -109,8 +109,6 @@ final class JerseyTestClient implements TestClient {
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
             resp = this.builder.get(ClientResponse.class);
-        } else if (RestTester.POST.equals(name)) {
-            resp = this.builder.post(ClientResponse.class, body);
         } else {
             resp = this.builder.method(name, ClientResponse.class, body);
         }

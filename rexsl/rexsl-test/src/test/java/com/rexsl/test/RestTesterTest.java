@@ -109,7 +109,7 @@ public final class RestTesterTest {
      */
     @Test
     public void sendsTextWithPostRequest() throws Exception {
-        final String name = "post-param";
+        final String name = "postparam";
         final String value = "some random value of this param \"&^%*;'\"";
         final ContainerMocker container = new ContainerMocker()
             .expectBody(Matchers.containsString(name))
@@ -159,6 +159,26 @@ public final class RestTesterTest {
             .get()
             .assertBody(Matchers.containsString("some"))
             .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can assert HTTP headers in response.
+     * @throws Exception If something goes wrong inside.
+     */
+    @Test
+    public void assertsHttpHeaders() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .returnHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN)
+            .mock();
+        RestTester
+            .start(container.home())
+            .get()
+            .assertStatus(HttpURLConnection.HTTP_OK)
+            .assertHeader(
+                HttpHeaders.CONTENT_TYPE,
+                Matchers.containsString(MediaType.TEXT_PLAIN)
+            );
     }
 
     /**

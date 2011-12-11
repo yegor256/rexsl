@@ -36,17 +36,14 @@ import javax.ws.rs.core.UriBuilder
 import org.junit.Assert
 import org.hamcrest.Matchers
 
-def r = RestTester.start(rexsl.home)
+RestTester.start(rexsl.home)
     .header(HttpHeaders.ACCEPT, 'text/plain,application/xml')
     .header(HttpHeaders.USER_AGENT, 'FireFox')
     .get()
     .assertStatus(HttpURLConnection.HTTP_OK)
+    .assertHeader(HttpHeaders.CONTENT_TYPE, Matchers.equalTo(MediaType.TEXT_HTML))
     .assertXPath('//xhtml:div')
-Assert.assertThat(
-    r.headers.get(HttpHeaders.CONTENT_TYPE),
-    Matchers.equalTo(MediaType.TEXT_HTML)
-)
 
-new RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-addr'))
+RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-addr'))
     .get()
     .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)

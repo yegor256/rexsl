@@ -165,7 +165,11 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public TestResponse assertStatus(final int status) throws IOException {
         MatcherAssert.assertThat(
-            String.format("Invalid HTTP code in:%n%s", this.asText()),
+            String.format(
+                "HTTP status code has to be equal to %d in:%n%s",
+                status,
+                this.asText()
+            ),
             status,
             Matchers.equalTo(this.getStatus())
         );
@@ -179,8 +183,29 @@ final class JerseyTestResponse implements TestResponse {
     public TestResponse assertStatus(final Matcher<Integer> matcher)
         throws IOException {
         MatcherAssert.assertThat(
-            String.format("Invalid HTTP response code in:%n%s", this.asText()),
+            String.format(
+                "HTTP status code has to match in:%n%s",
+                this.asText()
+            ),
             this.getStatus(),
+            matcher
+        );
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse assertHeader(final String name,
+        final Matcher<String> matcher) throws IOException {
+        MatcherAssert.assertThat(
+            String.format(
+                "HTTP header '%s' has to match in:%n%s",
+                name,
+                this.asText()
+            ),
+            this.response.getHeaders().getFirst(name),
             matcher
         );
         return this;
@@ -193,7 +218,10 @@ final class JerseyTestResponse implements TestResponse {
     public TestResponse assertBody(final Matcher<String> matcher)
         throws IOException {
         MatcherAssert.assertThat(
-            String.format("Invalid content in:%n%s", this.asText()),
+            String.format(
+                "HTTP response content has to match in:%n%s",
+                this.asText()
+            ),
             this.getBody(),
             matcher
         );
@@ -210,7 +238,11 @@ final class JerseyTestResponse implements TestResponse {
             .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
             .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
         MatcherAssert.assertThat(
-            String.format("XPath can't be evaluated in:%n%s", this.asText()),
+            String.format(
+                "XPath '%s' has to exist in:%n%s",
+                xpath,
+                this.asText()
+            ),
             XhtmlConverter.the(this.getBody()),
             XmlMatchers.hasXPath(xpath, context)
         );
