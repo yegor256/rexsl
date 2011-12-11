@@ -496,7 +496,6 @@ public final class TestClient {
                 )
             );
         }
-        builder.append(this.response.getEntity().toString());
         return builder.toString();
     }
 
