@@ -31,7 +31,9 @@ package com.rexsl.test;
 
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URLEncoder;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -107,14 +109,21 @@ public final class RestTesterTest {
      */
     @Test
     public void sendsTextWithPostRequest() throws Exception {
+        final String name = "post-param";
+        final String value = "some random value of this param \"&^%*;'\"";
         final ContainerMocker container = new ContainerMocker()
-            .expectBody(Matchers.containsString("=some-value"))
-            .expectParam("bar", Matchers.containsString("-value-"))
+            .expectBody(Matchers.containsString(name))
+            .expectBody(Matchers.containsString(value))
+            .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(RestTester.POST))
             .mock();
         RestTester
             .start(container.home())
-            .post("bar=some-value-encoded")
+            .header(
+                HttpHeaders.CONTENT_TYPE,
+                MediaType.APPLICATION_FORM_URLENCODED
+            )
+            .post(String.format("%s=%s", name, URLEncoder.encode(value)))
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
