@@ -45,14 +45,6 @@
     <packaging>jar</packaging>
     <name>rexsl-core</name>
 
-    <repositories>
-        <repository>
-            <!-- for Jersey -->
-            <id>java.net</id>
-            <url>http://download.java.net/maven/2</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -154,13 +146,13 @@
             <!-- JAX-RS implementation -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version since="26 Oct 2011">1.9.1</version>
+            <version since="11 Dec 2011">1.10</version>
         </dependency>
         <dependency>
             <!-- JAX-RS implementation, core library -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
-            <version since="26 Oct 2011">1.9.1</version>
+            <version since="11 Dec 2011">1.10</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>

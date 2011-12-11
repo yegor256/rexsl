@@ -94,6 +94,28 @@ public final class ContainerMocker {
     }
 
     /**
+     * Expect this method.
+     * @param matcher Name of the method to expect.
+     * @return This object
+     */
+    public ContainerMocker expectMethod(final Matcher<String> matcher) {
+        this.adapter.setMethodMatcher(matcher);
+        return this;
+    }
+
+    /**
+     * Expect this param with this matcher.
+     * @param name Name of the param
+     * @param matcher Matcher for its content
+     * @return This object
+     */
+    public ContainerMocker expectParam(final String name,
+        final Matcher<String> matcher) {
+        this.adapter.addParamMatcher(name, matcher);
+        return this;
+    }
+
+    /**
      * Expect this header with this matcher.
      * @param name Name of the header.
      * @param matcher Matcher for body
@@ -202,9 +224,18 @@ public final class ContainerMocker {
          */
         private Matcher<String> bodyMatcher;
         /**
+         * Method matcher.
+         */
+        private Matcher<String> methodMatcher;
+        /**
          * Request URI matcher.
          */
         private Matcher<String> requestUriMatcher;
+        /**
+         * Param matchers.
+         */
+        private ConcurrentMap<String, Matcher<String>> paramMatchers =
+            new ConcurrentHashMap<String, Matcher<String>>();
         /**
          * Header matchers.
          */
@@ -229,7 +260,9 @@ public final class ContainerMocker {
         @Override
         public void service(final GrizzlyRequest request,
             final GrizzlyResponse response) {
+            this.assertMethod(request);
             this.assertRequestUri(request);
+            this.assertParams(request);
             this.assertBody(request);
             this.assertHeaders(request);
             for (ConcurrentMap.Entry<String, String> entry
@@ -252,11 +285,27 @@ public final class ContainerMocker {
             this.requestUriMatcher = matcher;
         }
         /**
+         * Set method matcher.
+         * @param matcher The matcher to set
+         */
+        public void setMethodMatcher(final Matcher<String> matcher) {
+            this.methodMatcher = matcher;
+        }
+        /**
          * Set body matcher.
          * @param matcher The matcher to set
          */
         public void setBodyMatcher(final Matcher<String> matcher) {
             this.bodyMatcher = matcher;
+        }
+        /**
+         * Add param matcher.
+         * @param name Param's name
+         * @param matcher The matcher to set
+         */
+        public void addParamMatcher(final String name,
+            final Matcher<String> matcher) {
+            this.paramMatchers.put(name, matcher);
         }
         /**
          * Add header matcher.
@@ -299,6 +348,40 @@ public final class ContainerMocker {
                     "Request-URI matches provided matcher",
                     request.getRequestURI(),
                     this.requestUriMatcher
+                );
+            }
+        }
+        /**
+         * Make assertions about method.
+         * @param request The HTTP grizzly request
+         */
+        private void assertMethod(final GrizzlyRequest request) {
+            if (this.methodMatcher != null) {
+                MatcherAssert.assertThat(
+                    String.format(
+                        "HTTP method matches provided matcher in:%n%s",
+                        this.asText(request)
+                    ),
+                    request.getMethod(),
+                    this.methodMatcher
+                );
+            }
+        }
+        /**
+         * Make assertions about HTTP parameters.
+         * @param request The HTTP grizzly request
+         */
+        private void assertParams(final GrizzlyRequest request) {
+            for (ConcurrentMap.Entry<String, Matcher<String>> entry
+                : this.paramMatchers.entrySet()) {
+                MatcherAssert.assertThat(
+                    String.format(
+                        "Param '%s' matches specified matcher in:%n%s",
+                        entry.getKey(),
+                        this.asText(request)
+                    ),
+                    request.getParameter(entry.getKey()),
+                    entry.getValue()
                 );
             }
         }
@@ -347,6 +430,10 @@ public final class ContainerMocker {
          */
         private String asText(final GrizzlyRequest request) {
             final StringBuilder builder = new StringBuilder();
+            builder.append(request.getMethod()).append(" ")
+                .append(request.getRequestURI()).append(" ")
+                .append(request.getProtocol())
+                .append("\n");
             for (Object name : Collections.list(request.getHeaderNames())) {
                 builder.append(
                     String.format(

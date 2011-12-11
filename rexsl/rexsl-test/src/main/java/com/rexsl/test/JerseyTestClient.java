@@ -77,7 +77,7 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse get() throws Exception {
-        return this.method("GET", "");
+        return this.method(RestTester.GET, "");
     }
 
     /**
@@ -85,7 +85,7 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse post(final String body) throws Exception {
-        return this.method("POST", body);
+        return this.method(RestTester.POST, body);
     }
 
     /**
@@ -93,7 +93,7 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse put(final String body) throws Exception {
-        return this.method("PUT", body);
+        return this.method(RestTester.PUT, body);
     }
 
     /**
@@ -106,14 +106,15 @@ final class JerseyTestClient implements TestClient {
     public TestResponse method(final String name, final String body)
         throws Exception {
         final long start = System.currentTimeMillis();
-        final ClientResponse resp = this.builder.method(
-            name,
-            ClientResponse.class,
-            body
-        );
+        ClientResponse resp;
+        if (RestTester.GET.equals(name)) {
+            resp = this.builder.get(ClientResponse.class);
+        } else {
+            resp = this.builder.method(name, ClientResponse.class, body);
+        }
         Logger.info(
             this,
-            "#%s(%s): completed in %dms [%d %s]",
+            "#%s('%s'): completed in %dms [%d %s]",
             name,
             this.home.getPath(),
             System.currentTimeMillis() - start,

@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import java.net.HttpURLConnection;
+import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriBuilder;
 import org.hamcrest.Matchers;
@@ -50,6 +51,7 @@ public final class RestTesterTest {
     public void sendsHttpRequestAndProcessesHttpResponse() throws Exception {
         final ContainerMocker container = new ContainerMocker()
             .expectRequestUri(Matchers.containsString("foo"))
+            .expectMethod(Matchers.equalTo(RestTester.GET))
             .returnBody("works fine")
             .mock();
         RestTester
@@ -68,10 +70,33 @@ public final class RestTesterTest {
     public void sendsHttpRequestWithHeaders() throws Exception {
         final ContainerMocker container = new ContainerMocker()
             .expectHeader(HttpHeaders.ACCEPT, Matchers.containsString("*"))
+            .expectMethod(Matchers.equalTo(RestTester.GET))
             .mock();
         RestTester
             .start(container.home())
             .header(HttpHeaders.ACCEPT, "*/*")
+            .get()
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can send GET request with query params.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void sendsTextWithGetParameters() throws Exception {
+        final String name = "qparam";
+        final String value = "some value of this param &^%*;'\"";
+        final ContainerMocker container = new ContainerMocker()
+            .expectParam(name, Matchers.equalTo(value))
+            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .mock();
+        final URI uri = UriBuilder
+            .fromUri(container.home())
+            .queryParam(name, value)
+            .build();
+        RestTester
+            .start(uri)
             .get()
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
@@ -83,11 +108,13 @@ public final class RestTesterTest {
     @Test
     public void sendsTextWithPostRequest() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectBody(Matchers.containsString("bar"))
+            .expectBody(Matchers.containsString("=some-value"))
+            .expectParam("bar", Matchers.containsString("-value-"))
+            .expectMethod(Matchers.equalTo(RestTester.POST))
             .mock();
         RestTester
             .start(container.home())
-            .post("bar bar bar")
+            .post("bar=some-value-encoded")
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
@@ -98,6 +125,7 @@ public final class RestTesterTest {
     @Test
     public void assertsHttpStatus() throws Exception {
         final ContainerMocker container = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.GET))
             .returnStatus(HttpURLConnection.HTTP_NOT_FOUND)
             .mock();
         RestTester
@@ -114,6 +142,7 @@ public final class RestTesterTest {
     @Test
     public void assertsHttpResponseBody() throws Exception {
         final ContainerMocker container = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.GET))
             .returnBody("some text")
             .mock();
         RestTester
@@ -130,6 +159,7 @@ public final class RestTesterTest {
     @Test
     public void assertsResponseBodyWithXpathQuery() throws Exception {
         final ContainerMocker container = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.GET))
             .returnBody("<root><a>works fine for me</a></root>")
             .mock();
         RestTester

@@ -66,6 +66,21 @@ import javax.ws.rs.core.UriBuilder;
 public final class RestTester {
 
     /**
+     * GET method name.
+     */
+    public static final String GET = "GET";
+
+    /**
+     * POST method name.
+     */
+    public static final String POST = "POST";
+
+    /**
+     * PUT method name.
+     */
+    public static final String PUT = "PUT";
+
+    /**
      * It's a utility class.
      */
     private RestTester() {
