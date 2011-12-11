@@ -41,11 +41,8 @@ assert log.text.contains('All ReXSL checks passed')
 assert log.text.contains('servlet initialized')
 
 // Let's verify that all files are packaged in destination folder
-// @todo #44 At the moment this validation doesn't work because
-//  packaging mechanism is not implemented. We should enable these
-//  validations once packers are implemented.
-
-// def css = new File(basedir, 'target/all-corect-1.0/css/screen.css')
-// assert !css.contains('/**')
-// def xsl = new File(basedir, 'target/all-corect-1.0/xsl/layout.xsl')
-// assert !xsl.contains('<!--')
+def css = new File(basedir, 'target/all-correct-1.0/css/screen.css')
+assert css.exists()
+assert !css.text.contains('/**')
+//def xsl = new File(basedir, 'target/all-corect-1.0/xsl/layout.xsl')
+//assert !xsl.contains('<!--')
