@@ -45,11 +45,11 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link TestClient}.
+ * Test case for {@link JerseyTestClient}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class TestClientTest {
+public final class JerseyTestClientTest {
 
     /**
      * TestClient can send HTTP request and process HTTP response.
@@ -61,7 +61,7 @@ public final class TestClientTest {
             .expectRequestUri(Matchers.containsString("path"))
             .returnBody("works fine")
             .mock();
-        final TestClient client = new TestClient(container.home())
+        final TestClient client = RestTester.start(container.home())
             .get("/the-path")
             .assertBody(Matchers.containsString("fine"))
             .assertStatus(HttpURLConnection.HTTP_OK);
