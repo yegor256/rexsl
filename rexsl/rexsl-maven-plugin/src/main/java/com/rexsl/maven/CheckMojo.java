@@ -38,7 +38,7 @@ import org.apache.maven.plugin.MojoFailureException;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @goal check
- * @phase verify
+ * @phase integration-test
  * @threadSafe
  */
 public final class CheckMojo extends AbstractRexslMojo {
