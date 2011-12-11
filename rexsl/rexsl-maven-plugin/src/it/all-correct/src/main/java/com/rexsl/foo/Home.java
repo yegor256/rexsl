@@ -29,7 +29,6 @@
  */
 package com.rexsl.foo;
 
-import com.rexsl.core.XmlSchema;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -41,7 +40,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSchema("nobody")
 public final class Home {
 
     @XmlElement(name = "text", nillable = false)

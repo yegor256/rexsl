@@ -40,6 +40,7 @@ import javax.ws.rs.core.UriBuilder
  * before this script.
  */
 RestTester.start(rexsl.home)
+    .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
     .header(HttpHeaders.USER_AGENT, 'Chrome')
     .get()

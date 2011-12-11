@@ -37,7 +37,7 @@ import org.junit.Assert
 import org.hamcrest.Matchers
 
 RestTester.start(rexsl.home)
-    .header(HttpHeaders.ACCEPT, 'text/plain,application/xml')
+    .header(HttpHeaders.ACCEPT, 'text/plain,text/xml')
     .header(HttpHeaders.USER_AGENT, 'FireFox')
     .get()
     .assertStatus(HttpURLConnection.HTTP_OK)
