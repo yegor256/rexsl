@@ -57,7 +57,7 @@ public final class Utils {
         final File dest = new File(basedir, name);
         dest.getParentFile().mkdirs();
         FileUtils.copyInputStreamToFile(
-            Utils.class.getResourceAsStream("basedir/" + name),
+            Utils.class.getResourceAsStream(String.format("basedir/%s", name)),
             dest
         );
     }

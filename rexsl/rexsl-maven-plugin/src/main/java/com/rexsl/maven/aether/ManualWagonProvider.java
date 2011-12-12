@@ -45,8 +45,8 @@ final class ManualWagonProvider implements WagonProvider {
      * {@inheritDoc}
      */
     @Override
-    public Wagon lookup(final String roleHint) throws Exception {
-        if ("http".equals(roleHint)) {
+    public Wagon lookup(final String hint) throws Exception {
+        if ("http".equals(hint)) {
             return new LightweightHttpWagon();
         }
         return null;

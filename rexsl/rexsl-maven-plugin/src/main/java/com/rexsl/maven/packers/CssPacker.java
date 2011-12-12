@@ -66,22 +66,23 @@ public final class CssPacker extends AbstractPacker {
      */
     @Override
     protected void pack(final File src, final File dest) throws IOException {
-        Reader in = null;
-        Writer out = null;
+        final Reader input = new InputStreamReader(
+            new FileInputStream(src),
+            this.ENCODING
+        );
+        final CssCompressor compressor = new CssCompressor(input);
         try {
-            in = new InputStreamReader(
-                new FileInputStream(src),
-                this.ENCODING
-            );
-            CssCompressor compressor = new CssCompressor(in);
-            out = new OutputStreamWriter(
+            final Writer output = new OutputStreamWriter(
                 new FileOutputStream(dest),
                 this.ENCODING
             );
-            compressor.compress(out, -1);
+            try {
+                compressor.compress(output, -1);
+            } finally {
+                IOUtils.closeQuietly(output);
+            }
         } finally {
-            IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(out);
+            IOUtils.closeQuietly(input);
         }
     }
 }

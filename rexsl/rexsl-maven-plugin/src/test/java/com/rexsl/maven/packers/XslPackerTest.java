@@ -32,7 +32,6 @@ package com.rexsl.maven.packers;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
 import java.io.File;
-import javax.validation.constraints.AssertFalse;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -69,7 +68,7 @@ public final class XslPackerTest {
      * Simple packaging.
      * @throws Exception If something goes wrong inside
      * @todo #37:1h Remove comments from the output file.
-     * XSL files should be compressed (all comments and spaces removed).
+     *  XSL files should be compressed (all comments and spaces removed).
      */
     @org.junit.Ignore
     @Test
@@ -90,8 +89,8 @@ public final class XslPackerTest {
         packer.pack(env);
         MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
         MatcherAssert.assertThat(
-             FileUtils.readFileToString(dest),
-             Matchers.equalTo("<stylesheet></stylesheet>")
+            FileUtils.readFileToString(dest),
+            Matchers.equalTo("<stylesheet></stylesheet>")
         );
     }
 

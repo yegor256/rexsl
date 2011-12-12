@@ -29,7 +29,6 @@
  */
 package com.rexsl.maven.packers;
 
-import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilderFactory;

@@ -55,10 +55,10 @@ public interface Environment {
     /**
      * Return a list of artifacts (JARs and dirs) that should be available
      * for all "running-as-remote" Groovy scripts.
-     * @param testOnly The list should include ONLY test-related artifacts?
+     * @param tonly The list should include ONLY test-related artifacts?
      * @return The list of JARs and directories
      */
-    List<File> classpath(final boolean testOnly);
+    List<File> classpath(final boolean tonly);
 
     /**
      * Shall we use runtime filtering of resources?

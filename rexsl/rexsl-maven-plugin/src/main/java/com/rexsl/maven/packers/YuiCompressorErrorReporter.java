@@ -39,50 +39,38 @@ import org.mozilla.javascript.EvaluatorException;
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id: YuiCompressorErrorReporter.java 370 2011-11-27 16:36:01Z guard $
  */
-public class YuiCompressorErrorReporter implements ErrorReporter {
+public final class YuiCompressorErrorReporter implements ErrorReporter {
+
     /**
      * {@inheritDoc}
+     * @checkstyle ParameterNumber (4 lines)
      */
-    public void warning(
-        final String message,
-        final String sourceName,
-        final int line,
-        final String lineSource,
-        final int lineOffset
-        ) {
-        if (line < 0) {
-            Logger.warn(this, message);
-        } else {
-            Logger.warn(this, line + ':' + lineOffset + ':' + message);
-        }
+    @Override
+    public void warning(final String message, final String source,
+        final int line, final String lsource, final int offset) {
+        this.error(message, source, line, lsource, offset);
     }
+
     /**
      * {@inheritDoc}
+     * @checkstyle ParameterNumber (4 lines)
      */
-    public void error(
-        final String message,
-        final String sourceName,
-        final int line,
-        final String lineSource,
-        final int lineOffset
-        ) {
-        if (line < 0) {
-            Logger.error(this, message);
-        } else {
-            Logger.error(this, line + ':' + lineOffset + ':' + message);
-        }
+    @Override
+    public void error(final String message, final String source,
+        final int line, final String lsource, final int offset) {
+        Logger.error(this, "%s[%d:%d]: %s", source, line, offset, message);
     }
+
     /**
      * {@inheritDoc}
+     * @checkstyle ParameterNumber (4 lines)
      */
-    public EvaluatorException runtimeError(
-        final String message,
-        final String sourceName,
-        final int line,
-        final String lineSource,
-        final int lineOffset
-        ) {
-        error(message, sourceName, line, lineSource, lineOffset);
+    @Override
+    public EvaluatorException runtimeError(final String message,
+        final String source, final int line, final String lsource,
+        final int offset) {
+        this.error(message, source, line, lsource, offset);
         return new EvaluatorException(message);
     }
+
 }

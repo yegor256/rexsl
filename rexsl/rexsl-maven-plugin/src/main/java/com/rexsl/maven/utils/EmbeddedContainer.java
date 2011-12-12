@@ -200,7 +200,7 @@ public final class EmbeddedContainer {
         final List<String> urls = new ArrayList<String>();
         for (File path : env.classpath(true)) {
             if (path.isDirectory()) {
-                urls.add(path.getAbsolutePath() + "/");
+                urls.add(String.format("%s/", path.getAbsolutePath()));
             } else {
                 urls.add(path.getAbsolutePath());
             }

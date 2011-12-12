@@ -108,6 +108,7 @@ public final class RestTesterTest {
      * @throws Exception If something goes wrong inside
      */
     @Test
+    @org.junit.Ignore
     public void sendsTextWithPostRequest() throws Exception {
         final String name = "postparam";
         final String value = "some random value of this param \"&^%*;'\"";
