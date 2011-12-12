@@ -56,7 +56,7 @@
 
     <description>
         <![CDATA[
-        RESTful web framework on top of XSL.
+        RESTful Java web framework on top of JAX-RS, JAXB, and XSL.
         ]]>
     </description>
     <url>http://www.rexsl.com</url>
@@ -193,7 +193,7 @@
                     <plugin>
                         <groupId>com.qulice</groupId>
                         <artifactId>qulice-maven-plugin</artifactId>
-                        <version since="25 Oct 2011">0.1.7</version>
+                        <version since="12 Dec 2011">0.1.7</version>
                         <dependencies>
                             <dependency>
                                 <groupId>com.rexsl</groupId>

@@ -41,13 +41,13 @@ ReXSL Testing Facility
   The module contains a collection of usable tools for testing of
   ReXSL-powered application. Read more about:
 
-   * {{{./apidocs/com/rexsl/test/TestClient.html}<<<com.rexsl.test.TestClient>>>}}
+   * {{{./apidocs/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
 
    * {{{./apidocs/com/rexsl/test/XhtmlConverter.html}<<<com.rexsl.test.XhtmlConverter>>>}}
 
    * {{{./apidocs/com/rexsl/test/JaxbConverter.html}<<<com.rexsl.test.JaxbConverter>>>}}
 
-  Include it into your project:
+  Include this dependency into your project:
 
 +--
 <dependency>
