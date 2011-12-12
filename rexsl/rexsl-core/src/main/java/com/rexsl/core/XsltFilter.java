@@ -87,30 +87,18 @@ public final class XsltFilter implements Filter {
     /**
      * XSLT factory.
      */
-    private TransformerFactory tfactory;
-
-    /**
-     * Context for the filter.
-     */
-    private ServletContext context;
-
-    /**
-     * Public ctor.
-     */
-    public XsltFilter() {
-        // intentionally empty
-    }
+    private transient TransformerFactory tfactory;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void init(final FilterConfig config) {
-        this.context = config.getServletContext();
+        final ServletContext context = config.getServletContext();
         this.tfactory = TransformerFactory.newInstance();
-        this.tfactory.setURIResolver(new ContextResourceResolver(this.context));
-        Manifests.append(this.context);
-        Logger.debug(
+        this.tfactory.setURIResolver(new ContextResourceResolver(context));
+        Manifests.append(context);
+        Logger.info(
             this,
             "#init(%s): XSLT filter initialized",
             config.getClass().getName()
@@ -142,8 +130,7 @@ public final class XsltFilter implements Filter {
      */
     @Override
     public void destroy() {
-        this.context = null;
-        Logger.debug(
+        Logger.info(
             this,
             "#destroy(): XSLT filter destroyed"
         );

@@ -45,11 +45,19 @@ final class ManualWagonProvider implements WagonProvider {
      * {@inheritDoc}
      */
     @Override
-    public Wagon lookup(final String roleHint) throws Exception {
-        if ("http".equals(roleHint)) {
-            return new LightweightHttpWagon();
+    public Wagon lookup(final String hint) throws Exception {
+        Wagon wagon = null;
+        if ("http".equals(hint)) {
+            wagon = new LightweightHttpWagon();
+        } else {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Unknown hint '%s', only 'http' allowed",
+                    hint
+                )
+            );
         }
-        return null;
+        return wagon;
     }
 
     /**

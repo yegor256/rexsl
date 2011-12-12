@@ -180,10 +180,13 @@ public final class Manifests {
             }
             throw new IllegalArgumentException(bldr.toString());
         }
+        String result;
         if (Manifests.INJECTED.containsKey(name)) {
-            return Manifests.INJECTED.get(name);
+            result = Manifests.INJECTED.get(name);
+        } else {
+            result = Manifests.attributes.get(name);
         }
-        return Manifests.attributes.get(name);
+        return result;
     }
 
     /**
@@ -227,22 +230,39 @@ public final class Manifests {
      * @param ctx Servlet context
      * @see #Manifests()
      */
-    static void append(final ServletContext ctx) {
+    protected static void append(final ServletContext ctx) {
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
         } catch (java.net.MalformedURLException ex) {
             throw new IllegalStateException(ex);
         }
-        if (main != null) {
-            Manifests.attributes.putAll(Manifests.loadOneFile(main));
+        if (main == null) {
+            Logger.warn(
+                Manifests.class,
+                "#append(%s): MANIFEST.MF not found in WAR package",
+                ctx.getClass().getName()
+            );
+        } else {
+            final ConcurrentMap<String, String> attrs =
+                Manifests.loadOneFile(main);
+            Manifests.attributes.putAll(attrs);
+            Logger.info(
+                Manifests.class,
+                "#append(%s): %d attributes loaded from %s",
+                ctx.getClass().getName(),
+                attrs.size(),
+                main
+            );
         }
     }
 
     /**
      * Load attributes from classpath.
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static void load() {
+        final long start = System.currentTimeMillis();
         Manifests.attributes = new ConcurrentHashMap<String, String>();
         Manifests.failures = new ConcurrentHashMap<URL, String>();
         Integer count = 0;
@@ -261,11 +281,12 @@ public final class Manifests {
             }
             count += 1;
         }
-        Logger.debug(
+        Logger.info(
             Manifests.class,
-            "#load(): %d attributes loaded from %d URL(s): %s",
+            "#load(): %d attributes loaded from %d URL(s) in %dms: %s",
             Manifests.attributes.size(),
             count,
+            System.currentTimeMillis() - start,
             Manifests.group(Manifests.attributes.keySet())
         );
     }
@@ -279,7 +300,7 @@ public final class Manifests {
         final Set<URL> urls = new HashSet<URL>();
         Enumeration<URL> resources;
         try {
-            resources = Manifests.class.getClassLoader()
+            resources = Thread.currentThread().getContextClassLoader()
                 .getResources("META-INF/MANIFEST.MF");
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
@@ -312,7 +333,7 @@ public final class Manifests {
                 final String value = attrs.getValue((Name) key);
                 props.put(key.toString(), value);
             }
-            Logger.debug(
+            Logger.trace(
                 Manifests.class,
                 "#loadOneFile('%s'): %d attributes loaded (%s)",
                 url,

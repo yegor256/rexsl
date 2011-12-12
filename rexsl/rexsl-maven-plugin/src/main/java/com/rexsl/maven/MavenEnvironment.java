@@ -51,27 +51,27 @@ public final class MavenEnvironment implements Environment {
     /**
      * The project, from Maven plugin.
      */
-    private final MavenProject project;
+    private final transient MavenProject project;
 
     /**
      * The list of properties from Maven plugin.
      */
-    private final Properties properties;
+    private final transient Properties properties;
 
     /**
      * Location of local repo.
      */
-    private String localRepo;
+    private transient String localRepo;
 
     /**
      * Shall we use runtime filtering?
      */
-    private boolean runtimeFiltering;
+    private transient boolean runtimeFiltering;
 
     /**
      * Port number.
      */
-    private Integer port;
+    private transient Integer iport;
 
     /**
      * Ctor.
@@ -89,7 +89,7 @@ public final class MavenEnvironment implements Environment {
      * @param prt The port number
      */
     public void setPort(final Integer prt) {
-        this.port = prt;
+        this.iport = prt;
     }
 
     /**
@@ -121,7 +121,7 @@ public final class MavenEnvironment implements Environment {
      */
     @Override
     public Integer port() {
-        return this.port;
+        return this.iport;
     }
 
     /**
@@ -140,14 +140,15 @@ public final class MavenEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
-    public List<File> classpath(final boolean testOnly) {
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    public List<File> classpath(final boolean tonly) {
         final List<String> paths = new ArrayList<String>();
         try {
             paths.addAll(this.project.getTestClasspathElements());
         } catch (DependencyResolutionRequiredException ex) {
             throw new IllegalStateException("Failed to read classpath", ex);
         }
-        for (Artifact artifact : this.artifacts(testOnly)) {
+        for (Artifact artifact : this.artifacts(tonly)) {
             paths.add(artifact.getFile().getPath());
         }
         final List<File> files = new ArrayList<File>();
@@ -172,16 +173,16 @@ public final class MavenEnvironment implements Environment {
 
     /**
      * List of artifacts, which should be available in classpath.
-     * @param testOnly Are interested in artifacts in "test" scope only?
+     * @param tonly Are interested in artifacts in "test" scope only?
      * @return The list of artifacts
      * @see #classloader()
      */
-    private List<Artifact> artifacts(final boolean testOnly) {
+    private List<Artifact> artifacts(final boolean tonly) {
         final List<Artifact> artifacts = new ArrayList<Artifact>();
         final DepsResolver resolver =
             new DepsResolver(this.project, this.localRepo);
         Logger.debug(this, "Full tree of artifacts in classpath:");
-        for (Artifact root : this.roots(testOnly)) {
+        for (Artifact root : this.roots(tonly)) {
             Logger.debug(
                 this,
                 "  %s:%s:%s",
@@ -214,16 +215,17 @@ public final class MavenEnvironment implements Environment {
 
     /**
      * List of root artifacts.
-     * @param testOnly Are interested in artifacts in "test" scope only?
+     * @param tonly Are interested in artifacts in "test" scope only?
      * @return The list of root artifacts
      * @see #artifacts()
      */
-    private List<Artifact> roots(final boolean testOnly) {
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    private List<Artifact> roots(final boolean tonly) {
         final List<Artifact> roots = new ArrayList<Artifact>();
         for (org.apache.maven.artifact.Artifact artf
             : this.project.getDependencyArtifacts()) {
             if (!org.apache.maven.artifact.Artifact.SCOPE_TEST
-                .equals(artf.getScope()) && testOnly) {
+                .equals(artf.getScope()) && tonly) {
                 continue;
             }
             roots.add(

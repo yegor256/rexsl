@@ -56,11 +56,11 @@ public final class PortReserverTest {
      */
     @Test
     public void testReservesPort() throws Exception {
-        final Integer port1 = new PortReserver().port();
-        MatcherAssert.assertThat(port1, Matchers.greaterThan(0));
-        final Integer port2 = new PortReserver().port();
-        MatcherAssert.assertThat(port2, Matchers.greaterThan(0));
-        MatcherAssert.assertThat(port1, Matchers.not(Matchers.equalTo(port2)));
+        final Integer first = new PortReserver().port();
+        MatcherAssert.assertThat(first, Matchers.greaterThan(0));
+        final Integer second = new PortReserver().port();
+        MatcherAssert.assertThat(second, Matchers.greaterThan(0));
+        MatcherAssert.assertThat(first, Matchers.not(Matchers.equalTo(second)));
     }
 
 }

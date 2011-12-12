@@ -28,10 +28,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.rexsl.test.TestClient
+import com.rexsl.test.RestTester
+import javax.ws.rs.core.HttpHeaders
+import javax.ws.rs.core.MediaType
 
-new TestClient(rexsl.home)
-    .header('Accept', 'application/xml')
-    .header('User-agent', 'Safari')
-    .get('/')
+RestTester.start(rexsl.home)
+    .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
+    .header(HttpHeaders.USER_AGENT, 'Safari')
+    .get()
     .assertStatus(HttpURLConnection.HTTP_OK)

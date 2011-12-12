@@ -111,9 +111,7 @@ public final class JaxbConverter {
         final Class... deps) throws Exception {
         final Class[] classes = new Class[deps.length + 1];
         classes[0] = object.getClass();
-        for (int pos = 0; pos < deps.length; pos += 1) {
-            classes[pos + 1] = deps[pos];
-        }
+        System.arraycopy(deps, 0, classes, 1, deps.length);
         final JAXBContext ctx = JAXBContext.newInstance(classes);
         final Marshaller mrsh = ctx.createMarshaller();
         mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);

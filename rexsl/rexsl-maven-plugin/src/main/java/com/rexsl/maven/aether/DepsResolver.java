@@ -58,12 +58,12 @@ public final class DepsResolver {
     /**
      * The project.
      */
-    private final MavenProject project;
+    private final transient MavenProject project;
 
     /**
      * Location of local repo.
      */
-    private final String localRepo;
+    private final transient String localRepo;
 
     /**
      * Ctor.

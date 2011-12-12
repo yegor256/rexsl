@@ -29,11 +29,12 @@
  */
 package com.rexsl.foo.scripts
 
-import com.rexsl.test.TestClient
+import com.rexsl.test.RestTester
 import javax.ws.rs.core.HttpHeaders
+import javax.ws.rs.core.UriBuilder
 
-new TestClient(rexsl.home)
+RestTester.start(UriBuilder.fromUri(rexsl.home).path('/xml/index.xml'))
     .header(HttpHeaders.ACCEPT, 'text/plain,application/xml')
     .header(HttpHeaders.USER_AGENT, 'Chrome')
-    .get('/xml/index.xml')
+    .get()
     .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)

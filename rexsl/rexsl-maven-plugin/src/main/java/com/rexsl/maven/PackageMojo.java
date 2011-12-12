@@ -30,6 +30,7 @@
 package com.rexsl.maven;
 
 import com.ymock.util.Logger;
+import java.util.Set;
 
 /**
  * Package resources.
@@ -48,7 +49,8 @@ public final class PackageMojo extends AbstractRexslMojo {
     @Override
     protected void run() {
         final long start = System.currentTimeMillis();
-        for (Packer packer : new PackersProvider().all()) {
+        final Set<Packer> packers = new PackersProvider().all();
+        for (Packer packer : packers) {
             packer.pack(this.env());
         }
         Logger.info(

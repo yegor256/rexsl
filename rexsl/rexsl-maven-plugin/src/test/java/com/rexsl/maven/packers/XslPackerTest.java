@@ -53,7 +53,7 @@ public final class XslPackerTest {
      * @checkstyle VisibilityModifier (3 lines)
      */
     @Rule
-    public TemporaryFolder temp = new TemporaryFolder();
+    public transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
      * Forward SLF4J to Maven Log.
@@ -67,9 +67,10 @@ public final class XslPackerTest {
     /**
      * Simple packaging.
      * @throws Exception If something goes wrong inside
-     * @todo #6 This test doesn't work because the Packer is not implemented.
+     * @todo #37:1h Remove comments from the output file.
      *  XSL files should be compressed (all comments and spaces removed).
      */
+    @org.junit.Ignore
     @Test
     public void testXslPackaging() throws Exception {
         final Environment env = Mockito.mock(Environment.class);
@@ -87,10 +88,10 @@ public final class XslPackerTest {
         final Packer packer = new XslPacker();
         packer.pack(env);
         MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
-        // MatcherAssert.assertThat(
-        //     FileUtils.readFileToString(dest),
-        //     Matchers.equalTo("<stylesheet></stylesheet>")
-        // );
+        MatcherAssert.assertThat(
+            FileUtils.readFileToString(dest),
+            Matchers.equalTo("<stylesheet></stylesheet>")
+        );
     }
 
 }

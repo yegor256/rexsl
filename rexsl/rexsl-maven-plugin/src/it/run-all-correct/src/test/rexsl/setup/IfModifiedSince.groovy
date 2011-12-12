@@ -30,10 +30,11 @@
 
 import java.text.SimpleDateFormat
 import javax.ws.rs.core.HttpHeaders
-import com.rexsl.test.TestClient
+import javax.ws.rs.core.UriBuilder
+import com.rexsl.test.RestTester
 import org.hamcrest.Matchers
 
-new TestClient(rexsl.home)
+RestTester.start(UriBuilder.fromUri(rexsl.home).path('/css/screen.css'))
     .header(HttpHeaders.ACCEPT, 'text/plain,text/css')
     .header(
         HttpHeaders.IF_MODIFIED_SINCE,
@@ -41,6 +42,6 @@ new TestClient(rexsl.home)
             .format(new Date())
     )
     .header(HttpHeaders.USER_AGENT, 'Chrome')
-    .get('/css/screen.css')
+    .get()
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString('font-family'))

@@ -46,6 +46,18 @@ Usage
 <project>
   [...]
   <build>
+    [..]
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <configuration>
+            <warSourceExcludes>js/**, css/**, xsl/**</warSourceExcludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    [..]
     <plugins>
       [...]
       <plugin>

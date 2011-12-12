@@ -27,22 +27,51 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test.client;
+package com.rexsl.maven.packers;
 
-import org.apache.http.HttpRequest;
+import com.ymock.util.Logger;
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 
 /**
- * Extender.
+ * Error reporter of Javascript compressor.
  *
+ * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
+ * @version $Id: YuiCompressorErrorReporter.java 370 2011-11-27 16:36:01Z guard $
  */
-public interface Extender {
+public final class YuiReporter implements ErrorReporter {
 
     /**
-     * Extend HTTP request.
-     * @param request HTTP request
+     * {@inheritDoc}
+     * @checkstyle ParameterNumber (4 lines)
      */
-    void extend(final HttpRequest request);
+    @Override
+    public void warning(final String message, final String source,
+        final int line, final String lsource, final int offset) {
+        this.error(message, source, line, lsource, offset);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @checkstyle ParameterNumber (4 lines)
+     */
+    @Override
+    public void error(final String message, final String source,
+        final int line, final String lsource, final int offset) {
+        Logger.error(this, "%s[%d:%d]: %s", source, line, offset, message);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @checkstyle ParameterNumber (4 lines)
+     */
+    @Override
+    public EvaluatorException runtimeError(final String message,
+        final String source, final int line, final String lsource,
+        final int offset) {
+        this.error(message, source, line, lsource, offset);
+        return new EvaluatorException(message);
+    }
 
 }

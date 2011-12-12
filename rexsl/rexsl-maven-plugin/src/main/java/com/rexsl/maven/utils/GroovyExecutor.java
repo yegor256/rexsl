@@ -53,12 +53,12 @@ public final class GroovyExecutor {
     /**
      * The classloader to use.
      */
-    private final ClassLoader classloader;
+    private final transient ClassLoader classloader;
 
     /**
      * Binding.
      */
-    private final Binding binding;
+    private final transient Binding binding;
 
     /**
      * Public ctor.
@@ -86,7 +86,7 @@ public final class GroovyExecutor {
         }
         this.classloader = new URLClassLoader(
             urls.toArray(new URL[] {}),
-            this.getClass().getClassLoader()
+            Thread.currentThread().getContextClassLoader()
         );
         this.binding = bnd;
     }
@@ -96,6 +96,7 @@ public final class GroovyExecutor {
      * @param file The groovy file with the script to run
      * @throws GroovyException If some failure inside
      */
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public void execute(final File file) throws GroovyException {
         final String basename = FilenameUtils.getBaseName(file.getPath());
         if (!basename.matches("[a-zA-Z]\\w*")) {

@@ -29,18 +29,34 @@
  */
 package com.rexsl.maven.packers;
 
-import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
-import org.apache.commons.io.FileUtils;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
 
 /**
  * Packager of XSL files. All XML comments and unnecessary spaces are removed.
  *
+ * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class XslPacker extends AbstractPacker {
+
+    /**
+     * Document builder factory.
+     */
+    private static final DocumentBuilderFactory DFACTORY =
+        DocumentBuilderFactory.newInstance();
+
+    /**
+     * Transformer factory.
+     */
+    private static final TransformerFactory TFACTORY =
+        TransformerFactory.newInstance();
 
     /**
      * {@inheritDoc}
@@ -55,8 +71,25 @@ public final class XslPacker extends AbstractPacker {
      */
     @Override
     protected void pack(final File src, final File dest) throws IOException {
-        FileUtils.copyFile(src, dest);
-        Logger.warn(this, "#pack(%s, %s): no packing, just copied", src, dest);
+        this.DFACTORY.setNamespaceAware(true);
+        Document document;
+        try {
+            document = this.DFACTORY.newDocumentBuilder().parse(src);
+        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            throw new IllegalStateException(ex);
+        } catch (org.xml.sax.SAXException ex) {
+            throw new IllegalStateException(ex);
+        }
+        try {
+            this.TFACTORY.newTransformer().transform(
+                new DOMSource(document),
+                new StreamResult(dest)
+            );
+        } catch (javax.xml.transform.TransformerConfigurationException ex) {
+            throw new IllegalStateException(ex);
+        } catch (javax.xml.transform.TransformerException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
 }

@@ -46,13 +46,14 @@ final class StringSource extends DOMSource {
     /**
      * The XML itself.
      */
-    private final String xml;
+    private final transient String xml;
 
     /**
      * Public ctor.
      * @param text The content of the document
      */
     public StringSource(final String text) {
+        super();
         this.xml = text;
         this.setNode(this.toDocument(text));
     }

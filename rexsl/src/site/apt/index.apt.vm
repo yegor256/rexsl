@@ -309,17 +309,18 @@ Assert.assertThat(
   (<<<rexsl.home>>> is provided by <<<rexsl-maven-plugin>>> executor):
 
 +--
-import com.rexsl.test.TestClient
+import com.rexsl.test.RestTester
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
-new TestClient(rexsl.home)
+import javax.ws.rs.core.UriBuilder
+RestTester.start(rexsl.home)
   .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
   .header(HttpHeaders.USER_AGENT, 'Safari')
-  .get('/')
+  .get()
   .assertStatus(HttpURLConnection.HTTP_OK)
   .assertXPath("//xhtml:div[contains(.,'world')]")
-new TestClient(rexsl.home)
-  .get('/strange-address')
+RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-address'))
+  .get()
   .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
 +--
 

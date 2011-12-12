@@ -39,10 +39,10 @@
 ReXSL core module
 
   There are two classes that you should use in your project (both
-  of them are mandatory in all cases):
+  of them are always mandatory):
   {{{./apidocs/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} and
   {{{./apidocs/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}}. Use them
-  in <<<web.xml>>>:
+  in <<<WEB-INF/web.xml>>>:
 
 +--
 <filter>

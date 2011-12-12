@@ -49,7 +49,7 @@ final class RuntimeResolver implements URIResolver {
     /**
      * Home page of the site.
      */
-    private final URI home;
+    private final transient URI home;
 
     /**
      * Public ctor.
