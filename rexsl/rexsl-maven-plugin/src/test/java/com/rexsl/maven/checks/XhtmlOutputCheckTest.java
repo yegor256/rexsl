@@ -52,7 +52,7 @@ public final class XhtmlOutputCheckTest {
      * @checkstyle VisibilityModifier (3 lines)
      */
     @Rule
-    public TemporaryFolder temp = new TemporaryFolder();
+    public transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
      * Forward SLF4J to Maven Log.

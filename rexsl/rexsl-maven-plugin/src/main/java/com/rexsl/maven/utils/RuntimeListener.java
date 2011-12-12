@@ -50,6 +50,7 @@ public final class RuntimeListener implements ServletContextListener {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.UseProperClassLoader")
     public void contextInitialized(final ServletContextEvent event) {
         final Environment env = new RuntimeListener.RuntimeEnvironment(
             event.getServletContext()
@@ -64,13 +65,13 @@ public final class RuntimeListener implements ServletContextListener {
             return;
         }
         int counter = 0;
-        for (File script
-            : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
+        final String[] exts = new String[] {"groovy"};
+        final GroovyExecutor exec = new GroovyExecutor(
+            event.getServletContext().getClassLoader(),
+            new BindingBuilder(env).build()
+        );
+        for (File script : FileUtils.listFiles(dir, exts, true)) {
             Logger.info(this, "Running '%s'...", script);
-            final GroovyExecutor exec = new GroovyExecutor(
-                event.getServletContext().getClassLoader(),
-                new BindingBuilder(env).build()
-            );
             try {
                 exec.execute(script);
             } catch (com.rexsl.maven.utils.GroovyException ex) {
@@ -101,7 +102,7 @@ public final class RuntimeListener implements ServletContextListener {
         /**
          * Servlet context.
          */
-        private final ServletContext context;
+        private final transient ServletContext context;
         /**
          * Public ctor.
          * @param ctx Context

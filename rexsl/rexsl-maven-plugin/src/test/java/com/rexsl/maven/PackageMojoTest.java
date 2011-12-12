@@ -49,7 +49,7 @@ public final class PackageMojoTest {
      * @checkstyle VisibilityModifier (3 lines)
      */
     @Rule
-    public TemporaryFolder temp = new TemporaryFolder();
+    public transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
      * Non-WAR projects should be ignored.

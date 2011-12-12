@@ -56,12 +56,12 @@ public final class EmbeddedContainerTest {
      * @checkstyle VisibilityModifier (3 lines)
      */
     @Rule
-    public TemporaryFolder temp = new TemporaryFolder();
+    public transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
      * Mocked Maven log.
      */
-    private Log log;
+    private transient Log log;
 
     /**
      * Add LOG4J appender.

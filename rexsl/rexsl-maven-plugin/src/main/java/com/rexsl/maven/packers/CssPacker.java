@@ -70,14 +70,13 @@ public final class CssPacker extends AbstractPacker {
             new FileInputStream(src),
             this.ENCODING
         );
-        final CssCompressor compressor = new CssCompressor(input);
         try {
             final Writer output = new OutputStreamWriter(
                 new FileOutputStream(dest),
                 this.ENCODING
             );
             try {
-                compressor.compress(output, -1);
+                new CssCompressor(input).compress(output, -1);
             } finally {
                 IOUtils.closeQuietly(output);
             }

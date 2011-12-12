@@ -29,7 +29,7 @@
  */
 package com.rexsl.maven;
 
-import java.util.List;
+import java.util.Set;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
@@ -57,7 +57,7 @@ public final class ChecksProviderTest {
      */
     @Test
     public void testChecksRetrieval() throws Exception {
-        final List<Check> checks = new ChecksProvider().all();
+        final Set<Check> checks = new ChecksProvider().all();
         MatcherAssert.assertThat(checks, Matchers.notNullValue());
         MatcherAssert.assertThat(checks.size(), Matchers.greaterThan(0));
     }

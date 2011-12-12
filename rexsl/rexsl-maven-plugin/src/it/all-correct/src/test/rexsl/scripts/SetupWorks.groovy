@@ -32,7 +32,6 @@ package com.rexsl.foo.scripts
 import com.rexsl.test.RestTester
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.UriBuilder
 
 /**
  * Here we're validating that setup mechanism works and

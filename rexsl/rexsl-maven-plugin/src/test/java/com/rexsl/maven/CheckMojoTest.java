@@ -29,8 +29,8 @@
  */
 package com.rexsl.maven;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
@@ -90,7 +90,7 @@ public final class CheckMojoTest {
         PowerMockito.mockStatic(ChecksProvider.class);
         final ChecksProvider provider =
             PowerMockito.mock(ChecksProvider.class);
-        final List<Check> checks = new ArrayList<Check>();
+        final Set<Check> checks = new HashSet<Check>();
         final CheckMojoTest.SpyCheck check = new CheckMojoTest.SpyCheck(true);
         checks.add(check);
         Mockito.doReturn(checks).when(provider).all();
@@ -129,11 +129,11 @@ public final class CheckMojoTest {
         /**
          * Environment.
          */
-        private Environment env;
+        private transient Environment environment;
         /**
          * Status to return, see ctor.
          */
-        private final boolean status;
+        private final transient boolean status;
         /**
          * Public ctor.
          * @param sts Status to return
@@ -145,8 +145,8 @@ public final class CheckMojoTest {
          * {@inheritDoc}
          */
         @Override
-        public boolean validate(final Environment environment) {
-            this.env = environment;
+        public boolean validate(final Environment env) {
+            this.environment = env;
             return this.status;
         }
         /**
@@ -154,7 +154,7 @@ public final class CheckMojoTest {
          * @return Status
          */
         public Environment env() {
-            return this.env;
+            return this.environment;
         }
     }
 

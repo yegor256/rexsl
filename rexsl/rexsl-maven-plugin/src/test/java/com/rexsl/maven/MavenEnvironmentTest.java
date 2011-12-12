@@ -83,7 +83,7 @@ public final class MavenEnvironmentTest {
     public void testClassloaderBuilding() throws Exception {
         final MavenProject project = Mockito.mock(MavenProject.class);
         final Properties props = new Properties();
-        final Environment env = new MavenEnvironment(project, props);
+        new MavenEnvironment(project, props);
         // todo...
     }
 

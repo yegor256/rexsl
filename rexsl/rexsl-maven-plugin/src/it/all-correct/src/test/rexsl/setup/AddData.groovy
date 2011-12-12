@@ -32,7 +32,6 @@ package com.rexsl.foo.setup
 import com.rexsl.test.RestTester
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.UriBuilder
 import org.hamcrest.Matchers
 
 // let's validate how data were injected in bootstrap
