@@ -55,7 +55,7 @@ final class ContextResourceResolver implements URIResolver {
     /**
      * Servlet Context.
      */
-    private final ServletContext context;
+    private final transient ServletContext context;
 
     /**
      * Constructor.
@@ -72,7 +72,7 @@ final class ContextResourceResolver implements URIResolver {
     public Source resolve(final String href, final String base)
         throws TransformerException {
         InputStream stream = null;
-        if (href.startsWith("/")) {
+        if (href.charAt(0) == '/') {
             stream = this.local(href);
         }
         final URI uri = UriBuilder.fromUri(href).build();

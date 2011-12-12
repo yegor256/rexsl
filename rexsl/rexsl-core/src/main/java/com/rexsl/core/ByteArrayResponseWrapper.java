@@ -50,13 +50,13 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
     /**
      * Stream for keeping the servlet response.
      */
-    private final ByteArrayOutputStream stream =
+    private final transient ByteArrayOutputStream stream =
         new ByteArrayOutputStream();
 
     /**
      * Wraps ByteArrayOutputStream into a PrintWriter.
      */
-    private final PrintWriter writer;
+    private final transient PrintWriter writer;
 
     /**
      * Public ctor.

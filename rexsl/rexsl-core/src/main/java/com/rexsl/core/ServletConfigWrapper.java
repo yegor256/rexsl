@@ -29,9 +29,11 @@
  */
 package com.rexsl.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -48,12 +50,12 @@ final class ServletConfigWrapper implements FilterConfig {
     /**
      * Wrapped config.
      */
-    private final ServletConfig config;
+    private final transient ServletConfig config;
 
     /**
      * Additional properties.
      */
-    private final Properties properties;
+    private final transient Properties properties;
 
     /**
      * Public ctor.
@@ -91,16 +93,12 @@ final class ServletConfigWrapper implements FilterConfig {
      */
     @Override
     public Enumeration<String> getInitParameterNames() {
-        // @checkstyle IllegalType (1 line)
-        final Vector<String> names = new Vector<String>();
+        final List<String> names = new ArrayList<String>();
         for (Object name : this.properties.keySet()) {
             names.add((String) name);
         }
-        final Enumeration<String> enm = this.config.getInitParameterNames();
-        while (enm.hasMoreElements()) {
-            names.add(enm.nextElement());
-        }
-        return names.elements();
+        names.addAll(Collections.list(this.config.getInitParameterNames()));
+        return Collections.enumeration(names);
     }
 
     /**

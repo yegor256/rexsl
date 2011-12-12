@@ -186,7 +186,7 @@ public final class XslResolverTest {
         /**
          * Injected object.
          */
-        private Object injected;
+        private transient Object injected;
         /**
          * Inject an object.
          * @param obj The object to inject

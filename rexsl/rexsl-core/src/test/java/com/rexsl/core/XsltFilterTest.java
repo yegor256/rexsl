@@ -62,12 +62,13 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ XsltFilter.class, ByteArrayResponseWrapper.class,
     StringWriter.class, TransformerFactory.class })
+@SuppressWarnings("PMD.TooManyMethods")
 public final class XsltFilterTest {
 
     /**
      * XSLT transformer.
      */
-    private Transformer transformer;
+    private transient Transformer transformer;
 
     /**
      * Let's prepare a transformer.
