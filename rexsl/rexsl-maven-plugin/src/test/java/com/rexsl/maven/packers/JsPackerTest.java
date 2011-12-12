@@ -53,7 +53,7 @@ public final class JsPackerTest {
      * @checkstyle VisibilityModifier (3 lines)
      */
     @Rule
-    public TemporaryFolder temp = new TemporaryFolder();
+    public transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
      * Forward SLF4J to Maven Log.
@@ -82,15 +82,17 @@ public final class JsPackerTest {
         src.getParentFile().mkdirs();
         FileUtils.writeStringToFile(
             src,
-            "function sum(num) {var i, sum = 0; for (i = 1; i <= num; i++)"
-            + " {sum += i;}}"
+            // @checkstyle LineLength (1 line)
+            "function sum(num) {var i, sum = 0; for (i = 1; i <= num; i++) {sum += i;}}"
         );
         final Packer packer = new JsPacker();
         packer.pack(env);
         MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
         MatcherAssert.assertThat(
-             FileUtils.readFileToString(dest),
-             Matchers.equalTo("function sum(a){var b,c=0;for(b=1;b<=a;b++){c+=b}};")
+            FileUtils.readFileToString(dest),
+            Matchers.equalTo(
+                "function sum(a){var b,c=0;for(b=1;b<=a;b++){c+=b}};"
+            )
         );
     }
 

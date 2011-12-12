@@ -52,31 +52,32 @@ public final class InContainerScriptsCheck implements Check {
     @Override
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), "src/test/rexsl/scripts");
-        if (!dir.exists()) {
+        boolean success = true;
+        if (dir.exists()) {
+            if (!env.webdir().exists()) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Webapp dir '%s' is absent, package the project first",
+                        env.webdir()
+                    )
+                );
+            }
+            Logger.info(
+                this,
+                "Starting embedded servlet container in '%s'...",
+                env.webdir()
+            );
+            final EmbeddedContainer container = EmbeddedContainer.start(env);
+            success = this.run(dir, env);
+            container.stop();
+            Logger.info(this, "Embedded servlet container stopped");
+        } else {
             Logger.info(
                 this,
                 "%s directory is absent, no scripts to run",
                 dir
             );
-            return true;
         }
-        if (!env.webdir().exists()) {
-            throw new IllegalStateException(
-                String.format(
-                    "Webapp dir '%s' is absent, package the project first",
-                    env.webdir()
-                )
-            );
-        }
-        Logger.info(
-            this,
-            "Starting embedded servlet container in '%s'...",
-            env.webdir()
-        );
-        final EmbeddedContainer container = EmbeddedContainer.start(env);
-        final boolean success = this.run(dir, env);
-        container.stop();
-        Logger.info(this, "Embedded servlet container stopped");
         return success;
     }
 
@@ -88,8 +89,8 @@ public final class InContainerScriptsCheck implements Check {
      */
     private boolean run(final File dir, final Environment env) {
         boolean success = true;
-        for (File script
-            : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
+        final String[] exts = new String[] {"groovy"};
+        for (File script : FileUtils.listFiles(dir, exts, true)) {
             try {
                 Logger.info(this, "Testing '%s'...", script);
                 this.one(env, script);

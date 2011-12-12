@@ -32,8 +32,8 @@ package com.rexsl.maven;
 import com.rexsl.maven.packers.CssPacker;
 import com.rexsl.maven.packers.JsPacker;
 import com.rexsl.maven.packers.XslPacker;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Provider of a collection of all packers.
@@ -47,8 +47,8 @@ public final class PackersProvider {
      * Get full collection of packers.
      * @return List of packers
      */
-    public List<Packer> all() {
-        final List<Packer> packers = new ArrayList<Packer>();
+    public Set<Packer> all() {
+        final Set<Packer> packers = new HashSet<Packer>();
         packers.add(new CssPacker());
         packers.add(new JsPacker());
         packers.add(new XslPacker());

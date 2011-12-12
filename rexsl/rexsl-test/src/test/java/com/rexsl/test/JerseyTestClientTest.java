@@ -27,22 +27,24 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test.client;
+package com.rexsl.test;
 
-import org.apache.http.HttpRequest;
+import org.junit.Test;
 
 /**
- * Extender.
- *
+ * Test case for {@link JerseyTestClient}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public interface Extender {
+public final class JerseyTestClientTest {
 
     /**
-     * Extend HTTP request.
-     * @param request HTTP request
+     * TestClient can send HTTP request and process HTTP response.
+     * @throws Exception If something goes wrong inside
      */
-    void extend(final HttpRequest request);
+    @Test
+    public void sendsHttpRequestAndProcessesHttpResponse() throws Exception {
+        // later...
+    }
 
 }

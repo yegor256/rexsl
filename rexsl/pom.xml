@@ -56,7 +56,7 @@
 
     <description>
         <![CDATA[
-        RESTful web framework on top of XSL.
+        RESTful Java web framework on top of JAX-RS, JAXB, and XSL.
         ]]>
     </description>
     <url>http://www.rexsl.com</url>
@@ -193,7 +193,7 @@
                     <plugin>
                         <groupId>com.qulice</groupId>
                         <artifactId>qulice-maven-plugin</artifactId>
-                        <version since="25 Oct 2011">0.1.7</version>
+                        <version since="12 Dec 2011">0.1.7</version>
                         <dependencies>
                             <dependency>
                                 <groupId>com.rexsl</groupId>
@@ -422,6 +422,64 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <!--
+            Package MOCK artifact.
+            -->
+            <id>mock</id>
+            <activation>
+                <file><exists>${basedir}/src/mock</exists></file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version since="2 Dec 2011">1.7</version>
+                        <executions>
+                            <execution>
+                                <id>add-test-sources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>${basedir}/src/mock/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version since="5 Dec 2011">2.3.2</version>
+                        <executions>
+                            <execution>
+                                <id>mock-artifact</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <classesDirectory>${project.build.testOutputDirectory}</classesDirectory>
+                                    <archive>
+                                        <index>true</index>
+                                        <manifest>
+                                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                        </manifest>
+                                    </archive>
+                                    <classifier>mock</classifier>
+                                    <includes>
+                                        <include>**/*Mocker.class</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <dependencyManagement>
@@ -478,6 +536,13 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <!-- Logging facility. -->
+                <groupId>com.ymock</groupId>
+                <artifactId>ymock-util</artifactId>
+                <version since="22 Sep 2011">1.0</version>
+            </dependency>
+            <dependency>
+                <!-- String manipulations -->
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version since="19 Oct 2011">2.6</version>

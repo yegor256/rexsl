@@ -32,8 +32,8 @@ package com.rexsl.maven.utils;
 import com.rexsl.maven.Environment;
 import groovy.lang.Binding;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Builder of binding for {@link GroovyExecutor}.
@@ -46,7 +46,8 @@ public final class BindingBuilder {
     /**
      * Properties.
      */
-    private final Map<String, Object> props = new HashMap<String, Object>();
+    private final transient ConcurrentMap<String, Object> props =
+        new ConcurrentHashMap<String, Object>();
 
     /**
      * Public ctor.

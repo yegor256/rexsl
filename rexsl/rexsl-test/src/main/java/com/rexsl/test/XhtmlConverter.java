@@ -55,6 +55,9 @@ import javax.xml.transform.Source;
  * }
  * </pre>
  *
+ * <p>The class is similar to {@code org.xmlmatchers.XmlConverters}, but it
+ * doesn't crash on XML documents with links to external DTD's.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */

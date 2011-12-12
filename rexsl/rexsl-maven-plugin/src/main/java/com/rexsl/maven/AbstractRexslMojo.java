@@ -52,54 +52,46 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * @required
      * @readonly
      */
-    private MavenProject project;
+    private transient MavenProject iproject;
 
     /**
      * The current repository/network configuration of Maven.
      * @parameter default-value="${repositorySystemSession}"
      * @readonly
      */
-    private RepositorySystemSession session;
+    private transient RepositorySystemSession session;
 
     /**
      * Shall we skip execution?
      * @parameter expression="${rexsl.skip}" default-value="false"
      * @required
      */
-    private boolean skip;
+    private transient boolean skip;
 
     /**
      * Webapp directory.
      * @parameter expression="${rexsl.webappDirectory}" default-value="${project.build.directory}/${project.build.finalName}"
      * @required
      */
-    private String webappDirectory;
+    private transient String webappDirectory;
 
     /**
      * TPC port to bind to.
      * @parameter expression="${rexsl.port}"
      */
-    private Integer port;
+    private transient Integer port;
 
     /**
      * Environment.
      */
-    private MavenEnvironment env;
-
-    /**
-     * Public ctor.
-     */
-    public AbstractRexslMojo() {
-        super();
-        this.project = null;
-    }
+    private transient MavenEnvironment environment;
 
     /**
      * Set Maven Project (used mostly for unit testing).
      * @param proj The project to set
      */
     public final void setProject(final MavenProject proj) {
-        this.project = proj;
+        this.iproject = proj;
     }
 
     /**
@@ -131,7 +123,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * @return The project
      */
     protected final MavenProject project() {
-        return this.project;
+        return this.iproject;
     }
 
     /**
@@ -139,7 +131,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * @return The environment
      */
     protected final MavenEnvironment env() {
-        return this.env;
+        return this.environment;
     }
 
     /**
@@ -152,21 +144,21 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
             Logger.info(this, "execution skipped because of 'skip' option");
             return;
         }
-        if (!"war".equals(this.project.getPackaging())) {
+        if (!"war".equals(this.project().getPackaging())) {
             throw new IllegalStateException("project packaging is not WAR");
         }
         final Properties properties = new Properties();
         properties.setProperty("webappDirectory", this.webappDirectory);
-        this.env = new MavenEnvironment(this.project, properties);
+        this.environment = new MavenEnvironment(this.project(), properties);
         if (this.session != null) {
-            this.env.setLocalRepository(
+            this.environment.setLocalRepository(
                 this.session.getLocalRepository().getBasedir().getPath()
             );
         }
-        if (this.port != null) {
-            this.env.setPort(this.port);
+        if (this.port == null) {
+            this.environment.setPort(new PortReserver().port());
         } else {
-            this.env.setPort(new PortReserver().port());
+            this.environment.setPort(this.port);
         }
         this.run();
     }

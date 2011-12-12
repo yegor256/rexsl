@@ -49,6 +49,7 @@ abstract class AbstractPacker implements Packer {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public final void pack(final Environment env) {
         final File srcdir = new File(
             env.basedir(),

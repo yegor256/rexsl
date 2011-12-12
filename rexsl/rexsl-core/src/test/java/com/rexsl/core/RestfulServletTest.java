@@ -30,7 +30,8 @@
 package com.rexsl.core;
 
 import com.rexsl.test.XhtmlConverter;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -52,11 +53,6 @@ import org.xmlmatchers.XmlMatchers;
 public final class RestfulServletTest {
 
     /**
-     * A message.
-     */
-    private static final String MESSAGE = "some text";
-
-    /**
      * Let's test.
      * @throws Exception If something goes wrong
      */
@@ -72,7 +68,7 @@ public final class RestfulServletTest {
         Mockito.doReturn("").when(request).getServletPath();
         Mockito.doReturn(new StringBuffer("http://localhost/"))
             .when(request).getRequestURL();
-        Mockito.doReturn(new Vector<String>().elements())
+        Mockito.doReturn(Collections.enumeration(new ArrayList<String>()))
             .when(request).getHeaderNames();
         Mockito.doReturn("GET").when(request).getMethod();
         final HttpServletResponse response =
@@ -94,7 +90,7 @@ public final class RestfulServletTest {
      */
     private HttpServlet servlet() throws Exception {
         final ServletConfig config = Mockito.mock(ServletConfig.class);
-        Mockito.doReturn(new Vector<String>().elements())
+        Mockito.doReturn(Collections.enumeration(new ArrayList<String>()))
             .when(config).getInitParameterNames();
         final ServletContext ctx = Mockito.mock(ServletContext.class);
         Mockito.doReturn(ctx).when(config).getServletContext();
@@ -121,7 +117,7 @@ public final class RestfulServletTest {
         /**
          * Buffer to hold all output.
          */
-        private final StringBuffer buffer = new StringBuffer();
+        private final transient StringBuilder buffer = new StringBuilder();
         /**
          * {@inheritDoc}
          */

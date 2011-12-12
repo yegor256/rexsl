@@ -32,8 +32,8 @@ package com.rexsl.maven;
 import com.rexsl.maven.checks.FilesStructureCheck;
 import com.rexsl.maven.checks.InContainerScriptsCheck;
 import com.rexsl.maven.checks.XhtmlOutputCheck;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Provider of checks.
@@ -47,8 +47,8 @@ public final class ChecksProvider {
      * Get full collection of checks.
      * @return List of checks
      */
-    public List<Check> all() {
-        final List<Check> checks = new ArrayList<Check>();
+    public Set<Check> all() {
+        final Set<Check> checks = new HashSet<Check>();
         checks.add(new FilesStructureCheck());
         checks.add(new XhtmlOutputCheck());
         checks.add(new InContainerScriptsCheck());

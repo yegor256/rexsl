@@ -87,14 +87,7 @@ public final class RestfulServlet extends HttpServlet {
     /**
      * Jersey servlet.
      */
-    private final ServletContainer jersey = new ServletContainer();
-
-    /**
-     * Public ctor.
-     */
-    public RestfulServlet() {
-        super();
-    }
+    private final transient ServletContainer jersey = new ServletContainer();
 
     /**
      * {@inheritDoc}

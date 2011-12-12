@@ -29,6 +29,7 @@
  */
 package com.rexsl.foo;
 
+import com.ymock.util.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -44,15 +45,20 @@ import javax.ws.rs.core.MediaType;
 public final class FrontEnd {
 
     @GET
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces(MediaType.TEXT_XML)
     public Home home() {
+        Logger.info(this, "#home()");
         return new Home();
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces(MediaType.TEXT_XML)
     public Home submit(@FormParam("text") final String text) {
+        if (text == null) {
+            throw new IllegalArgumentException("Form param 'text' expected");
+        }
         Data.INSTANCE.set(text);
+        Logger.info(this, "#submit(%s): done", text);
         return this.home();
     }
 

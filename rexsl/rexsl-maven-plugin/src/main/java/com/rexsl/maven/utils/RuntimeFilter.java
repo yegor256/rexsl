@@ -57,7 +57,7 @@ public final class RuntimeFilter implements Filter {
     /**
      * Folders where we read files in runtime.
      */
-    private final List<File> folders = new ArrayList<File>();
+    private final transient List<File> folders = new ArrayList<File>();
 
     /**
      * {@inheritDoc}
@@ -97,6 +97,7 @@ public final class RuntimeFilter implements Filter {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void init(final FilterConfig config) {
         final String param = config.getServletContext()
             .getInitParameter("com.rexsl.maven.utils.RUNTIME_FOLDERS");
@@ -141,7 +142,9 @@ public final class RuntimeFilter implements Filter {
             content.length
         );
         final byte[] replacement = this.fetch(path);
-        if (replacement != null && !Arrays.equals(content, replacement)) {
+        if (replacement == null || Arrays.equals(content, replacement)) {
+            wrapper.passThrough();
+        } else {
             Logger.info(
                 this,
                 "#filter(%s): content replaced on-fly (%d bytes)",
@@ -155,8 +158,6 @@ public final class RuntimeFilter implements Filter {
                 "Rexsl-Filtered",
                 String.format("%d bytes", content.length)
             );
-        } else {
-            wrapper.passThrough();
         }
         response.getOutputStream().write(content);
     }
@@ -167,6 +168,7 @@ public final class RuntimeFilter implements Filter {
      * @return The content or NULL
      * @throws IOException If something goes wrong
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private byte[] fetch(final String path) throws IOException {
         byte[] content = null;
         for (File dir : this.folders) {

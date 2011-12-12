@@ -66,25 +66,23 @@ public final class JsPacker extends AbstractPacker {
      */
     @Override
     protected void pack(final File src, final File dest) throws IOException {
-        Reader in = null;
-        Writer out = null;
+        final Reader input = new InputStreamReader(
+            new FileInputStream(src),
+            this.ENCODING
+        );
         try {
-            in = new InputStreamReader(
-                new FileInputStream(src),
-                this.ENCODING
-            );
-            JavaScriptCompressor compressor = new JavaScriptCompressor(
-                in,
-                new YuiCompressorErrorReporter()
-            );
-            out = new OutputStreamWriter(
+            final Writer output = new OutputStreamWriter(
                 new FileOutputStream(dest),
                 this.ENCODING
             );
-            compressor.compress(out, -1, true, false, false, false);
+            try {
+                new JavaScriptCompressor(input, new YuiReporter())
+                    .compress(output, -1, true, false, false, false);
+            } finally {
+                IOUtils.closeQuietly(output);
+            }
         } finally {
-            IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(out);
+            IOUtils.closeQuietly(input);
         }
     }
 }

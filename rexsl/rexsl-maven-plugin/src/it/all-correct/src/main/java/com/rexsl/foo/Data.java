@@ -29,6 +29,8 @@
  */
 package com.rexsl.foo;
 
+import com.ymock.util.Logger;
+
 /**
  * Holder of data.
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -46,9 +48,11 @@ public final class Data {
 
     public void set(final String txt) {
         this.text = txt;
+        Logger.info(this, "#set('%s'): done", txt);
     }
 
     public String get() {
+        Logger.info(this, "#get(): returned '%s'", this.text);
         return this.text;
     }
 

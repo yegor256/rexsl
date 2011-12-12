@@ -65,24 +65,17 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * Folder with XSD files.
      * @see #setServletContext(ServletContext)
      */
-    private File xsdFolder;
+    private transient File xsdFolder;
 
     /**
      * Classes to process.
      */
-    private final List<Class> classes = new ArrayList<Class>();
+    private final transient List<Class> classes = new ArrayList<Class>();
 
     /**
      * JAXB context.
      */
-    private JAXBContext context;
-
-    /**
-     * Public ctor.
-     */
-    public XslResolver() {
-        // intentionally empty
-    }
+    private transient JAXBContext context;
 
     /**
      * Set servlet context from container, to be called by JAX-RS framework
@@ -115,7 +108,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     public Marshaller getContext(final Class<?> type) {
         Marshaller mrsh;
         try {
-            mrsh = this.context(type).createMarshaller();
+            mrsh = this.buildContext(type).createMarshaller();
             mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             final String header = String.format(
                 "\n<?xml-stylesheet type='text/xml' href='%s'?>",
@@ -125,14 +118,14 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         } catch (javax.xml.bind.JAXBException ex) {
             throw new IllegalStateException(ex);
         }
-        if (this.xsdFolder != null) {
-            mrsh = this.addXsdValidator(mrsh, type);
-        } else {
+        if (this.xsdFolder == null) {
             Logger.debug(
                 this,
                 "#getContext(%s): marshaller created (no XSD validator)",
                 type.getName()
             );
+        } else {
+            mrsh = this.addXsdValidator(mrsh, type);
         }
         return mrsh;
     }
@@ -167,7 +160,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @param cls The class we should process
      * @return The context
      */
-    private JAXBContext context(final Class cls) {
+    private JAXBContext buildContext(final Class cls) {
         this.add(cls);
         return this.context;
     }

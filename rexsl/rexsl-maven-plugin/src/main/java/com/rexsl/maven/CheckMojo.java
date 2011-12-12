@@ -30,6 +30,7 @@
 package com.rexsl.maven;
 
 import com.ymock.util.Logger;
+import java.util.Set;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -49,7 +50,8 @@ public final class CheckMojo extends AbstractRexslMojo {
     @Override
     protected void run() throws MojoFailureException {
         final long start = System.currentTimeMillis();
-        for (Check check : new ChecksProvider().all()) {
+        final Set<Check> checks = new ChecksProvider().all();
+        for (Check check : checks) {
             if (!check.validate(this.env())) {
                 throw new MojoFailureException(
                     String.format(

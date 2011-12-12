@@ -180,10 +180,13 @@ public final class Manifests {
             }
             throw new IllegalArgumentException(bldr.toString());
         }
+        String result;
         if (Manifests.INJECTED.containsKey(name)) {
-            return Manifests.INJECTED.get(name);
+            result = Manifests.INJECTED.get(name);
+        } else {
+            result = Manifests.attributes.get(name);
         }
-        return Manifests.attributes.get(name);
+        return result;
     }
 
     /**
@@ -227,7 +230,7 @@ public final class Manifests {
      * @param ctx Servlet context
      * @see #Manifests()
      */
-    static void append(final ServletContext ctx) {
+    protected static void append(final ServletContext ctx) {
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
@@ -257,6 +260,7 @@ public final class Manifests {
     /**
      * Load attributes from classpath.
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static void load() {
         final long start = System.currentTimeMillis();
         Manifests.attributes = new ConcurrentHashMap<String, String>();
@@ -296,7 +300,7 @@ public final class Manifests {
         final Set<URL> urls = new HashSet<URL>();
         Enumeration<URL> resources;
         try {
-            resources = Manifests.class.getClassLoader()
+            resources = Thread.currentThread().getContextClassLoader()
                 .getResources("META-INF/MANIFEST.MF");
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);

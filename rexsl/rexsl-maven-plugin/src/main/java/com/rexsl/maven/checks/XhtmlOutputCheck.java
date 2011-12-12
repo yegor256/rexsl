@@ -66,37 +66,38 @@ public final class XhtmlOutputCheck implements Check {
     @Override
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), this.XML_DIR);
-        if (!dir.exists()) {
+        boolean success = true;
+        if (dir.exists()) {
+            Logger.info(
+                this,
+                "Starting embedded servlet container in '%s'...",
+                env.webdir()
+            );
+            final EmbeddedContainer container = EmbeddedContainer.start(env);
+            final String[] exts = new String[] {"xml"};
+            for (File xml : FileUtils.listFiles(dir, exts, true)) {
+                try {
+                    Logger.info(this, "Testing %s through...", xml);
+                    this.one(env, xml);
+                } catch (InternalCheckException ex) {
+                    Logger.warn(
+                        this,
+                        "Failed: %s\n%s",
+                        ex.getMessage(),
+                        this.stacktrace(ex)
+                    );
+                    success = false;
+                }
+            }
+            container.stop();
+            Logger.info(this, "Embedded servlet container stopped");
+        } else {
             Logger.info(
                 this,
                 "%s directory is absent, no XHTML tests",
                 this.XML_DIR
             );
-            return true;
         }
-        Logger.info(
-            this,
-            "Starting embedded servlet container in '%s'...",
-            env.webdir()
-        );
-        final EmbeddedContainer container = EmbeddedContainer.start(env);
-        boolean success = true;
-        for (File xml : FileUtils.listFiles(dir, new String[] {"xml"}, true)) {
-            try {
-                Logger.info(this, "Testing %s through...", xml);
-                this.one(env, xml);
-            } catch (InternalCheckException ex) {
-                Logger.warn(
-                    this,
-                    "Failed: %s\n%s",
-                    ex.getMessage(),
-                    this.stacktrace(ex)
-                );
-                success = false;
-            }
-        }
-        container.stop();
-        Logger.info(this, "Embedded servlet container stopped");
         return success;
     }
 
@@ -144,6 +145,7 @@ public final class XhtmlOutputCheck implements Check {
      * @throws InternalCheckException If file is invalid.
      */
     private void validate(final String xhtml) throws InternalCheckException {
+        assert xhtml != null;
     }
 
     /**

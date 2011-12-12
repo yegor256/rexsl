@@ -64,7 +64,12 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
-            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!-- Logging facility -->
+            <groupId>com.ymock</groupId>
+            <artifactId>ymock-util</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <!-- ReXSL test harness -->
@@ -125,6 +130,16 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <configuration>
+                        <warSourceExcludes>js/**, css/**, xsl/**</warSourceExcludes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>com.rexsl</groupId>

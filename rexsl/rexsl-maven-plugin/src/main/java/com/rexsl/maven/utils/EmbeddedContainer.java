@@ -37,9 +37,9 @@ import java.security.Policy;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import javax.servlet.DispatcherType;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -58,7 +58,7 @@ public final class EmbeddedContainer {
     /**
      * The server just started.
      */
-    private Server server;
+    private final transient Server server;
 
     /**
      * Private ctor.
@@ -73,6 +73,7 @@ public final class EmbeddedContainer {
      * @param env The environment
      * @return The container
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public static EmbeddedContainer start(final Environment env) {
         if (!env.webdir().exists()) {
             throw new IllegalArgumentException(
@@ -96,7 +97,7 @@ public final class EmbeddedContainer {
                 EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR)
             );
         }
-        for (Map.Entry<String, String> entry
+        for (ConcurrentMap.Entry<String, String> entry
             : EmbeddedContainer.params(env).entrySet()) {
             ctx.setInitParameter(entry.getKey(), entry.getValue());
         }
@@ -118,6 +119,7 @@ public final class EmbeddedContainer {
     /**
      * Stop this container.
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public void stop() {
         try {
             this.server.stop();
@@ -132,11 +134,12 @@ public final class EmbeddedContainer {
      * @param env Environment
      * @return The params
      */
-    private static Map<String, String> params(final Environment env) {
+    private static ConcurrentMap<String, String> params(final Environment env) {
         final List<String> folders = new ArrayList<String>();
         folders.add(new File(env.basedir(), "src/main/webapp").getPath());
         folders.add(new File(env.basedir(), "src/test/rexsl").getPath());
-        final Map<String, String> params = new HashMap<String, String>();
+        final ConcurrentMap<String, String> params =
+            new ConcurrentHashMap<String, String>();
         params.put(
             "com.rexsl.maven.utils.BASEDIR",
             env.basedir().getAbsolutePath()
@@ -167,26 +170,26 @@ public final class EmbeddedContainer {
      */
     private static void setup(final Environment env) {
         final File dir = new File(env.basedir(), "src/test/rexsl/setup");
-        if (!dir.exists()) {
-            Logger.info(
-                EmbeddedContainer.class,
-                "%s directory is absent, no setup scripts to run",
-                dir
+        if (dir.exists()) {
+            final GroovyExecutor exec = new GroovyExecutor(
+                env,
+                new BindingBuilder(env).build()
             );
-        } else {
-            for (File script
-                : FileUtils.listFiles(dir, new String[] {"groovy"}, true)) {
+            final String[] exts = new String[] {"groovy"};
+            for (File script : FileUtils.listFiles(dir, exts, true)) {
                 Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
-                final GroovyExecutor exec = new GroovyExecutor(
-                    env,
-                    new BindingBuilder(env).build()
-                );
                 try {
                     exec.execute(script);
                 } catch (com.rexsl.maven.utils.GroovyException ex) {
                     throw new IllegalStateException(ex);
                 }
             }
+        } else {
+            Logger.info(
+                EmbeddedContainer.class,
+                "%s directory is absent, no setup scripts to run",
+                dir
+            );
         }
     }
 
@@ -200,7 +203,7 @@ public final class EmbeddedContainer {
         final List<String> urls = new ArrayList<String>();
         for (File path : env.classpath(true)) {
             if (path.isDirectory()) {
-                urls.add(path.getAbsolutePath() + "/");
+                urls.add(String.format("%s/", path.getAbsolutePath()));
             } else {
                 urls.add(path.getAbsolutePath());
             }

@@ -52,23 +52,23 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
     /**
      * Stream for keeping the servlet response.
      */
-    private final ByteArrayOutputStream stream =
+    private final transient ByteArrayOutputStream stream =
         new ByteArrayOutputStream();
 
     /**
      * Wraps ByteArrayOutputStream into a PrintWriter.
      */
-    private final PrintWriter writer;
+    private final transient PrintWriter writer;
 
     /**
      * HTTP status.
      */
-    private int status;
+    private transient int status;
 
     /**
      * Error message.
      */
-    private String message;
+    private transient String message;
 
     /**
      * Public ctor.
@@ -141,6 +141,7 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      * Pass through all sendError() calls.
      * @throws IOException If there is some problem
      */
+    @SuppressWarnings("PMD.ConfusingTernary")
     public void passThrough() throws IOException {
         if (this.message != null) {
             Logger.debug(

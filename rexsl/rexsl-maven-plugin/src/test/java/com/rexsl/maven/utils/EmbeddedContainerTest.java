@@ -56,12 +56,12 @@ public final class EmbeddedContainerTest {
      * @checkstyle VisibilityModifier (3 lines)
      */
     @Rule
-    public TemporaryFolder temp = new TemporaryFolder();
+    public transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
      * Mocked Maven log.
      */
-    private Log log;
+    private transient Log log;
 
     /**
      * Add LOG4J appender.
@@ -82,6 +82,7 @@ public final class EmbeddedContainerTest {
         final File webdir = this.temp.newFolder("webdir");
         FileUtils.writeStringToFile(
             new File(webdir, "WEB-INF/web.xml"),
+            // @checkstyle StringLiteralsConcatenation (15 lines)
             "<web-app version='3.0'"
             + " xmlns='http://java.sun.com/xml/ns/javaee'>"
             + "<filter>"
@@ -106,7 +107,7 @@ public final class EmbeddedContainerTest {
         Mockito.doReturn(new PortReserver().port()).when(env).port();
         final EmbeddedContainer container = EmbeddedContainer.start(env);
         final HttpURLConnection conn = (HttpURLConnection)
-            new URL("http://localhost:" + env.port() + "/file.txt")
+            new URL("http", "localhost", env.port(), "/file.txt")
                 .openConnection();
         conn.connect();
         final String content = IOUtils.toString(conn.getInputStream());
