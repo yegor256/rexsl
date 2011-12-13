@@ -146,13 +146,13 @@
             <!-- Jersey server -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version since="11 Dec 2011">1.10</version>
+            <version since="13 Dec 2011">1.11</version>
         </dependency>
         <dependency>
             <!-- Jersey serlvet -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-servlet</artifactId>
-            <version since="11 Dec 2011">1.10</version>
+            <version since="13 Dec 2011">1.11</version>
         </dependency>
         <dependency>
             <!-- Forward all calls to SLF4J to LOG4J. -->

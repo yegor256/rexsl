@@ -56,14 +56,14 @@
             <!-- JAX-RS implementation, core library -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version since="11 Dec 2011">1.10</version>
+            <version since="13 Dec 2011">1.11</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <!-- Jersey client -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version since="11 Dec 2011">1.10</version>
+            <version since="13 Dec 2011">1.11</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
