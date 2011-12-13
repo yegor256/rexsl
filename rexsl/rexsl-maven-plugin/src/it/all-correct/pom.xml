@@ -151,6 +151,17 @@
                             <goal>check</goal>
                             <goal>package</goal>
                         </goals>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <!--
+                                This variable is used in
+                                src/test/rexsl/scripts/SystemPropertyVariables.groovy
+                                For more information see ticket:
+                                http://trac.rexsl.com/rexsl/ticket/90
+                                -->
+                                <rexsl.injected>123</rexsl.injected>
+                            </systemPropertyVariables>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
