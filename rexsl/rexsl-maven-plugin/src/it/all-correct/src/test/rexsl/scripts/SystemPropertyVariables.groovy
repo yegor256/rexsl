@@ -35,6 +35,6 @@ import org.hamcrest.Matchers
 // This variable should be injected by rexsl-maven-plugin, see its
 // configuration in pom.xml of this invoker test.
 MatcherAssert.assertThat(
-    System.getProperty("rexsl.injected"),
+    System.getProperty('rexsl.injected'),
     Matchers.equalTo('123')
 )
