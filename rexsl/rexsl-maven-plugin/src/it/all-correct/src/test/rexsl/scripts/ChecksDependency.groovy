@@ -31,4 +31,4 @@ package com.rexsl.foo.scripts
 
 // This class should be available in classpath because its dependency
 // is in the project in "compile" scope.
-import org.apache.lucene.index.IndexReader
+new org.apache.lucene.index.Term('test')
