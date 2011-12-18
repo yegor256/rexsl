@@ -32,7 +32,6 @@ package com.rexsl.core;
 import com.ymock.util.Logger;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,17 +41,16 @@ import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
-import org.apache.commons.lang.StringUtils;
 
 /**
- * Wrapper around <tt>MANIFEST.MF</tt> files.
+ * Wrapper around {@code MANIFEST.MF} files.
  *
- * The class will read all <tt>MANIFEST.MF</tt> files available in classpath
+ * The class will read all {@code MANIFEST.MF} files available in classpath
  * and all attributes from them. This mechanism is very useful for sending
  * information from continuous integration environment to the production
- * environment. For example, you want you site to show project version and
- * date of when WAR file was packaged. First, you configure
- * <tt>maven-war-plugin</tt> to add this information to <tt>MANIFEST.MF</tt>:
+ * environment. For example, you want your site to show project version and
+ * the date of WAR file packaging. First, you configure
+ * {@code maven-war-plugin} to add this information to {@code MANIFEST.MF}:
  *
  * <pre>
  * &lt;plugin>
@@ -68,9 +66,10 @@ import org.apache.commons.lang.StringUtils;
  * &lt;/plugin>
  * </pre>
  *
- * <p>The plugin will add these attributes to your <tt>MANIFEST.MF</tt> and the
+ * <p>{@code maven-war-plugin} will add these attributes to your
+ * {@code MANIFEST.MF} file and the
  * project will be deployed to the production environment. Then, you can read
- * them where it's necessary (in one of your JAXB annotated objects,
+ * these attributes where it's necessary (in one of your JAXB annotated objects,
  * for example) and show to users:
  *
  * <pre>
@@ -96,7 +95,8 @@ import org.apache.commons.lang.StringUtils;
  * </pre>
  *
  * <p>In unit and integration tests you may need to inject some values
- * to <tt>MANIFEST.MF</tt> in runtime:
+ * to {@code MANIFEST.MF} in runtime (for example in your bootstrap Groovy
+ * scripts):
  *
  * <pre>
  * import com.rexsl.core.Manifests
@@ -121,7 +121,7 @@ public final class Manifests {
         new ConcurrentHashMap<String, String>();
 
     /**
-     * Attributes retrieved from all existing <tt>MANIFEST.MF</tt> files.
+     * Attributes retrieved from all existing {@code MANIFEST.MF} files.
      * @see #load()
      */
     private static ConcurrentMap<String, String> attributes;
@@ -148,10 +148,14 @@ public final class Manifests {
     }
 
     /**
-     * Read one attribute available in one of <tt>MANIFEST.MF</tt> files.
+     * Read one attribute available in one of {@code MANIFEST.MF} files.
      *
      * <p>If such a attribute doesn't exist {@link IllegalArgumentException}
-     * will be thrown.
+     * will be thrown. If you're not sure whether the attribute is present or
+     * not use {@link #exists(String)} beforehand.
+     *
+     * <p>During testing you can inject attributes into this class by means
+     * of {@link #inject(String,String)}.
      *
      * @param name Name of the attribute
      * @return The value of the attribute retrieved
@@ -166,16 +170,16 @@ public final class Manifests {
             final StringBuilder bldr = new StringBuilder(
                 String.format(
                     // @checkstyle LineLength (1 line)
-                    "Atribute '%s' not found in MANIFEST.MF file(s) among %d other attribute(s) [%s] and %d injection(s)",
+                    "Atribute '%s' not found in MANIFEST.MF file(s) among %d other attribute(s) %[list]s and %d injection(s)",
                     name,
                     Manifests.attributes.size(),
-                    Manifests.group(Manifests.attributes.keySet()),
+                    Manifests.attributes.keySet(),
                     Manifests.INJECTED.size()
                 )
             );
             if (!Manifests.failures.isEmpty()) {
                 bldr.append("; failures: ").append(
-                    Manifests.group(Manifests.failures.keySet())
+                    Logger.format("%[list]s", Manifests.failures.keySet())
                 );
             }
             throw new IllegalArgumentException(bldr.toString());
@@ -191,6 +195,11 @@ public final class Manifests {
 
     /**
      * Inject new attribute.
+     *
+     * <p>An attribute can be injected in runtime, mostly for the sake of
+     * unit and integration testing. Once injected an attribute becomes
+     * available with {@link read(String)}.
+     *
      * @param name Name of the attribute
      * @param value The value of the attribute being injected
      */
@@ -215,9 +224,13 @@ public final class Manifests {
     }
 
     /**
-     * Check whether attribute exists in any of <tt>MANIFEST.MF</tt> files.
-     * @param name Name of the attribute
-     * @return It exists?
+     * Check whether attribute exists in any of {@code MANIFEST.MF} files.
+     *
+     * <p>Use this method before {@link read(String)} to check whether an
+     * attribute exists, in order to avoid a runtime exception.
+     *
+     * @param name Name of the attribute to check
+     * @return Returns {@code TRUE} if it exists, {@code FALSE} otherwise
      */
     public static boolean exists(final String name) {
         return Manifests.attributes.containsKey(name)
@@ -225,12 +238,13 @@ public final class Manifests {
     }
 
     /**
-     * Append attributes from the web application <tt>MANIFEST.MF</tt>,
-     * {@link XsltFilter#init(FilterConfig)}.
+     * Append attributes from the web application {@code MANIFEST.MF}, called
+     * from {@link XsltFilter#init(FilterConfig)}.
      * @param ctx Servlet context
      * @see #Manifests()
      */
-    protected static void append(final ServletContext ctx) {
+    @SuppressWarnings("PMD.DefaultPackage")
+    static void append(final ServletContext ctx) {
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
@@ -274,20 +288,20 @@ public final class Manifests {
                 Manifests.failures.put(url, ex.getMessage());
                 Logger.error(
                     Manifests.class,
-                    "#load(): '%s' failed %s",
+                    "#load(): '%s' failed %[exception]s",
                     url,
-                    ex.getMessage()
+                    ex
                 );
             }
             count += 1;
         }
         Logger.info(
             Manifests.class,
-            "#load(): %d attributes loaded from %d URL(s) in %dms: %s",
+            "#load(): %d attributes loaded from %d URL(s) in %dms: %[list]s",
             Manifests.attributes.size(),
             count,
             System.currentTimeMillis() - start,
-            Manifests.group(Manifests.attributes.keySet())
+            Manifests.attributes.keySet()
         );
     }
 
@@ -335,10 +349,10 @@ public final class Manifests {
             }
             Logger.trace(
                 Manifests.class,
-                "#loadOneFile('%s'): %d attributes loaded (%s)",
+                "#loadOneFile('%s'): %d attributes loaded (%[list]s)",
                 url,
                 props.size(),
-                Manifests.group(props.keySet())
+                props.keySet()
             );
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
@@ -348,22 +362,13 @@ public final class Manifests {
             } catch (java.io.IOException ex) {
                 Logger.error(
                     Manifests.class,
-                    "#loadOneFile('%s'): %s",
+                    "#loadOneFile('%s'): %[exception]s",
                     url,
-                    ex.getMessage()
+                    ex
                 );
             }
         }
         return props;
-    }
-
-    /**
-     * Convert collection of objects into text.
-     * @param group The objects
-     * @return The text
-     */
-    private static String group(final Collection group) {
-        return StringUtils.join(group, ", ");
     }
 
 }

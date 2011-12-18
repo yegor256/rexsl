@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,22 +26,79 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.maven.utils;
+
+import com.rexsl.maven.Environment;
+import java.io.File;
+import java.util.List;
+import javax.servlet.ServletContext;
+
+/**
+ * Runtime environment, for {@link RuntimeListener}.
  *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
-    http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="rexsl-tk">
+ */
+final class RuntimeEnvironment implements Environment {
 
-    <body>
-        <menu ref="parent" />
-        <menu name="Overview">
-            <item name="Introduction" href="index.html" />
-        </menu>
-        <menu ref="reports" />
-        <menu ref="modules" />
-    </body>
+    /**
+     * Servlet context.
+     */
+    private final transient ServletContext context;
 
-</project>
+    /**
+     * Public ctor.
+     * @param ctx Context
+     */
+    public RuntimeEnvironment(final ServletContext ctx) {
+        this.context = ctx;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public File basedir() {
+        return new File(
+            this.context.getInitParameter("com.rexsl.maven.utils.BASEDIR")
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public File webdir() {
+        return new File(
+            this.context.getInitParameter("com.rexsl.maven.utils.WEBDIR")
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<File> classpath(final boolean test) {
+        throw new IllegalStateException("#classpath");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean useRuntimeFiltering() {
+        throw new IllegalStateException("#useRuntimeFiltering");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer port() {
+        return Integer.valueOf(
+            this.context.getInitParameter("com.rexsl.maven.utils.PORT")
+        );
+    }
+
+}

@@ -55,8 +55,8 @@ import javax.xml.transform.stream.StreamSource;
  * Converts XML to XHTML, if necessary.
  *
  * <p>You don't need to instantiate this class directly. It is instantiated
- * by servlet container according to configuration from <tt>web.xml</tt>.
- * Should be used in <tt>web.xml</tt> (together with {@link RestfulServlet})
+ * by servlet container according to configuration from {@code web.xml}.
+ * Should be used in {@code web.xml} (together with {@link RestfulServlet})
  * like this:
  *
  * <pre>

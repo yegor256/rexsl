@@ -40,7 +40,7 @@ import org.hamcrest.Matcher;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-interface TestResponse {
+public interface TestResponse {
 
     /**
      * Follow the LOCATION header.

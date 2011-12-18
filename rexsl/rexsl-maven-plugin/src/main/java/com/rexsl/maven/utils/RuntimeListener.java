@@ -32,8 +32,6 @@ package com.rexsl.maven.utils;
 import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
 import java.io.File;
-import java.util.List;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.apache.commons.io.FileUtils;
@@ -52,7 +50,7 @@ public final class RuntimeListener implements ServletContextListener {
     @Override
     @SuppressWarnings("PMD.UseProperClassLoader")
     public void contextInitialized(final ServletContextEvent event) {
-        final Environment env = new RuntimeListener.RuntimeEnvironment(
+        final Environment env = new RuntimeEnvironment(
             event.getServletContext()
         );
         final File dir = new File(env.basedir(), "src/test/rexsl/bootstrap");
@@ -93,64 +91,6 @@ public final class RuntimeListener implements ServletContextListener {
     @Override
     public void contextDestroyed(final ServletContextEvent event) {
         Logger.debug(this, "#contextDestroyed(): destroyed");
-    }
-
-    /**
-     * Runtime environment.
-     */
-    private static final class RuntimeEnvironment implements Environment {
-        /**
-         * Servlet context.
-         */
-        private final transient ServletContext context;
-        /**
-         * Public ctor.
-         * @param ctx Context
-         */
-        public RuntimeEnvironment(final ServletContext ctx) {
-            this.context = ctx;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public File basedir() {
-            return new File(
-                this.context.getInitParameter("com.rexsl.maven.utils.BASEDIR")
-            );
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public File webdir() {
-            return new File(
-                this.context.getInitParameter("com.rexsl.maven.utils.WEBDIR")
-            );
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public List<File> classpath(final boolean test) {
-            throw new IllegalStateException("#classpath");
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean useRuntimeFiltering() {
-            throw new IllegalStateException("#useRuntimeFiltering");
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Integer port() {
-            return Integer.valueOf(
-                this.context.getInitParameter("com.rexsl.maven.utils.PORT")
-            );
-        }
     }
 
 }

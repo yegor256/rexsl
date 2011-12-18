@@ -131,8 +131,9 @@ final class ContextResourceResolver implements URIResolver {
         if (code != HttpURLConnection.HTTP_OK) {
             throw new IOException(
                 String.format(
-                    "Invalid HTTP response code: %d",
-                    code
+                    "Invalid HTTP response code %d at '%s'",
+                    code,
+                    uri
                 )
             );
         }

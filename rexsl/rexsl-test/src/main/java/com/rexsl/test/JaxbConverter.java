@@ -77,7 +77,7 @@ import javax.xml.transform.Source;
  * }
  * </pre>
  *
- * <p>We recommend to use <tt>XmlMatchers</tt> class from this Maven
+ * <p>We recommend to use {@code XmlMatchers} class from this Maven
  * artifact:
  *
  * <pre>

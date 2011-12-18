@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  * XML output against.
  *
  * <p>If this annotation is omitted ReXSL assumes that XML Schema is named
- * after class full name plus <tt>.xsd</tt> extenstion.
+ * after class full name plus {@code .xsd} extenstion.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$

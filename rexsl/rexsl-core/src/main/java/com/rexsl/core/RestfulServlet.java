@@ -48,8 +48,8 @@ import org.apache.commons.lang.StringUtils;
  * The only and the main servlet from ReXSL framework.
  *
  * <p>You don't need to instantiate this class directly. It is instantiated
- * by servlet container according to configuration from <tt>web.xml</tt>.
- * Should be used in <tt>web.xml</tt> (together with {@link XsltFilter})
+ * by servlet container according to configuration from {@code web.xml}.
+ * Should be used in {@code web.xml} (together with {@link XsltFilter})
  * like that:
  *
  * <pre>
@@ -67,9 +67,11 @@ import org.apache.commons.lang.StringUtils;
  * &lt;/servlet-mapping>
  * </pre>
  *
- * <p><tt>com.rexsl.PACKAGES</tt> init parameter should contain comma-separated
+ * <p>{@code com.rexsl.PACKAGES} init parameter should contain comma-separated
  * list of packages where JAX-RS annotated resources are located and should be
- * discovered.
+ * discovered. If this parameter is not set a runtime exception will be thrown
+ * and the servlet won't be initialized. The same will happen if the parameter
+ * contains incorrect data.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -85,6 +87,11 @@ public final class RestfulServlet extends HttpServlet {
     private static final String COMMA = ",";
 
     /**
+     * Name of servlet param.
+     */
+    private static final String PACKAGES = "com.rexsl.PACKAGES";
+
+    /**
      * Jersey servlet.
      */
     private final transient ServletContainer jersey = new ServletContainer();
@@ -97,8 +104,15 @@ public final class RestfulServlet extends HttpServlet {
     public void init(final ServletConfig config) throws ServletException {
         final List<String> packages = new ArrayList<String>();
         packages.add(this.getClass().getPackage().getName());
-        final String param = config.getInitParameter("com.rexsl.PACKAGES");
-        if (param != null) {
+        final String param = config.getInitParameter(this.PACKAGES);
+        if (param == null) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "'%s' servlet parameter is mandatory",
+                    this.PACKAGES
+                )
+            );
+        } else {
             for (String pkg : StringUtils.split(param, this.COMMA)) {
                 if (packages.contains(pkg)) {
                     continue;

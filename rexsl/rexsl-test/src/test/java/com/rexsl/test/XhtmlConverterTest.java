@@ -55,6 +55,19 @@ public final class XhtmlConverterTest {
     }
 
     /**
+     * XhtmlConverter can convert text to XML, with Unicode inside.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void convertsTextToXmlWithUnicode() throws Exception {
+        final String text = "<a>\u8514  &#8250;</a>";
+        Assert.assertThat(
+            XhtmlConverter.the(text),
+            XmlMatchers.hasXPath("/a")
+        );
+    }
+
+    /**
      * XhtmlConverter can handle processing instructions.
      * @throws Exception If something goes wrong inside
      */

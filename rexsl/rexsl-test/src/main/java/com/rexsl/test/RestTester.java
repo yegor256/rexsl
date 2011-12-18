@@ -46,18 +46,17 @@ import javax.ws.rs.core.UriBuilder;
  * import javax.ws.rs.core.MediaType
  * import org.xmlmatchers.XmlMatchers
  * import org.hamcrest.Matchers
- * new RestTester.start(rexsl.home)
+ * new RestTester.start(UriBuilder.fromUri(rexsl.home).path('/{id}').build(id))
  *   .header(HttpHeaders.USER_AGENT, 'Safari 4')
  *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
- *   .body('name=John Doe')
- *   .post(UriBuilder.fromUri('/{id}').build(number))
+ *   .post('name=John Doe')
  *   .assertStatus(HttpURLConnection.HTTP_OK)
- *   .assertBody(XmlMatchers.hasXPath('/data/user[.="John Doe"]'))
  *   .assertBody(Matchers.containsString('xml'))
+ *   .assertXPath('/data/user[.="John Doe"]')
  * </pre>
  *
- * <p>This example will make a <tt>POST</tt> request to the URI pre-built
- * by <tt>UriBuilder</tt>, providing headers and request body. Response will
+ * <p>This example will make a {@code POST} request to the URI pre-built
+ * by {@code UriBuilder}, providing headers and request body. Response will
  * be validated with matchers.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -88,8 +87,8 @@ public final class RestTester {
     }
 
     /**
-     * Start new session.
-     * @param uri Home URI
+     * Start new RESTful testing session.
+     * @param uri URI of the entry point
      * @return The client ready to process the request
      */
     public static TestClient start(final URI uri) {

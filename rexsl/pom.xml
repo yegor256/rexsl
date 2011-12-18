@@ -48,7 +48,6 @@
     <name>rexsl</name>
 
     <modules>
-        <module>rexsl-tk</module>
         <module>rexsl-test</module>
         <module>rexsl-core</module>
         <module>rexsl-maven-plugin</module>
@@ -194,13 +193,9 @@
                         <groupId>com.qulice</groupId>
                         <artifactId>qulice-maven-plugin</artifactId>
                         <version since="12 Dec 2011">0.1.7</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.rexsl</groupId>
-                                <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
-                            </dependency>
-                        </dependencies>
+                        <configuration>
+                            <license>file:${basedir}/LICENSE.txt</license>
+                        </configuration>
                         <executions>
                             <execution>
                                 <goals>
@@ -247,9 +242,9 @@
                         <version since="19 Oct 2011">2.2.1</version>
                         <dependencies>
                             <dependency>
-                                <groupId>com.rexsl</groupId>
-                                <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
+                                <groupId>com.ymock</groupId>
+                                <artifactId>ymock-tk</artifactId>
+                                <version since="18 Dec 2011">1.0.3</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -261,11 +256,10 @@
                                 <configuration>
                                     <descriptorRefs>
                                         <!--
-                                        This descriptor is in rexsl-tk sub-module, which is in classpath of
-                                        this plugin.
+                                        This descriptor is in ymock-tk sub-module, which is in classpath of this plugin.
                                         @see http://maven.apache.org/plugins/maven-assembly-plugin/examples/sharing-descriptors.html
                                         -->
-                                        <descriptorRef>rexsl-sources</descriptorRef>
+                                        <descriptorRef>ymock-sources</descriptorRef>
                                     </descriptorRefs>
                                 </configuration>
                             </execution>
@@ -371,13 +365,6 @@
                                 </plugin>
                             </reportPlugins>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.rexsl</groupId>
-                                <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
-                            </dependency>
-                        </dependencies>
                         <executions>
                             <execution>
                                 <id>attach-descriptor</id>
@@ -539,7 +526,7 @@
                 <!-- Logging facility. -->
                 <groupId>com.ymock</groupId>
                 <artifactId>ymock-util</artifactId>
-                <version since="22 Sep 2011">1.0</version>
+                <version since="18 Dec 2011">1.0.3</version>
             </dependency>
             <dependency>
                 <!-- String manipulations -->
