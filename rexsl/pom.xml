@@ -259,7 +259,7 @@
                                         This descriptor is in ymock-tk sub-module, which is in classpath of this plugin.
                                         @see http://maven.apache.org/plugins/maven-assembly-plugin/examples/sharing-descriptors.html
                                         -->
-                                        <descriptorRef>rexsl-sources</descriptorRef>
+                                        <descriptorRef>ymock-sources</descriptorRef>
                                     </descriptorRefs>
                                 </configuration>
                             </execution>

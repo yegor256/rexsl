@@ -32,7 +32,6 @@ package com.rexsl.core;
 import com.ymock.util.Logger;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,7 +41,6 @@ import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Wrapper around {@code MANIFEST.MF} files.
@@ -153,7 +151,11 @@ public final class Manifests {
      * Read one attribute available in one of {@code MANIFEST.MF} files.
      *
      * <p>If such a attribute doesn't exist {@link IllegalArgumentException}
-     * will be thrown.
+     * will be thrown. If you're not sure whether the attribute is present or
+     * not use {@link #exists(String)} beforehand.
+     *
+     * <p>During testing you can inject attributes into this class by means
+     * of {@link #inject(String,String)}.
      *
      * @param name Name of the attribute
      * @return The value of the attribute retrieved
@@ -193,6 +195,11 @@ public final class Manifests {
 
     /**
      * Inject new attribute.
+     *
+     * <p>An attribute can be injected in runtime, mostly for the sake of
+     * unit and integration testing. Once injected an attribute becomes
+     * available with {@link read(String)}.
+     *
      * @param name Name of the attribute
      * @param value The value of the attribute being injected
      */
@@ -218,8 +225,12 @@ public final class Manifests {
 
     /**
      * Check whether attribute exists in any of {@code MANIFEST.MF} files.
-     * @param name Name of the attribute
-     * @return It exists?
+     *
+     * <p>Use this method before {@link read(String)} to check whether an
+     * attribute exists, in order to avoid a runtime exception.
+     *
+     * @param name Name of the attribute to check
+     * @return Returns {@code TRUE} if it exists, {@code FALSE} otherwise
      */
     public static boolean exists(final String name) {
         return Manifests.attributes.containsKey(name)
@@ -227,12 +238,13 @@ public final class Manifests {
     }
 
     /**
-     * Append attributes from the web application {@code MANIFEST.MF},
-     * {@link XsltFilter#init(FilterConfig)}.
+     * Append attributes from the web application {@code MANIFEST.MF}, called
+     * from {@link XsltFilter#init(FilterConfig)}.
      * @param ctx Servlet context
      * @see #Manifests()
      */
-    protected static void append(final ServletContext ctx) {
+    @SuppressWarnings("PMD.DefaultPackage")
+    static void append(final ServletContext ctx) {
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
