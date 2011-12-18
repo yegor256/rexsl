@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 
@@ -42,12 +43,14 @@ final class XsdEventHandler implements ValidationEventHandler {
 
     /**
      * {@inheritDoc}
+     * @todo #41 When ymock 1.1 is released we should replace "%s" with
+     *  "%[document]s" in order to get better logging.
      */
     @Override
     public boolean handleEvent(final ValidationEvent event) {
         throw new IllegalStateException(
-            String.format(
-                "JAXB error: \"%s\" at '%s' [%d:%d]: %[document]s",
+            Logger.format(
+                "JAXB error: \"%s\" at '%s' [%d:%d]: %s",
                 event.getMessage(),
                 event.getLocator().getURL(),
                 event.getLocator().getLineNumber(),

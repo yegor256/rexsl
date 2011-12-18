@@ -207,12 +207,13 @@ public final class EmbeddedContainer {
             } else {
                 urls.add(path.getAbsolutePath());
             }
-            Logger.debug(
-                EmbeddedContainer.class,
-                "#testClasspath(): %s",
-                path
-            );
         }
+        Logger.debug(
+            EmbeddedContainer.class,
+            "#testClasspath(%s): %[list]s",
+            env.getClass().getName(),
+            urls
+        );
         return StringUtils.join(urls, ",");
     }
 

@@ -34,8 +34,6 @@ import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -112,26 +110,18 @@ public final class GroovyExecutor {
                 this.classloader
             );
         } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(this.log(ex));
+            throw new IllegalArgumentException(
+                Logger.format("IOException: %[exception]s", ex)
+            );
         }
         try {
             gse.run(file.getName(), this.binding);
         // @checkstyle IllegalCatch (1 line)
         } catch (Throwable ex) {
-            throw new GroovyException(this.log(ex));
+            throw new GroovyException(
+                Logger.format("Exception: %[exception]s", ex)
+            );
         }
-    }
-
-    /**
-     * Protocol one exception just happened, and return it.
-     * @param exception The exception to protocol
-     * @return The same exception object
-     */
-    private Throwable log(final Throwable exception) {
-        final StringWriter writer = new StringWriter();
-        exception.printStackTrace(new PrintWriter(writer));
-        Logger.warn(this, "%s", writer.toString());
-        return exception;
     }
 
 }
