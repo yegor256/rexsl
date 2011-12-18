@@ -36,7 +36,7 @@ package com.rexsl.test;
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (200 lines)
  */
-interface TestClient {
+public interface TestClient {
 
     /**
      * Set request header.
