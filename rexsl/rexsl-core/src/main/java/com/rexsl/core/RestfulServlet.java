@@ -48,8 +48,8 @@ import org.apache.commons.lang.StringUtils;
  * The only and the main servlet from ReXSL framework.
  *
  * <p>You don't need to instantiate this class directly. It is instantiated
- * by servlet container according to configuration from <tt>web.xml</tt>.
- * Should be used in <tt>web.xml</tt> (together with {@link XsltFilter})
+ * by servlet container according to configuration from {@code web.xml}.
+ * Should be used in {@code web.xml} (together with {@link XsltFilter})
  * like that:
  *
  * <pre>
@@ -67,7 +67,7 @@ import org.apache.commons.lang.StringUtils;
  * &lt;/servlet-mapping>
  * </pre>
  *
- * <p><tt>com.rexsl.PACKAGES</tt> init parameter should contain comma-separated
+ * <p>{@code com.rexsl.PACKAGES} init parameter should contain comma-separated
  * list of packages where JAX-RS annotated resources are located and should be
  * discovered.
  *

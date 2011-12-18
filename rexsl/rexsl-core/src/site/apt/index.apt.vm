@@ -38,6 +38,8 @@
 
 ReXSL core module
 
+  Read {{{./apidocs/com/rexsl/core/index.html}JavaDoc}} of the module.
+
   There are two classes that you should use in your project (both
   of them are always mandatory):
   {{{./apidocs/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} and
@@ -76,7 +78,7 @@ ReXSL core module
   {{{./apidocs/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}} is converting
   XML output documents into XHTML when necessary.
 
-  This is what you include into your <<<pom.xml>>>:
+  This dependency you add to <<<pom.xml>>>:
 
 +--
 <dependency>
@@ -86,3 +88,15 @@ ReXSL core module
   <scope>runtime</scope>
 </dependency>
 +--
+
+* Supplementary Classess
+
+  {{{./apidocs/com/rexsl/core/Manifests.html}<<<Manifests>>>}} is
+  a convenient accessor to <<<MANIFEST.MF>>> files of your web application.
+
+  {{{./apidocs/com/rexsl/core/Stylesheet.html}<<<Stylesheet>>>}} annotation
+  enables re-configuration of XSL stylesheet name for a JAXB-annotated object.
+
+  {{{./apidocs/com/rexsl/core/XmlSchema.html}<<<XmlSchema>>>}} annotation
+  lets you set the name of XML Schema of a JAXB-annotated object.
+

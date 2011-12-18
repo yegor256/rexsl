@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  * it during XML-to-XHTML transformation.
  *
  * <p>For example, this is your JAX-RS resource, returning JAXB-annotated
- * object on HTTP <tt>/front</tt> request:
+ * object on HTTP {@code /front} request:
  *
  * <pre>
  * import javax.ws.rs.GET;
@@ -57,7 +57,7 @@ import java.lang.annotation.Target;
  * }
  * </pre>
  *
- * <p>Because of <tt>Produces(MediaType.APPLICATION_XML)</tt> annotation JAX-RS
+ * <p>Because of {@code Produces(MediaType.APPLICATION_XML)} annotation JAX-RS
  * knows that the object returned has to be converted to XML (it's done by
  * {@link javax.xml.bind.Marshaller} instantiated by {@link XslResolver}).
  * Let's say, this is the object:
@@ -85,12 +85,12 @@ import java.lang.annotation.Target;
  * </pre>
  *
  * <p>Then, this XML is sent to the browser and it converts it to XHTML using
- * provided stylesheet: <tt>/xsl/Front.xsl</tt>. This stylesheet should be
- * available in <tt>webapp</tt> directory. The name of stylesheet is constructed
- * from a simple name of the class <tt>Front</tt>.
+ * provided stylesheet: {@code /xsl/Front.xsl}. This stylesheet should be
+ * available in {@code webapp} directory. The name of stylesheet is constructed
+ * from a simple name of the class {@code Front}.
  *
  * <p>What if we want to use
- * another XSL stylesheet for this class? Then we need <tt>&#64;Stylesheet</tt>
+ * another XSL stylesheet for this class? Then we need {@code &#64;Stylesheet}
  * annotation:
  *
  * <pre>
