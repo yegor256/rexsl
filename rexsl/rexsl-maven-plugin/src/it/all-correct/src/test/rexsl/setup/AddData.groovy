@@ -30,9 +30,12 @@
 package com.rexsl.foo.setup
 
 import com.rexsl.test.RestTester
+import com.ymock.util.Logger
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import org.hamcrest.Matchers
+
+Logger.info(this, 'AddsData script running...')
 
 // let's validate how data were injected in bootstrap
 RestTester.start(rexsl.home)

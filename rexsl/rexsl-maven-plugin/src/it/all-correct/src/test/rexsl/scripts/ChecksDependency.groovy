@@ -27,22 +27,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.foo.bootstrap
+package com.rexsl.foo.scripts
 
-// This class is accessible from a bootstrap script, since it's executed
-// (the script) from servlet context listener injected into the application
-// by embedded container on-fly.
-import com.rexsl.foo.Data
-import com.ymock.util.Logger
-
-Logger.info(this, 'StartsDataHolder running...')
-
-assert Data.INSTANCE.get() == 'Hello, world!'
-Data.INSTANCE.set('bootstrapped')
-
-// These properties should be injected by maven plugin, we're validating
-// this behavior here
-assert rexsl.basedir.exists()
-assert rexsl.webdir.exists()
-assert rexsl.port > 0
-assert rexsl.home != null
+// This class should be available in classpath because its dependency
+// is in the project in "compile" scope.
+new org.apache.lucene.index.Term('test')

@@ -30,10 +30,13 @@
 package com.rexsl.foo.scripts
 
 import com.rexsl.test.RestTester
+import com.ymock.util.Logger
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
 import org.hamcrest.Matchers
+
+Logger.info(this, 'HomePage script running...')
 
 RestTester.start(rexsl.home)
     .header(HttpHeaders.ACCEPT, 'text/plain,text/xml')
