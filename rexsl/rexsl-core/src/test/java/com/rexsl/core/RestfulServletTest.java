@@ -92,6 +92,8 @@ public final class RestfulServletTest {
         final ServletConfig config = Mockito.mock(ServletConfig.class);
         Mockito.doReturn(Collections.enumeration(new ArrayList<String>()))
             .when(config).getInitParameterNames();
+        Mockito.doReturn("com.rexsl.core")
+            .when(config).getInitParameter("com.rexsl.PACKAGES");
         final ServletContext ctx = Mockito.mock(ServletContext.class);
         Mockito.doReturn(ctx).when(config).getServletContext();
         Mockito.doReturn(this.getClass().getResourceAsStream("main.xsl"))
