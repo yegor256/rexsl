@@ -263,10 +263,11 @@ public final class Manifests {
             Manifests.attributes.putAll(attrs);
             Logger.info(
                 Manifests.class,
-                "#append(%s): %d attributes loaded from %s",
+                "#append(%s): %d attributes loaded from %s: %[list]s",
                 ctx.getClass().getName(),
                 attrs.size(),
-                main
+                main,
+                attrs.keySet()
             );
         }
     }

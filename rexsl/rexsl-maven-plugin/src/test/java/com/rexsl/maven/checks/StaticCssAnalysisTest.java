@@ -46,7 +46,7 @@ import org.mockito.Mockito;
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
  * @todo #56 Implement CSS stylesheet validation and enable all test methods in
- * this class.
+ *  this class.
  */
 public final class StaticCssAnalysisTest {
 
