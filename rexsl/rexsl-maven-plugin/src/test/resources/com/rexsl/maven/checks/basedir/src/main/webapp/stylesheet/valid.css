@@ -1,0 +1,13 @@
+/**
+ * Valid CSS file.
+ */
+a {
+    color: black;
+    text-decoration: none;
+}
+    /* when mouse is over it */
+    a:hover {
+        background-color: black;
+        color: white
+    }
+
