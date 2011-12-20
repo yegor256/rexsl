@@ -41,7 +41,7 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
 /**
- * StaticCssCheck test case.
+ * JigsawCssCheck test case.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
@@ -79,7 +79,7 @@ public final class StaticCssCheckTest {
         Mockito.doReturn(new PortReserver().port()).when(env).port();
         Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
         MatcherAssert.assertThat(
-            new StaticCssCheck().validate(env),
+            new JigsawCssCheck().validate(env),
             Matchers.is(true)
         );
     }
@@ -97,7 +97,7 @@ public final class StaticCssCheckTest {
         Mockito.doReturn(basedir).when(env).basedir();
         Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
         MatcherAssert.assertThat(
-            new StaticCssCheck().validate(env),
+            new JigsawCssCheck().validate(env),
             Matchers.is(false)
         );
     }

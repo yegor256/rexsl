@@ -33,12 +33,12 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 
 /**
- * Validates CSS files against style sheet rules.
+ * Validates CSS files.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id: StaticCssAnalysis.java 204 2011-10-26 21:15:28Z guard $
+ * @version $Id: JigsawCssCheck.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class StaticCssAnalysis implements Check {
+public final class JigsawCssCheck implements Check {
 
     @Override
     public boolean validate(final Environment env) {

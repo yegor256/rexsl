@@ -80,7 +80,7 @@ public final class StaticCssAnalysisTest {
         Mockito.doReturn(new PortReserver().port()).when(env).port();
         Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
         MatcherAssert.assertThat(
-            new StaticCssCheck().validate(env),
+            new JigsawCssCheck().validate(env),
             Matchers.is(true)
         );
     }
@@ -98,7 +98,7 @@ public final class StaticCssAnalysisTest {
         Mockito.doReturn(basedir).when(env).basedir();
         Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
         MatcherAssert.assertThat(
-            new StaticCssCheck().validate(env),
+            new JigsawCssCheck().validate(env),
             Matchers.is(false)
         );
     }
