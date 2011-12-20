@@ -41,11 +41,12 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
 /**
- * JigsawCssCheck test case.
+ * StaticCssAnalysis test case.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
- * @todo #10 Implement CSS validation and enable all test methods in this class
+ * @todo #56 Implement CSS stylesheet validation and enable all test methods in
+ *  this class.
  */
 public final class StaticCssCheckTest {
 
@@ -85,7 +86,7 @@ public final class StaticCssCheckTest {
     }
 
     /**
-     * Validates wrong CSS files (against CSS 2.1).
+     * Validates wrong CSS files.
      * @throws Exception If something goes wrong
      */
     @org.junit.Ignore
