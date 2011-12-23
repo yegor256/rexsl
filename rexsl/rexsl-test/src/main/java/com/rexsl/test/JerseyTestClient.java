@@ -39,7 +39,6 @@ import java.net.URI;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @checkstyle ClassDataAbstractionCoupling (200 lines)
  */
 final class JerseyTestClient implements TestClient {
 
@@ -114,12 +113,13 @@ final class JerseyTestClient implements TestClient {
         }
         Logger.info(
             this,
-            "#%s('%s'): completed in %dms [%d %s]",
+            "#%s('%s'): completed in %dms [%d %s]: %s",
             name,
             this.home.getPath(),
             System.currentTimeMillis() - start,
             resp.getStatus(),
-            resp.getClientResponseStatus()
+            resp.getClientResponseStatus(),
+            this.home
         );
         return new JerseyTestResponse(resp);
     }

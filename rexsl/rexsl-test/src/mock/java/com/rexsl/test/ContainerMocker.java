@@ -34,7 +34,6 @@ import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import com.ymock.util.Logger;
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.URI;
@@ -160,9 +159,8 @@ public final class ContainerMocker {
 
     /**
      * Mock it, and return this object.
-     * @throws Exception If something goes wrong inside
      */
-    public ContainerMocker mock() throws Exception {
+    public ContainerMocker mock() {
         this.port = this.reservePort();
         this.gws = new GrizzlyWebServer(this.port);
         this.gws.addGrizzlyAdapter(this.adapter, new String[] {"/"});
@@ -172,10 +170,13 @@ public final class ContainerMocker {
 
     /**
      * Mock it, and return this object.
-     * @throws Exception If something goes wrong inside
      */
-    public void start() throws Exception {
-        this.gws.start();
+    public void start() {
+        try {
+            this.gws.start();
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
         Logger.debug(
             this,
             "#start(): Grizzly started at port #%s",
@@ -185,9 +186,8 @@ public final class ContainerMocker {
 
     /**
      * Stop Servlet container.
-     * @throws Exception If something goes wrong inside
      */
-    public void stop() throws Exception {
+    public void stop() {
         this.gws.stop();
         Logger.debug(
             this,
@@ -198,20 +198,31 @@ public final class ContainerMocker {
 
     /**
      * Get its home.
-     * @throws Exception If something goes wrong inside
      */
-    public URI home() throws Exception {
-        return new URI("http", "", "localhost", this.port, "", "", "");
+    public URI home() {
+        try {
+            return new URI(String.format("http://localhost:%d/", this.port));
+        } catch (java.net.URISyntaxException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**
      * Reserve port.
-     * @throws Exception If something goes wrong inside
      */
-    private Integer reservePort() throws Exception {
-        final ServerSocket socket = new ServerSocket(0);
+    private Integer reservePort() {
+        ServerSocket socket;
+        try {
+            socket = new ServerSocket(0);
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
         final Integer reserved = socket.getLocalPort();
-        socket.close();
+        try {
+            socket.close();
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
         return reserved;
     }
 

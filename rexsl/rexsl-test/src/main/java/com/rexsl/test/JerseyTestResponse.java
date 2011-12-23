@@ -30,18 +30,17 @@
 package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
+import com.ymock.util.Logger;
 import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -94,10 +93,11 @@ final class JerseyTestResponse implements TestResponse {
             .evaluate(xpath, document, XPathConstants.NODESET);
         if (nodes.getLength() != 1) {
             throw new AssertionError(
-                String.format(
-                    "XPath '%s' not found in:%n%s",
+                Logger.format(
+                    // @checkstyle LineLength (1 line)
+                    "XPath '%s' not found in:\n%[com.rexsl.test.ClientResponseDecor]s",
                     xpath,
-                    this.asText()
+                    this.response
                 )
             );
         }
@@ -165,10 +165,11 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public TestResponse assertStatus(final int status) throws IOException {
         MatcherAssert.assertThat(
-            String.format(
-                "HTTP status code has to be equal to %d in:%n%s",
+            Logger.format(
+                // @checkstyle LineLength (1 line)
+                "HTTP status code has to be equal to %d in:\n%[com.rexsl.test.ClientResponseDecor]s",
                 status,
-                this.asText()
+                this.response
             ),
             status,
             Matchers.equalTo(this.getStatus())
@@ -183,9 +184,10 @@ final class JerseyTestResponse implements TestResponse {
     public TestResponse assertStatus(final Matcher<Integer> matcher)
         throws IOException {
         MatcherAssert.assertThat(
-            String.format(
-                "HTTP status code has to match in:%n%s",
-                this.asText()
+            Logger.format(
+                // @checkstyle LineLength (1 line)
+                "HTTP status code has to match in:\n%[com.rexsl.test.ClientResponseDecor]s",
+                this.response
             ),
             this.getStatus(),
             matcher
@@ -200,10 +202,11 @@ final class JerseyTestResponse implements TestResponse {
     public TestResponse assertHeader(final String name,
         final Matcher<String> matcher) throws IOException {
         MatcherAssert.assertThat(
-            String.format(
-                "HTTP header '%s' has to match in:%n%s",
+            Logger.format(
+                // @checkstyle LineLength (1 line)
+                "HTTP header '%s' has to match in:\n%[com.rexsl.test.ClientResponseDecor]s",
                 name,
-                this.asText()
+                this.response
             ),
             this.response.getHeaders().getFirst(name),
             matcher
@@ -218,9 +221,10 @@ final class JerseyTestResponse implements TestResponse {
     public TestResponse assertBody(final Matcher<String> matcher)
         throws IOException {
         MatcherAssert.assertThat(
-            String.format(
-                "HTTP response content has to match in:%n%s",
-                this.asText()
+            Logger.format(
+                // @checkstyle LineLength (1 line)
+                "HTTP response content has to match in:\n%[com.rexsl.test.ClientResponseDecor]s",
+                this.response
             ),
             this.getBody(),
             matcher
@@ -238,41 +242,16 @@ final class JerseyTestResponse implements TestResponse {
             .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
             .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
         MatcherAssert.assertThat(
-            String.format(
-                "XPath '%s' has to exist in:%n%s",
+            Logger.format(
+                // @checkstyle LineLength (1 line)
+                "XPath '%s' has to exist in:\n%[com.rexsl.test.ClientResponseDecor]s",
                 xpath,
-                this.asText()
+                this.response
             ),
             XhtmlConverter.the(this.getBody()),
             XmlMatchers.hasXPath(xpath, context)
         );
         return this;
-    }
-
-    /**
-     * Show response as text.
-     * @return The text
-     * @throws IOException If some problem inside
-     */
-    private String asText() throws IOException {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("\t---\n");
-        for (MultivaluedMap.Entry<String, List<String>> header
-            : this.response.getHeaders().entrySet()) {
-            builder.append(
-                String.format(
-                    "\t%s: %s\n",
-                    header.getKey(),
-                    StringUtils.join(header.getValue(), ", ")
-                )
-            );
-        }
-        builder
-            .append("\n ")
-            .append("\t")
-            .append(this.getBody().replace("\n", "\n\t"))
-            .append("\n\t---");
-        return builder.toString();
     }
 
 }
