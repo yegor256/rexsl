@@ -105,18 +105,34 @@ public final class JaxbConverter {
      * @param object The object to convert
      * @param deps Dependencies that we should take into account
      * @return DOM source/document
-     * @throws Exception If anything goes wrong
      */
-    public static Source the(final Object object,
-        final Class... deps) throws Exception {
+    public static Source the(final Object object, final Class... deps) {
         final Class[] classes = new Class[deps.length + 1];
         classes[0] = object.getClass();
         System.arraycopy(deps, 0, classes, 1, deps.length);
-        final JAXBContext ctx = JAXBContext.newInstance(classes);
-        final Marshaller mrsh = ctx.createMarshaller();
-        mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        JAXBContext ctx;
+        try {
+            ctx = JAXBContext.newInstance(classes);
+        } catch (javax.xml.bind.JAXBException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        Marshaller mrsh;
+        try {
+            mrsh = ctx.createMarshaller();
+        } catch (javax.xml.bind.JAXBException ex) {
+            throw new IllegalStateException(ex);
+        }
+        try {
+            mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        } catch (javax.xml.bind.PropertyException ex) {
+            throw new IllegalStateException(ex);
+        }
         final StringWriter writer = new StringWriter();
-        mrsh.marshal(object, writer);
+        try {
+            mrsh.marshal(object, writer);
+        } catch (javax.xml.bind.JAXBException ex) {
+            throw new IllegalArgumentException(ex);
+        }
         final String xml = writer.toString();
         return new StringSource(xml);
     }

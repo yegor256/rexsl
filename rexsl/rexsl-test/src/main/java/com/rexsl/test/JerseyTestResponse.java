@@ -34,7 +34,6 @@ import com.ymock.util.Logger;
 import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.net.URI;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
@@ -84,13 +83,27 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestClient rel(final String xpath) throws Exception {
-        final Document document = DocumentBuilderFactory.newInstance()
-            .newDocumentBuilder()
-            .parse(new ByteArrayInputStream(this.getBody().getBytes()));
-        final NodeList nodes = (NodeList) XPathFactory.newInstance()
-            .newXPath()
-            .evaluate(xpath, document, XPathConstants.NODESET);
+    public TestClient rel(final String xpath) {
+        Document document;
+        try {
+            document = DocumentBuilderFactory.newInstance()
+                .newDocumentBuilder()
+                .parse(new ByteArrayInputStream(this.getBody().getBytes()));
+        } catch (java.io.IOException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (org.xml.sax.SAXException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        NodeList nodes;
+        try {
+            nodes = (NodeList) XPathFactory.newInstance()
+                .newXPath()
+                .evaluate(xpath, document, XPathConstants.NODESET);
+        } catch (javax.xml.xpath.XPathExpressionException ex) {
+            throw new IllegalArgumentException(ex);
+        }
         if (nodes.getLength() != 1) {
             throw new AssertionError(
                 Logger.format(
@@ -118,7 +131,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public String getBody() throws IOException {
+    public String getBody() {
         return this.body;
     }
 
@@ -134,8 +147,16 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public GPathResult getGpath() throws Exception {
-        return new XmlSlurper().parseText(this.getBody());
+    public GPathResult getGpath() {
+        try {
+            return new XmlSlurper().parseText(this.getBody());
+        } catch (java.io.IOException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (org.xml.sax.SAXException ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
     /**
@@ -162,7 +183,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertStatus(final int status) throws IOException {
+    public TestResponse assertStatus(final int status) {
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP status code has to be equal to %d in:\n%s",
@@ -179,8 +200,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertStatus(final Matcher<Integer> matcher)
-        throws IOException {
+    public TestResponse assertStatus(final Matcher<Integer> matcher) {
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP status code has to match in:\n%s",
@@ -197,7 +217,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertHeader(final String name,
-        final Matcher<String> matcher) throws IOException {
+        final Matcher<String> matcher) {
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP header '%s' has to match in:\n%s",
@@ -214,8 +234,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertBody(final Matcher<String> matcher)
-        throws IOException {
+    public TestResponse assertBody(final Matcher<String> matcher) {
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP response content has to match in:\n%s",
@@ -231,7 +250,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertXPath(final String xpath) throws Exception {
+    public TestResponse assertXPath(final String xpath) {
         final SimpleNamespaceContext context = new SimpleNamespaceContext()
             .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
             .withBinding("xs", "http://www.w3.org/2001/XMLSchema")

@@ -44,6 +44,7 @@ import org.junit.Test;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class RestTesterTest {
 
     /**

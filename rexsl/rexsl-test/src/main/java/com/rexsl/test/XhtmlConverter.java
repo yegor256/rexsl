@@ -74,9 +74,8 @@ public final class XhtmlConverter {
      * Convert it to XML.
      * @param text The text to convert
      * @return DOM source/document
-     * @throws Exception If anything goes wrong
      */
-    public static Source the(final String text) throws Exception {
+    public static Source the(final String text) {
         return new StringSource(text);
     }
 

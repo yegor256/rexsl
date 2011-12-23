@@ -75,7 +75,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse get() throws Exception {
+    public TestResponse get() {
         return this.method(RestTester.GET, "");
     }
 
@@ -83,7 +83,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse post(final String body) throws Exception {
+    public TestResponse post(final String body) {
         return this.method(RestTester.POST, body);
     }
 
@@ -91,7 +91,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse put(final String body) throws Exception {
+    public TestResponse put(final String body) {
         return this.method(RestTester.PUT, body);
     }
 
@@ -100,10 +100,9 @@ final class JerseyTestClient implements TestClient {
      * @param name The name of HTTP method
      * @param body Body of HTTP request
      * @return The response
-     * @throws Exception If some problem inside
+     * @If some problem inside
      */
-    public TestResponse method(final String name, final String body)
-        throws Exception {
+    public TestResponse method(final String name, final String body) {
         final long start = System.currentTimeMillis();
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {

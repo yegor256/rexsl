@@ -49,24 +49,21 @@ public interface TestClient {
     /**
      * Execute GET request.
      * @return This object
-     * @throws Exception If something goes wrong
      */
-    TestResponse get() throws Exception;
+    TestResponse get();
 
     /**
      * Execute POST request.
      * @param body Request entity as a string
      * @return This object
-     * @throws Exception If something goes wrong
      */
-    TestResponse post(String body) throws Exception;
+    TestResponse post(String body);
 
     /**
      * Execute PUT request.
      * @param body Request entity as a string
      * @return This object
-     * @throws Exception If something goes wrong
      */
-    TestResponse put(String body) throws Exception;
+    TestResponse put(String body);
 
 }
