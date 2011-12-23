@@ -219,13 +219,13 @@ public final class RestTesterTest {
     }
 
     /**
-     * RestTester can handle unicode.
+     * RestTester can handle unicode in plain text response.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    @org.junit.Ignore
-    public void acceptsUnicodeInXml() throws Exception {
+    public void acceptsUnicodeInPlainText() throws Exception {
         final ContainerMocker container = new ContainerMocker()
+            .returnHeader(HttpHeaders.CONTENT_TYPE, "text/plain;charset=utf-8")
             .returnBody("\u0443\u0440\u0430!")
             .mock();
         RestTester
@@ -233,6 +233,23 @@ public final class RestTesterTest {
             .get()
             .assertBody(CoreMatchers.containsString("\u0443\u0440\u0430"))
             .assertBody(CoreMatchers.containsString("!"));
+    }
+
+    /**
+     * RestTester can handle unicode in XML response.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    @org.junit.Ignore
+    public void acceptsUnicodeInXml() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .returnHeader(HttpHeaders.CONTENT_TYPE, "text/xml;charset=utf-8")
+            .returnBody("<text>\u0443\u0440\u0430!</text>")
+            .mock();
+        RestTester
+            .start(UriBuilder.fromUri(container.home()).path("/barbar"))
+            .get()
+            .assertXPath("/text[contains(.,'\u0443\u0440\u0430')]");
     }
 
 }
