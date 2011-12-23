@@ -31,36 +31,26 @@ package com.rexsl.maven.utils;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Test case for {@link PortReserver}.
+ * Test case for {@link GroovyException}.
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class PortReserverTest {
+public final class GroovyExceptionTest {
 
     /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
-    }
-
-    /**
-     * PortReserver can reserve a port.
+     * GroovyException can be instantiated.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void canReserverTcpPort() throws Exception {
-        final Integer first = new PortReserver().port();
-        MatcherAssert.assertThat(first, Matchers.greaterThan(0));
-        final Integer second = new PortReserver().port();
-        MatcherAssert.assertThat(second, Matchers.greaterThan(0));
-        MatcherAssert.assertThat(first, Matchers.not(Matchers.equalTo(second)));
+    public void instantiatedWithString() throws Exception {
+        final Exception exp = new GroovyException("%?");
+        MatcherAssert.assertThat(
+            exp.getMessage(),
+            Matchers.containsString("?")
+        );
     }
 
 }
