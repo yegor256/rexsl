@@ -254,15 +254,15 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @return The name of XSD file
      */
     private String schema(final Class<?> type) {
-        final Annotation antn = type.getAnnotation(XmlSchema.class);
+        final Annotation antn = type.getAnnotation(Schema.class);
         String schema;
         if (antn == null) {
             schema = String.format("%s.xsd", type.getName());
         } else {
-            if (((XmlSchema) antn).ignore()) {
+            if (((Schema) antn).ignore()) {
                 schema = "";
             } else {
-                schema = ((XmlSchema) antn).value();
+                schema = ((Schema) antn).value();
             }
         }
         Logger.debug(
