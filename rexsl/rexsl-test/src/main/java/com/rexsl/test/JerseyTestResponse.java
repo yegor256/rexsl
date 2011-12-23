@@ -34,7 +34,8 @@ import com.ymock.util.Logger;
 import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
 import java.io.ByteArrayInputStream;
-import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -83,40 +84,18 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestClient rel(final String xpath) {
-        Document document;
-        try {
-            document = DocumentBuilderFactory.newInstance()
-                .newDocumentBuilder()
-                .parse(new ByteArrayInputStream(this.getBody().getBytes()));
-        } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalArgumentException(ex);
-        }
-        NodeList nodes;
-        try {
-            nodes = (NodeList) XPathFactory.newInstance()
-                .newXPath()
-                .evaluate(xpath, document, XPathConstants.NODESET);
-        } catch (javax.xml.xpath.XPathExpressionException ex) {
-            throw new IllegalArgumentException(ex);
-        }
-        if (nodes.getLength() != 1) {
-            throw new AssertionError(
-                Logger.format(
-                    "XPath '%s' not found in:\n%s",
-                    xpath,
-                    new ClientResponseDecor(this.response)
-                )
-            );
-        }
-        final URI uri = UriBuilder
-            .fromUri(nodes.item(0).getNodeValue())
-            .build();
-        return RestTester.start(uri);
+    public TestClient rel(final String query) {
+        final List<String> links = this.xpath(query);
+        MatcherAssert.assertThat(
+            Logger.format(
+                "XPath '%s' not found in:\n%s",
+                query,
+                new ClientResponseDecor(this.response)
+            ),
+            links,
+            Matchers.hasSize(1)
+        );
+        return RestTester.start(UriBuilder.fromUri(links.get(0)).build());
     }
 
     /**
@@ -157,6 +136,31 @@ final class JerseyTestResponse implements TestResponse {
         } catch (org.xml.sax.SAXException ex) {
             throw new IllegalArgumentException(ex);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> xpath(final String query) {
+        NodeList nodes;
+        try {
+            nodes = (NodeList) XPathFactory.newInstance()
+                .newXPath()
+                .evaluate(query, this.document(), XPathConstants.NODESET);
+        } catch (javax.xml.xpath.XPathExpressionException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        final List<String> items = new ArrayList<String>();
+        for (int idx = 0; idx < nodes.getLength(); idx += 1) {
+            MatcherAssert.assertThat(
+                "Only /text() nodes are retrievable with xpath()",
+                nodes.item(idx).getNodeType(),
+                Matchers.equalTo(org.w3c.dom.Node.TEXT_NODE)
+            );
+            items.add(nodes.item(idx).getNodeValue());
+        }
+        return items;
     }
 
     /**
@@ -278,6 +282,26 @@ final class JerseyTestResponse implements TestResponse {
             XmlMatchers.hasXPath(xpath, context)
         );
         return this;
+    }
+
+    /**
+     * Get document of body.
+     * @return The document
+     */
+    public Document document() {
+        Document document;
+        try {
+            document = DocumentBuilderFactory.newInstance()
+                .newDocumentBuilder()
+                .parse(new ByteArrayInputStream(this.getBody().getBytes()));
+        } catch (java.io.IOException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (org.xml.sax.SAXException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        return document;
     }
 
 }

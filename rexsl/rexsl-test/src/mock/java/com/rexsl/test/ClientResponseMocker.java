@@ -97,6 +97,7 @@ public final class ClientResponseMocker {
     public ClientResponseMocker withEntity(final String entity) {
         Mockito.doReturn(entity).when(this.response)
             .getEntity(Mockito.any(Class.class));
+        Mockito.doReturn(true).when(this.response).hasEntity();
         return this;
     }
 

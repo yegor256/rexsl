@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import groovy.util.slurpersupport.GPathResult;
+import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import org.hamcrest.Matcher;
 
@@ -49,10 +50,10 @@ public interface TestResponse {
 
     /**
      * Find link in XML and return new client with this link as URI.
-     * @param xpath The path of the link
+     * @param query The path of the link
      * @return New client
      */
-    TestClient rel(String xpath);
+    TestClient rel(String query);
 
     /**
      * Get body as a string.
@@ -71,6 +72,13 @@ public interface TestResponse {
      * @return The GPath result
      */
     GPathResult getGpath();
+
+    /**
+     * Find and return nodes matched by xpath.
+     * @param query The XPath query
+     * @return The list of node values (texts)
+     */
+    List<String> xpath(String query);
 
     /**
      * Get status line of the response.
