@@ -42,6 +42,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -156,8 +157,8 @@ public final class XsltFilter implements Filter {
             // we can't change response that is already finished
             return;
         }
-        final String agent = request.getHeader("User-Agent");
-        final String accept = request.getHeader("Accept");
+        final String agent = request.getHeader(HttpHeaders.USER_AGENT);
+        final String accept = request.getHeader(HttpHeaders.ACCEPT);
         String page = wrapper.getByteStream().toString(this.ENCODING);
         // let's check whether we should transform or not
         // @checkstyle BooleanExpressionComplexity (1 line)
@@ -183,7 +184,7 @@ public final class XsltFilter implements Filter {
                 accept
             );
         } else {
-            response.setContentType("text/html");
+            response.setContentType(MediaType.TEXT_HTML);
             page = this.transform(page);
         }
         response.getOutputStream().write(page.getBytes(this.ENCODING));

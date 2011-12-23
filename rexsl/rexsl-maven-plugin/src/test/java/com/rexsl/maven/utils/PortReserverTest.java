@@ -35,7 +35,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * PortReserver test case.
+ * Test case for {@link PortReserver}.
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
@@ -51,11 +51,11 @@ public final class PortReserverTest {
     }
 
     /**
-     * Let's try to reserver a port.
+     * PortReserver can reserve a port.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testReservesPort() throws Exception {
+    public void canReserverTcpPort() throws Exception {
         final Integer first = new PortReserver().port();
         MatcherAssert.assertThat(first, Matchers.greaterThan(0));
         final Integer second = new PortReserver().port();
