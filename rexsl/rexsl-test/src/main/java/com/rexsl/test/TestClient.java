@@ -56,22 +56,25 @@ public interface TestClient {
 
     /**
      * Execute GET request.
+     * @param description Short description of the operation
      * @return This object
      */
-    TestResponse get();
+    TestResponse get(String description);
 
     /**
      * Execute POST request.
+     * @param description Short description of the operation
      * @param body Request entity as a string
      * @return This object
      */
-    TestResponse post(String body);
+    TestResponse post(String description, String body);
 
     /**
      * Execute PUT request.
+     * @param description Short description of the operation
      * @param body Request entity as a string
      * @return This object
      */
-    TestResponse put(String body);
+    TestResponse put(String description, String body);
 
 }
