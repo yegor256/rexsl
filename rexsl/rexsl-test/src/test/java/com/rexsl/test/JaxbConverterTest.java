@@ -34,8 +34,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.xmlmatchers.XmlMatchers;
 
@@ -68,7 +68,7 @@ public final class JaxbConverterTest {
         final Object object = new JaxbConverterTest.Employee();
         MatcherAssert.assertThat(
             JaxbConverter.the(object).toString(),
-            Matchers.containsString("John")
+            CoreMatchers.containsString("John")
         );
     }
 

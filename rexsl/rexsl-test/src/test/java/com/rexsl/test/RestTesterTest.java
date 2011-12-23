@@ -35,8 +35,8 @@ import java.net.URLEncoder;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -53,15 +53,16 @@ public final class RestTesterTest {
     @Test
     public void sendsHttpRequestAndProcessesHttpResponse() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectRequestUri(Matchers.containsString("foo"))
-            .expectMethod(Matchers.equalTo(RestTester.GET))
-            .returnBody("works fine")
+            .expectRequestUri(CoreMatchers.containsString("foo"))
+            .expectMethod(CoreMatchers.equalTo(RestTester.GET))
+            .returnBody("hello!!")
             .mock();
         RestTester
             .start(UriBuilder.fromUri(container.home()).path("/foo"))
             .get()
-            .assertBody(Matchers.containsString("fine"))
-            .assertBody(Matchers.containsString("works"))
+            // .assertBody(CoreMatchers.containsString("\u0443\u0440\u0430"))
+            .assertBody(CoreMatchers.containsString("!!"))
+            .assertBody(CoreMatchers.containsString("hello!"))
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
@@ -72,8 +73,8 @@ public final class RestTesterTest {
     @Test
     public void sendsHttpRequestWithHeaders() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectHeader(HttpHeaders.ACCEPT, Matchers.containsString("*"))
-            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectHeader(HttpHeaders.ACCEPT, CoreMatchers.containsString("*"))
+            .expectMethod(CoreMatchers.equalTo(RestTester.GET))
             .mock();
         RestTester
             .start(container.home())
@@ -91,8 +92,8 @@ public final class RestTesterTest {
         final String name = "qparam";
         final String value = "some value of this param &^%*;'\"";
         final ContainerMocker container = new ContainerMocker()
-            .expectParam(name, Matchers.equalTo(value))
-            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectParam(name, CoreMatchers.equalTo(value))
+            .expectMethod(CoreMatchers.equalTo(RestTester.GET))
             .mock();
         RestTester
             .start(UriBuilder.fromUri(container.home()).queryParam(name, value))
@@ -115,10 +116,10 @@ public final class RestTesterTest {
         final String name = "postparam";
         final String value = "some random value of this param \"&^%*;'\"";
         final ContainerMocker container = new ContainerMocker()
-            .expectBody(Matchers.containsString(name))
-            .expectBody(Matchers.containsString(value))
-            .expectParam(name, Matchers.equalTo(value))
-            .expectMethod(Matchers.equalTo(RestTester.POST))
+            .expectBody(CoreMatchers.containsString(name))
+            .expectBody(CoreMatchers.containsString(value))
+            .expectParam(name, CoreMatchers.equalTo(value))
+            .expectMethod(CoreMatchers.equalTo(RestTester.POST))
             .mock();
         RestTester
             .start(container.home())
@@ -137,14 +138,16 @@ public final class RestTesterTest {
     @Test
     public void assertsHttpStatus() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectMethod(CoreMatchers.equalTo(RestTester.GET))
             .returnStatus(HttpURLConnection.HTTP_NOT_FOUND)
             .mock();
         RestTester
             .start(container.home())
             .get()
             .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
-            .assertStatus(Matchers.equalTo(HttpURLConnection.HTTP_NOT_FOUND));
+            .assertStatus(
+                CoreMatchers.equalTo(HttpURLConnection.HTTP_NOT_FOUND)
+            );
     }
 
     /**
@@ -154,13 +157,13 @@ public final class RestTesterTest {
     @Test
     public void assertsHttpResponseBody() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectMethod(CoreMatchers.equalTo(RestTester.GET))
             .returnBody("some text")
             .mock();
         RestTester
             .start(container.home())
             .get()
-            .assertBody(Matchers.containsString("some"))
+            .assertBody(CoreMatchers.containsString("some"))
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
@@ -171,7 +174,7 @@ public final class RestTesterTest {
     @Test
     public void assertsHttpHeaders() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectMethod(CoreMatchers.equalTo(RestTester.GET))
             .returnHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN)
             .mock();
         RestTester
@@ -180,7 +183,7 @@ public final class RestTesterTest {
             .assertStatus(HttpURLConnection.HTTP_OK)
             .assertHeader(
                 HttpHeaders.CONTENT_TYPE,
-                Matchers.containsString(MediaType.TEXT_PLAIN)
+                CoreMatchers.containsString(MediaType.TEXT_PLAIN)
             );
     }
 
@@ -191,13 +194,13 @@ public final class RestTesterTest {
     @Test
     public void assertsResponseBodyWithXpathQuery() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(RestTester.GET))
-            .returnBody("<root><a>works fine for me</a></root>")
+            .expectMethod(CoreMatchers.equalTo(RestTester.GET))
+            .returnBody("<root><a>\u0443\u0440\u0430!</a></root>")
             .mock();
         RestTester
             .start(container.home())
             .get()
-            .assertXPath("/root/a[contains(.,'works')]")
+            .assertXPath("/root/a[contains(.,'!')]")
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
@@ -211,8 +214,25 @@ public final class RestTesterTest {
         final String regex = "^http://localhost:\\d+/$";
         MatcherAssert.assertThat(
             uri.toString().matches(regex),
-            Matchers.describedAs(uri.toString(), Matchers.is(true))
+            CoreMatchers.describedAs(uri.toString(), CoreMatchers.is(true))
         );
+    }
+
+    /**
+     * RestTester can handle unicode.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    @org.junit.Ignore
+    public void acceptsUnicodeInXml() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .returnBody("\u0443\u0440\u0430!")
+            .mock();
+        RestTester
+            .start(UriBuilder.fromUri(container.home()).path("/abcde"))
+            .get()
+            .assertBody(CoreMatchers.containsString("\u0443\u0440\u0430"))
+            .assertBody(CoreMatchers.containsString("!"));
     }
 
 }

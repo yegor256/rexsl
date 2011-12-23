@@ -67,6 +67,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <!-- Jersey core lib -->
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-core</artifactId>
+            <version since="13 Dec 2011">1.11</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <!-- JAXB 2.0 API. -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
@@ -80,23 +87,23 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!--
-            This dependency is required in "compile" scope for org.hamcrest.*
-            classes.
-            -->
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <!--
-            XML matchers, in "compile" scope for hasXPath() matchers.
-            @link http://code.google.com/p/xml-matchers/
-            -->
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.xmlmatchers</groupId>
             <artifactId>xml-matchers</artifactId>
-            <version since="26 Jun 2011">0.10</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
         <dependency>
             <!--
@@ -137,11 +144,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <!-- Groovy engine. -->
