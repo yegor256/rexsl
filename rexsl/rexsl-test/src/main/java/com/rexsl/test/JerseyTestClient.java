@@ -65,6 +65,14 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
+    public URI uri() {
+        return this.home;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TestClient header(final String name, final String value) {
         Logger.debug(this, "#header('%s', '%s'): set", name, value);
         this.builder.header(name, value);
