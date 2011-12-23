@@ -42,7 +42,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class ClientResponseDecor implements Formattable {
+final class ClientResponseDecor implements Formattable {
 
     /**
      * The response.
@@ -50,11 +50,18 @@ public final class ClientResponseDecor implements Formattable {
     private final transient ClientResponse response;
 
     /**
+     * Its body.
+     */
+    private final transient String body;
+
+    /**
      * Public ctor.
      * @param resp The response
+     * @param text Body text
      */
-    public ClientResponseDecor(final Object resp) {
-        this.response = (ClientResponse) resp;
+    public ClientResponseDecor(final ClientResponse resp, final String text) {
+        this.response = resp;
+        this.body = text;
     }
 
     /**
@@ -69,12 +76,13 @@ public final class ClientResponseDecor implements Formattable {
             : this.response.getHeaders().entrySet()) {
             builder.append(
                 String.format(
-                    "\t%s: %s%n",
+                    "\t%s: %s\n",
                     header.getKey(),
                     StringUtils.join(header.getValue(), ", ")
                 )
             );
         }
+        builder.append("\n").append(this.body).append("\n\n");
         formatter.format("%s", builder.toString());
     }
 

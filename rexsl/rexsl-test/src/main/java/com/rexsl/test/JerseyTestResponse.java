@@ -89,7 +89,7 @@ final class JerseyTestResponse implements TestResponse {
             Logger.format(
                 "XPath '%s' not found in:\n%s",
                 query,
-                new ClientResponseDecor(this.response)
+                new ClientResponseDecor(this.response, this.body)
             ),
             links,
             Matchers.hasSize(1)
@@ -191,7 +191,7 @@ final class JerseyTestResponse implements TestResponse {
             Logger.format(
                 "%s:\n%s",
                 reason,
-                new ClientResponseDecor(this.response)
+                new ClientResponseDecor(this.response, this.body)
             )
         );
     }
@@ -205,7 +205,7 @@ final class JerseyTestResponse implements TestResponse {
             Logger.format(
                 "HTTP status code has to be equal to %d in:\n%s",
                 status,
-                new ClientResponseDecor(this.response)
+                new ClientResponseDecor(this.response, this.body)
             ),
             status,
             Matchers.equalTo(this.getStatus())
@@ -221,7 +221,7 @@ final class JerseyTestResponse implements TestResponse {
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP status code has to match in:\n%s",
-                new ClientResponseDecor(this.response)
+                new ClientResponseDecor(this.response, this.body)
             ),
             this.getStatus(),
             matcher
@@ -238,7 +238,7 @@ final class JerseyTestResponse implements TestResponse {
             Logger.format(
                 "HTTP header '%s' has to match in:\n%s",
                 name,
-                new ClientResponseDecor(this.response)
+                new ClientResponseDecor(this.response, this.body)
             ),
             this.response.getHeaders().getFirst((String) name),
             matcher
@@ -254,7 +254,7 @@ final class JerseyTestResponse implements TestResponse {
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP response content has to match in:\n%s",
-                new ClientResponseDecor(this.response)
+                new ClientResponseDecor(this.response, this.body)
             ),
             this.getBody(),
             matcher
@@ -275,7 +275,7 @@ final class JerseyTestResponse implements TestResponse {
             Logger.format(
                 "XPath '%s' has to exist in:\n%s",
                 xpath,
-                new ClientResponseDecor(this.response)
+                new ClientResponseDecor(this.response, this.body)
             ),
             this.document(),
             Matchers.hasXPath(xpath, context)
