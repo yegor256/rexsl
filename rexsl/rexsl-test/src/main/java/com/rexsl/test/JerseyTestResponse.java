@@ -33,7 +33,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
 import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
@@ -41,12 +40,12 @@ import javax.ws.rs.core.UriBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xmlmatchers.XmlMatchers;
 import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
@@ -278,8 +277,8 @@ final class JerseyTestResponse implements TestResponse {
                 xpath,
                 new ClientResponseDecor(this.response)
             ),
-            XhtmlConverter.the(this.getBody()),
-            XmlMatchers.hasXPath(xpath, context)
+            this.document(),
+            Matchers.hasXPath(xpath, context)
         );
         return this;
     }
@@ -293,7 +292,7 @@ final class JerseyTestResponse implements TestResponse {
         try {
             document = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder()
-                .parse(new ByteArrayInputStream(this.getBody().getBytes()));
+                .parse(IOUtils.toInputStream(this.getBody(), "UTF-8"));
         } catch (java.io.IOException ex) {
             throw new IllegalArgumentException(ex);
         } catch (javax.xml.parsers.ParserConfigurationException ex) {

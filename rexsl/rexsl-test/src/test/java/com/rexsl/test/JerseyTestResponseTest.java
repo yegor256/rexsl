@@ -48,7 +48,7 @@ public final class JerseyTestResponseTest {
     @Test
     public void findsDocumentNodesWithXpath() throws Exception {
         final ClientResponse resp = new ClientResponseMocker()
-            .withEntity("<r><a>A</a><a>B</a></r>")
+            .withEntity("<r><a>\u0443\u0440\u0430!</a><a>B</a></r>")
             .mock();
         final TestResponse response = new JerseyTestResponse(resp);
         MatcherAssert.assertThat(
@@ -57,8 +57,22 @@ public final class JerseyTestResponseTest {
         );
         MatcherAssert.assertThat(
             response.xpath("/r/a/text()"),
-            Matchers.hasItem("A")
+            Matchers.hasItem("\u0443\u0440\u0430!")
         );
+    }
+
+    /**
+     * TestResponse can assert with XPath.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void assertsWithXpath() throws Exception {
+        final ClientResponse resp = new ClientResponseMocker()
+            .withEntity("<x><y>\u0443\u0440\u0430!</y></x>")
+            .mock();
+        new JerseyTestResponse(resp)
+            .assertXPath("//y[.='\u0443\u0440\u0430!']")
+            .assertXPath("/x/y[contains(.,'\u0430')]");
     }
 
 }
