@@ -50,7 +50,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface XmlSchema {
+public @interface Schema {
 
     /**
      * Get it's value.
