@@ -55,7 +55,7 @@ final class StringSource extends DOMSource {
     public StringSource(final String text) {
         super();
         this.xml = text;
-        this.setNode(this.toDocument(text));
+        this.setNode(StringSource.toDocument(text));
     }
 
     /**
@@ -71,7 +71,7 @@ final class StringSource extends DOMSource {
      * @param text The content of the document
      * @return The DOM document
      */
-    private Document toDocument(final String text) {
+    private static Document toDocument(final String text) {
         final DocumentBuilderFactory factory =
             DocumentBuilderFactory.newInstance();
         try {

@@ -35,6 +35,7 @@ import java.net.URLEncoder;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -57,7 +58,7 @@ public final class RestTesterTest {
             .returnBody("works fine")
             .mock();
         RestTester
-            .start(UriBuilder.fromUri(container.home()).path("/foo").build())
+            .start(UriBuilder.fromUri(container.home()).path("/foo"))
             .get()
             .assertBody(Matchers.containsString("fine"))
             .assertBody(Matchers.containsString("works"))
@@ -93,12 +94,8 @@ public final class RestTesterTest {
             .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(RestTester.GET))
             .mock();
-        final URI uri = UriBuilder
-            .fromUri(container.home())
-            .queryParam(name, value)
-            .build();
         RestTester
-            .start(uri)
+            .start(UriBuilder.fromUri(container.home()).queryParam(name, value))
             .get()
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
@@ -202,6 +199,20 @@ public final class RestTesterTest {
             .get()
             .assertXPath("/root/a[contains(.,'works')]")
             .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can work with URL returned by ContainerMocker.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void mockedUrlIsInCorrectFormat() throws Exception {
+        final URI uri = new ContainerMocker().mock().home();
+        final String regex = "^http://localhost:\\d+/$";
+        MatcherAssert.assertThat(
+            uri.toString().matches(regex),
+            Matchers.describedAs(uri.toString(), Matchers.is(true))
+        );
     }
 
 }
