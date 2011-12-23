@@ -94,10 +94,9 @@ final class JerseyTestResponse implements TestResponse {
         if (nodes.getLength() != 1) {
             throw new AssertionError(
                 Logger.format(
-                    // @checkstyle LineLength (1 line)
-                    "XPath '%s' not found in:\n%[com.rexsl.test.ClientResponseDecor]s",
+                    "XPath '%s' not found in:\n%s",
                     xpath,
-                    this.response
+                    new ClientResponseDecor(this.response)
                 )
             );
         }
@@ -166,10 +165,9 @@ final class JerseyTestResponse implements TestResponse {
     public TestResponse assertStatus(final int status) throws IOException {
         MatcherAssert.assertThat(
             Logger.format(
-                // @checkstyle LineLength (1 line)
-                "HTTP status code has to be equal to %d in:\n%[com.rexsl.test.ClientResponseDecor]s",
+                "HTTP status code has to be equal to %d in:\n%s",
                 status,
-                this.response
+                new ClientResponseDecor(this.response)
             ),
             status,
             Matchers.equalTo(this.getStatus())
@@ -185,9 +183,8 @@ final class JerseyTestResponse implements TestResponse {
         throws IOException {
         MatcherAssert.assertThat(
             Logger.format(
-                // @checkstyle LineLength (1 line)
-                "HTTP status code has to match in:\n%[com.rexsl.test.ClientResponseDecor]s",
-                this.response
+                "HTTP status code has to match in:\n%s",
+                new ClientResponseDecor(this.response)
             ),
             this.getStatus(),
             matcher
@@ -203,10 +200,9 @@ final class JerseyTestResponse implements TestResponse {
         final Matcher<String> matcher) throws IOException {
         MatcherAssert.assertThat(
             Logger.format(
-                // @checkstyle LineLength (1 line)
-                "HTTP header '%s' has to match in:\n%[com.rexsl.test.ClientResponseDecor]s",
+                "HTTP header '%s' has to match in:\n%s",
                 name,
-                this.response
+                new ClientResponseDecor(this.response)
             ),
             this.response.getHeaders().getFirst(name),
             matcher
@@ -222,9 +218,8 @@ final class JerseyTestResponse implements TestResponse {
         throws IOException {
         MatcherAssert.assertThat(
             Logger.format(
-                // @checkstyle LineLength (1 line)
-                "HTTP response content has to match in:\n%[com.rexsl.test.ClientResponseDecor]s",
-                this.response
+                "HTTP response content has to match in:\n%s",
+                new ClientResponseDecor(this.response)
             ),
             this.getBody(),
             matcher
@@ -243,10 +238,9 @@ final class JerseyTestResponse implements TestResponse {
             .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
         MatcherAssert.assertThat(
             Logger.format(
-                // @checkstyle LineLength (1 line)
-                "XPath '%s' has to exist in:\n%[com.rexsl.test.ClientResponseDecor]s",
+                "XPath '%s' has to exist in:\n%s",
                 xpath,
-                this.response
+                new ClientResponseDecor(this.response)
             ),
             XhtmlConverter.the(this.getBody()),
             XmlMatchers.hasXPath(xpath, context)
