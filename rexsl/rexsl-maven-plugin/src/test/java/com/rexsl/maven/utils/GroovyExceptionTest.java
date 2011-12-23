@@ -29,51 +29,28 @@
  */
 package com.rexsl.maven.utils;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+
 /**
- * Groovy-generated exception.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * Test case for {@link GroovyException}.
+ * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class GroovyException extends Exception {
+public final class GroovyExceptionTest {
 
     /**
-     * Default ctor.
+     * GroovyException can be instantiated.
+     * @throws Exception If something goes wrong
      */
-    public GroovyException() {
-        super();
-    }
-
-    /**
-     * Ctor.
-     * @param cause The cause
-     */
-    public GroovyException(final Throwable cause) {
-        super(cause);
-    }
-
-    /**
-     * Ctor.
-     * @param cause The cause
-     * @param args Agruments for String.format()
-     */
-    public GroovyException(final String cause, final Object... args) {
-        super(GroovyException.toText(cause, args));
-    }
-
-    /**
-     * To message.
-     * @param cause The cause
-     * @param args Agruments for String.format()
-     */
-    private static String toText(final String cause, final Object... args) {
-        String text;
-        if (args.length > 0) {
-            text = String.format(cause, args);
-        } else {
-            text = cause;
-        }
-        return text;
+    @Test
+    public void instantiatedWithString() throws Exception {
+        final Exception exp = new GroovyException("%?");
+        MatcherAssert.assertThat(
+            exp.getMessage(),
+            Matchers.containsString("?")
+        );
     }
 
 }
