@@ -230,15 +230,14 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertHeader(final String name,
-        final Matcher<String> matcher) {
+    public TestResponse assertHeader(final String name, final Matcher matcher) {
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP header '%s' has to match in:\n%s",
                 name,
                 new ClientResponseDecor(this.response)
             ),
-            this.response.getHeaders().getFirst(name),
+            this.response.getHeaders().getFirst((String) name),
             matcher
         );
         return this;

@@ -111,7 +111,7 @@ public interface TestResponse {
      * @param matcher The matcher to use
      * @return This object
      */
-    TestResponse assertHeader(String name, Matcher<String> matcher);
+    TestResponse assertHeader(String name, Matcher matcher);
 
     /**
      * Verifies HTTP response body content against provided matcher.
