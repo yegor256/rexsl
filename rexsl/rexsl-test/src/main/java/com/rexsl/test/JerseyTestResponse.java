@@ -183,6 +183,20 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
+    public void fail(final String reason) {
+        throw new AssertionError(
+            Logger.format(
+                "%s:\n%s",
+                reason,
+                new ClientResponseDecor(this.response)
+            )
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TestResponse assertStatus(final int status) {
         MatcherAssert.assertThat(
             Logger.format(

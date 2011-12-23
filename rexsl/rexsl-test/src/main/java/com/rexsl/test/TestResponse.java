@@ -85,6 +85,12 @@ public interface TestResponse {
     MultivaluedMap<String, String> getHeaders();
 
     /**
+     * Fail and report a problem.
+     * @param reason Reason of failure
+     */
+    void fail(String reason);
+
+    /**
      * Verifies HTTP response status code against the provided absolute value,
      * and throws {@link AssertionError} in case of mismatch.
      * @param status Expected status code
