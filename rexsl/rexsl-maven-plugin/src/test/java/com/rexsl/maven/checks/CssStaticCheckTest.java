@@ -36,16 +36,16 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link StaticCssCheck}.
+ * Test case for {@link CssStaticCheck}.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
  * @todo #56 Implement CSS stylesheet validation and enable all test methods in
  *  this class.
  */
-public final class StaticCssCheckTest {
+public final class CssStaticCheckTest {
 
     /**
-     * StaticCssCheck can validate correct CSS file.
+     * CssStaticCheck can validate correct CSS file.
      * @throws Exception If something goes wrong
      */
     @org.junit.Ignore
@@ -58,7 +58,7 @@ public final class StaticCssCheckTest {
     }
 
     /**
-     * StaticCssCheck can validate incorrect CSS file.
+     * CssStaticCheck can validate incorrect CSS file.
      * @throws Exception If something goes wrong
      */
     @org.junit.Ignore
