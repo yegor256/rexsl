@@ -31,8 +31,6 @@ package com.rexsl.test;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlmatchers.XmlMatchers;
-import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
  * Test case for {@link XhtmlConverter}.
@@ -47,10 +45,10 @@ public final class XhtmlConverterTest {
      */
     @Test
     public void convertsTextToXml() throws Exception {
-        final String text = "<html><body><p>test</p></body></html>";
+        final String text = "<html><body><p>\u0443</p></body></html>";
         Assert.assertThat(
             XhtmlConverter.the(text),
-            XmlMatchers.hasXPath("/html/body/p[.='test']")
+            XhtmlMatchers.hasXPath("/html/body/p[.='\u0443']")
         );
     }
 
@@ -63,7 +61,7 @@ public final class XhtmlConverterTest {
         final String text = "<a>\u8514  &#8250;</a>";
         Assert.assertThat(
             XhtmlConverter.the(text),
-            XmlMatchers.hasXPath("/a")
+            XhtmlMatchers.hasXPath("/a")
         );
     }
 
@@ -76,7 +74,7 @@ public final class XhtmlConverterTest {
         final String text = "<?xml version='1.0'?><?pi name='foo'?><a/>";
         Assert.assertThat(
             XhtmlConverter.the(text),
-            XmlMatchers.hasXPath(
+            XhtmlMatchers.hasXPath(
                 "/processing-instruction('pi')[contains(.,'foo')]"
             )
         );
@@ -94,20 +92,18 @@ public final class XhtmlConverterTest {
             + "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'"
             + " 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>"
             + "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>"
-            + "<body><p>test</p></body>"
+            + "<body><p>\u0443\u0440\u0430!</p></body>"
             + "</html>";
         final String[] paths = new String[] {
             "/*",
             "//*",
-            "/xhtml:html/xhtml:body/xhtml:p[.='test']",
-            "//xhtml:p[contains(., 't')]",
+            "/xhtml:html/xhtml:body/xhtml:p[.='\u0443\u0440\u0430!']",
+            "//xhtml:p[contains(., '\u0443')]",
         };
-        final SimpleNamespaceContext context = new SimpleNamespaceContext()
-            .withBinding("xhtml", "http://www.w3.org/1999/xhtml");
         for (String path : paths) {
             Assert.assertThat(
                 XhtmlConverter.the(text),
-                XmlMatchers.hasXPath(path, context)
+                XhtmlMatchers.hasXPath(path)
             );
         }
     }

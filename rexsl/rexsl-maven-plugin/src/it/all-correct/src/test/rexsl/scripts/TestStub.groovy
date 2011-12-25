@@ -37,7 +37,7 @@ import org.hamcrest.Matchers
 // but during tests it should be available because of "src/test/java/com/rexsl/foo/Stub.java"
 // class and its test resources
 RestTester.start(UriBuilder.fromUri(rexsl.home).path('/stub'))
-    .get()
+    .get('reading stub')
     .assertStatus(HttpURLConnection.HTTP_OK)
     // This text is from src/test/resources/com/rexsl/foo/stub.txt
     .assertBody(Matchers.containsString('stubbing works fine!'))

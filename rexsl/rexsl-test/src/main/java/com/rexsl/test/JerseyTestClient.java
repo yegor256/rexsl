@@ -65,6 +65,14 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
+    public URI uri() {
+        return this.home;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TestClient header(final String name, final String value) {
         Logger.debug(this, "#header('%s', '%s'): set", name, value);
         this.builder.header(name, value);
@@ -75,35 +83,35 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse get() throws Exception {
-        return this.method(RestTester.GET, "");
+    public TestResponse get(final String desc) {
+        return this.method(RestTester.GET, "", desc);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public TestResponse post(final String body) throws Exception {
-        return this.method(RestTester.POST, body);
+    public TestResponse post(final String desc, final String body) {
+        return this.method(RestTester.POST, body, desc);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public TestResponse put(final String body) throws Exception {
-        return this.method(RestTester.PUT, body);
+    public TestResponse put(final String desc, final String body) {
+        return this.method(RestTester.PUT, body, desc);
     }
 
     /**
      * Run this method.
      * @param name The name of HTTP method
      * @param body Body of HTTP request
+     * @param desc Description of the operation, for logging
      * @return The response
-     * @throws Exception If some problem inside
      */
-    public TestResponse method(final String name, final String body)
-        throws Exception {
+    public TestResponse method(final String name, final String body,
+        final String desc) {
         final long start = System.currentTimeMillis();
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
@@ -113,9 +121,10 @@ final class JerseyTestClient implements TestClient {
         }
         Logger.info(
             this,
-            "#%s('%s'): completed in %dms [%d %s]: %s",
+            "#%s('%s'): \"%s\" completed in %dms [%d %s]: %s",
             name,
             this.home.getPath(),
+            desc,
             System.currentTimeMillis() - start,
             resp.getStatus(),
             resp.getClientResponseStatus(),

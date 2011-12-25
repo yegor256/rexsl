@@ -44,8 +44,6 @@ import javax.ws.rs.core.UriBuilder;
  * import java.net.HttpURLConnection
  * import javax.ws.rs.core.HttpHeaders
  * import javax.ws.rs.core.MediaType
- * import org.xmlmatchers.XmlMatchers
- * import org.hamcrest.Matchers
  * new RestTester.start(UriBuilder.fromUri(rexsl.home).path('/{id}').build(id))
  *   .header(HttpHeaders.USER_AGENT, 'Safari 4')
  *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)

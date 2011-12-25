@@ -30,16 +30,12 @@
 package com.rexsl.foo.xhtml
 
 import com.rexsl.test.XhtmlConverter
+import com.rexsl.test.XhtmlMatchers
 import org.junit.Assert
 import org.junit.matchers.JUnitMatchers
-import org.xmlmatchers.XmlMatchers
 
 Assert.assertThat(rexsl.document, JUnitMatchers.containsString('hello'))
 Assert.assertThat(
     XhtmlConverter.the(rexsl.document),
-    XmlMatchers.hasXPath(
-        "//x:input[contains(@value,'hello')]",
-        new org.xmlmatchers.namespace.SimpleNamespaceContext()
-        .withBinding('x', 'http://www.w3.org/1999/xhtml')
-    )
+    XhtmlMatchers.hasXPath("//xhtml:input[contains(@value,'hello')]")
 )

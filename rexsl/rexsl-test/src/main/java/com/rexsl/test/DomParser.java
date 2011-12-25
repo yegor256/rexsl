@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,25 +26,57 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.test;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.commons.io.IOUtils;
+import org.w3c.dom.Document;
+
+/**
+ * Implementation of {@link TestResponse}.
  *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    xmlns="http://www.w3.org/1999/xhtml"
-    version="2.0" exclude-result-prefixes="xs xsl xhtml">
+ */
+final class DomParser {
 
-    <xsl:output method="xhtml"
-        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-        doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" />
+    /**
+     * The XML as a text.
+     */
+    private final transient String xml;
 
-    <xsl:template match="/" xml:lang="en">
-        <html>
-            <p>
-                <xsl:value-of select="/page" />
-            </p>
-        </html>
-    </xsl:template>
+    /**
+     * Public ctor.
+     * @param txt The XML in text
+     */
+    public DomParser(final String txt) {
+        this.xml = txt;
+    }
 
-</xsl:stylesheet>
+    /**
+     * Get document of body.
+     * @return The document
+     */
+    public Document document() {
+        Document doc;
+        try {
+            final DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+            // @checkstyle LineLength (1 line)
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            factory.setNamespaceAware(true);
+            doc = factory
+                .newDocumentBuilder()
+                .parse(IOUtils.toInputStream(this.xml, "UTF-8"));
+        } catch (java.io.IOException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (org.xml.sax.SAXException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        return doc;
+    }
+
+}

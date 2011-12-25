@@ -30,111 +30,73 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.utils.PortReserver;
-import java.io.File;
+import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 
 /**
- * XhtmlOutputCheck test case.
+ * Test case for {@link XhtmlOutputCheck}.
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
 public final class XhtmlOutputCheckTest {
 
     /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
-    }
-
-    /**
-     * Validate correct XML+XSL transformation.
+     * XhtmlOutputCheck can validate correct XML+XSL transformation.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testTruePositiveValidation() throws Exception {
-        final File basedir = this.temp.newFolder("base-1");
-        // @checkstyle MultipleStringLiterals (4 lines)
-        Utils.copy(basedir, "src/main/webapp/xsl/layout.xsl");
-        Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
-        Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
-        Utils.copy(basedir, "src/test/rexsl/xhtml/index.groovy");
-        final Environment env = Mockito.mock(Environment.class);
-        Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(new PortReserver().port()).when(env).port();
-        Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
+    public void validatesPositiveSituation() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            // @checkstyle MultipleStringLiterals (4 lines)
+            .withFile("target/webdir/xsl/layout.xsl")
+            .withFile("target/webdir/xsl/Home.xsl")
+            .withFile("src/test/rexsl/xml/index.xml")
+            .withFile("src/test/rexsl/xhtml/index.groovy")
+            .mock();
         MatcherAssert.assertThat(
-            new XhtmlOutputCheck().validate(env),
-            Matchers.is(true)
+            "all tests pass fine",
+            new XhtmlOutputCheck().validate(env)
         );
     }
 
     /**
-     * Validate incorrect XML+XSL transformation (layout file is missed).
+     * XhtmlOutputCheck can validate incorrect XML+XSL transformation
+     * (layout file is missed).
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testFalsePositiveValidation() throws Exception {
-        final File basedir = this.temp.newFolder("base-2");
-        // @checkstyle MultipleStringLiterals (2 lines)
-        Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
-        Utils.copy(basedir, "src/test/rexsl/xml/index.xml");
-        final Environment env = Mockito.mock(Environment.class);
-        Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
+    public void validatesWithMissedLayoutFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            // @checkstyle MultipleStringLiterals (4 lines)
+            .withFile("target/webdir/xsl/Home.xsl")
+            .withFile("src/test/rexsl/xml/index.xml")
+            .mock();
         MatcherAssert.assertThat(
-            new XhtmlOutputCheck().validate(env),
-            Matchers.is(false)
+            "missed layout file situation is detected",
+            !new XhtmlOutputCheck().validate(env)
         );
     }
 
     /**
-     * Validate incorrect XHTML.
+     * XhtmlOutputCheck can validate incorrect XHTML.
      * @throws Exception If something goes wrong
      * @todo #11 Implement XHTML validation in XhtmlOutputCheck class.
      */
     @org.junit.Ignore
     @Test
-    public void testIncorrectXHTMLValidation() throws Exception {
-        final File basedir = this.temp.newFolder("base-3");
-        // @checkstyle MultipleStringLiterals (4 lines)
-        Utils.copy(basedir, "src/main/webapp/xsl/layout.xsl");
-        Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
-        Utils.copy(basedir, "src/test/rexsl/xml/invalidindex.xml");
-        Utils.copy(basedir, "src/test/rexsl/xhtml/invalidindex.groovy");
-        final Environment env = Mockito.mock(Environment.class);
-        Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(new PortReserver().port()).when(env).port();
-        Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
+    public void validatesIncorrectXhtml() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            // @checkstyle MultipleStringLiterals (4 lines)
+            .withFile("target/webdir/xsl/layout.xsl")
+            .withFile("target/webdir/xsl/Home.xsl")
+            .withFile("src/test/rexsl/xml/invalid-index.xml")
+            .withFile("src/test/rexsl/xhtml/invalid-index.groovy")
+            .mock();
         MatcherAssert.assertThat(
-            new XhtmlOutputCheck().validate(env),
-            Matchers.is(false)
+            "non-valid XHTML situation is detected",
+            !new XhtmlOutputCheck().validate(env)
         );
-    }
-
-    /**
-     * Build webdir out of basedir.
-     * @param basedir The basedir
-     * @return The webdir
-     */
-    private File webdir(final File basedir) {
-        return new File(basedir, "src/main/webapp");
     }
 
 }

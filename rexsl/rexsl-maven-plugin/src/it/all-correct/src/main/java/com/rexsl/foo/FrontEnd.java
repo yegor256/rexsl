@@ -30,6 +30,7 @@
 package com.rexsl.foo;
 
 import com.ymock.util.Logger;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -53,6 +54,7 @@ public final class FrontEnd {
 
     @POST
     @Produces(MediaType.TEXT_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Home submit(@FormParam("text") final String text) {
         if (text == null) {
             throw new IllegalArgumentException("Form param 'text' expected");

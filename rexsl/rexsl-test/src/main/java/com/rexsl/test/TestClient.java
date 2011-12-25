@@ -29,6 +29,8 @@
  */
 package com.rexsl.test;
 
+import java.net.URI;
+
 /**
  * A universal class for in-container testing of your web application.
  *
@@ -37,6 +39,12 @@ package com.rexsl.test;
  * @checkstyle ClassDataAbstractionCoupling (200 lines)
  */
 public interface TestClient {
+
+    /**
+     * Destination of the client.
+     * @return This destination
+     */
+    URI uri();
 
     /**
      * Set request header.
@@ -48,25 +56,25 @@ public interface TestClient {
 
     /**
      * Execute GET request.
+     * @param description Short description of the operation
      * @return This object
-     * @throws Exception If something goes wrong
      */
-    TestResponse get() throws Exception;
+    TestResponse get(String description);
 
     /**
      * Execute POST request.
+     * @param description Short description of the operation
      * @param body Request entity as a string
      * @return This object
-     * @throws Exception If something goes wrong
      */
-    TestResponse post(String body) throws Exception;
+    TestResponse post(String description, String body);
 
     /**
      * Execute PUT request.
+     * @param description Short description of the operation
      * @param body Request entity as a string
      * @return This object
-     * @throws Exception If something goes wrong
      */
-    TestResponse put(String body) throws Exception;
+    TestResponse put(String description, String body);
 
 }

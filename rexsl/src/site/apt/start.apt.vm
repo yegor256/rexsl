@@ -127,8 +127,8 @@ ReXSL, Quick Start Guide
     <dependency>
       <!-- Matchers for JUnit from http://code.google.com/p/hamcrest/ -->
       <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-all</artifactId>
-      <version>1.1</version>
+      <artifactId>hamcrest-library</artifactId>
+      <version>1.2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -142,7 +142,7 @@ ReXSL, Quick Start Guide
       <!-- Unit testing framework from http://www.junit.org/ -->
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.2</version>
+      <version>4.10</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -156,7 +156,6 @@ ReXSL, Quick Start Guide
         <executions>
           <execution>
             <goals>
-              <goal>package</goal>
               <goal>check</goal>
             </goals>
           </execution>
@@ -191,8 +190,6 @@ ReXSL, Quick Start Guide
   <filter-mapping>
     <filter-name>XsltFilter</filter-name>
     <servlet-name>RestfulServlet</servlet-name>
-    <dispatcher>REQUEST</dispatcher>
-    <dispatcher>ERROR</dispatcher>
   </filter-mapping>
   <servlet>
     <servlet-name>RestfulServlet</servlet-name>
@@ -283,17 +280,13 @@ public class HomeTest {
 
 +--
 import com.rexsl.test.XhtmlConverter
+import com.rexsl.test.XhtmlMatchers
 import org.hamcrest.Matchers
 import org.junit.Assert
-import org.xmlmatchers.XmlMatchers
-import org.xmlmatchers.namespace.SimpleNamespaceContext
 Assert.assertThat(rexsl.document, Matchers.containsString('say hello'))
 Assert.assertThat(
     XhtmlConverter.the(rexsl.document),
-    XmlMatchers.hasXPath(
-        "//x:div[contains(.,'say hello')]",
-        new SimpleNamespaceContext().withBinding("x", "http://www.w3.org/1999/xhtml")
-    )
+    XhtmlMatchers.hasXPath("//xhtml:div[contains(.,'say hello')]")
 )
 +--
 
@@ -308,7 +301,7 @@ import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
 RestTester.start(rexsl.home)
-  .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
+  .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
   .header(HttpHeaders.USER_AGENT, 'Safari')
   .get()
   .assertStatus(HttpURLConnection.HTTP_OK)

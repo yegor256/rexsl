@@ -27,30 +27,62 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.test;
 
-import org.apache.maven.monitor.logging.DefaultLog;
-import org.apache.maven.plugin.logging.Log;
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
-import org.slf4j.impl.StaticLoggerBinder;
+import javax.ws.rs.core.UriBuilder;
+import org.mockito.Mockito;
 
 /**
- * Start logging to a mock Maven log.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * Mocker of {@link TestClient}.
+ * @author Yegor Bugayenko (yegor@netbout.com)
  * @version $Id$
  */
-public final class LogStarter {
+public final class TestClientMocker {
 
     /**
-     * Start logging.
-     * @throws Exception If something goes wrong inside
+     * Mock.
      */
-    public void start() throws Exception {
-        final Log log = new DefaultLog(
-            new ConsoleLogger(Logger.LEVEL_INFO, "test")
-        );
-        StaticLoggerBinder.getSingleton().setMavenLog(log);
+    private final transient TestClient client = Mockito.mock(TestClient.class);
+
+    /**
+     * Public ctor.
+     */
+    public TestClientMocker() {
+        this.withUri("http://localhost");
+        this.withResponse(new TestResponseMocker().mock());
+    }
+
+    /**
+     * Return this uri.
+     * @param uri The uri
+     * @return This object
+     */
+    public TestClientMocker withUri(final String uri) {
+        Mockito.doReturn(UriBuilder.fromUri(uri).build())
+            .when(this.client).uri();
+        return this;
+    }
+
+    /**
+     * Return this response.
+     * @param resp The response
+     * @return This object
+     */
+    public TestClientMocker withResponse(final TestResponse resp) {
+        Mockito.doReturn(resp).when(this.client).get(Mockito.anyString());
+        Mockito.doReturn(resp).when(this.client)
+            .post(Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(resp).when(this.client)
+            .put(Mockito.anyString(), Mockito.anyString());
+        return this;
+    }
+
+    /**
+     * Mock it.
+     * @return Mocked class
+     */
+    public TestClient mock() {
+        return this.client;
     }
 
 }

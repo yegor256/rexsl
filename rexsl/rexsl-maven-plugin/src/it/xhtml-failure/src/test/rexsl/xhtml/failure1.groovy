@@ -29,12 +29,12 @@
  */
 
 import com.rexsl.test.XhtmlConverter
+import com.rexsl.test.XhtmlMatchers
 import org.junit.Assert
 import org.junit.matchers.JUnitMatchers
-import org.xmlmatchers.XmlMatchers
 
 Assert.assertThat(rexsl.document, JUnitMatchers.containsString('say hello'))
 Assert.assertThat(
     XhtmlConverter.the(rexsl.document),
-    XmlMatchers.hasXPath("//div[contains(.,'say hello')]")
+    XhtmlMatchers.hasXPath("//div[contains(.,'say hello')]")
 )

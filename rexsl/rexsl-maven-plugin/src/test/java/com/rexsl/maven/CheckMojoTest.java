@@ -34,8 +34,6 @@ import java.util.Set;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -46,7 +44,7 @@ import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.repository.LocalRepository;
 
 /**
- * Test maven plugin single MOJO.
+ * Test case for {@link CheckMojo}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
@@ -55,11 +53,11 @@ import org.sonatype.aether.repository.LocalRepository;
 public final class CheckMojoTest {
 
     /**
-     * Skip option should stop MOJO execution.
+     * CheckMojo can cancel execution on "skip" option.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testSkipOption() throws Exception {
+    public void skipOptionCancelsExecution() throws Exception {
         final CheckMojo mojo = new CheckMojo();
         mojo.setSkip(true);
         final Log log = Mockito.mock(Log.class);
@@ -69,41 +67,40 @@ public final class CheckMojoTest {
     }
 
     /**
-     * Non-WAR projects should be ignored.
+     * CheckMojo rejects non-WAR projects.
      * @throws Exception If something goes wrong inside
      */
     @Test(expected = IllegalStateException.class)
-    public void testNonWarPackaging() throws Exception {
+    public void rejectsNonWarPackaging() throws Exception {
         final CheckMojo mojo = new CheckMojo();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn("jar").when(project).getPackaging();
+        final MavenProject project = new MavenProjectMocker()
+            .withPackaging("jar")
+            .mock();
         mojo.setProject(project);
         mojo.execute();
     }
 
     /**
-     * Validate using a collection of checks.
+     * CheckMojo can validate using a collection of checks.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testWithCollectionOfChecks() throws Exception {
+    public void onePositiveCheckIsExecuted() throws Exception {
         PowerMockito.mockStatic(ChecksProvider.class);
         final ChecksProvider provider =
             PowerMockito.mock(ChecksProvider.class);
         final Set<Check> checks = new HashSet<Check>();
-        final CheckMojoTest.SpyCheck check = new CheckMojoTest.SpyCheck(true);
+        final Check check = new CheckMocker().withResult(true).mock();
         checks.add(check);
         Mockito.doReturn(checks).when(provider).all();
         PowerMockito.whenNew(ChecksProvider.class).withNoArguments()
             .thenReturn(provider);
         final CheckMojo mojo = this.mojo();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn("war").when(project).getPackaging();
+        final MavenProject project = new MavenProjectMocker().mock();
         mojo.setProject(project);
         mojo.execute();
         Mockito.verify(provider).all();
-        final Environment env = check.env();
-        MatcherAssert.assertThat(env, Matchers.notNullValue());
+        Mockito.verify(check).validate(Mockito.any(Environment.class));
     }
 
     /**
@@ -120,42 +117,6 @@ public final class CheckMojoTest {
         mojo.setSession(session);
         mojo.setLog(new SystemStreamLog());
         return mojo;
-    }
-
-    /**
-     * Sample check, used in tests.
-     */
-    private static final class SpyCheck implements Check {
-        /**
-         * Environment.
-         */
-        private transient Environment environment;
-        /**
-         * Status to return, see ctor.
-         */
-        private final transient boolean status;
-        /**
-         * Public ctor.
-         * @param sts Status to return
-         */
-        public SpyCheck(final boolean sts) {
-            this.status = sts;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean validate(final Environment env) {
-            this.environment = env;
-            return this.status;
-        }
-        /**
-         * Environment.
-         * @return Status
-         */
-        public Environment env() {
-            return this.environment;
-        }
     }
 
 }

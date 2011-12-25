@@ -27,39 +27,39 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.test;
 
-import java.io.File;
-import org.apache.commons.io.FileUtils;
+import com.sun.jersey.api.client.ClientResponse;
+import java.util.Formattable;
+import java.util.Formatter;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
- * Supplementary test utils.
- * @author Yegor Bugayenko (yegor@qulice.com)
+ * Test case for {@link ClientResponseDecor}.
+ * @author Yegor Bugayenko (yegor@netbout.com)
  * @version $Id$
  */
-public final class Utils {
+public final class ClientResponseDecorTest {
 
     /**
-     * Private ctor to avoid instantiation.
+     * BoutMocker can assign title to the bout.
+     * @throws Exception If there is some problem inside
      */
-    private Utils() {
-        // intentionally empty
-    }
-
-    /**
-     * Copy resource to file.
-     * @param basedir The directory to copy to
-     * @param name Name of resource
-     * @throws Exception If something goes wrong
-     */
-    public static void copy(final File basedir, final String name)
-        throws Exception {
-        final File dest = new File(basedir, name);
-        dest.getParentFile().mkdirs();
-        FileUtils.copyInputStreamToFile(
-            Utils.class.getResourceAsStream(String.format("basedir/%s", name)),
-            dest
-        );
+    @Test
+    public void canHaveATitleMocked() throws Exception {
+        final ClientResponse response = new ClientResponseMocker()
+            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML)
+            .mock();
+        final Formattable decor =
+            new ClientResponseDecor(response, "works, \u0443\u0440\u0430!");
+        final Appendable dest = Mockito.mock(Appendable.class);
+        final Formatter fmt = new Formatter(dest);
+        decor.formatTo(fmt, 0, 0, 0);
+        Mockito.verify(dest).append(Mockito.contains("Content-Type: text/xml"));
+        Mockito.verify(dest).append(Mockito.contains("\u0443\u0440\u0430"));
     }
 
 }

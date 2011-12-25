@@ -65,9 +65,13 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
      */
     public ByteArrayResponseWrapper(final HttpServletResponse response) {
         super(response);
-        this.writer = new PrintWriter(
-            new OutputStreamWriter(this.stream)
-        );
+        try {
+            this.writer = new PrintWriter(
+                new OutputStreamWriter(this.stream, "UTF-8")
+            );
+        } catch (java.io.UnsupportedEncodingException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**

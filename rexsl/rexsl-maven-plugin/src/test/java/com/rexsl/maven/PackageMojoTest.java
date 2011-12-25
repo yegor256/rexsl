@@ -29,52 +29,42 @@
  */
 package com.rexsl.maven;
 
-import java.io.File;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
 /**
- * Test maven plugin single MOJO.
+ * Test case for {@link PackageMojo}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class PackageMojoTest {
 
     /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Non-WAR projects should be ignored.
+     * PackageMojo can't work with non-WAR projects.
      * @throws Exception If something goes wrong inside
      */
     @Test(expected = IllegalStateException.class)
     public void testNonWarPackaging() throws Exception {
         final PackageMojo mojo = new PackageMojo();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn("jar").when(project).getPackaging();
+        final MavenProject project = new MavenProjectMocker()
+            .withPackaging("jar")
+            .mock();
         mojo.setProject(project);
         mojo.execute();
     }
 
     /**
-     * Normal packaging.
+     * PackageMojo can package artifacts normally.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testNormalPackaging() throws Exception {
-        final File webdir = this.temp.newFolder("webdir");
+    public void packsArtifactsNormally() throws Exception {
+        final Environment env = new EnvironmentMocker().mock();
         final PackageMojo mojo = new PackageMojo();
-        mojo.setWebappDirectory(webdir.getAbsolutePath());
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn("war").when(project).getPackaging();
+        mojo.setWebappDirectory(env.webdir().getAbsolutePath());
+        final MavenProject project = new MavenProjectMocker().mock();
         final Log log = Mockito.mock(Log.class);
         mojo.setLog(log);
         mojo.setProject(project);
