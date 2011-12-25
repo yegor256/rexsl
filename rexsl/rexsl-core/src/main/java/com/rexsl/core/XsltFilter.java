@@ -42,7 +42,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -77,6 +76,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  * @since 0.2
+ * @checkstyle ClassDataAbstractionCoupling (300 lines)
  */
 public final class XsltFilter implements Filter {
 
@@ -157,90 +157,13 @@ public final class XsltFilter implements Filter {
             // we can't change response that is already finished
             return;
         }
-        final String agent = request.getHeader(HttpHeaders.USER_AGENT);
-        final String accept = request.getHeader(HttpHeaders.ACCEPT);
         String page = wrapper.getByteStream().toString(this.ENCODING);
-        // let's check whether we should transform or not
-        // @checkstyle BooleanExpressionComplexity (1 line)
-        final boolean dontTouch =
-            // page is empty
-            page.isEmpty()
-            // it doesn't look like XML
-            || !page.startsWith("<?xml ")
-            // it doesn't refer to any stylesheet
-            || !page.contains("<?xml-stylesheet ")
-            // it's a pure XML client, requesting XML format
-            || this.isXmlExplicitlyRequested(accept)
-            // the browser supports XSTL 2.0
-            || (this.isXsltCapable(agent) && this.acceptsXml(accept));
-        if (dontTouch) {
-            Logger.debug(
-                this,
-                // @checkstyle LineLength (1 line)
-                "#filter('%s': %d chars): User-Agent='%s', Accept='%s', no need to transform",
-                request.getRequestURI(),
-                page.length(),
-                agent,
-                accept
-            );
-        } else {
+        final PageAnalyzer analyzer = new PageAnalyzer(page, request);
+        if (analyzer.needsTransformation()) {
             response.setContentType(MediaType.TEXT_HTML);
             page = this.transform(page);
         }
         response.getOutputStream().write(page.getBytes(this.ENCODING));
-    }
-
-    /**
-     * Check if the XSLT transformation is required on the server side.
-     * @param agent User agent string from the request.
-     * @return If the transformation is needed.
-     * @todo #7 The implementation is very preliminary and should be refined.
-     *  Not all Chrome or Safari versions support XSLT 2.0. We should properly
-     *  parse the "Agent" header and understand versions.
-     */
-    private Boolean isXsltCapable(final String agent) {
-        final Boolean cap = (agent != null)
-            && agent.matches(".*(Chrome|Safari).*");
-        Logger.debug(this, "#isXsltCapable('%s'): %b", agent, cap);
-        return cap;
-    }
-
-    /**
-     * Check if the application/xml MIME type is the only one there.
-     * @param header Accept header string from the request.
-     * @return If the application/XML MIME type is the one
-     */
-    private Boolean isXmlExplicitlyRequested(final String header) {
-        final Boolean requested = (header != null)
-            && (MediaType.APPLICATION_XML.equals(header));
-        Logger.debug(
-            this,
-            "#isXmlExplicitlyRequested('%s'): %b",
-            header,
-            requested
-        );
-        return requested;
-    }
-
-    /**
-     * Check if the "application/xml" MIME type is accepted.
-     * @param header Accept header string from the request.
-     * @return If the application/XML MIME type is present
-     * @todo #7 This implemetation is very very preliminary and should
-     *  be replaced with something more decent. I don't like the idea
-     *  of implementing this parsing functionality here. We should better
-     *  use some library: http://stackoverflow.com/questions/7705979
-     */
-    private Boolean acceptsXml(final String header) {
-        final Boolean accepts = (header != null)
-            && (header.contains(MediaType.APPLICATION_XML));
-        Logger.debug(
-            this,
-            "#acceptsXml('%s'): %b",
-            header,
-            accepts
-        );
-        return accepts;
     }
 
     /**

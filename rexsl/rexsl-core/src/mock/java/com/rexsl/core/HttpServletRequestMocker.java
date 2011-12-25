@@ -32,6 +32,8 @@ package com.rexsl.core;
 import com.rexsl.test.XhtmlConverter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -43,6 +45,8 @@ import javax.ws.rs.Path;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.xmlmatchers.XmlMatchers;
 
 /**
@@ -59,6 +63,12 @@ public final class HttpServletRequestMocker {
         Mockito.mock(HttpServletRequest.class);
 
     /**
+     * All headers.
+     */
+    private final transient ConcurrentMap<String, String> headers =
+        new ConcurrentHashMap<String, String>();
+
+    /**
      * Public ctor.
      */
     public HttpServletRequestMocker() {
@@ -68,6 +78,23 @@ public final class HttpServletRequestMocker {
         Mockito.doReturn("").when(this.request).getServletPath();
         Mockito.doReturn(new StringBuffer("http://localhost/"))
             .when(this.request).getRequestURL();
+        Mockito.doAnswer(
+            new Answer() {
+                public Object answer(final InvocationOnMock invocation) {
+                    final String name = (String) invocation.getArguments()[0];
+                    return HttpServletRequestMocker.this.headers.get(name);
+                }
+            }
+        ).when(this.request).getHeader(Mockito.anyString());
+        Mockito.doAnswer(
+            new Answer() {
+                public Object answer(final InvocationOnMock invocation) {
+                    return Collections.enumeration(
+                        HttpServletRequestMocker.this.headers.keySet()
+                    );
+                }
+            }
+        ).when(this.request).getHeaderNames();
         this.withMethod("GET");
         this.withRequestUri("/");
     }
@@ -80,6 +107,18 @@ public final class HttpServletRequestMocker {
     public HttpServletRequestMocker withRequestUri(final String uri) {
         Mockito.doReturn(uri).when(this.request).getRequestURI();
         Mockito.doReturn(uri).when(this.request).getPathInfo();
+        return this;
+    }
+
+    /**
+     * With this header.
+     * @param name The name of it
+     * @param value The value
+     * @return This object
+     */
+    public HttpServletRequestMocker withHeader(final String name,
+        final String value) {
+        this.headers.put(name, value);
         return this;
     }
 

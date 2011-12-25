@@ -72,7 +72,21 @@ public final class ServletOutputStreamMocker {
                 new Answer() {
                     public Object answer(final InvocationOnMock invocation)
                         throws java.io.IOException {
-                        final byte[] data = (byte[]) invocation.getArguments()[0];
+                        final byte[] data =
+                            (byte[]) invocation.getArguments()[0];
+                        ServletOutputStreamMocker.this.buffer.append(
+                            new String(data, "UTF-8").toCharArray()
+                        );
+                        return null;
+                    }
+                }
+            ).when(this.stream).write((byte[]) Mockito.any());
+            Mockito.doAnswer(
+                new Answer() {
+                    public Object answer(final InvocationOnMock invocation)
+                        throws java.io.IOException {
+                        final byte[] data =
+                            (byte[]) invocation.getArguments()[0];
                         final int off = (Integer) invocation.getArguments()[1];
                         final int len = (Integer) invocation.getArguments()[2];
                         ServletOutputStreamMocker.this.buffer.append(
