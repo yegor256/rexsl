@@ -29,13 +29,8 @@
  */
 package com.rexsl.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -44,7 +39,6 @@ import javax.ws.rs.core.MediaType;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 /**
  * Testing {@link RestfulServlet} class.
@@ -59,21 +53,15 @@ public final class RestfulServletTest {
      */
     @Test
     public void testJerseyInteractions() throws Exception {
-        final ServletContext ctx = new ServletContextMocker().mock();
         final ServletConfig config = new ServletConfigMocker()
             .withParam("com.rexsl.PACKAGES", "com.rexsl.core")
-            .withServletContext(ctx)
             .mock();
-        // Mockito.doReturn(this.getClass().getResourceAsStream("main.xsl"))
-        //     .when(ctx).getResourceAsStream("/xsl/main.xsl");
         final HttpServlet servlet = new RestfulServlet();
         servlet.init(config);
-        final HttpServletRequest request = new HttpServletRequestMocker()
-            .mock();
         final HttpServletResponse response = new HttpServletResponseMocker()
             .expectStatus(HttpServletResponse.SC_OK)
             .mock();
-        servlet.service(request, response);
+        servlet.service(new HttpServletRequestMocker().mock(), response);
         MatcherAssert.assertThat(
             response.toString(),
             Matchers.containsString("\u0443\u0440\u0430")

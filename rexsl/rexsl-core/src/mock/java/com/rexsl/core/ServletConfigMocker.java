@@ -55,6 +55,13 @@ public final class ServletConfigMocker {
     private final transient List<String> params = new ArrayList<String>();
 
     /**
+     * Public ctor.
+     */
+    public ServletConfigMocker() {
+        this.withServletContext(new ServletContextMocker().mock());
+    }
+
+    /**
      * With this parameter.
      * @param name The name of it
      * @param val The value
