@@ -53,11 +53,13 @@ public final class ClientResponseDecorTest {
         final ClientResponse response = new ClientResponseMocker()
             .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML)
             .mock();
-        final Formattable decor = new ClientResponseDecor(response, "body");
+        final Formattable decor =
+            new ClientResponseDecor(response, "some response body");
         final Appendable dest = Mockito.mock(Appendable.class);
         final Formatter fmt = new Formatter(dest);
         decor.formatTo(fmt, 0, 0, 0);
-        Mockito.verify(dest).append("\tContent-Type: text/xml\n\nbody\n\n");
+        Mockito.verify(dest).append(Mockito.contains("Content-Type: text/xml"));
+        Mockito.verify(dest).append(Mockito.contains("body"));
     }
 
 }

@@ -82,7 +82,10 @@ final class ClientResponseDecor implements Formattable {
                 )
             );
         }
-        builder.append("\n").append(this.body).append("\n\n");
+        final String eol = "\n";
+        builder.append(eol)
+            .append(this.body.replace(eol, "\n\t"))
+            .append(eol);
         formatter.format("%s", builder.toString());
     }
 

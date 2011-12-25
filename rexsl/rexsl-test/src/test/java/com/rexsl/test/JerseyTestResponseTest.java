@@ -75,4 +75,19 @@ public final class JerseyTestResponseTest {
             .assertXPath("/x/y[contains(.,'\u0430')]");
     }
 
+    /**
+     * TestResponse can assert with XPath and namespaces.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void assertsWithXpathAndNamespaces() throws Exception {
+        final ClientResponse resp = new ClientResponseMocker()
+            // @checkstyle LineLength (1 line)
+            .withEntity("<html xmlns='http://www.w3.org/1999/xhtml'><div>\u0443\u0440\u0430!</div></html>")
+            .mock();
+        new JerseyTestResponse(resp)
+            .assertXPath("/xhtml:html/xhtml:div")
+            .assertXPath("//xhtml:div[.='\u0443\u0440\u0430!']");
+    }
+
 }

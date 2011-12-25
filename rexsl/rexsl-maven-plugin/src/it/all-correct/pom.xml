@@ -62,18 +62,34 @@
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
             <version since="6 Apr 2011">1.1.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <!-- JAXB 2.0 API -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version since="6 Apr 2011">2.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <!-- ReXSL runtime library -->
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <!-- Assertions and matchers for unit tests. -->
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version since="23 Dec 2011">1.2.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Assertions and matchers for unit tests. -->
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version since="23 Dec 2011">1.2.1</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <!-- Logging facility -->
@@ -109,14 +125,7 @@
             <!-- Unit testing framework from http://www.junit.org/ -->
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version since="6 Apr 2011">4.8.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- Assertions and matchers for unit tests. -->
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-            <version since="6 Apr 2011">1.1</version>
+            <version since="23 Dec 2011">4.10</version>
             <scope>test</scope>
         </dependency>
         <dependency>

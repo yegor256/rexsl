@@ -32,7 +32,6 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**

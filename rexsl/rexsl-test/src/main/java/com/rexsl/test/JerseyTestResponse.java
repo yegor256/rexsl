@@ -286,7 +286,10 @@ final class JerseyTestResponse implements TestResponse {
     public Document document() {
         Document document;
         try {
-            document = DocumentBuilderFactory.newInstance()
+            final DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            document = factory
                 .newDocumentBuilder()
                 .parse(IOUtils.toInputStream(this.getBody(), "UTF-8"));
         } catch (java.io.IOException ex) {

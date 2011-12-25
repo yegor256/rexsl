@@ -39,18 +39,18 @@ Logger.info(this, 'AddsData script running...')
 
 // let's validate how data were injected in bootstrap
 RestTester.start(rexsl.home)
-    .get()
+    .get('reading start data')
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString('bootstrapped'))
 
 // inject new data value
 RestTester.start(rexsl.home)
     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
-    .post('text=injected')
+    .post('changing data', 'text=injected')
     .assertStatus(HttpURLConnection.HTTP_OK)
 
 // let's validate that it's there
 RestTester.start(rexsl.home)
-    .get()
+    .get('validating')
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString('injected'))

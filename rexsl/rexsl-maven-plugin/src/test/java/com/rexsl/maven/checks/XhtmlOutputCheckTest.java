@@ -32,7 +32,6 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -49,6 +48,7 @@ public final class XhtmlOutputCheckTest {
     @Test
     public void validatesPositiveSituation() throws Exception {
         final Environment env = new EnvironmentMocker()
+            // @checkstyle MultipleStringLiterals (4 lines)
             .withFile("target/webdir/xsl/layout.xsl")
             .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/index.xml")
@@ -68,6 +68,7 @@ public final class XhtmlOutputCheckTest {
     @Test
     public void validatesWithMissedLayoutFile() throws Exception {
         final Environment env = new EnvironmentMocker()
+            // @checkstyle MultipleStringLiterals (4 lines)
             .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/index.xml")
             .mock();
@@ -86,6 +87,7 @@ public final class XhtmlOutputCheckTest {
     @Test
     public void validatesIncorrectXhtml() throws Exception {
         final Environment env = new EnvironmentMocker()
+            // @checkstyle MultipleStringLiterals (4 lines)
             .withFile("target/webdir/xsl/layout.xsl")
             .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/invalid-index.xml")

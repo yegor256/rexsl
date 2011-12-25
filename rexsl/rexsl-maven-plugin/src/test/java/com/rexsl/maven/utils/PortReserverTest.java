@@ -29,9 +29,9 @@
  */
 package com.rexsl.maven.utils;
 
+import com.rexsl.maven.LogMocker;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -42,20 +42,12 @@ import org.junit.Test;
 public final class PortReserverTest {
 
     /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogMocker().mock();
-    }
-
-    /**
      * PortReserver can reserve a port.
      * @throws Exception If something goes wrong
      */
     @Test
     public void canReserverTcpPort() throws Exception {
+        new LogMocker().mock();
         final Integer first = new PortReserver().port();
         MatcherAssert.assertThat(first, Matchers.greaterThan(0));
         final Integer second = new PortReserver().port();

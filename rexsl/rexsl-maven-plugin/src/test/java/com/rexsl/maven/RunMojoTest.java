@@ -31,7 +31,6 @@ package com.rexsl.maven;
 
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 /**
  * Test case for {@link RunMojo}.

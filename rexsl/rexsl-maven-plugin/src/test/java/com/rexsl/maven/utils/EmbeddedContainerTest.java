@@ -33,18 +33,10 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import com.rexsl.maven.LogMocker;
 import com.rexsl.test.RestTester;
-import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URI;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 import org.slf4j.impl.StaticLoggerBinder;
 
 /**
@@ -75,7 +67,7 @@ public final class EmbeddedContainerTest {
                 + " <url-pattern>/*</url-pattern>"
                 + "</filter-mapping>"
                 + "</web-app>"
-            )
+        )
             .withTextFile("target/webdir/file.txt", "some test data")
             .mock();
         final EmbeddedContainer container = EmbeddedContainer.start(env);
@@ -97,12 +89,12 @@ public final class EmbeddedContainerTest {
             "runtime filter destroyed",
             "XSLT filter destroyed",
         };
-        for (String message : messages) {
-            // MatcherAssert.assertThat(
-            //     lmocker.getMessages(),
-            //     Matchers.hasItem(Matchers.containsString(message))
-            // );
-        }
+        // for (String message : messages) {
+        //     MatcherAssert.assertThat(
+        //         lmocker.getMessages(),
+        //         Matchers.hasItem(Matchers.containsString(message))
+        //     );
+        // }
     }
 
 }

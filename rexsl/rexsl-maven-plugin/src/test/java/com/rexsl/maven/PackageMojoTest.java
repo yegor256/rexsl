@@ -29,7 +29,6 @@
  */
 package com.rexsl.maven;
 
-import java.io.File;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
