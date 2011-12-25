@@ -46,7 +46,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xmlmatchers.namespace.SimpleNamespaceContext;
+import org.xmlmatchers.transform.XmlConverters;
 
 /**
  * Implementation of {@link TestResponse}.
@@ -267,18 +267,14 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertXPath(final String xpath) {
-        final SimpleNamespaceContext context = new SimpleNamespaceContext()
-            .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
-            .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
-            .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
         MatcherAssert.assertThat(
             Logger.format(
                 "XPath '%s' has to exist in:\n%s",
                 xpath,
                 new ClientResponseDecor(this.response, this.body)
             ),
-            this.document(),
-            Matchers.hasXPath(xpath, context)
+            XmlConverters.the(this.document()),
+            XhtmlMatchers.hasXPath(xpath)
         );
         return this;
     }
