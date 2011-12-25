@@ -37,7 +37,6 @@ import javax.xml.bind.annotation.XmlType;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.xmlmatchers.XmlMatchers;
 
 /**
  * Test case for {@link JaxbConverter}.
@@ -55,7 +54,7 @@ public final class JaxbConverterTest {
         final Object object = new JaxbConverterTest.Employee();
         MatcherAssert.assertThat(
             JaxbConverter.the(object),
-            XmlMatchers.hasXPath("/employee/name[.='John Doe']")
+            XhtmlMatchers.hasXPath("/employee/name[.='John Doe']")
         );
     }
 
@@ -84,7 +83,7 @@ public final class JaxbConverterTest {
         employee.inject(new JaxbConverterTest.Foo());
         MatcherAssert.assertThat(
             JaxbConverter.the(employee, JaxbConverterTest.Foo.class),
-            XmlMatchers.hasXPath("/employee/injected/name")
+            XhtmlMatchers.hasXPath("/employee/injected/name")
         );
     }
 
@@ -129,7 +128,7 @@ public final class JaxbConverterTest {
          */
         @XmlElement
         public String getName() {
-            return "some foo name";
+            return "\u0443\u0440\u0430";
         }
     }
 

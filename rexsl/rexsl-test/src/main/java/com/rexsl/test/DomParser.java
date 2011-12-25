@@ -29,37 +29,54 @@
  */
 package com.rexsl.test;
 
-import javax.xml.transform.dom.DOMSource;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.commons.io.IOUtils;
+import org.w3c.dom.Document;
 
 /**
- * Private class for DOM to String converting.
+ * Implementation of {@link TestResponse}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class StringSource extends DOMSource {
+final class DomParser {
 
     /**
-     * The XML itself.
+     * The XML as a text.
      */
     private final transient String xml;
 
     /**
      * Public ctor.
-     * @param text The content of the document
+     * @param txt The XML in text
      */
-    public StringSource(final String text) {
-        super();
-        this.xml = text;
-        this.setNode(new DomParser(text).document());
+    public DomParser(final String txt) {
+        this.xml = txt;
     }
 
     /**
-     * {@inheritDoc}
+     * Get document of body.
+     * @return The document
      */
-    @Override
-    public String toString() {
-        return this.xml;
+    public Document document() {
+        Document doc;
+        try {
+            final DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+            // @checkstyle LineLength (1 line)
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            factory.setNamespaceAware(true);
+            doc = factory
+                .newDocumentBuilder()
+                .parse(IOUtils.toInputStream(this.xml, "UTF-8"));
+        } catch (java.io.IOException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (org.xml.sax.SAXException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        return doc;
     }
 
 }
