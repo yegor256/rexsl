@@ -46,8 +46,8 @@ RestTester.start(rexsl.home)
 // inject new data value
 def value = '\u0443\u0440\u0430'
 RestTester.start(rexsl.home)
-    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED + ';charset=utf-8')
-    .post('changing data', 'text=' + URLEncoder.encode(value))
+    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
+    .post('changing data', 'text=' + URLEncoder.encode(value, 'UTF-8'))
     .assertStatus(HttpURLConnection.HTTP_OK)
 
 // let's validate that it's there
