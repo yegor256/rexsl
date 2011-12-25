@@ -30,6 +30,7 @@
 package com.rexsl.maven;
 
 import com.google.common.io.Files;
+import com.rexsl.maven.utils.PortReserver;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.mockito.Mockito;
@@ -61,6 +62,18 @@ public final class EnvironmentMocker {
         this.basedir = new File(temp, "basedir");
         this.basedir.mkdirs();
         Mockito.doReturn(this.basedir).when(this.env).basedir();
+        Mockito.doReturn(new File(this.basedir, "src/main/webapp"))
+            .when(this.env).webdir();
+        Mockito.doReturn(new PortReserver().port()).when(this.env).port();
+    }
+
+    /**
+     * With this file in basedir.
+     * @param name File name
+     * @return This object
+     */
+    public EnvironmentMocker withFile(final String name) {
+        return this.withFile(name, name.substring(name.lastIndexOf("/") + 1));
     }
 
     /**

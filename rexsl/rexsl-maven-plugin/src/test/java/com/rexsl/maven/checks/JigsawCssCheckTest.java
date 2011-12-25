@@ -30,85 +30,44 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.utils.PortReserver;
-import java.io.File;
+import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 
 /**
- * JigsawCssCheck test case.
- *
+ * Test case for {@link JigsawCssCheck}.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @todo #10 Implement CSS validation and enable all test methods in this class
  */
 public final class JigsawCssCheckTest {
 
     /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
-    }
-
-    /**
-     * Validates correct CSS files.
+     * JigsawCssCheckTest can validate correct CSS files.
      * @throws Exception If something goes wrong
      */
     @org.junit.Ignore
     @Test
-    public void testTruePositiveValidation() throws Exception {
-        final File basedir = this.temp.newFolder("base-1");
-        Utils.copy(basedir, "src/main/webapp/css/valid.css");
-        final Environment env = Mockito.mock(Environment.class);
-        Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(new PortReserver().port()).when(env).port();
-        Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
-        MatcherAssert.assertThat(
-            new JigsawCssCheck().validate(env),
-            Matchers.is(true)
-        );
+    public void validatesCorrectCssFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withFile("src/main/webapp/css/valid.css")
+            .mock();
+        MatcherAssert.assertThat(new JigsawCssCheck().validate(env));
     }
 
     /**
-     * Validates wrong CSS files (against CSS 2.1).
+     * JigsawCssCheckTest can validate incorrect CSS files.
      * @throws Exception If something goes wrong
      */
     @org.junit.Ignore
     @Test
-    public void testFalsePositiveValidation() throws Exception {
-        final File basedir = this.temp.newFolder("base-2");
-        Utils.copy(basedir, "src/main/webapp/css/invalid.css");
-        final Environment env = Mockito.mock(Environment.class);
-        Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(this.webdir(basedir)).when(env).webdir();
-        MatcherAssert.assertThat(
-            new JigsawCssCheck().validate(env),
-            Matchers.is(false)
-        );
-    }
-
-    /**
-     * Build webdir out of basedir.
-     * @param basedir The basedir
-     * @return The webdir
-     */
-    private File webdir(final File basedir) {
-        return new File(basedir, "src/main/webapp");
+    public void validatesIncorrectCssFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withFile("src/main/webapp/css/invalid.css")
+            .mock();
+        MatcherAssert.assertThat(!new JigsawCssCheck().validate(env));
     }
 
 }

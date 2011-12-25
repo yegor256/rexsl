@@ -29,13 +29,11 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import java.io.File;
+import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 /**
  * Test case for {@link InContainerScriptsCheck}.
@@ -45,25 +43,21 @@ import org.mockito.Mockito;
 public final class InContainerScriptsCheckTest {
 
     /**
-     * Validate correct XML+XSL transformation.
+     * InContainerScriptsCheck can validate without exceptions, if no problems.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void textTruePositiveValidation() throws Exception {
+    public void validatesCorrectProjectWithNoExceptions() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/xsl/layout.xsl", "layout.xsl")
+            .withFile("src/main/webapp/xsl/layout.xsl")
+            .withFile("src/main/webapp/xsl/Home.xsl")
+            .withFile("src/main/webapp/WEB-INF/web.xml")
+            .withFile("src/test/rexsl/scripts/HomePage.groovy")
             .mock();
-        final File basedir = this.temp.newFolder("basedir");
-        Utils.copy(basedir, );
-        Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
-        Utils.copy(basedir, "src/main/webapp/WEB-INF/web.xml");
-        Utils.copy(basedir, "src/test/rexsl/scripts/home.groovy");
-        final Environment env = Mockito.mock(Environment.class);
-        Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(new File(basedir, "src/main/webapp"))
-            .when(env).webdir();
-        final Check check = new InContainerScriptsCheck();
-        MatcherAssert.assertThat(check.validate(env), Matchers.is(true));
+        MatcherAssert.assertThat(
+            "all validations pass",
+            new InContainerScriptsCheck().validate(env)
+        );
     }
 
 }
