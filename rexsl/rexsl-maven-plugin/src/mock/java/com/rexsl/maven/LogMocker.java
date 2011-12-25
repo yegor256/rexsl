@@ -36,17 +36,16 @@ import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.slf4j.impl.StaticLoggerBinder;
 
 /**
- * Start logging to a mock Maven log.
+ * Mocker of Maven log.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class LogStarter {
+public final class LogMocker {
 
     /**
      * Start logging.
-     * @throws Exception If something goes wrong inside
      */
-    public void start() throws Exception {
+    public void mock() {
         final Log log = new DefaultLog(
             new ConsoleLogger(Logger.LEVEL_INFO, "test")
         );

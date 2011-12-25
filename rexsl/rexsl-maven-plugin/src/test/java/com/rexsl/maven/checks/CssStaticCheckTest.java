@@ -54,7 +54,10 @@ public final class CssStaticCheckTest {
         final Environment env = new EnvironmentMocker()
             .withFile("src/main/webapp/css/valid.css")
             .mock();
-        MatcherAssert.assertThat(new StaticCssCheck().validate(env));
+        MatcherAssert.assertThat(
+            "valid CSS passes without problems",
+            new CssStaticCheck().validate(env)
+        );
     }
 
     /**
@@ -67,7 +70,10 @@ public final class CssStaticCheckTest {
         final Environment env = new EnvironmentMocker()
             .withFile("src/main/webapp/css/invalid.css")
             .mock();
-        MatcherAssert.assertThat(!new StaticCssCheck().validate(env));
+        MatcherAssert.assertThat(
+            "invalid CSS is caught",
+            !new CssStaticCheck().validate(env)
+        );
     }
 
 }

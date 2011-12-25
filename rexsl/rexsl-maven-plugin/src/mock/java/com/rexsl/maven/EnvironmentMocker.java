@@ -32,7 +32,9 @@ package com.rexsl.maven;
 import com.google.common.io.Files;
 import com.rexsl.maven.utils.PortReserver;
 import java.io.File;
+import java.io.InputStream;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.mockito.Mockito;
 
 /**
@@ -56,14 +58,19 @@ public final class EnvironmentMocker {
      * Public ctor.
      */
     public EnvironmentMocker() {
-        new LogStarter().start();
+        new LogMocker().mock();
         final File temp = Files.createTempDir();
-        FileUtils.forceDeleteOnExit(temp);
+        try {
+            FileUtils.forceDeleteOnExit(temp);
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
         this.basedir = new File(temp, "basedir");
         this.basedir.mkdirs();
         Mockito.doReturn(this.basedir).when(this.env).basedir();
-        Mockito.doReturn(new File(this.basedir, "src/main/webapp"))
-            .when(this.env).webdir();
+        final File webdir = new File(this.basedir, "target/webdir");
+        webdir.mkdirs();
+        Mockito.doReturn(webdir).when(this.env).webdir();
         Mockito.doReturn(new PortReserver().port()).when(this.env).port();
     }
 
@@ -83,12 +90,33 @@ public final class EnvironmentMocker {
      * @return This object
      */
     public EnvironmentMocker withFile(final String name, final String res) {
+        final InputStream stream = this.getClass().getResourceAsStream(res);
+        if (stream == null) {
+            throw new IllegalArgumentException(
+                String.format("resource '%s' not found", res)
+            );
+        }
+        try {
+            return this.withTextFile(name, IOUtils.toString(stream));
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    /**
+     * With this file in basedir.
+     * @param name File name
+     * @param txt Content of the file to save
+     * @return This object
+     */
+    public EnvironmentMocker withTextFile(final String name, final String txt) {
         final File dest = new File(this.basedir, name);
         dest.getParentFile().mkdirs();
-        FileUtils.copyInputStreamToFile(
-            this.getClass().getResourceAsStream(res),
-            dest
-        );
+        try {
+            FileUtils.writeStringToFile(dest, txt);
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
         return this;
     }
 

@@ -49,12 +49,15 @@ public final class XhtmlOutputCheckTest {
     @Test
     public void validatesPositiveSituation() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/xsl/layout.xsl")
-            .withFile("src/main/webapp/xsl/Home.xsl")
+            .withFile("target/webdir/xsl/layout.xsl")
+            .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/index.xml")
             .withFile("src/test/rexsl/xhtml/index.groovy")
             .mock();
-        MatcherAssert.assertThat(new XhtmlOutputCheck().validate(env));
+        MatcherAssert.assertThat(
+            "all tests pass fine",
+            new XhtmlOutputCheck().validate(env)
+        );
     }
 
     /**
@@ -65,10 +68,13 @@ public final class XhtmlOutputCheckTest {
     @Test
     public void validatesWithMissedLayoutFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/xsl/Home.xsl")
+            .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/index.xml")
             .mock();
-        MatcherAssert.assertThat(!new XhtmlOutputCheck().validate(env));
+        MatcherAssert.assertThat(
+            "missed layout file situation is detected",
+            !new XhtmlOutputCheck().validate(env)
+        );
     }
 
     /**
@@ -80,12 +86,15 @@ public final class XhtmlOutputCheckTest {
     @Test
     public void validatesIncorrectXhtml() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/xsl/layout.xsl")
-            .withFile("src/main/webapp/xsl/Home.xsl")
+            .withFile("target/webdir/xsl/layout.xsl")
+            .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/invalid-index.xml")
             .withFile("src/test/rexsl/xhtml/invalid-index.groovy")
             .mock();
-        MatcherAssert.assertThat(!new XhtmlOutputCheck().validate(env));
+        MatcherAssert.assertThat(
+            "non-valid XHTML situation is detected",
+            !new XhtmlOutputCheck().validate(env)
+        );
     }
 
 }

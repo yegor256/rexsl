@@ -36,7 +36,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Test provider of checks.
+ * Test case for {@link ChecksProvider}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
@@ -48,7 +48,7 @@ public final class ChecksProviderTest {
      */
     @BeforeClass
     public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
+        new com.rexsl.maven.LogMocker().mock();
     }
 
     /**

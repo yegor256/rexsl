@@ -47,7 +47,7 @@ public final class PortReserverTest {
      */
     @BeforeClass
     public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
+        new com.rexsl.maven.LogMocker().mock();
     }
 
     /**
