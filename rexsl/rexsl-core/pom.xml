@@ -57,10 +57,7 @@
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
             <version since="25 Nov 2011">1.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ymock</groupId>
-            <artifactId>ymock-util</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <!-- JAXB 2.0 API. -->
@@ -76,6 +73,10 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>com.ymock</groupId>
+            <artifactId>ymock-util</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
@@ -87,6 +88,14 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlmatchers</groupId>
+            <artifactId>xml-matchers</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -108,10 +117,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
         </dependency>
-        <!-- <dependency>
-            <groupId>org.xmlmatchers</groupId>
-            <artifactId>xml-matchers</artifactId>
-        </dependency> -->
         <dependency>
             <!-- Saxon for XSLT 2.0 -->
             <groupId>net.sf.saxon</groupId>
@@ -198,6 +203,9 @@
     <build>
         <plugins>
             <plugin>
+                <!--
+                There is a problem with jersey dependencies.
+                -->
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>

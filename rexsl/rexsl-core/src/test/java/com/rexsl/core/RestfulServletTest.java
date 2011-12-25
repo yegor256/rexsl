@@ -41,7 +41,7 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Testing {@link RestfulServlet} class.
+ * Test case for {@link RestfulServlet}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */

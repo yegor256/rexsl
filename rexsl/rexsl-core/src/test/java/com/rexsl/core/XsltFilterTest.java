@@ -43,7 +43,7 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 /**
- * XslBrowserFilter test case.
+ * Test case for {@link XslFilter}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
