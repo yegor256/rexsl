@@ -61,31 +61,19 @@ import javax.xml.transform.Source;
  *
  * <pre>
  * import com.rexsl.test.JaxbConverter;
- * import org.hamcrest.Matchers;
+ * import com.rexsl.test.XhtmlMatchers;
  * import org.junit.Assert;
  * import org.junit.Test;
- * import org.xmlmatchers.XmlMatchers;
  * public final class EmployeeTest {
  *   &#64;Test
  *   public void testObjectToXmlConversion() throws Exception {
  *     final Object object = new Employee();
  *     Assert.assertThat(
  *       JaxbConverter.the(object),
- *       XmlMatchers.hasXPath("/employee/name[.='John Doe']")
+ *       XhtmlMatchers.hasXPath("/employee/name[.='John Doe']")
  *     );
  *   }
  * }
- * </pre>
- *
- * <p>We recommend to use {@code XmlMatchers} class from this Maven
- * artifact:
- *
- * <pre>
- * &lt;dependency>
- *   &lt;groupId>org.xmlmatchers&lt;/groupId>
- *   &lt;artifactId>xml-matchers&lt;/artifactId>
- *   &lt;version>0.10&lt;/version>
- * &lt;/dependency>
  * </pre>
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
