@@ -62,22 +62,22 @@ import org.xmlmatchers.XmlMatchers;
 public final class XslResolverTest {
 
     /**
-     * Let's test.
+     * XslResolver can instantiate a marshaller.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testInstantiatesMarshaller() throws Exception {
+    public void instantiatesMarshaller() throws Exception {
         final ContextResolver<Marshaller> resolver = new XslResolver();
         final Marshaller mrsh = resolver.getContext(XslResolverTest.Page.class);
         MatcherAssert.assertThat(mrsh, Matchers.notNullValue());
     }
 
     /**
-     * Let's test.
+     * XslResolver throws exception when Marshaller throws.
      * @throws Exception If something goes wrong
      */
     @Test(expected = IllegalStateException.class)
-    public void testMarshallerException() throws Exception {
+    public void throwsExceptionWhenMarshallerReports() throws Exception {
         PowerMockito.mockStatic(JAXBContext.class);
         Mockito.when(JAXBContext.newInstance(Mockito.any(Class.class)))
             .thenThrow(new JAXBException(""));
@@ -85,11 +85,11 @@ public final class XslResolverTest {
     }
 
     /**
-     * Let's test.
+     * XslResolver throws exception when Marshaller throws.
      * @throws Exception If something goes wrong
      */
     @Test(expected = IllegalStateException.class)
-    public void testCreateMarshallerException() throws Exception {
+    public void throwsWhenCreateMarshallerException() throws Exception {
         PowerMockito.mockStatic(JAXBContext.class);
         final JAXBContext context = Mockito.mock(JAXBContext.class);
         Mockito.when(context.createMarshaller())
@@ -100,14 +100,14 @@ public final class XslResolverTest {
     }
 
     /**
-     * Let's verify that JAXBContext is not created twice.
+     * XslResolvers can avoid duplicated creation of marshaller.
      * @throws Exception If something goes wrong
      * @todo #3 This test is not working at the moment, but it should. We have
      *  to confirm that Marshaller is created only once per class.
      */
     @Ignore
     @Test
-    public void testDuplicatedMarshallerCreation() throws Exception {
+    public void avoidsDuplicatedMarshallerCreation() throws Exception {
         // PowerMockito.mockStatic(JAXBContext.class);
         // final JAXBContext context = mock(JAXBContext.class);
         // final Marshaller mrsh = mock(Marshaller.class);
@@ -123,11 +123,11 @@ public final class XslResolverTest {
     }
 
     /**
-     * Create a marshaller for dynamically extendable object.
+     * XslResolver can handle dynamically extendable objects.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testDynamicallyExtendableObject() throws Exception {
+    public void handlesDynamicallyExtendableObject() throws Exception {
         final XslResolver resolver = new XslResolver();
         resolver.add(XslResolverTest.Injectable.class);
         final Marshaller mrsh = resolver.getContext(Page.class);
@@ -142,11 +142,11 @@ public final class XslResolverTest {
     }
 
     /**
-     * By default stylesheet processing instruction should be injected.
+     * XslResolver injects xml-stylesheet processing instruction.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testDefaultStylesheetPI() throws Exception {
+    public void injectsDefaultStylesheetPi() throws Exception {
         final XslResolver resolver = new XslResolver();
         final Marshaller mrsh = resolver.getContext(XslResolverTest.Page.class);
         final Page page = new XslResolverTest.Page();
@@ -162,7 +162,7 @@ public final class XslResolverTest {
     }
 
     /**
-     * Stylesheet annotation should change the stylesheet injection.
+     * XslResolver understands stylesheet annotation.
      * @throws Exception If something goes wrong
      */
     @Test

@@ -48,11 +48,11 @@ import org.junit.Test;
 public final class RestfulServletTest {
 
     /**
-     * Let's test.
+     * RestfulServlet can pass HTTP requests to Jersey for further processing.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testJerseyInteractions() throws Exception {
+    public void passesHttpRequestsToJersey() throws Exception {
         final ServletConfig config = new ServletConfigMocker()
             .withParam("com.rexsl.PACKAGES", "com.rexsl.core")
             .mock();
@@ -68,6 +68,9 @@ public final class RestfulServletTest {
         );
     }
 
+    /**
+     * It's a test JAX-RS resource.
+     */
     @Path("/")
     public static final class FrontEnd {
         /**
