@@ -34,21 +34,22 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * Test maven plugin single MOJO.
+ * Test case for {@link RunMojo}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class RunMojoTest {
 
     /**
-     * Non-WAR projects should be ignored.
+     * RunMojo can reject non-WAR projects.
      * @throws Exception If something goes wrong inside
      */
     @Test(expected = IllegalStateException.class)
-    public void testNonWarPackaging() throws Exception {
+    public void rejectsNonWarPackaging() throws Exception {
         final RunMojo mojo = new RunMojo();
-        final MavenProject project = Mockito.mock(MavenProject.class);
-        Mockito.doReturn("jar").when(project).getPackaging();
+        final MavenProject project = new MavenProjectMocker()
+            .withPackaging("jar")
+            .mock();
         mojo.setProject(project);
         mojo.execute();
     }

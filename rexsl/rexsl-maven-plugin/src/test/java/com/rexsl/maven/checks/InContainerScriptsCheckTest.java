@@ -49,9 +49,9 @@ public final class InContainerScriptsCheckTest {
     @Test
     public void validatesCorrectProjectWithNoExceptions() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/xsl/layout.xsl")
-            .withFile("src/main/webapp/xsl/Home.xsl")
-            .withFile("src/main/webapp/WEB-INF/web.xml")
+            .withFile("target/webdir/xsl/layout.xsl")
+            .withFile("target/webdir/xsl/Home.xsl")
+            .withFile("target/webdir/WEB-INF/web.xml")
             .withFile("src/test/rexsl/scripts/HomePage.groovy")
             .mock();
         MatcherAssert.assertThat(

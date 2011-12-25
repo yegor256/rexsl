@@ -29,47 +29,45 @@
  */
 package com.rexsl.maven;
 
-import java.io.File;
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
-import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * Test case for {@link PackageMojo}.
+ * Mocker of {@link Check}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class PackageMojoTest {
+public final class CheckMocker {
 
     /**
-     * PackageMojo can't work with non-WAR projects.
-     * @throws Exception If something goes wrong inside
+     * The mock.
      */
-    @Test(expected = IllegalStateException.class)
-    public void testNonWarPackaging() throws Exception {
-        final PackageMojo mojo = new PackageMojo();
-        final MavenProject project = new MavenProjectMocker()
-            .withPackaging("jar")
-            .mock();
-        mojo.setProject(project);
-        mojo.execute();
+    private final transient Check check =
+        Mockito.mock(Check.class);
+
+    /**
+     * Public ctor.
+     */
+    public CheckMocker() {
+        this.withResult(true);
     }
 
     /**
-     * PackageMojo can package artifacts normally.
-     * @throws Exception If something goes wrong inside
+     * With this validation result.
+     * @param result The result
+     * @return This object
      */
-    @Test
-    public void packsArtifactsNormally() throws Exception {
-        final Environment env = new EnvironmentMocker().mock();
-        final PackageMojo mojo = new PackageMojo();
-        mojo.setWebappDirectory(env.webdir().getAbsolutePath());
-        final MavenProject project = new MavenProjectMocker().mock();
-        final Log log = Mockito.mock(Log.class);
-        mojo.setLog(log);
-        mojo.setProject(project);
-        mojo.execute();
+    public CheckMocker withResult(final boolean result) {
+        Mockito.doReturn(result).when(this.check)
+            .validate(Mockito.any(Environment.class));
+        return this;
+    }
+
+    /**
+     * Mock it.
+     * @return Mocked check
+     */
+    public Check mock() {
+        return this.check;
     }
 
 }

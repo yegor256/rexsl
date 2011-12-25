@@ -29,47 +29,51 @@
  */
 package com.rexsl.maven;
 
+import com.google.common.io.Files;
+import com.rexsl.maven.utils.PortReserver;
 import java.io.File;
-import org.apache.maven.plugin.logging.Log;
+import java.io.InputStream;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.project.MavenProject;
-import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * Test case for {@link PackageMojo}.
+ * Mocker of {@link MavenProject}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class PackageMojoTest {
+public final class MavenProjectMocker {
 
     /**
-     * PackageMojo can't work with non-WAR projects.
-     * @throws Exception If something goes wrong inside
+     * The mock.
      */
-    @Test(expected = IllegalStateException.class)
-    public void testNonWarPackaging() throws Exception {
-        final PackageMojo mojo = new PackageMojo();
-        final MavenProject project = new MavenProjectMocker()
-            .withPackaging("jar")
-            .mock();
-        mojo.setProject(project);
-        mojo.execute();
+    private final transient MavenProject project =
+        Mockito.mock(MavenProject.class);
+
+    /**
+     * Public ctor.
+     */
+    public MavenProjectMocker() {
+        this.withPackaging("war");
     }
 
     /**
-     * PackageMojo can package artifacts normally.
-     * @throws Exception If something goes wrong inside
+     * With this packaging name.
+     * @param pkg The name
+     * @return This object
      */
-    @Test
-    public void packsArtifactsNormally() throws Exception {
-        final Environment env = new EnvironmentMocker().mock();
-        final PackageMojo mojo = new PackageMojo();
-        mojo.setWebappDirectory(env.webdir().getAbsolutePath());
-        final MavenProject project = new MavenProjectMocker().mock();
-        final Log log = Mockito.mock(Log.class);
-        mojo.setLog(log);
-        mojo.setProject(project);
-        mojo.execute();
+    public MavenProjectMocker withPackaging(final String pkg) {
+        Mockito.doReturn(pkg).when(this.project).getPackaging();
+        return this;
+    }
+
+    /**
+     * Mock it.
+     * @return Mocked project
+     */
+    public MavenProject mock() {
+        return this.project;
     }
 
 }

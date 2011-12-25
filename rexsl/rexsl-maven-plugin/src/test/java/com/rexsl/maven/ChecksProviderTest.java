@@ -52,11 +52,11 @@ public final class ChecksProviderTest {
     }
 
     /**
-     * Factory should return a collection of checks.
+     * ChecksProvider can provide a set of checks.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testChecksRetrieval() throws Exception {
+    public void retrievesSetOfChecks() throws Exception {
         final Set<Check> checks = new ChecksProvider().all();
         MatcherAssert.assertThat(checks, Matchers.notNullValue());
         MatcherAssert.assertThat(checks.size(), Matchers.greaterThan(0));

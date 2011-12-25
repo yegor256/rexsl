@@ -43,7 +43,7 @@ import org.junit.Test;
 public final class XhtmlOutputCheckTest {
 
     /**
-     * XhtmlOutputCheck validates correct XML+XSL transformation.
+     * XhtmlOutputCheck can validate correct XML+XSL transformation.
      * @throws Exception If something goes wrong
      */
     @Test
@@ -61,7 +61,7 @@ public final class XhtmlOutputCheckTest {
     }
 
     /**
-     * XhtmlOutputCheck validates incorrect XML+XSL transformation
+     * XhtmlOutputCheck can validate incorrect XML+XSL transformation
      * (layout file is missed).
      * @throws Exception If something goes wrong
      */
@@ -78,7 +78,7 @@ public final class XhtmlOutputCheckTest {
     }
 
     /**
-     * XhtmlOutputCheck validates incorrect XHTML.
+     * XhtmlOutputCheck can validate incorrect XHTML.
      * @throws Exception If something goes wrong
      * @todo #11 Implement XHTML validation in XhtmlOutputCheck class.
      */

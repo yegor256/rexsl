@@ -38,6 +38,7 @@ import org.junit.Test;
 /**
  * Test case for {@link CssStaticCheck}.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  * @todo #56 Implement CSS stylesheet validation and enable all test methods in
  *  this class.
