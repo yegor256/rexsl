@@ -44,13 +44,14 @@ RestTester.start(rexsl.home)
     .assertBody(Matchers.containsString('bootstrapped'))
 
 // inject new data value
+def value = '\u0443\u0440\u0430'
 RestTester.start(rexsl.home)
-    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
-    .post('changing data', 'text=injected')
+    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED + ';charset=utf-8')
+    .post('changing data', 'text=' + URLEncoder.encode(value))
     .assertStatus(HttpURLConnection.HTTP_OK)
 
 // let's validate that it's there
 RestTester.start(rexsl.home)
     .get('validating')
     .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertBody(Matchers.containsString('injected'))
+    .assertBody(Matchers.containsString(value))

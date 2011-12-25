@@ -178,10 +178,10 @@ public final class XsltFilter implements Filter {
         final StringWriter writer = new StringWriter();
         try {
             final Source stylesheet = this.tfactory.getAssociatedStylesheet(
-                new StreamSource(new StringReader(xml)),
+                this.source(xml),
                 null,
                 null,
-                null
+                this.ENCODING
             );
             if (stylesheet == null) {
                 throw new ServletException(
@@ -200,7 +200,7 @@ public final class XsltFilter implements Filter {
             );
             final Transformer trans = this.tfactory.newTransformer(stylesheet);
             trans.transform(
-                new StreamSource(new StringReader(xml)),
+                this.source(xml),
                 new StreamResult(writer)
             );
         } catch (TransformerConfigurationException ex) {
@@ -229,6 +229,15 @@ public final class XsltFilter implements Filter {
             System.currentTimeMillis() - start
         );
         return output;
+    }
+
+    /**
+     * Transform XML into DOM source.
+     * @param xml XML page to be transformed.
+     * @return Source
+     */
+    private Source source(final String xml) {
+        return new StreamSource(new StringReader(xml));
     }
 
 }

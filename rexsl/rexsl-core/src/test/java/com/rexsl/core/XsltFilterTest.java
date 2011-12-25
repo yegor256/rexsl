@@ -59,7 +59,7 @@ public final class XsltFilterTest {
             .withResource(
                 "/foo.xsl",
                 // @checkstyle LineLength (1 line)
-                "<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform' xmlns:x='http://www.w3.org/1999/xhtml'><template match='/'><x:html><value-of select='/page/data'/></x:html></template></stylesheet>"
+                "<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform' xmlns:x='http://www.w3.org/1999/xhtml'><template match='/'><x:html><x:div><value-of select='/page/data'/></x:div><x:p>\u0443</x:p></x:html></template></stylesheet>"
         ).mock();
         final FilterConfig config = new FilterConfigMocker()
             .withServletContext(context)
@@ -72,7 +72,7 @@ public final class XsltFilterTest {
             .mock();
         final FilterChain chain = new FilterChainMocker()
             // @checkstyle LineLength (1 line)
-            .withOutput("<?xml version='1.0'?><?xml-stylesheet href='/foo.xsl' type='text/xsl'?><page><data>123</data></page>")
+            .withOutput("<?xml version='1.0'?><?xml-stylesheet href='/foo.xsl' type='text/xsl'?><page><data>\u0443\u0440\u0430</data></page>")
             .mock();
         final Filter filter = new XsltFilter();
         filter.init(config);
@@ -80,7 +80,11 @@ public final class XsltFilterTest {
         filter.destroy();
         MatcherAssert.assertThat(
             XhtmlConverter.the(response.toString()),
-            XhtmlMatchers.hasXPath("/xhtml:html[.='123']")
+            XhtmlMatchers.hasXPath("//xhtml:div[.='\u0443\u0440\u0430']")
+        );
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(response.toString()),
+            XhtmlMatchers.hasXPath("/xhtml:html/xhtml:p[.='\u0443']")
         );
     }
 

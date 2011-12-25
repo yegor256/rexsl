@@ -54,7 +54,7 @@ public final class JaxbConverterTest {
         final Object object = new JaxbConverterTest.Employee();
         MatcherAssert.assertThat(
             JaxbConverter.the(object),
-            XhtmlMatchers.hasXPath("/employee/name[.='John Doe']")
+            XhtmlMatchers.hasXPath("/employee/name[.='\u0443\u0440\u0430']")
         );
     }
 
@@ -67,7 +67,7 @@ public final class JaxbConverterTest {
         final Object object = new JaxbConverterTest.Employee();
         MatcherAssert.assertThat(
             JaxbConverter.the(object).toString(),
-            Matchers.containsString("John")
+            Matchers.containsString("\u0443")
         );
     }
 
@@ -115,7 +115,7 @@ public final class JaxbConverterTest {
          */
         @XmlElement(name = "name")
         public String getName() {
-            return "John Doe";
+            return "\u0443\u0440\u0430";
         }
     }
 
@@ -128,7 +128,7 @@ public final class JaxbConverterTest {
          */
         @XmlElement
         public String getName() {
-            return "\u0443\u0440\u0430";
+            return "Foo: \u0443\u0440\u0430";
         }
     }
 

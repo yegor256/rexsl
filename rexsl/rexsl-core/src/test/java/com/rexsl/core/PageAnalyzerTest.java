@@ -105,7 +105,7 @@ public final class PageAnalyzerTest {
                 {xml, "Chrome", "application/xml;q=0.9,*/*;q=0.3", false},
                 {"", null, null, false},
                 {"", "Safari 5", MediaType.TEXT_HTML, false},
-                {"some text doc", "Safari 4", MediaType.TEXT_HTML, false},
+                {"\u0443\u0440\u0430", "Safari 4", MediaType.TEXT_HTML, false},
                 // @checkstyle LineLength (1 line)
                 {"<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform'></stylesheet>", "Safari 5.1", MediaType.TEXT_HTML, false},
             }

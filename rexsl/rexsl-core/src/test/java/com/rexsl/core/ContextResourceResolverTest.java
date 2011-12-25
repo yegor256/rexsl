@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.rexsl.test.XhtmlMatchers;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -66,13 +67,14 @@ public final class ContextResourceResolverTest {
      */
     @Test
     public void resolvesResourceByHref() throws Exception {
-        final String href = "/xsl/layout.xsl";
+        final String href = "/test.xml";
         final ServletContext ctx = new ServletContextMocker()
-            .withResource(href, "")
+            .withResource(href, "<r>\u0443</r>")
             .mock();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve(href, null);
         MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(href));
+        MatcherAssert.assertThat(src, XhtmlMatchers.hasXPath("/r[.='\u0443']"));
     }
 
     /**

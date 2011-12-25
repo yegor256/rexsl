@@ -55,7 +55,12 @@ public final class ServletContextMocker {
      */
     public ServletContextMocker withResource(final String name,
         final String content) {
-        final InputStream stream = IOUtils.toInputStream(content);
+        InputStream stream;
+        try {
+            stream = IOUtils.toInputStream(content, "UTF-8");
+        } catch (java.io.IOException ex) {
+            throw new IllegalArgumentException(ex);
+        }
         Mockito.doReturn(stream).when(this.context).getResourceAsStream(name);
         return this;
     }

@@ -73,7 +73,8 @@ public final class FilterChainMocker {
                         throws java.io.IOException {
                         final HttpServletResponse response =
                             (HttpServletResponse) invocation.getArguments()[1];
-                        response.getOutputStream().print(text);
+                        response.getOutputStream()
+                            .write(text.getBytes("UTF-8"));
                         return null;
                     }
                 }

@@ -54,12 +54,12 @@ public final class ClientResponseDecorTest {
             .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML)
             .mock();
         final Formattable decor =
-            new ClientResponseDecor(response, "some response body");
+            new ClientResponseDecor(response, "works, \u0443\u0440\u0430!");
         final Appendable dest = Mockito.mock(Appendable.class);
         final Formatter fmt = new Formatter(dest);
         decor.formatTo(fmt, 0, 0, 0);
         Mockito.verify(dest).append(Mockito.contains("Content-Type: text/xml"));
-        Mockito.verify(dest).append(Mockito.contains("body"));
+        Mockito.verify(dest).append(Mockito.contains("\u0443\u0440\u0430"));
     }
 
 }
