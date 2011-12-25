@@ -29,68 +29,75 @@
  */
 package com.rexsl.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
- * Testing {@link RestfulServlet} class.
+ * Mocker of {@link HttpServletResponse}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class RestfulServletTest {
+public final class HttpServletResponseMocker {
 
     /**
-     * Let's test.
-     * @throws Exception If something goes wrong
+     * The mock.
      */
-    @Test
-    public void testJerseyInteractions() throws Exception {
-        final ServletContext ctx = new ServletContextMocker().mock();
-        final ServletConfig config = new ServletConfigMocker()
-            .withParam("com.rexsl.PACKAGES", "com.rexsl.core")
-            .withServletContext(ctx)
-            .mock();
-        // Mockito.doReturn(this.getClass().getResourceAsStream("main.xsl"))
-        //     .when(ctx).getResourceAsStream("/xsl/main.xsl");
-        final HttpServlet servlet = new RestfulServlet();
-        servlet.init(config);
-        final HttpServletRequest request = new HttpServletRequestMocker()
-            .mock();
-        final HttpServletResponse response = new HttpServletResponseMocker()
-            .expectStatus(HttpServletResponse.SC_OK)
-            .mock();
-        servlet.service(request, response);
-        MatcherAssert.assertThat(
-            response.toString(),
-            Matchers.containsString("\u0443\u0440\u0430")
-        );
+    private final transient HttpServletResponse response =
+        Mockito.mock(HttpServletResponse.class);
+
+    /**
+     * Mocked stream.
+     */
+    private final transient ServletOutputStream stream =
+        new ServletOutputStreamMocker().mock();
+
+    /**
+     * Public ctor.
+     */
+    public HttpServletResponseMocker() {
+        try {
+            Mockito.doReturn(this.stream).when(this.response).getOutputStream();
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
+        Mockito.doAnswer(
+            new Answer() {
+                public Object answer(final InvocationOnMock invocation) {
+                    return HttpServletResponseMocker.this.stream.toString();
+                }
+            }
+        ).when(this.response).toString();
     }
 
-    @Path("/")
-    public static final class FrontEnd {
-        /**
-         * Front page.
-         * @return The content of it
-         */
-        @GET
-        @Produces(MediaType.TEXT_PLAIN)
-        public String front() {
-            return "some text, \u0443\u0440\u0430!";
-        }
+    /**
+     * Expect only this status code.
+     * @param status The HTTP status code
+     * @return This object
+     */
+    public HttpServletResponseMocker expectStatus(final int status) {
+        Mockito.doAnswer(
+            new Answer() {
+                public Object answer(final InvocationOnMock invocation) {
+                    final int actual = (Integer) invocation.getArguments()[0];
+                    MatcherAssert.assertThat(actual, Matchers.equalTo(status));
+                    return null;
+                }
+            }
+        ).when(this.response).setStatus(Mockito.anyInt());
+        return this;
+    }
+
+    /**
+     * Mock it.
+     * @return Mocked request
+     */
+    public HttpServletResponse mock() {
+        return this.response;
     }
 
 }

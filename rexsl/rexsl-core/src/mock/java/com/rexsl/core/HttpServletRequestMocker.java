@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.rexsl.test.XhtmlConverter;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.servlet.ServletConfig;
@@ -39,58 +40,65 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.xmlmatchers.XmlMatchers;
 
 /**
- * Testing {@link RestfulServlet} class.
+ * Mocker of {@link HttpServletRequest}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class RestfulServletTest {
+public final class HttpServletRequestMocker {
 
     /**
-     * Let's test.
-     * @throws Exception If something goes wrong
+     * The mock.
      */
-    @Test
-    public void testJerseyInteractions() throws Exception {
-        final ServletContext ctx = new ServletContextMocker().mock();
-        final ServletConfig config = new ServletConfigMocker()
-            .withParam("com.rexsl.PACKAGES", "com.rexsl.core")
-            .withServletContext(ctx)
-            .mock();
-        // Mockito.doReturn(this.getClass().getResourceAsStream("main.xsl"))
-        //     .when(ctx).getResourceAsStream("/xsl/main.xsl");
-        final HttpServlet servlet = new RestfulServlet();
-        servlet.init(config);
-        final HttpServletRequest request = new HttpServletRequestMocker()
-            .mock();
-        final HttpServletResponse response = new HttpServletResponseMocker()
-            .expectStatus(HttpServletResponse.SC_OK)
-            .mock();
-        servlet.service(request, response);
-        MatcherAssert.assertThat(
-            response.toString(),
-            Matchers.containsString("\u0443\u0440\u0430")
-        );
+    private final transient HttpServletRequest request =
+        Mockito.mock(HttpServletRequest.class);
+
+    /**
+     * Public ctor.
+     */
+    public HttpServletRequestMocker() {
+        Mockito.doReturn(Collections.enumeration(new ArrayList<String>()))
+            .when(this.request).getHeaderNames();
+        Mockito.doReturn("").when(this.request).getContextPath();
+        Mockito.doReturn("").when(this.request).getServletPath();
+        Mockito.doReturn(new StringBuffer("http://localhost/"))
+            .when(this.request).getRequestURL();
+        this.withMethod("GET");
+        this.withRequestUri("/");
     }
 
-    @Path("/")
-    public static final class FrontEnd {
-        /**
-         * Front page.
-         * @return The content of it
-         */
-        @GET
-        @Produces(MediaType.TEXT_PLAIN)
-        public String front() {
-            return "some text, \u0443\u0440\u0430!";
-        }
+    /**
+     * With this request URI.
+     * @param uri The URI
+     * @return This object
+     */
+    public HttpServletRequestMocker withRequestUri(final String uri) {
+        Mockito.doReturn(uri).when(this.request).getRequestURI();
+        Mockito.doReturn(uri).when(this.request).getPathInfo();
+        return this;
+    }
+
+    /**
+     * With this HTTP method.
+     * @param name Name of method
+     * @return This object
+     */
+    public HttpServletRequestMocker withMethod(final String name) {
+        Mockito.doReturn(name).when(this.request).getMethod();
+        return this;
+    }
+
+    /**
+     * Mock it.
+     * @return Mocked request
+     */
+    public HttpServletRequest mock() {
+        return this.request;
     }
 
 }

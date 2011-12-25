@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
@@ -28,25 +26,64 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ */
+package com.rexsl.core;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import org.mockito.Mockito;
+
+/**
+ * Mocker of {@link ServletConfig}.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    xmlns="http://www.w3.org/1999/xhtml"
-    version="2.0" exclude-result-prefixes="xs xsl xhtml">
+ */
+public final class ServletConfigMocker {
 
-    <xsl:output method="xhtml"
-        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-        doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" />
+    /**
+     * The mock.
+     */
+    private final transient ServletConfig config =
+        Mockito.mock(ServletConfig.class);
 
-    <xsl:template match="/" xml:lang="en">
-        <html>
-            <p>
-                <xsl:value-of select="/page" />
-            </p>
-        </html>
-    </xsl:template>
+    /**
+     * Params.
+     */
+    private final transient List<String> params = new ArrayList<String>();
 
-</xsl:stylesheet>
+    /**
+     * With this parameter.
+     * @param name The name of it
+     * @param val The value
+     * @return This object
+     */
+    public ServletConfigMocker withParam(final String name, final String val) {
+        this.params.add(name);
+        Mockito.doReturn(val).when(this.config).getInitParameter(name);
+        return this;
+    }
+
+    /**
+     * With this servlet context.
+     * @param ctx The context
+     * @return This object
+     */
+    public ServletConfigMocker withServletContext(final ServletContext ctx) {
+        Mockito.doReturn(ctx).when(this.config).getServletContext();
+        return this;
+    }
+
+    /**
+     * Mock it.
+     * @return Mocked config
+     */
+    public ServletConfig mock() {
+        Mockito.doReturn(Collections.enumeration(this.params))
+            .when(this.config).getInitParameterNames();
+        return this.config;
+    }
+
+}
