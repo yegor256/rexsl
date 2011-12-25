@@ -29,37 +29,53 @@
  */
 package com.rexsl.core;
 
-import javax.servlet.http.HttpServletResponse;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.Test;
+import java.io.InputStream;
+import javax.servlet.ServletContext;
+import org.apache.commons.io.IOUtils;
 import org.mockito.Mockito;
 
 /**
- * Test case for {@link ByteArrayResponseWrapper}.
+ * Mocker of {@link ServletContext}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
-public final class ByteArrayResponseWrapperTest {
+public final class ServletContextMocker {
 
     /**
-     * ByteArrayResponseWrapper can write to an output stream.
-     * @throws Exception If something goes wrong
+     * The mock.
      */
-    @Test
-    public void writesToOutputStream() throws Exception {
-        final ByteArrayResponseWrapper wrapper =
-            new ByteArrayResponseWrapper(
-                Mockito.mock(HttpServletResponse.class)
-            );
-        final String text = "some text, \u0443\u0440\u0430!";
-        final String encoding = "UTF-8";
-        wrapper.getOutputStream().write(text.getBytes(encoding));
-        MatcherAssert.assertThat(
-            wrapper.getByteStream().toString(encoding),
-            Matchers.equalTo(text)
-        );
+    private final transient ServletContext context =
+        Mockito.mock(ServletContext.class);
+
+    /**
+     * With this resource on board.
+     * @param name Name of it
+     * @param content The content of it
+     * @return This object
+     */
+    public ServletContextMocker withResource(final String name,
+        final String content) {
+        final InputStream stream = IOUtils.toInputStream(content);
+        Mockito.doReturn(stream).when(this.context).getResourceAsStream(name);
+        return this;
+    }
+
+    /**
+     * This resource is absent, and returns NULL.
+     * @param name Name of it
+     * @return This object
+     */
+    public ServletContextMocker withoutResource(final String name) {
+        Mockito.doReturn(null).when(this.context).getResourceAsStream(name);
+        return this;
+    }
+
+    /**
+     * Mock it.
+     * @return Mocked servlet context
+     */
+    public ServletContext mock() {
+        return this.context;
     }
 
 }

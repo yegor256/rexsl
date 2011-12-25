@@ -53,34 +53,39 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
+ * @todo #92 Would be nice to get rid of PowerMocking here and use YMOCK
+ *  socket mocking feature (still not implemented). Once it's implemented in
+ *  YMOCK let's use it here. Test case will be much shorter and clearer.
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ContextResourceResolver.class, UriBuilder.class })
 public final class ContextResourceResolverTest {
 
     /**
-     * Let's test simple resolving.
+     * ContextResourceResolver can resolve resource by HREF.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testSimpleResolving() throws Exception {
-        final ServletContext ctx = Mockito.mock(ServletContext.class);
+    public void resolvesResourceByHref() throws Exception {
         final String href = "/xsl/layout.xsl";
-        final InputStream stream = IOUtils.toInputStream("");
-        Mockito.doReturn(stream).when(ctx).getResourceAsStream(href);
+        final ServletContext ctx = new ServletContextMocker()
+            .withResource(href, "")
+            .mock();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve(href, null);
         MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(href));
     }
 
     /**
-     * Absolute URI should be fetched through HTTP.
+     * ContextResourceResolver can resolve when a resource is an Absolute URI.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testWithAbsoluteResource() throws Exception {
-        final ServletContext ctx = Mockito.mock(ServletContext.class);
+    public void resolvesWhenResourcesIsAnAbsoluteLink() throws Exception {
         final String href = "http://localhost/xsl/file.xsl";
+        final ServletContext ctx = new ServletContextMocker()
+            .withoutResource(href)
+            .mock();
         Mockito.doReturn(null).when(ctx).getResourceAsStream(href);
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final HttpURLConnection conn = this.mockConnection(href);
@@ -98,14 +103,17 @@ public final class ContextResourceResolverTest {
     }
 
     /**
-     * Absolute URI fetched through HTTP with invalid (non-OK) HTTP response.
+     * ContextResourceResolver throws exception if absolute URI fetched through
+     * HTTP has invalid (non-OK) HTTP response status code.
      * @throws Exception If something goes wrong
      */
     @Test(expected = javax.xml.transform.TransformerException.class)
-    public void testWithAbsoluteResourceAndInvalidCode() throws Exception {
-        final ServletContext ctx = Mockito.mock(ServletContext.class);
+    public void throwsExceptionWhenAbsoluteResourceHasInvalidStatusCode()
+        throws Exception {
         final String href = "http://localhost/some-non-existing-file.xsl";
-        Mockito.doReturn(null).when(ctx).getResourceAsStream(href);
+        final ServletContext ctx = new ServletContextMocker()
+            .withoutResource(href)
+            .mock();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final HttpURLConnection conn = this.mockConnection(href);
         Mockito.doReturn(HttpURLConnection.HTTP_NOT_FOUND)
@@ -114,14 +122,17 @@ public final class ContextResourceResolverTest {
     }
 
     /**
-     * Absolute URI fetched through HTTP with IO exception.
+     * ContextResourceResolver throws exception when absolute URI
+     * fetched through HTTP throws IO exception.
      * @throws Exception If something goes wrong
      */
     @Test(expected = javax.xml.transform.TransformerException.class)
-    public void testWithAbsoluteResourceAndIOException() throws Exception {
-        final ServletContext ctx = Mockito.mock(ServletContext.class);
+    public void throwsExceptionWhenAbsoluteResourceThrowsIoException()
+        throws Exception {
         final String href = "http://localhost/erroneous-file.xsl";
-        Mockito.doReturn(null).when(ctx).getResourceAsStream(href);
+        final ServletContext ctx = new ServletContextMocker()
+            .withoutResource(href)
+            .mock();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final HttpURLConnection conn = this.mockConnection(href);
         Mockito.doThrow(new java.io.IOException("ouch")).when(conn).connect();
@@ -129,14 +140,16 @@ public final class ContextResourceResolverTest {
     }
 
     /**
-     * Let's test with absent resource.
+     * ContextResourceResolver throws exception when resource is absent and
+     * is not an absolute URI.
      * @throws Exception If something goes wrong
      */
     @Test(expected = javax.xml.transform.TransformerException.class)
-    public void testWithAbsentResource() throws Exception {
-        final ServletContext ctx = Mockito.mock(ServletContext.class);
+    public void throwsWhenResourceIsAbsent() throws Exception {
         final String href = "/xsl/file.xsl";
-        Mockito.doReturn(null).when(ctx).getResourceAsStream(href);
+        final ServletContext ctx = new ServletContextMocker()
+            .withoutResource(href)
+            .mock();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         resolver.resolve(href, null);
     }
