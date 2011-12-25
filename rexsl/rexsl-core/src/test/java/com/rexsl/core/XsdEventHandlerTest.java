@@ -29,33 +29,36 @@
  */
 package com.rexsl.core;
 
-import com.ymock.util.Logger;
+import java.net.URL;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
+import javax.xml.bind.ValidationEventLocator;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
- * Handler of XSD events.
- *
+ * Test case for {@link XsdEventHandler}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class XsdEventHandler implements ValidationEventHandler {
+public final class XsdEventHandlerTest {
 
     /**
-     * {@inheritDoc}
+     * XsdEventHandler throws exception on every event.
+     * @throws Exception If something goes wrong
      */
-    @Override
-    public boolean handleEvent(final ValidationEvent event) {
-        throw new IllegalStateException(
-            Logger.format(
-                "JAXB error: \"%s\" at '%s' [%d:%d]: %[document]s",
-                event.getMessage(),
-                event.getLocator().getURL(),
-                event.getLocator().getLineNumber(),
-                event.getLocator().getColumnNumber(),
-                event.getLocator().getNode()
-            )
-        );
+    @Test(expected = IllegalStateException.class)
+    public void throwsExceptionOnEveryEvent() throws Exception {
+        final ValidationEventLocator locator =
+            Mockito.mock(ValidationEventLocator.class);
+        Mockito.doReturn(1).when(locator).getLineNumber();
+        Mockito.doReturn(1).when(locator).getColumnNumber();
+        Mockito.doReturn(new URL("http://localhost")).when(locator).getURL();
+        final ValidationEvent event = Mockito.mock(ValidationEvent.class);
+        Mockito.doReturn("msg").when(event).getMessage();
+        Mockito.doReturn(locator).when(event).getLocator();
+        final ValidationEventHandler handler = new XsdEventHandler();
+        handler.handleEvent(event);
     }
 
 }
