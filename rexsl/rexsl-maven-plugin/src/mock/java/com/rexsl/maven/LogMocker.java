@@ -29,10 +29,12 @@
  */
 package com.rexsl.maven;
 
-import org.apache.maven.monitor.logging.DefaultLog;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.maven.plugin.logging.Log;
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.slf4j.impl.StaticLoggerBinder;
 
 /**
@@ -43,13 +45,76 @@ import org.slf4j.impl.StaticLoggerBinder;
 public final class LogMocker {
 
     /**
-     * Start logging.
+     * The mock.
      */
-    public void mock() {
-        final Log log = new DefaultLog(
-            new ConsoleLogger(Logger.LEVEL_INFO, "test")
-        );
-        StaticLoggerBinder.getSingleton().setMavenLog(log);
+    private final transient Log log = Mockito.mock(Log.class);
+
+    /**
+     * Lines recorded.
+     */
+    private final transient List<String> messages = new ArrayList<String>();
+
+    /**
+     * Public ctor.
+     */
+    public LogMocker() {
+        Mockito.doAnswer(
+            new Answer() {
+                public Object answer(final InvocationOnMock invocation) {
+                    LogMocker.this.messages.add(
+                        (String) invocation.getArguments()[0]
+                    );
+                    return null;
+                }
+            }
+        ).when(this.log).info(Mockito.anyString());
+        Mockito.doAnswer(
+            new Answer() {
+                public Object answer(final InvocationOnMock invocation) {
+                    LogMocker.this.messages.add(
+                        (String) invocation.getArguments()[0]
+                    );
+                    return null;
+                }
+            }
+        ).when(this.log).error(Mockito.anyString());
+        Mockito.doAnswer(
+            new Answer() {
+                public Object answer(final InvocationOnMock invocation) {
+                    LogMocker.this.messages.add(
+                        (String) invocation.getArguments()[0]
+                    );
+                    return null;
+                }
+            }
+        ).when(this.log).debug(Mockito.anyString());
+        Mockito.doAnswer(
+            new Answer() {
+                public Object answer(final InvocationOnMock invocation) {
+                    LogMocker.this.messages.add(
+                        (String) invocation.getArguments()[0]
+                    );
+                    return null;
+                }
+            }
+        ).when(this.log).warn(Mockito.anyString());
+    }
+
+    /**
+     * Mock the log.
+     * @return The log
+     */
+    public Log mock() {
+        StaticLoggerBinder.getSingleton().setMavenLog(this.log);
+        return this.log;
+    }
+
+    /**
+     * Get messages recorded.
+     * @return The messages
+     */
+    public List<String> getMessages() {
+        return this.messages;
     }
 
 }
