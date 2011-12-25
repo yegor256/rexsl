@@ -34,34 +34,15 @@ import com.rexsl.maven.Environment;
 import java.io.File;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
 /**
- * InContainerScriptsCheck test case.
+ * Test case for {@link InContainerScriptsCheck}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class InContainerScriptsCheckTest {
-
-    /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
-    }
 
     /**
      * Validate correct XML+XSL transformation.
@@ -69,8 +50,11 @@ public final class InContainerScriptsCheckTest {
      */
     @Test
     public void textTruePositiveValidation() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withFile("src/main/webapp/xsl/layout.xsl", "layout.xsl")
+            .mock();
         final File basedir = this.temp.newFolder("basedir");
-        Utils.copy(basedir, "src/main/webapp/xsl/layout.xsl");
+        Utils.copy(basedir, );
         Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
         Utils.copy(basedir, "src/main/webapp/WEB-INF/web.xml");
         Utils.copy(basedir, "src/test/rexsl/scripts/home.groovy");

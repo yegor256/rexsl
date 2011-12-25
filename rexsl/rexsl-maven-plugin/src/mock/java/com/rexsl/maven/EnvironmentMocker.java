@@ -27,39 +27,64 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.maven;
 
+import com.google.common.io.Files;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
+import org.mockito.Mockito;
 
 /**
- * Supplementary test utils.
- * @author Yegor Bugayenko (yegor@qulice.com)
+ * Mocker of {@link Environment}.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class Utils {
+public final class EnvironmentMocker {
 
     /**
-     * Private ctor to avoid instantiation.
+     * The mock.
      */
-    private Utils() {
-        // intentionally empty
+    private final transient Environment env = Mockito.mock(Environment.class);
+
+    /**
+     * Temporary folder.
+     */
+    public transient File basedir;
+
+    /**
+     * Public ctor.
+     */
+    public EnvironmentMocker() {
+        new LogStarter().start();
+        final File temp = Files.createTempDir();
+        FileUtils.forceDeleteOnExit(temp);
+        this.basedir = new File(temp, "basedir");
+        this.basedir.mkdirs();
+        Mockito.doReturn(this.basedir).when(this.env).basedir();
     }
 
     /**
-     * Copy resource to file.
-     * @param basedir The directory to copy to
-     * @param name Name of resource
-     * @throws Exception If something goes wrong
+     * With this file in basedir.
+     * @param name File name
+     * @param res The resource to use
+     * @return This object
      */
-    public static void copy(final File basedir, final String name)
-        throws Exception {
-        final File dest = new File(basedir, name);
+    public EnvironmentMocker withFile(final String name, final String res) {
+        final File dest = new File(this.basedir, name);
         dest.getParentFile().mkdirs();
         FileUtils.copyInputStreamToFile(
-            Utils.class.getResourceAsStream(String.format("basedir/%s", name)),
+            this.getClass().getResourceAsStream(res),
             dest
         );
+        return this;
+    }
+
+    /**
+     * Mock it.
+     * @return Mocked environment
+     */
+    public Environment mock() {
+        return this.env;
     }
 
 }
