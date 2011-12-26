@@ -97,8 +97,9 @@ public final class XsltFilter implements Filter {
         Manifests.append(context);
         Logger.info(
             this,
-            "#init(%s): XSLT filter initialized",
-            config.getClass().getName()
+            "#init(%s): XSLT filter initialized (ReXSL version: %s)",
+            config.getClass().getName(),
+            Manifests.read("ReXSL-Version")
         );
     }
 

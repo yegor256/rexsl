@@ -55,6 +55,7 @@ public final class XsltFilterTest {
      */
     @Test
     public void transformsFromXmlToHtml() throws Exception {
+        Manifests.inject("ReXSL-Version", "1.0-SNAPSHOT");
         final ServletContext context = new ServletContextMocker()
             .withResource(
                 "/foo.xsl",
