@@ -75,8 +75,8 @@ final class ContextResourceResolver implements URIResolver {
         if (href.charAt(0) == '/') {
             stream = this.local(href);
         }
-        final URI uri = UriBuilder.fromUri(href).build();
         if (stream == null) {
+            final URI uri = UriBuilder.fromUri(href).build();
             if (uri.isAbsolute()) {
                 try {
                     stream = this.fetch(uri);

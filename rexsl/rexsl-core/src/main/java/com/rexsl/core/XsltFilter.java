@@ -181,12 +181,12 @@ public final class XsltFilter implements Filter {
                 this.source(xml),
                 null,
                 null,
-                this.ENCODING
+                null
             );
             if (stylesheet == null) {
                 throw new ServletException(
                     String.format(
-                        "No associated stylesheet found at '%s'",
+                        "No associated stylesheet found at:%n%s",
                         xml
                     )
                 );
