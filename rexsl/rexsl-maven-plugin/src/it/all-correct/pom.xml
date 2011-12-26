@@ -75,7 +75,7 @@
             <!-- ReXSL runtime library -->
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
-            <version rexsl="yes">0.2.6</version>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <!-- Assertions and matchers for unit tests. -->
@@ -111,7 +111,7 @@
             <!-- ReXSL test harness -->
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">0.2.6</version>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <!-- XML matchers from http://code.google.com/p/xml-matchers/ -->
@@ -181,7 +181,7 @@
             <plugin>
                 <groupId>com.rexsl</groupId>
                 <artifactId>rexsl-maven-plugin</artifactId>
-                <version rexsl="yes">0.2.6</version>
+                <version rexsl="yes">1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <goals>
