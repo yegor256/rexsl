@@ -244,7 +244,7 @@
                             <dependency>
                                 <groupId>com.ymock</groupId>
                                 <artifactId>ymock-tk</artifactId>
-                                <version since="18 Dec 2011">1.0.3</version>
+                                <version since="26 Dec 2011">1.0.4</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -558,7 +558,7 @@
                 <!-- Logging facility. -->
                 <groupId>com.ymock</groupId>
                 <artifactId>ymock-util</artifactId>
-                <version since="18 Dec 2011">1.0.3</version>
+                <version since="26 Dec 2011">1.0.4</version>
             </dependency>
             <dependency>
                 <!-- String manipulations -->
