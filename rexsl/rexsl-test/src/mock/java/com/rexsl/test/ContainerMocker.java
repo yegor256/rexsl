@@ -48,6 +48,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 
 /**
  * Mocker of Java Servlet container.
@@ -123,6 +124,18 @@ public final class ContainerMocker {
     public ContainerMocker expectHeader(final String name,
         final Matcher<String> matcher) {
         this.adapter.addHeaderMatcher(name, matcher);
+        return this;
+    }
+
+    /**
+     * Expect this header with exactly this value.
+     * @param name Name of the header.
+     * @param value The value to expect
+     * @return This object
+     */
+    public ContainerMocker expectHeader(final String name,
+        final String value) {
+        this.adapter.addHeaderMatcher(name, Matchers.equalTo(value));
         return this;
     }
 

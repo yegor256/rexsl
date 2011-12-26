@@ -94,9 +94,11 @@ public final class RestTesterTest {
         final ContainerMocker container = new ContainerMocker()
             .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectHeader(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
             .mock();
         RestTester
             .start(UriBuilder.fromUri(container.home()).queryParam(name, value))
+            .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
             .get("test of GET params")
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
