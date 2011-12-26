@@ -37,6 +37,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -60,7 +61,11 @@ public final class FrontEnd {
             throw new IllegalArgumentException("Form param 'text' expected");
         }
         Data.INSTANCE.set(text);
-        Logger.info(this, "#submit(%s): done", text);
+        Logger.info(
+            this,
+            "#submit('%s'): done",
+            StringEscapeUtils.escapeJava(text)
+        );
         return this.home();
     }
 

@@ -27,42 +27,53 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.foo;
+package com.rexsl.maven.utils;
 
-import com.ymock.util.Logger;
-import org.apache.commons.lang.StringEscapeUtils;
+import com.rexsl.maven.Environment;
+import com.rexsl.maven.EnvironmentMocker;
+import groovy.lang.Binding;
+import java.io.File;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
- * Holder of data.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * Test case for {@link GroovyExecutor}.
+ * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class Data {
+public final class GroovyExecutorTest {
 
-    public static final Data INSTANCE = new Data();
-
-    private String text = "Hello, world!";
-
-    private Data() {
-        // empty
+    /**
+     * GroovyExecutor can execute a simple groovy script.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void executesSimpleGroovyScript() throws Exception {
+        final String name = "src/test.groovy";
+        final Environment env = new EnvironmentMocker()
+            .withTextFile(name, "println('hello, world')")
+            .mock();
+        final Binding binding = new BindingBuilder(env).build();
+        final GroovyExecutor exec = new GroovyExecutor(env, binding);
+        exec.execute(new File(env.basedir(), name));
     }
 
-    public void set(final String txt) {
-        this.text = txt;
-        Logger.info(
-            this,
-            "#set('%s'): done",
-            StringEscapeUtils.escapeJava(txt)
+    /**
+     * GroovyExecutor can work with explicitly provided classloader.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void worksWithSpecifiedClassloader() throws Exception {
+        final String name = "src/foo.groovy";
+        final Environment env = new EnvironmentMocker()
+            .withTextFile(name, "println('hello, everybody')")
+            .mock();
+        final GroovyExecutor exec = new GroovyExecutor(
+            Thread.currentThread().getContextClassLoader(),
+            new BindingBuilder(env).build()
         );
-    }
-
-    public String get() {
-        Logger.info(
-            this,
-            "#get(): returned '%s'",
-            StringEscapeUtils.escapeJava(this.text)
-        );
-        return this.text;
+        exec.execute(new File(env.basedir(), name));
     }
 
 }

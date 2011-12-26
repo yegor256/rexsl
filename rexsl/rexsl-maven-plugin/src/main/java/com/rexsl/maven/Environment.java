@@ -30,10 +30,10 @@
 package com.rexsl.maven;
 
 import java.io.File;
-import java.util.List;
+import java.util.Set;
 
 /**
- * Environment proxy.
+ * Testing environment.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -47,28 +47,28 @@ public interface Environment {
     File basedir();
 
     /**
-     * Get web root.
+     * Get web root, normally a directory in "target/" folder.
      * @return The web dir
      */
     File webdir();
 
     /**
-     * Return a list of artifacts (JARs and dirs) that should be available
+     * Return a set of artifacts (JARs and dirs) that should be available
      * for all "running-as-remote" Groovy scripts.
      * @param tonly The list should include ONLY test-related artifacts?
      * @return The list of JARs and directories
      */
-    List<File> classpath(final boolean tonly);
+    Set<File> classpath(final boolean tonly);
 
     /**
-     * Shall we use runtime filtering of resources?
+     * Shall we use runtime filtering of web resources?
      * @return Shall we?
      */
     boolean useRuntimeFiltering();
 
     /**
-     * Get port number.
-     * @return The port number
+     * Get port number, that can be used for a web container in runtime.
+     * @return The port number, just allocated/reserved
      */
     Integer port();
 
