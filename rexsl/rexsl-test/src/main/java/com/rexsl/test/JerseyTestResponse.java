@@ -31,8 +31,6 @@ package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
-import groovy.util.XmlSlurper;
-import groovy.util.slurpersupport.GPathResult;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
@@ -123,22 +121,6 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public Integer getStatus() {
         return this.response.getStatus();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GPathResult getGpath() {
-        try {
-            return new XmlSlurper().parseText(this.getBody());
-        } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalArgumentException(ex);
-        }
     }
 
     /**

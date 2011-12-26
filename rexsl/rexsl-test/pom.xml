@@ -146,13 +146,6 @@
             <artifactId>mockito-all</artifactId>
         </dependency>
         <dependency>
-            <!-- Groovy engine. -->
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all-minimal</artifactId>
-            <version since="3 Sep 2011">1.5.8</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <!-- Embedded Java Servlet Container, for tests only. -->
             <groupId>com.sun.grizzly</groupId>
             <artifactId>grizzly-servlet-webserver</artifactId>

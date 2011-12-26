@@ -29,7 +29,6 @@
  */
 package com.rexsl.test;
 
-import groovy.util.slurpersupport.GPathResult;
 import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import org.hamcrest.Matcher;
@@ -66,12 +65,6 @@ public interface TestResponse {
      * @return The status
      */
     Integer getStatus();
-
-    /**
-     * Get body as {@link GPathResult}.
-     * @return The GPath result
-     */
-    GPathResult getGpath();
 
     /**
      * Find and return nodes matched by xpath.
