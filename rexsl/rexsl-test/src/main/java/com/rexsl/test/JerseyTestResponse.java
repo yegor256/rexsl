@@ -194,8 +194,8 @@ final class JerseyTestResponse implements TestResponse {
                 status,
                 new ClientResponseDecor(this.response, this.getBody())
             ),
-            status,
-            Matchers.equalTo(this.getStatus())
+            this.getStatus(),
+            Matchers.equalTo(status)
         );
         return this;
     }
