@@ -95,7 +95,9 @@ final class ContextResourceResolver implements URIResolver {
         Source source;
         try {
             source = new StreamSource(
-                new BufferedReader(new InputStreamReader(stream, "UTF-8"))
+                new BufferedReader(
+                    new InputStreamReader(stream, XsltFilter.ENCODING)
+                )
             );
         } catch (java.io.UnsupportedEncodingException ex) {
             throw new TransformerException(ex);

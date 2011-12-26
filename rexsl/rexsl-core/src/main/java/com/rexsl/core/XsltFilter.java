@@ -83,7 +83,8 @@ public final class XsltFilter implements Filter {
     /**
      * Character encoding of the page.
      */
-    private static final String ENCODING = "UTF-8";
+    @SuppressWarnings("PMD.DefaultPackage")
+    static final String ENCODING = "UTF-8";
 
     /**
      * XSLT factory.
@@ -160,8 +161,10 @@ public final class XsltFilter implements Filter {
         String page = wrapper.getByteStream().toString(this.ENCODING);
         final PageAnalyzer analyzer = new PageAnalyzer(page, request);
         if (analyzer.needsTransformation()) {
-            response.setContentType(MediaType.TEXT_HTML);
             page = this.transform(page);
+            response.setContentType(MediaType.TEXT_HTML);
+            response.setContentLength(page.length());
+            response.setCharacterEncoding(this.ENCODING);
         }
         response.getOutputStream().write(page.getBytes(this.ENCODING));
     }
