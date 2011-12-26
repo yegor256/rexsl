@@ -30,10 +30,12 @@
 package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
+import java.util.ArrayList;
 import java.util.Formattable;
 import java.util.Formatter;
 import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -43,6 +45,16 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  */
 final class ClientResponseDecor implements Formattable {
+
+    /**
+     * End of line.
+     */
+    private static final String EOL = "\n";
+
+    /**
+     * Indentation.
+     */
+    private static final String INDENT = "    ";
 
     /**
      * The response.
@@ -76,18 +88,37 @@ final class ClientResponseDecor implements Formattable {
             : this.response.getHeaders().entrySet()) {
             builder.append(
                 String.format(
-                    "\t%s: %s\n",
+                    "%s%s: %s%s",
+                    this.INDENT,
                     header.getKey(),
-                    StringUtils.join(header.getValue(), ", ")
+                    StringUtils.join(header.getValue(), ", "),
+                    this.EOL
                 )
             );
         }
-        final String eol = "\n";
-        builder.append(eol)
-            .append("\t")
-            .append(this.body.replace(eol, "\n\t"))
-            .append(eol);
+        builder.append(this.EOL)
+            .append(this.INDENT)
+            .append(
+                StringUtils.join(
+                    this.lines(this.body),
+                    String.format("%s%s", this.EOL, this.INDENT)
+                )
+            )
+            .append(this.EOL);
         formatter.format("%s", builder.toString());
+    }
+
+    /**
+     * Get all lines from the text.
+     * @param text The text
+     * @return Lines
+     */
+    private List<String> lines(final String text) {
+        final List<String> lines = new ArrayList<String>();
+        for (String line : StringUtils.split(text, this.EOL)) {
+            lines.add(StringEscapeUtils.escapeJava(line));
+        }
+        return lines;
     }
 
 }

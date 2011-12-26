@@ -32,9 +32,9 @@ package com.rexsl.maven;
 import com.rexsl.maven.aether.DepsResolver;
 import com.ymock.util.Logger;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Properties;
+import java.util.Set;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 import org.sonatype.aether.artifact.Artifact;
@@ -141,8 +141,8 @@ public final class MavenEnvironment implements Environment {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public List<File> classpath(final boolean tonly) {
-        final List<String> paths = new ArrayList<String>();
+    public Set<File> classpath(final boolean tonly) {
+        final Set<String> paths = new LinkedHashSet<String>();
         try {
             paths.addAll(this.project.getTestClasspathElements());
         } catch (DependencyResolutionRequiredException ex) {
@@ -151,7 +151,7 @@ public final class MavenEnvironment implements Environment {
         for (Artifact artifact : this.artifacts(tonly)) {
             paths.add(artifact.getFile().getPath());
         }
-        final List<File> files = new ArrayList<File>();
+        final Set<File> files = new LinkedHashSet<File>();
         for (String path : paths) {
             files.add(new File(path));
             Logger.debug(
@@ -177,8 +177,8 @@ public final class MavenEnvironment implements Environment {
      * @return The list of artifacts
      * @see #classloader()
      */
-    private List<Artifact> artifacts(final boolean tonly) {
-        final List<Artifact> artifacts = new ArrayList<Artifact>();
+    private Set<Artifact> artifacts(final boolean tonly) {
+        final Set<Artifact> artifacts = new LinkedHashSet<Artifact>();
         final DepsResolver resolver =
             new DepsResolver(this.project, this.localRepo);
         Logger.debug(this, "Full tree of artifacts in classpath:");
@@ -220,8 +220,8 @@ public final class MavenEnvironment implements Environment {
      * @see #artifacts()
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    private List<Artifact> roots(final boolean tonly) {
-        final List<Artifact> roots = new ArrayList<Artifact>();
+    private Set<Artifact> roots(final boolean tonly) {
+        final Set<Artifact> roots = new LinkedHashSet<Artifact>();
         for (org.apache.maven.artifact.Artifact artf
             : this.project.getDependencyArtifacts()) {
             if (!org.apache.maven.artifact.Artifact.SCOPE_TEST

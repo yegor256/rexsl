@@ -50,6 +50,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Converts XML to XHTML, if necessary.
@@ -79,11 +80,6 @@ import javax.xml.transform.stream.StreamSource;
  * @checkstyle ClassDataAbstractionCoupling (300 lines)
  */
 public final class XsltFilter implements Filter {
-
-    /**
-     * Character encoding of the page.
-     */
-    private static final String ENCODING = "UTF-8";
 
     /**
      * XSLT factory.
@@ -157,13 +153,15 @@ public final class XsltFilter implements Filter {
             // we can't change response that is already finished
             return;
         }
-        String page = wrapper.getByteStream().toString(this.ENCODING);
+        String page = wrapper.getByteStream().toString(CharEncoding.UTF_8);
         final PageAnalyzer analyzer = new PageAnalyzer(page, request);
         if (analyzer.needsTransformation()) {
-            response.setContentType(MediaType.TEXT_HTML);
             page = this.transform(page);
+            response.setContentType(MediaType.TEXT_HTML);
+            response.setContentLength(page.length());
+            response.setCharacterEncoding(CharEncoding.UTF_8);
         }
-        response.getOutputStream().write(page.getBytes(this.ENCODING));
+        response.getOutputStream().write(page.getBytes(CharEncoding.UTF_8));
     }
 
     /**
@@ -181,12 +179,12 @@ public final class XsltFilter implements Filter {
                 this.source(xml),
                 null,
                 null,
-                this.ENCODING
+                null
             );
             if (stylesheet == null) {
                 throw new ServletException(
                     String.format(
-                        "No associated stylesheet found at '%s'",
+                        "No associated stylesheet found at:%n%s",
                         xml
                     )
                 );

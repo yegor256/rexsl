@@ -72,10 +72,16 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <!-- ReXSL test harness -->
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-test</artifactId>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <!-- ReXSL runtime library -->
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
-            <version rexsl="yes">0.2.6</version>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <!-- Assertions and matchers for unit tests. -->
@@ -92,6 +98,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <!-- for string processing -->
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version since="19 Oct 2011">2.6</version>
+        </dependency>
+        <dependency>
             <!-- Logging facility -->
             <groupId>com.ymock</groupId>
             <artifactId>ymock-util</artifactId>
@@ -106,13 +118,6 @@
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
             <version since="18 Dec 2011">3.5.0</version>
-        </dependency>
-        <dependency>
-            <!-- ReXSL test harness -->
-            <groupId>com.rexsl</groupId>
-            <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">0.2.6</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <!-- XML matchers from http://code.google.com/p/xml-matchers/ -->
@@ -182,7 +187,7 @@
             <plugin>
                 <groupId>com.rexsl</groupId>
                 <artifactId>rexsl-maven-plugin</artifactId>
-                <version rexsl="yes">0.2.6</version>
+                <version rexsl="yes">1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <goals>

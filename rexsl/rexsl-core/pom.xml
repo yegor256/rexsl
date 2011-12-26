@@ -39,7 +39,7 @@
     <parent>
         <groupId>com.rexsl</groupId>
         <artifactId>rexsl</artifactId>
-        <version rexsl="yes">0.2.6</version>
+        <version rexsl="yes">1.0-SNAPSHOT</version>
     </parent>
     <artifactId>rexsl-core</artifactId>
     <packaging>jar</packaging>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">0.2.6</version>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -189,13 +189,13 @@
         </dependency>
         <dependency>
             <!--
-            Javax Servlet API 2.3. We're using this old version intentionally,
+            Javax Servlet API 2.4. We're using this old version intentionally,
             in order to make the framework compatible with all possible (incl.
             very old) web containers. See ticket #42 for more information.
             -->
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
-            <version since="26 Oct 2011">2.3</version>
+            <version since="26 Oct 2011">2.4</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

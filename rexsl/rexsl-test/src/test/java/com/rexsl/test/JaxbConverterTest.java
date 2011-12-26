@@ -67,7 +67,7 @@ public final class JaxbConverterTest {
         final Object object = new JaxbConverterTest.Employee();
         MatcherAssert.assertThat(
             JaxbConverter.the(object).toString(),
-            Matchers.containsString("\u0443")
+            Matchers.containsString("&#443;")
         );
     }
 

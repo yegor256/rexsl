@@ -50,39 +50,42 @@ public final class RuntimeListener implements ServletContextListener {
     @Override
     @SuppressWarnings("PMD.UseProperClassLoader")
     public void contextInitialized(final ServletContextEvent event) {
+        final long start = System.currentTimeMillis();
         final Environment env = new RuntimeEnvironment(
             event.getServletContext()
         );
         final File dir = new File(env.basedir(), "src/test/rexsl/bootstrap");
-        if (!dir.exists()) {
+        if (dir.exists()) {
+            int counter = 0;
+            final String[] exts = new String[] {"groovy"};
+            final GroovyExecutor exec = new GroovyExecutor(
+                event.getServletContext().getClassLoader(),
+                new BindingBuilder(env).build()
+            );
+            for (File script : FileUtils.listFiles(dir, exts, true)) {
+                Logger.info(this, "Running '%s'...", script);
+                try {
+                    exec.execute(script);
+                } catch (com.rexsl.maven.utils.GroovyException ex) {
+                    throw new IllegalStateException(ex);
+                }
+                counter += 1;
+            }
+            Logger.debug(
+                this,
+                // @checkstyle LineLength (1 line)
+                "#contextInitialized(%s): initialized with %d script(s) in %dms",
+                event.getClass().getName(),
+                counter,
+                System.currentTimeMillis() - start
+            );
+        } else {
             Logger.info(
                 this,
                 "%s directory is absent, no bootstrap scripts to run",
                 dir
             );
-            return;
         }
-        int counter = 0;
-        final String[] exts = new String[] {"groovy"};
-        final GroovyExecutor exec = new GroovyExecutor(
-            event.getServletContext().getClassLoader(),
-            new BindingBuilder(env).build()
-        );
-        for (File script : FileUtils.listFiles(dir, exts, true)) {
-            Logger.info(this, "Running '%s'...", script);
-            try {
-                exec.execute(script);
-            } catch (com.rexsl.maven.utils.GroovyException ex) {
-                throw new IllegalStateException(ex);
-            }
-            counter += 1;
-        }
-        Logger.debug(
-            this,
-            "#contextInitialized(%s): initialized with %d script(s)",
-            event.getClass().getName(),
-            counter
-        );
     }
 
     /**

@@ -27,39 +27,51 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.maven.utils;
 
-import com.sun.jersey.api.client.ClientResponse;
-import java.util.Formattable;
-import java.util.Formatter;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
+import com.rexsl.maven.Environment;
+import com.rexsl.maven.EnvironmentMocker;
+import groovy.lang.Binding;
+import java.io.File;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 /**
- * Test case for {@link ClientResponseDecor}.
- * @author Yegor Bugayenko (yegor@netbout.com)
+ * Test case for {@link GroovyExecutor}.
+ * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class ClientResponseDecorTest {
+public final class GroovyExecutorTest {
 
     /**
-     * BoutMocker can assign title to the bout.
-     * @throws Exception If there is some problem inside
+     * GroovyExecutor can execute a simple groovy script.
+     * @throws Exception If something goes wrong
      */
     @Test
-    public void canHaveATitleMocked() throws Exception {
-        final ClientResponse response = new ClientResponseMocker()
-            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML)
+    public void executesSimpleGroovyScript() throws Exception {
+        final String name = "src/test.groovy";
+        final Environment env = new EnvironmentMocker()
+            .withTextFile(name, "println('hello, world')")
             .mock();
-        final Formattable decor =
-            new ClientResponseDecor(response, "works, \u0443\u0440\u0430!");
-        final Appendable dest = Mockito.mock(Appendable.class);
-        final Formatter fmt = new Formatter(dest);
-        decor.formatTo(fmt, 0, 0, 0);
-        Mockito.verify(dest).append(Mockito.contains("Content-Type: text/xml"));
-        Mockito.verify(dest).append(Mockito.contains("\\u0443\\u0440\\u0430"));
+        final Binding binding = new BindingBuilder(env).build();
+        final GroovyExecutor exec = new GroovyExecutor(env, binding);
+        exec.execute(new File(env.basedir(), name));
+    }
+
+    /**
+     * GroovyExecutor can work with explicitly provided classloader.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void worksWithSpecifiedClassloader() throws Exception {
+        final String name = "src/foo.groovy";
+        final Environment env = new EnvironmentMocker()
+            .withTextFile(name, "println('hello, everybody')")
+            .mock();
+        final GroovyExecutor exec = new GroovyExecutor(
+            Thread.currentThread().getContextClassLoader(),
+            new BindingBuilder(env).build()
+        );
+        exec.execute(new File(env.basedir(), name));
     }
 
 }

@@ -156,7 +156,14 @@ public final class XslResolverTest {
             XhtmlConverter.the(writer.toString()),
             XmlMatchers.hasXPath(
                 // @checkstyle LineLength (1 line)
-                "/processing-instruction('xml-stylesheet')[contains(.,'Page.xsl')]"
+                "/processing-instruction('xml-stylesheet')[contains(.,\"href='/xsl/Page.xsl'\")]"
+            )
+        );
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(writer.toString()),
+            XmlMatchers.hasXPath(
+                // @checkstyle LineLength (1 line)
+                "/processing-instruction('xml-stylesheet')[contains(.,\"type='text/xsl'\")]"
             )
         );
     }
@@ -175,7 +182,8 @@ public final class XslResolverTest {
         MatcherAssert.assertThat(
             XhtmlConverter.the(writer.toString()),
             XmlMatchers.hasXPath(
-                "/processing-instruction('xml-stylesheet')[contains(.,'test')]"
+                // @checkstyle LineLength (1 line)
+                "/processing-instruction('xml-stylesheet')[contains(.,\"href='test'\")]"
             )
         );
     }

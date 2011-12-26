@@ -31,14 +31,13 @@ package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
-import groovy.util.XmlSlurper;
-import groovy.util.slurpersupport.GPathResult;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -92,7 +91,7 @@ final class JerseyTestResponse implements TestResponse {
         MatcherAssert.assertThat(
             Logger.format(
                 "XPath '%s' not found in:\n%s",
-                query,
+                StringEscapeUtils.escapeJava(query),
                 new ClientResponseDecor(this.response, this.getBody())
             ),
             links,
@@ -123,22 +122,6 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public Integer getStatus() {
         return this.response.getStatus();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GPathResult getGpath() {
-        try {
-            return new XmlSlurper().parseText(this.getBody());
-        } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalArgumentException(ex);
-        }
     }
 
     /**
@@ -274,7 +257,7 @@ final class JerseyTestResponse implements TestResponse {
         MatcherAssert.assertThat(
             Logger.format(
                 "XPath '%s' has to exist in:\n%s",
-                xpath,
+                StringEscapeUtils.escapeJava(xpath),
                 new ClientResponseDecor(this.response, this.getBody())
             ),
             XmlConverters.the(this.document()),
