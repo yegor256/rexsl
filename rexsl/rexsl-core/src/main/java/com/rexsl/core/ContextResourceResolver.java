@@ -42,6 +42,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Resolves resources using {@link ServletContext}.
@@ -96,7 +97,7 @@ final class ContextResourceResolver implements URIResolver {
         try {
             source = new StreamSource(
                 new BufferedReader(
-                    new InputStreamReader(stream, XsltFilter.ENCODING)
+                    new InputStreamReader(stream, CharEncoding.UTF_8)
                 )
             );
         } catch (java.io.UnsupportedEncodingException ex) {

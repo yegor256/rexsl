@@ -36,7 +36,6 @@ import groovy.util.GroovyScriptEngine;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.apache.commons.io.FilenameUtils;

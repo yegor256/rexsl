@@ -33,8 +33,6 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import groovy.lang.Binding;
 import java.io.File;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**

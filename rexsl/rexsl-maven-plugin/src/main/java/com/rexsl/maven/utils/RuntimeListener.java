@@ -73,6 +73,7 @@ public final class RuntimeListener implements ServletContextListener {
             }
             Logger.debug(
                 this,
+                // @checkstyle LineLength (1 line)
                 "#contextInitialized(%s): initialized with %d script(s) in %dms",
                 event.getClass().getName(),
                 counter,
