@@ -37,6 +37,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -90,7 +91,7 @@ final class JerseyTestResponse implements TestResponse {
         MatcherAssert.assertThat(
             Logger.format(
                 "XPath '%s' not found in:\n%s",
-                query,
+                StringEscapeUtils.escapeJava(query),
                 new ClientResponseDecor(this.response, this.getBody())
             ),
             links,
@@ -256,7 +257,7 @@ final class JerseyTestResponse implements TestResponse {
         MatcherAssert.assertThat(
             Logger.format(
                 "XPath '%s' has to exist in:\n%s",
-                xpath,
+                StringEscapeUtils.escapeJava(xpath),
                 new ClientResponseDecor(this.response, this.getBody())
             ),
             XmlConverters.the(this.document()),

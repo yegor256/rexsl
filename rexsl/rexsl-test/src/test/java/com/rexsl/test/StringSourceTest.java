@@ -29,37 +29,29 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
-import java.util.Formattable;
-import java.util.Formatter;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 /**
- * Test case for {@link ClientResponseDecor}.
- * @author Yegor Bugayenko (yegor@netbout.com)
+ * Test case for {@link StringSource}.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class ClientResponseDecorTest {
+public final class StringSourceTest {
 
     /**
-     * BoutMocker can assign title to the bout.
-     * @throws Exception If there is some problem inside
+     * StringSource can format XML text propertly.
+     * @throws Exception If something goes wrong inside
      */
     @Test
-    public void canHaveATitleMocked() throws Exception {
-        final ClientResponse response = new ClientResponseMocker()
-            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML)
-            .mock();
-        final Formattable decor =
-            new ClientResponseDecor(response, "works, \u0443\u0440\u0430!");
-        final Appendable dest = Mockito.mock(Appendable.class);
-        final Formatter fmt = new Formatter(dest);
-        decor.formatTo(fmt, 0, 0, 0);
-        Mockito.verify(dest).append(Mockito.contains("Content-Type: text/xml"));
-        Mockito.verify(dest).append(Mockito.contains("\\u0443\\u0440\\u0430"));
+    public void formatsIncomingXmlDocument() throws Exception {
+        final String xml = "<a><b>\u0443\u0440\u0430!</b></a>";
+        final StringSource source = new StringSource(xml);
+        MatcherAssert.assertThat(
+            source.toString(),
+            Matchers.containsString("&#443;")
+        );
     }
 
 }

@@ -29,7 +29,9 @@
  */
 package com.rexsl.test;
 
+import java.util.Locale;
 import javax.xml.transform.dom.DOMSource;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Private class for DOM to String converting.
@@ -59,7 +61,21 @@ final class StringSource extends DOMSource {
      */
     @Override
     public String toString() {
-        return this.xml;
+        final StringBuilder buf = new StringBuilder();
+        final int length = this.xml.length();
+        for (int pos = 0; pos < length; pos += 1) {
+            final char chr = this.xml.charAt(pos);
+            if (chr > 0x7f) {
+                buf.append("&#");
+                buf.append(
+                    Integer.toHexString(chr).toUpperCase(Locale.ENGLISH)
+                );
+                buf.append(";");
+            } else {
+                buf.append(chr);
+            }
+        }
+        return buf.toString();
     }
 
 }
