@@ -112,7 +112,6 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
             <version rexsl="yes">0.2.6</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <!-- XML matchers from http://code.google.com/p/xml-matchers/ -->
