@@ -52,7 +52,7 @@ public interface TestClient {
      * @param value Value of the header to set
      * @return This object
      */
-    TestClient header(String name, String value);
+    TestClient header(String name, Object value);
 
     /**
      * Execute GET request.
@@ -67,7 +67,7 @@ public interface TestClient {
      * @param body Request entity as a string
      * @return This object
      */
-    TestResponse post(String description, String body);
+    TestResponse post(String description, Object body);
 
     /**
      * Execute PUT request.
@@ -75,6 +75,6 @@ public interface TestClient {
      * @param body Request entity as a string
      * @return This object
      */
-    TestResponse put(String description, String body);
+    TestResponse put(String description, Object body);
 
 }
