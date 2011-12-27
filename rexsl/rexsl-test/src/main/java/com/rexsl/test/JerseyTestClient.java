@@ -73,9 +73,9 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
-    public TestClient header(final String name, final String value) {
+    public TestClient header(final String name, final Object value) {
         Logger.debug(this, "#header('%s', '%s'): set", name, value);
-        this.builder.header(name, value);
+        this.builder.header(name, value.toString());
         return this;
     }
 
@@ -91,16 +91,16 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse post(final String desc, final String body) {
-        return this.method(RestTester.POST, body, desc);
+    public TestResponse post(final String desc, final Object body) {
+        return this.method(RestTester.POST, body.toString(), desc);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public TestResponse put(final String desc, final String body) {
-        return this.method(RestTester.PUT, body, desc);
+    public TestResponse put(final String desc, final Object body) {
+        return this.method(RestTester.PUT, body.toString(), desc);
     }
 
     /**

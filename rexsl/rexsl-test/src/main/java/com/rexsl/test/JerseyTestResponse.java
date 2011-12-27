@@ -42,6 +42,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlmatchers.transform.XmlConverters;
 
@@ -140,9 +141,10 @@ final class JerseyTestResponse implements TestResponse {
         final List<String> items = new ArrayList<String>();
         for (int idx = 0; idx < nodes.getLength(); idx += 1) {
             MatcherAssert.assertThat(
-                "Only /text() nodes are retrievable with xpath()",
+                "Only /text() nodes or attributes are retrievable with xpath()",
                 nodes.item(idx).getNodeType(),
-                Matchers.equalTo(org.w3c.dom.Node.TEXT_NODE)
+                Matchers.<Short>either(Matchers.equalTo(Node.TEXT_NODE))
+                    .or(Matchers.equalTo(Node.ATTRIBUTE_NODE))
             );
             items.add(nodes.item(idx).getNodeValue());
         }
@@ -194,8 +196,8 @@ final class JerseyTestResponse implements TestResponse {
                 status,
                 new ClientResponseDecor(this.response, this.getBody())
             ),
-            status,
-            Matchers.equalTo(this.getStatus())
+            this.getStatus(),
+            Matchers.equalTo(status)
         );
         return this;
     }

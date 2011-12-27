@@ -168,7 +168,7 @@ public final class Manifests {
         }
         if (!Manifests.exists(name)) {
             final StringBuilder bldr = new StringBuilder(
-                String.format(
+                Logger.format(
                     // @checkstyle LineLength (1 line)
                     "Atribute '%s' not found in MANIFEST.MF file(s) among %d other attribute(s) %[list]s and %d injection(s)",
                     name,
