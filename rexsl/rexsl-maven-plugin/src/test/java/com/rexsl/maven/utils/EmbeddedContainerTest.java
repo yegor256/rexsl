@@ -69,13 +69,14 @@ public final class EmbeddedContainerTest {
                 + "</web-app>"
         )
             .withTextFile("target/webdir/file.txt", "some test data")
+            .withTextFile("src/test/rexsl/setup/test.groovy", "assert true")
             .mock();
+        final LogMocker lmocker = new LogMocker();
+        StaticLoggerBinder.getSingleton().setMavenLog(lmocker.mock());
         final EmbeddedContainer container = EmbeddedContainer.start(env);
         final URI home = new URI(
             String.format("http://localhost:%d/file.txt", env.port())
         );
-        final LogMocker lmocker = new LogMocker();
-        StaticLoggerBinder.getSingleton().setMavenLog(lmocker.mock());
         RestTester.start(home)
             .get("get test data file")
             .assertStatus(HttpURLConnection.HTTP_OK)

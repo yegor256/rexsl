@@ -34,7 +34,6 @@ import com.ymock.util.Logger;
 import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import org.apache.commons.io.FileUtils;
 
 /**
  * To be executed before all other code.
@@ -57,12 +56,12 @@ public final class RuntimeListener implements ServletContextListener {
         final File dir = new File(env.basedir(), "src/test/rexsl/bootstrap");
         if (dir.exists()) {
             int counter = 0;
-            final String[] exts = new String[] {"groovy"};
             final GroovyExecutor exec = new GroovyExecutor(
                 event.getServletContext().getClassLoader(),
                 new BindingBuilder(env).build()
             );
-            for (File script : FileUtils.listFiles(dir, exts, true)) {
+            final ScriptsFinder finder = new ScriptsFinder(dir);
+            for (File script : finder.ordered()) {
                 Logger.info(this, "Running '%s'...", script);
                 try {
                     exec.execute(script);
