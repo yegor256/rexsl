@@ -39,6 +39,8 @@ import org.junit.Test;
  * Test case for {@link WebXmlCheck}.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
+ * @todo #65:1h Implement XMLSchemaValidator with test and remove Ignore
+ *  annotations.
  */
 public final class WebXmlCheckTest {
 

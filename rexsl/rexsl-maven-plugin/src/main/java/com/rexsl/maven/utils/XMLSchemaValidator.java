@@ -27,33 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.maven.utils;
 
-import com.rexsl.maven.Check;
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.utils.XMLSchemaValidator;
 import java.io.File;
 
 /**
- * Validates web.xml file against it's XSD schema.
+ * Validates XML files against XML schema.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id: WebXmlCheck.java 204 2011-10-26 21:15:28Z guard $
+ * @version $Id: XMLSchemaValidator.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class WebXmlCheck implements Check {
+public final class XMLSchemaValidator {
 
-    @Override
-    public boolean validate(final Environment env) {
-        final File directory = env.basedir();
-        final File[] files = directory.listFiles();
-        boolean valid = true;
-        final XMLSchemaValidator validator = new XMLSchemaValidator();
-        for (File file : files) {
-            valid = validator.validate(file);
-            if (!valid) {
-                break;
-            }
-        }
-        return valid;
+    /**
+     * Performs validation of the specified file.
+     * @param file XML file to validate.
+     * @return If file is valid - <code>true</code>, if file is invalid -
+     *  <code>false</code>.
+     */
+    public boolean validate(final File file) {
+        return false;
     }
 }
