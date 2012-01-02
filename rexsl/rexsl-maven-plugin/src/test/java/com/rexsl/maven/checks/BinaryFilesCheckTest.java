@@ -38,8 +38,6 @@ import org.junit.Test;
  * Test case for {@link BinaryFilesCheck}.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id: BinaryFilesCheckTest.java 570 2011-12-25 16:32:21Z guard $
- * @todo #103 Implement files format validation and enable all test methods in
- *  this class.
  */
 public final class BinaryFilesCheckTest {
 
@@ -47,11 +45,10 @@ public final class BinaryFilesCheckTest {
      * BinaryFilesCheck can validate correct text file.
      * @throws Exception If something goes wrong
      */
-    @org.junit.Ignore
     @Test
     public void validatesTextFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/valid-text.xxx")
+            .withFile("src/main/webapp/valid-text.txt")
             .mock();
         MatcherAssert.assertThat(
             "valid text file passes without problems",
@@ -63,11 +60,10 @@ public final class BinaryFilesCheckTest {
      * BinaryFilesCheck can validate incorrect binary file.
      * @throws Exception If something goes wrong
      */
-    @org.junit.Ignore
     @Test
     public void validatesIncorrectCssFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/invalid-text.txt")
+            .withFile("src/main/webapp/invalid-text.jpg")
             .mock();
         MatcherAssert.assertThat(
             "invalid binary file is caught",
