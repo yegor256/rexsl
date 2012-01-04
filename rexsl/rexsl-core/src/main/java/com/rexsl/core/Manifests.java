@@ -31,16 +31,19 @@ package com.rexsl.core;
 
 import com.ymock.util.Logger;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
+import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang.SerializationUtils;
 
 /**
  * Wrapper around {@code MANIFEST.MF} files.
@@ -117,20 +120,20 @@ public final class Manifests {
      * Injected attributes.
      * @see #inject(String,String)
      */
-    private static final ConcurrentMap<String, String> INJECTED =
+    private static final Map<String, String> INJECTED =
         new ConcurrentHashMap<String, String>();
 
     /**
      * Attributes retrieved from all existing {@code MANIFEST.MF} files.
      * @see #load()
      */
-    private static ConcurrentMap<String, String> attributes;
+    private static Map<String, String> attributes;
 
     /**
      * Failures registered during loading.
      * @see #load()
      */
-    private static ConcurrentMap<URL, String> failures;
+    private static Map<URL, String> failures;
 
     /**
      * Load add available data on first loading of this class
@@ -238,6 +241,30 @@ public final class Manifests {
     }
 
     /**
+     * Make a snapshot of current attributes and their values.
+     * @return The snapshot, to be used later with {@link #revert(String)}
+     */
+    public static String snapshot() {
+        try {
+            return new String(
+                SerializationUtils.serialize((Serializable) Manifests.INJECTED),
+                CharEncoding.UTF_8
+            );
+        } catch (java.io.UnsupportedEncodingException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    /**
+     * Revert to the state that was recorded by {@link #snapshot()}.
+     * @param snapshot The snapshot taken by {@link #snapshot()}
+     */
+    public static void revert(final String snapshot) {
+        Manifests.INJECTED = (Map<String, String>)
+            SerializationUtils.deserialize(snapshot);
+    }
+
+    /**
      * Append attributes from the web application {@code MANIFEST.MF}, called
      * from {@link XsltFilter#init(FilterConfig)}.
      * @param ctx Servlet context
@@ -258,8 +285,7 @@ public final class Manifests {
                 ctx.getClass().getName()
             );
         } else {
-            final ConcurrentMap<String, String> attrs =
-                Manifests.loadOneFile(main);
+            final Map<String, String> attrs = Manifests.loadOneFile(main);
             Manifests.attributes.putAll(attrs);
             Logger.info(
                 Manifests.class,
@@ -332,8 +358,8 @@ public final class Manifests {
      * @return The attributes loaded
      * @see #load()
      */
-    private static ConcurrentMap<String, String> loadOneFile(final URL url) {
-        final ConcurrentMap<String, String> props =
+    private static Map<String, String> loadOneFile(final URL url) {
+        final Map<String, String> props =
             new ConcurrentHashMap<String, String>();
         InputStream stream;
         try {
