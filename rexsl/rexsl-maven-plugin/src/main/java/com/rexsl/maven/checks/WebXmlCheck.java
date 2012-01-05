@@ -31,7 +31,7 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.utils.XMLSchemaValidator;
+import com.ymock.util.Logger;
 import java.io.File;
 
 /**
@@ -45,15 +45,25 @@ public final class WebXmlCheck implements Check {
     @Override
     public boolean validate(final Environment env) {
         final File directory = env.basedir();
-        final File[] files = directory.listFiles();
+        final File file = new File(directory, "src/webapp/WEB-INF/web.xml");
         boolean valid = true;
-        final XMLSchemaValidator validator = new XMLSchemaValidator();
-        for (File file : files) {
-            valid = validator.validate(file);
-            if (!valid) {
-                break;
-            }
+        if (!file.exists()) {
+            Logger.warn(this, "File '%s' is absent, but should be there", file);
+            valid = false;
+        }
+        if (valid) {
+            valid = this.validate(file);
         }
         return valid;
+    }
+
+    /**
+     * Performs validation of the specified XML file against it's XSD schema.
+     * @param file File to be validated.
+     * @return True if file is valid, <code>false</code> if file is invalid.
+     */
+    private boolean validate(final File file) {
+        Logger.debug(this, "Validating file %s", file);
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 }
