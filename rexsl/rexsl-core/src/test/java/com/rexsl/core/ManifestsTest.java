@@ -100,7 +100,7 @@ public final class ManifestsTest {
     @Test
     public void makesSnapshotAndRestoresBack() throws Exception {
         final String name = "Test-Foo-Attribute";
-        final String snapshot = Manifests.snapshot();
+        final byte[] snapshot = Manifests.snapshot();
         MatcherAssert.assertThat("is absent", !Manifests.exists(name));
         Manifests.inject(name, "some value to inject");
         MatcherAssert.assertThat("should be", Manifests.exists(name));

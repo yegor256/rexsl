@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -54,10 +55,9 @@ public final class ByteArrayResponseWrapperTest {
                 Mockito.mock(HttpServletResponse.class)
             );
         final String text = "some text, \u0443\u0440\u0430!";
-        final String encoding = "UTF-8";
-        wrapper.getOutputStream().write(text.getBytes(encoding));
+        wrapper.getOutputStream().write(text.getBytes(CharEncoding.UTF_8));
         MatcherAssert.assertThat(
-            wrapper.getByteStream().toString(encoding),
+            wrapper.getByteStream().toString(CharEncoding.UTF_8),
             Matchers.equalTo(text)
         );
     }

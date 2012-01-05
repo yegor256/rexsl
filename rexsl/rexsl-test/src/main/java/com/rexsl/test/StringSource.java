@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import java.util.Locale;
 import javax.xml.transform.dom.DOMSource;
+import org.w3c.dom.Node;
 
 /**
  * Private class for DOM to String converting.
@@ -52,7 +53,17 @@ final class StringSource extends DOMSource {
     public StringSource(final String text) {
         super();
         this.xml = text;
-        this.setNode(new DomParser(text).document());
+        super.setNode(new DomParser(text).document());
+    }
+
+    /**
+     * Public ctor.
+     * @param node The node
+     */
+    public StringSource(final Node node) {
+        super();
+        this.xml = "xml";
+        super.setNode(node);
     }
 
     /**

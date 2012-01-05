@@ -36,6 +36,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang.CharEncoding;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -74,7 +75,7 @@ public final class FilterChainMocker {
                         final HttpServletResponse response =
                             (HttpServletResponse) invocation.getArguments()[1];
                         response.getOutputStream()
-                            .write(text.getBytes("UTF-8"));
+                            .write(text.getBytes(CharEncoding.UTF_8));
                         return null;
                     }
                 }
