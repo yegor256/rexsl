@@ -42,18 +42,13 @@ import org.junit.Test;
 public final class BinaryFilesCheckTest {
 
     /**
-     * Empty string.
-     */
-    private static final String EMPTY_STRING = "";
-
-    /**
      * BinaryFilesCheck can validate correct text file.
      * @throws Exception If something goes wrong
      */
     @Test
     public void validatesTextFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withTextFile("src/main/webapp/valid-text.txt", this.EMPTY_STRING)
+            .withTextFile("src/main/webapp/valid-text.txt", "")
             .mock();
         MatcherAssert.assertThat(
             "valid text file passes without problems",
@@ -68,7 +63,7 @@ public final class BinaryFilesCheckTest {
     @Test
     public void validatesIncorrectCssFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withTextFile("src/main/webapp/invalid-text.jpg", this.EMPTY_STRING)
+            .withTextFile("src/main/webapp/invalid-text.jpg", "")
             .mock();
         MatcherAssert.assertThat(
             "invalid binary file is caught",
