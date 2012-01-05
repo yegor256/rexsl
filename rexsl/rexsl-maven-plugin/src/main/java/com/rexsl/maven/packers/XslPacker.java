@@ -32,10 +32,19 @@ package com.rexsl.maven.packers;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Packager of XSL files. All XML comments and unnecessary spaces are removed.
@@ -57,6 +66,12 @@ public final class XslPacker extends AbstractPacker {
      */
     private static final TransformerFactory TFACTORY =
         TransformerFactory.newInstance();
+
+    /**
+     * Xpath factory.
+     */
+    private static final XPathFactory XPATHFACTORY =
+        XPathFactory.newInstance();
 
     /**
      * {@inheritDoc}
@@ -81,7 +96,17 @@ public final class XslPacker extends AbstractPacker {
             throw new IllegalStateException(ex);
         }
         try {
-            this.TFACTORY.newTransformer().transform(
+            clear(document);
+        } catch (XPathExpressionException ex) {
+            throw new IllegalStateException(ex);
+        }
+        try {
+            final Transformer transformer = this.TFACTORY.newTransformer();
+            transformer.setOutputProperty(
+                OutputKeys.OMIT_XML_DECLARATION,
+                "yes"
+            );
+            transformer.transform(
                 new DOMSource(document),
                 new StreamResult(dest)
             );
@@ -89,6 +114,24 @@ public final class XslPacker extends AbstractPacker {
             throw new IllegalStateException(ex);
         } catch (javax.xml.transform.TransformerException ex) {
             throw new IllegalStateException(ex);
+        }
+    }
+
+    private void clear(final Document document)
+        throws XPathExpressionException {
+        final XPath xpath = this.XPATHFACTORY.newXPath();
+        final XPathExpression expr = xpath.compile("//comment()");
+        final Object result = expr.evaluate(document, XPathConstants.NODESET);
+        final NodeList nodes = (NodeList) result;
+        for (int i = 0; i < nodes.getLength(); i++) {
+            final Node node = nodes.item(i);
+            final Node parent = node.getParentNode();
+            if (null == parent) {
+                throw new IllegalStateException(
+                    "Root element cannot be a comment"
+                );
+            }
+            parent.removeChild(node);
         }
     }
 
