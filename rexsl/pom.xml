@@ -48,7 +48,6 @@
     <name>rexsl</name>
 
     <modules>
-        <module>rexsl-tk</module>
         <module>rexsl-test</module>
         <module>rexsl-core</module>
         <module>rexsl-maven-plugin</module>
@@ -163,7 +162,7 @@
         This property has to be updated every time you release
         a new version to Maven Central
         -->
-        <releasedVersion>0.2.3</releasedVersion>
+        <releasedVersion>0.2.7</releasedVersion>
     </properties>
     <repositories>
         <!--
@@ -194,13 +193,9 @@
                         <groupId>com.qulice</groupId>
                         <artifactId>qulice-maven-plugin</artifactId>
                         <version since="12 Dec 2011">0.1.7</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.rexsl</groupId>
-                                <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
-                            </dependency>
-                        </dependencies>
+                        <configuration>
+                            <license>file:${basedir}/LICENSE.txt</license>
+                        </configuration>
                         <executions>
                             <execution>
                                 <goals>
@@ -247,9 +242,9 @@
                         <version since="19 Oct 2011">2.2.1</version>
                         <dependencies>
                             <dependency>
-                                <groupId>com.rexsl</groupId>
-                                <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
+                                <groupId>com.ymock</groupId>
+                                <artifactId>ymock-tk</artifactId>
+                                <version since="26 Dec 2011">1.0.4</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -261,11 +256,10 @@
                                 <configuration>
                                     <descriptorRefs>
                                         <!--
-                                        This descriptor is in rexsl-tk sub-module, which is in classpath of
-                                        this plugin.
+                                        This descriptor is in ymock-tk sub-module, which is in classpath of this plugin.
                                         @see http://maven.apache.org/plugins/maven-assembly-plugin/examples/sharing-descriptors.html
                                         -->
-                                        <descriptorRef>rexsl-sources</descriptorRef>
+                                        <descriptorRef>ymock-sources</descriptorRef>
                                     </descriptorRefs>
                                 </configuration>
                             </execution>
@@ -371,13 +365,6 @@
                                 </plugin>
                             </reportPlugins>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.rexsl</groupId>
-                                <artifactId>rexsl-tk</artifactId>
-                                <version rexsl="yes">1.0-SNAPSHOT</version>
-                            </dependency>
-                        </dependencies>
                         <executions>
                             <execution>
                                 <id>attach-descriptor</id>
@@ -495,6 +482,28 @@
                 <artifactId>junit</artifactId>
                 <version since="25 Nov 2011">4.10</version>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <!--
+                XML matchers.
+                @see http://code.google.com/p/xml-matchers/wiki/Tutorial
+                -->
+                <groupId>org.xmlmatchers</groupId>
+                <artifactId>xml-matchers</artifactId>
+                <version since="23 Sep 2011">0.10</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <!--
@@ -502,8 +511,18 @@
                 @link http://code.google.com/p/hamcrest/wiki/Tutorial
                 -->
                 <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-all</artifactId>
-                <version since="6 Apr 2011">1.1</version>
+                <artifactId>hamcrest-core</artifactId>
+                <version since="23 Dec 2011">1.2.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!--
+                Assertions and matchers for unit tests.
+                @link http://code.google.com/p/hamcrest/wiki/Tutorial
+                -->
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-library</artifactId>
+                <version since="23 Dec 2011">1.2.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -539,7 +558,7 @@
                 <!-- Logging facility. -->
                 <groupId>com.ymock</groupId>
                 <artifactId>ymock-util</artifactId>
-                <version since="22 Sep 2011">1.0</version>
+                <version since="26 Dec 2011">1.0.4</version>
             </dependency>
             <dependency>
                 <!-- String manipulations -->

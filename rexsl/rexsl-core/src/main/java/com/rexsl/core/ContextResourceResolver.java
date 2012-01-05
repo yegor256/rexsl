@@ -42,6 +42,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Resolves resources using {@link ServletContext}.
@@ -75,8 +76,8 @@ final class ContextResourceResolver implements URIResolver {
         if (href.charAt(0) == '/') {
             stream = this.local(href);
         }
-        final URI uri = UriBuilder.fromUri(href).build();
         if (stream == null) {
+            final URI uri = UriBuilder.fromUri(href).build();
             if (uri.isAbsolute()) {
                 try {
                     stream = this.fetch(uri);
@@ -92,9 +93,16 @@ final class ContextResourceResolver implements URIResolver {
                 );
             }
         }
-        final Source source = new StreamSource(
-            new BufferedReader(new InputStreamReader(stream))
-        );
+        Source source;
+        try {
+            source = new StreamSource(
+                new BufferedReader(
+                    new InputStreamReader(stream, CharEncoding.UTF_8)
+                )
+            );
+        } catch (java.io.UnsupportedEncodingException ex) {
+            throw new TransformerException(ex);
+        }
         source.setSystemId(href);
         return source;
     }
@@ -131,8 +139,9 @@ final class ContextResourceResolver implements URIResolver {
         if (code != HttpURLConnection.HTTP_OK) {
             throw new IOException(
                 String.format(
-                    "Invalid HTTP response code: %d",
-                    code
+                    "Invalid HTTP response code %d at '%s'",
+                    code,
+                    uri
                 )
             );
         }

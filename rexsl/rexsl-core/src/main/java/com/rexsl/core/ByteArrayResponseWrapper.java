@@ -36,6 +36,7 @@ import java.io.PrintWriter;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Wrapper that redirects all the writes to {@link ByteArrayOutputStream}.
@@ -65,9 +66,13 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
      */
     public ByteArrayResponseWrapper(final HttpServletResponse response) {
         super(response);
-        this.writer = new PrintWriter(
-            new OutputStreamWriter(this.stream)
-        );
+        try {
+            this.writer = new PrintWriter(
+                new OutputStreamWriter(this.stream, CharEncoding.UTF_8)
+            );
+        } catch (java.io.UnsupportedEncodingException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**

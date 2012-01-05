@@ -1,0 +1,21 @@
+/**
+ * Example of invalid CSS file. For test usage only.
+ */
+/* all in one line */
+a { color: black; text-decoration: none; }
+
+/* two-space indentation instead of four spaces */
+a:hover { 
+  background-color: black;
+}
+
+/* missed semicolon at the end */
+a:hover { 
+    background-color: black
+}
+
+/* no space between tag and curled bracket */
+a:hover{ 
+    background-color: black
+}
+

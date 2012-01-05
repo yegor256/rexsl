@@ -34,9 +34,9 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.GroovyExecutor;
+import com.rexsl.maven.utils.ScriptsFinder;
 import com.ymock.util.Logger;
 import java.io.File;
-import org.apache.commons.io.FileUtils;
 
 /**
  * Validate the product in container, with Groovy scripts.
@@ -89,8 +89,8 @@ public final class InContainerScriptsCheck implements Check {
      */
     private boolean run(final File dir, final Environment env) {
         boolean success = true;
-        final String[] exts = new String[] {"groovy"};
-        for (File script : FileUtils.listFiles(dir, exts, true)) {
+        final ScriptsFinder finder = new ScriptsFinder(dir);
+        for (File script : finder.random()) {
             try {
                 Logger.info(this, "Testing '%s'...", script);
                 this.one(env, script);

@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.servlet.DispatcherType;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -175,8 +174,8 @@ public final class EmbeddedContainer {
                 env,
                 new BindingBuilder(env).build()
             );
-            final String[] exts = new String[] {"groovy"};
-            for (File script : FileUtils.listFiles(dir, exts, true)) {
+            final ScriptsFinder finder = new ScriptsFinder(dir);
+            for (File script : finder.ordered()) {
                 Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
                 try {
                     exec.execute(script);
@@ -207,12 +206,13 @@ public final class EmbeddedContainer {
             } else {
                 urls.add(path.getAbsolutePath());
             }
-            Logger.debug(
-                EmbeddedContainer.class,
-                "#testClasspath(): %s",
-                path
-            );
         }
+        Logger.debug(
+            EmbeddedContainer.class,
+            "#testClasspath(%s): %[list]s",
+            env.getClass().getName(),
+            urls
+        );
         return StringUtils.join(urls, ",");
     }
 

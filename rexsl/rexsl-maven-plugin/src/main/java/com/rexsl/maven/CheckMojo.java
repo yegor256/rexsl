@@ -30,6 +30,7 @@
 package com.rexsl.maven;
 
 import com.ymock.util.Logger;
+import java.util.Map;
 import java.util.Set;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -45,11 +46,22 @@ import org.apache.maven.plugin.MojoFailureException;
 public final class CheckMojo extends AbstractRexslMojo {
 
     /**
+     * System variables to be set before running tests.
+     * @parameter
+     * @since 0.3
+     */
+    @SuppressWarnings("PMD.LongVariable")
+    private transient Map<String, String> systemPropertyVariables;
+
+    /**
      * {@inheritDoc}
      */
     @Override
     protected void run() throws MojoFailureException {
         final long start = System.currentTimeMillis();
+        if (this.systemPropertyVariables != null) {
+            this.injectVariables(this.systemPropertyVariables);
+        }
         final Set<Check> checks = new ChecksProvider().all();
         for (Check check : checks) {
             if (!check.validate(this.env())) {
@@ -66,6 +78,22 @@ public final class CheckMojo extends AbstractRexslMojo {
             "All ReXSL checks passed in %dms",
             System.currentTimeMillis() - start
         );
+    }
+
+    /**
+     * Inject system property variables.
+     * @param vars The variables to inject
+     */
+    private void injectVariables(final Map<String, String> vars) {
+        for (Map.Entry<String, String> var : vars.entrySet()) {
+            System.setProperty(var.getKey(), var.getValue());
+            Logger.info(
+                this,
+                "System variable '%s' set to '%s'",
+                var.getKey(),
+                var.getValue()
+            );
+        }
     }
 
 }

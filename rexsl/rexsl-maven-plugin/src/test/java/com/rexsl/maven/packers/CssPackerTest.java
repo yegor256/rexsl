@@ -30,16 +30,12 @@
 package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.Packer;
+import com.rexsl.maven.EnvironmentMocker;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 
 /**
  * Test case for {@link CssPacker}.
@@ -49,44 +45,19 @@ import org.mockito.Mockito;
 public final class CssPackerTest {
 
     /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
-    }
-
-    /**
-     * Simple packaging.
+     * CssPacker can do CSS packing.
      * @throws Exception If something goes wrong inside
-     * @todo #6 This test doesn't work because the Packer is not implemented.
-     *  We should package CSS files and compress them.
      */
     @Test
-    public void testCssPacking() throws Exception {
-        final Environment env = Mockito.mock(Environment.class);
-        final File basedir = this.temp.newFolder("basedir");
-        Mockito.doReturn(basedir).when(env).basedir();
-        final File webdir = new File(basedir, "target/webdir");
-        Mockito.doReturn(webdir).when(env).webdir();
-        final File src = new File(basedir, "src/main/webapp/css/screen.css");
-        final File dest = new File(webdir, "css/screen.css");
-        src.getParentFile().mkdirs();
-        FileUtils.writeStringToFile(
-            src,
-            "\u002F* test */ a: { color: red; }"
-        );
-        final Packer packer = new CssPacker();
-        packer.pack(env);
-        MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
+    public void packsCssFiles() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withTextFile(
+                "src/main/webapp/css/foo.css",
+                "\u002F* test */ a: { color: red; }"
+        ).mock();
+        final File dest = new File(env.webdir(), "css/foo.css");
+        new CssPacker().pack(env);
+        MatcherAssert.assertThat("file is created", dest.exists());
         MatcherAssert.assertThat(
             FileUtils.readFileToString(dest),
             Matchers.equalTo("a:{color:red}")

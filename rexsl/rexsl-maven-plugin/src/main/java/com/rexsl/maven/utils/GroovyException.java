@@ -38,14 +38,14 @@ package com.rexsl.maven.utils;
 public final class GroovyException extends Exception {
 
     /**
-     * Default ctor.
+     * Default public no-agrument ctor.
      */
     public GroovyException() {
         super();
     }
 
     /**
-     * Ctor.
+     * Public ctor.
      * @param cause The cause
      */
     public GroovyException(final Throwable cause) {
@@ -53,12 +53,28 @@ public final class GroovyException extends Exception {
     }
 
     /**
-     * Ctor.
-     * @param cause The cause
-     * @param args Agruments for String.format()
+     * Public ctor.
+     * @param cause The cause (formatting string for {@code String#format()})
+     * @param args Agruments for {@code String#format()}
      */
     public GroovyException(final String cause, final Object... args) {
-        super(String.format(cause, args));
+        super(GroovyException.toText(cause, args));
+    }
+
+    /**
+     * To message.
+     * @param cause The cause
+     * @param args Agruments for String.format()
+     * @return Compiled text
+     */
+    private static String toText(final String cause, final Object... args) {
+        String text;
+        if (args.length > 0) {
+            text = String.format(cause, args);
+        } else {
+            text = cause;
+        }
+        return text;
     }
 
 }

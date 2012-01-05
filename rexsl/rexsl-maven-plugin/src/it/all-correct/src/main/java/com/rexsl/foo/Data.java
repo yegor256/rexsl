@@ -30,6 +30,7 @@
 package com.rexsl.foo;
 
 import com.ymock.util.Logger;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Holder of data.
@@ -48,11 +49,19 @@ public final class Data {
 
     public void set(final String txt) {
         this.text = txt;
-        Logger.info(this, "#set('%s'): done", txt);
+        Logger.info(
+            this,
+            "#set('%s'): done",
+            StringEscapeUtils.escapeJava(txt)
+        );
     }
 
     public String get() {
-        Logger.info(this, "#get(): returned '%s'", this.text);
+        Logger.info(
+            this,
+            "#get(): returned '%s'",
+            StringEscapeUtils.escapeJava(this.text)
+        );
         return this.text;
     }
 

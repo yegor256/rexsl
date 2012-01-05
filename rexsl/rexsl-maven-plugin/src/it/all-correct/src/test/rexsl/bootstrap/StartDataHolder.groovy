@@ -33,6 +33,9 @@ package com.rexsl.foo.bootstrap
 // (the script) from servlet context listener injected into the application
 // by embedded container on-fly.
 import com.rexsl.foo.Data
+import com.ymock.util.Logger
+
+Logger.info(this, 'StartsDataHolder running...')
 
 assert Data.INSTANCE.get() == 'Hello, world!'
 Data.INSTANCE.set('bootstrapped')

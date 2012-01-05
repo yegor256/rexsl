@@ -30,19 +30,22 @@
 package com.rexsl.foo.scripts
 
 import com.rexsl.test.RestTester
+import com.ymock.util.Logger
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
 import org.hamcrest.Matchers
 
+Logger.info(this, 'HomePage script running...')
+
 RestTester.start(rexsl.home)
     .header(HttpHeaders.ACCEPT, 'text/plain,text/xml')
     .header(HttpHeaders.USER_AGENT, 'FireFox')
-    .get()
+    .get('home page')
     .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertHeader(HttpHeaders.CONTENT_TYPE, Matchers.equalTo(MediaType.TEXT_HTML))
+    .assertHeader(HttpHeaders.CONTENT_TYPE, Matchers.startsWith(MediaType.TEXT_HTML))
     .assertXPath('//xhtml:div')
 
 RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-addr'))
-    .get()
+    .get('non-existing page')
     .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)

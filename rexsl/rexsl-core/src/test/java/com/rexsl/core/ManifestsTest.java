@@ -41,11 +41,11 @@ import org.junit.Test;
 public final class ManifestsTest {
 
     /**
-     * Read single attribute, which always exist in MANIFEST.MF.
+     * Manifests can read a single attribute, which always exist in MANIFEST.MF.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testAttributeReading() throws Exception {
+    public void readsSingleExistingAttribute() throws Exception {
         MatcherAssert.assertThat(
             Manifests.read("Class-Path"),
             Matchers.notNullValue()
@@ -53,11 +53,11 @@ public final class ManifestsTest {
     }
 
     /**
-     * Injected attribute can be read.
+     * Manifests can read an injected attribute.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testAttributeInjecting() throws Exception {
+    public void readsInjectedAttribute() throws Exception {
         final String name = "Foo-Attribute";
         final String value = "some special value";
         MatcherAssert.assertThat(
@@ -76,20 +76,20 @@ public final class ManifestsTest {
     }
 
     /**
-     * Empty attribute.
+     * Manifests can throw an exception if an attribute is empty.
      * @throws Exception If something goes wrong
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyAttributeReading() throws Exception {
+    public void throwsExceptionWhenAttributeIsEmpty() throws Exception {
         Manifests.read("REXSL-Test-Empty-Attribute");
     }
 
     /**
-     * Read non-existing attribute.
+     * Manifests can throw an exception when attribute is absent.
      * @throws Exception If something goes wrong
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testAbsentAttributeReading() throws Exception {
+    public void throwsExceptionIfAttributeIsMissed() throws Exception {
         Manifests.read("absent-property");
     }
 

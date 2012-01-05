@@ -58,7 +58,23 @@ public final class InternalCheckException extends Exception {
      * @param args Agruments for String.format()
      */
     public InternalCheckException(final String cause, final Object... args) {
-        super(String.format(cause, args));
+        super(InternalCheckException.toText(cause, args));
+    }
+
+    /**
+     * To message.
+     * @param cause The cause
+     * @param args Agruments for String.format()
+     * @return Compiled text
+     */
+    private static String toText(final String cause, final Object... args) {
+        String text;
+        if (args.length > 0) {
+            text = String.format(cause, args);
+        } else {
+            text = cause;
+        }
+        return text;
     }
 
 }

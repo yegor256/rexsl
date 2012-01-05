@@ -29,108 +29,58 @@
  */
 package com.rexsl.core;
 
-import com.rexsl.test.XhtmlConverter;
-import java.util.ArrayList;
-import java.util.Collections;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.xmlmatchers.XmlMatchers;
 
 /**
- * Testing {@link RestfulServlet} class.
+ * Test case for {@link RestfulServlet}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class RestfulServletTest {
 
     /**
-     * Let's test.
+     * RestfulServlet can pass HTTP requests to Jersey for further processing.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testJerseyInteractions() throws Exception {
-        final HttpServlet servlet = this.servlet();
-        final HttpServletRequest request =
-            Mockito.mock(HttpServletRequest.class);
-        final String root = "/";
-        Mockito.doReturn(root).when(request).getRequestURI();
-        Mockito.doReturn("").when(request).getContextPath();
-        Mockito.doReturn(root).when(request).getPathInfo();
-        Mockito.doReturn("").when(request).getServletPath();
-        Mockito.doReturn(new StringBuffer("http://localhost/"))
-            .when(request).getRequestURL();
-        Mockito.doReturn(Collections.enumeration(new ArrayList<String>()))
-            .when(request).getHeaderNames();
-        Mockito.doReturn("GET").when(request).getMethod();
-        final HttpServletResponse response =
-            Mockito.mock(HttpServletResponse.class);
-        final Stream stream = new Stream();
-        Mockito.doReturn(stream).when(response).getOutputStream();
-        servlet.service(request, response);
-        Mockito.verify(response).setStatus(HttpServletResponse.SC_OK);
+    public void passesHttpRequestsToJersey() throws Exception {
+        final ServletConfig config = new ServletConfigMocker()
+            .withParam("com.rexsl.PACKAGES", "com.rexsl.core")
+            .mock();
+        final HttpServlet servlet = new RestfulServlet();
+        servlet.init(config);
+        final HttpServletResponse response = new HttpServletResponseMocker()
+            .expectStatus(HttpServletResponse.SC_OK)
+            .mock();
+        servlet.service(new HttpServletRequestMocker().mock(), response);
         MatcherAssert.assertThat(
-            XhtmlConverter.the(stream.toString()),
-            XmlMatchers.hasXPath("/page[.='test']")
+            response.toString(),
+            Matchers.containsString("\u0443\u0440\u0430")
         );
     }
 
     /**
-     * Create and initialize servlet.
-     * @return The servlet for tests
-     * @throws Exception If something goes wrong
+     * It's a test JAX-RS resource.
      */
-    private HttpServlet servlet() throws Exception {
-        final ServletConfig config = Mockito.mock(ServletConfig.class);
-        Mockito.doReturn(Collections.enumeration(new ArrayList<String>()))
-            .when(config).getInitParameterNames();
-        final ServletContext ctx = Mockito.mock(ServletContext.class);
-        Mockito.doReturn(ctx).when(config).getServletContext();
-        Mockito.doReturn(this.getClass().getResourceAsStream("main.xsl"))
-            .when(ctx).getResourceAsStream("/xsl/main.xsl");
-        final HttpServlet servlet = new RestfulServlet();
-        servlet.init(config);
-        return servlet;
-    }
-
     @Path("/")
     public static final class FrontEnd {
         /**
-         * Simple name.
-         * @return The name
+         * Front page.
+         * @return The content of it
          */
         @GET
-        public String getName() {
-            return "<?xml version='1.0'?><page>test</page>";
-        }
-    }
-
-    private static final class Stream extends ServletOutputStream {
-        /**
-         * Buffer to hold all output.
-         */
-        private final transient StringBuilder buffer = new StringBuilder();
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void write(final int data) {
-            this.buffer.append((char) data);
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String toString() {
-            return this.buffer.toString();
+        @Produces(MediaType.TEXT_PLAIN)
+        public String front() {
+            return "some text, \u0443\u0440\u0430!";
         }
     }
 

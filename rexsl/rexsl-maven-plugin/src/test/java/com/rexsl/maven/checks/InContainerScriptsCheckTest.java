@@ -29,57 +29,34 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import java.io.File;
+import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 
 /**
- * InContainerScriptsCheck test case.
+ * Test case for {@link InContainerScriptsCheck}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class InContainerScriptsCheckTest {
 
     /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
-    }
-
-    /**
-     * Validate correct XML+XSL transformation.
+     * InContainerScriptsCheck can validate without exceptions, if no problems.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void textTruePositiveValidation() throws Exception {
-        final File basedir = this.temp.newFolder("basedir");
-        Utils.copy(basedir, "src/main/webapp/xsl/layout.xsl");
-        Utils.copy(basedir, "src/main/webapp/xsl/Home.xsl");
-        Utils.copy(basedir, "src/main/webapp/WEB-INF/web.xml");
-        Utils.copy(basedir, "src/test/rexsl/scripts/home.groovy");
-        final Environment env = Mockito.mock(Environment.class);
-        Mockito.doReturn(basedir).when(env).basedir();
-        Mockito.doReturn(new File(basedir, "src/main/webapp"))
-            .when(env).webdir();
-        final Check check = new InContainerScriptsCheck();
-        MatcherAssert.assertThat(check.validate(env), Matchers.is(true));
+    public void validatesCorrectProjectWithNoExceptions() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withFile("target/webdir/xsl/layout.xsl")
+            .withFile("target/webdir/xsl/Home.xsl")
+            .withFile("target/webdir/WEB-INF/web.xml")
+            .withFile("src/test/rexsl/scripts/HomePage.groovy")
+            .mock();
+        MatcherAssert.assertThat(
+            "all validations pass",
+            new InContainerScriptsCheck().validate(env)
+        );
     }
 
 }

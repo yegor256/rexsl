@@ -30,24 +30,28 @@
 package com.rexsl.foo.setup
 
 import com.rexsl.test.RestTester
+import com.ymock.util.Logger
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import org.hamcrest.Matchers
 
+Logger.info(this, 'AddsData script running...')
+
 // let's validate how data were injected in bootstrap
 RestTester.start(rexsl.home)
-    .get()
+    .get('reading start data')
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString('bootstrapped'))
 
 // inject new data value
+def value = '\u0443\u0440\u0430'
 RestTester.start(rexsl.home)
     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
-    .post('text=injected')
+    .post('changing data', 'text=' + URLEncoder.encode(value, 'UTF-8'))
     .assertStatus(HttpURLConnection.HTTP_OK)
 
 // let's validate that it's there
 RestTester.start(rexsl.home)
-    .get()
+    .get('validating')
     .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertBody(Matchers.containsString('injected'))
+    .assertBody(Matchers.containsString(value))

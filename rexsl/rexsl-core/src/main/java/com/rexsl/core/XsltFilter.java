@@ -50,13 +50,14 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Converts XML to XHTML, if necessary.
  *
  * <p>You don't need to instantiate this class directly. It is instantiated
- * by servlet container according to configuration from <tt>web.xml</tt>.
- * Should be used in <tt>web.xml</tt> (together with {@link RestfulServlet})
+ * by servlet container according to configuration from {@code web.xml}.
+ * Should be used in {@code web.xml} (together with {@link RestfulServlet})
  * like this:
  *
  * <pre>
@@ -76,13 +77,9 @@ import javax.xml.transform.stream.StreamSource;
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  * @since 0.2
+ * @checkstyle ClassDataAbstractionCoupling (300 lines)
  */
 public final class XsltFilter implements Filter {
-
-    /**
-     * Character encoding of the page.
-     */
-    private static final String ENCODING = "UTF-8";
 
     /**
      * XSLT factory.
@@ -100,8 +97,9 @@ public final class XsltFilter implements Filter {
         Manifests.append(context);
         Logger.info(
             this,
-            "#init(%s): XSLT filter initialized",
-            config.getClass().getName()
+            "#init(%s): XSLT filter initialized (ReXSL version: %s)",
+            config.getClass().getName(),
+            Manifests.read("ReXSL-Version")
         );
     }
 
@@ -156,90 +154,15 @@ public final class XsltFilter implements Filter {
             // we can't change response that is already finished
             return;
         }
-        final String agent = request.getHeader("User-Agent");
-        final String accept = request.getHeader("Accept");
-        String page = wrapper.getByteStream().toString(this.ENCODING);
-        // let's check whether we should transform or not
-        // @checkstyle BooleanExpressionComplexity (1 line)
-        final boolean dontTouch =
-            // page is empty
-            page.isEmpty()
-            // it doesn't look like XML
-            || !page.startsWith("<?xml ")
-            // it doesn't refer to any stylesheet
-            || !page.contains("<?xml-stylesheet ")
-            // it's a pure XML client, requesting XML format
-            || this.isXmlExplicitlyRequested(accept)
-            // the browser supports XSTL 2.0
-            || (this.isXsltCapable(agent) && this.acceptsXml(accept));
-        if (dontTouch) {
-            Logger.debug(
-                this,
-                // @checkstyle LineLength (1 line)
-                "#filter('%s': %d chars): User-Agent='%s', Accept='%s', no need to transform",
-                request.getRequestURI(),
-                page.length(),
-                agent,
-                accept
-            );
-        } else {
-            response.setContentType("text/html");
+        String page = wrapper.getByteStream().toString(CharEncoding.UTF_8);
+        final PageAnalyzer analyzer = new PageAnalyzer(page, request);
+        if (analyzer.needsTransformation()) {
             page = this.transform(page);
+            response.setContentType(MediaType.TEXT_HTML);
+            response.setContentLength(page.length());
+            response.setCharacterEncoding(CharEncoding.UTF_8);
         }
-        response.getOutputStream().write(page.getBytes(this.ENCODING));
-    }
-
-    /**
-     * Check if the XSLT transformation is required on the server side.
-     * @param agent User agent string from the request.
-     * @return If the transformation is needed.
-     * @todo #7 The implementation is very preliminary and should be refined.
-     *  Not all Chrome or Safari versions support XSLT 2.0. We should properly
-     *  parse the "Agent" header and understand versions.
-     */
-    private Boolean isXsltCapable(final String agent) {
-        final Boolean cap = (agent != null)
-            && agent.matches(".*(Chrome|Safari).*");
-        Logger.debug(this, "#isXsltCapable('%s'): %b", agent, cap);
-        return cap;
-    }
-
-    /**
-     * Check if the application/xml MIME type is the only one there.
-     * @param header Accept header string from the request.
-     * @return If the application/XML MIME type is the one
-     */
-    private Boolean isXmlExplicitlyRequested(final String header) {
-        final Boolean requested = (header != null)
-            && (MediaType.APPLICATION_XML.equals(header));
-        Logger.debug(
-            this,
-            "#isXmlExplicitlyRequested('%s'): %b",
-            header,
-            requested
-        );
-        return requested;
-    }
-
-    /**
-     * Check if the "application/xml" MIME type is accepted.
-     * @param header Accept header string from the request.
-     * @return If the application/XML MIME type is present
-     * @todo #7 This implemetation is very very preliminary and should
-     *  be replaced with something more decent. I don't like the idea
-     *  of implementing this parsing functionality here. We should better
-     *  use some library: http://stackoverflow.com/questions/7705979
-     */
-    private Boolean acceptsXml(final String header) {
-        final Boolean accepts = (header != null)
-            && (header.contains(MediaType.APPLICATION_XML));
-        Logger.debug(
-            this,
-            "#acceptsXml('%s'): %b",
-            header,
-            accepts
-        );
-        return accepts;
+        response.getOutputStream().write(page.getBytes(CharEncoding.UTF_8));
     }
 
     /**
@@ -254,7 +177,7 @@ public final class XsltFilter implements Filter {
         final StringWriter writer = new StringWriter();
         try {
             final Source stylesheet = this.tfactory.getAssociatedStylesheet(
-                new StreamSource(new StringReader(xml)),
+                this.source(xml),
                 null,
                 null,
                 null
@@ -262,7 +185,7 @@ public final class XsltFilter implements Filter {
             if (stylesheet == null) {
                 throw new ServletException(
                     String.format(
-                        "No associated stylesheet found at '%s'",
+                        "No associated stylesheet found at:%n%s",
                         xml
                     )
                 );
@@ -276,7 +199,7 @@ public final class XsltFilter implements Filter {
             );
             final Transformer trans = this.tfactory.newTransformer(stylesheet);
             trans.transform(
-                new StreamSource(new StringReader(xml)),
+                this.source(xml),
                 new StreamResult(writer)
             );
         } catch (TransformerConfigurationException ex) {
@@ -305,6 +228,15 @@ public final class XsltFilter implements Filter {
             System.currentTimeMillis() - start
         );
         return output;
+    }
+
+    /**
+     * Transform XML into DOM source.
+     * @param xml XML page to be transformed.
+     * @return Source
+     */
+    private Source source(final String xml) {
+        return new StreamSource(new StringReader(xml));
     }
 
 }

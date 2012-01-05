@@ -29,11 +29,8 @@
  */
 package com.rexsl.test;
 
-import java.io.ByteArrayInputStream;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.Locale;
 import javax.xml.transform.dom.DOMSource;
-import org.w3c.dom.Document;
 
 /**
  * Private class for DOM to String converting.
@@ -55,7 +52,7 @@ final class StringSource extends DOMSource {
     public StringSource(final String text) {
         super();
         this.xml = text;
-        this.setNode(this.toDocument(text));
+        this.setNode(new DomParser(text).document());
     }
 
     /**
@@ -63,42 +60,22 @@ final class StringSource extends DOMSource {
      */
     @Override
     public String toString() {
-        return this.xml;
-    }
-
-    /**
-     * Convert text to DOM Document.
-     * @param text The content of the document
-     * @return The DOM document
-     */
-    private Document toDocument(final String text) {
-        final DocumentBuilderFactory factory =
-            DocumentBuilderFactory.newInstance();
-        try {
-            // @checkstyle LineLength (1 line)
-            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
-            throw new IllegalStateException(ex);
+        final StringBuilder buf = new StringBuilder();
+        final int length = this.xml.length();
+        for (int pos = 0; pos < length; pos += 1) {
+            final char chr = this.xml.charAt(pos);
+            // @checkstyle MagicNumber (1 line)
+            if (chr > 0x7f) {
+                buf.append("&#");
+                buf.append(
+                    Integer.toHexString(chr).toUpperCase(Locale.ENGLISH)
+                );
+                buf.append(";");
+            } else {
+                buf.append(chr);
+            }
         }
-        factory.setNamespaceAware(true);
-        DocumentBuilder builder;
-        try {
-            builder = factory.newDocumentBuilder();
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
-            throw new IllegalStateException(ex);
-        }
-        Document dom;
-        try {
-            dom = builder.parse(new ByteArrayInputStream(text.getBytes()));
-        } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalStateException(
-                String.format("Failed to parse XML: '%s'", text),
-                ex
-            );
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        }
-        return dom;
+        return buf.toString();
     }
 
 }

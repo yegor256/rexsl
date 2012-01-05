@@ -84,6 +84,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      */
     @Context
     public void setServletContext(final ServletContext ctx) {
+        assert ctx != null : "ServletContext can't be NULL";
         final String name = ctx.getInitParameter("com.rexsl.core.XSD_FOLDER");
         if (name != null) {
             this.xsdFolder = new File(name);
@@ -111,7 +112,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             mrsh = this.buildContext(type).createMarshaller();
             mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             final String header = String.format(
-                "\n<?xml-stylesheet type='text/xml' href='%s'?>",
+                "\n<?xml-stylesheet type='text/xsl' href='%s'?>",
                 StringEscapeUtils.escapeXml(this.stylesheet(type))
             );
             mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
@@ -254,15 +255,15 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @return The name of XSD file
      */
     private String schema(final Class<?> type) {
-        final Annotation antn = type.getAnnotation(XmlSchema.class);
+        final Annotation antn = type.getAnnotation(Schema.class);
         String schema;
         if (antn == null) {
             schema = String.format("%s.xsd", type.getName());
         } else {
-            if (((XmlSchema) antn).ignore()) {
+            if (((Schema) antn).ignore()) {
                 schema = "";
             } else {
-                schema = ((XmlSchema) antn).value();
+                schema = ((Schema) antn).value();
             }
         }
         Logger.debug(

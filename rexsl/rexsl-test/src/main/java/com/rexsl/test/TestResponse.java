@@ -29,8 +29,7 @@
  */
 package com.rexsl.test;
 
-import groovy.util.slurpersupport.GPathResult;
-import java.io.IOException;
+import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import org.hamcrest.Matcher;
 
@@ -40,7 +39,7 @@ import org.hamcrest.Matcher;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-interface TestResponse {
+public interface TestResponse {
 
     /**
      * Follow the LOCATION header.
@@ -50,18 +49,16 @@ interface TestResponse {
 
     /**
      * Find link in XML and return new client with this link as URI.
-     * @param xpath The path of the link
+     * @param query The path of the link
      * @return New client
-     * @throws Exception If some problem inside
      */
-    TestClient rel(String xpath) throws Exception;
+    TestClient rel(String query);
 
     /**
      * Get body as a string.
      * @return The body
-     * @throws IOException If some IO problem inside
      */
-    String getBody() throws IOException;
+    String getBody();
 
     /**
      * Get status of the response as a number.
@@ -70,11 +67,11 @@ interface TestResponse {
     Integer getStatus();
 
     /**
-     * Get body as {@link GPathResult}.
-     * @return The GPath result
-     * @throws Exception If some problem inside
+     * Find and return nodes matched by xpath.
+     * @param query The XPath query
+     * @return The list of node values (texts)
      */
-    GPathResult getGpath() throws Exception;
+    List<String> xpath(String query);
 
     /**
      * Get status line of the response.
@@ -89,46 +86,46 @@ interface TestResponse {
     MultivaluedMap<String, String> getHeaders();
 
     /**
+     * Fail and report a problem.
+     * @param reason Reason of failure
+     */
+    void fail(String reason);
+
+    /**
      * Verifies HTTP response status code against the provided absolute value,
      * and throws {@link AssertionError} in case of mismatch.
      * @param status Expected status code
      * @return This object
-     * @throws IOException If some problem with body retrieval
      */
-    TestResponse assertStatus(int status) throws IOException;
+    TestResponse assertStatus(int status);
 
     /**
      * Verifies HTTP response status code against the provided matcher.
      * @param matcher Matcher to validate status code
      * @return This object
-     * @throws IOException If some problem with body retrieval
      */
-    TestResponse assertStatus(Matcher<Integer> matcher) throws IOException;
+    TestResponse assertStatus(Matcher<Integer> matcher);
 
     /**
      * Verifies HTTP header against provided matcher.
      * @param name Name of the header to match
      * @param matcher The matcher to use
      * @return This object
-     * @throws IOException If some problem with body retrieval
      */
-    TestResponse assertHeader(String name, Matcher<String> matcher)
-        throws IOException;
+    TestResponse assertHeader(String name, Matcher matcher);
 
     /**
      * Verifies HTTP response body content against provided matcher.
      * @param matcher The matcher to use
      * @return This object
-     * @throws IOException If some problem with body retrieval
      */
-    TestResponse assertBody(Matcher<String> matcher) throws IOException;
+    TestResponse assertBody(Matcher<String> matcher);
 
     /**
      * Verifies HTTP response body XHTML/XML content against XPath query.
      * @param xpath Query to use
      * @return This object
-     * @throws Exception If some problem with body retrieval or conversion
      */
-    TestResponse assertXPath(String xpath) throws Exception;
+    TestResponse assertXPath(String xpath);
 
 }

@@ -29,13 +29,9 @@
  */
 package com.rexsl.core;
 
-import java.io.StringWriter;
+import com.ymock.util.Logger;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Node;
 
 /**
  * Handler of XSD events.
@@ -51,40 +47,15 @@ final class XsdEventHandler implements ValidationEventHandler {
     @Override
     public boolean handleEvent(final ValidationEvent event) {
         throw new IllegalStateException(
-            String.format(
-                "JAXB error: \"%s\" at '%s' [%d:%d]: \"%s\"",
+            Logger.format(
+                "JAXB error: \"%s\" at '%s' [%d:%d]: %[document]s",
                 event.getMessage(),
                 event.getLocator().getURL(),
                 event.getLocator().getLineNumber(),
                 event.getLocator().getColumnNumber(),
-                this.asText(event.getLocator().getNode())
+                event.getLocator().getNode()
             )
         );
-    }
-
-    /**
-     * Convert XML node to text.
-     * @param node The node to convert
-     * @return The text
-     */
-    private String asText(final Node node) {
-        String text = "XML is not available";
-        if (node != null) {
-            try {
-                final StringWriter writer = new StringWriter();
-                TransformerFactory.newInstance().newTransformer().transform(
-                    new DOMSource(node),
-                    new StreamResult(writer)
-                );
-                writer.flush();
-                text = writer.toString();
-            } catch (javax.xml.transform.TransformerConfigurationException ex) {
-                text = ex.getMessage();
-            } catch (javax.xml.transform.TransformerException ex) {
-                text = ex.getMessage();
-            }
-        }
-        return text;
     }
 
 }

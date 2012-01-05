@@ -34,12 +34,10 @@ import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -72,17 +70,18 @@ public final class GroovyExecutor {
 
     /**
      * Public ctor.
+     *
+     * <p>Classpath for Groovy execution is built from URLs defined in the
+     * environment and Thread-default classloader (which is built by Maven)
+     * for the plugin.
+     *
      * @param env The environment
      * @param bnd The binding
      */
     public GroovyExecutor(final Environment env, final Binding bnd) {
-        final List<URL> urls = new ArrayList<URL>();
-        for (File path : env.classpath(false)) {
-            try {
-                urls.add(path.toURI().toURL());
-            } catch (java.net.MalformedURLException ex) {
-                throw new IllegalArgumentException(ex);
-            }
+        final Set<URL> urls = new LinkedHashSet<URL>();
+        for (URL url : GroovyExecutor.fetch(env)) {
+            urls.add(url);
         }
         this.classloader = new URLClassLoader(
             urls.toArray(new URL[] {}),
@@ -112,26 +111,35 @@ public final class GroovyExecutor {
                 this.classloader
             );
         } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(this.log(ex));
+            throw new IllegalArgumentException(
+                Logger.format("IOException: %[exception]s", ex)
+            );
         }
         try {
             gse.run(file.getName(), this.binding);
         // @checkstyle IllegalCatch (1 line)
         } catch (Throwable ex) {
-            throw new GroovyException(this.log(ex));
+            throw new GroovyException(
+                Logger.format("Exception: %[exception]s", ex)
+            );
         }
     }
 
     /**
-     * Protocol one exception just happened, and return it.
-     * @param exception The exception to protocol
-     * @return The same exception object
+     * Retrieve URLs from env.
+     * @param env The environment
+     * @return Set of URLs
      */
-    private Throwable log(final Throwable exception) {
-        final StringWriter writer = new StringWriter();
-        exception.printStackTrace(new PrintWriter(writer));
-        Logger.warn(this, "%s", writer.toString());
-        return exception;
+    private static Set<URL> fetch(final Environment env) {
+        final Set<URL> urls = new LinkedHashSet<URL>();
+        for (File path : env.classpath(false)) {
+            try {
+                urls.add(path.toURI().toURL());
+            } catch (java.net.MalformedURLException ex) {
+                throw new IllegalArgumentException(ex);
+            }
+        }
+        return urls;
     }
 
 }

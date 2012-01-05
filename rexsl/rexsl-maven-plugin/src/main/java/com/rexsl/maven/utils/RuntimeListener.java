@@ -32,11 +32,8 @@ package com.rexsl.maven.utils;
 import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
 import java.io.File;
-import java.util.List;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import org.apache.commons.io.FileUtils;
 
 /**
  * To be executed before all other code.
@@ -52,39 +49,42 @@ public final class RuntimeListener implements ServletContextListener {
     @Override
     @SuppressWarnings("PMD.UseProperClassLoader")
     public void contextInitialized(final ServletContextEvent event) {
-        final Environment env = new RuntimeListener.RuntimeEnvironment(
+        final long start = System.currentTimeMillis();
+        final Environment env = new RuntimeEnvironment(
             event.getServletContext()
         );
         final File dir = new File(env.basedir(), "src/test/rexsl/bootstrap");
-        if (!dir.exists()) {
+        if (dir.exists()) {
+            int counter = 0;
+            final GroovyExecutor exec = new GroovyExecutor(
+                event.getServletContext().getClassLoader(),
+                new BindingBuilder(env).build()
+            );
+            final ScriptsFinder finder = new ScriptsFinder(dir);
+            for (File script : finder.ordered()) {
+                Logger.info(this, "Running '%s'...", script);
+                try {
+                    exec.execute(script);
+                } catch (com.rexsl.maven.utils.GroovyException ex) {
+                    throw new IllegalStateException(ex);
+                }
+                counter += 1;
+            }
+            Logger.debug(
+                this,
+                // @checkstyle LineLength (1 line)
+                "#contextInitialized(%s): initialized with %d script(s) in %dms",
+                event.getClass().getName(),
+                counter,
+                System.currentTimeMillis() - start
+            );
+        } else {
             Logger.info(
                 this,
                 "%s directory is absent, no bootstrap scripts to run",
                 dir
             );
-            return;
         }
-        int counter = 0;
-        final String[] exts = new String[] {"groovy"};
-        final GroovyExecutor exec = new GroovyExecutor(
-            event.getServletContext().getClassLoader(),
-            new BindingBuilder(env).build()
-        );
-        for (File script : FileUtils.listFiles(dir, exts, true)) {
-            Logger.info(this, "Running '%s'...", script);
-            try {
-                exec.execute(script);
-            } catch (com.rexsl.maven.utils.GroovyException ex) {
-                throw new IllegalStateException(ex);
-            }
-            counter += 1;
-        }
-        Logger.debug(
-            this,
-            "#contextInitialized(%s): initialized with %d script(s)",
-            event.getClass().getName(),
-            counter
-        );
     }
 
     /**
@@ -93,64 +93,6 @@ public final class RuntimeListener implements ServletContextListener {
     @Override
     public void contextDestroyed(final ServletContextEvent event) {
         Logger.debug(this, "#contextDestroyed(): destroyed");
-    }
-
-    /**
-     * Runtime environment.
-     */
-    private static final class RuntimeEnvironment implements Environment {
-        /**
-         * Servlet context.
-         */
-        private final transient ServletContext context;
-        /**
-         * Public ctor.
-         * @param ctx Context
-         */
-        public RuntimeEnvironment(final ServletContext ctx) {
-            this.context = ctx;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public File basedir() {
-            return new File(
-                this.context.getInitParameter("com.rexsl.maven.utils.BASEDIR")
-            );
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public File webdir() {
-            return new File(
-                this.context.getInitParameter("com.rexsl.maven.utils.WEBDIR")
-            );
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public List<File> classpath(final boolean test) {
-            throw new IllegalStateException("#classpath");
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean useRuntimeFiltering() {
-            throw new IllegalStateException("#useRuntimeFiltering");
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Integer port() {
-            return Integer.valueOf(
-                this.context.getInitParameter("com.rexsl.maven.utils.PORT")
-            );
-        }
     }
 
 }
