@@ -59,6 +59,7 @@ final class StringSource extends DOMSource {
     /**
      * Public ctor.
      * @param node The node
+     * @todo #107 We should transform Node into text and assign to this.xml
      */
     public StringSource(final Node node) {
         super();
