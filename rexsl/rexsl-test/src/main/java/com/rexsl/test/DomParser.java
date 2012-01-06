@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.w3c.dom.Document;
 
 /**
@@ -68,7 +69,7 @@ final class DomParser {
             factory.setNamespaceAware(true);
             doc = factory
                 .newDocumentBuilder()
-                .parse(IOUtils.toInputStream(this.xml, "UTF-8"));
+                .parse(IOUtils.toInputStream(this.xml, CharEncoding.UTF_8));
         } catch (java.io.IOException ex) {
             throw new IllegalArgumentException(ex);
         } catch (javax.xml.parsers.ParserConfigurationException ex) {

@@ -39,6 +39,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Packager of JS files. All comments, spaces, and unnecessary language
@@ -48,11 +49,6 @@ import org.apache.commons.io.IOUtils;
  * @version $Id$
  */
 public final class JsPacker extends AbstractPacker {
-
-    /**
-     * Encoding.
-     */
-    private static final String ENCODING = "UTF-8";
 
     /**
      * {@inheritDoc}
@@ -68,12 +64,12 @@ public final class JsPacker extends AbstractPacker {
     protected void pack(final File src, final File dest) throws IOException {
         final Reader input = new InputStreamReader(
             new FileInputStream(src),
-            this.ENCODING
+            CharEncoding.UTF_8
         );
         try {
             final Writer output = new OutputStreamWriter(
                 new FileOutputStream(dest),
-                this.ENCODING
+                CharEncoding.UTF_8
             );
             try {
                 new JavaScriptCompressor(input, new YuiReporter())
