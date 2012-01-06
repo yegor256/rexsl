@@ -136,7 +136,7 @@ public final class RestfulServlet extends HttpServlet {
         this.jersey.init(cfg);
         Logger.info(
             this,
-            "#init(%s): servlet initialized",
+            "#init(%s): servlet initialized with Jersey JAX-RS implementation",
             config.getClass().getName()
         );
     }

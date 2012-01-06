@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * Test {@link MavenEnvironment} class.
+ * Test case for {@link MavenEnvironment}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
@@ -51,15 +51,15 @@ public final class MavenEnvironmentTest {
      */
     @BeforeClass
     public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
+        new com.rexsl.maven.LogMocker().mock();
     }
 
     /**
-     * Environment should return pre-set props.
+     * MavenEnvironment can return pre-set props.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testStaticProperties() throws Exception {
+    public void returnsStaticProperties() throws Exception {
         final MavenProject project = Mockito.mock(MavenProject.class);
         final File basedir = Mockito.mock(File.class);
         Mockito.doReturn(basedir).when(project).getBasedir();
@@ -76,11 +76,11 @@ public final class MavenEnvironmentTest {
     }
 
     /**
-     * Environment should calculate and return classloader.
+     * MavenEnvironment can build a classloader.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void testClassloaderBuilding() throws Exception {
+    public void classloaderIsBuilt() throws Exception {
         final MavenProject project = Mockito.mock(MavenProject.class);
         final Properties props = new Properties();
         new MavenEnvironment(project, props);

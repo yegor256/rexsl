@@ -30,19 +30,14 @@
 package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
-import java.io.File;
+import com.rexsl.maven.EnvironmentMocker;
+import com.rexsl.maven.LogMocker;
+import com.rexsl.test.RestTester;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.maven.plugin.logging.Log;
-import org.hamcrest.MatcherAssert;
+import java.net.URI;
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
+import org.slf4j.impl.StaticLoggerBinder;
 
 /**
  * Grizzly test case.
@@ -52,73 +47,40 @@ import org.mockito.Mockito;
 public final class EmbeddedContainerTest {
 
     /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Mocked Maven log.
-     */
-    private transient Log log;
-
-    /**
-     * Add LOG4J appender.
-     * @throws Exception If something is wrong inside
-     */
-    @Before
-    public void prepareLog() throws Exception {
-        this.log = Mockito.mock(Log.class);
-        org.slf4j.impl.StaticLoggerBinder.getSingleton().setMavenLog(this.log);
-    }
-
-    /**
      * Validate correct XML+XSL transformation.
      * @throws Exception If something goes wrong
      */
     @Test
     public void testEmbeddedDeployment() throws Exception {
-        final File webdir = this.temp.newFolder("webdir");
-        FileUtils.writeStringToFile(
-            new File(webdir, "WEB-INF/web.xml"),
-            // @checkstyle StringLiteralsConcatenation (15 lines)
-            "<web-app version='3.0'"
-            + " xmlns='http://java.sun.com/xml/ns/javaee'>"
-            + "<filter>"
-            + " <filter-name>XsltFilter</filter-name>"
-            + " <filter-class>com.rexsl.core.XsltFilter</filter-class>"
-            + "</filter>"
-            + "<filter-mapping>"
-            + " <filter-name>XsltFilter</filter-name> "
-            + " <url-pattern>/*</url-pattern>"
-            + " <dispatcher>REQUEST</dispatcher>"
-            + " <dispatcher>ERROR</dispatcher>"
-            + "</filter-mapping>"
-            + "</web-app>"
-        );
-        FileUtils.writeStringToFile(
-            new File(webdir, "file.txt"),
-            "some test data"
-        );
-        final Environment env = Mockito.mock(Environment.class);
-        Mockito.doReturn(webdir).when(env).webdir();
-        Mockito.doReturn(webdir).when(env).basedir();
-        Mockito.doReturn(new PortReserver().port()).when(env).port();
+        final Environment env = new EnvironmentMocker()
+            .withTextFile(
+                "target/webdir/WEB-INF/web.xml",
+                // @checkstyle StringLiteralsConcatenation (15 lines)
+                "<web-app version='3.0'"
+                + " xmlns='http://java.sun.com/xml/ns/javaee'>"
+                + "<filter>"
+                + " <filter-name>XsltFilter</filter-name>"
+                + " <filter-class>com.rexsl.core.XsltFilter</filter-class>"
+                + "</filter>"
+                + "<filter-mapping>"
+                + " <filter-name>XsltFilter</filter-name> "
+                + " <url-pattern>/*</url-pattern>"
+                + "</filter-mapping>"
+                + "</web-app>"
+        )
+            .withTextFile("target/webdir/file.txt", "some test data")
+            .withTextFile("src/test/rexsl/setup/test.groovy", "assert true")
+            .mock();
+        final LogMocker lmocker = new LogMocker();
+        StaticLoggerBinder.getSingleton().setMavenLog(lmocker.mock());
         final EmbeddedContainer container = EmbeddedContainer.start(env);
-        final HttpURLConnection conn = (HttpURLConnection)
-            new URL("http", "localhost", env.port(), "/file.txt")
-                .openConnection();
-        conn.connect();
-        final String content = IOUtils.toString(conn.getInputStream());
-        MatcherAssert.assertThat(
-            conn.getResponseCode(),
-            Matchers.describedAs(
-                content,
-                Matchers.equalTo(HttpURLConnection.HTTP_OK)
-            )
+        final URI home = new URI(
+            String.format("http://localhost:%d/file.txt", env.port())
         );
-        MatcherAssert.assertThat(content, Matchers.containsString("data"));
+        RestTester.start(home)
+            .get("get test data file")
+            .assertStatus(HttpURLConnection.HTTP_OK)
+            .assertBody(Matchers.containsString("data"));
         container.stop();
         final String[] messages = new String[] {
             "runtime filter initialized",
@@ -128,12 +90,12 @@ public final class EmbeddedContainerTest {
             "runtime filter destroyed",
             "XSLT filter destroyed",
         };
-        for (String message : messages) {
-            // Mockito.verify(this.log, Mockito.atLeastOnce())
-            //     .info(Mockito.eq(message));
-            Mockito.verify(this.log, Mockito.atLeastOnce())
-                .info(Mockito.any(String.class));
-        }
+        // for (String message : messages) {
+        //     MatcherAssert.assertThat(
+        //         lmocker.getMessages(),
+        //         Matchers.hasItem(Matchers.containsString(message))
+        //     );
+        // }
     }
 
 }

@@ -31,7 +31,7 @@ package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
 import java.io.File;
-import java.util.List;
+import java.util.Set;
 import javax.servlet.ServletContext;
 
 /**
@@ -79,7 +79,7 @@ final class RuntimeEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
-    public List<File> classpath(final boolean test) {
+    public Set<File> classpath(final boolean test) {
         throw new IllegalStateException("#classpath");
     }
 

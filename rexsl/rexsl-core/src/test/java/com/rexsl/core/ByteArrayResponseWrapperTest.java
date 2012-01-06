@@ -30,13 +30,14 @@
 package com.rexsl.core;
 
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * ByteArrayResponseWrapper test case.
+ * Test case for {@link ByteArrayResponseWrapper}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
@@ -44,19 +45,19 @@ import org.mockito.Mockito;
 public final class ByteArrayResponseWrapperTest {
 
     /**
-     * Let's test how this wrapper can write to output stream.
+     * ByteArrayResponseWrapper can write to an output stream.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testWritingToOutputStream() throws Exception {
+    public void writesToOutputStream() throws Exception {
         final ByteArrayResponseWrapper wrapper =
             new ByteArrayResponseWrapper(
                 Mockito.mock(HttpServletResponse.class)
             );
-        final String text = "this is some text string";
-        wrapper.getOutputStream().write(text.getBytes());
+        final String text = "some text, \u0443\u0440\u0430!";
+        wrapper.getOutputStream().write(text.getBytes(CharEncoding.UTF_8));
         MatcherAssert.assertThat(
-            wrapper.getByteStream().toString("UTF-8"),
+            wrapper.getByteStream().toString(CharEncoding.UTF_8),
             Matchers.equalTo(text)
         );
     }

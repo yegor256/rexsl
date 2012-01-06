@@ -30,16 +30,14 @@
 package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.Packer;
+import com.rexsl.maven.EnvironmentMocker;
+import com.rexsl.test.XhtmlConverter;
+import com.rexsl.test.XhtmlMatchers;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 
 /**
  * Test case for {@link XslPacker}.
@@ -49,48 +47,26 @@ import org.mockito.Mockito;
 public final class XslPackerTest {
 
     /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
-    }
-
-    /**
-     * Simple packaging.
+     * XslPacker can pack XSL files.
      * @throws Exception If something goes wrong inside
      * @todo #37:1h Remove comments from the output file.
      *  XSL files should be compressed (all comments and spaces removed).
      */
-    @org.junit.Ignore
     @Test
-    public void testXslPackaging() throws Exception {
-        final Environment env = Mockito.mock(Environment.class);
-        final File basedir = this.temp.newFolder("basedir");
-        Mockito.doReturn(basedir).when(env).basedir();
-        final File webdir = new File(basedir, "target/webdir");
-        Mockito.doReturn(webdir).when(env).webdir();
-        final File src = new File(basedir, "src/main/webapp/xsl/layout.xsl");
-        final File dest = new File(webdir, "xsl/layout.xsl");
-        src.getParentFile().mkdirs();
-        FileUtils.writeStringToFile(
-            src,
-            "<stylesheet><!-- some text --></stylesheet>"
-        );
-        final Packer packer = new XslPacker();
-        packer.pack(env);
-        MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
+    public void packsXslFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withFile("src/main/webapp/xsl/layout.xsl")
+            .mock();
+        final File dest = new File(env.webdir(), "xsl/layout.xsl");
+        new XslPacker().pack(env);
+        MatcherAssert.assertThat("file created", dest.exists());
         MatcherAssert.assertThat(
-            FileUtils.readFileToString(dest),
-            Matchers.equalTo("<stylesheet></stylesheet>")
+            XhtmlConverter.the(FileUtils.readFileToString(dest)),
+            Matchers.allOf(
+                XhtmlMatchers.hasXPath("//xsl:template"),
+                XhtmlMatchers.hasXPath("//xhtml:body"),
+                Matchers.not(XhtmlMatchers.hasXPath("//comment()"))
+            )
         );
     }
 

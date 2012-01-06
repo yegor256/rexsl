@@ -31,7 +31,11 @@ package com.rexsl.test;
 
 import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBIntrospector;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
 /**
@@ -61,31 +65,19 @@ import javax.xml.transform.Source;
  *
  * <pre>
  * import com.rexsl.test.JaxbConverter;
- * import org.hamcrest.Matchers;
+ * import com.rexsl.test.XhtmlMatchers;
  * import org.junit.Assert;
  * import org.junit.Test;
- * import org.xmlmatchers.XmlMatchers;
  * public final class EmployeeTest {
  *   &#64;Test
  *   public void testObjectToXmlConversion() throws Exception {
  *     final Object object = new Employee();
  *     Assert.assertThat(
  *       JaxbConverter.the(object),
- *       XmlMatchers.hasXPath("/employee/name[.='John Doe']")
+ *       XhtmlMatchers.hasXPath("/employee/name[.='John Doe']")
  *     );
  *   }
  * }
- * </pre>
- *
- * <p>We recommend to use {@code XmlMatchers} class from this Maven
- * artifact:
- *
- * <pre>
- * &lt;dependency>
- *   &lt;groupId>org.xmlmatchers&lt;/groupId>
- *   &lt;artifactId>xml-matchers&lt;/artifactId>
- *   &lt;version>0.10&lt;/version>
- * &lt;/dependency>
  * </pre>
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -105,20 +97,74 @@ public final class JaxbConverter {
      * @param object The object to convert
      * @param deps Dependencies that we should take into account
      * @return DOM source/document
-     * @throws Exception If anything goes wrong
      */
-    public static Source the(final Object object,
-        final Class... deps) throws Exception {
+    public static Source the(final Object object, final Class... deps) {
         final Class[] classes = new Class[deps.length + 1];
         classes[0] = object.getClass();
         System.arraycopy(deps, 0, classes, 1, deps.length);
-        final JAXBContext ctx = JAXBContext.newInstance(classes);
-        final Marshaller mrsh = ctx.createMarshaller();
-        mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        JAXBContext ctx;
+        try {
+            ctx = JAXBContext.newInstance(classes);
+        } catch (javax.xml.bind.JAXBException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        final JAXBIntrospector intro = ctx.createJAXBIntrospector();
+        Object subject = object;
+        if (intro.getElementName(object) == null) {
+            subject = new JAXBElement(
+                new QName(JaxbConverter.typeName(object)),
+                object.getClass(),
+                object
+            );
+        }
+        final Marshaller mrsh = JaxbConverter.marshaller(ctx);
         final StringWriter writer = new StringWriter();
-        mrsh.marshal(object, writer);
+        try {
+            mrsh.marshal(subject, writer);
+        } catch (javax.xml.bind.JAXBException ex) {
+            throw new IllegalArgumentException(ex);
+        }
         final String xml = writer.toString();
         return new StringSource(xml);
+    }
+
+    /**
+     * Create marshaller.
+     * @param ctx The context
+     * @return Marshaller
+     */
+    private static Marshaller marshaller(final JAXBContext ctx) {
+        Marshaller mrsh;
+        try {
+            mrsh = ctx.createMarshaller();
+        } catch (javax.xml.bind.JAXBException ex) {
+            throw new IllegalStateException(ex);
+        }
+        try {
+            mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        } catch (javax.xml.bind.PropertyException ex) {
+            throw new IllegalStateException(ex);
+        }
+        return mrsh;
+    }
+
+    /**
+     * Get type name, if XmlType annotation is present (exception otherwise).
+     * @param obj The object
+     * @return Name
+     */
+    private static String typeName(final Object obj) {
+        final XmlType type = (XmlType) obj.getClass()
+            .getAnnotation(XmlType.class);
+        if (type == null) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "XmlType annotation is absent at %[type]s",
+                    obj
+                )
+            );
+        }
+        return type.name();
     }
 
 }

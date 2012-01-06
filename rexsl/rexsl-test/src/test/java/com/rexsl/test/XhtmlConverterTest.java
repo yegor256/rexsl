@@ -29,10 +29,12 @@
  */
 package com.rexsl.test;
 
-import org.junit.Assert;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.xmlmatchers.XmlMatchers;
-import org.xmlmatchers.namespace.SimpleNamespaceContext;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Test case for {@link XhtmlConverter}.
@@ -47,10 +49,10 @@ public final class XhtmlConverterTest {
      */
     @Test
     public void convertsTextToXml() throws Exception {
-        final String text = "<html><body><p>test</p></body></html>";
-        Assert.assertThat(
+        final String text = "<html><body><p>\u0443</p></body></html>";
+        MatcherAssert.assertThat(
             XhtmlConverter.the(text),
-            XmlMatchers.hasXPath("/html/body/p[.='test']")
+            XhtmlMatchers.hasXPath("/html/body/p[.='\u0443']")
         );
     }
 
@@ -61,9 +63,9 @@ public final class XhtmlConverterTest {
     @Test
     public void convertsTextToXmlWithUnicode() throws Exception {
         final String text = "<a>\u8514  &#8250;</a>";
-        Assert.assertThat(
+        MatcherAssert.assertThat(
             XhtmlConverter.the(text),
-            XmlMatchers.hasXPath("/a")
+            XhtmlMatchers.hasXPath("/a")
         );
     }
 
@@ -74,9 +76,9 @@ public final class XhtmlConverterTest {
     @Test
     public void preservesProcessingInstructions() throws Exception {
         final String text = "<?xml version='1.0'?><?pi name='foo'?><a/>";
-        Assert.assertThat(
+        MatcherAssert.assertThat(
             XhtmlConverter.the(text),
-            XmlMatchers.hasXPath(
+            XhtmlMatchers.hasXPath(
                 "/processing-instruction('pi')[contains(.,'foo')]"
             )
         );
@@ -94,22 +96,38 @@ public final class XhtmlConverterTest {
             + "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'"
             + " 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>"
             + "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>"
-            + "<body><p>test</p></body>"
+            + "<body><p>\u0443\u0440\u0430!</p></body>"
             + "</html>";
-        final String[] paths = new String[] {
-            "/*",
-            "//*",
-            "/xhtml:html/xhtml:body/xhtml:p[.='test']",
-            "//xhtml:p[contains(., 't')]",
-        };
-        final SimpleNamespaceContext context = new SimpleNamespaceContext()
-            .withBinding("xhtml", "http://www.w3.org/1999/xhtml");
-        for (String path : paths) {
-            Assert.assertThat(
-                XhtmlConverter.the(text),
-                XmlMatchers.hasXPath(path, context)
-            );
-        }
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(text),
+            Matchers.allOf(
+                XhtmlMatchers.hasXPath("/*"),
+                XhtmlMatchers.hasXPath("//*"),
+                XhtmlMatchers.hasXPath(
+                    "/xhtml:html/xhtml:body/xhtml:p[.='\u0443\u0440\u0430!']"
+                ),
+                XhtmlMatchers.hasXPath("//xhtml:p[contains(., '\u0443')]")
+            )
+        );
+    }
+
+    /**
+     * XhtmlConverter can convert W3C Node to XML.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void convertsNodeToXml() throws Exception {
+        final Document doc = DocumentBuilderFactory
+            .newInstance()
+            .newDocumentBuilder()
+            .newDocument();
+        final Element root = doc.createElement("foo");
+        root.appendChild(doc.createTextNode("bar"));
+        doc.appendChild(root);
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(doc),
+            XhtmlMatchers.hasXPath("/foo[.='bar']")
+        );
     }
 
 }

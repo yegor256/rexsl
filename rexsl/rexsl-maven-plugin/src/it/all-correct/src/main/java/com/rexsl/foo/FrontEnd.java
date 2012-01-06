@@ -30,12 +30,14 @@
 package com.rexsl.foo;
 
 import com.ymock.util.Logger;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -53,12 +55,17 @@ public final class FrontEnd {
 
     @POST
     @Produces(MediaType.TEXT_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Home submit(@FormParam("text") final String text) {
         if (text == null) {
             throw new IllegalArgumentException("Form param 'text' expected");
         }
         Data.INSTANCE.set(text);
-        Logger.info(this, "#submit(%s): done", text);
+        Logger.info(
+            this,
+            "#submit('%s'): done",
+            StringEscapeUtils.escapeJava(text)
+        );
         return this.home();
     }
 

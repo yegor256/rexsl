@@ -30,25 +30,21 @@
 package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
-import groovy.util.XmlSlurper;
-import groovy.util.slurpersupport.GPathResult;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.URI;
+import com.ymock.util.Logger;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xmlmatchers.XmlMatchers;
-import org.xmlmatchers.namespace.SimpleNamespaceContext;
+import org.xmlmatchers.transform.XmlConverters;
 
 /**
  * Implementation of {@link TestResponse}.
@@ -69,6 +65,12 @@ final class JerseyTestResponse implements TestResponse {
     private final transient String body;
 
     /**
+     * Cached document, in the body.
+     * @see #document()
+     */
+    private transient Document doc;
+
+    /**
      * Public ctor.
      * @param resp The response
      */
@@ -85,26 +87,18 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestClient rel(final String xpath) throws Exception {
-        final Document document = DocumentBuilderFactory.newInstance()
-            .newDocumentBuilder()
-            .parse(new ByteArrayInputStream(this.getBody().getBytes()));
-        final NodeList nodes = (NodeList) XPathFactory.newInstance()
-            .newXPath()
-            .evaluate(xpath, document, XPathConstants.NODESET);
-        if (nodes.getLength() != 1) {
-            throw new AssertionError(
-                String.format(
-                    "XPath '%s' not found in:%n%s",
-                    xpath,
-                    this.asText()
-                )
-            );
-        }
-        final URI uri = UriBuilder
-            .fromUri(nodes.item(0).getNodeValue())
-            .build();
-        return RestTester.start(uri);
+    public TestClient rel(final String query) {
+        final List<String> links = this.xpath(query);
+        MatcherAssert.assertThat(
+            Logger.format(
+                "XPath '%s' not found in:\n%s",
+                StringEscapeUtils.escapeJava(query),
+                new ClientResponseDecor(this.response, this.getBody())
+            ),
+            links,
+            Matchers.hasSize(1)
+        );
+        return RestTester.start(UriBuilder.fromUri(links.get(0)).build());
     }
 
     /**
@@ -119,7 +113,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public String getBody() throws IOException {
+    public String getBody() {
         return this.body;
     }
 
@@ -135,8 +129,26 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public GPathResult getGpath() throws Exception {
-        return new XmlSlurper().parseText(this.getBody());
+    public List<String> xpath(final String query) {
+        NodeList nodes;
+        try {
+            nodes = (NodeList) XPathFactory.newInstance()
+                .newXPath()
+                .evaluate(query, this.document(), XPathConstants.NODESET);
+        } catch (javax.xml.xpath.XPathExpressionException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        final List<String> items = new ArrayList<String>();
+        for (int idx = 0; idx < nodes.getLength(); idx += 1) {
+            MatcherAssert.assertThat(
+                "Only /text() nodes or attributes are retrievable with xpath()",
+                nodes.item(idx).getNodeType(),
+                Matchers.<Short>either(Matchers.equalTo(Node.TEXT_NODE))
+                    .or(Matchers.equalTo(Node.ATTRIBUTE_NODE))
+            );
+            items.add(nodes.item(idx).getNodeValue());
+        }
+        return items;
     }
 
     /**
@@ -163,15 +175,29 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertStatus(final int status) throws IOException {
+    public void fail(final String reason) {
+        throw new AssertionError(
+            Logger.format(
+                "%s:\n%s",
+                reason,
+                new ClientResponseDecor(this.response, this.getBody())
+            )
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse assertStatus(final int status) {
         MatcherAssert.assertThat(
-            String.format(
-                "HTTP status code has to be equal to %d in:%n%s",
+            Logger.format(
+                "HTTP status code has to be equal to %d in:\n%s",
                 status,
-                this.asText()
+                new ClientResponseDecor(this.response, this.getBody())
             ),
-            status,
-            Matchers.equalTo(this.getStatus())
+            this.getStatus(),
+            Matchers.equalTo(status)
         );
         return this;
     }
@@ -180,12 +206,11 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertStatus(final Matcher<Integer> matcher)
-        throws IOException {
+    public TestResponse assertStatus(final Matcher<Integer> matcher) {
         MatcherAssert.assertThat(
-            String.format(
-                "HTTP status code has to match in:%n%s",
-                this.asText()
+            Logger.format(
+                "HTTP status code has to match in:\n%s",
+                new ClientResponseDecor(this.response, this.getBody())
             ),
             this.getStatus(),
             matcher
@@ -197,15 +222,14 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertHeader(final String name,
-        final Matcher<String> matcher) throws IOException {
+    public TestResponse assertHeader(final String name, final Matcher matcher) {
         MatcherAssert.assertThat(
-            String.format(
-                "HTTP header '%s' has to match in:%n%s",
+            Logger.format(
+                "HTTP header '%s' has to match in:\n%s",
                 name,
-                this.asText()
+                new ClientResponseDecor(this.response, this.getBody())
             ),
-            this.response.getHeaders().getFirst(name),
+            this.response.getHeaders().getFirst((String) name),
             matcher
         );
         return this;
@@ -215,12 +239,11 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertBody(final Matcher<String> matcher)
-        throws IOException {
+    public TestResponse assertBody(final Matcher<String> matcher) {
         MatcherAssert.assertThat(
-            String.format(
-                "HTTP response content has to match in:%n%s",
-                this.asText()
+            Logger.format(
+                "HTTP response content has to match in:\n%s",
+                new ClientResponseDecor(this.response, this.getBody())
             ),
             this.getBody(),
             matcher
@@ -232,47 +255,30 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertXPath(final String xpath) throws Exception {
-        final SimpleNamespaceContext context = new SimpleNamespaceContext()
-            .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
-            .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
-            .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
+    public TestResponse assertXPath(final String xpath) {
         MatcherAssert.assertThat(
-            String.format(
-                "XPath '%s' has to exist in:%n%s",
-                xpath,
-                this.asText()
+            Logger.format(
+                "XPath '%s' has to exist in:\n%s",
+                StringEscapeUtils.escapeJava(xpath),
+                new ClientResponseDecor(this.response, this.getBody())
             ),
-            XhtmlConverter.the(this.getBody()),
-            XmlMatchers.hasXPath(xpath, context)
+            XmlConverters.the(this.document()),
+            XhtmlMatchers.hasXPath(xpath)
         );
         return this;
     }
 
     /**
-     * Show response as text.
-     * @return The text
-     * @throws IOException If some problem inside
+     * Get document of body.
+     * @return The document
      */
-    private String asText() throws IOException {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("\t---\n");
-        for (MultivaluedMap.Entry<String, List<String>> header
-            : this.response.getHeaders().entrySet()) {
-            builder.append(
-                String.format(
-                    "\t%s: %s\n",
-                    header.getKey(),
-                    StringUtils.join(header.getValue(), ", ")
-                )
-            );
+    private Document document() {
+        synchronized (this) {
+            if (this.doc == null) {
+                this.doc = new DomParser(this.getBody()).document();
+            }
+            return this.doc;
         }
-        builder
-            .append("\n ")
-            .append("\t")
-            .append(this.getBody().replace("\n", "\n\t"))
-            .append("\n\t---");
-        return builder.toString();
     }
 
 }

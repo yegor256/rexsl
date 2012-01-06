@@ -35,6 +35,8 @@ import java.net.URLEncoder;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+import org.apache.commons.lang.CharEncoding;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -43,6 +45,7 @@ import org.junit.Test;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class RestTesterTest {
 
     /**
@@ -54,13 +57,13 @@ public final class RestTesterTest {
         final ContainerMocker container = new ContainerMocker()
             .expectRequestUri(Matchers.containsString("foo"))
             .expectMethod(Matchers.equalTo(RestTester.GET))
-            .returnBody("works fine")
+            .returnBody("hello!!")
             .mock();
         RestTester
-            .start(UriBuilder.fromUri(container.home()).path("/foo").build())
-            .get()
-            .assertBody(Matchers.containsString("fine"))
-            .assertBody(Matchers.containsString("works"))
+            .start(UriBuilder.fromUri(container.home()).path("/foo"))
+            .get("test of HTTP request and response")
+            .assertBody(Matchers.containsString("!!"))
+            .assertBody(Matchers.containsString("hello!"))
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
@@ -77,7 +80,7 @@ public final class RestTesterTest {
         RestTester
             .start(container.home())
             .header(HttpHeaders.ACCEPT, "*/*")
-            .get()
+            .get("test of HTTP simple request")
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
@@ -92,14 +95,12 @@ public final class RestTesterTest {
         final ContainerMocker container = new ContainerMocker()
             .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectHeader(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
             .mock();
-        final URI uri = UriBuilder
-            .fromUri(container.home())
-            .queryParam(name, value)
-            .build();
         RestTester
-            .start(uri)
-            .get()
+            .start(UriBuilder.fromUri(container.home()).queryParam(name, value))
+            .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
+            .get("test of GET params")
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
@@ -129,7 +130,14 @@ public final class RestTesterTest {
                 HttpHeaders.CONTENT_TYPE,
                 MediaType.APPLICATION_FORM_URLENCODED
             )
-            .post(String.format("%s=%s", name, URLEncoder.encode(value)))
+            .post(
+                "testing of POST request",
+                String.format(
+                    "%s=%s",
+                    name,
+                    URLEncoder.encode(value, CharEncoding.UTF_8)
+                )
+            )
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
@@ -145,9 +153,11 @@ public final class RestTesterTest {
             .mock();
         RestTester
             .start(container.home())
-            .get()
+            .get("asserts HTTP status")
             .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
-            .assertStatus(Matchers.equalTo(HttpURLConnection.HTTP_NOT_FOUND));
+            .assertStatus(
+                Matchers.equalTo(HttpURLConnection.HTTP_NOT_FOUND)
+            );
     }
 
     /**
@@ -162,7 +172,7 @@ public final class RestTesterTest {
             .mock();
         RestTester
             .start(container.home())
-            .get()
+            .get("asserts HTTP response body")
             .assertBody(Matchers.containsString("some"))
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
@@ -179,7 +189,7 @@ public final class RestTesterTest {
             .mock();
         RestTester
             .start(container.home())
-            .get()
+            .get("asserts HTTP headers")
             .assertStatus(HttpURLConnection.HTTP_OK)
             .assertHeader(
                 HttpHeaders.CONTENT_TYPE,
@@ -195,13 +205,61 @@ public final class RestTesterTest {
     public void assertsResponseBodyWithXpathQuery() throws Exception {
         final ContainerMocker container = new ContainerMocker()
             .expectMethod(Matchers.equalTo(RestTester.GET))
-            .returnBody("<root><a>works fine for me</a></root>")
+            .returnBody("<root><a>\u0443\u0440\u0430!</a></root>")
             .mock();
         RestTester
             .start(container.home())
-            .get()
-            .assertXPath("/root/a[contains(.,'works')]")
+            .get("asserts response body with XPath")
+            .assertXPath("/root/a[contains(.,'!')]")
             .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can work with URL returned by ContainerMocker.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void mockedUrlIsInCorrectFormat() throws Exception {
+        final URI uri = new ContainerMocker().mock().home();
+        final String regex = "^http://localhost:\\d+/$";
+        MatcherAssert.assertThat(
+            uri.toString().matches(regex),
+            Matchers.describedAs(uri.toString(), Matchers.is(true))
+        );
+    }
+
+    /**
+     * RestTester can handle unicode in plain text response.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void acceptsUnicodeInPlainText() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .returnHeader(HttpHeaders.CONTENT_TYPE, "text/plain;charset=utf-8")
+            .returnBody("\u0443\u0440\u0430!")
+            .mock();
+        RestTester
+            .start(UriBuilder.fromUri(container.home()).path("/abcde"))
+            .get("unicode in plain text")
+            .assertBody(Matchers.containsString("\u0443\u0440\u0430"))
+            .assertBody(Matchers.containsString("!"));
+    }
+
+    /**
+     * RestTester can handle unicode in XML response.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    @org.junit.Ignore
+    public void acceptsUnicodeInXml() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .returnHeader(HttpHeaders.CONTENT_TYPE, "text/xml;charset=utf-8")
+            .returnBody("<text>\u0443\u0440\u0430!</text>")
+            .mock();
+        RestTester
+            .start(UriBuilder.fromUri(container.home()).path("/barbar"))
+            .get("unicode conversion")
+            .assertXPath("/text[contains(.,'\u0443\u0440\u0430')]");
     }
 
 }

@@ -47,6 +47,14 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
@@ -57,10 +65,7 @@
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
             <version since="25 Nov 2011">1.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ymock</groupId>
-            <artifactId>ymock-util</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <!-- JAXB 2.0 API. -->
@@ -76,51 +81,41 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>com.ymock</groupId>
+            <artifactId>ymock-util</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <!-- other details are in parent pom.xml -->
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <!-- other details are in parent pom.xml -->
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-core</artifactId>
-            <!-- other details are in parent pom.xml -->
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <!-- other details are in parent pom.xml -->
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <!-- other details are in parent pom.xml -->
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-            <!-- other details are in parent pom.xml -->
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <!-- other details are in parent pom.xml -->
         </dependency>
         <dependency>
             <groupId>org.xmlmatchers</groupId>
             <artifactId>xml-matchers</artifactId>
-            <version since="23 Sep 2011">0.10</version>
-            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
         </dependency>
         <dependency>
             <!-- Saxon for XSLT 2.0 -->
@@ -155,11 +150,12 @@
             <version since="13 Dec 2011">1.11</version>
         </dependency>
         <dependency>
-            <!-- Forward all calls to SLF4J to LOG4J. -->
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version since="19 Sep 2011">1.6.2</version>
-            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
         </dependency>
         <dependency>
             <!--
@@ -179,13 +175,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- Use LOG4J logging facility for all loggings. -->
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version since="19 Sep 2011">1.2.16</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <!-- implementation of Javax Mail API, required by Jersey -->
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
@@ -194,13 +183,13 @@
         </dependency>
         <dependency>
             <!--
-            Javax Servlet API 2.3. We're using this old version intentionally,
+            Javax Servlet API 2.4. We're using this old version intentionally,
             in order to make the framework compatible with all possible (incl.
             very old) web containers. See ticket #42 for more information.
             -->
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
-            <version since="26 Oct 2011">2.3</version>
+            <version since="26 Oct 2011">2.4</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -208,6 +197,9 @@
     <build>
         <plugins>
             <plugin>
+                <!--
+                There is a problem with jersey dependencies.
+                -->
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
@@ -217,6 +209,20 @@
                 </executions>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <ReXSL-Version>${project.version}</ReXSL-Version>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>

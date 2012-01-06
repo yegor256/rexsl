@@ -30,16 +30,12 @@
 package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.Packer;
+import com.rexsl.maven.EnvironmentMocker;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 
 /**
  * Test case for {@link JsPacker}.
@@ -49,45 +45,20 @@ import org.mockito.Mockito;
 public final class JsPackerTest {
 
     /**
-     * Temporary folder.
-     * @checkstyle VisibilityModifier (3 lines)
-     */
-    @Rule
-    public transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogStarter().start();
-    }
-
-    /**
-     * Simple packaging.
+     * JsPacker can pack Javascript files.
      * @throws Exception If something goes wrong inside
-     * @todo #6 This test doesn't work because the Packer is not implemented.
-     *  Javascript files should be packaged and compressed.
      */
     @Test
-    public void testJssPackaging() throws Exception {
-        final Environment env = Mockito.mock(Environment.class);
-        final File basedir = this.temp.newFolder("basedir");
-        Mockito.doReturn(basedir).when(env).basedir();
-        final File webdir = new File(basedir, "target/webdir");
-        Mockito.doReturn(webdir).when(env).webdir();
-        final File src = new File(basedir, "src/main/webapp/js/simple.js");
-        final File dest = new File(webdir, "js/simple.js");
-        src.getParentFile().mkdirs();
-        FileUtils.writeStringToFile(
-            src,
-            // @checkstyle LineLength (1 line)
-            "function sum(num) {var i, sum = 0; for (i = 1; i <= num; i++) {sum += i;}}"
-        );
-        final Packer packer = new JsPacker();
-        packer.pack(env);
-        MatcherAssert.assertThat(dest.exists(), Matchers.equalTo(true));
+    public void packsJavascriptFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withTextFile(
+                "src/main/webapp/js/simple.js",
+                // @checkstyle LineLength (1 line)
+                "function sum(num) {var i, sum = 0; for (i = 1; i <= num; i++) {sum += i;}}"
+        ).mock();
+        final File dest = new File(env.webdir(), "js/simple.js");
+        new JsPacker().pack(env);
+        MatcherAssert.assertThat("packed file created", dest.exists());
         MatcherAssert.assertThat(
             FileUtils.readFileToString(dest),
             Matchers.equalTo(

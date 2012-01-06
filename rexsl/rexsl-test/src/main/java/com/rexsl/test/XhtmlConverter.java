@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import javax.xml.transform.Source;
+import org.w3c.dom.Node;
 
 /**
  * Convert a string to XML source.
@@ -39,17 +40,16 @@ import javax.xml.transform.Source;
  *
  * <pre>
  * import com.rexsl.test.XhtmlConverter;
- * import org.hamcrest.Matchers;
+ * import com.rexsl.test.XhtmlMatchers;
  * import org.junit.Assert;
  * import org.junit.Test;
- * import org.xmlmatchers.XmlMatchers;
  * public final class EmployeeTest {
  *   &#64;Test
  *   public void testXmlContent() throws Exception {
  *     String xml = ... // get it somewhere
  *     Assert.assertThat(
  *       XhtmlConverter.the(xml),
- *       XmlMatchers.hasXPath("/employee/name[.='John Doe']")
+ *       XhtmlMatchers.hasXPath("/employee/name[.='John Doe']")
  *     );
  *   }
  * }
@@ -74,10 +74,18 @@ public final class XhtmlConverter {
      * Convert it to XML.
      * @param text The text to convert
      * @return DOM source/document
-     * @throws Exception If anything goes wrong
      */
-    public static Source the(final String text) throws Exception {
+    public static Source the(final String text) {
         return new StringSource(text);
+    }
+
+    /**
+     * Convert it to XML.
+     * @param node The node to convert
+     * @return DOM source/document
+     */
+    public static Source the(final Node node) {
+        return new StringSource(node);
     }
 
 }
