@@ -49,6 +49,8 @@ public final class BinaryFilesCheckTest {
     public void validatesTextFile() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withTextFile("src/main/webapp/valid-text.txt", "")
+            .withTextFile("src/main/webapp/.svn/entries", "")
+            .withTextFile("src/main/webapp/.DS_Store", "")
             .mock();
         MatcherAssert.assertThat(
             "valid text file passes without problems",
@@ -61,7 +63,7 @@ public final class BinaryFilesCheckTest {
      * @throws Exception If something goes wrong
      */
     @Test
-    public void validatesIncorrectCssFile() throws Exception {
+    public void validatesIncorrectFileTypes() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withTextFile("src/main/webapp/invalid-text.jpg", "")
             .mock();
