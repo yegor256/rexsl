@@ -37,6 +37,7 @@ import com.ymock.util.Logger;
  * Validates CSS files against style sheet rules.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: CssStaticCheck.java 204 2011-10-26 21:15:28Z guard $
  */
 public final class CssStaticCheck implements Check {

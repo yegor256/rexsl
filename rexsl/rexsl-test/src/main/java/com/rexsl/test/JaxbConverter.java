@@ -31,7 +31,11 @@ package com.rexsl.test;
 
 import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBIntrospector;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
 /**
@@ -104,6 +108,32 @@ public final class JaxbConverter {
         } catch (javax.xml.bind.JAXBException ex) {
             throw new IllegalArgumentException(ex);
         }
+        final JAXBIntrospector intro = ctx.createJAXBIntrospector();
+        Object subject = object;
+        if (intro.getElementName(object) == null) {
+            subject = new JAXBElement(
+                new QName(JaxbConverter.typeName(object)),
+                object.getClass(),
+                object
+            );
+        }
+        final Marshaller mrsh = JaxbConverter.marshaller(ctx);
+        final StringWriter writer = new StringWriter();
+        try {
+            mrsh.marshal(subject, writer);
+        } catch (javax.xml.bind.JAXBException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        final String xml = writer.toString();
+        return new StringSource(xml);
+    }
+
+    /**
+     * Create marshaller.
+     * @param ctx The context
+     * @return Marshaller
+     */
+    private static Marshaller marshaller(final JAXBContext ctx) {
         Marshaller mrsh;
         try {
             mrsh = ctx.createMarshaller();
@@ -115,14 +145,26 @@ public final class JaxbConverter {
         } catch (javax.xml.bind.PropertyException ex) {
             throw new IllegalStateException(ex);
         }
-        final StringWriter writer = new StringWriter();
-        try {
-            mrsh.marshal(object, writer);
-        } catch (javax.xml.bind.JAXBException ex) {
-            throw new IllegalArgumentException(ex);
+        return mrsh;
+    }
+
+    /**
+     * Get type name, if XmlType annotation is present (exception otherwise).
+     * @param obj The object
+     * @return Name
+     */
+    private static String typeName(final Object obj) {
+        final XmlType type = (XmlType) obj.getClass()
+            .getAnnotation(XmlType.class);
+        if (type == null) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "XmlType annotation is absent at %[type]s",
+                    obj
+                )
+            );
         }
-        final String xml = writer.toString();
-        return new StringSource(xml);
+        return type.name();
     }
 
 }

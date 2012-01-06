@@ -42,6 +42,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * Checks that all files are text ones.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: BinaryFilesCheck.java 204 2011-10-26 21:15:28Z guard $
  */
 public final class BinaryFilesCheck implements Check {
