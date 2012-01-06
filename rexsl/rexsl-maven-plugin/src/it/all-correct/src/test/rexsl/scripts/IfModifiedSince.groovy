@@ -41,7 +41,7 @@ RestTester.start(UriBuilder.fromUri(rexsl.home).path('/css/screen.css'))
         HttpHeaders.IF_MODIFIED_SINCE,
         new SimpleDateFormat('EEE, dd MMM yyyy HH:mm:ss zzz', Locale.ENGLISH).format(new Date())
     )
-    .header(HttpHeaders.USER_AGENT, 'Chrome')
+    .header(HttpHeaders.USER_AGENT, 'somebody')
     .get('getting screen.css')
     .assertStatus(HttpURLConnection.HTTP_NOT_MODIFIED)
     .assertBody(Matchers.equalTo(''))

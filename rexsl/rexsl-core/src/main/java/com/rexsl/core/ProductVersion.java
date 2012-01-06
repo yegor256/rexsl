@@ -27,14 +27,60 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.foo.scripts
+package com.rexsl.core;
 
-import com.rexsl.test.RestTester
-import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.UriBuilder
+import java.util.regex.Pattern;
 
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/xml/index.xml'))
-    .header(HttpHeaders.ACCEPT, 'text/plain,application/xml')
-    .header(HttpHeaders.USER_AGENT, 'somebody')
-    .get('reading mocked XML file')
-    .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
+/**
+ * Product version.
+ *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @version $Id$
+ * @see <a href="http://tools.ietf.org/html/rfc2616#section-3.8">RFC-2616</a>
+ */
+final class ProductVersion implements Comparable<ProductVersion> {
+
+    /**
+     * Text presentation of it.
+     */
+    private final transient String normalized;
+
+    /**
+     * Public ctor.
+     * @param text The text of it
+     * @see <a href="http://stackoverflow.com/questions/198431">prototype</a>
+     */
+    public ProductVersion(final String text) {
+        final String[] parts = Pattern
+            .compile(".", Pattern.LITERAL)
+            .split(text);
+        final StringBuilder bldr = new StringBuilder();
+        for (String part : parts) {
+            bldr.append(String.format("%4s.", part));
+        }
+        this.normalized = bldr.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int compareTo(final ProductVersion ver) {
+        int result = this.normalized.compareTo(ver.normalized);
+        if (result > 1) {
+            result = 1;
+        } else if (result < -1) {
+            result = -1;
+        }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return this.normalized.replace(" ", "");
+    }
+
+}
