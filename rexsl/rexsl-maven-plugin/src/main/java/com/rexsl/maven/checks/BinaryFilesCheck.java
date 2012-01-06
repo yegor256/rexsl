@@ -36,7 +36,10 @@ import java.io.File;
 import java.util.Collection;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.filefilter.AndFileFilter;
+import org.apache.commons.io.filefilter.HiddenFileFilter;
+import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
 
 /**
  * Checks that all files are text ones.
@@ -55,12 +58,17 @@ public final class BinaryFilesCheck implements Check {
         final File dir = new File(env.basedir(), "src/main/webapp");
         final Collection<File> files = FileUtils.listFiles(
             dir,
-            TrueFileFilter.INSTANCE,
-            TrueFileFilter.INSTANCE
+            HiddenFileFilter.VISIBLE,
+            new AndFileFilter(
+                HiddenFileFilter.VISIBLE,
+                new NotFileFilter(new NameFileFilter(".svn"))
+            )
         );
         boolean valid = true;
         for (File file : files) {
-            final String ext = FilenameUtils.getExtension(file.getPath());
+            final String path = file.getAbsolutePath()
+                .substring(dir.getAbsolutePath().length() + 1);
+            final String ext = FilenameUtils.getExtension(path);
             if (!ext.matches("html|xml|xhtml|txt|xsl|css")) {
                 Logger.warn(
                     this,

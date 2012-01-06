@@ -50,7 +50,6 @@ public final class BinaryFilesCheckTest {
         final Environment env = new EnvironmentMocker()
             .withTextFile("src/main/webapp/valid-text.txt", "")
             .withTextFile("src/main/webapp/.svn/entries", "")
-            .withTextFile("src/main/webapp/.DS_Store", "")
             .mock();
         MatcherAssert.assertThat(
             "valid text file passes without problems",
