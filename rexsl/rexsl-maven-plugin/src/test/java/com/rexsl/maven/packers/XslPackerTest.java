@@ -62,7 +62,7 @@ public final class XslPackerTest {
         MatcherAssert.assertThat("file created", dest.exists());
         MatcherAssert.assertThat(
             FileUtils.readFileToString(dest),
-            Matchers.equalTo("<stylesheet></stylesheet>")
+            Matchers.equalTo("<stylesheet/>")
         );
     }
 

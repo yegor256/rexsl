@@ -96,7 +96,7 @@ public final class XslPacker extends AbstractPacker {
             throw new IllegalStateException(ex);
         }
         try {
-            clear(document);
+            this.clear(document);
         } catch (XPathExpressionException ex) {
             throw new IllegalStateException(ex);
         }
@@ -117,14 +117,20 @@ public final class XslPacker extends AbstractPacker {
         }
     }
 
+    /**
+     * Removes comments from the specified <code>Document</code>.
+     * @param document Document to clear.
+     * @throws XPathExpressionException If XPATH expression to retrieve comment
+     *  <code>Node</code>s is wrong.
+     */
     private void clear(final Document document)
         throws XPathExpressionException {
         final XPath xpath = this.XPATHFACTORY.newXPath();
         final XPathExpression expr = xpath.compile("//comment()");
         final Object result = expr.evaluate(document, XPathConstants.NODESET);
         final NodeList nodes = (NodeList) result;
-        for (int i = 0; i < nodes.getLength(); i++) {
-            final Node node = nodes.item(i);
+        for (int index = 0; index < nodes.getLength(); index = index + 1) {
+            final Node node = nodes.item(index);
             final Node parent = node.getParentNode();
             if (null == parent) {
                 throw new IllegalStateException(
