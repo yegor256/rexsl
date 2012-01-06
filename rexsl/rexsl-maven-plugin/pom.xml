@@ -432,6 +432,9 @@
                                 <copy verbose="yes" overwrite="yes"
                                     file="${com.rexsl:rexsl-core:jar}"
                                     tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-core/${project.version}/rexsl-core-${project.version}.jar"/>
+                                <copy verbose="yes" overwrite="yes"
+                                    file="${com.rexsl:rexsl-w3c:jar}"
+                                    tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-w3c/${project.version}/rexsl-w3c-${project.version}.jar"/>
                             </target>
                         </configuration>
                         <goals>
