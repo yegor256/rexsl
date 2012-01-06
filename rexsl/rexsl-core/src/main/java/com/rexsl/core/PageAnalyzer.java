@@ -68,7 +68,9 @@ final class PageAnalyzer {
      * @return Do we need to transform to XHTML?
      */
     public boolean needsTransformation() {
-        final String agent = this.request.getHeader(HttpHeaders.USER_AGENT);
+        final UserAgent agent = new UserAgent(
+            this.request.getHeader(HttpHeaders.USER_AGENT)
+        );
         final String accept = this.request.getHeader(HttpHeaders.ACCEPT);
         // let's check whether we should transform or not
         // @checkstyle BooleanExpressionComplexity (1 line)
@@ -82,7 +84,7 @@ final class PageAnalyzer {
             // it's a pure XML client, requesting XML format
             || this.isXmlExplicitlyRequested(accept)
             // the browser supports XSTL 2.0
-            || (this.isXsltCapable(agent) && this.acceptsXml(accept));
+            || (agent.isXsltCapable() && this.acceptsXml(accept));
         if (dontTouch) {
             Logger.debug(
                 this,
@@ -95,21 +97,6 @@ final class PageAnalyzer {
             );
         }
         return !dontTouch;
-    }
-
-    /**
-     * Check if the XSLT transformation is required on the server side.
-     * @param agent User agent string from the request.
-     * @return If the transformation is needed.
-     * @todo #7 The implementation is very preliminary and should be refined.
-     *  Not all Chrome or Safari versions support XSLT 2.0. We should properly
-     *  parse the "Agent" header and understand versions.
-     */
-    private Boolean isXsltCapable(final String agent) {
-        final Boolean cap = (agent != null)
-            && agent.matches(".*(Chrome|Safari).*");
-        Logger.debug(this, "#isXsltCapable('%s'): %b", agent, cap);
-        return cap;
     }
 
     /**

@@ -88,26 +88,25 @@ public final class PageAnalyzerTest {
     /**
      * Params for this parametrized test.
      * @return Array of arrays of params for ctor
+     * @checkstyle LineLength (25 lines)
      */
     @Parameters
     public static Collection<Object[]> params() {
-        // @checkstyle LineLength (1 line)
         final String xml = "<?xml version='1.0'?><?xml-stylesheet href='/foo.xsl' type='text/xsl'?><page/>";
         return Arrays.asList(
             new Object[][] {
                 {xml, null, null, true},
-                {xml, "Firefox", MediaType.TEXT_HTML, true},
+                {xml, "Firefox/4", MediaType.TEXT_HTML, true},
                 {xml, null, "application/xml;q=0.9,*/*;q=0.7", true},
-                {xml, "Firefox 8", "application/xml;q=0.9,*/*;q=0.4", true},
+                {xml, "Firefox/8", "application/xml;q=0.9,*/*;q=0.4", true},
                 {xml, null, MediaType.APPLICATION_XML, false},
-                {xml, "Chrome 9", MediaType.TEXT_HTML, true},
-                {xml, "Chrome 10", null, true},
-                {xml, "Chrome", "application/xml;q=0.9,*/*;q=0.3", false},
+                {xml, "Chrome/9", MediaType.TEXT_HTML, true},
+                {xml, "Chrome/10", null, true},
+                {xml, "Chrome/10 Version/10.65.8484", "application/xml;q=0.9,*/*;q=0.3", false},
                 {"", null, null, false},
-                {"", "Safari 5", MediaType.TEXT_HTML, false},
-                {"\u0443\u0440\u0430", "Safari 4", MediaType.TEXT_HTML, false},
-                // @checkstyle LineLength (1 line)
-                {"<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform'></stylesheet>", "Safari 5.1", MediaType.TEXT_HTML, false},
+                {"", "Mozilla/5.0 Version/5.1.1 Safari/534.51.22", MediaType.TEXT_HTML, false},
+                {"\u0443\u0440\u0430", "Safari/4", MediaType.TEXT_HTML, false},
+                {"<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform'></stylesheet>", "Safari/5", MediaType.TEXT_HTML, false},
             }
         );
     }
