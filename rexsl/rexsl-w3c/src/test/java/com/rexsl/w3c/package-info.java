@@ -27,51 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
-
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.EnvironmentMocker;
-import org.hamcrest.MatcherAssert;
-import org.junit.Test;
 
 /**
- * Test case for {@link JigsawCssCheck}.
- * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * W3C validators, tests.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @todo #10 Implement CSS validation and enable all test methods in this class
  */
-public final class JigsawCssCheckTest {
-
-    /**
-     * JigsawCssCheckTest can validate correct CSS files.
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void validatesCorrectCssFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/css/valid.css")
-            .mock();
-        MatcherAssert.assertThat(
-            "valid CSS passes without problems",
-            new JigsawCssCheck().validate(env)
-        );
-    }
-
-    /**
-     * JigsawCssCheckTest can validate incorrect CSS files.
-     * @throws Exception If something goes wrong
-     */
-    @org.junit.Ignore
-    @Test
-    public void validatesIncorrectCssFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/css/invalid.css")
-            .mock();
-        MatcherAssert.assertThat(
-            "invalid CSS is caught",
-            !new JigsawCssCheck().validate(env)
-        );
-    }
-
-}
+package com.rexsl.w3c;

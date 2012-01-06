@@ -31,6 +31,7 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.ymock.util.Logger;
 
 /**
  * Validates CSS files against style sheet rules.
@@ -40,9 +41,16 @@ import com.rexsl.maven.Environment;
  */
 public final class CssStaticCheck implements Check {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean validate(final Environment env) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        Logger.warn(
+            this,
+            "CSS static check is not implemented yet"
+        );
+        return true;
     }
 
 }

@@ -29,8 +29,12 @@
  */
 package com.rexsl.maven;
 
+import com.rexsl.maven.checks.BinaryFilesCheck;
+import com.rexsl.maven.checks.CssStaticCheck;
 import com.rexsl.maven.checks.FilesStructureCheck;
 import com.rexsl.maven.checks.InContainerScriptsCheck;
+import com.rexsl.maven.checks.JigsawCssCheck;
+import com.rexsl.maven.checks.WebXmlCheck;
 import com.rexsl.maven.checks.XhtmlOutputCheck;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +44,7 @@ import java.util.Set;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (100 lines)
  */
 public final class ChecksProvider {
 
@@ -49,9 +54,13 @@ public final class ChecksProvider {
      */
     public Set<Check> all() {
         final Set<Check> checks = new HashSet<Check>();
+        checks.add(new BinaryFilesCheck());
+        checks.add(new CssStaticCheck());
+        checks.add(new JigsawCssCheck());
         checks.add(new FilesStructureCheck());
         checks.add(new XhtmlOutputCheck());
         checks.add(new InContainerScriptsCheck());
+        checks.add(new WebXmlCheck());
         return checks;
     }
 

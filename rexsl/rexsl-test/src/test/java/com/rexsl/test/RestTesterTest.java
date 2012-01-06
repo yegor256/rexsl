@@ -35,6 +35,7 @@ import java.net.URLEncoder;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+import org.apache.commons.lang.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -129,7 +130,14 @@ public final class RestTesterTest {
                 HttpHeaders.CONTENT_TYPE,
                 MediaType.APPLICATION_FORM_URLENCODED
             )
-            .post("", String.format("%s=%s", name, URLEncoder.encode(value)))
+            .post(
+                "testing of POST request",
+                String.format(
+                    "%s=%s",
+                    name,
+                    URLEncoder.encode(value, CharEncoding.UTF_8)
+                )
+            )
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 

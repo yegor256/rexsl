@@ -58,46 +58,18 @@ public final class LogMocker {
      * Public ctor.
      */
     public LogMocker() {
-        Mockito.doAnswer(
-            new Answer() {
-                public Object answer(final InvocationOnMock invocation) {
-                    LogMocker.this.messages.add(
-                        (String) invocation.getArguments()[0]
-                    );
-                    return null;
-                }
+        final Answer rec = new Answer() {
+            public Object answer(final InvocationOnMock invocation) {
+                final String text = (String) invocation.getArguments()[0];
+                LogMocker.this.messages.add(text);
+                // System.out.println(text);
+                return null;
             }
-        ).when(this.log).info(Mockito.anyString());
-        Mockito.doAnswer(
-            new Answer() {
-                public Object answer(final InvocationOnMock invocation) {
-                    LogMocker.this.messages.add(
-                        (String) invocation.getArguments()[0]
-                    );
-                    return null;
-                }
-            }
-        ).when(this.log).error(Mockito.anyString());
-        Mockito.doAnswer(
-            new Answer() {
-                public Object answer(final InvocationOnMock invocation) {
-                    LogMocker.this.messages.add(
-                        (String) invocation.getArguments()[0]
-                    );
-                    return null;
-                }
-            }
-        ).when(this.log).debug(Mockito.anyString());
-        Mockito.doAnswer(
-            new Answer() {
-                public Object answer(final InvocationOnMock invocation) {
-                    LogMocker.this.messages.add(
-                        (String) invocation.getArguments()[0]
-                    );
-                    return null;
-                }
-            }
-        ).when(this.log).warn(Mockito.anyString());
+        };
+        Mockito.doAnswer(rec).when(this.log).info(Mockito.anyString());
+        Mockito.doAnswer(rec).when(this.log).error(Mockito.anyString());
+        Mockito.doAnswer(rec).when(this.log).debug(Mockito.anyString());
+        Mockito.doAnswer(rec).when(this.log).warn(Mockito.anyString());
     }
 
     /**

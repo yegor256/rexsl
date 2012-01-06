@@ -27,51 +27,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.w3c;
 
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 /**
- * Test case for {@link JigsawCssCheck}.
- * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * Test case for {@link DefaultHtmlValidator}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @todo #10 Implement CSS validation and enable all test methods in this class
  */
-public final class JigsawCssCheckTest {
+public final class DefaultHtmlValidatorTest {
 
     /**
-     * JigsawCssCheckTest can validate correct CSS files.
-     * @throws Exception If something goes wrong
+     * DefaultHtmlValidator can validate HTML document.
+     * @throws Exception If something goes wrong inside
+     * @todo #84 Implement functionality and make it working
      */
     @Test
-    public void validatesCorrectCssFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/css/valid.css")
-            .mock();
-        MatcherAssert.assertThat(
-            "valid CSS passes without problems",
-            new JigsawCssCheck().validate(env)
-        );
-    }
-
-    /**
-     * JigsawCssCheckTest can validate incorrect CSS files.
-     * @throws Exception If something goes wrong
-     */
     @org.junit.Ignore
-    @Test
-    public void validatesIncorrectCssFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/css/invalid.css")
-            .mock();
-        MatcherAssert.assertThat(
-            "invalid CSS is caught",
-            !new JigsawCssCheck().validate(env)
-        );
+    public void validatesHtmlDocument() throws Exception {
+        final HtmlValidator validator = new DefaultHtmlValidator();
+        final ValidationResponse response = validator.validate("<html/>");
+        MatcherAssert.assertThat("problem caught", !response.valid());
     }
 
 }

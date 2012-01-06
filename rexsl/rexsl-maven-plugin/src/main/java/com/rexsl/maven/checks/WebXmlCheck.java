@@ -45,7 +45,7 @@ public final class WebXmlCheck implements Check {
     /**
      * Contains path to web.xml file.
      */
-    public static final String WEB_XML = "src/webapp/WEB-INF/web.xml";
+    public static final String WEB_XML = "src/main/webapp/WEB-INF/web.xml";
 
     @Override
     public boolean validate(final Environment env) {

@@ -31,6 +31,15 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.w3c.CssValidator;
+import com.rexsl.w3c.Defect;
+import com.rexsl.w3c.ValidationResponse;
+import com.rexsl.w3c.ValidatorBuilder;
+import com.ymock.util.Logger;
+import java.io.File;
+import java.util.List;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Validates CSS files.
@@ -40,9 +49,84 @@ import com.rexsl.maven.Environment;
  */
 public final class JigsawCssCheck implements Check {
 
+    /**
+     * Directory with CSS files.
+     */
+    private static final String CSS_DIR = "src/webapp/css";
+
+    /**
+     * Validator.
+     */
+    private final transient CssValidator validator =
+        new ValidatorBuilder().css();
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean validate(final Environment env) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        final File dir = new File(env.webdir(), this.CSS_DIR);
+        boolean success = true;
+        if (dir.exists()) {
+            final String[] exts = new String[] {"css"};
+            for (File css : FileUtils.listFiles(dir, exts, true)) {
+                try {
+                    this.one(css);
+                } catch (InternalCheckException ex) {
+                    Logger.warn(
+                        this,
+                        "Failed:\n%[exception]s",
+                        ex
+                    );
+                    success = false;
+                }
+            }
+        } else {
+            Logger.info(
+                this,
+                "%s directory is absent, no CSS tests",
+                this.CSS_DIR
+            );
+        }
+        return success;
+    }
+
+    /**
+     * Check one CSS page.
+     * @param file Check this particular CSS document
+     * @throws InternalCheckException If some failure inside
+     */
+    private void one(final File file) throws InternalCheckException {
+        String page;
+        try {
+            page = FileUtils.readFileToString(file);
+        } catch (java.io.IOException ex) {
+            throw new InternalCheckException(ex);
+        }
+        final ValidationResponse response = this.validator.validate(page);
+        if (!response.valid()) {
+            Logger.error(
+                this,
+                "%s contains invalid CSS",
+                file
+            );
+            for (Defect defect : (List<Defect>) ListUtils
+                .union(response.errors(), response.warnings())
+            ) {
+                Logger.error(
+                    this,
+                    "[%d] %s: %s",
+                    defect.line(),
+                    defect.message(),
+                    defect.source()
+                );
+            }
+            throw new InternalCheckException(
+                "CSS validation failed with %d errors and %d warnings",
+                response.errors().size(),
+                response.warnings().size()
+            );
+        }
     }
 
 }
