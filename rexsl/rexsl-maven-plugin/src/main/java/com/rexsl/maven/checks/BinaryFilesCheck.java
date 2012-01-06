@@ -31,10 +31,11 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.ymock.util.Logger;
 import java.io.File;
 import java.util.Collection;
-import javax.activation.MimetypesFileTypeMap;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
@@ -46,23 +47,26 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 public final class BinaryFilesCheck implements Check {
 
     /**
-     * Text MIME type.
+     * {@inheritDoc}
      */
-    private static final String TEXT = "text/plain";
-
     @Override
     public boolean validate(final Environment env) {
-        final File directory = env.basedir();
+        final File dir = new File(env.basedir(), "src/main/webapp");
         final Collection<File> files = FileUtils.listFiles(
-            directory,
+            dir,
             TrueFileFilter.INSTANCE,
             TrueFileFilter.INSTANCE
         );
-        final MimetypesFileTypeMap map = new MimetypesFileTypeMap();
         boolean valid = true;
         for (File file : files) {
-            final String type = map.getContentType(file);
-            if (!this.TEXT.equals(type)) {
+            final String ext = FilenameUtils.getExtension(file.getPath());
+            if (!ext.matches("html|xml|xhtml|txt|xsl|css")) {
+                Logger.warn(
+                    this,
+                    "File %s has incorrect type/extension '%s'",
+                    file,
+                    ext
+                );
                 valid = false;
                 break;
             }
