@@ -27,57 +27,46 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.packers;
+package com.rexsl.maven.checks;
 
-import com.yahoo.platform.yui.compressor.CssCompressor;
+import com.rexsl.maven.Check;
+import com.rexsl.maven.Environment;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
+import java.util.Collection;
+import javax.activation.MimetypesFileTypeMap;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
- * Packager of CSS files. All comments and unnecessary spaces are removed.
+ * Checks that all files are text ones.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
+ * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @version $Id: BinaryFilesCheck.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class CssPacker extends AbstractPacker {
+public final class BinaryFilesCheck implements Check {
 
     /**
-     * {@inheritDoc}
+     * Text MIME type.
      */
-    @Override
-    protected String extension() {
-        return "css";
-    }
+    private static final String TEXT = "text/plain";
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected void pack(final File src, final File dest) throws IOException {
-        final Reader input = new InputStreamReader(
-            new FileInputStream(src),
-            CharEncoding.UTF_8
+    public boolean validate(final Environment env) {
+        final File directory = env.basedir();
+        final Collection<File> files = FileUtils.listFiles(
+            directory,
+            TrueFileFilter.INSTANCE,
+            TrueFileFilter.INSTANCE
         );
-        try {
-            final Writer output = new OutputStreamWriter(
-                new FileOutputStream(dest),
-                CharEncoding.UTF_8
-            );
-            try {
-                new CssCompressor(input).compress(output, -1);
-            } finally {
-                IOUtils.closeQuietly(output);
+        final MimetypesFileTypeMap map = new MimetypesFileTypeMap();
+        boolean valid = true;
+        for (File file : files) {
+            final String type = map.getContentType(file);
+            if (!this.TEXT.equals(type)) {
+                valid = false;
+                break;
             }
-        } finally {
-            IOUtils.closeQuietly(input);
         }
+        return valid;
     }
 }
