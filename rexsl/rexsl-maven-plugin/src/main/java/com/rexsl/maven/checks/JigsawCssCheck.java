@@ -45,6 +45,7 @@ import org.apache.commons.io.FileUtils;
  * Validates CSS files.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: JigsawCssCheck.java 204 2011-10-26 21:15:28Z guard $
  */
 public final class JigsawCssCheck implements Check {

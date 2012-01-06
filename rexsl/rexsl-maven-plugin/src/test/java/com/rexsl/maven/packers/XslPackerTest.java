@@ -31,6 +31,8 @@ package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
+import com.rexsl.test.XhtmlConverter;
+import com.rexsl.test.XhtmlMatchers;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
@@ -53,16 +55,18 @@ public final class XslPackerTest {
     @Test
     public void packsXslFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withTextFile(
-                "src/main/webapp/xsl/layout.xsl",
-                "<stylesheet><!-- some text --></stylesheet>"
-        ).mock();
+            .withFile("src/main/webapp/xsl/layout.xsl")
+            .mock();
         final File dest = new File(env.webdir(), "xsl/layout.xsl");
         new XslPacker().pack(env);
         MatcherAssert.assertThat("file created", dest.exists());
         MatcherAssert.assertThat(
-            FileUtils.readFileToString(dest),
-            Matchers.equalTo("<stylesheet/>")
+            XhtmlConverter.the(FileUtils.readFileToString(dest)),
+            Matchers.allOf(
+                XhtmlMatchers.hasXPath("//xsl:template"),
+                XhtmlMatchers.hasXPath("//xhtml:body"),
+                Matchers.not(XhtmlMatchers.hasXPath("//comment()"))
+            )
         );
     }
 

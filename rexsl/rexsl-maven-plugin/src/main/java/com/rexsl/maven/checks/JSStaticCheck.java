@@ -31,18 +31,27 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.ymock.util.Logger;
 
 /**
  * Validates Java script files against style sheet rules.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: JSStaticCheck.java 204 2011-10-26 21:15:28Z guard $
  */
 public final class JSStaticCheck implements Check {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean validate(final Environment env) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        Logger.warn(
+            this,
+            "Static javascript validator is not implemented yet"
+        );
+        return true;
     }
 
 }

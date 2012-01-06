@@ -1,4 +1,5 @@
 <?xml version='1.0'?>
+<!-- some comment, to be removed by XslPacker -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns="http://www.w3.org/1999/xhtml"

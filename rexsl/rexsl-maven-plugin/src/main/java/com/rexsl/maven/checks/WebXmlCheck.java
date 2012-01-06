@@ -38,6 +38,7 @@ import java.io.File;
  * Validates web.xml file against it's XSD schema.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: WebXmlCheck.java 204 2011-10-26 21:15:28Z guard $
  */
 public final class WebXmlCheck implements Check {
@@ -47,10 +48,12 @@ public final class WebXmlCheck implements Check {
      */
     public static final String WEB_XML = "src/main/webapp/WEB-INF/web.xml";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean validate(final Environment env) {
-        final File directory = env.basedir();
-        final File file = new File(directory, this.WEB_XML);
+        final File file = new File(env.basedir(), this.WEB_XML);
         boolean valid = true;
         if (!file.exists()) {
             Logger.warn(this, "File '%s' is absent, but should be there", file);
