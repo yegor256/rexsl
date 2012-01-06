@@ -34,10 +34,14 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.GroovyExecutor;
+import com.rexsl.w3c.Defect;
+import com.rexsl.w3c.HtmlValidator;
+import com.rexsl.w3c.ValidationResponse;
+import com.rexsl.w3c.ValidatorBuilder;
 import com.ymock.util.Logger;
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.util.List;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -61,6 +65,12 @@ public final class XhtmlOutputCheck implements Check {
     private static final String GROOVY_DIR = "src/test/rexsl/xhtml";
 
     /**
+     * Validator.
+     */
+    private final transient HtmlValidator validator =
+        new ValidatorBuilder().html();
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -82,9 +92,8 @@ public final class XhtmlOutputCheck implements Check {
                 } catch (InternalCheckException ex) {
                     Logger.warn(
                         this,
-                        "Failed: %s\n%s",
-                        ex.getMessage(),
-                        this.stacktrace(ex)
+                        "Failed:\n%[exception]s",
+                        ex
                     );
                     success = false;
                 }
@@ -127,7 +136,7 @@ public final class XhtmlOutputCheck implements Check {
             );
         }
         final String xhtml = new XhtmlTransformer().transform(env, file);
-        this.validate(xhtml);
+        this.validate(file, xhtml);
         final GroovyExecutor exec = new GroovyExecutor(
             env,
             new BindingBuilder(env).add("document", xhtml).build()
@@ -141,22 +150,36 @@ public final class XhtmlOutputCheck implements Check {
 
     /**
      * Validates XHTML file.
+     * @param xml The file being validated
      * @param xhtml Contains XHTML file to validate.
      * @throws InternalCheckException If file is invalid.
      */
-    private void validate(final String xhtml) throws InternalCheckException {
-        assert xhtml != null;
-    }
-
-    /**
-     * Exception to string conversion.
-     * @param exp The exception
-     * @return Stacktrace
-     */
-    private String stacktrace(final Exception exp) {
-        final StringWriter writer = new StringWriter();
-        exp.printStackTrace(new PrintWriter(writer));
-        return writer.toString();
+    private void validate(final File xml, final String xhtml)
+        throws InternalCheckException {
+        final ValidationResponse response = this.validator.validate(xhtml);
+        if (!response.valid()) {
+            Logger.error(
+                this,
+                "%s produced invalid XHTML",
+                xml
+            );
+            for (Defect defect : (List<Defect>) ListUtils
+                .union(response.errors(), response.warnings())
+            ) {
+                Logger.error(
+                    this,
+                    "[%d] %s: %s",
+                    defect.line(),
+                    defect.message(),
+                    defect.source()
+                );
+            }
+            throw new InternalCheckException(
+                "XHTML validation failed with %d errors and %d warnings",
+                response.errors().size(),
+                response.warnings().size()
+            );
+        }
     }
 
 }

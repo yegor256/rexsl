@@ -48,6 +48,7 @@
     <name>rexsl</name>
 
     <modules>
+        <module>rexsl-w3c</module>
         <module>rexsl-test</module>
         <module>rexsl-core</module>
         <module>rexsl-maven-plugin</module>
@@ -571,6 +572,20 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version since="19 Oct 2011">2.1</version>
+            </dependency>
+            <dependency>
+                <!-- Forward all calls to SLF4J to LOG4J. -->
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version since="19 Sep 2011">1.6.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- Use LOG4J logging facility for all loggings. -->
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version since="19 Sep 2011">1.2.16</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -27,51 +27,54 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.w3c;
 
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.EnvironmentMocker;
-import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import java.net.URI;
+import java.util.List;
 
 /**
- * Test case for {@link JigsawCssCheck}.
- * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * Response of validation.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @todo #10 Implement CSS validation and enable all test methods in this class
+ * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-public final class JigsawCssCheckTest {
+public interface ValidationResponse {
 
     /**
-     * JigsawCssCheckTest can validate correct CSS files.
-     * @throws Exception If something goes wrong
+     * The document is valid?
+     * @return Is it valid?
      */
-    @Test
-    public void validatesCorrectCssFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/css/valid.css")
-            .mock();
-        MatcherAssert.assertThat(
-            "valid CSS passes without problems",
-            new JigsawCssCheck().validate(env)
-        );
-    }
+    boolean valid();
 
     /**
-     * JigsawCssCheckTest can validate incorrect CSS files.
-     * @throws Exception If something goes wrong
+     * Checked by.
+     * @return URI
      */
-    @org.junit.Ignore
-    @Test
-    public void validatesIncorrectCssFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/css/invalid.css")
-            .mock();
-        MatcherAssert.assertThat(
-            "invalid CSS is caught",
-            !new JigsawCssCheck().validate(env)
-        );
-    }
+    URI checkedBy();
+
+    /**
+     * Doctype of the document.
+     * @return Doctype
+     */
+    String doctype();
+
+    /**
+     * Charset of the document.
+     * @return Charset
+     */
+    String charset();
+
+    /**
+     * Errors found.
+     * @return List of errors
+     */
+    List<Defect> errors();
+
+    /**
+     * Warnings found.
+     * @return List of warnings
+     */
+    List<Defect> warnings();
 
 }
