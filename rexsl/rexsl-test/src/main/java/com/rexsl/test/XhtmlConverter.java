@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import javax.xml.transform.Source;
+import org.w3c.dom.Node;
 
 /**
  * Convert a string to XML source.
@@ -76,6 +77,15 @@ public final class XhtmlConverter {
      */
     public static Source the(final String text) {
         return new StringSource(text);
+    }
+
+    /**
+     * Convert it to XML.
+     * @param node The node to convert
+     * @return DOM source/document
+     */
+    public static Source the(final Node node) {
+        return new StringSource(node);
     }
 
 }

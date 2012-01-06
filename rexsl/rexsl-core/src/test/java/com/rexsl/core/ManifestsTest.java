@@ -93,4 +93,19 @@ public final class ManifestsTest {
         Manifests.read("absent-property");
     }
 
+    /**
+     * Manifests can make a snapshot and restore it back.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void makesSnapshotAndRestoresBack() throws Exception {
+        final String name = "Test-Foo-Attribute";
+        final byte[] snapshot = Manifests.snapshot();
+        MatcherAssert.assertThat("is absent", !Manifests.exists(name));
+        Manifests.inject(name, "some value to inject");
+        MatcherAssert.assertThat("should be", Manifests.exists(name));
+        Manifests.revert(snapshot);
+        MatcherAssert.assertThat("reverted", !Manifests.exists(name));
+    }
+
 }
