@@ -87,6 +87,19 @@ public final class JaxbConverterTest {
         );
     }
 
+    /**
+     * JaxbConverter can convert an object without XmlRootElement annotation.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void convertsNonRootObject() throws Exception {
+        final Object object = new JaxbConverterTest.Foo();
+        MatcherAssert.assertThat(
+            JaxbConverter.the(object),
+            XhtmlMatchers.hasXPath("/foo/name")
+        );
+    }
+
     @XmlRootElement(name = "employee")
     @XmlAccessorType(XmlAccessType.NONE)
     private static final class Employee {
