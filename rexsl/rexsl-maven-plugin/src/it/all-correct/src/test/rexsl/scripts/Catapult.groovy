@@ -37,6 +37,6 @@ import javax.ws.rs.core.UriBuilder
 def home = UriBuilder.fromUri(System.getProperty('catapult.home'))
 RestTester.start(home)
     .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
-    .header(HttpHeaders.USER_AGENT, 'Chrome')
+    .header(HttpHeaders.USER_AGENT, 'somebody')
     .get('catapult test')
     .assertStatus(HttpURLConnection.HTTP_OK)

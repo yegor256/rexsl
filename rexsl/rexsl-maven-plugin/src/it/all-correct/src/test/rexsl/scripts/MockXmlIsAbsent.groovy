@@ -35,6 +35,6 @@ import javax.ws.rs.core.UriBuilder
 
 RestTester.start(UriBuilder.fromUri(rexsl.home).path('/xml/index.xml'))
     .header(HttpHeaders.ACCEPT, 'text/plain,application/xml')
-    .header(HttpHeaders.USER_AGENT, 'Chrome')
+    .header(HttpHeaders.USER_AGENT, 'somebody')
     .get('reading mocked XML file')
     .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
