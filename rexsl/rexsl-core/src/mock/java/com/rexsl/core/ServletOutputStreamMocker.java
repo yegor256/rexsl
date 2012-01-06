@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import javax.servlet.ServletOutputStream;
+import org.apache.commons.lang.CharEncoding;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -75,7 +76,7 @@ public final class ServletOutputStreamMocker {
                         final byte[] data =
                             (byte[]) invocation.getArguments()[0];
                         ServletOutputStreamMocker.this.buffer.append(
-                            new String(data, "UTF-8").toCharArray()
+                            new String(data, CharEncoding.UTF_8).toCharArray()
                         );
                         return null;
                     }
@@ -90,7 +91,7 @@ public final class ServletOutputStreamMocker {
                         final int off = (Integer) invocation.getArguments()[1];
                         final int len = (Integer) invocation.getArguments()[2];
                         ServletOutputStreamMocker.this.buffer.append(
-                            new String(data, "UTF-8").toCharArray(),
+                            new String(data, CharEncoding.UTF_8).toCharArray(),
                             off,
                             len
                         );

@@ -42,10 +42,15 @@ import java.io.File;
  */
 public final class WebXmlCheck implements Check {
 
+    /**
+     * Contains path to web.xml file.
+     */
+    public static final String WEB_XML = "src/webapp/WEB-INF/web.xml";
+
     @Override
     public boolean validate(final Environment env) {
         final File directory = env.basedir();
-        final File file = new File(directory, "src/webapp/WEB-INF/web.xml");
+        final File file = new File(directory, this.WEB_XML);
         boolean valid = true;
         if (!file.exists()) {
             Logger.warn(this, "File '%s' is absent, but should be there", file);
@@ -64,6 +69,6 @@ public final class WebXmlCheck implements Check {
      */
     private boolean validate(final File file) {
         Logger.debug(this, "Validating file %s", file);
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return true;
     }
 }

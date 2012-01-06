@@ -32,6 +32,7 @@ package com.rexsl.core;
 import java.io.InputStream;
 import javax.servlet.ServletContext;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.mockito.Mockito;
 
 /**
@@ -57,7 +58,7 @@ public final class ServletContextMocker {
         final String content) {
         InputStream stream;
         try {
-            stream = IOUtils.toInputStream(content, "UTF-8");
+            stream = IOUtils.toInputStream(content, CharEncoding.UTF_8);
         } catch (java.io.IOException ex) {
             throw new IllegalArgumentException(ex);
         }

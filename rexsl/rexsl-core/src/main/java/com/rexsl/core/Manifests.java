@@ -31,16 +31,18 @@ package com.rexsl.core;
 
 import com.ymock.util.Logger;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
+import org.apache.commons.lang.SerializationUtils;
 
 /**
  * Wrapper around {@code MANIFEST.MF} files.
@@ -95,12 +97,27 @@ import javax.servlet.ServletContext;
  * </pre>
  *
  * <p>In unit and integration tests you may need to inject some values
- * to {@code MANIFEST.MF} in runtime (for example in your bootstrap Groovy
+ * to {@code MANIFEST.MF} in runtime (for example, in your bootstrap Groovy
  * scripts):
  *
  * <pre>
  * import com.rexsl.core.Manifests
  * Manifests.inject("Foo-URL", "http://localhost/abc");
+ * </pre>
+ *
+ * <p>When it is necessary to isolate such injections between different unit
+ * tests "snapshots" may help, for example (it's a method in a unit test):
+ *
+ * <pre>
+ * &#64;Test
+ * public void testSomeCode() {
+ *   // save current state of all MANIFEST.MF attributes
+ *   final byte[] snapshot = Manifests.snapshot();
+ *   // inject new attribute required for this specific test
+ *   Manifests.inject("Foo-URL", "http://localhost/abc");
+ *   // restore back all attributes, as they were before the injection
+ *   Manifests.revert(snapshot);
+ * }
  * </pre>
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -111,34 +128,27 @@ import javax.servlet.ServletContext;
  * @see <a href="http://trac.fazend.com/rexsl/ticket/55">Class was introduced in ticket #55</a>
  * @since 0.3
  */
+@SuppressWarnings("PMD.UseConcurrentHashMap")
 public final class Manifests {
 
     /**
      * Injected attributes.
      * @see #inject(String,String)
      */
-    private static final ConcurrentMap<String, String> INJECTED =
+    private static final Map<String, String> INJECTED =
         new ConcurrentHashMap<String, String>();
 
     /**
      * Attributes retrieved from all existing {@code MANIFEST.MF} files.
      * @see #load()
      */
-    private static ConcurrentMap<String, String> attributes;
+    private static Map<String, String> attributes = Manifests.load();
 
     /**
      * Failures registered during loading.
      * @see #load()
      */
-    private static ConcurrentMap<URL, String> failures;
-
-    /**
-     * Load add available data on first loading of this class
-     * into JVM.
-     */
-    static {
-        Manifests.load();
-    }
+    private static Map<URL, String> failures;
 
     /**
      * It's a utility class, can't be instantiated.
@@ -198,7 +208,7 @@ public final class Manifests {
      *
      * <p>An attribute can be injected in runtime, mostly for the sake of
      * unit and integration testing. Once injected an attribute becomes
-     * available with {@link read(String)}.
+     * available with {@link #read(String)}.
      *
      * @param name Name of the attribute
      * @param value The value of the attribute being injected
@@ -226,7 +236,7 @@ public final class Manifests {
     /**
      * Check whether attribute exists in any of {@code MANIFEST.MF} files.
      *
-     * <p>Use this method before {@link read(String)} to check whether an
+     * <p>Use this method before {@link #read(String)} to check whether an
      * attribute exists, in order to avoid a runtime exception.
      *
      * @param name Name of the attribute to check
@@ -238,6 +248,47 @@ public final class Manifests {
     }
 
     /**
+     * Make a snapshot of current attributes and their values.
+     * @return The snapshot, to be used later with {@link #revert(byte[])}
+     * @see <a href="http://trac.fazend.com/rexsl/ticket/107">Introduced in ticket #107</a>
+     */
+    public static byte[] snapshot() {
+        byte[] snapshot;
+        synchronized (Manifests.INJECTED) {
+            snapshot = SerializationUtils.serialize(
+                (Serializable) Manifests.INJECTED
+            );
+        }
+        Logger.debug(
+            Manifests.class,
+            "#snapshot(): created (%d bytes)",
+            snapshot.length
+        );
+        return snapshot;
+    }
+
+    /**
+     * Revert to the state that was recorded by {@link #snapshot()}.
+     * @param snapshot The snapshot taken by {@link #snapshot()}
+     * @see <a href="http://trac.fazend.com/rexsl/ticket/107">Introduced in ticket #107</a>
+     */
+    public static void revert(final byte[] snapshot) {
+        synchronized (Manifests.INJECTED) {
+            Manifests.INJECTED.clear();
+            for (Map.Entry<String, String> entry
+                : ((Map<String, String>) SerializationUtils
+                    .deserialize(snapshot)).entrySet()) {
+                Manifests.INJECTED.put(entry.getKey(), entry.getValue());
+            }
+        }
+        Logger.debug(
+            Manifests.class,
+            "#revert(%d bytes): reverted",
+            snapshot.length
+        );
+    }
+
+    /**
      * Append attributes from the web application {@code MANIFEST.MF}, called
      * from {@link XsltFilter#init(FilterConfig)}.
      * @param ctx Servlet context
@@ -245,6 +296,7 @@ public final class Manifests {
      */
     @SuppressWarnings("PMD.DefaultPackage")
     static void append(final ServletContext ctx) {
+        final long start = System.currentTimeMillis();
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
@@ -258,15 +310,15 @@ public final class Manifests {
                 ctx.getClass().getName()
             );
         } else {
-            final ConcurrentMap<String, String> attrs =
-                Manifests.loadOneFile(main);
+            final Map<String, String> attrs = Manifests.loadOneFile(main);
             Manifests.attributes.putAll(attrs);
             Logger.info(
                 Manifests.class,
-                "#append(%s): %d attributes loaded from %s: %[list]s",
+                "#append(%s): %d attributes loaded from %s in %dms: %[list]s",
                 ctx.getClass().getName(),
                 attrs.size(),
                 main,
+                System.currentTimeMillis() - start,
                 attrs.keySet()
             );
         }
@@ -274,16 +326,18 @@ public final class Manifests {
 
     /**
      * Load attributes from classpath.
+     * @return All found attributes
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    private static void load() {
+    private static Map<String, String> load() {
         final long start = System.currentTimeMillis();
-        Manifests.attributes = new ConcurrentHashMap<String, String>();
         Manifests.failures = new ConcurrentHashMap<URL, String>();
+        final Map<String, String> attrs =
+            new ConcurrentHashMap<String, String>();
         Integer count = 0;
         for (URL url : Manifests.urls()) {
             try {
-                Manifests.attributes.putAll(Manifests.loadOneFile(url));
+                attrs.putAll(Manifests.loadOneFile(url));
             // @checkstyle IllegalCatch (1 line)
             } catch (Exception ex) {
                 Manifests.failures.put(url, ex.getMessage());
@@ -299,11 +353,12 @@ public final class Manifests {
         Logger.info(
             Manifests.class,
             "#load(): %d attributes loaded from %d URL(s) in %dms: %[list]s",
-            Manifests.attributes.size(),
+            attrs.size(),
             count,
             System.currentTimeMillis() - start,
-            Manifests.attributes.keySet()
+            attrs.keySet()
         );
+        return attrs;
     }
 
     /**
@@ -332,8 +387,8 @@ public final class Manifests {
      * @return The attributes loaded
      * @see #load()
      */
-    private static ConcurrentMap<String, String> loadOneFile(final URL url) {
-        final ConcurrentMap<String, String> props =
+    private static Map<String, String> loadOneFile(final URL url) {
+        final Map<String, String> props =
             new ConcurrentHashMap<String, String>();
         InputStream stream;
         try {

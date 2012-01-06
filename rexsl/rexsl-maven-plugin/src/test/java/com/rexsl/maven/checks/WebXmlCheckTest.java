@@ -45,11 +45,6 @@ import org.junit.Test;
 public final class WebXmlCheckTest {
 
     /**
-     * Contains path to web.xml file.
-     */
-    private static final String WEB_XML = "src/webapp/WEB-INF/web.xml";
-
-    /**
      * WebXmlCheck can validate correct web.xml file.
      * @throws Exception If something goes wrong
      */
@@ -57,7 +52,7 @@ public final class WebXmlCheckTest {
     @Test
     public void validatesCorrectWebXmlFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withTextFile(this.WEB_XML, "valid-web.xml")
+            .withTextFile(WebXmlCheck.WEB_XML, "valid-web.xml")
             .mock();
         MatcherAssert.assertThat(
             "valid web.xml passes with problems",
@@ -73,7 +68,7 @@ public final class WebXmlCheckTest {
     @Test
     public void validatesIncorrectWebXmlFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withTextFile(this.WEB_XML, "invalid-web.xml")
+            .withTextFile(WebXmlCheck.WEB_XML, "invalid-web.xml")
             .mock();
         MatcherAssert.assertThat(
             "invalid web.xml is caught",
