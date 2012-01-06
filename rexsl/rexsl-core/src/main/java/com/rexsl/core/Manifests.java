@@ -275,11 +275,9 @@ public final class Manifests {
     public static void revert(final byte[] snapshot) {
         synchronized (Manifests.INJECTED) {
             Manifests.INJECTED.clear();
-            for (Map.Entry<String, String> entry
-                : ((Map<String, String>) SerializationUtils
-                    .deserialize(snapshot)).entrySet()) {
-                Manifests.INJECTED.put(entry.getKey(), entry.getValue());
-            }
+            Manifests.INJECTED.putAll(
+                (Map<String, String>) SerializationUtils.deserialize(snapshot)
+            );
         }
         Logger.debug(
             Manifests.class,
