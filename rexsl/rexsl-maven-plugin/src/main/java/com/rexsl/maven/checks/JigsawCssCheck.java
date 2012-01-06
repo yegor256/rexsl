@@ -53,7 +53,7 @@ public final class JigsawCssCheck implements Check {
     /**
      * Directory with CSS files.
      */
-    private static final String CSS_DIR = "src/webapp/css";
+    private static final String CSS_DIR = "src/main/webapp/css";
 
     /**
      * Validator.
