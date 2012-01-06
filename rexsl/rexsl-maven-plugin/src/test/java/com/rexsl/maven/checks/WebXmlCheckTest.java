@@ -27,41 +27,53 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.checks;
 
-import com.rexsl.maven.checks.BinaryFilesCheck;
-import com.rexsl.maven.checks.CssStaticCheck;
-import com.rexsl.maven.checks.FilesStructureCheck;
-import com.rexsl.maven.checks.InContainerScriptsCheck;
-import com.rexsl.maven.checks.JigsawCssCheck;
-import com.rexsl.maven.checks.WebXmlCheck;
-import com.rexsl.maven.checks.XhtmlOutputCheck;
-import java.util.HashSet;
-import java.util.Set;
+import com.rexsl.maven.Environment;
+import com.rexsl.maven.EnvironmentMocker;
+import org.hamcrest.MatcherAssert;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
- * Provider of checks.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * Test case for {@link WebXmlCheck}.
+ * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
- * @checkstyle ClassDataAbstractionCoupling (100 lines)
+ * @todo #65:1h Implement XMLSchemaValidator with test and remove Ignore
+ *  annotations.
  */
-public final class ChecksProvider {
+public final class WebXmlCheckTest {
 
     /**
-     * Get full collection of checks.
-     * @return List of checks
+     * WebXmlCheck can validate correct web.xml file.
+     * @throws Exception If something goes wrong
      */
-    public Set<Check> all() {
-        final Set<Check> checks = new HashSet<Check>();
-        checks.add(new BinaryFilesCheck());
-        checks.add(new CssStaticCheck());
-        checks.add(new JigsawCssCheck());
-        checks.add(new FilesStructureCheck());
-        checks.add(new XhtmlOutputCheck());
-        checks.add(new InContainerScriptsCheck());
-        checks.add(new WebXmlCheck());
-        return checks;
+    @Ignore
+    @Test
+    public void validatesCorrectWebXmlFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withTextFile(WebXmlCheck.WEB_XML, "valid-web.xml")
+            .mock();
+        MatcherAssert.assertThat(
+            "valid web.xml passes with problems",
+            new WebXmlCheck().validate(env)
+        );
+    }
+
+    /**
+     * WebXmlCheck can validate incorrect web.xml file.
+     * @throws Exception If something goes wrong
+     */
+    @Ignore
+    @Test
+    public void validatesIncorrectWebXmlFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withTextFile(WebXmlCheck.WEB_XML, "invalid-web.xml")
+            .mock();
+        MatcherAssert.assertThat(
+            "invalid web.xml is caught",
+            !new WebXmlCheck().validate(env)
+        );
     }
 
 }

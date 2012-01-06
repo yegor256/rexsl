@@ -27,41 +27,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.checks;
 
-import com.rexsl.maven.checks.BinaryFilesCheck;
-import com.rexsl.maven.checks.CssStaticCheck;
-import com.rexsl.maven.checks.FilesStructureCheck;
-import com.rexsl.maven.checks.InContainerScriptsCheck;
-import com.rexsl.maven.checks.JigsawCssCheck;
-import com.rexsl.maven.checks.WebXmlCheck;
-import com.rexsl.maven.checks.XhtmlOutputCheck;
-import java.util.HashSet;
-import java.util.Set;
+import com.rexsl.maven.Check;
+import com.rexsl.maven.Environment;
+import com.ymock.util.Logger;
+import java.io.File;
 
 /**
- * Provider of checks.
+ * Validates web.xml file against it's XSD schema.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- * @checkstyle ClassDataAbstractionCoupling (100 lines)
+ * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @version $Id: WebXmlCheck.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class ChecksProvider {
+public final class WebXmlCheck implements Check {
 
     /**
-     * Get full collection of checks.
-     * @return List of checks
+     * Contains path to web.xml file.
      */
-    public Set<Check> all() {
-        final Set<Check> checks = new HashSet<Check>();
-        checks.add(new BinaryFilesCheck());
-        checks.add(new CssStaticCheck());
-        checks.add(new JigsawCssCheck());
-        checks.add(new FilesStructureCheck());
-        checks.add(new XhtmlOutputCheck());
-        checks.add(new InContainerScriptsCheck());
-        checks.add(new WebXmlCheck());
-        return checks;
+    public static final String WEB_XML = "src/main/webapp/WEB-INF/web.xml";
+
+    @Override
+    public boolean validate(final Environment env) {
+        final File directory = env.basedir();
+        final File file = new File(directory, this.WEB_XML);
+        boolean valid = true;
+        if (!file.exists()) {
+            Logger.warn(this, "File '%s' is absent, but should be there", file);
+            valid = false;
+        }
+        if (valid) {
+            valid = this.validate(file);
+        }
+        return valid;
     }
 
+    /**
+     * Performs validation of the specified XML file against it's XSD schema.
+     * @param file File to be validated.
+     * @return True if file is valid, <code>false</code> if file is invalid.
+     */
+    private boolean validate(final File file) {
+        Logger.debug(this, "Validating file %s", file);
+        return true;
+    }
 }
