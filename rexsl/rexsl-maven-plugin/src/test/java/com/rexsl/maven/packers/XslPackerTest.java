@@ -50,7 +50,6 @@ public final class XslPackerTest {
      * @todo #37:1h Remove comments from the output file.
      *  XSL files should be compressed (all comments and spaces removed).
      */
-    @org.junit.Ignore
     @Test
     public void packsXslFile() throws Exception {
         final Environment env = new EnvironmentMocker()
@@ -63,7 +62,7 @@ public final class XslPackerTest {
         MatcherAssert.assertThat("file created", dest.exists());
         MatcherAssert.assertThat(
             FileUtils.readFileToString(dest),
-            Matchers.equalTo("<stylesheet></stylesheet>")
+            Matchers.equalTo("<stylesheet/>")
         );
     }
 
