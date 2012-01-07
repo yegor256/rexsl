@@ -33,6 +33,11 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
 import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  * Validates web.xml file against it's XSD schema.
@@ -60,7 +65,15 @@ public final class WebXmlCheck implements Check {
             valid = false;
         }
         if (valid) {
-            valid = this.validate(file);
+            try {
+                valid = this.validate(file);
+            } catch (ParserConfigurationException ex) {
+                valid = false;
+            } catch (SAXException ex) {
+                valid = false;
+            } catch (IOException ex) {
+                valid = false;
+            }
         }
         return valid;
     }
@@ -70,8 +83,18 @@ public final class WebXmlCheck implements Check {
      * @param file File to be validated.
      * @return True if file is valid, <code>false</code> if file is invalid.
      */
-    private boolean validate(final File file) {
-        Logger.debug(this, "Validating file %s", file);
-        return true;
+    private boolean validate(final File file) throws ParserConfigurationException, SAXException, IOException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setValidating(true);
+        factory.setAttribute(
+            "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+            "http://www.w3.org/2001/XMLSchema"
+        );
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        final WebXmlErrorHandler handler = new WebXmlErrorHandler();
+        builder.setErrorHandler(handler);
+        builder.parse(file);
+        return handler.isEmpty();
     }
 }

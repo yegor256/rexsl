@@ -29,49 +29,45 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.EnvironmentMocker;
-import org.hamcrest.MatcherAssert;
-import org.junit.Ignore;
-import org.junit.Test;
+import com.ymock.util.Logger;
+import java.util.Collection;
+import java.util.LinkedList;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
- * Test case for {@link WebXmlCheck}.
+ * Handles errors of web.xml schema validation.
+ *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id$
- * @todo #65:1h Implement XMLSchemaValidator with test and remove Ignore
- *  annotations.
+ * @version $Id: WebXmlCheck.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class WebXmlCheckTest {
+public final class WebXmlErrorHandler implements ErrorHandler {
 
     /**
-     * WebXmlCheck can validate correct web.xml file.
-     * @throws Exception If something goes wrong
+     * Contains validation errors.
      */
-    @Test
-    public void validatesCorrectWebXmlFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile(WebXmlCheck.WEB_XML, "valid-web.xml")
-            .mock();
-        MatcherAssert.assertThat(
-            "valid web.xml passes with problems",
-            new WebXmlCheck().validate(env)
-        );
+    private Collection<Exception> errors = new LinkedList<Exception>();
+
+    @Override
+    public void warning(SAXParseException exception) throws SAXException {
+        Logger.warn(this, exception.getMessage());
+        errors.add(exception);
     }
 
-    /**
-     * WebXmlCheck can validate incorrect web.xml file.
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void validatesIncorrectWebXmlFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile(WebXmlCheck.WEB_XML, "invalid-web.xml")
-            .mock();
-        MatcherAssert.assertThat(
-            "invalid web.xml is caught",
-            !new WebXmlCheck().validate(env)
-        );
+    @Override
+    public void error(SAXParseException exception) throws SAXException {
+        Logger.error(this, exception.getMessage());
+        errors.add(exception);
     }
 
+    @Override
+    public void fatalError(SAXParseException exception) throws SAXException {
+        Logger.error(this, exception.getMessage());
+        errors.add(exception);
+    }
+
+    public boolean isEmpty() {
+        return errors.isEmpty();
+    }
 }
