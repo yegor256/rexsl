@@ -30,6 +30,7 @@
 package com.rexsl.maven.checks;
 
 import com.ymock.util.Logger;
+import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 import org.xml.sax.ErrorHandler;
@@ -37,7 +38,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- * Handles errors of web.xml schema validation.
+ * Handles errors of web.xml schema validator.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id: WebXmlCheck.java 204 2011-10-26 21:15:28Z guard $
@@ -45,29 +46,55 @@ import org.xml.sax.SAXParseException;
 public final class WebXmlErrorHandler implements ErrorHandler {
 
     /**
+     * Error message format.
+     */
+    private static final String FORMAT =
+        "File: %s contains the following error: %s.";
+
+    /**
      * Contains validation errors.
      */
-    private Collection<Exception> errors = new LinkedList<Exception>();
+    private final transient Collection<Exception> errors =
+        new LinkedList<Exception>();
 
-    @Override
-    public void warning(SAXParseException exception) throws SAXException {
-        Logger.warn(this, exception.getMessage());
-        errors.add(exception);
+    /**
+     * File is being validated.
+     */
+    private final transient  File file;
+
+    /**
+     * Creates new instance of <code>WebXmlErrorHandler</code> with the
+     * specified validated file.
+     * @param name File to be validated.
+     */
+    public WebXmlErrorHandler(final File name) {
+        this.file = name;
     }
 
     @Override
-    public void error(SAXParseException exception) throws SAXException {
-        Logger.error(this, exception.getMessage());
-        errors.add(exception);
+    public void warning(final SAXParseException exception) throws SAXException {
+        Logger.warn(this, this.FORMAT, this.file, exception.getMessage());
+        this.errors.add(exception);
     }
 
     @Override
-    public void fatalError(SAXParseException exception) throws SAXException {
-        Logger.error(this, exception.getMessage());
-        errors.add(exception);
+    public void error(final SAXParseException exception) throws SAXException {
+        Logger.error(this, this.FORMAT, this.file, exception.getMessage());
+        this.errors.add(exception);
     }
 
+    @Override
+    public void fatalError(final SAXParseException exception) throws
+        SAXException {
+        Logger.error(this, this.FORMAT, this.file, exception.getMessage());
+        this.errors.add(exception);
+    }
+
+    /**
+     * Returns <code>true</code> if there are no validation errors.
+     * @return True if if there are no validation errors.
+     */
     public boolean isEmpty() {
-        return errors.isEmpty();
+        return this.errors.isEmpty();
     }
 }

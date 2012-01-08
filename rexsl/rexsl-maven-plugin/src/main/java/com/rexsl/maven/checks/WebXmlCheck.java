@@ -67,11 +67,7 @@ public final class WebXmlCheck implements Check {
         if (valid) {
             try {
                 valid = this.validate(file);
-            } catch (ParserConfigurationException ex) {
-                valid = false;
-            } catch (SAXException ex) {
-                valid = false;
-            } catch (IOException ex) {
+            } catch (XSDValidationException exception) {
                 valid = false;
             }
         }
@@ -82,19 +78,32 @@ public final class WebXmlCheck implements Check {
      * Performs validation of the specified XML file against it's XSD schema.
      * @param file File to be validated.
      * @return True if file is valid, <code>false</code> if file is invalid.
+     * @throws XSDValidationException If errors while validation occurs.
      */
-    private boolean validate(final File file) throws ParserConfigurationException, SAXException, IOException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    private boolean validate(final File file) throws XSDValidationException {
+        final DocumentBuilderFactory factory =
+            DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         factory.setValidating(true);
         factory.setAttribute(
             "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
             "http://www.w3.org/2001/XMLSchema"
         );
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        final WebXmlErrorHandler handler = new WebXmlErrorHandler();
+        DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException exception) {
+            throw new XSDValidationException(exception);
+        }
+        final WebXmlErrorHandler handler = new WebXmlErrorHandler(file);
         builder.setErrorHandler(handler);
-        builder.parse(file);
+        try {
+            builder.parse(file);
+        } catch (SAXException exception) {
+            throw new XSDValidationException(exception);
+        } catch (IOException exception) {
+            throw new XSDValidationException(exception);
+        }
         return handler.isEmpty();
     }
 }

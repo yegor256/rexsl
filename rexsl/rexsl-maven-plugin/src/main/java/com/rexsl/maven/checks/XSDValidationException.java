@@ -29,48 +29,21 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.EnvironmentMocker;
-import org.hamcrest.MatcherAssert;
-import org.junit.Test;
-
 /**
- * Test case for {@link WebXmlCheck}.
+ * Wrapper of <code>Exception</code> to be thrown by the
+ * <code>WebXmlValidator</code> while validating web.xml.
+ *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id$
- * @todo #65:1h Implement XMLSchemaValidator with test and remove Ignore
- *  annotations.
+ * @version $Id: WebXmlCheck.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class WebXmlCheckTest {
+public final class XSDValidationException extends Exception {
 
     /**
-     * WebXmlCheck can validate correct web.xml file.
-     * @throws Exception If something goes wrong
+     * Creates new instance of <code>XSDValidationException</code> with the
+     * specified <code>Exception</code>.
+     * @param exception Exception to be wrapped.
      */
-    @Test
-    public void validatesCorrectWebXmlFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile(WebXmlCheck.WEB_XML, "valid-web.xml")
-            .mock();
-        MatcherAssert.assertThat(
-            "valid web.xml passes with problems",
-            new WebXmlCheck().validate(env)
-        );
+    public XSDValidationException(final Exception exception) {
+        super(exception);
     }
-
-    /**
-     * WebXmlCheck can validate incorrect web.xml file.
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void validatesIncorrectWebXmlFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile(WebXmlCheck.WEB_XML, "invalid-web.xml")
-            .mock();
-        MatcherAssert.assertThat(
-            "invalid web.xml is caught",
-            !new WebXmlCheck().validate(env)
-        );
-    }
-
 }
