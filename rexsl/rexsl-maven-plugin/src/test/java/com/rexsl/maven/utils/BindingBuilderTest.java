@@ -27,34 +27,46 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.foo.scripts
+package com.rexsl.maven.utils;
 
-import com.rexsl.test.RestTester
-import com.ymock.util.Logger
-import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.UriBuilder
-import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers
+import com.rexsl.maven.Environment;
+import com.rexsl.maven.EnvironmentMocker;
+import groovy.lang.Binding;
+import java.util.concurrent.ConcurrentMap;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
-Logger.info(this, 'HomePage script running...')
+/**
+ * Test case for {@link BindingBuilder}.
+ * @author Yegor Bugayenko (yegor@qulice.com)
+ * @version $Id$
+ */
+public final class BindingBuilderTest {
 
-MatcherAssert.assertThat(
-    rexsl.home.toString(),
-    Matchers.allOf(
-        Matchers.startsWith('http://localhost:'),
-        Matchers.endsWith('/')
-    )
-)
+    /**
+     * BindingBuilder can build a Binding with props inside.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void buildsBindingWithProperties() throws Exception {
+        final Environment env = new EnvironmentMocker().mock();
+        final BindingBuilder builder = new BindingBuilder(env);
+        final Binding binding = builder.build();
+        final ConcurrentMap<String, Object> map =
+            (ConcurrentMap<String, Object>) binding.getVariable("rexsl");
+        MatcherAssert.assertThat(
+            map.get("home").toString(),
+            Matchers.equalTo(String.format("http://localhost:%d/", env.port()))
+        );
+        MatcherAssert.assertThat(
+            map.get("basedir").toString(),
+            Matchers.equalTo(env.basedir().toString())
+        );
+        MatcherAssert.assertThat(
+            map.get("webdir").toString(),
+            Matchers.equalTo(env.webdir().toString())
+        );
+    }
 
-RestTester.start(rexsl.home)
-    .header(HttpHeaders.ACCEPT, 'text/plain,text/xml')
-    .header(HttpHeaders.USER_AGENT, 'FireFox')
-    .get('home page')
-    .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertHeader(HttpHeaders.CONTENT_TYPE, Matchers.startsWith(MediaType.TEXT_HTML))
-    .assertXPath('//xhtml:div')
-
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-addr'))
-    .get('non-existing page')
-    .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
+}

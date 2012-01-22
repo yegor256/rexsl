@@ -56,7 +56,7 @@ public final class BindingBuilder {
     public BindingBuilder(final Environment env) {
         URI home;
         try {
-            home = new URI(String.format("http://localhost:%d", env.port()));
+            home = new URI(String.format("http://localhost:%d/", env.port()));
         } catch (java.net.URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }
