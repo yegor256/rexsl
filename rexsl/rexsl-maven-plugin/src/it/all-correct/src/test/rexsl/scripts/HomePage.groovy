@@ -34,9 +34,18 @@ import com.ymock.util.Logger
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
+import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 
 Logger.info(this, 'HomePage script running...')
+
+MatcherAssert.assertThat(
+    rexsl.home.toString(),
+    Matchers.allOf(
+        Matchers.startsWith('http://localhost:'),
+        Matchers.endsWith('/')
+    )
+)
 
 RestTester.start(rexsl.home)
     .header(HttpHeaders.ACCEPT, 'text/plain,text/xml')
