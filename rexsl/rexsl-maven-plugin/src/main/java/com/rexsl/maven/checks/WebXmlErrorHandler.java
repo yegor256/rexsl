@@ -41,15 +41,9 @@ import org.xml.sax.SAXParseException;
  * Handles errors of web.xml schema validator.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id: WebXmlCheck.java 204 2011-10-26 21:15:28Z guard $
+ * @version $Id: WebXmlErrorHandler.java 204 2011-10-26 21:15:28Z guard $
  */
 public final class WebXmlErrorHandler implements ErrorHandler {
-
-    /**
-     * Error message format.
-     */
-    private static final String FORMAT =
-        "File: %s contains the following error: %s.";
 
     /**
      * Contains validation errors.
@@ -73,21 +67,18 @@ public final class WebXmlErrorHandler implements ErrorHandler {
 
     @Override
     public void warning(final SAXParseException exception) throws SAXException {
-        Logger.warn(this, this.FORMAT, this.file, exception.getMessage());
-        this.errors.add(exception);
+        add(exception);
     }
 
     @Override
     public void error(final SAXParseException exception) throws SAXException {
-        Logger.error(this, this.FORMAT, this.file, exception.getMessage());
-        this.errors.add(exception);
+        add(exception);
     }
 
     @Override
     public void fatalError(final SAXParseException exception) throws
         SAXException {
-        Logger.error(this, this.FORMAT, this.file, exception.getMessage());
-        this.errors.add(exception);
+        add(exception);
     }
 
     /**
@@ -96,5 +87,19 @@ public final class WebXmlErrorHandler implements ErrorHandler {
      */
     public boolean isEmpty() {
         return this.errors.isEmpty();
+    }
+
+    /**
+     * Registers validation error (adds it to the container).
+     * @param exception Exception to be added to the container.
+     */
+    private void add(final SAXParseException exception) {
+        Logger.error(
+            this,
+            "File: %s contains the following error: %s.",
+            this.file,
+            exception.getMessage()
+        );
+        this.errors.add(exception);
     }
 }

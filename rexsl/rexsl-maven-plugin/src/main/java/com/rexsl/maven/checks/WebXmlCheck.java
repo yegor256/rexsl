@@ -59,17 +59,11 @@ public final class WebXmlCheck implements Check {
     @Override
     public boolean validate(final Environment env) {
         final File file = new File(env.basedir(), this.WEB_XML);
-        boolean valid = true;
-        if (!file.exists()) {
+        boolean valid = false;
+        if (file.exists()) {
+            valid = this.validate(file);
+        } else {
             Logger.warn(this, "File '%s' is absent, but should be there", file);
-            valid = false;
-        }
-        if (valid) {
-            try {
-                valid = this.validate(file);
-            } catch (XSDValidationException exception) {
-                valid = false;
-            }
         }
         return valid;
     }
@@ -78,31 +72,29 @@ public final class WebXmlCheck implements Check {
      * Performs validation of the specified XML file against it's XSD schema.
      * @param file File to be validated.
      * @return True if file is valid, <code>false</code> if file is invalid.
-     * @throws XSDValidationException If errors while validation occurs.
      */
-    private boolean validate(final File file) throws XSDValidationException {
+    private boolean validate(final File file) {
         final DocumentBuilderFactory factory =
             DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         factory.setValidating(true);
         factory.setAttribute(
             "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-            "http://www.w3.org/2001/XMLSchema"
-        );
+            "http://www.w3.org/2001/XMLSchema");
         DocumentBuilder builder = null;
         try {
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException exception) {
-            throw new XSDValidationException(exception);
+            throw new IllegalStateException(exception);
         }
         final WebXmlErrorHandler handler = new WebXmlErrorHandler(file);
         builder.setErrorHandler(handler);
         try {
             builder.parse(file);
         } catch (SAXException exception) {
-            throw new XSDValidationException(exception);
+            throw new IllegalStateException(exception);
         } catch (IOException exception) {
-            throw new XSDValidationException(exception);
+            throw new IllegalStateException(exception);
         }
         return handler.isEmpty();
     }
