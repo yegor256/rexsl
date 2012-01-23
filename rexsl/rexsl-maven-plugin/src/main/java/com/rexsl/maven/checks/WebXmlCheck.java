@@ -80,7 +80,8 @@ public final class WebXmlCheck implements Check {
         factory.setValidating(true);
         factory.setAttribute(
             "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-            "http://www.w3.org/2001/XMLSchema");
+            "http://www.w3.org/2001/XMLSchema"
+        );
         DocumentBuilder builder = null;
         try {
             builder = factory.newDocumentBuilder();

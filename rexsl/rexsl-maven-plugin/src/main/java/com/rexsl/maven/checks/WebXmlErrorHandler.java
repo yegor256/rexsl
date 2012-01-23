@@ -67,18 +67,18 @@ public final class WebXmlErrorHandler implements ErrorHandler {
 
     @Override
     public void warning(final SAXParseException exception) throws SAXException {
-        add(exception);
+        this.add(exception);
     }
 
     @Override
     public void error(final SAXParseException exception) throws SAXException {
-        add(exception);
+        this.add(exception);
     }
 
     @Override
     public void fatalError(final SAXParseException exception) throws
         SAXException {
-        add(exception);
+        this.add(exception);
     }
 
     /**
