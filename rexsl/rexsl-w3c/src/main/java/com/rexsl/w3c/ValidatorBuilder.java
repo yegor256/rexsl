@@ -41,19 +41,21 @@ public final class ValidatorBuilder {
     /**
      * Static instance of HTML validator.
      */
-    private static final HtmlValidator HTML = new DefaultHtmlValidator();
+    private static final HtmlValidator HTML_VALIDATOR =
+        new DefaultHtmlValidator();
 
     /**
      * Static instance of CSS validator.
      */
-    private static final CssValidator CSS = new DefaultCssValidator();
+    private static final CssValidator CSS_VALIDATOR =
+        new DefaultCssValidator();
 
     /**
      * Build HTML validator.
      * @return The validator
      */
     public HtmlValidator html() {
-        return this.HTML;
+        return this.HTML_VALIDATOR;
     }
 
     /**
@@ -61,7 +63,7 @@ public final class ValidatorBuilder {
      * @return The validator
      */
     public CssValidator css() {
-        return this.CSS;
+        return this.CSS_VALIDATOR;
     }
 
 }

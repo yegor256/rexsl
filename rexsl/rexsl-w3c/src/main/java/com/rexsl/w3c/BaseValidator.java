@@ -52,7 +52,7 @@ import org.apache.http.entity.mime.content.StringBody;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-abstract class AbstractValidator {
+class BaseValidator {
 
     /**
      * Boundary for HTTP POST form data.

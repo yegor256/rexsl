@@ -40,7 +40,7 @@ import javax.ws.rs.core.UriBuilder;
  * @version $Id$
  * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API</a>
  */
-final class DefaultCssValidator extends AbstractValidator
+final class DefaultCssValidator extends BaseValidator
     implements CssValidator {
 
     /**

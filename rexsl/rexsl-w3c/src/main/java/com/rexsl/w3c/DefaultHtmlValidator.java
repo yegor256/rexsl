@@ -41,7 +41,7 @@ import javax.ws.rs.core.UriBuilder;
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-final class DefaultHtmlValidator extends AbstractValidator
+final class DefaultHtmlValidator extends BaseValidator
     implements HtmlValidator {
 
     /**
