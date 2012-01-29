@@ -39,6 +39,7 @@ import org.hamcrest.Matcher;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public interface TestResponse {
 
     /**
@@ -90,6 +91,21 @@ public interface TestResponse {
      * @param reason Reason of failure
      */
     void fail(String reason);
+
+    /**
+     * Register additional namespace prefix for XPath.
+     * @param prefix The prefix to register
+     * @param uri Namespace URI
+     * @return This object
+     */
+    TestResponse registerNs(String prefix, Object uri);
+
+    /**
+     * Retrieve nodes from the XML response.
+     * @param query The XPath query
+     * @return Collection of responses
+     */
+    List<TestResponse> nodes(String query);
 
     /**
      * Verifies HTTP response status code against the provided absolute value,

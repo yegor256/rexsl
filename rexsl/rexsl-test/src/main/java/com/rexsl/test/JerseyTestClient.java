@@ -118,6 +118,13 @@ final class JerseyTestClient implements TestClient {
             resp = this.builder.get(ClientResponse.class);
         } else {
             resp = this.builder.method(name, ClientResponse.class, body);
+            Logger.debug(
+                this,
+                "#%s('%s'): body:\n%s",
+                name,
+                this.home.getPath(),
+                body
+            );
         }
         Logger.info(
             this,

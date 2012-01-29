@@ -90,4 +90,42 @@ public final class JerseyTestResponseTest {
             .assertXPath("//xhtml:div[.='\u0443\u0440\u0430!']");
     }
 
+    /**
+     * TestResponse can assert with XPath with custom namespaces.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void assertsWithXpathWithCustomNamespace() throws Exception {
+        final ClientResponse resp = new ClientResponseMocker()
+            .withEntity("<a xmlns='urn:foo'><b>yes!</b></a>")
+            .mock();
+        final TestResponse response = new JerseyTestResponse(resp)
+            .registerNs("foo", "urn:foo")
+            .assertXPath("/foo:a/foo:b[.='yes!']");
+        MatcherAssert.assertThat(
+            response.xpath("//foo:b/text()").get(0),
+            Matchers.equalTo("yes!")
+        );
+    }
+
+    /**
+     * TestResponse can find and return nodes with XPath.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void findsDocumentNodesWithXpathAndReturnsThem() throws Exception {
+        final ClientResponse resp = new ClientResponseMocker()
+            .withEntity("<root><a><x>1</x></a><a><x>2</x></a></root>")
+            .mock();
+        final TestResponse response = new JerseyTestResponse(resp);
+        MatcherAssert.assertThat(
+            response.nodes("//a"),
+            Matchers.hasSize(2)
+        );
+        MatcherAssert.assertThat(
+            response.nodes("/root/a").get(0).xpath("x/text()").get(0),
+            Matchers.equalTo("1")
+        );
+    }
+
 }
