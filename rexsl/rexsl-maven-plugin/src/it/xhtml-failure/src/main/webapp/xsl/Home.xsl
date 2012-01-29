@@ -45,6 +45,9 @@
 
     <xsl:template match="/">
         <html xml:lang="en">
+            <head>
+                <title>hello!</title>
+            </head>
             <body>
                 <p>
                     <xsl:value-of select="/page/text" />

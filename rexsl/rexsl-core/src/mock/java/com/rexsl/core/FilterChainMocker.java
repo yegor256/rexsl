@@ -29,11 +29,7 @@
  */
 package com.rexsl.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.CharEncoding;
@@ -79,10 +75,11 @@ public final class FilterChainMocker {
                         return null;
                     }
                 }
-            ).when(this.chain).doFilter(
-                Mockito.any(HttpServletRequest.class),
-                Mockito.any(HttpServletResponse.class)
-            );
+            ).when(this.chain)
+                .doFilter(
+                    Mockito.any(HttpServletRequest.class),
+                    Mockito.any(HttpServletResponse.class)
+                );
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         } catch (javax.servlet.ServletException ex) {

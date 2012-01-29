@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
 import org.hamcrest.Matcher;
 import org.xmlmatchers.namespace.SimpleNamespaceContext;
@@ -51,16 +52,34 @@ public final class XhtmlMatchers {
     }
 
     /**
+     * Context with pre-defined prefixes.
+     * @return The context to use later in assertions
+     */
+    public static SimpleNamespaceContext context() {
+        return new SimpleNamespaceContext()
+            .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
+            .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
+            .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
+    }
+
+    /**
      * Matches content agains XPath query.
      * @param query The query
      * @return Matcher suitable for JUnit/Hamcrest matching
      */
     public static Matcher<Source> hasXPath(final String query) {
-        final SimpleNamespaceContext context = new SimpleNamespaceContext()
-            .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
-            .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
-            .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
-        return HasXPath.hasXPath(query, context);
+        return XhtmlMatchers.hasXPath(query, XhtmlMatchers.context());
+    }
+
+    /**
+     * Matches content agains XPath query, with custom context.
+     * @param query The query
+     * @param ctx The context
+     * @return Matcher suitable for JUnit/Hamcrest matching
+     */
+    public static Matcher<Source> hasXPath(final String query,
+        final NamespaceContext ctx) {
+        return HasXPath.hasXPath(query, ctx);
     }
 
 }

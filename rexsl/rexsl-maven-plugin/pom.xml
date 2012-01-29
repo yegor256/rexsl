@@ -54,10 +54,12 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -75,7 +77,6 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -348,6 +349,11 @@
             <groupId>rhino</groupId>
             <artifactId>js</artifactId>
             <version since="4 Dec 2011">1.6R7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlmatchers</groupId>
+            <artifactId>xml-matchers</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

@@ -27,43 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.w3c;
 
 /**
- * Builder of validators.
+ * Core artifact of ReXSL framework, mocks.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-public final class ValidatorBuilder {
-
-    /**
-     * Static instance of HTML validator.
-     */
-    private static final HtmlValidator HTML_VALIDATOR =
-        new DefaultHtmlValidator();
-
-    /**
-     * Static instance of CSS validator.
-     */
-    private static final CssValidator CSS_VALIDATOR =
-        new DefaultCssValidator();
-
-    /**
-     * Build HTML validator.
-     * @return The validator
-     */
-    public HtmlValidator html() {
-        return this.HTML_VALIDATOR;
-    }
-
-    /**
-     * Build CSS validator.
-     * @return The validator
-     */
-    public CssValidator css() {
-        return this.CSS_VALIDATOR;
-    }
-
-}
+package com.rexsl.core;

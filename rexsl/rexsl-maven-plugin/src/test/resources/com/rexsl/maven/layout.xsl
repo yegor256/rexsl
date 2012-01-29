@@ -11,7 +11,8 @@
     <xsl:template match="/">
         <html xml:lang="en">
             <head>
-                <link href="/css/screen.css" rel="stylesheet" type="text/css"></link>
+                <link href="/css/screen.css" rel="stylesheet" type="text/css"/>
+                <title>hello!</title>
             </head>
             <body>
                 <div id="content">

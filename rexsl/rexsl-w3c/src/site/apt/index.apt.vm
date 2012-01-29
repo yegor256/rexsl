@@ -40,7 +40,7 @@
 
 W3C Validator in Java
 
-  It's simple:
+  It's simple (see {{{./apidocs/}JavaDoc}} for more details):
 
 +--
 String xhtml = "<html><body><p>Hello, world!</p></body></html>";

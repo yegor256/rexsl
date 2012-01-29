@@ -29,41 +29,25 @@
  */
 package com.rexsl.w3c;
 
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
+
 /**
- * Builder of validators.
- *
+ * Test case for {@link DefaultCssValidator}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-public final class ValidatorBuilder {
+public final class DefaultCssValidatorTest {
 
     /**
-     * Static instance of HTML validator.
+     * DefaultCssValidator can validate CSS document.
+     * @throws Exception If something goes wrong inside
      */
-    private static final HtmlValidator HTML_VALIDATOR =
-        new DefaultHtmlValidator();
-
-    /**
-     * Static instance of CSS validator.
-     */
-    private static final CssValidator CSS_VALIDATOR =
-        new DefaultCssValidator();
-
-    /**
-     * Build HTML validator.
-     * @return The validator
-     */
-    public HtmlValidator html() {
-        return this.HTML_VALIDATOR;
-    }
-
-    /**
-     * Build CSS validator.
-     * @return The validator
-     */
-    public CssValidator css() {
-        return this.CSS_VALIDATOR;
+    @Test
+    public void validatesCssDocument() throws Exception {
+        final CssValidator validator = new DefaultCssValidator();
+        final ValidationResponse response = validator.validate("* { }");
+        MatcherAssert.assertThat(response.toString(), response.valid());
     }
 
 }

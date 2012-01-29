@@ -35,16 +35,17 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xmlmatchers.transform.XmlConverters;
+import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
  * Implementation of {@link TestResponse}.
@@ -52,6 +53,7 @@ import org.xmlmatchers.transform.XmlConverters;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 final class JerseyTestResponse implements TestResponse {
 
     /**
@@ -66,9 +68,31 @@ final class JerseyTestResponse implements TestResponse {
 
     /**
      * Cached document, in the body.
-     * @see #document()
+     * @see #element()
      */
-    private transient Document doc;
+    private transient Element elm;
+
+    /**
+     * Namespace context to use.
+     */
+    private transient SimpleNamespaceContext context =
+        XhtmlMatchers.context();
+
+    /**
+     * Private ctor, for cloning.
+     * @param resp The response
+     * @param text Body
+     * @param element DOM element
+     * @param ctx Namespace context
+     * @checkstyle ParameterNumber (4 lines)
+     */
+    private JerseyTestResponse(final ClientResponse resp, final String text,
+        final Element element, final SimpleNamespaceContext ctx) {
+        this.response = resp;
+        this.body = text;
+        this.elm = element;
+        this.context = ctx;
+    }
 
     /**
      * Public ctor.
@@ -130,14 +154,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public List<String> xpath(final String query) {
-        NodeList nodes;
-        try {
-            nodes = (NodeList) XPathFactory.newInstance()
-                .newXPath()
-                .evaluate(query, this.document(), XPathConstants.NODESET);
-        } catch (javax.xml.xpath.XPathExpressionException ex) {
-            throw new IllegalArgumentException(ex);
-        }
+        final NodeList nodes = this.nodelist(query);
         final List<String> items = new ArrayList<String>();
         for (int idx = 0; idx < nodes.getLength(); idx += 1) {
             MatcherAssert.assertThat(
@@ -145,6 +162,7 @@ final class JerseyTestResponse implements TestResponse {
                 nodes.item(idx).getNodeType(),
                 Matchers.<Short>either(Matchers.equalTo(Node.TEXT_NODE))
                     .or(Matchers.equalTo(Node.ATTRIBUTE_NODE))
+                    .or(Matchers.equalTo(Node.CDATA_SECTION_NODE))
             );
             items.add(nodes.item(idx).getNodeValue());
         }
@@ -183,6 +201,41 @@ final class JerseyTestResponse implements TestResponse {
                 new ClientResponseDecor(this.response, this.getBody())
             )
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse registerNs(final String prefix, final Object uri) {
+        this.context.withBinding(prefix, uri.toString());
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    public List<TestResponse> nodes(final String query) {
+        final NodeList nodes = this.nodelist(query);
+        final List<TestResponse> items = new ArrayList<TestResponse>();
+        for (int idx = 0; idx < nodes.getLength(); idx += 1) {
+            MatcherAssert.assertThat(
+                "Only elements are retrievable with nodes()",
+                nodes.item(idx).getNodeType(),
+                Matchers.equalTo(Node.ELEMENT_NODE)
+            );
+            items.add(
+                new JerseyTestResponse(
+                    this.response,
+                    this.body,
+                    (Element) nodes.item(idx),
+                    this.context
+                )
+            );
+        }
+        return items;
     }
 
     /**
@@ -262,8 +315,8 @@ final class JerseyTestResponse implements TestResponse {
                 StringEscapeUtils.escapeJava(xpath),
                 new ClientResponseDecor(this.response, this.getBody())
             ),
-            XmlConverters.the(this.document()),
-            XhtmlMatchers.hasXPath(xpath)
+            XhtmlConverter.the(this.element()),
+            XhtmlMatchers.hasXPath(xpath, this.context)
         );
         return this;
     }
@@ -272,13 +325,36 @@ final class JerseyTestResponse implements TestResponse {
      * Get document of body.
      * @return The document
      */
-    private Document document() {
+    private Element element() {
         synchronized (this) {
-            if (this.doc == null) {
-                this.doc = new DomParser(this.getBody()).document();
+            if (this.elm == null) {
+                this.elm = new DomParser(this.getBody())
+                    .document()
+                    .getDocumentElement();
             }
-            return this.doc;
+            return this.elm;
         }
+    }
+
+    /**
+     * Retrieve and return a nodelist for XPath query.
+     * @param query XPath query
+     * @return List of DOM nodes
+     */
+    private NodeList nodelist(final String query) {
+        NodeList nodes;
+        try {
+            final XPath xpath = XPathFactory.newInstance().newXPath();
+            xpath.setNamespaceContext(this.context);
+            nodes = (NodeList) xpath.evaluate(
+                query,
+                this.element(),
+                XPathConstants.NODESET
+            );
+        } catch (javax.xml.xpath.XPathExpressionException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        return nodes;
     }
 
 }
