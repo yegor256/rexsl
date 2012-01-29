@@ -107,7 +107,7 @@
             <!-- Logging facility -->
             <groupId>com.ymock</groupId>
             <artifactId>ymock-util</artifactId>
-            <version>1.0.3</version>
+            <version since="29 Jan 2012">1.0.4</version>
         </dependency>
         <dependency>
             <!--

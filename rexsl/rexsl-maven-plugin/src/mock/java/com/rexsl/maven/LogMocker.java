@@ -62,7 +62,7 @@ public final class LogMocker {
             public Object answer(final InvocationOnMock invocation) {
                 final String text = (String) invocation.getArguments()[0];
                 LogMocker.this.messages.add(text);
-                System.out.println(text);
+                // System.out.println(text);
                 return null;
             }
         };
