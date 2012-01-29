@@ -61,7 +61,9 @@ abstract class AbstractValidator {
 
     /**
      * Send request and return response.
-     * @param
+     * @param uri The URI to fetch
+     * @param entity The entity to POST
+     * @return The response
      */
     protected final TestResponse send(final URI uri, final String entity) {
         return RestTester.start(uri)
@@ -82,11 +84,13 @@ abstract class AbstractValidator {
 
     /**
      * Convert HTML to HTTP FORM entity.
-     * @param html The HTML document
+     * @param name Name of HTTP form field
+     * @param content The content of it
+     * @param type Media type of it
      * @return The HTTP post body
      */
-    protected String entity(final String name, final String file,
-        final String content, final String type) {
+    protected String entity(final String name, final String content,
+        final String type) {
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try {
             final MultipartEntity entity = new MultipartEntity(
@@ -99,7 +103,7 @@ abstract class AbstractValidator {
                 new InputStreamBody(
                     IOUtils.toInputStream(content),
                     type,
-                    file
+                    "file"
                 )
             );
             entity.addPart("output", new StringBody("soap12"));
@@ -114,10 +118,12 @@ abstract class AbstractValidator {
 
     /**
      * Build response from XML.
+     * @param soap The response
+     * @return The validation response just built
      */
     protected final ValidationResponse build(final TestResponse soap) {
         final DefaultValidationResponse resp = new DefaultValidationResponse(
-            this.textOf(soap.xpath("//m:validity/text()")).equals("true"),
+            "true".equals(this.textOf(soap.xpath("//m:validity/text()"))),
             UriBuilder.fromUri(
                 this.textOf(soap.xpath("//m:checkedby/text()"))
             ).build(),
@@ -125,30 +131,28 @@ abstract class AbstractValidator {
             this.textOf(soap.xpath("//m:charset/text()"))
         );
         for (TestResponse node : soap.nodes("//m:error")) {
-            resp.addError(
-                new Defect(
-                    this.intOf(node.xpath("m:line/text()")),
-                    this.intOf(node.xpath("m:col/text()")),
-                    this.textOf(node.xpath("m:source/text()")),
-                    this.textOf(node.xpath("m:explanation/text()")),
-                    this.textOf(node.xpath("m:messageid/text()")),
-                    this.textOf(node.xpath("m:message/text()"))
-                )
-            );
+            resp.addError(this.defect(node));
         }
         for (TestResponse node : soap.nodes("//m:warning")) {
-            resp.addWarning(
-                new Defect(
-                    this.intOf(node.xpath("m:line/text()")),
-                    this.intOf(node.xpath("m:col/text()")),
-                    this.textOf(node.xpath("m:source/text()")),
-                    this.textOf(node.xpath("m:explanation/text()")),
-                    this.textOf(node.xpath("m:messageid/text()")),
-                    this.textOf(node.xpath("m:message/text()"))
-                )
-            );
+            resp.addWarning(this.defect(node));
         }
         return resp;
+    }
+
+    /**
+     * Convert SOAP node to defect.
+     * @param node The node
+     * @return The defect
+     */
+    private Defect defect(final TestResponse node) {
+        return new Defect(
+            this.intOf(node.xpath("m:line/text()")),
+            this.intOf(node.xpath("m:col/text()")),
+            this.textOf(node.xpath("m:source/text()")),
+            this.textOf(node.xpath("m:explanation/text()")),
+            this.textOf(node.xpath("m:messageid/text()")),
+            this.textOf(node.xpath("m:message/text()"))
+        );
     }
 
     /**

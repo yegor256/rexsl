@@ -77,6 +77,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      * @param server Who validated it?
      * @param tpe DOCTYPE of the document
      * @param enc Charset of the document
+     * @checkstyle ParameterNumber (3 lines)
      */
     public DefaultValidationResponse(final boolean val, final URI server,
         final String tpe, final String enc) {
@@ -96,14 +97,8 @@ final class DefaultValidationResponse implements ValidationResponse {
         text.append(String.format("Validator: \"%s\"\n", this.validator));
         text.append(String.format("DOCTYPE: \"%s\"\n", this.type));
         text.append(String.format("Charset: \"%s\"\n", this.encoding));
-        text.append("Errors:\n");
-        for (Defect error : this.ierrors) {
-            text.append("  ").append(error.toString()).append("\n");
-        }
-        text.append("Warnings:\n");
-        for (Defect warning : this.iwarnings) {
-            text.append("  ").append(warning.toString()).append("\n");
-        }
+        text.append("Errors:\n").append(this.asText(this.ierrors));
+        text.append("Warnings:\n").append(this.asText(this.iwarnings));
         return text.toString();
     }
 
@@ -169,6 +164,19 @@ final class DefaultValidationResponse implements ValidationResponse {
      */
     public void addWarning(final Defect warning) {
         this.iwarnings.add(warning);
+    }
+
+    /**
+     * Convert list of defects into string.
+     * @param defects List of them
+     * @return The text
+     */
+    private String asText(final List<Defect> defects) {
+        final StringBuilder text = new StringBuilder();
+        for (Defect defect : defects) {
+            text.append("  ").append(defect.toString()).append("\n");
+        }
+        return text.toString();
     }
 
 }

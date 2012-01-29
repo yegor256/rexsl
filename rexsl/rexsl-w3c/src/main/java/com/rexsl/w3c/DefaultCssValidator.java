@@ -31,7 +31,6 @@ package com.rexsl.w3c;
 
 import com.rexsl.test.TestResponse;
 import java.net.URI;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
 /**
@@ -53,7 +52,7 @@ final class DefaultCssValidator extends AbstractValidator
             .fromUri("http://jigsaw.w3.org/css-validator/validator")
             .build();
         final TestResponse soap = this
-            .send(uri, this.entity("file", "a.css", css, "text/css"))
+            .send(uri, this.entity("file", css, "text/css"))
             .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
             .registerNs("m", "http://www.w3.org/2005/07/css-validator")
             .assertXPath("/env:Envelope/env:Body/m:cssvalidationresponse")
