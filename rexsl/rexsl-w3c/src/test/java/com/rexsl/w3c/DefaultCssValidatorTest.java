@@ -47,7 +47,7 @@ public final class DefaultCssValidatorTest {
     public void validatesCssDocument() throws Exception {
         final CssValidator validator = new DefaultCssValidator();
         final ValidationResponse response = validator.validate("* { }");
-        MatcherAssert.assertThat("problem caught", !response.valid());
+        MatcherAssert.assertThat(response.toString(), response.valid());
     }
 
 }

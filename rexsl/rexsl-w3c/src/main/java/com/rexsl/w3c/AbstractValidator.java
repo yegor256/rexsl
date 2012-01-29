@@ -35,6 +35,7 @@ import java.io.ByteArrayOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
@@ -101,6 +102,7 @@ abstract class AbstractValidator {
                     file
                 )
             );
+            entity.addPart("output", new StringBody("soap12"));
             entity.writeTo(stream);
             return stream.toString(CharEncoding.UTF_8);
         } catch (java.io.UnsupportedEncodingException ex) {
@@ -108,6 +110,75 @@ abstract class AbstractValidator {
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
+    }
+
+    /**
+     * Build response from XML.
+     */
+    protected final ValidationResponse build(final TestResponse soap) {
+        final DefaultValidationResponse resp = new DefaultValidationResponse(
+            this.textOf(soap.xpath("//m:validity/text()")).equals("true"),
+            UriBuilder.fromUri(
+                this.textOf(soap.xpath("//m:checkedby/text()"))
+            ).build(),
+            this.textOf(soap.xpath("//m:doctype/text()")),
+            this.textOf(soap.xpath("//m:charset/text()"))
+        );
+        for (TestResponse node : soap.nodes("//m:error")) {
+            resp.addError(
+                new Defect(
+                    this.intOf(node.xpath("m:line/text()")),
+                    this.intOf(node.xpath("m:col/text()")),
+                    this.textOf(node.xpath("m:source/text()")),
+                    this.textOf(node.xpath("m:explanation/text()")),
+                    this.textOf(node.xpath("m:messageid/text()")),
+                    this.textOf(node.xpath("m:message/text()"))
+                )
+            );
+        }
+        for (TestResponse node : soap.nodes("//m:warning")) {
+            resp.addWarning(
+                new Defect(
+                    this.intOf(node.xpath("m:line/text()")),
+                    this.intOf(node.xpath("m:col/text()")),
+                    this.textOf(node.xpath("m:source/text()")),
+                    this.textOf(node.xpath("m:explanation/text()")),
+                    this.textOf(node.xpath("m:messageid/text()")),
+                    this.textOf(node.xpath("m:message/text()"))
+                )
+            );
+        }
+        return resp;
+    }
+
+    /**
+     * Get text from list of strings.
+     * @param lines The lines to work with
+     * @return The value
+     */
+    private String textOf(final List<String> lines) {
+        String text;
+        if (lines.isEmpty()) {
+            text = "";
+        } else {
+            text = lines.get(0);
+        }
+        return text;
+    }
+
+    /**
+     * Get text from list of strings.
+     * @param lines The lines to work with
+     * @return The value
+     */
+    private int intOf(final List<String> lines) {
+        int value;
+        if (lines.isEmpty()) {
+            value = 0;
+        } else {
+            value = Integer.valueOf(lines.get(0));
+        }
+        return value;
     }
 
 }

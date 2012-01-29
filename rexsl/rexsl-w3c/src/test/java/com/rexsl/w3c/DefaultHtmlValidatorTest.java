@@ -47,7 +47,7 @@ public final class DefaultHtmlValidatorTest {
     public void validatesHtmlDocument() throws Exception {
         final HtmlValidator validator = new DefaultHtmlValidator();
         final ValidationResponse response = validator.validate("<html/>");
-        MatcherAssert.assertThat("problem caught", !response.valid());
+        MatcherAssert.assertThat(response.toString(), !response.valid());
     }
 
 }

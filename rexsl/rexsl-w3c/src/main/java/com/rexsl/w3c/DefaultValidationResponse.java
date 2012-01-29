@@ -90,6 +90,27 @@ final class DefaultValidationResponse implements ValidationResponse {
      * {@inheritDoc}
      */
     @Override
+    public String toString() {
+        final StringBuilder text = new StringBuilder();
+        text.append(String.format("Validity: %B\n", this.ivalid));
+        text.append(String.format("Validator: \"%s\"\n", this.validator));
+        text.append(String.format("DOCTYPE: \"%s\"\n", this.type));
+        text.append(String.format("Charset: \"%s\"\n", this.encoding));
+        text.append("Errors:\n");
+        for (Defect error : this.ierrors) {
+            text.append("  ").append(error.toString()).append("\n");
+        }
+        text.append("Warnings:\n");
+        for (Defect warning : this.iwarnings) {
+            text.append("  ").append(warning.toString()).append("\n");
+        }
+        return text.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean valid() {
         return this.ivalid;
     }

@@ -89,6 +89,22 @@ public final class Defect {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return String.format(
+            "[%d:%d] \"%s\", \"%s\", \"%s\", \"%s\"",
+            this.iline,
+            this.icolumn,
+            this.isource,
+            this.iexplanation,
+            this.imessageId,
+            this.imessage
+        );
+    }
+
+    /**
      * Line.
      * @return Line number
      */

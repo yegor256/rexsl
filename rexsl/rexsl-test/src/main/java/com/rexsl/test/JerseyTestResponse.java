@@ -162,6 +162,7 @@ final class JerseyTestResponse implements TestResponse {
                 nodes.item(idx).getNodeType(),
                 Matchers.<Short>either(Matchers.equalTo(Node.TEXT_NODE))
                     .or(Matchers.equalTo(Node.ATTRIBUTE_NODE))
+                    .or(Matchers.equalTo(Node.CDATA_SECTION_NODE))
             );
             items.add(nodes.item(idx).getNodeValue());
         }

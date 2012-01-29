@@ -29,20 +29,10 @@
  */
 package com.rexsl.w3c;
 
-import com.rexsl.test.RestTester;
 import com.rexsl.test.TestResponse;
-import java.io.ByteArrayOutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.nio.charset.Charset;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.StringBody;
 
 /**
  * Default implementation of CSS validator.
@@ -55,57 +45,21 @@ final class DefaultCssValidator extends AbstractValidator
     implements CssValidator {
 
     /**
-     * File name to send there in POST.
-     */
-    private static final String FILE = "file";
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public ValidationResponse validate(final String css) {
         final URI uri = UriBuilder
             .fromUri("http://jigsaw.w3.org/css-validator/validator")
-            .queryParam("text", "")
-            .queryParam("profile", "css2")
-            .queryParam("output", "soap12")
             .build();
         final TestResponse soap = this
             .send(uri, this.entity("file", "a.css", css, "text/css"))
             .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
-            .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
-            .assertXPath("/env:Envelope/env:Body/m:markupvalidationresponse");
-        final DefaultValidationResponse resp = new DefaultValidationResponse(
-            soap.xpath("//m:validity").get(0).equals("true"),
-            UriBuilder.fromUri(soap.xpath("//m:checkedby").get(0)).build(),
-            soap.xpath("//m:doctype").get(0),
-            soap.xpath("//m:charset").get(0)
-        );
-        for (TestResponse node : soap.nodes("//m:errorlist/m:error")) {
-            resp.addError(
-                new Defect(
-                    Integer.valueOf(node.xpath("/m:line").get(0)),
-                    Integer.valueOf(node.xpath("/m:col").get(0)),
-                    node.xpath("/m:source").get(0),
-                    node.xpath("/m:explanation").get(0),
-                    node.xpath("/m:messageid").get(0),
-                    node.xpath("/m:message").get(0)
-                )
-            );
-        }
-        for (TestResponse node : soap.nodes("//m:warninglist/m:warning")) {
-            resp.addWarning(
-                new Defect(
-                    Integer.valueOf(node.xpath("/m:line").get(0)),
-                    Integer.valueOf(node.xpath("/m:col").get(0)),
-                    node.xpath("/m:source").get(0),
-                    node.xpath("/m:explanation").get(0),
-                    node.xpath("/m:messageid").get(0),
-                    node.xpath("/m:message").get(0)
-                )
-            );
-        }
-        return resp;
+            .registerNs("m", "http://www.w3.org/2005/07/css-validator")
+            .assertXPath("/env:Envelope/env:Body/m:cssvalidationresponse")
+            .assertXPath("//m:validity")
+            .assertXPath("//m:checkedby");
+        return this.build(soap);
     }
 
 }

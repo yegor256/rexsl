@@ -29,20 +29,10 @@
  */
 package com.rexsl.w3c;
 
-import com.rexsl.test.RestTester;
 import com.rexsl.test.TestResponse;
-import java.io.ByteArrayOutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.nio.charset.Charset;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.StringBody;
 
 /**
  * Implementation of (X)HTML validator.
@@ -61,45 +51,17 @@ final class DefaultHtmlValidator extends AbstractValidator
     public ValidationResponse validate(final String html) {
         final String field = "uploaded_file";
         final URI uri = UriBuilder.fromUri("http://validator.w3.org/check")
-            .queryParam(field, "")
-            .queryParam("output", "soap12")
             .build();
         final TestResponse soap = this
             .send(uri, this.entity(field, "p.html", html, MediaType.TEXT_HTML))
             .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
             .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
-            .assertXPath("/env:Envelope/env:Body/m:markupvalidationresponse");
-        final DefaultValidationResponse resp = new DefaultValidationResponse(
-            soap.xpath("//m:validity").get(0).equals("true"),
-            UriBuilder.fromUri(soap.xpath("//m:checkedby").get(0)).build(),
-            soap.xpath("//m:doctype").get(0),
-            soap.xpath("//m:charset").get(0)
-        );
-        for (TestResponse node : soap.nodes("//m:errorlist/m:error")) {
-            resp.addError(
-                new Defect(
-                    Integer.valueOf(node.xpath("/m:line").get(0)),
-                    Integer.valueOf(node.xpath("/m:col").get(0)),
-                    node.xpath("/m:source").get(0),
-                    node.xpath("/m:explanation").get(0),
-                    node.xpath("/m:messageid").get(0),
-                    node.xpath("/m:message").get(0)
-                )
-            );
-        }
-        for (TestResponse node : soap.nodes("//m:warninglist/m:warning")) {
-            resp.addWarning(
-                new Defect(
-                    Integer.valueOf(node.xpath("/m:line").get(0)),
-                    Integer.valueOf(node.xpath("/m:col").get(0)),
-                    node.xpath("/m:source").get(0),
-                    node.xpath("/m:explanation").get(0),
-                    node.xpath("/m:messageid").get(0),
-                    node.xpath("/m:message").get(0)
-                )
-            );
-        }
-        return resp;
+            .assertXPath("/env:Envelope/env:Body/m:markupvalidationresponse")
+            .assertXPath("//m:validity")
+            .assertXPath("//m:checkedby")
+            .assertXPath("//m:doctype")
+            .assertXPath("//m:charset");
+        return this.build(soap);
     }
 
 }
