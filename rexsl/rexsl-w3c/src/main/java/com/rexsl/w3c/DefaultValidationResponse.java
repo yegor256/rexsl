@@ -30,6 +30,7 @@
 package com.rexsl.w3c;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,11 +42,56 @@ import java.util.List;
 final class DefaultValidationResponse implements ValidationResponse {
 
     /**
+     * Is it valid?
+     */
+    private final transient boolean ivalid;
+
+    /**
+     * Who validated it?
+     */
+    private final transient URI validator;
+
+    /**
+     * DOCTYPE of the document.
+     */
+    private final transient String type;
+
+    /**
+     * The encoding.
+     */
+    private final transient String encoding;
+
+    /**
+     * List of errors found.
+     */
+    private final transient List<Defect> ierrors = new ArrayList<Defect>();
+
+    /**
+     * List of warnings found.
+     */
+    private final transient List<Defect> iwarnings = new ArrayList<Defect>();
+
+    /**
+     * Public ctor.
+     * @param val The document is valid?
+     * @param server Who validated it?
+     * @param tpe DOCTYPE of the document
+     * @param enc Charset of the document
+     */
+    public DefaultValidationResponse(final boolean val, final URI server,
+        final String tpe, final String enc) {
+        this.ivalid = val;
+        this.validator = server;
+        this.type = tpe;
+        this.encoding = enc;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public boolean valid() {
-        return true;
+        return this.ivalid;
     }
 
     /**
@@ -53,7 +99,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      */
     @Override
     public URI checkedBy() {
-        return null;
+        return this.validator;
     }
 
     /**
@@ -61,7 +107,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      */
     @Override
     public String doctype() {
-        return null;
+        return this.type;
     }
 
     /**
@@ -69,7 +115,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      */
     @Override
     public String charset() {
-        return null;
+        return this.encoding;
     }
 
     /**
@@ -77,7 +123,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      */
     @Override
     public List<Defect> errors() {
-        return null;
+        return new ArrayList<Defect>(this.ierrors);
     }
 
     /**
@@ -85,7 +131,23 @@ final class DefaultValidationResponse implements ValidationResponse {
      */
     @Override
     public List<Defect> warnings() {
-        return null;
+        return new ArrayList<Defect>(this.iwarnings);
+    }
+
+    /**
+     * Add error.
+     * @param error The error to add
+     */
+    public void addError(final Defect error) {
+        this.ierrors.add(error);
+    }
+
+    /**
+     * Add warning.
+     * @param warning The warning to add
+     */
+    public void addWarning(final Defect warning) {
+        this.iwarnings.add(warning);
     }
 
 }

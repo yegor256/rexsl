@@ -61,7 +61,7 @@ public final class Defect {
     /**
      * Message id.
      */
-    private final transient int imessageId;
+    private final transient String imessageId;
 
     /**
      * The message.
@@ -79,7 +79,7 @@ public final class Defect {
      * @checkstyle ParameterNumber (5 lines)
      */
     protected Defect(final int line, final int column, final String source,
-        final String explanation, final int mid, final String message) {
+        final String explanation, final String mid, final String message) {
         this.iline = line;
         this.icolumn = column;
         this.isource = source;
@@ -124,7 +124,7 @@ public final class Defect {
      * Message ID.
      * @return The ID
      */
-    public int messageId() {
+    public String messageId() {
         return this.imessageId;
     }
 

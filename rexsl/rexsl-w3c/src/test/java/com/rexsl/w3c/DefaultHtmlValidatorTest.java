@@ -42,10 +42,8 @@ public final class DefaultHtmlValidatorTest {
     /**
      * DefaultHtmlValidator can validate HTML document.
      * @throws Exception If something goes wrong inside
-     * @todo #84 Implement functionality and make it working
      */
     @Test
-    @org.junit.Ignore
     public void validatesHtmlDocument() throws Exception {
         final HtmlValidator validator = new DefaultHtmlValidator();
         final ValidationResponse response = validator.validate("<html/>");

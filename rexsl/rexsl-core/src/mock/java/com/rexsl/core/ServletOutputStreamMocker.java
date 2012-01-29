@@ -99,7 +99,9 @@ public final class ServletOutputStreamMocker {
                     }
                 }
             ).when(this.stream)
-            .write((byte[]) Mockito.any(), Mockito.anyInt(), Mockito.anyInt());
+                .write(
+                    (byte[]) Mockito.any(), Mockito.anyInt(), Mockito.anyInt()
+                );
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }

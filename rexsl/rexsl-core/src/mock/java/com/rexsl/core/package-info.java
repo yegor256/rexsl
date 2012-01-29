@@ -27,23 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.w3c;
 
 /**
- * Default implementation of CSS validator.
+ * Core artifact of ReXSL framework, mocks.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class DefaultCssValidator implements CssValidator {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ValidationResponse validate(final String css) {
-        // todo
-        return null;
-    }
-
-}
+package com.rexsl.core;

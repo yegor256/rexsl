@@ -39,11 +39,21 @@ package com.rexsl.w3c;
 public final class ValidatorBuilder {
 
     /**
+     * Static instance of HTML validator.
+     */
+    private static final HtmlValidator HTML = new DefaultHtmlValidator();
+
+    /**
+     * Static instance of CSS validator.
+     */
+    private static final CssValidator CSS = new DefaultCssValidator();
+
+    /**
      * Build HTML validator.
      * @return The validator
      */
     public HtmlValidator html() {
-        return new DefaultHtmlValidator();
+        return this.HTML;
     }
 
     /**
@@ -51,7 +61,7 @@ public final class ValidatorBuilder {
      * @return The validator
      */
     public CssValidator css() {
-        return new DefaultCssValidator();
+        return this.CSS;
     }
 
 }
