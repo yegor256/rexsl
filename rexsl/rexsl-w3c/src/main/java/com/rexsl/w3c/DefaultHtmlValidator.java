@@ -51,42 +51,21 @@ import org.apache.http.entity.mime.content.StringBody;
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-final class DefaultHtmlValidator implements HtmlValidator {
-
-    /**
-     * File name to send there in POST.
-     */
-    private static final String FILE = "page.html";
-
-    /**
-     * Boundary for HTTP POST form data.
-     */
-    private static final String BOUNDARY = "vV9olNqRj00PC4OIlM7";
+final class DefaultHtmlValidator extends AbstractValidator
+    implements HtmlValidator {
 
     /**
      * {@inheritDoc}
      */
     @Override
     public ValidationResponse validate(final String html) {
+        final String field = "uploaded_file";
         final URI uri = UriBuilder.fromUri("http://validator.w3.org/check")
-            .queryParam("uploaded_file", this.FILE)
+            .queryParam(field, "")
             .queryParam("output", "soap12")
             .build();
-        final String entity = this.entity(html);
-        final TestResponse soap = RestTester.start(uri)
-            .header(HttpHeaders.USER_AGENT, "ReXSL")
-            .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
-            .header(HttpHeaders.CONTENT_LENGTH, entity.length())
-            .header(
-                HttpHeaders.CONTENT_TYPE,
-                String.format(
-                    "%s; boundary=%s",
-                    MediaType.MULTIPART_FORM_DATA,
-                    this.BOUNDARY
-                )
-            )
-            .post("validating HTML through W3C validator", entity)
-            .assertStatus(HttpURLConnection.HTTP_OK)
+        final TestResponse soap = this
+            .send(uri, this.entity(field, "p.html", html, MediaType.TEXT_HTML))
             .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
             .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
             .assertXPath("/env:Envelope/env:Body/m:markupvalidationresponse");
@@ -121,36 +100,6 @@ final class DefaultHtmlValidator implements HtmlValidator {
             );
         }
         return resp;
-    }
-
-    /**
-     * Convert HTML to HTTP FORM entity.
-     * @param html The HTML document
-     * @return The HTTP post body
-     */
-    private String entity(final String html) {
-        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        try {
-            final MultipartEntity entity = new MultipartEntity(
-                HttpMultipartMode.STRICT,
-                this.BOUNDARY,
-                Charset.forName(CharEncoding.UTF_8)
-            );
-            entity.addPart(
-                this.FILE,
-                new StringBody(
-                    html,
-                    MediaType.TEXT_HTML,
-                    Charset.forName(CharEncoding.UTF_8)
-                )
-            );
-            entity.writeTo(stream);
-            return stream.toString(CharEncoding.UTF_8);
-        } catch (java.io.UnsupportedEncodingException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        }
     }
 
 }

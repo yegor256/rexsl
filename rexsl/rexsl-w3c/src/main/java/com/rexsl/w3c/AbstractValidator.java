@@ -42,70 +42,72 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 
 /**
- * Default implementation of CSS validator.
+ * Abstract implementation of (X)HTML validator.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API</a>
  */
-final class DefaultCssValidator extends AbstractValidator
-    implements CssValidator {
+abstract class AbstractValidator {
 
     /**
-     * File name to send there in POST.
+     * Boundary for HTTP POST form data.
      */
-    private static final String FILE = "file";
+    protected static final String BOUNDARY = "vV9olNqRj00PC4OIlM7";
 
     /**
-     * {@inheritDoc}
+     * Send request and return response.
+     * @param
      */
-    @Override
-    public ValidationResponse validate(final String css) {
-        final URI uri = UriBuilder
-            .fromUri("http://jigsaw.w3.org/css-validator/validator")
-            .queryParam("text", "")
-            .queryParam("profile", "css2")
-            .queryParam("output", "soap12")
-            .build();
-        final TestResponse soap = this
-            .send(uri, this.entity("file", "a.css", css, "text/css"))
-            .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
-            .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
-            .assertXPath("/env:Envelope/env:Body/m:markupvalidationresponse");
-        final DefaultValidationResponse resp = new DefaultValidationResponse(
-            soap.xpath("//m:validity").get(0).equals("true"),
-            UriBuilder.fromUri(soap.xpath("//m:checkedby").get(0)).build(),
-            soap.xpath("//m:doctype").get(0),
-            soap.xpath("//m:charset").get(0)
-        );
-        for (TestResponse node : soap.nodes("//m:errorlist/m:error")) {
-            resp.addError(
-                new Defect(
-                    Integer.valueOf(node.xpath("/m:line").get(0)),
-                    Integer.valueOf(node.xpath("/m:col").get(0)),
-                    node.xpath("/m:source").get(0),
-                    node.xpath("/m:explanation").get(0),
-                    node.xpath("/m:messageid").get(0),
-                    node.xpath("/m:message").get(0)
+    protected final TestResponse send(final URI uri, final String entity) {
+        return RestTester.start(uri)
+            .header(HttpHeaders.USER_AGENT, "ReXSL")
+            .header(HttpHeaders.ACCEPT, "application/soap+xml")
+            .header(HttpHeaders.CONTENT_LENGTH, entity.length())
+            .header(
+                HttpHeaders.CONTENT_TYPE,
+                String.format(
+                    "%s; boundary=%s",
+                    MediaType.MULTIPART_FORM_DATA,
+                    this.BOUNDARY
+                )
+            )
+            .post("validating through W3C validator", entity)
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * Convert HTML to HTTP FORM entity.
+     * @param html The HTML document
+     * @return The HTTP post body
+     */
+    protected String entity(final String name, final String file,
+        final String content, final String type) {
+        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        try {
+            final MultipartEntity entity = new MultipartEntity(
+                HttpMultipartMode.STRICT,
+                this.BOUNDARY,
+                Charset.forName(CharEncoding.UTF_8)
+            );
+            entity.addPart(
+                name,
+                new InputStreamBody(
+                    IOUtils.toInputStream(content),
+                    type,
+                    file
                 )
             );
+            entity.writeTo(stream);
+            return stream.toString(CharEncoding.UTF_8);
+        } catch (java.io.UnsupportedEncodingException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
         }
-        for (TestResponse node : soap.nodes("//m:warninglist/m:warning")) {
-            resp.addWarning(
-                new Defect(
-                    Integer.valueOf(node.xpath("/m:line").get(0)),
-                    Integer.valueOf(node.xpath("/m:col").get(0)),
-                    node.xpath("/m:source").get(0),
-                    node.xpath("/m:explanation").get(0),
-                    node.xpath("/m:messageid").get(0),
-                    node.xpath("/m:message").get(0)
-                )
-            );
-        }
-        return resp;
     }
 
 }
