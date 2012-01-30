@@ -94,6 +94,8 @@ How to release new version to Maven Central:
 
         find . -name "*.xml" -exec sed -i "" 's|\(\<version rexsl\=\"yes\"\>\)1\.0\-SNAPSHOT\(\<\/version\>\)|\10.2.4\2|g' {} \;
 
+    3a. Change "releasedVersion" in pom.xml to the next version
+
     4. Commit your changes
 
     5. Read these pages:
