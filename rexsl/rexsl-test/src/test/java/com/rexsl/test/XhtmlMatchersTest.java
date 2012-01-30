@@ -27,24 +27,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.w3c;
+package com.rexsl.test;
+
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
 
 /**
- * Validator of CSS pages through W3C validation API.
- *
- * <p>Objects of this interface should be immutable and thread-safe.
- *
+ * Test case for {@link XhtmlMatchers}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API, CSS</a>
  */
-public interface CssValidator {
+public final class XhtmlMatchersTest {
 
     /**
-     * Validate and return validation response.
-     * @param css The CSS stylesheet
-     * @return The response
+     * XhtmlMatchers can match with custom namespace.
+     * @throws Exception If something goes wrong inside
      */
-    ValidationResponse validate(String css);
+    @Test
+    public void matchesWithCustomNamespace() throws Exception {
+        final String text = "<a xmlns='foo'><file>abc.txt</file></a>";
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(text),
+            XhtmlMatchers.hasXPath("/ns1:a/ns1:file[.='abc.txt']", "foo")
+        );
+    }
 
 }
