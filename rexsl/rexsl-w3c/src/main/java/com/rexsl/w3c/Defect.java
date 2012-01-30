@@ -80,7 +80,7 @@ public final class Defect {
      * @param message Message text
      * @checkstyle ParameterNumber (5 lines)
      */
-    protected Defect(final int line, final int column, final String source,
+    Defect(final int line, final int column, final String source,
         final String explanation, final String mid, final String message) {
         this.iline = line;
         this.icolumn = column;
