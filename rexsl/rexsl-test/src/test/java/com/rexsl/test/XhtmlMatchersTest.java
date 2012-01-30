@@ -52,4 +52,16 @@ public final class XhtmlMatchersTest {
         );
     }
 
+    /**
+     * XhtmlMatchers can match against string.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void matchesPlainString() throws Exception {
+        MatcherAssert.assertThat(
+            "<b xmlns='bar'><file>abc.txt</file></b>",
+            XhtmlMatchers.withXPath("/ns1:b/ns1:file[.='abc.txt']", "bar")
+        );
+    }
+
 }

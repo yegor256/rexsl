@@ -27,68 +27,53 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.w3c;
+package com.rexsl.test;
+
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.transform.Source;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.xmlmatchers.xpath.HasXPath;
 
 /**
- * Builder of HTML and CSS validators.
- *
- * <p>This is your entry point to the module. Start with creating a new
- * validator:
- *
- * <pre>
- * final HtmlValidator validator = new ValidatorBuilder().html();
- * </pre>
- *
- * <p>Now you can use it in order to validate your HTML document against
- * W3C rules:
- *
- * <pre>
- * final ValidationResponse response = validator.validate(
- *   "&lt;html&gt;&lt;body&gt;...&lt;/body&gt;&lt;/html&gt;"
- * );
- * </pre>
- *
- * <p>The response contains all information provided by W3C server. You can
- * work with details from {@link ValidationResponse} or just output it to
- * console:
- *
- * <pre>
- * System.out.println(response.toString());
- * </pre>
+ * Matcher of XPath against a plain string.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see ValidationResponse
- * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
+ * @since 0.2.6
  */
-public final class ValidatorBuilder {
+final class PlainXpathMatcher extends TypeSafeMatcher<Object> {
 
     /**
-     * Static instance of HTML validator.
+     * Real matcher.
      */
-    private static final HtmlValidator HTML_VALIDATOR =
-        new DefaultHtmlValidator();
+    private final transient Matcher<Source> matcher;
 
     /**
-     * Static instance of CSS validator.
+     * Public ctor.
+     * @param query The query
+     * @param ctx The context
      */
-    private static final CssValidator CSS_VALIDATOR =
-        new DefaultCssValidator();
-
-    /**
-     * Build HTML validator.
-     * @return The validator
-     */
-    public HtmlValidator html() {
-        return this.HTML_VALIDATOR;
+    public PlainXpathMatcher(final String query, final NamespaceContext ctx) {
+        super();
+        this.matcher = HasXPath.hasXPath(query, ctx);
     }
 
     /**
-     * Build CSS validator.
-     * @return The validator
+     * {@inheritDoc}
      */
-    public CssValidator css() {
-        return this.CSS_VALIDATOR;
+    @Override
+    public boolean matchesSafely(final Object text) {
+        return this.matcher.matches(XhtmlConverter.the(text.toString()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void describeTo(final Description description) {
+        this.matcher.describeTo(description);
     }
 
 }

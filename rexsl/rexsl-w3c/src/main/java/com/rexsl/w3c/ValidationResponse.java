@@ -35,14 +35,16 @@ import java.util.List;
 /**
  * Response of HTML or CSS validation.
  *
- * <p>See {@link ValidationBuilder} for explanation of how to get an instance
+ * <p>See {@link ValidatorBuilder} for explanation of how to get an instance
  * of this interface.
  *
  * <p>Objects of this interface should be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see ValidationBuilder
+ * @see ValidatorBuilder
+ * @see CssValidator#validate(String)
+ * @see HtmlValidator#validate(String)
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API, HTML</a>
  * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API, CSS</a>
  */

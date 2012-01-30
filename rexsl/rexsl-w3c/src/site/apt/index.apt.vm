@@ -56,7 +56,8 @@ ValidationResponse response = new ValidatorBuilder().css().validate(css);
 assert response.valid();
 +--
 
-  This dependency you add to <<<pom.xml>>>:
+  This dependency you add to <<<pom.xml>>> (or download
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-w3c/${releasedVersion}/}rexsl-w3c.jar}}):
 
 +--
 <dependency>
