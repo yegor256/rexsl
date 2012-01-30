@@ -52,23 +52,42 @@ public final class XhtmlMatchers {
     }
 
     /**
-     * Context with pre-defined prefixes.
-     * @return The context to use later in assertions
-     */
-    public static SimpleNamespaceContext context() {
-        return new SimpleNamespaceContext()
-            .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
-            .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
-            .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
-    }
-
-    /**
      * Matches content agains XPath query.
      * @param query The query
      * @return Matcher suitable for JUnit/Hamcrest matching
      */
     public static Matcher<Source> hasXPath(final String query) {
         return XhtmlMatchers.hasXPath(query, XhtmlMatchers.context());
+    }
+
+    /**
+     * Matches content agains XPath query, with custom namespaces.
+     *
+     * <p>Every namespace from the {@code namespaces} list will be assigned to
+     * its own prefix, in order of appearance. Start with {@code 1}.
+     * For example:
+     *
+     * <pre>
+     * MatcherAssert.assert(
+     *   XhtmlConverter.the("&lt;foo xmlns='my-namespace'&gt;&lt;/foo&gt;"),
+     *   XhtmlMatchers.hasXPath("/ns1:foo", "my-namespace")
+     * );
+     * </pre>
+     *
+     * @param query The query
+     * @param namespaces List of namespaces
+     * @return Matcher suitable for JUnit/Hamcrest matching
+     */
+    public static Matcher<Source> hasXPath(final String query,
+        final Object... namespaces) {
+        final SimpleNamespaceContext ctx = XhtmlMatchers.context();
+        for (int pos = 0; pos < namespaces.length; pos += 1) {
+            ctx.withBinding(
+                String.format("ns%d", pos + 1),
+                namespaces[pos].toString()
+            );
+        }
+        return XhtmlMatchers.hasXPath(query, ctx);
     }
 
     /**
@@ -80,6 +99,19 @@ public final class XhtmlMatchers {
     public static Matcher<Source> hasXPath(final String query,
         final NamespaceContext ctx) {
         return HasXPath.hasXPath(query, ctx);
+    }
+
+    /**
+     * Context with pre-defined prefixes.
+     * @return The context to use later in assertions
+     */
+    @SuppressWarnings("PMD.DefaultPackage")
+    static SimpleNamespaceContext context() {
+        return new SimpleNamespaceContext()
+            .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
+            .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
+            .withBinding("xsi", "http://www.w3.org/2001/XMLSchema-instance")
+            .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
     }
 
 }

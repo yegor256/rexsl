@@ -32,9 +32,11 @@ package com.rexsl.w3c;
 /**
  * Validator of CSS pages through W3C validation API.
  *
+ * <p>Objects of this interface should be immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API</a>
+ * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API, CSS</a>
  */
 public interface CssValidator {
 

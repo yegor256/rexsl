@@ -30,7 +30,9 @@
 package com.rexsl.w3c;
 
 /**
- * Validation defect.
+ * Validation defect (error or warning) produced by {@link ValidationResponse}.
+ *
+ * <p>Objects of this class are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -105,7 +107,7 @@ public final class Defect {
     }
 
     /**
-     * Line.
+     * Line number, where the defect was found.
      * @return Line number
      */
     public int line() {
@@ -113,7 +115,7 @@ public final class Defect {
     }
 
     /**
-     * Column.
+     * Column number inside the line.
      * @return Column number
      */
     public int column() {
@@ -121,8 +123,8 @@ public final class Defect {
     }
 
     /**
-     * Source line.
-     * @return Text
+     * Source line, as quoted by W3C validator.
+     * @return Full text of the source line
      */
     public String source() {
         return this.isource;
@@ -137,7 +139,7 @@ public final class Defect {
     }
 
     /**
-     * Message ID.
+     * Message ID, according to W3C API.
      * @return The ID
      */
     public String messageId() {
@@ -145,8 +147,8 @@ public final class Defect {
     }
 
     /**
-     * Text of message.
-     * @return Text
+     * Text of the message.
+     * @return The message returned by W3C server
      */
     public String message() {
         return this.imessage;

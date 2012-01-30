@@ -32,6 +32,8 @@ package com.rexsl.w3c;
 /**
  * Validator of (X)HTML pages through W3C validation API.
  *
+ * <p>Objects of this interface should be immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>

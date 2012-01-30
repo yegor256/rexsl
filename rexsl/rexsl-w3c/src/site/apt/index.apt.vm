@@ -65,3 +65,9 @@ assert response.valid();
   <version>${releasedVersion}</version>
 </dependency>
 +--
+
+  All events are logged through {{{http://www.slf4j.org/}slf4j}},
+  using <<<"com.rexsl.w3c">>> logger.
+  If you want to see them, just add proper binding to classpath,
+  as explained in {{{http://www.slf4j.org/manual.html}SLF4J manual}}.
+
