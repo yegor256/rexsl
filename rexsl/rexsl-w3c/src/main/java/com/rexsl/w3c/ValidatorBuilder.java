@@ -36,7 +36,7 @@ package com.rexsl.w3c;
  * validator:
  *
  * <pre>
- * final HtmlValidator validator = ValidatorBuilder.html();
+ * final HtmlValidator validator = new ValidatorBuilder().html();
  * </pre>
  *
  * <p>Now you can use it in order to validate your HTML document against
