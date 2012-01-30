@@ -29,39 +29,51 @@
  */
 package com.rexsl.test;
 
-import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.transform.Source;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.xmlmatchers.xpath.HasXPath;
 
 /**
- * Test case for {@link XhtmlMatchers}.
+ * Matcher of XPath against a plain string.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @since 0.2.6
  */
-public final class XhtmlMatchersTest {
+final class PlainXpathMatcher extends TypeSafeMatcher<Object> {
 
     /**
-     * XhtmlMatchers can match with custom namespace.
-     * @throws Exception If something goes wrong inside
+     * Real matcher.
      */
-    @Test
-    public void matchesWithCustomNamespace() throws Exception {
-        final String text = "<a xmlns='foo'><file>abc.txt</file></a>";
-        MatcherAssert.assertThat(
-            XhtmlConverter.the(text),
-            XhtmlMatchers.hasXPath("/ns1:a/ns1:file[.='abc.txt']", "foo")
-        );
+    private final transient Matcher<Source> matcher;
+
+    /**
+     * Public ctor.
+     * @param query The query
+     * @param ctx The context
+     */
+    public PlainXpathMatcher(final String query, final NamespaceContext ctx) {
+        super();
+        this.matcher = HasXPath.hasXPath(query, ctx);
     }
 
     /**
-     * XhtmlMatchers can match against string.
-     * @throws Exception If something goes wrong inside
+     * {@inheritDoc}
      */
-    @Test
-    public void matchesPlainString() throws Exception {
-        MatcherAssert.assertThat(
-            "<b xmlns='bar'><file>abc.txt</file></b>",
-            XhtmlMatchers.withXPath("/ns1:b/ns1:file[.='abc.txt']", "bar")
-        );
+    @Override
+    public boolean matchesSafely(final Object text) {
+        return this.matcher.matches(XhtmlConverter.the(text.toString()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void describeTo(final Description description) {
+        this.matcher.describeTo(description);
     }
 
 }

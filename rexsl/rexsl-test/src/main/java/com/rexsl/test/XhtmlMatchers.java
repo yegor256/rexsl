@@ -38,6 +38,15 @@ import org.xmlmatchers.xpath.HasXPath;
 /**
  * Convenient set of matchers for XHTML/XML content.
  *
+ * <p>For example:
+ *
+ * <pre>
+ * MatcherAssert.assertThat(
+ *   "&lt;root&gt;&lt;a/&gt;&lt;/root&gt;",
+ *   XhtmlMatchers.withXPath("/root/a[.='']")
+ * );
+ * </pre>
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.2.6
@@ -80,14 +89,7 @@ public final class XhtmlMatchers {
      */
     public static Matcher<Source> hasXPath(final String query,
         final Object... namespaces) {
-        final SimpleNamespaceContext ctx = XhtmlMatchers.context();
-        for (int pos = 0; pos < namespaces.length; pos += 1) {
-            ctx.withBinding(
-                String.format("ns%d", pos + 1),
-                namespaces[pos].toString()
-            );
-        }
-        return XhtmlMatchers.hasXPath(query, ctx);
+        return XhtmlMatchers.hasXPath(query, XhtmlMatchers.context(namespaces));
     }
 
     /**
@@ -102,16 +104,58 @@ public final class XhtmlMatchers {
     }
 
     /**
+     * Matches content agains XPath query.
+     * @param query The query
+     * @return Matcher suitable for JUnit/Hamcrest matching
+     * @see #hasXPath(String)
+     */
+    public static Matcher<Object> withXPath(final String query) {
+        return new PlainXpathMatcher(query, XhtmlMatchers.context());
+    }
+
+    /**
+     * Matches content agains XPath query, with custom namespaces.
+     * @param query The query
+     * @param namespaces List of namespaces
+     * @return Matcher suitable for JUnit/Hamcrest matching
+     * @see #hasXPath(String,Object)
+     */
+    public static Matcher<Object> withXPath(final String query,
+        final Object... namespaces) {
+        return new PlainXpathMatcher(query, XhtmlMatchers.context(namespaces));
+    }
+
+    /**
+     * Matches content agains XPath query, with custom context.
+     * @param query The query
+     * @param ctx The context
+     * @return Matcher suitable for JUnit/Hamcrest matching
+     * @see #hasXPath(String,NamespaceContext)
+     */
+    public static Matcher<Object> withXPath(final String query,
+        final NamespaceContext ctx) {
+        return new PlainXpathMatcher(query, ctx);
+    }
+
+    /**
      * Context with pre-defined prefixes.
+     * @param namespaces Optional namespaces
      * @return The context to use later in assertions
      */
     @SuppressWarnings("PMD.DefaultPackage")
-    static SimpleNamespaceContext context() {
-        return new SimpleNamespaceContext()
+    static SimpleNamespaceContext context(final Object... namespaces) {
+        final SimpleNamespaceContext ctx = new SimpleNamespaceContext()
             .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
             .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
             .withBinding("xsi", "http://www.w3.org/2001/XMLSchema-instance")
             .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
+        for (int pos = 0; pos < namespaces.length; pos += 1) {
+            ctx.withBinding(
+                String.format("ns%d", pos + 1),
+                namespaces[pos].toString()
+            );
+        }
+        return ctx;
     }
 
 }
