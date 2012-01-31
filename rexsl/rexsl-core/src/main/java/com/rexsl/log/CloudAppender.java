@@ -38,6 +38,29 @@ import org.apache.log4j.spi.LoggingEvent;
 /**
  * Log appender, for cloud loggers.
  *
+ * <p>Configure it in your {@code log4j.properties} like this (just an example,
+ * which uses <a href="http://www.loggly.com">loggly.com</a> HTTP log
+ * consuming interface):
+ *
+ * <pre>
+ * log4j.rootLogger=WARN, LOGGLY, CONSOLE
+ * log4j.appender.LOGGLY=com.rexsl.log.CloudAppender
+ * log4j.appender.LOGGLY.feeder=com.rexsl.log.HttpFeeder
+ * log4j.appender.LOGGLY.feeder.url=https://logs.loggly.com/inputs/0604e96...
+ * log4j.appender.LOGGLY.layout=org.apache.log4j.PatternLayout
+ * log4j.appender.LOGGLY.layout.ConversionPattern = [%5p] %t %c: %m\n
+ * log4j.appender.CONSOLE=com.netbout.log.CloudAppender
+ * log4j.appender.CONSOLE.feeder=com.rexsl.log.ConsoleFeeder
+ * log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+ * log4j.appender.CONSOLE.layout.ConversionPattern = [%5p] %t %c: %m\n
+ * </pre>
+ *
+ * <p>You can extend it with your own feeding mechanisms. Just implement
+ * the {@link Feeder} interface and add an instance of the class to the
+ * appender.
+ *
+ * <p>The class is thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.2

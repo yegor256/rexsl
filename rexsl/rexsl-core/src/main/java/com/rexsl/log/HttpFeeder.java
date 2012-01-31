@@ -41,6 +41,8 @@ import org.apache.commons.lang.CharEncoding;
 /**
  * Feeder through HTTP POST request.
  *
+ * <p>The class is thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.2

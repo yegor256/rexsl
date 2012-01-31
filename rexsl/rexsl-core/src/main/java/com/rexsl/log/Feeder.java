@@ -35,6 +35,8 @@ import org.apache.log4j.spi.OptionHandler;
 /**
  * Feeder of events to the cloud.
  *
+ * <p>Implementation of this interface should be thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.2

@@ -32,6 +32,8 @@ package com.rexsl.log;
 /**
  * Feeder to console.
  *
+ * <p>The class is thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.2
