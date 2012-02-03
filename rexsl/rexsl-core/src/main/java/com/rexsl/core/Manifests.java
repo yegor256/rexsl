@@ -289,11 +289,16 @@ public final class Manifests {
     /**
      * Append attributes from the web application {@code MANIFEST.MF}, called
      * from {@link XsltFilter#init(FilterConfig)}.
+     *
+     * <p>You can call this method in your own
+     * {@link javax.servlet.Filter} or
+     * {@link javax.servlet.ServletContextListener},
+     * in order to inject {@code MANIFEST.MF} attributes to the class.
+     *
      * @param ctx Servlet context
      * @see #Manifests()
      */
-    @SuppressWarnings("PMD.DefaultPackage")
-    static void append(final ServletContext ctx) {
+    public static void append(final ServletContext ctx) {
         final long start = System.currentTimeMillis();
         URL main;
         try {
