@@ -70,6 +70,14 @@ public final class HttpFeeder implements Feeder {
      * {@inheritDoc}
      */
     @Override
+    public String toString() {
+        return String.format("HTTP POST to \"%s\"", this.url);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void feed(final String text) throws IOException {
         for (String line : text.split(CloudAppender.EOL)) {
             this.post(String.format("%s%s", line, CloudAppender.EOL));

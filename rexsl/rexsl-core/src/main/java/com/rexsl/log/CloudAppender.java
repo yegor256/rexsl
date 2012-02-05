@@ -32,6 +32,7 @@ package com.rexsl.log;
 import com.ymock.util.Logger;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -85,6 +86,11 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
     private transient Feeder feeder;
 
     /**
+     * Are we still alive?
+     */
+    private final transient AtomicBoolean alive = new AtomicBoolean(false);
+
+    /**
      * Set feeder, option {@code feeder} in config.
      * @param fdr The feeder to use
      */
@@ -119,7 +125,7 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
      */
     @Override
     public void close() {
-        // empty
+        this.alive.set(false);
     }
 
     /**
@@ -144,8 +150,14 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
     @Override
     @SuppressWarnings("PMD.SystemPrintln")
     public void run() {
-        System.out.println("CloudAppender started to work...");
-        while (true) {
+        System.out.println(
+            String.format(
+                "CloudAppender started to work with %s...",
+                this.feeder
+            )
+        );
+        this.alive.set(true);
+        while (this.alive.get()) {
             String text;
             try {
                 text = this.messages.take();
@@ -157,14 +169,19 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
             } catch (java.io.IOException ex) {
                 System.out.println(
                     Logger.format(
-                        "%sfailed to report because of %[exception]s",
+                        "%sCloudAppender failed to report: %[exception]s",
                         text,
                         ex
                     )
                 );
             }
         }
-        System.out.println("CloudAppender finished to work.");
+        System.out.println(
+            String.format(
+                "CloudAppender finished to work with %s.",
+                this.feeder
+            )
+        );
     }
 
 }
