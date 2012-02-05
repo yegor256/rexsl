@@ -37,7 +37,7 @@ import com.rexsl.maven.checks.JSStaticCheck;
 import com.rexsl.maven.checks.JigsawCssCheck;
 import com.rexsl.maven.checks.WebXmlCheck;
 import com.rexsl.maven.checks.XhtmlOutputCheck;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -54,7 +54,7 @@ public final class ChecksProvider {
      * @return List of checks
      */
     public Set<Check> all() {
-        final Set<Check> checks = new TreeSet<Check>();
+        final Set<Check> checks = new LinkedHashSet<Check>();
         checks.add(new BinaryFilesCheck());
         checks.add(new CssStaticCheck());
         checks.add(new JigsawCssCheck());

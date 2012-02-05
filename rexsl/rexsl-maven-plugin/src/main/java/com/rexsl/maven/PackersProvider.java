@@ -32,7 +32,7 @@ package com.rexsl.maven;
 import com.rexsl.maven.packers.CssPacker;
 import com.rexsl.maven.packers.JsPacker;
 import com.rexsl.maven.packers.XslPacker;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -48,7 +48,7 @@ public final class PackersProvider {
      * @return List of packers
      */
     public Set<Packer> all() {
-        final Set<Packer> packers = new TreeSet<Packer>();
+        final Set<Packer> packers = new LinkedHashSet<Packer>();
         packers.add(new CssPacker());
         packers.add(new JsPacker());
         packers.add(new XslPacker());
