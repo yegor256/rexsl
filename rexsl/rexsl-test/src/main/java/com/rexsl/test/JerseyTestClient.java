@@ -37,6 +37,8 @@ import java.net.URI;
 /**
  * Implementation of {@link TestClient}.
  *
+ * <p>Objects of this class are immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
@@ -84,7 +86,15 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse get(final String desc) {
-        return this.method(RestTester.GET, "", desc);
+        return new JerseyTestResponse(
+            new JerseyFetcher() {
+                @Override
+                public ClientResponse fetch() {
+                    return JerseyTestClient.this
+                        .method(RestTester.GET, "", desc);
+                }
+            }
+        );
     }
 
     /**
@@ -92,7 +102,15 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse post(final String desc, final Object body) {
-        return this.method(RestTester.POST, body.toString(), desc);
+        return new JerseyTestResponse(
+            new JerseyFetcher() {
+                @Override
+                public ClientResponse fetch() {
+                    return JerseyTestClient.this
+                        .method(RestTester.POST, body.toString(), desc);
+                }
+            }
+        );
     }
 
     /**
@@ -100,7 +118,15 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse put(final String desc, final Object body) {
-        return this.method(RestTester.PUT, body.toString(), desc);
+        return new JerseyTestResponse(
+            new JerseyFetcher() {
+                @Override
+                public ClientResponse fetch() {
+                    return JerseyTestClient.this
+                        .method(RestTester.PUT, body.toString(), desc);
+                }
+            }
+        );
     }
 
     /**
@@ -110,7 +136,7 @@ final class JerseyTestClient implements TestClient {
      * @param desc Description of the operation, for logging
      * @return The response
      */
-    public TestResponse method(final String name, final String body,
+    private ClientResponse method(final String name, final String body,
         final String desc) {
         final long start = System.currentTimeMillis();
         ClientResponse resp;
@@ -130,7 +156,7 @@ final class JerseyTestClient implements TestClient {
             resp.getClientResponseStatus(),
             this.home
         );
-        return new JerseyTestResponse(resp);
+        return resp;
     }
 
 }

@@ -41,6 +41,8 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Decor for {@link ClientResponse}.
  *
+ * <p>Objects of this class are immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */

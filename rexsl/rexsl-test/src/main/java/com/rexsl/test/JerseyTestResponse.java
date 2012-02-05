@@ -50,6 +50,8 @@ import org.xmlmatchers.namespace.SimpleNamespaceContext;
 /**
  * Implementation of {@link TestResponse}.
  *
+ * <p>Objects of this class are thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
@@ -57,14 +59,26 @@ import org.xmlmatchers.namespace.SimpleNamespaceContext;
 final class JerseyTestResponse implements TestResponse {
 
     /**
-     * The response.
+     * Fetcher of response.
      */
-    private final transient ClientResponse response;
+    private final transient JerseyFetcher fetcher;
 
     /**
-     * The body of response.
+     * The response, should be initialized on demand in {@link #response()}.
+     * @see #response()
      */
-    private final transient String body;
+    private transient ClientResponse iresponse;
+
+    /**
+     * The body of response, should be loaded on demand in {@link #body()}.
+     * @see #body()
+     */
+    private transient String body;
+
+    /**
+     * Namespace context to use.
+     */
+    private final transient SimpleNamespaceContext context;
 
     /**
      * Cached document, in the body.
@@ -73,10 +87,13 @@ final class JerseyTestResponse implements TestResponse {
     private transient Element elm;
 
     /**
-     * Namespace context to use.
+     * Public ctor.
+     * @param ftch Response fetcher
      */
-    private transient SimpleNamespaceContext context =
-        XhtmlMatchers.context();
+    public JerseyTestResponse(final JerseyFetcher ftch) {
+        this.fetcher = ftch;
+        this.context = XhtmlMatchers.context();
+    }
 
     /**
      * Private ctor, for cloning.
@@ -86,25 +103,26 @@ final class JerseyTestResponse implements TestResponse {
      * @param ctx Namespace context
      * @checkstyle ParameterNumber (4 lines)
      */
+    @SuppressWarnings("PMD.NullAssignment")
     private JerseyTestResponse(final ClientResponse resp, final String text,
         final Element element, final SimpleNamespaceContext ctx) {
-        this.response = resp;
+        this.fetcher = null;
+        this.iresponse = resp;
         this.body = text;
         this.elm = element;
         this.context = ctx;
     }
 
     /**
-     * Public ctor.
-     * @param resp The response
+     * {@inheritDoc}
      */
-    public JerseyTestResponse(final ClientResponse resp) {
-        this.response = resp;
-        if (this.response.hasEntity()) {
-            this.body = this.response.getEntity(String.class);
-        } else {
-            this.body = "";
-        }
+    @Override
+    @SuppressWarnings("PMD.NullAssignment")
+    public TestResponse retry() {
+        this.iresponse = null;
+        this.body = null;
+        this.elm = null;
+        return this;
     }
 
     /**
@@ -117,7 +135,7 @@ final class JerseyTestResponse implements TestResponse {
             Logger.format(
                 "XPath '%s' not found in:\n%s",
                 StringEscapeUtils.escapeJava(query),
-                new ClientResponseDecor(this.response, this.getBody())
+                new ClientResponseDecor(this.response(), this.getBody())
             ),
             links,
             Matchers.hasSize(1)
@@ -130,7 +148,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestClient follow() {
-        return RestTester.start(this.response.getLocation());
+        return RestTester.start(this.response().getLocation());
     }
 
     /**
@@ -138,7 +156,16 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public String getBody() {
-        return this.body;
+        synchronized (this) {
+            if (this.body == null) {
+                if (this.response().hasEntity()) {
+                    this.body = this.response().getEntity(String.class);
+                } else {
+                    this.body = "";
+                }
+            }
+            return this.body;
+        }
     }
 
     /**
@@ -146,7 +173,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public Integer getStatus() {
-        return this.response.getStatus();
+        return this.response().getStatus();
     }
 
     /**
@@ -176,8 +203,8 @@ final class JerseyTestResponse implements TestResponse {
     public String getStatusLine() {
         return String.format(
             "%d %s",
-            this.response.getStatus(),
-            this.response.getClientResponseStatus()
+            this.response().getStatus(),
+            this.response().getClientResponseStatus()
         );
     }
 
@@ -186,21 +213,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public MultivaluedMap<String, String> getHeaders() {
-        return this.response.getHeaders();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void fail(final String reason) {
-        throw new AssertionError(
-            Logger.format(
-                "%s:\n%s",
-                reason,
-                new ClientResponseDecor(this.response, this.getBody())
-            )
-        );
+        return this.response().getHeaders();
     }
 
     /**
@@ -228,7 +241,7 @@ final class JerseyTestResponse implements TestResponse {
             );
             items.add(
                 new JerseyTestResponse(
-                    this.response,
+                    this.response(),
                     this.body,
                     (Element) nodes.item(idx),
                     this.context
@@ -242,12 +255,35 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
+    public TestResponse assertThat(final AssertionPolicy assertion) {
+        assertion.assertThat(this);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void fail(final String reason) {
+        throw new AssertionError(
+            Logger.format(
+                "%s:\n%s",
+                reason,
+                new ClientResponseDecor(this.response(), this.getBody())
+            )
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TestResponse assertStatus(final int status) {
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP status code has to be equal to %d in:\n%s",
                 status,
-                new ClientResponseDecor(this.response, this.getBody())
+                new ClientResponseDecor(this.response(), this.getBody())
             ),
             this.getStatus(),
             Matchers.equalTo(status)
@@ -263,7 +299,7 @@ final class JerseyTestResponse implements TestResponse {
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP status code has to match in:\n%s",
-                new ClientResponseDecor(this.response, this.getBody())
+                new ClientResponseDecor(this.response(), this.getBody())
             ),
             this.getStatus(),
             matcher
@@ -280,9 +316,9 @@ final class JerseyTestResponse implements TestResponse {
             Logger.format(
                 "HTTP header '%s' has to match in:\n%s",
                 name,
-                new ClientResponseDecor(this.response, this.getBody())
+                new ClientResponseDecor(this.response(), this.getBody())
             ),
-            this.response.getHeaders().getFirst((String) name),
+            this.response().getHeaders().getFirst((String) name),
             matcher
         );
         return this;
@@ -296,7 +332,7 @@ final class JerseyTestResponse implements TestResponse {
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP response content has to match in:\n%s",
-                new ClientResponseDecor(this.response, this.getBody())
+                new ClientResponseDecor(this.response(), this.getBody())
             ),
             this.getBody(),
             matcher
@@ -313,12 +349,25 @@ final class JerseyTestResponse implements TestResponse {
             Logger.format(
                 "XPath '%s' has to exist in:\n%s",
                 StringEscapeUtils.escapeJava(xpath),
-                new ClientResponseDecor(this.response, this.getBody())
+                new ClientResponseDecor(this.response(), this.getBody())
             ),
             XhtmlConverter.the(this.element()),
             XhtmlMatchers.hasXPath(xpath, this.context)
         );
         return this;
+    }
+
+    /**
+     * Fetch and return response.
+     * @return The response
+     */
+    public ClientResponse response() {
+        synchronized (this) {
+            if (this.iresponse == null) {
+                this.iresponse = this.fetcher.fetch();
+            }
+            return this.iresponse;
+        }
     }
 
     /**

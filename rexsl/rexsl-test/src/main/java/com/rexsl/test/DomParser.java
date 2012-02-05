@@ -37,6 +37,8 @@ import org.w3c.dom.Document;
 /**
  * Implementation of {@link TestResponse}.
  *
+ * <p>Objects of this class are immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */

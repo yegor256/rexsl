@@ -39,6 +39,8 @@ import org.xmlmatchers.xpath.HasXPath;
 /**
  * Matcher of XPath against a plain string.
  *
+ * <p>Objects of this class are immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.2.6
