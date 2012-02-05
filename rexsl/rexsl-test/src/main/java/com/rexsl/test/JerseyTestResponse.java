@@ -29,7 +29,9 @@
  */
 package com.rexsl.test;
 
+import com.rexsl.test.assertions.BodyMatcher;
 import com.rexsl.test.assertions.Failure;
+import com.rexsl.test.assertions.HeaderMatcher;
 import com.rexsl.test.assertions.StatusMatcher;
 import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
@@ -318,14 +320,16 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertHeader(final String name, final Matcher matcher) {
-        MatcherAssert.assertThat(
-            Logger.format(
-                "HTTP header '%s' has to match in:\n%s",
+        this.assertThat(
+            new HeaderMatcher(
+                Logger.format(
+                    "HTTP header '%s' has to match:\n%s",
+                    name,
+                    new ClientResponseDecor(this.response(), this.getBody())
+                ),
                 name,
-                new ClientResponseDecor(this.response(), this.getBody())
-            ),
-            this.response().getHeaders().getFirst((String) name),
-            matcher
+                matcher
+            )
         );
         return this;
     }
@@ -335,13 +339,14 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertBody(final Matcher<String> matcher) {
-        MatcherAssert.assertThat(
-            Logger.format(
-                "HTTP response content has to match in:\n%s",
-                new ClientResponseDecor(this.response(), this.getBody())
-            ),
-            this.getBody(),
-            matcher
+        this.assertThat(
+            new BodyMatcher(
+                Logger.format(
+                    "HTTP response content has to match:\n%s",
+                    new ClientResponseDecor(this.response(), this.getBody())
+                ),
+                matcher
+            )
         );
         return this;
     }
