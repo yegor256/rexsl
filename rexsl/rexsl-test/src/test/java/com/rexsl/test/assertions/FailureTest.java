@@ -47,7 +47,7 @@ public final class FailureTest {
      * Failure can fail on demand.
      * @throws Exception If something goes wrong inside
      */
-    @Test
+    @Test(expected = AssertionError.class)
     public void throwsExceptionOnDemand() throws Exception {
         final AssertionPolicy assertion = new Failure(
             new ClientResponseMocker().mock(),
