@@ -44,6 +44,14 @@ public final class ConsoleFeeder implements Feeder {
      * {@inheritDoc}
      */
     @Override
+    public String toString() {
+        return "Console Feeder";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     @SuppressWarnings("PMD.SystemPrintln")
     public void feed(final String text) {
         System.out.print(text);
