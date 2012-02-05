@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.rexsl.test.assertions.Failure;
+import com.rexsl.test.assertions.StatusMatcher;
 import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
 import java.util.ArrayList;
@@ -266,7 +267,15 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public void fail(final String reason) {
-        this.assertThat(new Failure(this.response(), reason));
+        this.assertThat(
+            new Failure(
+                Logger.format(
+                    "%s:\n%s",
+                    reason,
+                    new ClientResponseDecor(this.response(), this.getBody())
+                )
+            )
+        );
     }
 
     /**
@@ -274,14 +283,15 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertStatus(final int status) {
-        MatcherAssert.assertThat(
-            Logger.format(
-                "HTTP status code has to be equal to %d in:\n%s",
-                status,
-                new ClientResponseDecor(this.response(), this.getBody())
-            ),
-            this.getStatus(),
-            Matchers.equalTo(status)
+        this.assertThat(
+            new StatusMatcher(
+                Logger.format(
+                    "HTTP status code has to be equal to %d in:\n%s",
+                    status,
+                    new ClientResponseDecor(this.response(), this.getBody())
+                ),
+                Matchers.equalTo(status)
+            )
         );
         return this;
     }
@@ -291,13 +301,14 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertStatus(final Matcher<Integer> matcher) {
-        MatcherAssert.assertThat(
-            Logger.format(
-                "HTTP status code has to match in:\n%s",
-                new ClientResponseDecor(this.response(), this.getBody())
-            ),
-            this.getStatus(),
-            matcher
+        this.assertThat(
+            new StatusMatcher(
+                Logger.format(
+                    "HTTP status code has to match:\n%s",
+                    new ClientResponseDecor(this.response(), this.getBody())
+                ),
+                matcher
+            )
         );
         return this;
     }

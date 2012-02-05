@@ -30,24 +30,48 @@
 package com.rexsl.test.assertions;
 
 import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.TestResponseMocker;
-import org.junit.Test;
+import com.rexsl.test.TestResponse;
+import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 
 /**
- * Test case for {@link Failure}.
+ * Matches HTTP status against required value.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class FailureTest {
+public final class StatusMatcher implements AssertionPolicy {
 
     /**
-     * Failure can fail on demand.
-     * @throws Exception If something goes wrong inside
+     * The message to show.
      */
-    @Test(expected = AssertionError.class)
-    public void throwsExceptionOnDemand() throws Exception {
-        final AssertionPolicy assertion = new Failure("some text");
-        assertion.assertThat(new TestResponseMocker().mock());
+    private final transient String message;
+
+    /**
+     * The matcher to use.
+     */
+    private final transient Matcher<Integer> matcher;
+
+    /**
+     * Public ctor.
+     * @param msg The message to show
+     * @param mtch The matcher to use
+     */
+    public StatusMatcher(final String msg, final Matcher<Integer> mtch) {
+        this.message = msg;
+        this.matcher = mtch;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void assertThat(final TestResponse rsp) {
+        MatcherAssert.assertThat(
+            this.message,
+            rsp.getStatus(),
+            this.matcher
+        );
     }
 
 }

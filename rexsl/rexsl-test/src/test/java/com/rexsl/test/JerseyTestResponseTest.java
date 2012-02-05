@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
+import java.net.HttpURLConnection;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -138,6 +139,16 @@ public final class JerseyTestResponseTest {
     public void failsOnDemand() throws Exception {
         new JerseyTestResponse(this.fetcher(new ClientResponseMocker().mock()))
             .fail("some reason");
+    }
+
+    /**
+     * TestResponse can assert HTTP status.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void assertsHttpStatusCode() throws Exception {
+        new JerseyTestResponse(this.fetcher(new ClientResponseMocker().mock()))
+            .assertStatus(HttpURLConnection.HTTP_NOT_FOUND);
     }
 
     /**

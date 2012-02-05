@@ -30,10 +30,7 @@
 package com.rexsl.test.assertions;
 
 import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.ClientResponseDecor;
 import com.rexsl.test.TestResponse;
-import com.sun.jersey.api.client.ClientResponse;
-import com.ymock.util.Logger;
 
 /**
  * Always fail.
@@ -41,12 +38,7 @@ import com.ymock.util.Logger;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public class Failure implements AssertionPolicy {
-
-    /**
-     * Client response.
-     */
-    private final transient ClientResponse response;
+public final class Failure implements AssertionPolicy {
 
     /**
      * The reason of failure.
@@ -55,11 +47,9 @@ public class Failure implements AssertionPolicy {
 
     /**
      * Public ctor.
-     * @param resp The response
      * @param txt The reason of failure
      */
-    public Failure(final ClientResponse resp, final String txt) {
-        this.response = resp;
+    public Failure(final String txt) {
         this.reason = txt;
     }
 
@@ -68,13 +58,7 @@ public class Failure implements AssertionPolicy {
      */
     @Override
     public void assertThat(final TestResponse rsp) {
-        throw new AssertionError(
-            Logger.format(
-                "%s:\n%s",
-                this.reason,
-                new ClientResponseDecor(this.response, rsp.getBody())
-            )
-        );
+        throw new AssertionError(this.reason);
     }
 
 }
