@@ -45,12 +45,6 @@ import org.hamcrest.Matcher;
 public interface TestResponse {
 
     /**
-     * Retry the same operation again.
-     * @return This object
-     */
-    TestResponse retry();
-
-    /**
      * Follow the LOCATION header.
      * @return New client
      */

@@ -74,4 +74,12 @@ public final class StatusMatcher implements AssertionPolicy {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean again(final int attempt) {
+        return false;
+    }
+
 }

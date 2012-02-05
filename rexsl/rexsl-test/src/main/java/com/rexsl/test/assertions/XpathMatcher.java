@@ -31,26 +31,44 @@ package com.rexsl.test.assertions;
 
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
+import javax.xml.transform.Source;
+import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 
 /**
- * Always fail.
+ * Matches HTTP header against required value.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class Failure implements AssertionPolicy {
+public final class XpathMatcher implements AssertionPolicy {
 
     /**
-     * The reason of failure.
+     * The message to show.
      */
-    private final transient String reason;
+    private final transient String message;
+
+    /**
+     * The source.
+     */
+    private final transient Source source;
+
+    /**
+     * The matcher to use.
+     */
+    private final transient Matcher<Source> matcher;
 
     /**
      * Public ctor.
-     * @param txt The reason of failure
+     * @param msg The message to show
+     * @param src The source
+     * @param mtch The matcher to use
      */
-    public Failure(final String txt) {
-        this.reason = txt;
+    public XpathMatcher(final String msg, final Source src,
+        final Matcher<Source> mtch) {
+        this.message = msg;
+        this.source = src;
+        this.matcher = mtch;
     }
 
     /**
@@ -58,7 +76,11 @@ public final class Failure implements AssertionPolicy {
      */
     @Override
     public void assertThat(final TestResponse rsp) {
-        throw new AssertionError(this.reason);
+        MatcherAssert.assertThat(
+            this.message,
+            this.source,
+            this.matcher
+        );
     }
 
     /**

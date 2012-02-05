@@ -82,4 +82,12 @@ public final class HeaderMatcher implements AssertionPolicy {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean again(final int attempt) {
+        return false;
+    }
+
 }

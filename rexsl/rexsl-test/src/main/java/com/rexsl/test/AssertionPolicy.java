@@ -46,4 +46,12 @@ public interface AssertionPolicy {
      */
     void assertThat(TestResponse response);
 
+    /**
+     * Do we need to re-fetch the page and try again?
+     * @param attempt Number of attempt we're trying to make (will not ask for
+     *  attempt #0, but will start from #1)
+     * @return Yes, we should try again (if {@code TRUE})
+     */
+    boolean again(int attempt);
+
 }

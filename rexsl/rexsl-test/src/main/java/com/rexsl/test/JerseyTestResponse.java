@@ -33,6 +33,7 @@ import com.rexsl.test.assertions.BodyMatcher;
 import com.rexsl.test.assertions.Failure;
 import com.rexsl.test.assertions.HeaderMatcher;
 import com.rexsl.test.assertions.StatusMatcher;
+import com.rexsl.test.assertions.XpathMatcher;
 import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
 import java.util.ArrayList;
@@ -58,9 +59,16 @@ import org.xmlmatchers.namespace.SimpleNamespaceContext;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @SuppressWarnings("PMD.TooManyMethods")
 final class JerseyTestResponse implements TestResponse {
+
+    /**
+     * How many attempts to make when {@link #assertThat(AssertionPolicy)}
+     * reports problem.
+     */
+    private static final int MAX_ATTEMPTS = 8;
 
     /**
      * Fetcher of response.
@@ -115,18 +123,6 @@ final class JerseyTestResponse implements TestResponse {
         this.body = text;
         this.elm = element;
         this.context = ctx;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("PMD.NullAssignment")
-    public TestResponse retry() {
-        this.iresponse = null;
-        this.body = null;
-        this.elm = null;
-        return this;
     }
 
     /**
@@ -259,8 +255,33 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.NullAssignment")
     public TestResponse assertThat(final AssertionPolicy assertion) {
-        assertion.assertThat(this);
+        int attempt = 0;
+        while (true) {
+            try {
+                assertion.assertThat(this);
+                break;
+            } catch (AssertionError ex) {
+                attempt += 1;
+                if (!assertion.again(attempt)) {
+                    throw ex;
+                }
+                if (attempt >= this.MAX_ATTEMPTS) {
+                    this.fail(
+                        String.format("failed after %d attempt(s)", attempt)
+                    );
+                }
+                Logger.warn(
+                    this,
+                    "assertThat(%[type]s): attempt #%d failed, trying again...",
+                    attempt
+                );
+                this.iresponse = null;
+                this.body = null;
+                this.elm = null;
+            }
+        }
         return this;
     }
 
@@ -356,14 +377,16 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertXPath(final String xpath) {
-        MatcherAssert.assertThat(
-            Logger.format(
-                "XPath '%s' has to exist in:\n%s",
-                StringEscapeUtils.escapeJava(xpath),
-                new ClientResponseDecor(this.response(), this.getBody())
-            ),
-            XhtmlConverter.the(this.element()),
-            XhtmlMatchers.hasXPath(xpath, this.context)
+        this.assertThat(
+            new XpathMatcher(
+                Logger.format(
+                    "XPath '%s' has to exist in:\n%s",
+                    StringEscapeUtils.escapeJava(xpath),
+                    new ClientResponseDecor(this.response(), this.getBody())
+                ),
+                XhtmlConverter.the(this.element()),
+                XhtmlMatchers.hasXPath(xpath, this.context)
+            )
         );
         return this;
     }
