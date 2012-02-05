@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
+import java.net.HttpURLConnection;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -50,7 +51,8 @@ public final class JerseyTestResponseTest {
         final ClientResponse resp = new ClientResponseMocker()
             .withEntity("<r><a>\u0443\u0440\u0430!</a><a>B</a></r>")
             .mock();
-        final TestResponse response = new JerseyTestResponse(resp);
+        final TestResponse response =
+            new JerseyTestResponse(this.fetcher(resp));
         MatcherAssert.assertThat(
             response.xpath("//a/text()"),
             Matchers.hasSize(2)
@@ -70,7 +72,7 @@ public final class JerseyTestResponseTest {
         final ClientResponse resp = new ClientResponseMocker()
             .withEntity("<x><y>\u0443\u0440\u0430!</y></x>")
             .mock();
-        new JerseyTestResponse(resp)
+        new JerseyTestResponse(this.fetcher(resp))
             .assertXPath("//y[.='\u0443\u0440\u0430!']")
             .assertXPath("/x/y[contains(.,'\u0430')]");
     }
@@ -85,7 +87,7 @@ public final class JerseyTestResponseTest {
             // @checkstyle LineLength (1 line)
             .withEntity("<html xmlns='http://www.w3.org/1999/xhtml'><div>\u0443\u0440\u0430!</div></html>")
             .mock();
-        new JerseyTestResponse(resp)
+        new JerseyTestResponse(this.fetcher(resp))
             .assertXPath("/xhtml:html/xhtml:div")
             .assertXPath("//xhtml:div[.='\u0443\u0440\u0430!']");
     }
@@ -99,7 +101,7 @@ public final class JerseyTestResponseTest {
         final ClientResponse resp = new ClientResponseMocker()
             .withEntity("<a xmlns='urn:foo'><b>yes!</b></a>")
             .mock();
-        final TestResponse response = new JerseyTestResponse(resp)
+        final TestResponse response = new JerseyTestResponse(this.fetcher(resp))
             .registerNs("foo", "urn:foo")
             .assertXPath("/foo:a/foo:b[.='yes!']");
         MatcherAssert.assertThat(
@@ -117,7 +119,8 @@ public final class JerseyTestResponseTest {
         final ClientResponse resp = new ClientResponseMocker()
             .withEntity("<root><a><x>1</x></a><a><x>2</x></a></root>")
             .mock();
-        final TestResponse response = new JerseyTestResponse(resp);
+        final TestResponse response =
+            new JerseyTestResponse(this.fetcher(resp));
         MatcherAssert.assertThat(
             response.nodes("//a"),
             Matchers.hasSize(2)
@@ -126,6 +129,40 @@ public final class JerseyTestResponseTest {
             response.nodes("/root/a").get(0).xpath("x/text()").get(0),
             Matchers.equalTo("1")
         );
+    }
+
+    /**
+     * TestResponse can fail on demand.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void failsOnDemand() throws Exception {
+        new JerseyTestResponse(this.fetcher(new ClientResponseMocker().mock()))
+            .fail("some reason");
+    }
+
+    /**
+     * TestResponse can assert HTTP status.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void assertsHttpStatusCode() throws Exception {
+        new JerseyTestResponse(this.fetcher(new ClientResponseMocker().mock()))
+            .assertStatus(HttpURLConnection.HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Create fetcher with response on board.
+     * @param resp The response to return
+     * @return The fetcher
+     */
+    private JerseyFetcher fetcher(final ClientResponse resp) {
+        return new JerseyFetcher() {
+            @Override
+            public ClientResponse fetch() {
+                return resp;
+            }
+        };
     }
 
 }

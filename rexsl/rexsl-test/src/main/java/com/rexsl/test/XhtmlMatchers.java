@@ -118,7 +118,7 @@ public final class XhtmlMatchers {
      * @param query The query
      * @param namespaces List of namespaces
      * @return Matcher suitable for JUnit/Hamcrest matching
-     * @see #hasXPath(String,Object)
+     * @see #hasXPath(String,Object[])
      */
     public static Matcher<Object> withXPath(final String query,
         final Object... namespaces) {

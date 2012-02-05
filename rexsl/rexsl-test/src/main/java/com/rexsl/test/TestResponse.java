@@ -36,6 +36,8 @@ import org.hamcrest.Matcher;
 /**
  * Resonse returned by {@link TestClient}.
  *
+ * <p>Implementation of this interface shall be thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
@@ -50,20 +52,20 @@ public interface TestResponse {
 
     /**
      * Find link in XML and return new client with this link as URI.
-     * @param query The path of the link
-     * @return New client
+     * @param query The path of the link, as XPath query
+     * @return New client ready to fetch content from this new page
      */
     TestClient rel(String query);
 
     /**
-     * Get body as a string.
+     * Get body as a string, assuming it's {@code UTF-8}.
      * @return The body
      */
     String getBody();
 
     /**
-     * Get status of the response as a number.
-     * @return The status
+     * Get status of the response as a positive integer number.
+     * @return The status code
      */
     Integer getStatus();
 
@@ -73,6 +75,13 @@ public interface TestResponse {
      * @return The list of node values (texts)
      */
     List<String> xpath(String query);
+
+    /**
+     * Retrieve nodes from the XML response.
+     * @param query The XPath query
+     * @return Collection of responses
+     */
+    List<TestResponse> nodes(String query);
 
     /**
      * Get status line of the response.
@@ -87,12 +96,6 @@ public interface TestResponse {
     MultivaluedMap<String, String> getHeaders();
 
     /**
-     * Fail and report a problem.
-     * @param reason Reason of failure
-     */
-    void fail(String reason);
-
-    /**
      * Register additional namespace prefix for XPath.
      * @param prefix The prefix to register
      * @param uri Namespace URI
@@ -101,11 +104,17 @@ public interface TestResponse {
     TestResponse registerNs(String prefix, Object uri);
 
     /**
-     * Retrieve nodes from the XML response.
-     * @param query The XPath query
-     * @return Collection of responses
+     * Fail and report a problem.
+     * @param reason Reason of failure
      */
-    List<TestResponse> nodes(String query);
+    void fail(String reason);
+
+    /**
+     * Assert something.
+     * @param assertion The assertion to use
+     * @return This object
+     */
+    TestResponse assertThat(AssertionPolicy assertion);
 
     /**
      * Verifies HTTP response status code against the provided absolute value,

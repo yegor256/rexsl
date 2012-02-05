@@ -34,6 +34,8 @@ import java.net.URI;
 /**
  * A universal class for in-container testing of your web application.
  *
+ * <p>Implementation of this interface shall be immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (200 lines)

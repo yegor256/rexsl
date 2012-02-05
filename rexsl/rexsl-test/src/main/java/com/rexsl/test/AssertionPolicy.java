@@ -29,67 +29,29 @@
  */
 package com.rexsl.test;
 
-import java.util.Locale;
-import javax.xml.transform.dom.DOMSource;
-import org.w3c.dom.Node;
-
 /**
- * Private class for DOM to String converting.
+ * Policy of assertion, used by {@link TestResponse}.
  *
- * <p>Objects of this class are immutable and thread-safe.
+ * <p>Implementation of this interface shall be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class StringSource extends DOMSource {
+public interface AssertionPolicy {
 
     /**
-     * The XML itself.
+     * Make an assertion and return nothing or throw {@link AssertionError}
+     * if some problem is found.
+     * @param response The response to assert
      */
-    private final transient String xml;
+    void assertThat(TestResponse response);
 
     /**
-     * Public ctor.
-     * @param text The content of the document
+     * Do we need to re-fetch the page and try again?
+     * @param attempt Number of attempt we're trying to make (will not ask for
+     *  attempt #0, but will start from #1)
+     * @return Yes, we should try again (if {@code TRUE})
      */
-    public StringSource(final String text) {
-        super();
-        this.xml = text;
-        super.setNode(new DomParser(text).document());
-    }
-
-    /**
-     * Public ctor.
-     * @param node The node
-     * @todo #107 We should transform Node into text and assign to this.xml
-     */
-    public StringSource(final Node node) {
-        super();
-        this.xml = "xml";
-        super.setNode(node);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        final StringBuilder buf = new StringBuilder();
-        final int length = this.xml.length();
-        for (int pos = 0; pos < length; pos += 1) {
-            final char chr = this.xml.charAt(pos);
-            // @checkstyle MagicNumber (1 line)
-            if (chr > 0x7f) {
-                buf.append("&#");
-                buf.append(
-                    Integer.toHexString(chr).toUpperCase(Locale.ENGLISH)
-                );
-                buf.append(";");
-            } else {
-                buf.append(chr);
-            }
-        }
-        return buf.toString();
-    }
+    boolean again(int attempt);
 
 }

@@ -41,13 +41,12 @@ import javax.ws.rs.core.UriBuilder;
  * <p>For example (in your Groovy script):
  *
  * <pre>
- * import java.net.HttpURLConnection
  * import javax.ws.rs.core.HttpHeaders
  * import javax.ws.rs.core.MediaType
  * new RestTester.start(UriBuilder.fromUri(rexsl.home).path('/{id}').build(id))
  *   .header(HttpHeaders.USER_AGENT, 'Safari 4')
  *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
- *   .post('name=John Doe')
+ *   .post('renaming somebody', 'name=John Doe')
  *   .assertStatus(HttpURLConnection.HTTP_OK)
  *   .assertBody(Matchers.containsString('xml'))
  *   .assertXPath('/data/user[.="John Doe"]')

@@ -27,69 +27,67 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.assertions;
 
-import java.util.Locale;
-import javax.xml.transform.dom.DOMSource;
-import org.w3c.dom.Node;
+import com.rexsl.test.AssertionPolicy;
+import com.rexsl.test.TestResponse;
+import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 
 /**
- * Private class for DOM to String converting.
- *
- * <p>Objects of this class are immutable and thread-safe.
+ * Matches HTTP header against required value.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class StringSource extends DOMSource {
+public final class HeaderMatcher implements AssertionPolicy {
 
     /**
-     * The XML itself.
+     * The message to show.
      */
-    private final transient String xml;
+    private final transient String message;
+
+    /**
+     * Header's name.
+     */
+    private final transient String name;
+
+    /**
+     * The matcher to use.
+     */
+    private final transient Matcher<String> matcher;
 
     /**
      * Public ctor.
-     * @param text The content of the document
+     * @param msg The message to show
+     * @param hdr The name of the header to match
+     * @param mtch The matcher to use
      */
-    public StringSource(final String text) {
-        super();
-        this.xml = text;
-        super.setNode(new DomParser(text).document());
-    }
-
-    /**
-     * Public ctor.
-     * @param node The node
-     * @todo #107 We should transform Node into text and assign to this.xml
-     */
-    public StringSource(final Node node) {
-        super();
-        this.xml = "xml";
-        super.setNode(node);
+    public HeaderMatcher(final String msg, final String hdr,
+        final Matcher<String> mtch) {
+        this.message = msg;
+        this.name = hdr;
+        this.matcher = mtch;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        final StringBuilder buf = new StringBuilder();
-        final int length = this.xml.length();
-        for (int pos = 0; pos < length; pos += 1) {
-            final char chr = this.xml.charAt(pos);
-            // @checkstyle MagicNumber (1 line)
-            if (chr > 0x7f) {
-                buf.append("&#");
-                buf.append(
-                    Integer.toHexString(chr).toUpperCase(Locale.ENGLISH)
-                );
-                buf.append(";");
-            } else {
-                buf.append(chr);
-            }
-        }
-        return buf.toString();
+    public void assertThat(final TestResponse rsp) {
+        MatcherAssert.assertThat(
+            this.message,
+            rsp.getHeaders().getFirst(this.name),
+            this.matcher
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean again(final int attempt) {
+        return false;
     }
 
 }

@@ -27,69 +27,46 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.assertions;
 
-import java.util.Locale;
-import javax.xml.transform.dom.DOMSource;
-import org.w3c.dom.Node;
+import com.rexsl.test.AssertionPolicy;
+import com.rexsl.test.TestResponse;
 
 /**
- * Private class for DOM to String converting.
- *
- * <p>Objects of this class are immutable and thread-safe.
+ * Always fail.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class StringSource extends DOMSource {
+public final class Failure implements AssertionPolicy {
 
     /**
-     * The XML itself.
+     * The reason of failure.
      */
-    private final transient String xml;
-
-    /**
-     * Public ctor.
-     * @param text The content of the document
-     */
-    public StringSource(final String text) {
-        super();
-        this.xml = text;
-        super.setNode(new DomParser(text).document());
-    }
+    private final transient String reason;
 
     /**
      * Public ctor.
-     * @param node The node
-     * @todo #107 We should transform Node into text and assign to this.xml
+     * @param txt The reason of failure
      */
-    public StringSource(final Node node) {
-        super();
-        this.xml = "xml";
-        super.setNode(node);
+    public Failure(final String txt) {
+        this.reason = txt;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        final StringBuilder buf = new StringBuilder();
-        final int length = this.xml.length();
-        for (int pos = 0; pos < length; pos += 1) {
-            final char chr = this.xml.charAt(pos);
-            // @checkstyle MagicNumber (1 line)
-            if (chr > 0x7f) {
-                buf.append("&#");
-                buf.append(
-                    Integer.toHexString(chr).toUpperCase(Locale.ENGLISH)
-                );
-                buf.append(";");
-            } else {
-                buf.append(chr);
-            }
-        }
-        return buf.toString();
+    public void assertThat(final TestResponse rsp) {
+        throw new AssertionError(this.reason);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean again(final int attempt) {
+        return false;
     }
 
 }
