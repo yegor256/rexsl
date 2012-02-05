@@ -257,32 +257,34 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     @SuppressWarnings("PMD.NullAssignment")
     public TestResponse assertThat(final AssertionPolicy assertion) {
-        int attempt = 0;
-        while (true) {
-            try {
-                assertion.assertThat(this);
-                break;
-            } catch (AssertionError ex) {
-                attempt += 1;
-                if (!assertion.again(attempt)) {
-                    throw ex;
-                }
-                if (attempt >= this.MAX_ATTEMPTS) {
-                    this.fail(
-                        String.format("failed after %d attempt(s)", attempt)
+        synchronized (this) {
+            int attempt = 0;
+            while (true) {
+                try {
+                    assertion.assertThat(this);
+                    break;
+                } catch (AssertionError ex) {
+                    attempt += 1;
+                    if (!assertion.again(attempt)) {
+                        throw ex;
+                    }
+                    if (attempt >= this.MAX_ATTEMPTS) {
+                        this.fail(
+                            String.format("failed after %d attempt(s)", attempt)
+                        );
+                    }
+                    Logger.warn(
+                        this,
+                        "assertThat(%[type]s): attempt #%d failed, re-trying..",
+                        attempt
                     );
+                    this.iresponse = null;
+                    this.body = null;
+                    this.elm = null;
                 }
-                Logger.warn(
-                    this,
-                    "assertThat(%[type]s): attempt #%d failed, trying again...",
-                    attempt
-                );
-                this.iresponse = null;
-                this.body = null;
-                this.elm = null;
             }
+            return this;
         }
-        return this;
     }
 
     /**

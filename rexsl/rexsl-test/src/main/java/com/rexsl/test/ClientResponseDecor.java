@@ -46,7 +46,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class ClientResponseDecor implements Formattable {
+final class ClientResponseDecor implements Formattable {
 
     /**
      * End of line.
