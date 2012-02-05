@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.rexsl.test.assertions.Failure;
 import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
 import java.util.ArrayList;
@@ -265,13 +266,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public void fail(final String reason) {
-        throw new AssertionError(
-            Logger.format(
-                "%s:\n%s",
-                reason,
-                new ClientResponseDecor(this.response(), this.getBody())
-            )
-        );
+        this.assertThat(new Failure(this.response(), reason));
     }
 
     /**

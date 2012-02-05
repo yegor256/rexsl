@@ -131,6 +131,16 @@ public final class JerseyTestResponseTest {
     }
 
     /**
+     * TestResponse can fail on demand.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void failsOnDemand() throws Exception {
+        new JerseyTestResponse(this.fetcher(new ClientResponseMocker().mock()))
+            .fail("some reason");
+    }
+
+    /**
      * Create fetcher with response on board.
      * @param resp The response to return
      * @return The fetcher
