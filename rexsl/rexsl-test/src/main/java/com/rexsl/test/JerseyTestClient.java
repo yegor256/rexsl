@@ -84,9 +84,23 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestClient header(final String name, final Object value) {
-        Logger.debug(this, "#header('%s', '%s'): set", name, value);
-        this.headers.add(new Header(name, value.toString()));
-        return this;
+        synchronized (this) {
+            boolean exists = false;
+            for (Header header : this.headers) {
+                if (header.getKey().equals(name)
+                    && header.getValue().toString().equals(value.toString())) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (exists) {
+                Logger.debug(this, "#header('%s', '%s'): dupe", name, value);
+            } else {
+                this.headers.add(new Header(name, value.toString()));
+                Logger.debug(this, "#header('%s', '%s'): set", name, value);
+            }
+            return this;
+        }
     }
 
     /**
