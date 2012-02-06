@@ -37,6 +37,7 @@ import com.rexsl.test.TestResponse;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @since 0.3.4
  */
 public final class Failure implements AssertionPolicy {
 

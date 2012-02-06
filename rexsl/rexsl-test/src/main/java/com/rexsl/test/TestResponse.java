@@ -113,6 +113,7 @@ public interface TestResponse {
      * Assert something.
      * @param assertion The assertion to use
      * @return This object
+     * @since 0.3.4
      */
     TestResponse assertThat(AssertionPolicy assertion);
 

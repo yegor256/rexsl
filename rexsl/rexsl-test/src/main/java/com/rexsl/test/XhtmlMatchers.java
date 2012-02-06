@@ -108,6 +108,7 @@ public final class XhtmlMatchers {
      * @param query The query
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @see #hasXPath(String)
+     * @since 0.3
      */
     public static Matcher<Object> withXPath(final String query) {
         return new PlainXpathMatcher(query, XhtmlMatchers.context());
@@ -119,6 +120,7 @@ public final class XhtmlMatchers {
      * @param namespaces List of namespaces
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @see #hasXPath(String,Object[])
+     * @since 0.3
      */
     public static Matcher<Object> withXPath(final String query,
         final Object... namespaces) {
@@ -131,6 +133,7 @@ public final class XhtmlMatchers {
      * @param ctx The context
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @see #hasXPath(String,NamespaceContext)
+     * @since 0.3
      */
     public static Matcher<Object> withXPath(final String query,
         final NamespaceContext ctx) {
