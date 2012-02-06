@@ -94,7 +94,17 @@ final class PageAnalyzer {
             Logger.debug(
                 this,
                 // @checkstyle LineLength (1 line)
-                "#filter('%s': %d chars): User-Agent='%s', Accept='%s', no need to transform",
+                "#needsTransformation('%s': %d chars): User-Agent='%s', Accept='%s', no need to transform",
+                this.request.getRequestURI(),
+                this.page.length(),
+                agent,
+                accept
+            );
+        } else {
+            Logger.debug(
+                this,
+                // @checkstyle LineLength (1 line)
+                "#filtneedsTransformationer('%s': %d chars): User-Agent='%s', Accept='%s', transformation required",
                 this.request.getRequestURI(),
                 this.page.length(),
                 agent,

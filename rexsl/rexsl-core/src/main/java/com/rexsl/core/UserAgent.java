@@ -70,6 +70,21 @@ final class UserAgent {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder text = new StringBuilder();
+        for (Map.Entry<String, ProductVersion> token : this.tokens.entrySet()) {
+            if (text.length() > 0) {
+                text.append("; ");
+            }
+            text.append(token.getKey()).append("-").append(token.getValue());
+        }
+        return text.toString();
+    }
+
+    /**
      * Check if this agent supports XSLT.
      * @return Does it support XSLT 2.0?
      */

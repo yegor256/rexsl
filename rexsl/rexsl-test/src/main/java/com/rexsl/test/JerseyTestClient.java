@@ -33,6 +33,9 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.ymock.util.Logger;
 import java.net.URI;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of {@link TestClient}.
@@ -47,7 +50,12 @@ final class JerseyTestClient implements TestClient {
     /**
      * Jersey web resource.
      */
-    private final transient WebResource.Builder builder;
+    private final transient WebResource resource;
+
+    /**
+     * Headers.
+     */
+    private final transient List<Header> headers = new ArrayList<Header>();
 
     /**
      * Entry point.
@@ -59,7 +67,7 @@ final class JerseyTestClient implements TestClient {
      * @param res The resource to work with
      */
     public JerseyTestClient(final WebResource res) {
-        this.builder = res.getRequestBuilder();
+        this.resource = res;
         this.home = res.getURI();
     }
 
@@ -76,9 +84,23 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestClient header(final String name, final Object value) {
-        Logger.debug(this, "#header('%s', '%s'): set", name, value);
-        this.builder.header(name, value.toString());
-        return this;
+        synchronized (this) {
+            boolean exists = false;
+            for (Header header : this.headers) {
+                if (header.getKey().equals(name)
+                    && header.getValue().toString().equals(value.toString())) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (exists) {
+                Logger.debug(this, "#header('%s', '%s'): dupe", name, value);
+            } else {
+                this.headers.add(new Header(name, value.toString()));
+                Logger.debug(this, "#header('%s', '%s'): set", name, value);
+            }
+            return this;
+        }
     }
 
     /**
@@ -139,11 +161,15 @@ final class JerseyTestClient implements TestClient {
     private ClientResponse method(final String name, final String body,
         final String desc) {
         final long start = System.currentTimeMillis();
+        final WebResource.Builder builder = this.resource.getRequestBuilder();
+        for (Header header : this.headers) {
+            builder.header(header.getKey(), header.getValue());
+        }
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
-            resp = this.builder.get(ClientResponse.class);
+            resp = builder.get(ClientResponse.class);
         } else {
-            resp = this.builder.method(name, ClientResponse.class, body);
+            resp = builder.method(name, ClientResponse.class, body);
         }
         Logger.info(
             this,
@@ -157,6 +183,21 @@ final class JerseyTestClient implements TestClient {
             this.home
         );
         return resp;
+    }
+
+    /**
+     * One header.
+     */
+    private static final class Header
+        extends AbstractMap.SimpleEntry<String, String> {
+        /**
+         * Public ctor.
+         * @param key The name of it
+         * @param value The value
+         */
+        public Header(final String key, final String value) {
+            super(key, value);
+        }
     }
 
 }

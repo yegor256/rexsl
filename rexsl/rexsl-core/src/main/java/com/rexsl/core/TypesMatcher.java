@@ -29,8 +29,9 @@
  */
 package com.rexsl.core;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import com.ymock.util.Logger;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Media types matcher.
@@ -52,9 +53,9 @@ final class TypesMatcher {
     private static final String ASTERIX = "*";
 
     /**
-     * Media types and their levels.
+     * Media types.
      */
-    private final transient Collection<String> types = new ArrayList<String>();
+    private final transient Set<String> types = new HashSet<String>();
 
     /**
      * Public ctor.
@@ -67,6 +68,14 @@ final class TypesMatcher {
                 this.types.add(parts[0]);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return Logger.format("%[list]s", this.types);
     }
 
     /**
