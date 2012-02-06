@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -67,6 +68,14 @@ final class TypesMatcher {
                 this.types.add(parts[0]);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return Logger.format("%[list]s", this.types);
     }
 
     /**
