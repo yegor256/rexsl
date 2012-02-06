@@ -276,6 +276,7 @@ final class JerseyTestResponse implements TestResponse {
                     Logger.warn(
                         this,
                         "assertThat(%[type]s): attempt #%d failed, re-trying..",
+                        assertion,
                         attempt
                     );
                     this.iresponse = null;

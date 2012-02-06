@@ -41,6 +41,7 @@ import org.mockito.Mockito;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class JerseyTestResponseTest {
 
     /**
@@ -163,12 +164,17 @@ public final class JerseyTestResponseTest {
             .when(fetcher).fetch();
         new JerseyTestResponse(fetcher).assertThat(
             new AssertionPolicy() {
+                private transient int num;
                 @Override
                 public void assertThat(final TestResponse resp) {
-                    throw new AssertionError();
+                    resp.getStatus();
+                    if (num == 0) {
+                        throw new AssertionError();
+                    }
                 }
                 @Override
                 public boolean again(final int attempt) {
+                    this.num += 1;
                     return attempt < 2;
                 }
             }
