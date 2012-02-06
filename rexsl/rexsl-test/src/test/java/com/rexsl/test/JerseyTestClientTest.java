@@ -33,7 +33,6 @@ import java.net.HttpURLConnection;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -50,15 +49,16 @@ public final class JerseyTestClientTest {
     @Test
     public void sendsIdenticalHttpRequestTwice() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectRequestUri(Matchers.containsString("foo"))
-            .expectMethod(Matchers.equalTo(RestTester.GET))
             .expectHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML)
             .mock();
         final TestClient client = RestTester
             .start(UriBuilder.fromUri(container.home()).path("/foo"))
             .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML);
-        client.get("first request").assertStatus(HttpURLConnection.HTTP_OK);
-        client.get("second try, should work exactly like the first one")
+        client.get("first request")
+            .assertStatus(HttpURLConnection.HTTP_OK);
+        client.post("second try, should work exactly like the first one", "")
+            .assertStatus(HttpURLConnection.HTTP_OK);
+        client.get("third request")
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 

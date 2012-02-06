@@ -50,7 +50,7 @@ final class JerseyTestClient implements TestClient {
     /**
      * Jersey web resource.
      */
-    private final transient WebResource.Builder builder;
+    private final transient WebResource resource;
 
     /**
      * Headers.
@@ -67,7 +67,7 @@ final class JerseyTestClient implements TestClient {
      * @param res The resource to work with
      */
     public JerseyTestClient(final WebResource res) {
-        this.builder = res.getRequestBuilder();
+        this.resource = res;
         this.home = res.getURI();
     }
 
@@ -147,14 +147,15 @@ final class JerseyTestClient implements TestClient {
     private ClientResponse method(final String name, final String body,
         final String desc) {
         final long start = System.currentTimeMillis();
+        final WebResource.Builder builder = this.resource.getRequestBuilder();
         for (Header header : this.headers) {
-            this.builder.header(header.getKey(), header.getValue());
+            builder.header(header.getKey(), header.getValue());
         }
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
-            resp = this.builder.get(ClientResponse.class);
+            resp = builder.get(ClientResponse.class);
         } else {
-            resp = this.builder.method(name, ClientResponse.class, body);
+            resp = builder.method(name, ClientResponse.class, body);
         }
         Logger.info(
             this,
