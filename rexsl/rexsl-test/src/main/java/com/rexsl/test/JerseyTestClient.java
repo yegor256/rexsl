@@ -33,6 +33,9 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.ymock.util.Logger;
 import java.net.URI;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of {@link TestClient}.
@@ -48,6 +51,11 @@ final class JerseyTestClient implements TestClient {
      * Jersey web resource.
      */
     private final transient WebResource.Builder builder;
+
+    /**
+     * Headers.
+     */
+    private final transient List<Header> headers = new ArrayList<Header>();
 
     /**
      * Entry point.
@@ -77,7 +85,7 @@ final class JerseyTestClient implements TestClient {
     @Override
     public TestClient header(final String name, final Object value) {
         Logger.debug(this, "#header('%s', '%s'): set", name, value);
-        this.builder.header(name, value.toString());
+        this.headers.add(new Header(name, value.toString()));
         return this;
     }
 
@@ -139,6 +147,9 @@ final class JerseyTestClient implements TestClient {
     private ClientResponse method(final String name, final String body,
         final String desc) {
         final long start = System.currentTimeMillis();
+        for (Header header : this.headers) {
+            this.builder.header(header.getKey(), header.getValue());
+        }
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
             resp = this.builder.get(ClientResponse.class);
@@ -157,6 +168,21 @@ final class JerseyTestClient implements TestClient {
             this.home
         );
         return resp;
+    }
+
+    /**
+     * One header.
+     */
+    private static final class Header
+        extends AbstractMap.SimpleEntry<String, String> {
+        /**
+         * Public ctor.
+         * @param key The name of it
+         * @param value The value
+         */
+        public Header(final String key, final String value) {
+            super(key, value);
+        }
     }
 
 }
