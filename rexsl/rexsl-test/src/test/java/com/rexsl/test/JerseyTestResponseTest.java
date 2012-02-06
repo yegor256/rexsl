@@ -34,12 +34,14 @@ import java.net.HttpURLConnection;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link JerseyTestResponse}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class JerseyTestResponseTest {
 
     /**
@@ -149,6 +151,35 @@ public final class JerseyTestResponseTest {
     public void assertsHttpStatusCode() throws Exception {
         new JerseyTestResponse(this.fetcher(new ClientResponseMocker().mock()))
             .assertStatus(HttpURLConnection.HTTP_NOT_FOUND);
+    }
+
+    /**
+     * TestResponse can retry a few times.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void retriesWhenRequiredByCustomAssertion() throws Exception {
+        final JerseyFetcher fetcher = Mockito.mock(JerseyFetcher.class);
+        Mockito.doReturn(new ClientResponseMocker().mock())
+            .when(fetcher).fetch();
+        new JerseyTestResponse(fetcher).assertThat(
+            new AssertionPolicy() {
+                private transient int num;
+                @Override
+                public void assertThat(final TestResponse resp) {
+                    resp.getStatus();
+                    if (num == 0) {
+                        throw new AssertionError();
+                    }
+                }
+                @Override
+                public boolean again(final int attempt) {
+                    this.num += 1;
+                    return attempt < 2;
+                }
+            }
+        );
+        Mockito.verify(fetcher, Mockito.times(2)).fetch();
     }
 
     /**
