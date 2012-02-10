@@ -97,7 +97,7 @@ public final class XsltFilterTest {
      */
     @Test
     public void doesntTouchBinaryContent() throws Exception {
-        final byte[] binary = new byte[] { (byte) 0x00, (byte) 0xff };
+        final byte[] binary = new byte[] {(byte) 0x00, (byte) 0xff};
         final FilterChain chain = new FilterChainMocker()
             .withOutput(binary)
             .mock();

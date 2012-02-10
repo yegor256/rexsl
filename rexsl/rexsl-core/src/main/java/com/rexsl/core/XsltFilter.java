@@ -135,7 +135,8 @@ public final class XsltFilter implements Filter {
     }
 
     /**
-     * Make filtering.
+     * Make filtering (when necessary) or pass through if it's not an XML
+     * document.
      * @param request The request
      * @param response The response
      * @param chain Filter chain
@@ -154,15 +155,18 @@ public final class XsltFilter implements Filter {
             // we can't change response that is already finished
             return;
         }
-        String page = wrapper.getByteStream().toString(CharEncoding.UTF_8);
+        final byte[] data = wrapper.getByteStream().toByteArray();
+        String page = new String(data, CharEncoding.UTF_8);
         final PageAnalyzer analyzer = new PageAnalyzer(page, request);
         if (analyzer.needsTransformation()) {
             page = this.transform(page);
             response.setContentType(MediaType.TEXT_HTML);
             response.setContentLength(page.length());
             response.setCharacterEncoding(CharEncoding.UTF_8);
+            response.getOutputStream().write(page.getBytes(CharEncoding.UTF_8));
+        } else {
+            response.getOutputStream().write(data);
         }
-        response.getOutputStream().write(page.getBytes(CharEncoding.UTF_8));
     }
 
     /**
