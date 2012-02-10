@@ -89,6 +89,36 @@ public final class FilterChainMocker {
     }
 
     /**
+     * With this output.
+     * @param data The output
+     * @return This object
+     */
+    public FilterChainMocker withOutput(final byte[] data) {
+        try {
+            Mockito.doAnswer(
+                new Answer() {
+                    public Object answer(final InvocationOnMock invocation)
+                        throws java.io.IOException {
+                        final HttpServletResponse response =
+                            (HttpServletResponse) invocation.getArguments()[1];
+                        response.getOutputStream().write(data);
+                        return null;
+                    }
+                }
+            ).when(this.chain)
+                .doFilter(
+                    Mockito.any(HttpServletRequest.class),
+                    Mockito.any(HttpServletResponse.class)
+                );
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        } catch (javax.servlet.ServletException ex) {
+            throw new IllegalStateException(ex);
+        }
+        return this;
+    }
+
+    /**
      * Mock it.
      * @return Mocked chain
      */

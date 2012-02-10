@@ -35,12 +35,14 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link XslFilter}.
@@ -87,6 +89,32 @@ public final class XsltFilterTest {
             XhtmlConverter.the(response.toString()),
             XhtmlMatchers.hasXPath("/xhtml:html/xhtml:p[.='\u0443']")
         );
+    }
+
+    /**
+     * XsltFilter can pass binary content through.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void doesntTouchBinaryContent() throws Exception {
+        final byte[] binary = new byte[] {(byte) 0x00, (byte) 0xff};
+        final FilterChain chain = new FilterChainMocker()
+            .withOutput(binary)
+            .mock();
+        final Filter filter = new XsltFilter();
+        filter.init(new FilterConfigMocker().mock());
+        final ServletOutputStream stream =
+            Mockito.mock(ServletOutputStream.class);
+        final HttpServletResponse response =
+            Mockito.mock(HttpServletResponse.class);
+        Mockito.doReturn(stream).when(response).getOutputStream();
+        filter.doFilter(
+            new HttpServletRequestMocker().mock(),
+            response,
+            chain
+        );
+        filter.destroy();
+        Mockito.verify(stream).write(binary);
     }
 
 }
