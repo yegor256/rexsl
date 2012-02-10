@@ -145,9 +145,11 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                     );
                     Logger.info(
                         this,
-                        "#add(%s): added to JAXBContext (%d total)",
+                        // @checkstyle LineLength (1 line)
+                        "#add(%s): added to JAXBContext (%d total), stylesheet: '%s'",
                         cls.getName(),
-                        this.classes.size()
+                        this.classes.size(),
+                        this.stylesheet(cls)
                     );
                 } catch (javax.xml.bind.JAXBException ex) {
                     throw new IllegalStateException(ex);
@@ -172,7 +174,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @return The name of stylesheet
      * @see #getContext(Class)
      */
-    private String stylesheet(final Class<?> type) {
+    private static String stylesheet(final Class<?> type) {
         final Annotation antn = type.getAnnotation(Stylesheet.class);
         String stylesheet;
         if (antn == null) {
@@ -184,7 +186,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             stylesheet = ((Stylesheet) antn).value();
         }
         Logger.debug(
-            this,
+            XslResolver.class,
             "#stylesheet(%s): '%s' stylesheet discovered",
             type.getName(),
             stylesheet
@@ -254,7 +256,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @param type The class
      * @return The name of XSD file
      */
-    private String schema(final Class<?> type) {
+    private static String schema(final Class<?> type) {
         final Annotation antn = type.getAnnotation(Schema.class);
         String schema;
         if (antn == null) {
@@ -267,7 +269,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             }
         }
         Logger.debug(
-            this,
+            XslResolver.class,
             "#schema(%s): '%s' schema discovered",
             type.getName(),
             schema
