@@ -75,4 +75,45 @@ public final class ScriptsFinderTest {
             previous = name;
         }
     }
+
+    /**
+     * Checks random order.
+     */
+    @Test
+    public void testRandom() {
+        final Environment environment = new EnvironmentMocker()
+            .withTextFile("src/test/rexsl/setup/k.groovy", this.TEST)
+            .withTextFile("src/test/rexsl/setup/b.groovy", this.TEST)
+            .withTextFile("src/test/rexsl/setup/c.groovy", this.TEST)
+            .withTextFile("src/test/rexsl/setup/d.groovy", this.TEST)
+            .withTextFile("src/test/rexsl/setup/e.groovy", this.TEST)
+            .withTextFile("src/test/rexsl/setup/l.groovy", this.TEST)
+            .withTextFile("src/test/rexsl/setup/m.groovy", this.TEST)
+            .withTextFile("src/test/rexsl/setup/h.groovy", this.TEST)
+            .withTextFile("src/test/rexsl/setup/i.groovy", this.TEST)
+            .mock();
+        final File directory = environment.basedir();
+        final ScriptsFinder finder = new ScriptsFinder(directory);
+        MatcherAssert.assertThat(
+            "random",
+            this.namesHash(finder.random()),
+            Matchers.anyOf(
+                Matchers.not(this.namesHash(finder.random())),
+                Matchers.not(this.namesHash(finder.random()))
+            )
+        );
+    }
+
+    /**
+     * Concatenates file names into one string.
+     * @param files Collection of files to concatenate names
+     * @return Concatenated file names
+     */
+    private String namesHash(final Collection<File> files) {
+        final StringBuilder builder = new StringBuilder();
+        for (File file : files) {
+            builder.append(file.getName());
+        }
+        return builder.toString();
+    }
 }
