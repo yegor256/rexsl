@@ -163,7 +163,7 @@ public final class XhtmlOutputCheck implements Check {
                 this,
                 "%s produced invalid XHTML:\n%s",
                 xml,
-                StringEscapeUtils.escapeJava(xhtml)
+                StringEscapeUtils.escapeJava(xhtml).replace("\\n", "\n")
             );
             for (Defect defect : (List<Defect>) ListUtils
                 .union(response.errors(), response.warnings())

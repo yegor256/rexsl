@@ -122,7 +122,7 @@ public final class JigsawCssCheck implements Check {
                 this,
                 "%s contains invalid CSS (see errors above):\n%s",
                 file,
-                StringEscapeUtils.escapeJava(page)
+                StringEscapeUtils.escapeJava(page).replace("\\n", "\n")
             );
             throw new InternalCheckException(
                 "CSS validation failed with %d errors and %d warnings",
