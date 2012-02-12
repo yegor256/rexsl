@@ -106,24 +106,24 @@ public final class JigsawCssCheck implements Check {
             throw new InternalCheckException(ex);
         }
         final ValidationResponse response = this.validator.validate(page);
+        for (Defect defect : (List<Defect>) ListUtils
+            .union(response.errors(), response.warnings())
+        ) {
+            Logger.error(
+                this,
+                "[%d] %s: %s",
+                defect.line(),
+                defect.message(),
+                defect.source()
+            );
+        }
         if (!response.valid()) {
             Logger.error(
                 this,
-                "%s contains invalid CSS:\n%s",
+                "%s contains invalid CSS (see errors above):\n%s",
                 file,
                 StringEscapeUtils.escapeJava(page)
             );
-            for (Defect defect : (List<Defect>) ListUtils
-                .union(response.errors(), response.warnings())
-            ) {
-                Logger.error(
-                    this,
-                    "[%d] %s: %s",
-                    defect.line(),
-                    defect.message(),
-                    defect.source()
-                );
-            }
             throw new InternalCheckException(
                 "CSS validation failed with %d errors and %d warnings",
                 response.errors().size(),
