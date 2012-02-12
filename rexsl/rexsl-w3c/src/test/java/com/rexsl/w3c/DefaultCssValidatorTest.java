@@ -50,4 +50,17 @@ public final class DefaultCssValidatorTest {
         MatcherAssert.assertThat(response.toString(), response.valid());
     }
 
+    /**
+     * DefaultCssValidator can ignore the entire document.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void ignoresEntireDocument() throws Exception {
+        final CssValidator validator = new DefaultCssValidator();
+        final ValidationResponse response = validator.validate(
+            "/* hey */\n\n/* JIGSAW IGNORE: .. */\n\n* { abc: cde }\n"
+        );
+        MatcherAssert.assertThat(response.toString(), response.valid());
+    }
+
 }

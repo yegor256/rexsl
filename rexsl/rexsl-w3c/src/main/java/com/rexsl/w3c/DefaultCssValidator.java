@@ -31,6 +31,7 @@ package com.rexsl.w3c;
 
 import com.rexsl.test.TestResponse;
 import java.net.URI;
+import java.util.regex.Pattern;
 import javax.ws.rs.core.UriBuilder;
 
 /**
@@ -60,7 +61,11 @@ final class DefaultCssValidator extends BaseValidator
             .assertXPath("//m:validity")
             .assertXPath("//m:checkedby");
         response = this.build(soap);
-        if (css.matches("/\\* JIGSAW IGNORE: .*\\*/")) {
+        final Pattern pattern = Pattern.compile(
+            ".*^/\\* JIGSAW IGNORE: [^\\n]+\\*/$.*",
+            Pattern.MULTILINE | Pattern.DOTALL
+        );
+        if (pattern.matcher(css).matches()) {
             response.setValid(true);
         }
         return response;
@@ -72,7 +77,10 @@ final class DefaultCssValidator extends BaseValidator
      * @return New document, with lines excluded
      */
     private String filter(final String css) {
-        return css.replaceAll(".*/\\* JIGSAW: .*\\*/", "");
+        return Pattern.compile(
+            "^/\\* JIGSAW: [^\\n]+\\*/$",
+            Pattern.MULTILINE | Pattern.DOTALL
+        ).matcher(css).replaceAll("");
     }
 
 }
