@@ -69,7 +69,7 @@ public final class BinaryFilesCheck implements Check {
             final String path = file.getAbsolutePath()
                 .substring(dir.getAbsolutePath().length() + 1);
             final String ext = FilenameUtils.getExtension(path);
-            if (!ext.matches("html|xml|xhtml|txt|xsl|css")) {
+            if (!ext.matches("html|xml|xhtml|txt|xsl|css|js")) {
                 Logger.warn(
                     this,
                     "File %s has incorrect type/extension '%s'",
