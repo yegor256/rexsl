@@ -58,6 +58,7 @@ public final class DefaultCssValidatorTest {
     public void ignoresEntireDocument() throws Exception {
         final CssValidator validator = new DefaultCssValidator();
         final ValidationResponse response = validator.validate(
+            // @checkstyle RegexpSingleline (1 line)
             "/* hey */\n\n/* JIGSAW IGNORE: .. */\n\n* { abc: cde }\n"
         );
         MatcherAssert.assertThat(response.toString(), response.valid());
