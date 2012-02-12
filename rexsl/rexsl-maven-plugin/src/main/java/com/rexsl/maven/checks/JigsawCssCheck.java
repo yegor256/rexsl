@@ -40,6 +40,7 @@ import java.io.File;
 import java.util.List;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Validates CSS files.
@@ -66,7 +67,7 @@ public final class JigsawCssCheck implements Check {
      */
     @Override
     public boolean validate(final Environment env) {
-        final File dir = new File(env.webdir(), this.CSS_DIR);
+        final File dir = new File(env.basedir(), this.CSS_DIR);
         boolean success = true;
         if (dir.exists()) {
             final String[] exts = new String[] {"css"};
@@ -105,23 +106,24 @@ public final class JigsawCssCheck implements Check {
             throw new InternalCheckException(ex);
         }
         final ValidationResponse response = this.validator.validate(page);
+        for (Defect defect : (List<Defect>) ListUtils
+            .union(response.errors(), response.warnings())
+        ) {
+            Logger.error(
+                this,
+                "[%d] %s: %s",
+                defect.line(),
+                defect.message(),
+                defect.source()
+            );
+        }
         if (!response.valid()) {
             Logger.error(
                 this,
-                "%s contains invalid CSS",
-                file
+                "%s contains invalid CSS (see errors above):\n%s",
+                file,
+                StringEscapeUtils.escapeJava(page).replace("\\n", "\n")
             );
-            for (Defect defect : (List<Defect>) ListUtils
-                .union(response.errors(), response.warnings())
-            ) {
-                Logger.error(
-                    this,
-                    "[%d] %s: %s",
-                    defect.line(),
-                    defect.message(),
-                    defect.source()
-                );
-            }
             throw new InternalCheckException(
                 "CSS validation failed with %d errors and %d warnings",
                 response.errors().size(),

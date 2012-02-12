@@ -44,6 +44,7 @@ import java.util.List;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Validate XHTML output.
@@ -160,8 +161,9 @@ public final class XhtmlOutputCheck implements Check {
         if (!response.valid()) {
             Logger.error(
                 this,
-                "%s produced invalid XHTML",
-                xml
+                "%s produced invalid XHTML:\n%s",
+                xml,
+                StringEscapeUtils.escapeJava(xhtml).replace("\\n", "\n")
             );
             for (Defect defect : (List<Defect>) ListUtils
                 .union(response.errors(), response.warnings())

@@ -31,6 +31,7 @@ package com.rexsl.w3c;
 
 import com.rexsl.test.TestResponse;
 import java.net.URI;
+import java.util.regex.Pattern;
 import javax.ws.rs.core.UriBuilder;
 
 /**
@@ -48,17 +49,38 @@ final class DefaultCssValidator extends BaseValidator
      */
     @Override
     public ValidationResponse validate(final String css) {
+        DefaultValidationResponse response;
         final URI uri = UriBuilder
             .fromUri("http://jigsaw.w3.org/css-validator/validator")
             .build();
         final TestResponse soap = this
-            .send(uri, this.entity("file", css, "text/css"))
+            .send(uri, this.entity("file", this.filter(css), "text/css"))
             .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
             .registerNs("m", "http://www.w3.org/2005/07/css-validator")
             .assertXPath("/env:Envelope/env:Body/m:cssvalidationresponse")
             .assertXPath("//m:validity")
             .assertXPath("//m:checkedby");
-        return this.build(soap);
+        response = this.build(soap);
+        final Pattern pattern = Pattern.compile(
+            ".*^/\\* JIGSAW IGNORE: [^\\n]+\\*/$.*",
+            Pattern.MULTILINE | Pattern.DOTALL
+        );
+        if (pattern.matcher(css).matches()) {
+            response.setValid(true);
+        }
+        return response;
+    }
+
+    /**
+     * Exclude problematic lines from CSS.
+     * @param css The css document
+     * @return New document, with lines excluded
+     */
+    private String filter(final String css) {
+        return Pattern.compile(
+            "^/\\* JIGSAW: [^\\n]+\\*/$",
+            Pattern.MULTILINE | Pattern.DOTALL
+        ).matcher(css).replaceAll("");
     }
 
 }

@@ -121,7 +121,7 @@ class BaseValidator {
      * @param soap The response
      * @return The validation response just built
      */
-    protected final ValidationResponse build(final TestResponse soap) {
+    protected final DefaultValidationResponse build(final TestResponse soap) {
         final DefaultValidationResponse resp = new DefaultValidationResponse(
             "true".equals(this.textOf(soap.xpath("//m:validity/text()"))),
             UriBuilder.fromUri(
