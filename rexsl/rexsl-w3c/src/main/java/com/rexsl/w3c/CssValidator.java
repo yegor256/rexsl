@@ -44,6 +44,20 @@ package com.rexsl.w3c;
  * }
  * </pre>
  *
+ * <p>You can also instruct the validator to ingore the entire file, by means
+ * of adding {@code JIGSAW IGNORE} comment anywhere in the text, for example:
+ *
+ * <pre>
+ * &#47;* JIGSAW IGNORE: it's an experimental file *&#47;
+ * div.test {
+ *   something-totally-incorrect:...
+ * }
+ * </pre>
+ *
+ * <p>Validation will happen anyway, but {@link ValidationResponse#valid()}
+ * will return {@code TRUE}. You will still be able to read errors and warnings
+ * from it, but it will be valid.
+ *
  * <p>Objects of this interface should be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)

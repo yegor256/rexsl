@@ -48,6 +48,7 @@ final class DefaultCssValidator extends BaseValidator
      */
     @Override
     public ValidationResponse validate(final String css) {
+        DefaultValidationResponse response;
         final URI uri = UriBuilder
             .fromUri("http://jigsaw.w3.org/css-validator/validator")
             .build();
@@ -56,9 +57,13 @@ final class DefaultCssValidator extends BaseValidator
             .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
             .registerNs("m", "http://www.w3.org/2005/07/css-validator")
             .assertXPath("/env:Envelope/env:Body/m:cssvalidationresponse")
-            .assertXPath("//m:validity-x")
+            .assertXPath("//m:validity")
             .assertXPath("//m:checkedby");
-        return this.build(soap);
+        response = this.build(soap);
+        if (css.matches("/\\* JIGSAW IGNORE: .*\\*/")) {
+            response.setValid(true);
+        }
+        return response;
     }
 
     /**

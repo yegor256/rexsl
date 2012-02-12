@@ -44,7 +44,7 @@ final class DefaultValidationResponse implements ValidationResponse {
     /**
      * Is it valid?
      */
-    private final transient boolean ivalid;
+    private transient boolean ivalid;
 
     /**
      * Who validated it?
@@ -148,6 +148,14 @@ final class DefaultValidationResponse implements ValidationResponse {
     @Override
     public List<Defect> warnings() {
         return new ArrayList<Defect>(this.iwarnings);
+    }
+
+    /**
+     * Set validity flag.
+     * @param flag The flag to set
+     */
+    public void setValid(final boolean flag) {
+        this.ivalid = flag;
     }
 
     /**
