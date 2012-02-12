@@ -32,6 +32,18 @@ package com.rexsl.w3c;
 /**
  * Validator of CSS pages through W3C validation API.
  *
+ * Sometimes this Jigsaw validator makes mistakes, sometimes you just need to
+ * use some IE-specific feature, which is not CSS compliant. In this case you
+ * may add comments to the document, at the end of every line you want to ignore
+ * during validation, for example:
+ *
+ * <pre>
+ * div.test {
+ *   color: red;
+ *   #position: 50%; &#47;* JIGSAW: this is a IE_-related hack *&#47;
+ * }
+ * </pre>
+ *
  * <p>Objects of this interface should be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
