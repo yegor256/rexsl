@@ -40,6 +40,7 @@ import java.io.File;
 import java.util.List;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Validates CSS files.
@@ -108,8 +109,9 @@ public final class JigsawCssCheck implements Check {
         if (!response.valid()) {
             Logger.error(
                 this,
-                "%s contains invalid CSS",
-                file
+                "%s contains invalid CSS:\n%s",
+                file,
+                StringEscapeUtils.escapeJava(page)
             );
             for (Defect defect : (List<Defect>) ListUtils
                 .union(response.errors(), response.warnings())
