@@ -170,6 +170,11 @@
         intentionally empty
         @see http://www.sonatype.com/people/2009/02/why-putting-repositories-in-your-poms-is-a-bad-idea/
         -->
+        <repository>
+            <!-- we need this repo because of SNAPSHOT status of the project -->
+            <id>sonatype.snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
