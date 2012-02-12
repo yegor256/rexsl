@@ -66,7 +66,7 @@ public final class JigsawCssCheck implements Check {
      */
     @Override
     public boolean validate(final Environment env) {
-        final File dir = new File(env.webdir(), this.CSS_DIR);
+        final File dir = new File(env.basedir(), this.CSS_DIR);
         boolean success = true;
         if (dir.exists()) {
             final String[] exts = new String[] {"css"};

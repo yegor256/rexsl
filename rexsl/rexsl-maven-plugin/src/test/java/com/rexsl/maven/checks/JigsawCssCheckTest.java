@@ -62,7 +62,6 @@ public final class JigsawCssCheckTest {
      * JigsawCssCheckTest can validate incorrect CSS files.
      * @throws Exception If something goes wrong
      */
-    @org.junit.Ignore
     @Test
     public void validatesIncorrectCssFile() throws Exception {
         final Environment env = new EnvironmentMocker()

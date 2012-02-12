@@ -160,8 +160,9 @@ public final class XhtmlOutputCheck implements Check {
         if (!response.valid()) {
             Logger.error(
                 this,
-                "%s produced invalid XHTML",
-                xml
+                "%s produced invalid XHTML:\n%s",
+                xml,
+                xhtml
             );
             for (Defect defect : (List<Defect>) ListUtils
                 .union(response.errors(), response.warnings())
