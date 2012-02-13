@@ -100,9 +100,11 @@ final class StringSource extends DOMSource {
      * @return Transformer, never null
      * @throws TransformerConfigurationException Transfomer problem
      */
-    private synchronized Transformer getTransformer()
+    private Transformer getTransformer()
         throws TransformerConfigurationException {
-        return this.TFACTORY.newTransformer();
+        synchronized (this) {
+            return this.TFACTORY.newTransformer();
+        }
     }
 
     /**

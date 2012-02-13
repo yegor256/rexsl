@@ -59,17 +59,20 @@ public final class StringSourceTest {
     }
 
     /**
-    * Check convert node to string.
-    * @throws Exception If something goes wrong inside
-    */
+     * Check convert node to string.
+     * @throws Exception If something goes wrong inside
+     */
     @Test
     public void formatIncomingNode() throws Exception {
         final DocumentBuilder builder = DocumentBuilderFactory.
             newInstance().
             newDocumentBuilder();
-        final String xmlString = "<nodeName><?some instruction?>"
-            + "<a/><!--comment--><a>withText</a>"
-            + "<a withArg=\"value\"/></nodeName>";
+        final String xmlString = String.format(
+            "<nodeName>%s%s%s<a/><a withArg=\"%s\"/></nodeName>",
+            "<?some instruction?>",
+            "<!--comment-->",
+            "<a>withText</a>",
+            "value");
         final Node node = builder.parse(
             new ByteArrayInputStream(xmlString.getBytes())
         );
