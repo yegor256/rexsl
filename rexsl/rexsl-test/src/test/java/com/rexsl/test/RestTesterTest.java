@@ -107,22 +107,20 @@ public final class RestTesterTest {
     /**
      * RestTester can send body with HTTP POST request.
      * @throws Exception If something goes wrong inside
-     * @todo #85 This test doesn't work for some reason, and I can't understand
-     *  what exactly is the problem. Grizzly container doesn't understand
-     *  POST params passed in HTTP request body. While Jersey understands them
-     *  perfectly in rexsl-maven-plugin invoker tests. Maybe getParameters()
-     *  method in GrizzlyHttpRequest doesn't work properly with POST params?
      */
     @Test
-    @org.junit.Ignore
     public void sendsTextWithPostRequest() throws Exception {
         final String name = "postparam";
         final String value = "some random value of this param \"&^%*;'\"";
+        final String body = String.format(
+            "%s=%s",
+            name,
+            URLEncoder.encode(value, CharEncoding.UTF_8)
+        );
         final ContainerMocker container = new ContainerMocker()
-            .expectBody(Matchers.containsString(name))
-            .expectBody(Matchers.containsString(value))
             .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(RestTester.POST))
+            .returnBody(body)
             .mock();
         RestTester
             .start(container.home())
@@ -132,11 +130,7 @@ public final class RestTesterTest {
             )
             .post(
                 "testing of POST request",
-                String.format(
-                    "%s=%s",
-                    name,
-                    URLEncoder.encode(value, CharEncoding.UTF_8)
-                )
+                body
             )
             .assertStatus(HttpURLConnection.HTTP_OK);
     }

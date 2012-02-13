@@ -29,22 +29,14 @@
  */
 package com.rexsl.test;
 
-import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
-import com.ymock.util.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.URI;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
@@ -106,12 +98,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     @Override
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
-        String input;
-        try {
-            input = IOUtils.toString(request.getInputStream());
-        } catch (IOException ex) {
-            throw new IllegalStateException(ex);
-        }
+        String input = this.body;
         this.assertMethod(request, input);
         this.assertRequestUri(request, input);
         this.assertParams(request, input);
