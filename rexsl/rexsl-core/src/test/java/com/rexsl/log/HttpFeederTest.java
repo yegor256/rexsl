@@ -30,6 +30,7 @@
 package com.rexsl.log;
 
 import com.rexsl.test.ContainerMocker;
+import java.io.IOException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import org.hamcrest.Matchers;
@@ -43,6 +44,21 @@ import org.junit.Test;
 public final class HttpFeederTest {
 
     /**
+     * The HTTP method constant.
+     */
+    public static final String POST = "POST";
+
+    /**
+     * The Http body constant.
+     */
+    public static final String BODY = "posted";
+
+    /**
+     * Some big enough value to exceed max open connections threshold.
+     */
+    public static final int MESSAGES_TO_SEND = 1500;
+
+    /**
      * HttpFeeder can send messages to HTTP via POST.
      * @throws Exception If there is some problem inside
      */
@@ -50,18 +66,44 @@ public final class HttpFeederTest {
     public void sendsMessagesToCloud() throws Exception {
         final String message = "hi there!";
         final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo("POST"))
+            .expectMethod(Matchers.equalTo(this.POST))
             // .expectBody(Matchers.equalTo(message))
             .expectHeader(
                 HttpHeaders.CONTENT_TYPE,
                 Matchers.equalTo(MediaType.TEXT_PLAIN)
             )
-            .returnBody("posted")
+            .returnBody(this.BODY)
             .mock();
         final HttpFeeder feeder = new HttpFeeder();
         feeder.setUrl(container.home().toString());
         feeder.activateOptions();
         feeder.feed(message);
+    }
+
+    /**
+     * HttpFeeder excessive test.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void feedExcessiveTest() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(this.POST))
+            .expectHeader(
+                HttpHeaders.CONTENT_TYPE,
+                Matchers.equalTo(MediaType.TEXT_PLAIN)
+            )
+            .returnBody(this.BODY)
+            .mock();
+        final HttpFeeder feeder = new HttpFeeder();
+        feeder.setUrl(container.home().toString());
+        feeder.activateOptions();
+        try {
+            for (int count = 0; count < this.MESSAGES_TO_SEND; count += 1) {
+                feeder.feed("some text\nmultiline");
+            }
+        } catch (IOException ex) {
+            throw new Exception(ex);
+        }
     }
 
 }

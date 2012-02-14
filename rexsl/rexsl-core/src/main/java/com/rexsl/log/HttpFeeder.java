@@ -123,6 +123,7 @@ public final class HttpFeeder implements Feeder {
                 )
             );
         }
+        conn.disconnect();
     }
 
 }
