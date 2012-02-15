@@ -29,8 +29,15 @@
  */
 package com.rexsl.test;
 
+import java.io.StringWriter;
 import java.util.Locale;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Node;
 
 /**
@@ -42,6 +49,12 @@ import org.w3c.dom.Node;
  * @version $Id$
  */
 final class StringSource extends DOMSource {
+
+    /**
+     * Transformer factory.
+     */
+    private static final TransformerFactory TFACTORY =
+        TransformerFactory.newInstance();
 
     /**
      * The XML itself.
@@ -61,12 +74,37 @@ final class StringSource extends DOMSource {
     /**
      * Public ctor.
      * @param node The node
-     * @todo #107 We should transform Node into text and assign to this.xml
      */
     public StringSource(final Node node) {
         super();
-        this.xml = "xml";
+        final StringWriter writer = new StringWriter();
+        try {
+            final Transformer transformer = this.getTransformer();
+            transformer.setOutputProperty(
+                OutputKeys.OMIT_XML_DECLARATION,
+                "yes"
+            );
+            transformer.transform(
+                new DOMSource(node),
+                new StreamResult(writer)
+            );
+        } catch (TransformerException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        this.xml = writer.toString();
         super.setNode(node);
+    }
+
+    /**
+     * Thread safe construct Transfomer.
+     * @return Transformer, never null
+     * @throws TransformerConfigurationException Transfomer problem
+     */
+    private Transformer getTransformer()
+        throws TransformerConfigurationException {
+        synchronized (this) {
+            return this.TFACTORY.newTransformer();
+        }
     }
 
     /**

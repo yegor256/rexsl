@@ -29,9 +29,13 @@
  */
 package com.rexsl.test;
 
+import java.io.ByteArrayInputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.w3c.dom.Node;
 
 /**
  * Test case for {@link StringSource}.
@@ -54,4 +58,43 @@ public final class StringSourceTest {
         );
     }
 
+    /**
+     * Check convert node to string.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void formatIncomingNode() throws Exception {
+        final DocumentBuilder builder = DocumentBuilderFactory.
+            newInstance().
+            newDocumentBuilder();
+        final String xmlString = String.format(
+            "<nodeName>%s%s%s<a/><a withArg=\"%s\"/></nodeName>",
+            "<?some instruction?>",
+            "<!--comment-->",
+            "<a>withText</a>",
+            "value");
+        final Node node = builder.parse(
+            new ByteArrayInputStream(xmlString.getBytes())
+        );
+        final StringSource source = new StringSource(node);
+        final String actual = source.toString();
+        MatcherAssert.assertThat(
+            actual, Matchers.containsString("nodeName")
+        );
+        MatcherAssert.assertThat(
+            actual, Matchers.containsString("<a/>")
+        );
+        MatcherAssert.assertThat(
+            actual, Matchers.containsString("withText")
+        );
+        MatcherAssert.assertThat(
+            actual, Matchers.containsString("<a withArg=\"value\"/>")
+        );
+        MatcherAssert.assertThat(
+            actual, Matchers.containsString("some instruction")
+        );
+        MatcherAssert.assertThat(
+            actual, Matchers.containsString("comment")
+        );
+    }
 }
