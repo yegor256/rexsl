@@ -30,6 +30,7 @@
 package com.rexsl.log;
 
 import com.rexsl.test.ContainerMocker;
+import com.rexsl.test.RestTester;
 import java.io.IOException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -44,16 +45,6 @@ import org.junit.Test;
 public final class HttpFeederTest {
 
     /**
-     * The HTTP method constant.
-     */
-    public static final String POST = "POST";
-
-    /**
-     * The Http body constant.
-     */
-    public static final String BODY = "posted";
-
-    /**
      * Some big enough value to exceed max open connections threshold.
      */
     public static final int MESSAGES_TO_SEND = 1500;
@@ -66,13 +57,13 @@ public final class HttpFeederTest {
     public void sendsMessagesToCloud() throws Exception {
         final String message = "hi there!";
         final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(this.POST))
+            .expectMethod(Matchers.equalTo(RestTester.POST))
             // .expectBody(Matchers.equalTo(message))
             .expectHeader(
                 HttpHeaders.CONTENT_TYPE,
                 Matchers.equalTo(MediaType.TEXT_PLAIN)
             )
-            .returnBody(this.BODY)
+            .returnBody("posted")
             .mock();
         final HttpFeeder feeder = new HttpFeeder();
         feeder.setUrl(container.home().toString());
@@ -87,12 +78,12 @@ public final class HttpFeederTest {
     @Test
     public void feedExcessiveTest() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(this.POST))
+            .expectMethod(Matchers.equalTo(RestTester.POST))
             .expectHeader(
                 HttpHeaders.CONTENT_TYPE,
                 Matchers.equalTo(MediaType.TEXT_PLAIN)
             )
-            .returnBody(this.BODY)
+            .returnBody("done")
             .mock();
         final HttpFeeder feeder = new HttpFeeder();
         feeder.setUrl(container.home().toString());
