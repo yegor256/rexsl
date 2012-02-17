@@ -37,6 +37,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
@@ -183,7 +184,7 @@ public final class Manifests {
                     "Atribute '%s' not found in MANIFEST.MF file(s) among %d other attribute(s) %[list]s and %d injection(s)",
                     name,
                     Manifests.attributes.size(),
-                    Manifests.attributes.keySet(),
+                    new TreeSet<String>(Manifests.attributes.keySet()),
                     Manifests.INJECTED.size()
                 )
             );
@@ -322,7 +323,7 @@ public final class Manifests {
                 attrs.size(),
                 main,
                 System.currentTimeMillis() - start,
-                attrs.keySet()
+                new TreeSet<String>(attrs.keySet())
             );
         }
     }
@@ -359,7 +360,7 @@ public final class Manifests {
             attrs.size(),
             count,
             System.currentTimeMillis() - start,
-            attrs.keySet()
+            new TreeSet<String>(attrs.keySet())
         );
         return attrs;
     }
@@ -411,7 +412,7 @@ public final class Manifests {
                 "#loadOneFile('%s'): %d attributes loaded (%[list]s)",
                 url,
                 props.size(),
-                props.keySet()
+                new TreeSet<String>(props.keySet())
             );
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
