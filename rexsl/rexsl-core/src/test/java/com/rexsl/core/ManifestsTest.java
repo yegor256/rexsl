@@ -29,6 +29,8 @@
  */
 package com.rexsl.core;
 
+import java.io.File;
+import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -106,6 +108,26 @@ public final class ManifestsTest {
         MatcherAssert.assertThat("should be", Manifests.exists(name));
         Manifests.revert(snapshot);
         MatcherAssert.assertThat("reverted", !Manifests.exists(name));
+    }
+
+    /**
+     * Manifests can append attributes from file.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void appendsAttributesFromFile() throws Exception {
+        final String name = "Test-Attribute-From-File";
+        final String value = "some text value of attribute";
+        final File file = File.createTempFile("test-", ".MF");
+        FileUtils.writeStringToFile(
+            file,
+            String.format("%s: %s\n", name, value)
+        );
+        MatcherAssert.assertThat(
+            "loaded from file",
+            Manifests.exists(name) && Manifests.read(name).equals(value)
+        );
+        file.delete();
     }
 
 }
