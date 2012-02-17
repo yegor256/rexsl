@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import com.ymock.util.Logger;
+import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
@@ -326,6 +327,29 @@ public final class Manifests {
                 new TreeSet<String>(attrs.keySet())
             );
         }
+    }
+
+    /**
+     * Append attributes from the file.
+     * @param file The file to load attributes from
+     */
+    public static void append(final File file) {
+        final long start = System.currentTimeMillis();
+        Map<String, String> attrs;
+        try {
+            attrs = Manifests.loadOneFile(file.toURL());
+        } catch (java.net.MalformedURLException ex) {
+            throw new IllegalStateException(ex);
+        }
+        Manifests.attributes.putAll(attrs);
+        Logger.info(
+            Manifests.class,
+            "#append('%s'): %d attributes loaded in %dms: %[list]s",
+            file,
+            attrs.size(),
+            System.currentTimeMillis() - start,
+            new TreeSet<String>(attrs.keySet())
+        );
     }
 
     /**
