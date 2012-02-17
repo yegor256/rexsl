@@ -123,6 +123,7 @@ public final class ManifestsTest {
             file,
             String.format("%s: %s\n", name, value)
         );
+        Manifests.append(file);
         MatcherAssert.assertThat(
             "loaded from file",
             Manifests.exists(name) && Manifests.read(name).equals(value)
