@@ -47,9 +47,8 @@ public final class JSStaticCheckTest {
      * JSStaticCheck can validate correct Java script file.
      * @throws Exception If something goes wrong
      */
-    @org.junit.Ignore
     @Test
-    public void validatesCorrectCssFile() throws Exception {
+    public void validatesCorrectJSFile() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withFile("src/main/webapp/js/valid.js")
             .mock();
@@ -63,9 +62,8 @@ public final class JSStaticCheckTest {
      * JSStaticCheck can validate incorrect Java script file.
      * @throws Exception If something goes wrong
      */
-    @org.junit.Ignore
     @Test
-    public void validatesIncorrectCssFile() throws Exception {
+    public void validatesIncorrectJSFile() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withFile("src/main/webapp/js/invalid.js")
             .mock();

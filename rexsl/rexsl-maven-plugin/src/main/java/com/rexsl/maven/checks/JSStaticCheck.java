@@ -29,9 +29,15 @@
  */
 package com.rexsl.maven.checks;
 
+import com.googlecode.jslint4java.Issue;
+import com.googlecode.jslint4java.JSLint;
+import com.googlecode.jslint4java.JSLintBuilder;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
+import java.io.File;
+import java.util.List;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Validates Java script files against style sheet rules.
@@ -43,15 +49,64 @@ import com.ymock.util.Logger;
 public final class JSStaticCheck implements Check {
 
     /**
+     * Directory with JS files.
+     */
+    private static final String JS_DIR = "src/main/webapp/js";
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public boolean validate(final Environment env) {
-        Logger.warn(
-            this,
-            "Static javascript validator is not implemented yet"
-        );
-        return true;
+        final File dir = new File(env.basedir(), this.JS_DIR);
+        boolean success = true;
+        if (dir.exists()) {
+            final String[] exts = new String[] {"js"};
+            for (File css : FileUtils.listFiles(dir, exts, true)) {
+                try {
+                    success &= this.one(css);
+                } catch (InternalCheckException ex) {
+                    Logger.warn(
+                        this,
+                        "Failed:\n%[exception]s",
+                        ex
+                    );
+                    success = false;
+                }
+            }
+        } else {
+            Logger.info(
+                this,
+                "%s directory is absent, no JS tests",
+                this.JS_DIR
+            );
+        }
+
+        return success;
     }
 
+    /**
+     * Check one script.
+     * @param file Script file to check
+     * @throws InternalCheckException If some failure inside
+     * @return Is script valid?
+     */
+    private boolean one(File file) throws InternalCheckException {
+        final String jScript;
+        try {
+            jScript = FileUtils.readFileToString(file);
+        } catch (java.io.IOException ex) {
+            throw new InternalCheckException(ex);
+        }
+        final JSLint lint = new JSLintBuilder().fromDefault();
+        final List<Issue> issues = lint.lint("systemId", jScript).getIssues();
+        for (Issue issue : issues) {
+            Logger.warn(
+                this,
+                "%s\n",
+                issue.toString()
+            );
+        }
+        return issues.size()==0;
+    }
 }

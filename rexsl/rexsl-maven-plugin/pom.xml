@@ -52,6 +52,11 @@
 
     <dependencies>
         <dependency>
+            <artifactId>jslint4java</artifactId>
+            <groupId>com.googlecode.jslint4java</groupId>
+            <version>2.0.2</version>
+          </dependency>
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
             <scope>compile</scope>
