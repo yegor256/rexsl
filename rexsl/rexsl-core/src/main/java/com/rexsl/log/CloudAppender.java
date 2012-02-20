@@ -162,6 +162,7 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
             try {
                 text = this.messages.take();
             } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
                 break;
             }
             try {

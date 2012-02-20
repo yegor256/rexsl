@@ -62,6 +62,7 @@ public final class RunMojo extends AbstractRexslMojo {
                 Thread.sleep(1000);
             } catch (java.lang.InterruptedException ex) {
                 container.stop();
+                Thread.currentThread().interrupt();
             }
         }
     }
