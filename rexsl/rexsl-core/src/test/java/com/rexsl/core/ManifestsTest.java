@@ -96,6 +96,19 @@ public final class ManifestsTest {
     }
 
     /**
+     * Manifests can throw an exception loading file with empty attribute.
+     * @throws Exception If something goes wrong
+     */
+    @Test(expected = IllegalStateException.class)
+    public void throwsExceptionWhen() throws Exception {
+        final File file = new File(
+            Thread.currentThread().getContextClassLoader().
+                getResource("META-INF/MANIFEST_INVALID.MF").getFile()
+        );
+        Manifests.append(file);
+    }
+
+    /**
      * Manifests can make a snapshot and restore it back.
      * @throws Exception If something goes wrong
      */
