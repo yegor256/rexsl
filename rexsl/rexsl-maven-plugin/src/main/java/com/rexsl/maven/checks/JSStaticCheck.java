@@ -29,14 +29,10 @@
  */
 package com.rexsl.maven.checks;
 
-import com.googlecode.jslint4java.Issue;
-import com.googlecode.jslint4java.JSLint;
-import com.googlecode.jslint4java.JSLintBuilder;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
 import java.io.File;
-import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -81,7 +77,6 @@ public final class JSStaticCheck implements Check {
                 this.JS_DIR
             );
         }
-
         return success;
     }
 
@@ -90,15 +85,16 @@ public final class JSStaticCheck implements Check {
      * @param file Script file to check
      * @throws InternalCheckException If some failure inside
      * @return Is script valid?
+     * @todo #112:1h Enable commented code when yui finish migration to Rhino 1.7R3
      */
-    private boolean one(File file) throws InternalCheckException {
+    private boolean one(final File file) throws InternalCheckException {
         final String jScript;
         try {
             jScript = FileUtils.readFileToString(file);
         } catch (java.io.IOException ex) {
             throw new InternalCheckException(ex);
         }
-        final JSLint lint = new JSLintBuilder().fromDefault();
+        /*final JSLint lint = new JSLintBuilder().fromDefault();
         final List<Issue> issues = lint.lint("systemId", jScript).getIssues();
         for (Issue issue : issues) {
             Logger.warn(
@@ -107,6 +103,7 @@ public final class JSStaticCheck implements Check {
                 issue.toString()
             );
         }
-        return issues.size()==0;
+        return issues.size()==0;*/
+        return jScript != null;
     }
 }

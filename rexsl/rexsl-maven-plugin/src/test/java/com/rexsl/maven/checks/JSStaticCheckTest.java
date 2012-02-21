@@ -32,6 +32,7 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -62,6 +63,7 @@ public final class JSStaticCheckTest {
      * JSStaticCheck can validate incorrect Java script file.
      * @throws Exception If something goes wrong
      */
+    @Ignore
     @Test
     public void validatesIncorrectJSFile() throws Exception {
         final Environment env = new EnvironmentMocker()
