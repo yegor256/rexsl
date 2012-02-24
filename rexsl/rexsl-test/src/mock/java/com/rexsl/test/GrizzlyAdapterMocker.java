@@ -98,7 +98,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     @Override
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
-        String input = this.body;
+        final String input = "";
         this.assertMethod(request, input);
         this.assertRequestUri(request, input);
         this.assertParams(request, input);
@@ -184,6 +184,22 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      */
     public void setStatus(final int code) {
         this.status = code;
+    }
+
+    /**
+     * Check if adapter has body matcher.
+     * @return true if adapter has body matcher
+     */
+    public boolean hasBodyMatcher() {
+        return this.bodyMatcher!=null;
+    }
+
+    /**
+     * Check if adapter has at least one parameter matcher.
+     * @return true if adapter has parameter matcher
+     */
+    public boolean hasParamMatcher() {
+        return !this.paramMatchers.isEmpty();
     }
 
     /**

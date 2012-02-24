@@ -109,18 +109,12 @@ public final class RestTesterTest {
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void sendsTextWithPostRequest() throws Exception {
+    public void sendsTextWithPostRequestMatchParam() throws Exception {
         final String name = "postparam";
         final String value = "some random value of this param \"&^%*;'\"";
-        final String body = String.format(
-            "%s=%s",
-            name,
-            URLEncoder.encode(value, CharEncoding.UTF_8)
-        );
         final ContainerMocker container = new ContainerMocker()
             .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(RestTester.POST))
-            .returnBody(body)
             .mock();
         RestTester
             .start(container.home())
@@ -130,7 +124,35 @@ public final class RestTesterTest {
             )
             .post(
                 "testing of POST request",
-                body
+                String.format(
+                    "%s=%s",
+                    name,
+                    URLEncoder.encode(value, CharEncoding.UTF_8)
+                )
+            )
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can send body with HTTP POST request.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void sendsTextWithPostRequestMatchBody() throws Exception {
+        final String value = "some body value with \"&^%*;'\"";
+        final ContainerMocker container = new ContainerMocker()
+            .expectBody(Matchers.containsString("with"))
+            .expectMethod(Matchers.equalTo(RestTester.POST))
+            .mock();
+        RestTester
+            .start(container.home())
+            .header(
+                HttpHeaders.CONTENT_TYPE,
+                MediaType.APPLICATION_FORM_URLENCODED
+            )
+            .post(
+                "testing of POST request body",
+                URLEncoder.encode(value, CharEncoding.UTF_8)
             )
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
