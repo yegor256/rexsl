@@ -131,7 +131,7 @@ final class ContextResourceResolver implements URIResolver {
      * @throws IOException If some problem happens
      */
     private InputStream fetch(final URI uri) throws IOException {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         final HttpURLConnection conn =
             (HttpURLConnection) uri.toURL().openConnection();
         conn.connect();
@@ -147,11 +147,11 @@ final class ContextResourceResolver implements URIResolver {
         }
         Logger.debug(
             this,
-            "#fetch('%s'): retrieved %d bytes of type '%s' [%dms]",
+            "#fetch('%s'): retrieved %d bytes of type '%s' in %[nano]s",
             uri,
             conn.getContentLength(),
             conn.getContentType(),
-            System.currentTimeMillis() - start
+            System.nanoTime() - start
         );
         return conn.getInputStream();
     }

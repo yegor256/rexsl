@@ -301,7 +301,7 @@ public final class Manifests {
      * @see #Manifests()
      */
     public static void append(final ServletContext ctx) {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
@@ -319,11 +319,11 @@ public final class Manifests {
             Manifests.attributes.putAll(attrs);
             Logger.info(
                 Manifests.class,
-                "#append(%s): %d attributes loaded from %s in %dms: %[list]s",
+                "#append(%s): %d attribs loaded from %s in %[nano]s: %[list]s",
                 ctx.getClass().getName(),
                 attrs.size(),
                 main,
-                System.currentTimeMillis() - start,
+                System.nanoTime() - start,
                 new TreeSet<String>(attrs.keySet())
             );
         }
@@ -334,7 +334,7 @@ public final class Manifests {
      * @param file The file to load attributes from
      */
     public static void append(final File file) {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         Map<String, String> attrs;
         try {
             attrs = Manifests.loadOneFile(file.toURL());
@@ -344,10 +344,10 @@ public final class Manifests {
         Manifests.attributes.putAll(attrs);
         Logger.info(
             Manifests.class,
-            "#append('%s'): %d attributes loaded in %dms: %[list]s",
+            "#append('%s'): %d attributes loaded in %[nano]s: %[list]s",
             file,
             attrs.size(),
-            System.currentTimeMillis() - start,
+            System.nanoTime() - start,
             new TreeSet<String>(attrs.keySet())
         );
     }
@@ -358,7 +358,7 @@ public final class Manifests {
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static Map<String, String> load() {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         Manifests.failures = new ConcurrentHashMap<URL, String>();
         final Map<String, String> attrs =
             new ConcurrentHashMap<String, String>();
@@ -380,10 +380,10 @@ public final class Manifests {
         }
         Logger.info(
             Manifests.class,
-            "#load(): %d attributes loaded from %d URL(s) in %dms: %[list]s",
+            "#load(): %d attribs loaded from %d URL(s) in %[nano]s: %[list]s",
             attrs.size(),
             count,
-            System.currentTimeMillis() - start,
+            System.nanoTime() - start,
             new TreeSet<String>(attrs.keySet())
         );
         return attrs;
