@@ -41,6 +41,7 @@
         <menu ref="parent" />
         <menu name="Overview">
             <item name="Introduction" href="index.html" />
+            <item name="Log4j Cloud Appender" href="log.html" />
         </menu>
         <menu ref="reports" />
     </body>
