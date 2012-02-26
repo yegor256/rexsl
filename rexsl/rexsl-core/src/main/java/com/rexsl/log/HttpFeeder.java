@@ -65,6 +65,7 @@ public final class HttpFeeder implements Feeder {
 
     /**
      * Shall we split lines before POST-ing?
+     * @since 0.3.6
      */
     private transient boolean split;
 
@@ -83,6 +84,7 @@ public final class HttpFeeder implements Feeder {
     /**
      * Set option {@code split}.
      * @param yes Shall we split?
+     * @since 0.3.6
      */
     public void setSplit(final boolean yes) {
         this.split = yes;
