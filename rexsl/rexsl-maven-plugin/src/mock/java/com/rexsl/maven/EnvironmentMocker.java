@@ -121,6 +121,17 @@ public final class EnvironmentMocker {
     }
 
     /**
+     * With this folder in basedir.
+     * @param name File name
+     * @return This object
+     */
+    public EnvironmentMocker withFolder(final String name) {
+        final File dest = new File(this.basedir, name);
+        dest.mkdirs();
+        return this;
+    }
+
+    /**
      * Mock it.
      * @return Mocked environment
      */
