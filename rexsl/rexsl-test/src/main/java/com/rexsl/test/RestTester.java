@@ -43,7 +43,9 @@ import javax.ws.rs.core.UriBuilder;
  * <pre>
  * import javax.ws.rs.core.HttpHeaders
  * import javax.ws.rs.core.MediaType
- * new RestTester.start(UriBuilder.fromUri(rexsl.home).path('/{id}').build(id))
+ * import javax.ws.rs.core.UriBuilder
+ * import org.hamcrest.Matchers
+ * RestTester.start(UriBuilder.fromUri(rexsl.home).path('/{id}').build(id))
  *   .header(HttpHeaders.USER_AGENT, 'Safari 4')
  *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
  *   .post('renaming somebody', 'name=John Doe')
@@ -54,7 +56,8 @@ import javax.ws.rs.core.UriBuilder;
  *
  * <p>This example will make a {@code POST} request to the URI pre-built
  * by {@code UriBuilder}, providing headers and request body. Response will
- * be validated with matchers.
+ * be validated with matchers. See class {@link TestResponse} to get an idea
+ * of what you can do with the response once it's retrieved.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
