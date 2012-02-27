@@ -29,7 +29,7 @@
  */
 
 /**
- * Exception trap.
+ * Exception trap, experimental implementation.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
