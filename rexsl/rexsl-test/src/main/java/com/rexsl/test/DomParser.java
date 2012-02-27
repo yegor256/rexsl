@@ -54,6 +54,14 @@ final class DomParser {
      * @param txt The XML in text
      */
     public DomParser(final String txt) {
+        if (txt == null) {
+            throw new IllegalArgumentException("NULL instead of XML");
+        }
+        if (txt.charAt(0) != '<') {
+            throw new IllegalArgumentException(
+                String.format("Doesn't look like XML: '%s'", txt)
+            );
+        }
         this.xml = txt;
     }
 
