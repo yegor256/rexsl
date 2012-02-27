@@ -119,20 +119,22 @@ public final class ExceptionTrap extends HttpServlet {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public void service(final HttpServletRequest request,
         final HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
-        final String text = this.text(request);
-        final String html = this.template.render(text);
-        response.getWriter().print(html);
-        response.getWriter().close();
+        final StringBuilder text = this.text(request);
         for (Notifier notifier : this.notifiers) {
             try {
-                notifier.notify(text);
-            } catch (IOException ex) {
+                notifier.notify(text.toString());
+            // @checkstyle IllegalCatch (1 line)
+            } catch (Throwable ex) {
+                text.append(Logger.format("%[exception]s\n", ex));
                 Logger.error(this, "#service(): %[exception]s", ex);
             }
         }
+        response.getWriter().print(this.template.render(text.toString()));
+        response.getWriter().close();
         Logger.error(this, "#service():\n%s", text);
     }
 
@@ -182,7 +184,7 @@ public final class ExceptionTrap extends HttpServlet {
      * @param request The HTTP request
      * @return Builder of text
      */
-    private String text(final HttpServletRequest request) {
+    private StringBuilder text(final HttpServletRequest request) {
         final StringBuilder text = new StringBuilder();
         this.append(text, request, "code");
         this.append(text, request, "message");
@@ -215,7 +217,7 @@ public final class ExceptionTrap extends HttpServlet {
                 ctx.getMinorVersion()
             )
         );
-        return text.toString();
+        return text;
     }
 
     /**
