@@ -27,67 +27,44 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.trap;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
-import org.w3c.dom.Document;
+import com.ymock.util.Logger;
 
 /**
- * Implementation of {@link TestResponse}.
- *
- * <p>Objects of this class are immutable and thread-safe.
+ * Template with no behavior, just to alert the user that there is a problem
+ * with template configuration.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @since 0.3.6
  */
-final class DomParser {
+final class AlertTemplate implements Template {
 
     /**
-     * The XML as a text.
+     * The message to show.
      */
-    private final transient String xml;
+    private final transient String message;
 
     /**
      * Public ctor.
-     * @param txt The XML in text
+     * @param msg The message to show
      */
-    public DomParser(final String txt) {
-        if (txt == null) {
-            throw new IllegalArgumentException("NULL instead of XML");
-        }
-        if (txt.charAt(0) != '<') {
-            throw new IllegalArgumentException(
-                String.format("Doesn't look like XML: '%s'", txt)
-            );
-        }
-        this.xml = txt;
+    public AlertTemplate(final String msg) {
+        this.message = msg;
     }
 
     /**
-     * Get document of body.
-     * @return The document
+     * {@inheritDoc}
      */
-    public Document document() {
-        Document doc;
-        try {
-            final DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
-            // @checkstyle LineLength (1 line)
-            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-            factory.setNamespaceAware(true);
-            doc = factory
-                .newDocumentBuilder()
-                .parse(IOUtils.toInputStream(this.xml, CharEncoding.UTF_8));
-        } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
-            throw new IllegalArgumentException(ex);
-        } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalArgumentException(ex);
-        }
-        return doc;
+    @Override
+    public String render(final String defect) {
+        Logger.warn(this, "#render(..): %s", this.message);
+        return String.format(
+            "<html><body><pre>%s\n\n%s</pre></body></html>",
+            this.message,
+            defect
+        );
     }
 
 }
