@@ -62,7 +62,7 @@ import org.apache.commons.lang.CharEncoding;
  *  &lt;init-param&gt;
  *   &lt;param-name&gt;com.rexsl.trap.Notifier&lt;/param-name&gt;
  *   &lt;param-value&gt;
- *    com.rexsl.trap.SmtpNotifier?to=me&#64;example.com&amp;server=gmail.com
+ *    com.rexsl.trap.SmtpNotifier?to=me&#64;example.com&amp;host=gmail.com...
  *   &lt;/param-value&gt;
  *  &lt;/init-param&gt;
  * &lt;/servlet&gt;
