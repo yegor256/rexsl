@@ -150,13 +150,13 @@ public final class RestfulServlet extends HttpServlet {
     protected void service(final HttpServletRequest request,
         final HttpServletResponse response)
         throws ServletException, IOException {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         this.jersey.service(request, response);
         Logger.debug(
             this,
-            "#service(%s): by Jersey in %dms",
+            "#service(%s): by Jersey in %[nano]s",
             request.getRequestURI(),
-            System.currentTimeMillis() - start
+            System.nanoTime() - start
         );
     }
 
