@@ -85,7 +85,7 @@ public final class StaticTemplate implements Template {
     private static String load(final URI uri) {
         String txt;
         try {
-            InputStream stream = StaticTemplate.class
+            final InputStream stream = StaticTemplate.class
                 .getResourceAsStream(uri.toString());
             if (stream == null) {
                 txt = Logger.format(

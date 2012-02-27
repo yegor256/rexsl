@@ -100,6 +100,7 @@ public final class ExceptionTrap extends HttpServlet {
 
     /**
      * {@inheritDoc}
+     * @checkstyle RedundantThrows (3 lines)
      */
     @Override
     public void init() throws ServletException {
@@ -141,6 +142,7 @@ public final class ExceptionTrap extends HttpServlet {
      * @return The object
      * @throws ServletException If some defect inside
      * @param <T> Expected type of response
+     * @checkstyle RedundantThrows (3 lines)
      */
     private <T> List<T> instantiate(final Class<T> type)
         throws ServletException {
@@ -238,6 +240,7 @@ public final class ExceptionTrap extends HttpServlet {
      * @param uri The URI
      * @return Map of all query params
      * @throws ServletException If some defect inside
+     * @checkstyle RedundantThrows (3 lines)
      */
     public static Properties props(final String uri) throws ServletException {
         final Properties props = new Properties();

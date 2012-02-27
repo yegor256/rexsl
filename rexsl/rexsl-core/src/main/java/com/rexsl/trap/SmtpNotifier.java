@@ -29,6 +29,7 @@
  */
 package com.rexsl.trap;
 
+import com.rexsl.core.Manifests;
 import java.io.IOException;
 import java.util.Properties;
 import javax.mail.Address;
@@ -105,13 +106,18 @@ public final class SmtpNotifier implements Notifier {
     /**
      * Get one property.
      * @param name Name of it
+     * @return Value of it
      * @throws IOException If can't find it
      */
     private String prop(final String name) throws IOException {
         if (!this.properties.containsKey(name)) {
             throw new IOException(String.format("%s param not found", name));
         }
-        return this.properties.getProperty(name);
+        String value = this.properties.getProperty(name);
+        if (!value.isEmpty() && value.charAt(0) == ':') {
+            value = Manifests.read(value.substring(1));
+        }
+        return value;
     }
 
 }

@@ -30,10 +30,6 @@
 package com.rexsl.trap;
 
 import com.ymock.util.Logger;
-import java.net.URI;
-import java.util.Properties;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Template with no behavior, just to alert the user that there is a problem
