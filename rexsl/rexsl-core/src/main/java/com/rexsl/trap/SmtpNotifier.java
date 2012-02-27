@@ -73,26 +73,26 @@ public final class SmtpNotifier implements Notifier {
     public void notify(final String defect) throws IOException {
         try {
             final Transport transport = this.session.getTransport(
-                this.properties.getProperty("transport")
+                this.prop("transport")
             );
             transport.connect(
-                this.properties.getProperty("host"),
-                Integer.valueOf(this.properties.getProperty("port")),
-                this.properties.getProperty("user"),
-                this.properties.getProperty("password")
+                this.prop("host"),
+                Integer.valueOf(this.prop("port")),
+                this.prop("user"),
+                this.prop("password")
             );
             final Message message = new MimeMessage(this.session);
             final InternetAddress reply = new InternetAddress(
-                this.properties.getProperty("reply-to")
+                this.prop("reply-to")
             );
             message.addFrom(new Address[] {reply});
             message.setReplyTo(new Address[] {reply});
             message.addRecipient(
                 javax.mail.Message.RecipientType.TO,
-                new InternetAddress(this.properties.getProperty("to"))
+                new InternetAddress(this.prop("to"))
             );
             message.setText(defect);
-            message.setSubject(this.properties.getProperty("subject"));
+            message.setSubject(this.prop("subject"));
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
         } catch (javax.mail.NoSuchProviderException ex) {
@@ -100,6 +100,18 @@ public final class SmtpNotifier implements Notifier {
         } catch (javax.mail.MessagingException ex) {
             throw new IOException(ex);
         }
+    }
+
+    /**
+     * Get one property.
+     * @param name Name of it
+     * @throws IOException If can't find it
+     */
+    private String prop(final String name) throws IOException {
+        if (!this.properties.containsKey(name)) {
+            throw new IOException(String.format("%s param not found", name));
+        }
+        return this.properties.getProperty(name);
     }
 
 }

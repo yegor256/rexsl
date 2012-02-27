@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -88,40 +89,61 @@ import org.apache.commons.lang.CharEncoding;
 public final class ExceptionTrap extends HttpServlet {
 
     /**
+     * List of notifiers ready to notify.
+     */
+    private transient List<Notifier> notifiers;
+
+    /**
+     * The template.
+     */
+    private transient Template template;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init() throws ServletException {
+        this.notifiers = this.instantiate(Notifier.class);
+        final List<Template> templates = this.instantiate(Template.class);
+        if (templates.isEmpty()) {
+            this.template = new AlertTemplate("HTML template not configured");
+        } else if (templates.size() > 1) {
+            this.template = new AlertTemplate("One HTML template expected");
+        } else {
+            this.template = templates.get(0);
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void service(final HttpServletRequest request,
         final HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
-        final StringBuilder text = this.start(request);
-        final List<Template> templates = this.instantiate(Template.class);
-        final String html;
-        if (templates.isEmpty()) {
-            text.append("HTML template is not configured!\n");
-            html = text.toString();
-        } else if (templates.size() > 1) {
-            text.append("Exactly one HTML template should be configured!\n");
-            html = text.toString();
-        } else {
-            html = templates.get(0).render(text.toString());
-        }
+        final String text = this.text(request);
+        final String html = this.template.render(text);
         response.getWriter().print(html);
         response.getWriter().close();
-        for (Notifier notifier : this.instantiate(Notifier.class)) {
-            notifier.notify(text.toString());
+        for (Notifier notifier : this.notifiers) {
+            try {
+                notifier.notify(text);
+            } catch (IOException ex) {
+                Logger.error(this, "#service(): %[exception]s", ex);
+            }
         }
+        Logger.error(this, "#service():\n%s", text);
     }
 
     /**
      * Instantiate class.
      * @param type The interface to instantiate
      * @return The object
-     * @throws IOException If some defect inside
+     * @throws ServletException If some defect inside
      * @param <T> Expected type of response
      */
     private <T> List<T> instantiate(final Class<T> type)
-        throws IOException {
+        throws ServletException {
         final String param = this.getInitParameter(type.getName());
         List<T> list;
         if (param == null) {
@@ -133,20 +155,20 @@ public final class ExceptionTrap extends HttpServlet {
                 final Properties props = this.props(uri);
                 try {
                     list.add(
-                        (T) Class.forName(URI.create(uri).getHost())
+                        (T) Class.forName(URI.create(uri).getPath())
                             .getConstructor(Properties.class)
                             .newInstance(props)
                     );
                 } catch (ClassNotFoundException ex) {
-                    throw new IOException(ex);
+                    throw new ServletException(ex);
                 } catch (NoSuchMethodException ex) {
-                    throw new IOException(ex);
+                    throw new ServletException(ex);
                 } catch (InstantiationException ex) {
-                    throw new IOException(ex);
+                    throw new ServletException(ex);
                 } catch (IllegalAccessException ex) {
-                    throw new IOException(ex);
+                    throw new ServletException(ex);
                 } catch (java.lang.reflect.InvocationTargetException ex) {
-                    throw new IOException(ex);
+                    throw new ServletException(ex);
                 }
             }
         }
@@ -158,7 +180,7 @@ public final class ExceptionTrap extends HttpServlet {
      * @param request The HTTP request
      * @return Builder of text
      */
-    private StringBuilder start(final HttpServletRequest request) {
+    private String text(final HttpServletRequest request) {
         final StringBuilder text = new StringBuilder();
         this.append(text, request, "code");
         this.append(text, request, "message");
@@ -166,7 +188,7 @@ public final class ExceptionTrap extends HttpServlet {
         this.append(text, request, "request_uri");
         text.append(
             Logger.format(
-                "exception: %[exception]s",
+                "exception: %[exception]s\n",
                 request.getAttribute("javax.servlet.error.exception")
             )
         );
@@ -180,7 +202,7 @@ public final class ExceptionTrap extends HttpServlet {
         );
         text.append(
             String.format(
-                "servlet context: %s\n",
+                "servlet context name: %s\n",
                 ctx.getServletContextName()
             )
         );
@@ -191,7 +213,7 @@ public final class ExceptionTrap extends HttpServlet {
                 ctx.getMinorVersion()
             )
         );
-        return text;
+        return text.toString();
     }
 
     /**
@@ -215,25 +237,28 @@ public final class ExceptionTrap extends HttpServlet {
      * Retrieve parameters of URI.
      * @param uri The URI
      * @return Map of all query params
-     * @throws java.io.UnsupportedEncodingException If some defect inside
+     * @throws ServletException If some defect inside
      */
-    public static Properties props(final String uri)
-        throws java.io.UnsupportedEncodingException {
+    public static Properties props(final String uri) throws ServletException {
         final Properties props = new Properties();
         final String[] parts = uri.split("\\?");
         if (parts.length > 1) {
             final String query = parts[1];
             for (String param : query.split("&")) {
-                final String[] pair = param.split("=", 2);
-                final String key =
-                    URLDecoder.decode(pair[0], CharEncoding.UTF_8);
-                String value;
-                if (pair.length == 1) {
-                    value = Boolean.TRUE.toString();
-                } else {
-                    value = URLDecoder.decode(pair[1], CharEncoding.UTF_8);
+                try {
+                    final String[] pair = param.split("=", 2);
+                    final String key =
+                        URLDecoder.decode(pair[0], CharEncoding.UTF_8);
+                    String value;
+                    if (pair.length == 1) {
+                        value = Boolean.TRUE.toString();
+                    } else {
+                        value = URLDecoder.decode(pair[1], CharEncoding.UTF_8);
+                    }
+                    props.setProperty(key, value);
+                } catch (java.io.UnsupportedEncodingException ex) {
+                    throw new ServletException(ex);
                 }
-                props.setProperty(key, value);
             }
         }
         return props;

@@ -30,37 +30,32 @@
 package com.rexsl.trap;
 
 import com.ymock.util.Logger;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
- * Template from static URL, loaded just one on setup.
+ * Template with no behavior, just to alert the user that there is a problem
+ * with template configuration.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.6
  */
-public final class StaticTemplate implements Template {
+final class AlertTemplate implements Template {
 
     /**
-     * Marker to replace with text.
+     * The message to show.
      */
-    private static final String MARKER = "${text}";
-
-    /**
-     * Text.
-     */
-    private final transient String text;
+    private final transient String message;
 
     /**
      * Public ctor.
-     * @param props The properties
+     * @param msg The message to show
      */
-    public StaticTemplate(final Properties props) {
-        this.text = StaticTemplate.load(URI.create(props.getProperty("uri")));
+    public AlertTemplate(final String msg) {
+        this.message = msg;
     }
 
     /**
@@ -68,46 +63,12 @@ public final class StaticTemplate implements Template {
      */
     @Override
     public String render(final String defect) {
-        return this.text.replace(
-            this.MARKER,
-            StringEscapeUtils.escapeHtml(defect)
+        Logger.warn(this, "#render(..): %s", this.message);
+        return String.format(
+            "<html><body><pre>%s\n\n%s</pre></body></html>",
+            this.message,
+            defect
         );
-    }
-
-    /**
-     * Load template from URI.
-     * @param uri The URI to load from
-     * @return The text just loaded
-     * @todo #167 We support only local resources now. This implementation
-     *  has to be extended in order to support different formats of URI, incl.
-     *  "file:...", "http:...", etc.
-     */
-    private static String load(final URI uri) {
-        String txt;
-        try {
-            InputStream stream = StaticTemplate.class
-                .getResourceAsStream(uri.toString());
-            if (stream == null) {
-                txt = Logger.format(
-                    "%s\nresource '%s' not found",
-                    StaticTemplate.MARKER,
-                    uri
-                );
-            } else {
-                txt = IOUtils.toString(stream);
-            }
-        } catch (java.io.IOException ex) {
-            txt = Logger.format(
-                "%s\nfailed to load '%s': %[exception]s",
-                StaticTemplate.MARKER,
-                uri,
-                ex
-            );
-        }
-        if (!txt.contains(StaticTemplate.MARKER)) {
-            txt = String.format("%s\n%s", StaticTemplate.MARKER, txt);
-        }
-        return txt;
     }
 
 }
