@@ -45,7 +45,7 @@ import org.xmlmatchers.xpath.HasXPath;
  * @version $Id$
  * @since 0.2.6
  */
-final class PlainXpathMatcher extends TypeSafeMatcher<Object> {
+final class PlainXpathMatcher<T> extends TypeSafeMatcher<T> {
 
     /**
      * Real matcher.
@@ -66,7 +66,7 @@ final class PlainXpathMatcher extends TypeSafeMatcher<Object> {
      * {@inheritDoc}
      */
     @Override
-    public boolean matchesSafely(final Object text) {
+    public boolean matchesSafely(final T text) {
         return this.matcher.matches(XhtmlConverter.the(text.toString()));
     }
 
