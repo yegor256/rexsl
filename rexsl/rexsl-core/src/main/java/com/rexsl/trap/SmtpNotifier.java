@@ -42,9 +42,41 @@ import javax.mail.internet.MimeMessage;
 /**
  * Notifier by SMTP.
  *
+ * <p>Configuration of this notifier is to be done via its URI in
+ * {@code web.xml}, for example:
+ *
+ * <pre>
+ * &lt;servlet>
+ *  &lt;servlet-name&gt;ExceptionTrap&lt;/servlet-name&gt;
+ *  &lt;servlet-class&gt;com.rexsl.trap.ExceptionTrap&lt;/servlet-class&gt;
+ *  &lt;init-param&gt;
+ *   &lt;param-name&gt;com.rexsl.trap.Notifier&lt;/param-name&gt;
+ *   &lt;param-value&gt;
+ *    com.rexsl.trap.SmtpNotifier?to=me&#64;example.com&amp;host=gmail.com...
+ *   &lt;/param-value&gt;
+ *  &lt;/init-param&gt;
+ * &lt;/servlet&gt;
+ * </pre>
+ *
+ * <p>All parameters you set as URI query params will be delivered to Java Mail
+ * API as explained in {@link javax.mail}. The following parameters are expected
+ * besides the ones defined in the API:
+ * {@code transport}, {@code password}, {@code subject}, {@code to}.
+ *
+ * <p>You can specify explicit values of parameters or refer us to one of your
+ * {@code MANIFEST.MF} files, for example:
+ *
+ * <pre>
+ * com.rexsl.trap.SmtpNotifier?mail.smtp.host=:My-Host
+ * </pre>
+ *
+ * <p>In this case we will try to find and read {@code My-Host} attribute from
+ * one of available {@code MANIFEST.MF} files (read more in {@link Manifests}).
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.6
+ * @see <a href="http://docs.oracle.com/javaee/6/api/javax/mail/package-summary.html">javax.mail</a>
  */
 public final class SmtpNotifier implements Notifier {
 
@@ -63,7 +95,7 @@ public final class SmtpNotifier implements Notifier {
      * @param props The properties
      */
     public SmtpNotifier(final Properties props) {
-        this.session = Session.getInstance(new Properties());
+        this.session = Session.getInstance(props);
         this.properties = props;
     }
 
@@ -77,14 +109,14 @@ public final class SmtpNotifier implements Notifier {
                 this.prop("transport")
             );
             transport.connect(
-                this.prop("host"),
-                Integer.valueOf(this.prop("port")),
-                this.prop("user"),
+                this.prop("mail.smtp.host"),
+                Integer.valueOf(this.prop("mail.smtp.port")),
+                this.prop("mail.smtp.user"),
                 this.prop("password")
             );
             final Message message = new MimeMessage(this.session);
             final InternetAddress reply = new InternetAddress(
-                this.prop("reply-to")
+                this.prop("mail.smtp.from")
             );
             message.addFrom(new Address[] {reply});
             message.setReplyTo(new Address[] {reply});
@@ -111,7 +143,9 @@ public final class SmtpNotifier implements Notifier {
      */
     private String prop(final String name) throws IOException {
         if (!this.properties.containsKey(name)) {
-            throw new IOException(String.format("%s param not found", name));
+            throw new IOException(
+                String.format("'%s' param not found", name)
+            );
         }
         String value = this.properties.getProperty(name);
         if (!value.isEmpty() && value.charAt(0) == ':') {
