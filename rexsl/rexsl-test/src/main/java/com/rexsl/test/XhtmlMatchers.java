@@ -105,13 +105,14 @@ public final class XhtmlMatchers {
 
     /**
      * Matches content agains XPath query.
+     * @param <T> type of the object to match
      * @param query The query
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @see #hasXPath(String)
      * @since 0.3
      */
-    public static Matcher<Object> withXPath(final String query) {
-        return new PlainXpathMatcher(query, XhtmlMatchers.context());
+    public static <T> Matcher<T> withXPath(final String query) {
+        return new PlainXpathMatcher<T>(query, XhtmlMatchers.context());
     }
 
     /**
