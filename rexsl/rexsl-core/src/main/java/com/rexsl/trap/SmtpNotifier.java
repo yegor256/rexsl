@@ -144,8 +144,8 @@ public final class SmtpNotifier implements Notifier {
     private String prop(final String name) throws IOException {
         if (!this.properties.containsKey(name)) {
             throw new IOException(
-            String.format("'%s' param not found", name)
-        );
+                String.format("'%s' param not found", name)
+            );
         }
         String value = this.properties.getProperty(name);
         if (!value.isEmpty() && value.charAt(0) == ':') {
