@@ -98,6 +98,10 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     @Override
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
+        // @todo #151 Is it possible to initialize input variable with
+        //     InputStream from request without side effects on request?
+        //     request's parameters retrieve is done lazily and requires
+        //     InputStream rewinded to it's start
         final String input = "";
         this.assertMethod(request, input);
         this.assertRequestUri(request, input);
