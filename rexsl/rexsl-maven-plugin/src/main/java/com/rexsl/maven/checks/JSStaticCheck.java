@@ -31,8 +31,10 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.utils.FileFinder;
 import com.ymock.util.Logger;
 import java.io.File;
+import java.util.Collection;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -57,10 +59,10 @@ public final class JSStaticCheck implements Check {
         final File dir = new File(env.basedir(), this.JS_DIR);
         boolean success = true;
         if (dir.exists()) {
-            final String[] exts = new String[] {"js"};
-            for (File css : FileUtils.listFiles(dir, exts, true)) {
+            final Collection<File> files = new FileFinder(dir, "js").random();
+            for (File file : files) {
                 try {
-                    success &= this.one(css);
+                    success &= this.one(file);
                 } catch (InternalCheckException ex) {
                     Logger.warn(
                         this,
