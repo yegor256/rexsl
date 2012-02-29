@@ -174,7 +174,7 @@ public final class EmbeddedContainer {
                 env,
                 new BindingBuilder(env).build()
             );
-            final ScriptsFinder finder = new ScriptsFinder(dir);
+            final FileFinder finder = new FileFinder(dir, "groovy");
             for (File script : finder.ordered()) {
                 Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
                 try {

@@ -31,11 +31,10 @@ package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
+import com.rexsl.maven.utils.FileFinder;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import org.apache.commons.io.FileUtils;
 
 /**
  * Abstract packer.
@@ -57,12 +56,7 @@ abstract class AbstractPacker implements Packer {
         );
         final File destdir = this.ddir(env);
         if (srcdir.exists()) {
-            final Collection<File> files = FileUtils.listFiles(
-                srcdir,
-                new String[] {this.extension()},
-                true
-            );
-            for (File src : files) {
+            for (File src : new FileFinder(srcdir, this.extension()).random()) {
                 final File dest = new File(destdir, src.getName());
                 try {
                     this.pack(src, dest);

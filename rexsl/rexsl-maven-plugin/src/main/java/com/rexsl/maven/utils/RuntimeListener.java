@@ -60,7 +60,7 @@ public final class RuntimeListener implements ServletContextListener {
                 event.getServletContext().getClassLoader(),
                 new BindingBuilder(env).build()
             );
-            final ScriptsFinder finder = new ScriptsFinder(dir);
+            final FileFinder finder = new FileFinder(dir, "groovy");
             for (File script : finder.ordered()) {
                 Logger.info(this, "Running '%s'...", script);
                 try {

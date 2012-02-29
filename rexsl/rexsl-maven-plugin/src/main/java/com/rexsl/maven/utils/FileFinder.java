@@ -39,17 +39,17 @@ import java.util.TreeSet;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Contains methods to find and sort scripts.
+ * Contains methods to find and sort files.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id: ScriptsFinder.java 464 2011-12-12 09:30:18Z guard $
+ * @version $Id: FileFinder.java 464 2011-12-12 09:30:18Z guard $
  */
-public final class ScriptsFinder {
+public final class FileFinder {
 
     /**
-     * Scripts mask.
+     * File extension.
      */
-    private static final String MASK = "groovy";
+    private final transient String extension;
 
     /**
      * Directory, containing scripts.
@@ -57,11 +57,13 @@ public final class ScriptsFinder {
     private final transient File directory;
 
     /**
-     * Creates new instance of <code>ScriptsFinder</code>.
+     * Creates new instance of <code>FileFinder</code>.
      * @param dir Directory, containing scripts.
+     * @param ext File extension.
      */
-    public ScriptsFinder(final File dir) {
+    public FileFinder(final File dir, final String ext) {
         this.directory = dir;
+        this.extension = ext;
     }
 
     /**
@@ -69,12 +71,11 @@ public final class ScriptsFinder {
      * @return Collection of scripts.
      */
     private Collection<File> fetch() {
-        final String[] extensions = new String[]{this.MASK};
-        final Collection<File> scripts = FileUtils.listFiles(
+        final String[] extensions = new String[]{this.extension};
+        return FileUtils.listFiles(
             this.directory,
             extensions,
             true);
-        return scripts;
     }
 
     /**
@@ -89,7 +90,6 @@ public final class ScriptsFinder {
     /**
      * Returns <code>Set</code> of scripts in the random order.
      * @return Set of scripts in the random order.
-     * @todo #46:1h Add test, checking random order.
      */
     public Set<File> random() {
         final List<File> scripts = (List<File>) this.fetch();

@@ -38,11 +38,11 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * ScriptsFinder test.
+ * FileFinder test.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id: ScriptsFinderTest.java 570 2011-12-25 16:32:21Z guard $
+ * @version $Id: FileFinderTest.java 570 2011-12-25 16:32:21Z guard $
  */
-public final class ScriptsFinderTest {
+public final class FileFinderTest {
 
     /**
      * Test string.
@@ -61,7 +61,7 @@ public final class ScriptsFinderTest {
             .withTextFile("src/test/rexsl/setup/a.groovy", this.TEST)
             .mock();
         final File directory = environment.basedir();
-        final ScriptsFinder finder = new ScriptsFinder(directory);
+        final FileFinder finder = new FileFinder(directory, "groovy");
         final Collection<File> files = finder.ordered();
         String previous = "";
         for (File file : files) {
@@ -82,18 +82,18 @@ public final class ScriptsFinderTest {
     @Test
     public void testRandom() {
         final Environment environment = new EnvironmentMocker()
-            .withTextFile("src/test/rexsl/setup/k.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/b.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/c.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/d.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/e.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/l.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/m.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/h.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/i.groovy", this.TEST)
+            .withTextFile("src/test/rexsl/setup/k.xml", this.TEST)
+            .withTextFile("src/test/rexsl/setup/b.xml", this.TEST)
+            .withTextFile("src/test/rexsl/setup/c.xml", this.TEST)
+            .withTextFile("src/test/rexsl/setup/d.xml", this.TEST)
+            .withTextFile("src/test/rexsl/setup/e.xml", this.TEST)
+            .withTextFile("src/test/rexsl/setup/l.xml", this.TEST)
+            .withTextFile("src/test/rexsl/setup/m.xml", this.TEST)
+            .withTextFile("src/test/rexsl/setup/h.xml", this.TEST)
+            .withTextFile("src/test/rexsl/setup/i.xml", this.TEST)
             .mock();
         final File directory = environment.basedir();
-        final ScriptsFinder finder = new ScriptsFinder(directory);
+        final FileFinder finder = new FileFinder(directory, "xml");
         MatcherAssert.assertThat(
             "random",
             this.namesHash(finder.random()),
@@ -102,6 +102,29 @@ public final class ScriptsFinderTest {
                 Matchers.not(this.namesHash(finder.random()))
             )
         );
+    }
+
+    /**
+     * Checks certain type.
+     * @throws Exception .
+     */
+    @Test
+    public void testCertainType() throws Exception {
+        final Environment environment = new EnvironmentMocker()
+            .withTextFile("src/test/rexsl/setup/n.css", this.TEST)
+            .withTextFile("src/test/rexsl/setup/o.xml", this.TEST)
+            .withTextFile("src/test/rexsl/setup/p.css", this.TEST)
+            .mock();
+        final File directory = environment.basedir();
+        final Collection<File> files =
+            new FileFinder(directory, "css").ordered();
+        for (File file : files) {
+            MatcherAssert.assertThat(
+                "file type",
+                file.getName(),
+                Matchers.endsWith(".css")
+            );
+        }
     }
 
     /**
