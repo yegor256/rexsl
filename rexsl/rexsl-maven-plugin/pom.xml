@@ -397,6 +397,7 @@
                         -->
                         <!-- <pomInclude>run-all-correct/pom.xml</pomInclude> -->
                         <pomInclude>all-correct/pom.xml</pomInclude>
+                        <pomInclude>structure-failure/pom.xml</pomInclude>
                         <pomInclude>script-failure/pom.xml</pomInclude>
                         <pomInclude>xhtml-failure/pom.xml</pomInclude>
                         <pomInclude>xsd-failure/pom.xml</pomInclude>

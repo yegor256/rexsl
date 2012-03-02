@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2012, ReXSL.com
+ * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,46 +26,14 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-package com.rexsl.maven;
-
-import com.rexsl.maven.checks.BinaryFilesCheck;
-import com.rexsl.maven.checks.CssStaticCheck;
-import com.rexsl.maven.checks.FilesStructureCheck;
-import com.rexsl.maven.checks.InContainerScriptsCheck;
-import com.rexsl.maven.checks.JSStaticCheck;
-import com.rexsl.maven.checks.JigsawCssCheck;
-import com.rexsl.maven.checks.RexslFilesCheck;
-import com.rexsl.maven.checks.WebXmlCheck;
-import com.rexsl.maven.checks.XhtmlOutputCheck;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-/**
- * Provider of checks.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- * @checkstyle ClassDataAbstractionCoupling (100 lines)
+ * @version $Id: verify.groovy 464 2011-12-12 09:30:18Z guard $
+ *
+ * Validate that the build really validated XSL files.
  */
-public final class ChecksProvider {
 
-    /**
-     * Get full collection of checks.
-     * @return List of checks
-     */
-    public Set<Check> all() {
-        final Set<Check> checks = new LinkedHashSet<Check>();
-        checks.add(new BinaryFilesCheck());
-        checks.add(new CssStaticCheck());
-        checks.add(new JigsawCssCheck());
-        checks.add(new JSStaticCheck());
-        checks.add(new FilesStructureCheck());
-        checks.add(new XhtmlOutputCheck());
-        checks.add(new InContainerScriptsCheck());
-        checks.add(new WebXmlCheck());
-        checks.add(new RexslFilesCheck());
-        return checks;
-    }
+def log = new File(basedir, 'build.log')
+assert log.text.contains('invalid.xml has incorrect type/extension')
+assert log.text.contains('Incorrect sub directory')
+assert log.text.contains('Incorrect rexsl folder structure')
 
-}
