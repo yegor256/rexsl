@@ -53,6 +53,7 @@ public final class RexslFilesCheck implements Check {
 
     /**
      * Allowed extensions for files in sub folders.
+     * @checkstyle MultipleStringLiterals (15 lines)
      */
     @SuppressWarnings({
         "PMD.UseConcurrentHashMap",
@@ -60,13 +61,12 @@ public final class RexslFilesCheck implements Check {
     })
     private static final Map<String, String> DIR_EXTENSIONS = ArrayUtils.toMap(
         new String[][]{
-            {"xml", "xml|"},
-            // @checkstyle MultipleStringLiterals (4 lines)
-            {"xhtml", "groovy|"},
-            {"scripts", "groovy|"},
-            {"setup", "groovy|"},
-            {"bootstrap", "groovy|"},
-            {"xsd", "xsd|"},
+            {"xml", "xml"},
+            {"xhtml", "groovy"},
+            {"scripts", "groovy"},
+            {"setup", "groovy"},
+            {"bootstrap", "groovy"},
+            {"xsd", "xsd"},
         }
     );
 
@@ -77,34 +77,45 @@ public final class RexslFilesCheck implements Check {
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), "src/test/rexsl");
         boolean valid = true;
-        for (File file : this.getFiles(dir)) {
-            Logger.warn(this, file.getAbsolutePath());
-            final File folder = file.getParentFile();
-            if (!folder.getParentFile().equals(dir)) {
-                Logger.warn(this, "Incorrect rexsl folder structure");
-                valid = false;
-                continue;
+        if (dir.exists()) {
+            for (File folder : dir.listFiles()) {
+                if (!this.DIR_EXTENSIONS.containsKey(folder.getName())) {
+                    continue;
+                }
+                valid &= this.validate(folder);
             }
-            if (!this.DIR_EXTENSIONS.containsKey(folder.getName())) {
-                Logger.warn(this, "Incorrect sub directory %s", folder);
+        } else {
+            Logger.warn(this, "Directory '%s' is absent", dir);
+        }
+        return valid;
+    }
+
+    /**
+     * Validate one folder.
+     * @param folder The folder
+     * @return TRUE if valid
+     */
+    private boolean validate(final File folder) {
+        boolean valid = true;
+        for (File file : this.getFiles(folder)) {
+            final String ext = FilenameUtils.getExtension(file.getPath());
+            final String regex = this.DIR_EXTENSIONS.get(folder.getName());
+            if (!ext.matches(regex)) {
+                Logger.warn(
+                    this,
+                    "File '%s' has incorrect extension (should match '%s')",
+                    file,
+                    regex
+                );
                 valid = false;
-                continue;
-            }
-            final String path = file.getAbsolutePath()
-                .substring(dir.getAbsolutePath().length() + 1);
-            final String ext = FilenameUtils.getExtension(path);
-            if (!ext.matches(this.DIR_EXTENSIONS.get(folder.getName()))) {
-                Logger.warn(this, "File %s has incorrect type/extension", file);
-                valid = false;
-                continue;
             }
         }
         return valid;
     }
 
     /**
-     * Get files to iterate over.
-     * @param dir Folder to getFiles from
+     * Get files, recursively.
+     * @param dir The directory to read from
      * @return Collection of files
      */
     private Collection<File> getFiles(final File dir) {
@@ -117,4 +128,5 @@ public final class RexslFilesCheck implements Check {
             )
         );
     }
+
 }
