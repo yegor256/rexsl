@@ -33,7 +33,5 @@
  */
 
 def log = new File(basedir, 'build.log')
-assert log.text.contains('invalid.xml has incorrect type/extension')
-assert log.text.contains('Incorrect sub directory')
-assert log.text.contains('Incorrect rexsl folder structure')
+assert log.text.contains('has incorrect extension')
 

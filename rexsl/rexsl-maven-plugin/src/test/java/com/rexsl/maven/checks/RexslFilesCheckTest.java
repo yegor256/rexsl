@@ -80,8 +80,12 @@ public final class RexslFilesCheckTest {
     /**
      * RexslFilesCheck can validate incorrect folder under src/test/rexsl.
      * @throws Exception If something goes wrong
+     * @todo #171 This test is IGNORED because I don't think that we should
+     *  prohibit users to create custom directories here. Let's just focus
+     *  on file types.
      */
     @Test
+    @org.junit.Ignore
     public void validatesIncorrectFolder() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withTextFile("src/test/rexsl/invalid-folder", "")
