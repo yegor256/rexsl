@@ -32,6 +32,7 @@ package com.rexsl.trap;
 import com.ymock.util.Logger;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -82,11 +83,17 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
      */
     public SmtpBulkNotifier(final Properties props) {
         super(props);
+        final Long interval = this.interval();
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
             this,
-            1L,
-            this.interval(),
+            0L,
+            interval,
             TimeUnit.MINUTES
+        );
+        Logger.info(
+            this,
+            "#SmtpBulkNotifier(): started with %dmin interval",
+            interval
         );
     }
 
@@ -132,20 +139,34 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
             )
         );
         final StringBuilder attachment = new StringBuilder();
-        while (!this.defects.isEmpty()) {
-            final Defect defect = this.defects.remove();
+        final Iterator<Defect> iterator = this.defects.iterator();
+        while (iterator.hasNext()) {
+            final Defect defect = iterator.next();
             text.append(defect.text()).append("\n\n");
             attachment.append(defect.date()).append("\n");
+            iterator.remove();
         }
         text.append("Detailed information is attached in text file.");
+        return this.mime(text.toString(), attachment.toString());
+    }
+
+    /**
+     * Create MIME message with body and attachment.
+     * @param text The body
+     * @param attachment The attachment
+     * @return The message
+     * @throws IOException If some problem inside
+     */
+    private Message mime(final String text, final String attachment)
+        throws IOException {
         final Message message = this.message();
         try {
             final Multipart multipart = new MimeMultipart();
             final BodyPart body = new MimeBodyPart();
-            body.setText(text.toString());
+            body.setText(text);
             multipart.addBodyPart(body);
             final BodyPart file = new MimeBodyPart();
-            file.setText(attachment.toString());
+            file.setText(attachment);
             file.setFileName("exceptions.txt");
             multipart.addBodyPart(file);
             message.setContent(multipart);
