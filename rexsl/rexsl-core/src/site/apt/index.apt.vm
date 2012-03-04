@@ -100,7 +100,7 @@ ReXSL core module
   {{{./apidocs/com/rexsl/core/Schema.html}<<<Schema>>>}} annotation
   lets you set the name of XML Schema of a JAXB-annotated object.
 
-  {{{./apidocs/com/rexsl/core/ExceptionTrap.html}<<<ExceptionTrap>>>}} servlet
+  {{{./apidocs/com/rexsl/trap/ExceptionTrap.html}<<<ExceptionTrap>>>}} servlet
   helps you to catch all uncaught exceptions and manage them gracefully, showing
   some information to your end-users and letting you know by email and/or log.
 
