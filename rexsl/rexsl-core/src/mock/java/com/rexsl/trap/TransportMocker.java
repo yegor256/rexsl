@@ -29,71 +29,73 @@
  */
 package com.rexsl.trap;
 
-import java.io.IOException;
-import java.util.Properties;
+import com.ymock.util.Logger;
+import javax.mail.Address;
 import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.URLName;
 
 /**
- * Notifier by SMTP.
- *
- * <p>Configuration of this notifier is to be done via its URI in
- * {@code web.xml}, for example:
- *
- * <pre>
- * &lt;servlet>
- *  &lt;servlet-name&gt;ExceptionTrap&lt;/servlet-name&gt;
- *  &lt;servlet-class&gt;com.rexsl.trap.ExceptionTrap&lt;/servlet-class&gt;
- *  &lt;init-param&gt;
- *   &lt;param-name&gt;com.rexsl.trap.Notifier&lt;/param-name&gt;
- *   &lt;param-value&gt;
- *    com.rexsl.trap.SmtpNotifier?to=me&#64;example.com&amp;host=gmail.com...
- *   &lt;/param-value&gt;
- *  &lt;/init-param&gt;
- * &lt;/servlet&gt;
- * </pre>
- *
- * <p>All parameters you set as URI query params will be delivered to Java Mail
- * API as explained in {@link javax.mail}. The following parameters are expected
- * besides the ones defined in the API:
- * {@code transport}, {@code password}, {@code subject}, {@code to}.
- *
- * <p>You can specify explicit values of parameters or refer us to one of your
- * {@code MANIFEST.MF} files, for example:
- *
- * <pre>
- * com.rexsl.trap.SmtpNotifier?mail.smtp.host=:My-Host
- * </pre>
- *
- * <p>In this case we will try to find and read {@code My-Host} attribute from
- * one of available {@code MANIFEST.MF} files (read more in {@link Manifests}).
+ * Dummy transport.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.6
- * @see <a href="http://docs.oracle.com/javaee/6/api/javax/mail/package-summary.html">javax.mail</a>
  */
-public final class SmtpNotifier extends AbstractSmtpNotifier {
+public final class TransportMocker extends Transport {
 
     /**
      * Public ctor.
-     * @param props The properties
      */
-    public SmtpNotifier(final Properties props) {
-        super(props);
+    public TransportMocker(final Session session, final URLName name) {
+        super(session, name);
+        Logger.info(
+            this,
+            "#TransportMocker('%[type]s', '%s'): instantiated",
+            session,
+            name
+        );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void notify(final String defect) throws IOException {
-        final Message message = this.message();
+    public void sendMessage(final Message message, final Address[] addrs) {
         try {
-            message.setText(defect);
+            Logger.info(
+                this,
+                // @checkstyle LineLength (1 line)
+                "#sendMessage(..):\n  From: %[list]s\n  To: %[list]s\n  CC:%s\n  Reply-to: %[list]s\n  Subject: %s\n  Text: %s",
+                message.getFrom(),
+                message.getRecipients(Message.RecipientType.TO),
+                message.getRecipients(Message.RecipientType.CC),
+                message.getReplyTo(),
+                message.getSubject(),
+                message.getContent()
+            );
         } catch (javax.mail.MessagingException ex) {
-            throw new IOException(ex);
+            throw new IllegalArgumentException(ex);
+        } catch (java.io.IOException ex) {
+            throw new IllegalArgumentException(ex);
         }
-        this.send(message);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void connect(final String host, final int port, final String user,
+        final String password) {
+        Logger.info(
+            this,
+            "#connect('%s', %d, '%s', '%s')",
+            host,
+            port,
+            user,
+            password
+        );
     }
 
 }
