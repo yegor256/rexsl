@@ -29,15 +29,19 @@
  */
 package com.rexsl.trap;
 
-import com.rexsl.core.Manifests;
+import com.ymock.util.Logger;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Properties;
-import javax.mail.Address;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import javax.mail.BodyPart;
 import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.mail.Multipart;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
 
 /**
  * Notifier by SMTP, with pre-packaging into bulks.
@@ -52,7 +56,25 @@ import javax.mail.internet.MimeMessage;
  * @version $Id$
  * @since 0.3.6
  */
-public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
+@SuppressWarnings("PMD.DoNotUseThreads")
+public final class SmtpBulkNotifier extends AbstractSmtpNotifier
+    implements Runnable {
+
+    /**
+     * Maximum allowed interval in minutes.
+     */
+    private static final Long MAX_INTERVAL = 180L;
+
+    /**
+     * Minimum allowed interval in minutes.
+     */
+    private static final Long MIN_INTERVAL = 5L;
+
+    /**
+     * List of reported defect.
+     */
+    private final transient Queue<Defect> defects =
+        new ConcurrentLinkedQueue<Defect>();
 
     /**
      * Public ctor.
@@ -60,6 +82,12 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
      */
     public SmtpBulkNotifier(final Properties props) {
         super(props);
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
+            this,
+            1L,
+            this.interval(),
+            TimeUnit.MINUTES
+        );
     }
 
     /**
@@ -67,13 +95,126 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
      */
     @Override
     public void notify(final String defect) throws IOException {
+        synchronized (this) {
+            this.defects.add(new Defect(defect));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void run() {
+        synchronized (this) {
+            if (!this.defects.isEmpty()) {
+                try {
+                    final Message message = this.compress();
+                    this.send(message);
+                } catch (IOException ex) {
+                    Logger.error(this, "#run(): %[exception]s", ex);
+                }
+            }
+        }
+    }
+
+    /**
+     * Compress all defects into one message.
+     * @return The message
+     * @throws IOException If some problem inside
+     */
+    private Message compress() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        text.append(
+            String.format(
+                // @checkstyle LineLength (1 line)
+                "During the last few mins there were %d exceptions:\n\n",
+                this.defects.size()
+            )
+        );
+        final StringBuilder attachment = new StringBuilder();
+        while (!this.defects.isEmpty()) {
+            final Defect defect = this.defects.remove();
+            text.append(defect.text()).append("\n\n");
+            attachment.append(defect.date()).append("\n");
+        }
+        text.append("Detailed information is attached in text file.");
         final Message message = this.message();
         try {
-            message.setText(defect);
+            final Multipart multipart = new MimeMultipart();
+            final BodyPart body = new MimeBodyPart();
+            body.setText(text.toString());
+            multipart.addBodyPart(body);
+            final BodyPart file = new MimeBodyPart();
+            file.setText(attachment.toString());
+            file.setFileName("exceptions.txt");
+            multipart.addBodyPart(file);
+            message.setContent(multipart);
         } catch (javax.mail.MessagingException ex) {
             throw new IOException(ex);
         }
-        this.send(message);
+        return message;
+    }
+
+    /**
+     * Calculate interval in minutes.
+     * @return The interval
+     */
+    private Long interval() {
+        Long interval = Long.valueOf(this.prop("interval"));
+        if (interval < this.MIN_INTERVAL) {
+            Logger.warn(
+                this,
+                "#interval(): set to %d, while minimum allowed is %d",
+                interval,
+                this.MIN_INTERVAL
+            );
+            interval = this.MIN_INTERVAL;
+        }
+        if (interval > this.MAX_INTERVAL) {
+            Logger.warn(
+                this,
+                "#interval(): set to %d, while maximum allowed is %d",
+                interval,
+                this.MAX_INTERVAL
+            );
+            interval = this.MAX_INTERVAL;
+        }
+        return interval;
+    }
+
+    /**
+     * Single defect reported.
+     */
+    private static final class Defect {
+        /**
+         * The date.
+         */
+        private final transient Date when = new Date();
+        /**
+         * The text.
+         */
+        private final transient String what;
+        /**
+         * Public ctor.
+         * @param txt The text
+         */
+        public Defect(final String txt) {
+            this.what = txt;
+        }
+        /**
+         * Get date.
+         * @return The date
+         */
+        public Date date() {
+            return this.when;
+        }
+        /**
+         * Get text.
+         * @return The text
+         */
+        public String text() {
+            return this.what;
+        }
     }
 
 }

@@ -47,6 +47,7 @@ public final class SmtpBulkNotifierTest {
     public void sendsEmail() throws Exception {
         final Properties props = new Properties();
         props.setProperty("transport", "smtps");
+        props.setProperty("interval", "1");
         props.setProperty("to", "test@example.com");
         props.setProperty("subject", "there is a problem");
         props.setProperty("password", "secret-123");

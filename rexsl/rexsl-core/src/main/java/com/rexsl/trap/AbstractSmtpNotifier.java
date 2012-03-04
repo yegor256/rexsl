@@ -71,6 +71,7 @@ abstract class AbstractSmtpNotifier implements Notifier {
     /**
      * Create new message.
      * @return The message
+     * @throws IOException If some problem inside
      */
     protected final Message message() throws IOException {
         return new MimeMessage(this.session);
@@ -79,6 +80,7 @@ abstract class AbstractSmtpNotifier implements Notifier {
     /**
      * Send message by email.
      * @param message The message to send
+     * @throws IOException If some problem inside
      */
     protected final void send(final Message message) throws IOException {
         try {
@@ -114,11 +116,10 @@ abstract class AbstractSmtpNotifier implements Notifier {
      * Get one property.
      * @param name Name of it
      * @return Value of it
-     * @throws IOException If can't find it
      */
-    protected final String prop(final String name) throws IOException {
+    protected final String prop(final String name) {
         if (!this.properties.containsKey(name)) {
-            throw new IOException(
+            throw new IllegalStateException(
                 String.format("'%s' param not found", name)
             );
         }
