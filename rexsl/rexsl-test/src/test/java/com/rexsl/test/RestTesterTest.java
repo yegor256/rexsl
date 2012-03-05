@@ -107,20 +107,17 @@ public final class RestTesterTest {
     /**
      * RestTester can send body with HTTP POST request.
      * @throws Exception If something goes wrong inside
-     * @todo #85 This test doesn't work for some reason, and I can't understand
-     *  what exactly is the problem. Grizzly container doesn't understand
-     *  POST params passed in HTTP request body. While Jersey understands them
-     *  perfectly in rexsl-maven-plugin invoker tests. Maybe getParameters()
-     *  method in GrizzlyHttpRequest doesn't work properly with POST params?
+     * @todo #151 Is it possible to initialize input variable with
+     *  InputStream from request without side effects on request?
+     *  request's parameters retrieve is done lazily and requires
+     *  InputStream rewinded to it's start
      */
     @Test
     @org.junit.Ignore
-    public void sendsTextWithPostRequest() throws Exception {
+    public void sendsTextWithPostRequestMatchParam() throws Exception {
         final String name = "postparam";
         final String value = "some random value of this param \"&^%*;'\"";
         final ContainerMocker container = new ContainerMocker()
-            .expectBody(Matchers.containsString(name))
-            .expectBody(Matchers.containsString(value))
             .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(RestTester.POST))
             .mock();
@@ -137,6 +134,35 @@ public final class RestTesterTest {
                     name,
                     URLEncoder.encode(value, CharEncoding.UTF_8)
                 )
+            )
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can send body with HTTP POST request.
+     * @throws Exception If something goes wrong inside
+     * @todo #151 Is it possible to initialize input variable with
+     *  InputStream from request without side effects on request?
+     *  request's parameters retrieve is done lazily and requires
+     *  InputStream rewinded to it's start
+     */
+    @Test
+    @org.junit.Ignore
+    public void sendsTextWithPostRequestMatchBody() throws Exception {
+        final String value = "some body value with \"&^%*;'\"";
+        final ContainerMocker container = new ContainerMocker()
+            .expectBody(Matchers.containsString("with"))
+            .expectMethod(Matchers.equalTo(RestTester.POST))
+            .mock();
+        RestTester
+            .start(container.home())
+            .header(
+                HttpHeaders.CONTENT_TYPE,
+                MediaType.APPLICATION_FORM_URLENCODED
+            )
+            .post(
+                "testing of POST request body",
+                URLEncoder.encode(value, CharEncoding.UTF_8)
             )
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
