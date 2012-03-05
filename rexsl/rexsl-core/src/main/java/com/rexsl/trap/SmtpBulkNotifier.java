@@ -142,8 +142,8 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
         final Iterator<Defect> iterator = this.defects.iterator();
         while (iterator.hasNext()) {
             final Defect defect = iterator.next();
-            text.append(defect.text()).append("\n\n");
-            attachment.append(defect.date()).append("\n");
+            text.append(defect.date()).append("\n\n");
+            attachment.append(defect.text()).append("\n");
             iterator.remove();
         }
         text.append("Detailed information is attached in text file.");
