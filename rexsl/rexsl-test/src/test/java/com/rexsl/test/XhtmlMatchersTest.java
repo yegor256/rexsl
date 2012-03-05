@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -62,6 +63,41 @@ public final class XhtmlMatchersTest {
             "<b xmlns='bar'><file>abc.txt</file></b>",
             XhtmlMatchers.withXPath("/ns1:b/ns1:file[.='abc.txt']", "bar")
         );
+        MatcherAssert.assertThat("<a><b/></a>", XhtmlMatchers.withXPath("//b"));
     }
 
+    /**
+     * XhtmlMatchers can match against type.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void matchesType() throws Exception {
+        final Foo foo = new Foo();
+        MatcherAssert.assertThat(
+            foo,
+            Matchers.allOf(
+                Matchers.hasProperty("abc", Matchers.containsString("some")),
+                XhtmlMatchers.<Foo>withXPath("//c")
+            )
+        );
+    }
+
+    public static final class Foo {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return "<a><c/></a>";
+        }
+
+        /**
+         * Property abc.
+         * @return Value of abc
+         */
+        public String getAbc() {
+            return "some value";
+        }
+    }
 }

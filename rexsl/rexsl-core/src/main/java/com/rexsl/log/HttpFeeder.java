@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,6 +41,15 @@ import org.apache.commons.lang.CharEncoding;
 /**
  * Feeder through HTTP POST request.
  *
+ * <p>The feeder can be configured to split all incoming texts to single lines
+ * and post them
+ * to the configured URL one by one. This mechanism may be required for
+ * some cloud
+ * logging platforms, for example for
+ * <a href="http://www.loggly.com">loggly.com</a> (read their forum post about
+ * <a href="http://forum.loggly.com/discussion/23">this problem</a>). You
+ * enable splitting by {@code split} option set to {@code TRUE}.
+ *
  * <p>The class is thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -55,6 +64,12 @@ public final class HttpFeeder implements Feeder {
     private transient URL url;
 
     /**
+     * Shall we split lines before POST-ing?
+     * @since 0.3.6
+     */
+    private transient boolean split;
+
+    /**
      * Set option {@code url}.
      * @param addr The URL
      */
@@ -64,6 +79,15 @@ public final class HttpFeeder implements Feeder {
         } catch (java.net.MalformedURLException ex) {
             throw new IllegalArgumentException(ex);
         }
+    }
+
+    /**
+     * Set option {@code split}.
+     * @param yes Shall we split?
+     * @since 0.3.6
+     */
+    public void setSplit(final boolean yes) {
+        this.split = yes;
     }
 
     /**
@@ -79,8 +103,12 @@ public final class HttpFeeder implements Feeder {
      */
     @Override
     public void feed(final String text) throws IOException {
-        for (String line : text.split(CloudAppender.EOL)) {
-            this.post(String.format("%s%s", line, CloudAppender.EOL));
+        if (this.split) {
+            for (String line : text.split(CloudAppender.EOL)) {
+                this.post(String.format("%s%s", line, CloudAppender.EOL));
+            }
+        } else {
+            this.post(text);
         }
     }
 
@@ -89,7 +117,7 @@ public final class HttpFeeder implements Feeder {
      */
     @Override
     public void activateOptions() {
-        // empty
+        // empty, nothing to do here
     }
 
     /**
@@ -123,6 +151,7 @@ public final class HttpFeeder implements Feeder {
                 )
             );
         }
+        conn.disconnect();
     }
 
 }

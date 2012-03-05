@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -117,6 +117,17 @@ public final class EnvironmentMocker {
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
+        return this;
+    }
+
+    /**
+     * With this folder in basedir.
+     * @param name File name
+     * @return This object
+     */
+    public EnvironmentMocker withFolder(final String name) {
+        final File dest = new File(this.basedir, name);
+        dest.mkdirs();
         return this;
     }
 

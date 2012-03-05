@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -98,11 +98,12 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     @Override
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
-        // @todo #151 Is it possible to initialize input variable with
-        //     InputStream from request without side effects on request?
-        //     request's parameters retrieve is done lazily and requires
-        //     InputStream rewinded to it's start
-        final String input = "";
+        String input = null;
+        try {
+            input = IOUtils.toString(request.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.assertMethod(request, input);
         this.assertRequestUri(request, input);
         this.assertParams(request, input);

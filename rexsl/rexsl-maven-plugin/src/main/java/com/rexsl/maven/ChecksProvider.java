@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,7 @@ import com.rexsl.maven.checks.FilesStructureCheck;
 import com.rexsl.maven.checks.InContainerScriptsCheck;
 import com.rexsl.maven.checks.JSStaticCheck;
 import com.rexsl.maven.checks.JigsawCssCheck;
+import com.rexsl.maven.checks.RexslFilesCheck;
 import com.rexsl.maven.checks.WebXmlCheck;
 import com.rexsl.maven.checks.XhtmlOutputCheck;
 import java.util.LinkedHashSet;
@@ -63,6 +64,7 @@ public final class ChecksProvider {
         checks.add(new XhtmlOutputCheck());
         checks.add(new InContainerScriptsCheck());
         checks.add(new WebXmlCheck());
+        checks.add(new RexslFilesCheck());
         return checks;
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -177,7 +177,7 @@ public final class XsltFilter implements Filter {
      * @checkstyle RedundantThrows (2 lines)
      */
     private String transform(final String xml) throws ServletException {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         final StringWriter writer = new StringWriter();
         try {
             final Source stylesheet = this.tfactory.getAssociatedStylesheet(
@@ -226,10 +226,10 @@ public final class XsltFilter implements Filter {
         final String output = writer.toString();
         Logger.debug(
             this,
-            "#tranform(%d chars): produced %d chars [%dms]",
+            "#tranform(%d chars): produced %d chars in %[nano]s",
             xml.length(),
             output.length(),
-            System.currentTimeMillis() - start
+            System.nanoTime() - start
         );
         return output;
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,11 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.utils.FileFinder;
 import com.ymock.util.Logger;
+import java.io.File;
+import java.util.Collection;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Validates Java script files against style sheet rules.
@@ -43,15 +47,65 @@ import com.ymock.util.Logger;
 public final class JSStaticCheck implements Check {
 
     /**
+     * Directory with JS files.
+     */
+    private static final String JS_DIR = "src/main/webapp/js";
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public boolean validate(final Environment env) {
-        Logger.warn(
-            this,
-            "Static javascript validator is not implemented yet"
-        );
-        return true;
+        final File dir = new File(env.basedir(), this.JS_DIR);
+        boolean success = true;
+        if (dir.exists()) {
+            final Collection<File> files = new FileFinder(dir, "js").random();
+            for (File file : files) {
+                try {
+                    success &= this.one(file);
+                } catch (InternalCheckException ex) {
+                    Logger.warn(
+                        this,
+                        "Failed:\n%[exception]s",
+                        ex
+                    );
+                    success = false;
+                }
+            }
+        } else {
+            Logger.info(
+                this,
+                "%s directory is absent, no JS tests",
+                this.JS_DIR
+            );
+        }
+        return success;
     }
 
+    /**
+     * Check one script.
+     * @param file Script file to check
+     * @throws InternalCheckException If some failure inside
+     * @return Is script valid?
+     * @todo #112! Enable commented code when yui finish migration to Rhino 1.7R3
+     */
+    private boolean one(final File file) throws InternalCheckException {
+        final String jScript;
+        try {
+            jScript = FileUtils.readFileToString(file);
+        } catch (java.io.IOException ex) {
+            throw new InternalCheckException(ex);
+        }
+        /*final JSLint lint = new JSLintBuilder().fromDefault();
+        final List<Issue> issues = lint.lint("systemId", jScript).getIssues();
+        for (Issue issue : issues) {
+            Logger.warn(
+                this,
+                "%s\n",
+                issue.toString()
+            );
+        }
+        return issues.size()==0;*/
+        return jScript != null;
+    }
 }

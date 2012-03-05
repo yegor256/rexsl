@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,7 +58,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      */
     @Override
     protected void run() throws MojoFailureException {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         if (this.systemPropertyVariables != null) {
             this.injectVariables(this.systemPropertyVariables);
         }
@@ -75,8 +75,8 @@ public final class CheckMojo extends AbstractRexslMojo {
         }
         Logger.info(
             this,
-            "All ReXSL checks passed in %dms",
-            System.currentTimeMillis() - start
+            "All ReXSL checks passed in %[nano]s",
+            System.nanoTime() - start
         );
     }
 

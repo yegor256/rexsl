@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,8 @@
  */
 package com.rexsl.core;
 
+import java.io.File;
+import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -94,6 +96,19 @@ public final class ManifestsTest {
     }
 
     /**
+     * Manifests can throw an exception loading file with empty attribute.
+     * @throws Exception If something goes wrong
+     */
+    @Test(expected = IllegalStateException.class)
+    public void throwsExceptionWhen() throws Exception {
+        final File file = new File(
+            Thread.currentThread().getContextClassLoader().
+                getResource("META-INF/MANIFEST_INVALID.MF").getFile()
+        );
+        Manifests.append(file);
+    }
+
+    /**
      * Manifests can make a snapshot and restore it back.
      * @throws Exception If something goes wrong
      */
@@ -106,6 +121,27 @@ public final class ManifestsTest {
         MatcherAssert.assertThat("should be", Manifests.exists(name));
         Manifests.revert(snapshot);
         MatcherAssert.assertThat("reverted", !Manifests.exists(name));
+    }
+
+    /**
+     * Manifests can append attributes from file.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void appendsAttributesFromFile() throws Exception {
+        final String name = "Test-Attribute-From-File";
+        final String value = "some text value of attribute";
+        final File file = File.createTempFile("test-", ".MF");
+        FileUtils.writeStringToFile(
+            file,
+            String.format("%s: %s\n", name, value)
+        );
+        Manifests.append(file);
+        MatcherAssert.assertThat(
+            "loaded from file",
+            Manifests.exists(name) && Manifests.read(name).equals(value)
+        );
+        file.delete();
     }
 
 }

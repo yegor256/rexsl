@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,8 +33,8 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
+import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.GroovyExecutor;
-import com.rexsl.maven.utils.ScriptsFinder;
 import com.ymock.util.Logger;
 import java.io.File;
 
@@ -89,7 +89,7 @@ public final class InContainerScriptsCheck implements Check {
      */
     private boolean run(final File dir, final Environment env) {
         boolean success = true;
-        final ScriptsFinder finder = new ScriptsFinder(dir);
+        final FileFinder finder = new FileFinder(dir, "groovy");
         for (File script : finder.random()) {
             try {
                 Logger.info(this, "Testing '%s'...", script);

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import com.ymock.util.Logger;
+import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
@@ -37,6 +38,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
@@ -183,7 +185,7 @@ public final class Manifests {
                     "Atribute '%s' not found in MANIFEST.MF file(s) among %d other attribute(s) %[list]s and %d injection(s)",
                     name,
                     Manifests.attributes.size(),
-                    Manifests.attributes.keySet(),
+                    new TreeSet<String>(Manifests.attributes.keySet()),
                     Manifests.INJECTED.size()
                 )
             );
@@ -299,7 +301,7 @@ public final class Manifests {
      * @see #Manifests()
      */
     public static void append(final ServletContext ctx) {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
@@ -317,14 +319,37 @@ public final class Manifests {
             Manifests.attributes.putAll(attrs);
             Logger.info(
                 Manifests.class,
-                "#append(%s): %d attributes loaded from %s in %dms: %[list]s",
+                "#append(%s): %d attribs loaded from %s in %[nano]s: %[list]s",
                 ctx.getClass().getName(),
                 attrs.size(),
                 main,
-                System.currentTimeMillis() - start,
-                attrs.keySet()
+                System.nanoTime() - start,
+                new TreeSet<String>(attrs.keySet())
             );
         }
+    }
+
+    /**
+     * Append attributes from the file.
+     * @param file The file to load attributes from
+     */
+    public static void append(final File file) {
+        final long start = System.nanoTime();
+        Map<String, String> attrs;
+        try {
+            attrs = Manifests.loadOneFile(file.toURL());
+        } catch (java.net.MalformedURLException ex) {
+            throw new IllegalStateException(ex);
+        }
+        Manifests.attributes.putAll(attrs);
+        Logger.info(
+            Manifests.class,
+            "#append('%s'): %d attributes loaded in %[nano]s: %[list]s",
+            file,
+            attrs.size(),
+            System.nanoTime() - start,
+            new TreeSet<String>(attrs.keySet())
+        );
     }
 
     /**
@@ -333,7 +358,7 @@ public final class Manifests {
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static Map<String, String> load() {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         Manifests.failures = new ConcurrentHashMap<URL, String>();
         final Map<String, String> attrs =
             new ConcurrentHashMap<String, String>();
@@ -355,11 +380,11 @@ public final class Manifests {
         }
         Logger.info(
             Manifests.class,
-            "#load(): %d attributes loaded from %d URL(s) in %dms: %[list]s",
+            "#load(): %d attribs loaded from %d URL(s) in %[nano]s: %[list]s",
             attrs.size(),
             count,
-            System.currentTimeMillis() - start,
-            attrs.keySet()
+            System.nanoTime() - start,
+            new TreeSet<String>(attrs.keySet())
         );
         return attrs;
     }
@@ -411,7 +436,7 @@ public final class Manifests {
                 "#loadOneFile('%s'): %d attributes loaded (%[list]s)",
                 url,
                 props.size(),
-                props.keySet()
+                new TreeSet<String>(props.keySet())
             );
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);

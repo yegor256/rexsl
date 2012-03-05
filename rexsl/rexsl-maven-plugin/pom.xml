@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
  *
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,6 +51,11 @@
     <name>rexsl-maven-plugin</name>
 
     <dependencies>
+        <!--<dependency>-->
+            <!--<artifactId>jslint4java</artifactId>-->
+            <!--<groupId>com.googlecode.jslint4java</groupId>-->
+            <!--<version>2.0.2</version>-->
+          <!--</dependency>-->
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
@@ -392,6 +397,7 @@
                         -->
                         <!-- <pomInclude>run-all-correct/pom.xml</pomInclude> -->
                         <pomInclude>all-correct/pom.xml</pomInclude>
+                        <pomInclude>structure-failure/pom.xml</pomInclude>
                         <pomInclude>script-failure/pom.xml</pomInclude>
                         <pomInclude>xhtml-failure/pom.xml</pomInclude>
                         <pomInclude>xsd-failure/pom.xml</pomInclude>
