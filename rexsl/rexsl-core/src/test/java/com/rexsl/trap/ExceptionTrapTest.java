@@ -29,6 +29,7 @@
  */
 package com.rexsl.trap;
 
+import com.rexsl.core.HttpServletRequestMocker;
 import com.rexsl.core.ServletConfigMocker;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -58,12 +59,7 @@ public final class ExceptionTrapTest {
         final HttpServlet servlet = new ExceptionTrap();
         servlet.init(config);
         final HttpServletRequest request =
-            Mockito.mock(HttpServletRequest.class);
-        Mockito.doReturn("GET").when(request).getMethod();
-        Mockito.doReturn("/").when(request).getRequestURI();
-        Mockito.doReturn("a").when(request).getAttribute(Mockito.anyString());
-        Mockito.doReturn(new java.io.IOException("ouch"))
-            .when(request).getAttribute("javax.servlet.error.exception");
+            new HttpServletRequestMocker().mock();
         final HttpServletResponse response =
             Mockito.mock(HttpServletResponse.class);
         final StringWriter writer = new StringWriter();
@@ -71,28 +67,8 @@ public final class ExceptionTrapTest {
         servlet.service(request, response);
         MatcherAssert.assertThat(
             writer.toString(),
-            Matchers.containsString("code: a\n")
+            Matchers.containsString("code: ")
         );
-    }
-
-    /**
-     * ExceptionTrap can render page even if most of values are NULL.
-     * @throws Exception If there is some problem inside
-     */
-    @Test
-    public void rendersHtmlPageWithNullAttributes() throws Exception {
-        final ServletConfig config = new ServletConfigMocker().mock();
-        final HttpServlet servlet = new ExceptionTrap();
-        servlet.init(config);
-        final HttpServletRequest request =
-            Mockito.mock(HttpServletRequest.class);
-        Mockito.doReturn("POST").when(request).getMethod();
-        Mockito.doReturn("/test").when(request).getRequestURI();
-        final HttpServletResponse response =
-            Mockito.mock(HttpServletResponse.class);
-        final StringWriter writer = new StringWriter();
-        Mockito.doReturn(new PrintWriter(writer)).when(response).getWriter();
-        servlet.service(request, response);
     }
 
 }
