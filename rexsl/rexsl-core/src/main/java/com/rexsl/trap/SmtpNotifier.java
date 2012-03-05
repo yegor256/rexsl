@@ -46,7 +46,7 @@ import javax.mail.Message;
  *  &lt;init-param&gt;
  *   &lt;param-name&gt;com.rexsl.trap.Notifier&lt;/param-name&gt;
  *   &lt;param-value&gt;
- *    com.rexsl.trap.SmtpNotifier?to=me&#64;example.com&amp;host=gmail.com...
+ *    com.rexsl.trap.SmtpNotifier?to=me&#64;example.com&amp;...
  *   &lt;/param-value&gt;
  *  &lt;/init-param&gt;
  * &lt;/servlet&gt;
@@ -65,7 +65,8 @@ import javax.mail.Message;
  * </pre>
  *
  * <p>In this case we will try to find and read {@code My-Host} attribute from
- * one of available {@code MANIFEST.MF} files (read more in {@link Manifests}).
+ * one of available {@code MANIFEST.MF} files (read more in
+ * {@link com.rexsl.core.Manifests}). See also {@link SmtpBulkNotifier}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
