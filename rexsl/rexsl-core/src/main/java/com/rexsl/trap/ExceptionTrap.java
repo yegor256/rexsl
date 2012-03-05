@@ -186,35 +186,48 @@ public final class ExceptionTrap extends HttpServlet {
      */
     private StringBuilder text(final HttpServletRequest request) {
         final StringBuilder text = new StringBuilder();
+        text.append(String.format("date: %s\n", new Date()));
         this.append(text, request, "code");
         this.append(text, request, "message");
         this.append(text, request, "exception_type");
         this.append(text, request, "request_uri");
-        text.append(
-            Logger.format(
-                "exception: %[exception]s\n",
-                request.getAttribute("javax.servlet.error.exception")
-            )
-        );
-        text.append(String.format("date: %s\n", new Date()));
         final ServletContext ctx = this.getServletContext();
         text.append(
             String.format(
-                "server info: %s\n",
+                "servlet context path: %s\n",
+                request.getContextPath()
+            )
+        );
+        text.append(
+            String.format(
+                "requested: %s (%s) at %s:%d\n",
+                request.getRequestURL().toString(),
+                request.getMethod(),
+                request.getServerName(),
+                request.getServerPort()
+            )
+        );
+        text.append(
+            String.format(
+                "remote: %s:%d (%s)\n",
+                request.getRemoteAddr(),
+                request.getRemotePort(),
+                request.getRemoteHost()
+            )
+        );
+        text.append(
+            String.format(
+                "servlet: \"%s\" (API %d.%d) at \"%s\"\n",
+                ctx.getServletContextName(),
+                ctx.getMajorVersion(),
+                ctx.getMinorVersion(),
                 ctx.getServerInfo()
             )
         );
         text.append(
-            String.format(
-                "servlet context name: %s\n",
-                ctx.getServletContextName()
-            )
-        );
-        text.append(
-            String.format(
-                "servlet API: %d.%d\n",
-                ctx.getMajorVersion(),
-                ctx.getMinorVersion()
+            Logger.format(
+                "exception: %[exception]s\n",
+                request.getAttribute("javax.servlet.error.exception")
             )
         );
         return text;
