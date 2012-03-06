@@ -194,7 +194,7 @@ public final class ExceptionTrap extends HttpServlet {
         final ServletContext ctx = this.getServletContext();
         text.append(
             String.format(
-                "servlet context path: %s\n",
+                "servlet context path: \"%s\"\n",
                 request.getContextPath()
             )
         );

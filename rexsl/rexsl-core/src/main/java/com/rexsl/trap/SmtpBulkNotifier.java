@@ -134,7 +134,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
         text.append(
             String.format(
                 // @checkstyle LineLength (1 line)
-                "During the last few mins there were %d exceptions:\n\n",
+                "During the last few mins there were %d exception(s):\n\n",
                 this.defects.size()
             )
         );
@@ -146,7 +146,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
             attachment.append(defect.text()).append("\n\n");
             iterator.remove();
         }
-        text.append("Detailed information is attached in text file.");
+        text.append("\nDetailed information is attached in text file.");
         return this.mime(text.toString(), attachment.toString());
     }
 
