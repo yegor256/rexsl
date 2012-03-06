@@ -79,8 +79,8 @@ import org.apache.commons.lang.CharEncoding;
  * <p>Configuration of the trap behavior is done through {@code init-params},
  * which are named as interfaces with values as URIs. Every URI has a name
  * of implementation class and a list of query params, which will be send to
- * the class in {@link Properties}. See {@link SmtpNotifier} for
- * a better example.
+ * the class in {@link Properties}. See {@link SmtpNotifier} and
+ * {@link SmtpBulkNotifier} for better examples.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
