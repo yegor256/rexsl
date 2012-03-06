@@ -27,39 +27,37 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.checks;
 
+import com.rexsl.maven.Check;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
- * Test case for {@link ChecksProvider}.
+ * Provider of checks.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (100 lines)
  */
-public final class ChecksProviderTest {
+public final class ChecksProvider {
 
     /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
+     * Get full collection of checks.
+     * @return List of checks
      */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogMocker().mock();
-    }
-
-    /**
-     * ChecksProvider can provide a set of checks.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void retrievesSetOfChecks() throws Exception {
-        final Set<Check> checks = new ChecksProvider().all();
-        MatcherAssert.assertThat(checks, Matchers.notNullValue());
-        MatcherAssert.assertThat(checks.size(), Matchers.greaterThan(0));
+    public Set<Check> all() {
+        final Set<Check> checks = new LinkedHashSet<Check>();
+        checks.add(new BinaryFilesCheck());
+        checks.add(new CssStaticCheck());
+        checks.add(new JigsawCssCheck());
+        checks.add(new JSStaticCheck());
+        checks.add(new FilesStructureCheck());
+        checks.add(new XhtmlOutputCheck());
+        checks.add(new InContainerScriptsCheck());
+        checks.add(new WebXmlCheck());
+        checks.add(new RexslFilesCheck());
+        return checks;
     }
 
 }

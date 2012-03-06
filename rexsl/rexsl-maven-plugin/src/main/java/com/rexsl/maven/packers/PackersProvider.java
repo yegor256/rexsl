@@ -27,11 +27,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.packers;
 
-import com.rexsl.maven.packers.CssPacker;
-import com.rexsl.maven.packers.JsPacker;
-import com.rexsl.maven.packers.XslPacker;
+import com.rexsl.maven.Packer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

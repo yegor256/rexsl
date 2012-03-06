@@ -47,7 +47,7 @@ import org.apache.commons.lang.CharEncoding;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CssPacker extends AbstractPacker {
+final class CssPacker extends AbstractPacker {
 
     /**
      * {@inheritDoc}

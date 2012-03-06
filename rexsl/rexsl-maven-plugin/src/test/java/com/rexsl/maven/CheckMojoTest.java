@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven;
 
+import com.rexsl.maven.checks.ChecksProvider;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.maven.plugin.logging.Log;

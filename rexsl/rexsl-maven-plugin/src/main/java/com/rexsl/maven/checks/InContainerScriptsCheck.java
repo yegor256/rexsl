@@ -44,7 +44,7 @@ import java.io.File;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class InContainerScriptsCheck implements Check {
+final class InContainerScriptsCheck implements Check {
 
     /**
      * {@inheritDoc}

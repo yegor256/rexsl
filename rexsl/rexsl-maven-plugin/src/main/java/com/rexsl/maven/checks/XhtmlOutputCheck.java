@@ -54,7 +54,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (2 lines)
  */
-public final class XhtmlOutputCheck implements Check {
+final class XhtmlOutputCheck implements Check {
 
     /**
      * Directory with XML files.
