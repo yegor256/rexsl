@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven;
 
+import com.rexsl.maven.packers.PackersProvider;
 import com.ymock.util.Logger;
 import java.util.Set;
 

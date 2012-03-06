@@ -49,7 +49,7 @@ import org.apache.commons.lang.ArrayUtils;
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
  * @version $Id$
  */
-public final class RexslFilesCheck implements Check {
+final class RexslFilesCheck implements Check {
 
     /**
      * Allowed extensions for files in sub folders.

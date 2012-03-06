@@ -44,7 +44,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class RuntimeResolver implements URIResolver {
+class RuntimeResolver implements URIResolver {
 
     /**
      * Home page of the site.

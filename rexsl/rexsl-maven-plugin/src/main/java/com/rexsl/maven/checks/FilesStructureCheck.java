@@ -40,7 +40,7 @@ import java.io.File;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class FilesStructureCheck implements Check {
+final class FilesStructureCheck implements Check {
 
     /**
      * {@inheritDoc}

@@ -35,7 +35,7 @@ package com.rexsl.maven.checks;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class InternalCheckException extends Exception {
+final class InternalCheckException extends Exception {
 
     /**
      * Default ctor.

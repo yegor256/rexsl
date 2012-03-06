@@ -27,45 +27,40 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.checks;
 
-import com.rexsl.maven.checks.BinaryFilesCheck;
-import com.rexsl.maven.checks.CssStaticCheck;
-import com.rexsl.maven.checks.FilesStructureCheck;
-import com.rexsl.maven.checks.InContainerScriptsCheck;
-import com.rexsl.maven.checks.JSStaticCheck;
-import com.rexsl.maven.checks.JigsawCssCheck;
-import com.rexsl.maven.checks.RexslFilesCheck;
-import com.rexsl.maven.checks.WebXmlCheck;
-import com.rexsl.maven.checks.XhtmlOutputCheck;
-import java.util.LinkedHashSet;
+import com.rexsl.maven.Check;
 import java.util.Set;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
- * Provider of checks.
- *
+ * Test case for {@link ChecksProvider}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @checkstyle ClassDataAbstractionCoupling (100 lines)
  */
-public final class ChecksProvider {
+public final class ChecksProviderTest {
 
     /**
-     * Get full collection of checks.
-     * @return List of checks
+     * Forward SLF4J to Maven Log.
+     * @throws Exception If something is wrong inside
      */
-    public Set<Check> all() {
-        final Set<Check> checks = new LinkedHashSet<Check>();
-        checks.add(new BinaryFilesCheck());
-        checks.add(new CssStaticCheck());
-        checks.add(new JigsawCssCheck());
-        checks.add(new JSStaticCheck());
-        checks.add(new FilesStructureCheck());
-        checks.add(new XhtmlOutputCheck());
-        checks.add(new InContainerScriptsCheck());
-        checks.add(new WebXmlCheck());
-        checks.add(new RexslFilesCheck());
-        return checks;
+    @BeforeClass
+    public static void startLogging() throws Exception {
+        new com.rexsl.maven.LogMocker().mock();
+    }
+
+    /**
+     * ChecksProvider can provide a set of checks.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void retrievesSetOfChecks() throws Exception {
+        final Set<Check> checks = new ChecksProvider().all();
+        MatcherAssert.assertThat(checks, Matchers.notNullValue());
+        MatcherAssert.assertThat(checks.size(), Matchers.greaterThan(0));
     }
 
 }

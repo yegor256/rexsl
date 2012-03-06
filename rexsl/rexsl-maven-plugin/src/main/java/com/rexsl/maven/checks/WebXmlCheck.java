@@ -41,7 +41,7 @@ import java.io.File;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: WebXmlCheck.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class WebXmlCheck implements Check {
+final class WebXmlCheck implements Check {
 
     /**
      * Contains path to web.xml file.

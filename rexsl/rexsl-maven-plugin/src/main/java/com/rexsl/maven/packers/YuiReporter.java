@@ -40,7 +40,7 @@ import org.mozilla.javascript.EvaluatorException;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: YuiCompressorErrorReporter.java 370 2011-11-27 16:36:01Z guard $
  */
-public final class YuiReporter implements ErrorReporter {
+final class YuiReporter implements ErrorReporter {
 
     /**
      * {@inheritDoc}

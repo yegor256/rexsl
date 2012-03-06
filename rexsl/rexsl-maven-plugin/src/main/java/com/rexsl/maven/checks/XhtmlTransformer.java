@@ -45,7 +45,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class XhtmlTransformer {
+class XhtmlTransformer {
 
     /**
      * Turn XML into XHTML.

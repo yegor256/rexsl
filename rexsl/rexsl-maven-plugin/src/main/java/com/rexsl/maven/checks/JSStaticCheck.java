@@ -44,7 +44,7 @@ import org.apache.commons.io.FileUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: JSStaticCheck.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class JSStaticCheck implements Check {
+final class JSStaticCheck implements Check {
 
     /**
      * Directory with JS files.

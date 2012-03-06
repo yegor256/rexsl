@@ -53,7 +53,7 @@ import org.w3c.dom.NodeList;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class XslPacker extends AbstractPacker {
+final class XslPacker extends AbstractPacker {
 
     /**
      * Document builder factory.
