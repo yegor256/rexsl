@@ -34,9 +34,10 @@ import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
 
-def home = UriBuilder.fromUri(System.getProperty('catapult.home'))
-RestTester.start(home)
-    .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
-    .header(HttpHeaders.USER_AGENT, 'somebody')
-    .get('catapult test')
-    .assertStatus(HttpURLConnection.HTTP_OK)
+['/', '/xsl/Home.xsl', '/css/screen.css'].each {
+    RestTester.start(UriBuilder.fromUri(System.getProperty('catapult.home')).path(it))
+        .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
+        .header(HttpHeaders.USER_AGENT, 'somebody')
+        .get('catapult test')
+        .assertStatus(HttpURLConnection.HTTP_OK)
+}
