@@ -148,9 +148,9 @@ class BaseValidator {
     protected final DefaultValidationResponse failure(final Throwable error) {
         final DefaultValidationResponse resp = new DefaultValidationResponse(
             false,
-            null,
-            null,
-            null
+            URI.create("http://localhost/"),
+            "unknown-doctype",
+            "no-encoding"
         );
         resp.addError(
             new Defect(
