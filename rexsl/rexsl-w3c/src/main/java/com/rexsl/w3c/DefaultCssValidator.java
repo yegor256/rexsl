@@ -59,7 +59,11 @@ final class DefaultCssValidator extends BaseValidator
                 .send(uri, this.entity("file", this.filter(css), "text/css"))
                 .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
                 .registerNs("m", "http://www.w3.org/2005/07/css-validator")
-                .assertXPath("/env:Envelope/env:Body/m:cssvalidationresponse")
+                .assertThat(
+                    new RetryPolicy(
+                        "/env:Envelope/env:Body/m:cssvalidationresponse"
+                    )
+                )
                 .assertXPath("//m:validity")
                 .assertXPath("//m:checkedby");
             response = this.build(soap);
