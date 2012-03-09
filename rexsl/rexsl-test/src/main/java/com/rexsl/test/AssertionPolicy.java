@@ -43,6 +43,12 @@ public interface AssertionPolicy {
     /**
      * Make an assertion and return nothing or throw {@link AssertionError}
      * if some problem is found.
+     *
+     * <p>Validity information about the response should be collected in
+     * this method and stored in the object's variable. Later you should use
+     * it in {@link again(int)} in order to inform the caller of whether it
+     * should retry the request or not.
+     *
      * @param response The response to assert
      */
     void assertThat(TestResponse response);
