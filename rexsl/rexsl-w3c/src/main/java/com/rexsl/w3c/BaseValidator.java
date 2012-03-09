@@ -33,7 +33,6 @@ import com.rexsl.test.RestTester;
 import com.rexsl.test.TestResponse;
 import com.ymock.util.Logger;
 import java.io.ByteArrayOutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -79,8 +78,7 @@ class BaseValidator {
                     this.BOUNDARY
                 )
             )
-            .post("validating through W3C validator", entity)
-            .assertStatus(HttpURLConnection.HTTP_OK);
+            .post("validating through W3C validator", entity);
     }
 
     /**

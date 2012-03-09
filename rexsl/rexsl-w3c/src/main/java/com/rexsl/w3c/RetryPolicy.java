@@ -32,6 +32,7 @@ package com.rexsl.w3c;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
 import com.ymock.util.Logger;
+import java.net.HttpURLConnection;
 
 /**
  * Retry policy of assertion.
@@ -65,6 +66,9 @@ final class RetryPolicy implements AssertionPolicy {
     @Override
     public void assertThat(final TestResponse response) {
         this.invalid = response.nodes(this.xpath).isEmpty();
+        if (response.getStatus() != HttpURLConnection.HTTP_OK) {
+            throw new AssertionError("invalid HTTP status");
+        }
         if (this.invalid) {
             throw new AssertionError("invalid XML from W3C server");
         }
