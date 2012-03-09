@@ -87,21 +87,24 @@ final class XhtmlOutputCheck implements Check {
             );
             final EmbeddedContainer container = EmbeddedContainer.start(env);
             final Collection<File> files = new FileFinder(dir, "xml").random();
-            for (File xml : files) {
-                try {
-                    Logger.info(this, "Testing %s through...", xml);
-                    this.one(env, xml);
-                } catch (InternalCheckException ex) {
-                    Logger.warn(
-                        this,
-                        "Failed:\n%[exception]s",
-                        ex
-                    );
-                    success = false;
+            try {
+                for (File xml : files) {
+                    try {
+                        Logger.info(this, "Testing %s through...", xml);
+                        this.one(env, xml);
+                    } catch (InternalCheckException ex) {
+                        Logger.warn(
+                            this,
+                            "Failed:\n%[exception]s",
+                            ex
+                        );
+                        success = false;
+                    }
                 }
+            } finally {
+                container.stop();
+                Logger.info(this, "Embedded servlet container stopped");
             }
-            container.stop();
-            Logger.info(this, "Embedded servlet container stopped");
         } else {
             Logger.info(
                 this,

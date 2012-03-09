@@ -42,6 +42,11 @@ public interface HtmlValidator {
 
     /**
      * Validate and return validation response.
+     *
+     * <p>The method should never throw runtime exceptions, no matter what
+     * happened with the HTTP connection to the W3C server. It will return
+     * an invalid response, but will never throw.
+     *
      * @param html The HTML document
      * @return The response
      */

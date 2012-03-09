@@ -48,25 +48,35 @@ final class DefaultCssValidator extends BaseValidator
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public ValidationResponse validate(final String css) {
         DefaultValidationResponse response;
         final URI uri = UriBuilder
             .fromUri("http://jigsaw.w3.org/css-validator/validator")
             .build();
-        final TestResponse soap = this
-            .send(uri, this.entity("file", this.filter(css), "text/css"))
-            .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
-            .registerNs("m", "http://www.w3.org/2005/07/css-validator")
-            .assertXPath("/env:Envelope/env:Body/m:cssvalidationresponse")
-            .assertXPath("//m:validity")
-            .assertXPath("//m:checkedby");
-        response = this.build(soap);
-        final Pattern pattern = Pattern.compile(
-            ".*^/\\* JIGSAW IGNORE: [^\\n]+\\*/$.*",
-            Pattern.MULTILINE | Pattern.DOTALL
-        );
-        if (pattern.matcher(css).matches()) {
-            response.setValid(true);
+        try {
+            final TestResponse soap = this
+                .send(uri, this.entity("file", this.filter(css), "text/css"))
+                .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
+                .registerNs("m", "http://www.w3.org/2005/07/css-validator")
+                .assertThat(
+                    new RetryPolicy(
+                        "/env:Envelope/env:Body/m:cssvalidationresponse"
+                    )
+                )
+                .assertXPath("//m:validity")
+                .assertXPath("//m:checkedby");
+            response = this.build(soap);
+            final Pattern pattern = Pattern.compile(
+                ".*^/\\* JIGSAW IGNORE: [^\\n]+\\*/$.*",
+                Pattern.MULTILINE | Pattern.DOTALL
+            );
+            if (pattern.matcher(css).matches()) {
+                response.setValid(true);
+            }
+        // @checkstyle IllegalCatchCheck (1 line)
+        } catch (Throwable ex) {
+            response = this.failure(ex);
         }
         return response;
     }

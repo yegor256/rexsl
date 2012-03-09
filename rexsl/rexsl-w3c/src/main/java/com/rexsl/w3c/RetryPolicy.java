@@ -29,51 +29,62 @@
  */
 package com.rexsl.w3c;
 
+import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
-import java.net.URI;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
+import com.ymock.util.Logger;
+import java.net.HttpURLConnection;
 
 /**
- * Implementation of (X)HTML validator.
+ * Retry policy of assertion.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-final class DefaultHtmlValidator extends BaseValidator
-    implements HtmlValidator {
+final class RetryPolicy implements AssertionPolicy {
+
+    /**
+     * XPath to look for.
+     */
+    private final transient String xpath;
+
+    /**
+     * Was it an invalid XML response?
+     */
+    private transient boolean invalid;
+
+    /**
+     * Public ctor.
+     * @param addr The XPath addr to check
+     */
+    public RetryPolicy(final String addr) {
+        this.xpath = addr;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    public ValidationResponse validate(final String html) {
-        DefaultValidationResponse response;
-        final String field = "uploaded_file";
-        final URI uri = UriBuilder.fromUri("http://validator.w3.org/check")
-            .build();
-        try {
-            final TestResponse soap = this
-                .send(uri, this.entity(field, html, MediaType.TEXT_HTML))
-                .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
-                .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
-                .assertThat(
-                    new RetryPolicy(
-                        "/env:Envelope/env:Body/m:markupvalidationresponse"
-                    )
-                )
-                .assertXPath("//m:validity")
-                .assertXPath("//m:checkedby")
-                .assertXPath("//m:doctype")
-                .assertXPath("//m:charset");
-            response = this.build(soap);
-        // @checkstyle IllegalCatchCheck (1 line)
-        } catch (Throwable ex) {
-            response = this.failure(ex);
+    public void assertThat(final TestResponse response) {
+        this.invalid = response.nodes(this.xpath).isEmpty();
+        if (response.getStatus() != HttpURLConnection.HTTP_OK) {
+            throw new AssertionError("invalid HTTP status");
         }
-        return response;
+        if (this.invalid) {
+            throw new AssertionError("invalid XML from W3C server");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean again(final int attempt) {
+        Logger.warn(
+            this,
+            "#again(#%d): W3C XML response is broken",
+            attempt
+        );
+        return this.invalid;
     }
 
 }

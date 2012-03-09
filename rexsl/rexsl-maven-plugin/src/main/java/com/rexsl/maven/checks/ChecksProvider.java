@@ -44,6 +44,11 @@ public final class ChecksProvider {
 
     /**
      * Get full collection of checks.
+     *
+     * <p>Checks should be ordered by their complexity. Most simple and fast
+     * checks should go first, in order to fail build faster. Most heavy and
+     * slow checks should be at the end of the list.
+     *
      * @return List of checks
      */
     public Set<Check> all() {
@@ -53,10 +58,10 @@ public final class ChecksProvider {
         checks.add(new JigsawCssCheck());
         checks.add(new JSStaticCheck());
         checks.add(new FilesStructureCheck());
-        checks.add(new XhtmlOutputCheck());
-        checks.add(new InContainerScriptsCheck());
         checks.add(new WebXmlCheck());
         checks.add(new RexslFilesCheck());
+        checks.add(new XhtmlOutputCheck());
+        checks.add(new InContainerScriptsCheck());
         return checks;
     }
 

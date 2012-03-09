@@ -31,8 +31,8 @@ package com.rexsl.w3c;
 
 import com.rexsl.test.RestTester;
 import com.rexsl.test.TestResponse;
+import com.ymock.util.Logger;
 import java.io.ByteArrayOutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -78,8 +78,7 @@ class BaseValidator {
                     this.BOUNDARY
                 )
             )
-            .post("validating through W3C validator", entity)
-            .assertStatus(HttpURLConnection.HTTP_OK);
+            .post("validating through W3C validator", entity);
     }
 
     /**
@@ -136,6 +135,31 @@ class BaseValidator {
         for (TestResponse node : soap.nodes("//m:warning")) {
             resp.addWarning(this.defect(node));
         }
+        return resp;
+    }
+
+    /**
+     * Build response from error that just happened.
+     * @param error The exception
+     * @return The validation response just built
+     */
+    protected final DefaultValidationResponse failure(final Throwable error) {
+        final DefaultValidationResponse resp = new DefaultValidationResponse(
+            false,
+            URI.create("http://localhost/"),
+            "unknown-doctype",
+            "no-encoding"
+        );
+        resp.addError(
+            new Defect(
+                0,
+                0,
+                "",
+                Logger.format("%[exception]s", error),
+                "",
+                error.getMessage()
+            )
+        );
         return resp;
     }
 
