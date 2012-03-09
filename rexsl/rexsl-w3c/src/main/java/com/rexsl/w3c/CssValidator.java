@@ -68,6 +68,11 @@ public interface CssValidator {
 
     /**
      * Validate and return validation response.
+     *
+     * <p>The method should never throw runtime exceptions, no matter what
+     * happened with the HTTP connection to the W3C server. It will return
+     * an invalid response, but will never throw.
+     *
      * @param css The CSS stylesheet
      * @return The response
      */

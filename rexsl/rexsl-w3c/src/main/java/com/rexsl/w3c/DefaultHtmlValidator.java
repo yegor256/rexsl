@@ -48,20 +48,29 @@ final class DefaultHtmlValidator extends BaseValidator
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public ValidationResponse validate(final String html) {
+        DefaultValidationResponse response;
         final String field = "uploaded_file";
         final URI uri = UriBuilder.fromUri("http://validator.w3.org/check")
             .build();
-        final TestResponse soap = this
-            .send(uri, this.entity(field, html, MediaType.TEXT_HTML))
-            .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
-            .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
-            .assertXPath("/env:Envelope/env:Body/m:markupvalidationresponse")
-            .assertXPath("//m:validity")
-            .assertXPath("//m:checkedby")
-            .assertXPath("//m:doctype")
-            .assertXPath("//m:charset");
-        return this.build(soap);
+        try {
+            final TestResponse soap = this
+                .send(uri, this.entity(field, html, MediaType.TEXT_HTML))
+                .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
+                .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
+                .assertXPath("/env:Envelope/env:Body")
+                .assertXPath("/*/env:Body/m:markupvalidationresponse")
+                .assertXPath("//m:validity")
+                .assertXPath("//m:checkedby")
+                .assertXPath("//m:doctype")
+                .assertXPath("//m:charset");
+            response = this.build(soap);
+        // @checkstyle IllegalCatchCheck (1 line)
+        } catch (Throwable ex) {
+            response = this.failure(ex);
+        }
+        return response;
     }
 
 }
