@@ -47,9 +47,9 @@ final class RetryPolicy implements AssertionPolicy {
     private final transient String xpath;
 
     /**
-     * Was it a valid XML response?
+     * Was it an invalid XML response?
      */
-    private transient boolean valid;
+    private transient boolean invalid;
 
     /**
      * Public ctor.
@@ -64,7 +64,10 @@ final class RetryPolicy implements AssertionPolicy {
      */
     @Override
     public void assertThat(final TestResponse response) {
-        this.valid |= response.nodes(this.xpath).isEmpty();
+        this.invalid |= response.nodes(this.xpath).isEmpty();
+        if (this.invalid) {
+            throw new AssertionError("invalid XML from W3C server");
+        }
     }
 
     /**
@@ -74,10 +77,10 @@ final class RetryPolicy implements AssertionPolicy {
     public boolean again(final int attempt) {
         Logger.warn(
             this,
-            "#again(#%d): W3C XML response is not valid",
+            "#again(#%d): W3C XML response is broken",
             attempt
         );
-        return !this.valid;
+        return this.invalid;
     }
 
 }

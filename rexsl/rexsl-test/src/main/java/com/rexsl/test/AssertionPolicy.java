@@ -49,6 +49,9 @@ public interface AssertionPolicy {
      * it in {@link again(int)} in order to inform the caller of whether it
      * should retry the request or not.
      *
+     * <p>If the method doesn't throw {@link AssertionError} it means that
+     * everything went fine and {@link again(int)} will never be called.
+     *
      * @param response The response to assert
      */
     void assertThat(TestResponse response);
