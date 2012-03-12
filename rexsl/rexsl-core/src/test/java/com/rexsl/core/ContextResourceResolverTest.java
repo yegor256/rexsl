@@ -67,9 +67,9 @@ public final class ContextResourceResolverTest {
      */
     @Test
     public void resolvesResourceByHref() throws Exception {
-        final String href = "/test.xml";
+        final String href = "/test.xml?123";
         final ServletContext ctx = new ServletContextMocker()
-            .withResource(href, "<r>\u0443</r>")
+            .withResource("/test.xml", "<r>\u0443</r>")
             .mock();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve(href, null);
