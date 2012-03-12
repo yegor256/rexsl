@@ -31,6 +31,8 @@ package com.rexsl.core;
 
 import com.rexsl.test.XhtmlConverter;
 import java.io.StringWriter;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.ext.ContextResolver;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -118,7 +120,7 @@ public final class XslResolverTest {
         // spy.getContext(Object.class);
         // verify(spy, times(1)).createContext();
         // reset(spy);
-        // spy.getContext(Object.class);
+        // spy.getContRRText(Object.class);
         // verify(spy, times(0)).createContext();
     }
 
@@ -164,6 +166,36 @@ public final class XslResolverTest {
             XmlMatchers.hasXPath(
                 // @checkstyle LineLength (1 line)
                 "/processing-instruction('xml-stylesheet')[contains(.,\"type='text/xsl'\")]"
+            )
+        );
+    }
+
+    /**
+     * XslResolver can inject absolute URLs.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void injectsAbsolutePath() throws Exception {
+        final XslResolver resolver = new XslResolver();
+        final ServletContext context = Mockito.mock(ServletContext.class);
+        resolver.setServletContext(context);
+        final HttpServletRequest request = new HttpServletRequestMocker()
+            .mock();
+        Mockito.doReturn("http").when(request).getScheme();
+        Mockito.doReturn("localhost").when(request).getServerName();
+        Mockito.doReturn("/sample").when(request).getContextPath();
+        final int port = 8080;
+        Mockito.doReturn(port).when(request).getServerPort();
+        resolver.setHttpServletRequest(request);
+        final Marshaller mrsh = resolver.getContext(XslResolverTest.Page.class);
+        final Page page = new XslResolverTest.Page();
+        final StringWriter writer = new StringWriter();
+        mrsh.marshal(page, writer);
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(writer.toString()),
+            XmlMatchers.hasXPath(
+                // @checkstyle LineLength (1 line)
+                "/processing-instruction('xml-stylesheet')[contains(.,\"href='http://localhost:8080/sample/xsl/Page.xsl'\")]"
             )
         );
     }
