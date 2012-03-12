@@ -113,7 +113,9 @@ final class ContextResourceResolver implements URIResolver {
      * @return The stream opened or NULL if nothing found
      */
     private InputStream local(final String path) {
-        final InputStream stream = this.context.getResourceAsStream(path);
+        final InputStream stream = this.context.getResourceAsStream(
+            URI.create(path).getPath()
+        );
         if (stream != null) {
             Logger.debug(
                 this,
