@@ -38,7 +38,7 @@ import com.ymock.util.Logger
 Logger.info(this, 'StartsDataHolder running...')
 
 assert Data.INSTANCE.get() == 'Hello, world!'
-Data.INSTANCE.set('bootstrapped')
+Data.INSTANCE.set('bootstrapped by \u041F\u0435\u0442\u044F')
 
 // These properties should be injected by maven plugin, we're validating
 // this behavior here
