@@ -67,6 +67,7 @@ final class RexslFilesCheck implements Check {
             {"setup", "groovy"},
             {"bootstrap", "groovy"},
             {"xsd", "xsd"},
+            {"js", "js"},
         }
     );
 

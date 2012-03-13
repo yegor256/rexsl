@@ -54,6 +54,7 @@ public final class RexslFilesCheckTest {
             .withTextFile("src/test/rexsl/setup/test.groovy", "")
             .withTextFile("src/test/rexsl/bootstrap/bootstrap.groovy", "")
             .withTextFile("src/test/rexsl/xsd/file.xsd", "")
+            .withTextFile("src/test/rexsl/js/jsScript.js", "")
             .mock();
         MatcherAssert.assertThat(
             "valid file types passes without problems",

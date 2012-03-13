@@ -51,6 +51,12 @@
     <name>rexsl-maven-plugin</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version since="11 Mar 2012">2.0.6</version>
+            <scope>compile</scope>
+        </dependency>
         <!--<dependency>-->
             <!--<artifactId>jslint4java</artifactId>-->
             <!--<groupId>com.googlecode.jslint4java</groupId>-->

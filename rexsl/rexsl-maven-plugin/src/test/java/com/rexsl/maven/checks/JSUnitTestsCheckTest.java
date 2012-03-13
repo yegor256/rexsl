@@ -29,41 +29,48 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.Check;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.rexsl.maven.Environment;
+import com.rexsl.maven.EnvironmentMocker;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
 
 /**
- * Provider of checks.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * Test case for {@link com.rexsl.maven.checks.JSUnitTestsCheck}.
+ * @author Evgeniy Nyavro (e.nyavro@gmail.com)
  * @version $Id$
- * @checkstyle ClassDataAbstractionCoupling (100 lines)
  */
-public final class ChecksProvider {
+public final class JSUnitTestsCheckTest {
 
     /**
-     * Get full collection of checks.
-     *
-     * <p>Checks should be ordered by their complexity. Most simple and fast
-     * checks should go first, in order to fail build faster. Most heavy and
-     * slow checks should be at the end of the list.
-     *
-     * @return List of checks
+     * JSStaticCheck can execute succeeding JS unit test.
+     * @throws Exception If something goes wrong
      */
-    public Set<Check> all() {
-        final Set<Check> checks = new LinkedHashSet<Check>();
-        checks.add(new BinaryFilesCheck());
-        checks.add(new CssStaticCheck());
-        checks.add(new JigsawCssCheck());
-        checks.add(new JSStaticCheck());
-        checks.add(new FilesStructureCheck());
-        checks.add(new WebXmlCheck());
-        checks.add(new RexslFilesCheck());
-        checks.add(new XhtmlOutputCheck());
-        checks.add(new InContainerScriptsCheck());
-        checks.add(new JSUnitTestsCheck());
-        return checks;
+    @Test
+    public void validatesCorrectJSFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withFile("src/main/webapp/js/script.js")
+            .withFile("src/test/rexsl/js/scriptTestOK.js")
+            .mock();
+        MatcherAssert.assertThat(
+            "valid JS test passes without problems",
+            new JSUnitTestsCheck().validate(env)
+        );
+    }
+
+    /**
+     * JSStaticCheck can detect failed JS unit test.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void validatesIncorrectJSFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withFile(String.format("src/main/webapp/js/%s", "script.js"))
+            .withFile("src/test/rexsl/js/scriptTestFailed.js")
+            .mock();
+        MatcherAssert.assertThat(
+            "JS test failed",
+            !new JSUnitTestsCheck().validate(env)
+        );
     }
 
 }
