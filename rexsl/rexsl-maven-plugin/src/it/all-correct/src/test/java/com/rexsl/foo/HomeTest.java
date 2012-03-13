@@ -45,7 +45,7 @@ public final class HomeTest {
         Home home = new Home();
         Assert.assertThat(
             JaxbConverter.the(home),
-            XmlMatchers.hasXPath("/page/text[contains(.,'world')]")
+            XmlMatchers.hasXPath("/page/text[contains(.,'Hello')]")
         );
     }
 
