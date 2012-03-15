@@ -191,7 +191,10 @@ public final class JerseyTestResponseTest {
     public void retrievesCookieByName() throws Exception {
         final ClientResponse resp = new ClientResponseMocker()
             .withEntity("<hello/>")
-            .withHeader(HttpHeaders.SET_COOKIE, "cookie1=foo1;Path=/, bar=1")
+            .withHeader(
+                HttpHeaders.SET_COOKIE,
+                "cookie1=foo1;Path=/;Comment=\"\", bar=1;"
+            )
             .mock();
         final TestResponse response =
             new JerseyTestResponse(this.fetcher(resp));
