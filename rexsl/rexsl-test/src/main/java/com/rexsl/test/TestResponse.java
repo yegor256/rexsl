@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import java.util.List;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedMap;
 import org.hamcrest.Matcher;
 
@@ -94,6 +95,13 @@ public interface TestResponse {
      * @return The headers
      */
     MultivaluedMap<String, String> getHeaders();
+
+    /**
+     * Get cookie.
+     * @param name Name of the cookie to get
+     * @return The cookie
+     */
+    Cookie cookie(String name);
 
     /**
      * Register additional namespace prefix for XPath.
