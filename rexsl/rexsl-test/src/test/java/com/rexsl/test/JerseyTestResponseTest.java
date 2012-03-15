@@ -197,7 +197,10 @@ public final class JerseyTestResponseTest {
             new JerseyTestResponse(this.fetcher(resp));
         MatcherAssert.assertThat(
             response.cookie("cookie1"),
-            Matchers.equalTo("foo1")
+            Matchers.allOf(
+                Matchers.hasProperty("value", Matchers.equalTo("foo1")),
+                Matchers.hasProperty("path", Matchers.equalTo("/"))
+            )
         );
     }
 

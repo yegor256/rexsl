@@ -38,6 +38,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.xpath.XPath;
@@ -214,6 +215,14 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public MultivaluedMap<String, String> getHeaders() {
         return this.response().getHeaders();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Cookie cookie(final String name) {
+        return null;
     }
 
     /**
