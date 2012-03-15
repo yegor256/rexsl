@@ -444,16 +444,7 @@ public final class Manifests {
                 new TreeSet<String>(props.keySet())
             );
         } finally {
-            try {
-                stream.close();
-            } catch (java.io.IOException ex) {
-                Logger.error(
-                    Manifests.class,
-                    "#loadOneFile('%s'): %[exception]s",
-                    url,
-                    ex
-                );
-            }
+            stream.close();
         }
         return props;
     }
