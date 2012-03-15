@@ -222,6 +222,11 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public Cookie cookie(final String name) {
+        final MultivaluedMap<String, String> headers = this.getHeaders();
+        MatcherAssert.assertThat(
+            "cookies should be set in HTTP header",
+            headers.containsKey(HttpHeaders.SET_COOKIE)
+        );
         return null;
     }
 
