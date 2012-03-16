@@ -481,7 +481,7 @@ final class JerseyTestResponse implements TestResponse {
                 XPathConstants.NODESET
             );
         } catch (javax.xml.xpath.XPathExpressionException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new AssertionError(ex);
         }
         return nodes;
     }

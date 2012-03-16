@@ -33,8 +33,6 @@ import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
 import com.rexsl.test.TestResponseMocker;
 import java.net.HttpURLConnection;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -67,7 +65,8 @@ public final class RetryPolicyTest {
     public void detectsDefectiveResponseEvenWithException() throws Exception {
         final AssertionPolicy policy = new RetryPolicy("/foo");
         final TestResponse response = Mockito.mock(TestResponse.class);
-        Mockito.doThrow(new IllegalStateException())
+        Mockito.doReturn(HttpURLConnection.HTTP_OK).when(response).getStatus();
+        Mockito.doThrow(new AssertionError())
             .when(response).nodes(Mockito.anyString());
         policy.assertThat(response);
     }
