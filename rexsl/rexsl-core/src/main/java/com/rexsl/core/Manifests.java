@@ -364,7 +364,6 @@ public final class Manifests {
      * Load attributes from classpath.
      * @return All found attributes
      */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static Map<String, String> load() {
         final long start = System.nanoTime();
         Manifests.failures = new ConcurrentHashMap<URL, String>();
@@ -372,7 +371,6 @@ public final class Manifests {
             new ConcurrentHashMap<String, String>();
         Integer count = 0;
         for (URL url : Manifests.urls()) {
-            //try {
             try {
                 attrs.putAll(Manifests.loadOneFile(url));
             } catch (IOException ex) {
@@ -424,6 +422,7 @@ public final class Manifests {
      * @see #load()
      * @throws IOException If some problem happens
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static Map<String, String> loadOneFile(final URL url)
         throws IOException {
         final Map<String, String> props =
@@ -442,6 +441,14 @@ public final class Manifests {
                 url,
                 props.size(),
                 new TreeSet<String>(props.keySet())
+            );
+        // @checkstyle IllegalCatch (1 line)
+        } catch (RuntimeException ex) {
+            Logger.error(
+                Manifests.class,
+                "#getMainAttributes(): '%s' failed %[exception]s",
+                url,
+                ex
             );
         } finally {
             stream.close();
