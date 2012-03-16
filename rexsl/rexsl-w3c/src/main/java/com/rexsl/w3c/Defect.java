@@ -84,10 +84,10 @@ public final class Defect {
         final String explanation, final String mid, final String message) {
         this.iline = line;
         this.icolumn = column;
-        this.isource = source;
-        this.iexplanation = explanation;
-        this.imessageId = mid;
-        this.imessage = message;
+        this.isource = source.trim();
+        this.iexplanation = explanation.trim();
+        this.imessageId = mid.trim();
+        this.imessage = message.trim();
     }
 
     /**
