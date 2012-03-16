@@ -31,6 +31,7 @@ package com.rexsl.core;
 
 import com.ymock.util.Logger;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
@@ -315,7 +316,12 @@ public final class Manifests {
                 ctx.getClass().getName()
             );
         } else {
-            final Map<String, String> attrs = Manifests.loadOneFile(main);
+            final Map<String, String> attrs;
+            try {
+                attrs = Manifests.loadOneFile(main);
+            } catch (IOException ex) {
+                throw new IllegalStateException(ex);
+            }
             Manifests.attributes.putAll(attrs);
             Logger.info(
                 Manifests.class,
@@ -340,6 +346,8 @@ public final class Manifests {
             attrs = Manifests.loadOneFile(file.toURL());
         } catch (java.net.MalformedURLException ex) {
             throw new IllegalStateException(ex);
+        } catch (IOException ex) {
+            throw new IllegalStateException(ex);
         }
         Manifests.attributes.putAll(attrs);
         Logger.info(
@@ -356,7 +364,6 @@ public final class Manifests {
      * Load attributes from classpath.
      * @return All found attributes
      */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static Map<String, String> load() {
         final long start = System.nanoTime();
         Manifests.failures = new ConcurrentHashMap<URL, String>();
@@ -366,8 +373,7 @@ public final class Manifests {
         for (URL url : Manifests.urls()) {
             try {
                 attrs.putAll(Manifests.loadOneFile(url));
-            // @checkstyle IllegalCatch (1 line)
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 Manifests.failures.put(url, ex.getMessage());
                 Logger.error(
                     Manifests.class,
@@ -414,16 +420,14 @@ public final class Manifests {
      * @param url The URL of it
      * @return The attributes loaded
      * @see #load()
+     * @throws IOException If some problem happens
      */
-    private static Map<String, String> loadOneFile(final URL url) {
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    private static Map<String, String> loadOneFile(final URL url)
+        throws IOException {
         final Map<String, String> props =
             new ConcurrentHashMap<String, String>();
-        InputStream stream;
-        try {
-            stream = url.openStream();
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        }
+        final InputStream stream = url.openStream();
         try {
             final Manifest manifest = new Manifest(stream);
             final Attributes attrs = manifest.getMainAttributes();
@@ -438,19 +442,16 @@ public final class Manifests {
                 props.size(),
                 new TreeSet<String>(props.keySet())
             );
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
+        // @checkstyle IllegalCatch (1 line)
+        } catch (RuntimeException ex) {
+            Logger.error(
+                Manifests.class,
+                "#getMainAttributes(): '%s' failed %[exception]s",
+                url,
+                ex
+            );
         } finally {
-            try {
-                stream.close();
-            } catch (java.io.IOException ex) {
-                Logger.error(
-                    Manifests.class,
-                    "#loadOneFile('%s'): %[exception]s",
-                    url,
-                    ex
-                );
-            }
+            stream.close();
         }
         return props;
     }
