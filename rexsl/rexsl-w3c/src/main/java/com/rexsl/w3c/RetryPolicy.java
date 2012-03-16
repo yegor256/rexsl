@@ -65,10 +65,10 @@ final class RetryPolicy implements AssertionPolicy {
      */
     @Override
     public void assertThat(final TestResponse response) {
-        this.invalid = response.nodes(this.xpath).isEmpty();
         if (response.getStatus() != HttpURLConnection.HTTP_OK) {
             throw new AssertionError("invalid HTTP status");
         }
+        this.invalid = response.nodes(this.xpath).isEmpty();
         if (this.invalid) {
             throw new AssertionError("invalid XML from W3C server");
         }

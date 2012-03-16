@@ -27,62 +27,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.w3c;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import com.rexsl.test.AssertionPolicy;
+import com.rexsl.test.TestResponse;
+import com.rexsl.test.TestResponseMocker;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ws.rs.core.MultivaluedMap;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * Mocker of {@link TestResponse}.
- * @author Yegor Bugayenko (yegor@netbout.com)
+ * Test case for {@link RetryPolicy}.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class TestResponseMocker {
+public final class RetryPolicyTest {
 
     /**
-     * Mock.
+     * RetryPolicy can detect defective response.
+     * @throws Exception If something goes wrong inside
      */
-    private final transient TestResponse response =
-        Mockito.mock(TestResponse.class);
-
-    /**
-     * Public ctor.
-     */
-    public TestResponseMocker() {
-        this.withBody("");
+    @Test(expected = AssertionError.class)
+    public void detectsDefectiveResponse() throws Exception {
+        final AssertionPolicy policy = new RetryPolicy("/a");
+        final TestResponse response = new TestResponseMocker()
+            .withBody("<!DOCTYPE a PUBLIC \"foo\"\"ff\"><a/>")
+            .withStatus(HttpURLConnection.HTTP_NOT_FOUND)
+            .mock();
+        policy.assertThat(response);
     }
 
     /**
-     * Return this body.
-     * @param body The body
-     * @return This object
+     * RetryPolicy can detect defective response, with runtime exception.
+     * @throws Exception If something goes wrong inside
      */
-    public TestResponseMocker withBody(final String body) {
-        Mockito.doReturn(body).when(this.response).getBody();
-        return this;
-    }
-
-    /**
-     * Return this status code.
-     * @param code The status code
-     * @return This object
-     */
-    public TestResponseMocker withStatus(final int code) {
-        Mockito.doReturn(code).when(this.response).getStatus();
-        return this;
-    }
-
-    /**
-     * Mock it.
-     * @return Mocked class
-     */
-    public TestResponse mock() {
-        return this.response;
+    @Test(expected = AssertionError.class)
+    public void detectsDefectiveResponseEvenWithException() throws Exception {
+        final AssertionPolicy policy = new RetryPolicy("/foo");
+        final TestResponse response = Mockito.mock(TestResponse.class);
+        Mockito.doReturn(HttpURLConnection.HTTP_OK).when(response).getStatus();
+        Mockito.doThrow(new AssertionError())
+            .when(response).nodes(Mockito.anyString());
+        policy.assertThat(response);
     }
 
 }
