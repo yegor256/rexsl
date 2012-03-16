@@ -66,13 +66,7 @@ final class ProductVersion implements Comparable<ProductVersion> {
      */
     @Override
     public int compareTo(final ProductVersion ver) {
-        int result = this.normalized.compareTo(ver.normalized);
-        if (result > 1) {
-            result = 1;
-        } else if (result < -1) {
-            result = -1;
-        }
-        return result;
+        return this.normalized.compareTo(ver.normalized);
     }
 
     /**
