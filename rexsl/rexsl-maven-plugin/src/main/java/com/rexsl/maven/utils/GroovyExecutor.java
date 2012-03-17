@@ -84,7 +84,7 @@ public final class GroovyExecutor {
             urls.add(url);
         }
         this.classloader = new URLClassLoader(
-            urls.toArray(new URL[] {}),
+            urls.toArray(new URL[urls.size()]),
             Thread.currentThread().getContextClassLoader()
         );
         this.binding = bnd;

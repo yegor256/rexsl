@@ -158,7 +158,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 try {
                     this.classes.add(cls);
                     this.context = JAXBContext.newInstance(
-                        this.classes.toArray(new Class[] {})
+                        this.classes.toArray(new Class[this.classes.size()])
                     );
                     Logger.info(
                         this,
