@@ -83,7 +83,7 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
     /**
      * The feeder.
      */
-    private transient Feeder feeder;
+    private final transient Feeder feeder;
 
     /**
      * Are we still alive?
@@ -91,13 +91,11 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
     private final transient AtomicBoolean alive = new AtomicBoolean(false);
 
     /**
-     * Set feeder, option {@code feeder} in config.
+     * Ctor.
      * @param fdr The feeder to use
      */
-    public void setFeeder(final Feeder fdr) {
-        if (this.feeder != null) {
-            throw new IllegalArgumentException("call #setFeeder() only once");
-        }
+    public CloudAppender(final Feeder fdr) {
+        super();
         this.feeder = fdr;
     }
 

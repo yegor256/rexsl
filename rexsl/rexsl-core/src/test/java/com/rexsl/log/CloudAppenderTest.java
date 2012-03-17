@@ -53,8 +53,6 @@ public final class CloudAppenderTest {
      */
     @Test
     public void sendsMessagesInBackground() throws Exception {
-        final CloudAppender appender = new CloudAppender();
-        appender.setLayout(new SimpleLayout());
         final Feeder feeder = Mockito.mock(Feeder.class);
         final StringBuilder builder = new StringBuilder();
         Mockito.doAnswer(
@@ -66,7 +64,8 @@ public final class CloudAppenderTest {
                 }
             }
         ).when(feeder).feed(Mockito.anyString());
-        appender.setFeeder(feeder);
+        final CloudAppender appender = new CloudAppender(feeder);
+        appender.setLayout(new SimpleLayout());
         appender.activateOptions();
         final LoggingEvent event = new LoggingEvent(
             this.getClass().getName(),
@@ -94,5 +93,4 @@ public final class CloudAppenderTest {
         );
         appender.close();
     }
-
 }
