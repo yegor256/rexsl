@@ -83,7 +83,7 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
     /**
      * The feeder.
      */
-    private final transient Feeder feeder;
+    private transient Feeder feeder;
 
     /**
      * Are we still alive?
@@ -91,11 +91,13 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
     private final transient AtomicBoolean alive = new AtomicBoolean(false);
 
     /**
-     * Ctor.
+     * Set feeder, option {@code feeder} in config.
      * @param fdr The feeder to use
      */
-    public CloudAppender(final Feeder fdr) {
-        super();
+    public void setFeeder(final Feeder fdr) {
+        if (this.feeder != null) {
+            throw new IllegalArgumentException("call #setFeeder() only once");
+        }
         this.feeder = fdr;
     }
 
@@ -112,6 +114,11 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
      */
     @Override
     public void activateOptions() {
+        if (this.feeder == null) {
+            throw new IllegalStateException(
+                "Unable to start with no feeder set"
+            );
+        }
         super.activateOptions();
         final Thread thread = new Thread(this);
         thread.setName(Logger.format("CloudAppender to %[type]s", this.feeder));

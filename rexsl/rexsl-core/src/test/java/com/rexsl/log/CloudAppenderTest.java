@@ -53,6 +53,8 @@ public final class CloudAppenderTest {
      */
     @Test
     public void sendsMessagesInBackground() throws Exception {
+        final CloudAppender appender = new CloudAppender();
+        appender.setLayout(new SimpleLayout());
         final Feeder feeder = Mockito.mock(Feeder.class);
         final StringBuilder builder = new StringBuilder();
         Mockito.doAnswer(
@@ -64,8 +66,7 @@ public final class CloudAppenderTest {
                 }
             }
         ).when(feeder).feed(Mockito.anyString());
-        final CloudAppender appender = new CloudAppender(feeder);
-        appender.setLayout(new SimpleLayout());
+        appender.setFeeder(feeder);
         appender.activateOptions();
         final LoggingEvent event = new LoggingEvent(
             this.getClass().getName(),
@@ -92,5 +93,14 @@ public final class CloudAppenderTest {
             )
         );
         appender.close();
+    }
+
+    /**
+     * CloudAppender validates it's state before run.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void validateAppenderState() {
+        final CloudAppender appender = new CloudAppender();
+        appender.activateOptions();
     }
 }
