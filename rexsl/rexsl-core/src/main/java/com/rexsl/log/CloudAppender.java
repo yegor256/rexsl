@@ -114,6 +114,11 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
      */
     @Override
     public void activateOptions() {
+        if (this.feeder == null) {
+            throw new IllegalStateException(
+                "Unable to start with no feeder set"
+            );
+        }
         super.activateOptions();
         final Thread thread = new Thread(this);
         thread.setName(Logger.format("CloudAppender to %[type]s", this.feeder));

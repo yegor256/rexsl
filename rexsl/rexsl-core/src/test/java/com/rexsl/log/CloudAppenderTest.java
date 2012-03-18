@@ -95,4 +95,12 @@ public final class CloudAppenderTest {
         appender.close();
     }
 
+    /**
+     * CloudAppender validates it's state before run.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void validateAppenderState() {
+        final CloudAppender appender = new CloudAppender();
+        appender.activateOptions();
+    }
 }
