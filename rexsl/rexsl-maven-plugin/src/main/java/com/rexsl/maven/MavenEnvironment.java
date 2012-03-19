@@ -71,7 +71,7 @@ public final class MavenEnvironment implements Environment {
     /**
      * Port number.
      */
-    private transient Integer iport;
+    private transient int iport;
 
     /**
      * Ctor.
@@ -88,7 +88,7 @@ public final class MavenEnvironment implements Environment {
      * Set port number or set default.
      * @param prt The port number
      */
-    public void setPort(final Integer prt) {
+    public void setPort(final int prt) {
         this.iport = prt;
     }
 
@@ -120,7 +120,7 @@ public final class MavenEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
-    public Integer port() {
+    public int port() {
         return this.iport;
     }
 

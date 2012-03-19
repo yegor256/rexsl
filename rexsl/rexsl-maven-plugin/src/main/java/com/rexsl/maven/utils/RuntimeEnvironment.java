@@ -95,8 +95,8 @@ final class RuntimeEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
-    public Integer port() {
-        return Integer.valueOf(
+    public int port() {
+        return Integer.parseInt(
             this.context.getInitParameter("com.rexsl.maven.utils.PORT")
         );
     }
