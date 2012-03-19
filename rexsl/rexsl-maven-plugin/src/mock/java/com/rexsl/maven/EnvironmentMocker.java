@@ -33,6 +33,8 @@ import com.google.common.io.Files;
 import com.rexsl.maven.utils.PortReserver;
 import java.io.File;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.mockito.Mockito;
@@ -128,6 +130,20 @@ public final class EnvironmentMocker {
     public EnvironmentMocker withFolder(final String name) {
         final File dest = new File(this.basedir, name);
         dest.mkdirs();
+        return this;
+    }
+
+    /**
+     * With default classpath.
+     * @return This object
+     */
+    public EnvironmentMocker withDefaultClasspath() {
+        final Set<File> files = new HashSet<File>();
+        for (String file : System.getProperty("java.class.path")
+            .split(System.getProperty("path.separator"))) {
+            files.add(new File(file));
+        }
+        Mockito.doReturn(files).when(this.env).classpath(Mockito.anyBoolean());
         return this;
     }
 
