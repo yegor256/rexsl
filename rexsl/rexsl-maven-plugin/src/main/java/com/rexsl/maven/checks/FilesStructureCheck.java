@@ -46,6 +46,7 @@ final class FilesStructureCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public boolean validate(final Environment env) {
         final String[] names = {
             "src/main/webapp/",
@@ -57,36 +58,18 @@ final class FilesStructureCheck implements Check {
             "src/test/rexsl/scripts/",
             "src/test/rexsl/xsd/",
         };
-        final boolean success = true;
+        boolean success = true;
         for (String name : names) {
-            try {
-                this.one(env.basedir(), name);
-            } catch (InternalCheckException ex) {
-                final String msg = ex.getMessage();
-                if (!msg.isEmpty()) {
-                    Logger.warn(this, "%s", msg);
-                }
-                // success = false;
+            final File file = new File(env.basedir(), name);
+            if (!file.exists()) {
+                Logger.warn(
+                    this,
+                    "File '%s' is absent, but should be there",
+                    file
+                );
+                success = false;
             }
         }
         return success;
     }
-
-    /**
-     * Check for existence of this file/dir.
-     * @param basedir Project basedir
-     * @param name The name of the file to check
-     * @throws InternalCheckException If some failure inside
-     */
-    private void one(final File basedir, final String name)
-        throws InternalCheckException {
-        final File file = new File(basedir, name);
-        if (!file.exists()) {
-            throw new InternalCheckException(
-                "File '%s' is absent, but should be there",
-                file
-            );
-        }
-    }
-
 }
