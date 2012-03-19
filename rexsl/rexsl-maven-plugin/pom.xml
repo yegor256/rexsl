@@ -369,6 +369,14 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version since="26 Oct 2011">1.6</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
@@ -438,7 +446,6 @@
                 see the ticket #30 for more information.
                 -->
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version since="26 Oct 2011">1.6</version>
                 <executions>
                     <execution>
                         <phase>pre-integration-test</phase>
@@ -466,5 +473,62 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>csslint</id>
+            <activation>
+                <file><exists>pom.xml</exists></file>
+            </activation>
+            <properties>
+                <csslint.js>${project.build.outputDirectory}/CssLint.js</csslint.js>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version since="26 Oct 2011">1.6</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <target>
+                                        <available file="${csslint.js}" property="present"/>
+                                        <get verbose="yes" usetimestamp="true" skipexisting="true"
+                                            src="https://raw.github.com/stubbornella/csslint/master/release/csslint-rhino.js"
+                                            dest="${csslint.js}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version since="18 Mar 2012">1.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>process-sources</phase>
+                                <configuration>
+                                    <mainClass>org.mozilla.javascript.tools.jsc.Main</mainClass>
+                                    <arguments>
+                                        <argument>-o</argument>
+                                        <argument>CssLint.class</argument>
+                                        <argument>${csslint.js}</argument>
+                                    </arguments>
+                                </configuration>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

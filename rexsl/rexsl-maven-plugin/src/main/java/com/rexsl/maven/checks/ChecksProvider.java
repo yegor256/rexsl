@@ -54,7 +54,6 @@ public final class ChecksProvider {
     public Set<Check> all() {
         final Set<Check> checks = new LinkedHashSet<Check>();
         checks.add(new BinaryFilesCheck());
-        checks.add(new CssStaticCheck());
         checks.add(new JigsawCssCheck());
         checks.add(new JSStaticCheck());
         checks.add(new FilesStructureCheck());
