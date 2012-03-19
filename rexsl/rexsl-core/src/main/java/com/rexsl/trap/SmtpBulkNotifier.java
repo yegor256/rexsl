@@ -64,12 +64,12 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
     /**
      * Maximum allowed interval in minutes.
      */
-    private static final Long MAX_INTERVAL = 180L;
+    private static final long MAX_INTERVAL = 180L;
 
     /**
      * Minimum allowed interval in minutes.
      */
-    private static final Long MIN_INTERVAL = 5L;
+    private static final long MIN_INTERVAL = 5L;
 
     /**
      * List of reported defect.
@@ -83,7 +83,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
      */
     public SmtpBulkNotifier(final Properties props) {
         super(props);
-        final Long interval = this.interval();
+        final long interval = this.interval();
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
             this,
             0L,
@@ -180,8 +180,8 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
      * Calculate interval in minutes.
      * @return The interval
      */
-    private Long interval() {
-        Long interval = Long.valueOf(this.prop("interval"));
+    private long interval() {
+        long interval = Long.parseLong(this.prop("interval"));
         if (interval < this.MIN_INTERVAL) {
             Logger.warn(
                 this,

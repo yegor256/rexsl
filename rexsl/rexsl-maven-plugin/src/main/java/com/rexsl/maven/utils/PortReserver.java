@@ -44,8 +44,8 @@ public final class PortReserver {
      * Find and return the first available port.
      * @return The port number
      */
-    public Integer port() {
-        Integer port;
+    public int port() {
+        int port;
         try {
             final ServerSocket socket = new ServerSocket(0);
             port = socket.getLocalPort();

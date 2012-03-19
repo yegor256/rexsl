@@ -70,6 +70,6 @@ public interface Environment {
      * Get port number, that can be used for a web container in runtime.
      * @return The port number, just allocated/reserved
      */
-    Integer port();
+    int port();
 
 }

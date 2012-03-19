@@ -149,7 +149,7 @@ public final class EmbeddedContainer {
         );
         params.put(
             "com.rexsl.maven.utils.PORT",
-            env.port().toString()
+            String.valueOf(env.port())
         );
         params.put(
             "com.rexsl.maven.utils.RUNTIME_FOLDERS",

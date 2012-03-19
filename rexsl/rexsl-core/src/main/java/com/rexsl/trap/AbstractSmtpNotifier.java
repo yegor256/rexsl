@@ -89,7 +89,7 @@ abstract class AbstractSmtpNotifier implements Notifier {
             );
             transport.connect(
                 this.prop("mail.smtp.host"),
-                Integer.valueOf(this.prop("mail.smtp.port")),
+                Integer.parseInt(this.prop("mail.smtp.port")),
                 this.prop("mail.smtp.user"),
                 this.prop("password")
             );

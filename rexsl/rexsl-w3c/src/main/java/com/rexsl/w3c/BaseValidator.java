@@ -204,7 +204,7 @@ class BaseValidator {
         if (lines.isEmpty()) {
             value = 0;
         } else {
-            value = Integer.valueOf(lines.get(0));
+            value = Integer.parseInt(lines.get(0));
         }
         return value;
     }
