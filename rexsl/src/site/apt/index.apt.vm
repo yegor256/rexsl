@@ -53,3 +53,6 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
 
    * {{{./rexsl-maven-plugin/index.html}<<<rexsl-maven-plugin>>> cookbook}}
 
+   * {{{./rexsl-core/index.html}<<<rexsl-core>>>}} module embeddable into your
+     web application
+

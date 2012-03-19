@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,12 +31,14 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.w3c.CssValidator;
 import com.rexsl.w3c.Defect;
 import com.rexsl.w3c.ValidationResponse;
 import com.rexsl.w3c.ValidatorBuilder;
 import com.ymock.util.Logger;
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.io.FileUtils;
@@ -49,7 +51,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: JigsawCssCheck.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class JigsawCssCheck implements Check {
+final class JigsawCssCheck implements Check {
 
     /**
      * Directory with CSS files.
@@ -70,8 +72,8 @@ public final class JigsawCssCheck implements Check {
         final File dir = new File(env.basedir(), this.CSS_DIR);
         boolean success = true;
         if (dir.exists()) {
-            final String[] exts = new String[] {"css"};
-            for (File css : FileUtils.listFiles(dir, exts, true)) {
+            final Collection<File> files = new FileFinder(dir, "css").random();
+            for (File css : files) {
                 try {
                     this.one(css);
                 } catch (InternalCheckException ex) {

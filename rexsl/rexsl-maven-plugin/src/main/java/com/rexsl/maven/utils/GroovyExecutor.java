@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -84,7 +84,7 @@ public final class GroovyExecutor {
             urls.add(url);
         }
         this.classloader = new URLClassLoader(
-            urls.toArray(new URL[] {}),
+            urls.toArray(new URL[urls.size()]),
             Thread.currentThread().getContextClassLoader()
         );
         this.binding = bnd;

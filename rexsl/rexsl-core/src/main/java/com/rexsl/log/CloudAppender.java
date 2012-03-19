@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -114,6 +114,11 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
      */
     @Override
     public void activateOptions() {
+        if (this.feeder == null) {
+            throw new IllegalStateException(
+                "Unable to start with no feeder set"
+            );
+        }
         super.activateOptions();
         final Thread thread = new Thread(this);
         thread.setName(Logger.format("CloudAppender to %[type]s", this.feeder));
@@ -162,6 +167,7 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
             try {
                 text = this.messages.take();
             } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
                 break;
             }
             try {

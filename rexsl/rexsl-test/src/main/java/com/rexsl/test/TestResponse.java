@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,13 +30,14 @@
 package com.rexsl.test;
 
 import java.util.List;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedMap;
 import org.hamcrest.Matcher;
 
 /**
  * Resonse returned by {@link TestClient}.
  *
- * <p>Implementation of this interface shall be thread-safe.
+ * <p>Implementation of this interface shall be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -94,6 +95,13 @@ public interface TestResponse {
      * @return The headers
      */
     MultivaluedMap<String, String> getHeaders();
+
+    /**
+     * Get cookie.
+     * @param name Name of the cookie to get
+     * @return The cookie
+     */
+    Cookie cookie(String name);
 
     /**
      * Register additional namespace prefix for XPath.

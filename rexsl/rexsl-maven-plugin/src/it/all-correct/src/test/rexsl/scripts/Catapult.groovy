@@ -34,9 +34,18 @@ import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
 
-def home = UriBuilder.fromUri(System.getProperty('catapult.home'))
-RestTester.start(home)
-    .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
-    .header(HttpHeaders.USER_AGENT, 'somebody')
-    .get('catapult test')
-    .assertStatus(HttpURLConnection.HTTP_OK)
+def home = UriBuilder.fromUri(System.getProperty('catapult.home')).build()
+
+['/', '/xsl/Home.xsl', '/css/screen.css', '/robots.txt'].each {
+    RestTester.start(UriBuilder.fromUri(home).path(it))
+        .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
+        .header(HttpHeaders.USER_AGENT, 'test-1')
+        .get('catapult test')
+        .assertStatus(HttpURLConnection.HTTP_OK)
+}
+
+['/non-existing-address', '/css/robots.txt'].each {
+    RestTester.start(UriBuilder.fromUri(home).path(it))
+        .get('fetching non existing page')
+        .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
+}

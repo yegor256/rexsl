@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -100,8 +100,12 @@ public final class ProductVersionTest {
      */
     @Test
     public void comparesTwoVersions() throws Exception {
+        int cmp = this.left.compareTo(this.right);
+        if (cmp != 0) {
+            cmp = cmp / Math.abs(cmp);
+        }
         MatcherAssert.assertThat(
-            this.left.compareTo(this.right),
+            cmp,
             Matchers.describedAs(
                 String.format(
                     "%d at [%s vs. %s]",

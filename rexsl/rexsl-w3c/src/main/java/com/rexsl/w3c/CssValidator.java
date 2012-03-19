@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -68,6 +68,11 @@ public interface CssValidator {
 
     /**
      * Validate and return validation response.
+     *
+     * <p>The method should never throw runtime exceptions, no matter what
+     * happened with the HTTP connection to the W3C server. It will return
+     * an invalid response, but will never throw.
+     *
      * @param css The CSS stylesheet
      * @return The response
      */

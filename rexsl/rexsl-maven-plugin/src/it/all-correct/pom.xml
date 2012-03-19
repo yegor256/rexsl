@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
  *
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -107,7 +107,7 @@
             <!-- Logging facility -->
             <groupId>com.ymock</groupId>
             <artifactId>ymock-util</artifactId>
-            <version since="29 Jan 2012">1.0.4</version>
+            <version since="26 Feb 2012">1.0.5</version>
         </dependency>
         <dependency>
             <!--
@@ -210,13 +210,16 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>tomcat-maven-plugin</artifactId>
-                <version since="13 Dec 2011">1.1</version>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version since="7 Feb 2012">2.0-beta-1</version>
                 <configuration>
+                    <contextFile>${basedir}/src/test/catapult/context.xml</contextFile>
                     <fork>true</fork>
                     <path>${catapult.context}</path>
                     <port>${catapult.port}</port>
+                    <uriEncoding>UTF-8</uriEncoding>
+                    <useSeparateTomcatClassLoader>true</useSeparateTomcatClassLoader>
                     <warDirectory>${project.build.directory}/${catapult.warName}.war</warDirectory>
                 </configuration>
                 <executions>

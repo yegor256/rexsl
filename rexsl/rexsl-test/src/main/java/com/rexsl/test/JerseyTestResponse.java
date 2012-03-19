@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,14 +36,18 @@ import com.rexsl.test.assertions.StatusMatcher;
 import com.rexsl.test.assertions.XpathMatcher;
 import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
+import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -214,6 +218,45 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public MultivaluedMap<String, String> getHeaders() {
         return this.response().getHeaders();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    public Cookie cookie(final String name) {
+        final MultivaluedMap<String, String> headers = this.getHeaders();
+        MatcherAssert.assertThat(
+            "cookies should be set in HTTP header",
+            headers.containsKey(HttpHeaders.SET_COOKIE)
+        );
+        final String header = StringUtils.join(
+            headers.get(HttpHeaders.SET_COOKIE), ", "
+        );
+        Cookie cookie = null;
+        for (HttpCookie candidate : HttpCookie.parse(header)) {
+            if (candidate.getName().equals(name)) {
+                cookie = new Cookie(
+                    candidate.getName(),
+                    candidate.getValue(),
+                    candidate.getPath(),
+                    candidate.getDomain(),
+                    candidate.getVersion()
+                );
+                break;
+            }
+        }
+        MatcherAssert.assertThat(
+            String.format(
+                "cookie '%s' not found in Set-Cookie header: '%s'",
+                name,
+                header
+            ),
+            cookie,
+            Matchers.notNullValue()
+        );
+        return cookie;
     }
 
     /**
@@ -438,7 +481,7 @@ final class JerseyTestResponse implements TestResponse {
                 XPathConstants.NODESET
             );
         } catch (javax.xml.xpath.XPathExpressionException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new AssertionError(ex);
         }
         return nodes;
     }

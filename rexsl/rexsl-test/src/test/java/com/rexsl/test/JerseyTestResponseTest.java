@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
 import java.net.HttpURLConnection;
+import javax.ws.rs.core.HttpHeaders;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -180,6 +181,30 @@ public final class JerseyTestResponseTest {
             }
         );
         Mockito.verify(fetcher, Mockito.times(2)).fetch();
+    }
+
+    /**
+     * TestResponse can retrieve a cookie by name.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void retrievesCookieByName() throws Exception {
+        final ClientResponse resp = new ClientResponseMocker()
+            .withEntity("<hello/>")
+            .withHeader(
+                HttpHeaders.SET_COOKIE,
+                "cookie1=foo1;Path=/;Comment=\"\", bar=1;"
+            )
+            .mock();
+        final TestResponse response =
+            new JerseyTestResponse(this.fetcher(resp));
+        MatcherAssert.assertThat(
+            response.cookie("cookie1"),
+            Matchers.allOf(
+                Matchers.hasProperty("value", Matchers.equalTo("foo1")),
+                Matchers.hasProperty("path", Matchers.equalTo("/"))
+            )
+        );
     }
 
     /**

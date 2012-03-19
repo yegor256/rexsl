@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,7 @@ public final class HomeTest {
         Home home = new Home();
         Assert.assertThat(
             JaxbConverter.the(home),
-            XmlMatchers.hasXPath("/page/text[contains(.,'world')]")
+            XmlMatchers.hasXPath("/page/text[contains(.,'Hello')]")
         );
     }
 

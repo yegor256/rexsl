@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -160,7 +160,7 @@ final class JerseyTestClient implements TestClient {
      */
     private ClientResponse method(final String name, final String body,
         final String desc) {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         final WebResource.Builder builder = this.resource.getRequestBuilder();
         for (Header header : this.headers) {
             builder.header(header.getKey(), header.getValue());
@@ -173,11 +173,11 @@ final class JerseyTestClient implements TestClient {
         }
         Logger.info(
             this,
-            "#%s('%s'): \"%s\" completed in %dms [%d %s]: %s",
+            "#%s('%s'): \"%s\" completed in %[nano]s [%d %s]: %s",
             name,
             this.home.getPath(),
             desc,
-            System.currentTimeMillis() - start,
+            System.nanoTime() - start,
             resp.getStatus(),
             resp.getClientResponseStatus(),
             this.home

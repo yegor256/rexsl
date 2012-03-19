@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -151,20 +151,17 @@ public final class XsltFilter implements Filter {
         final ByteArrayResponseWrapper wrapper =
             new ByteArrayResponseWrapper(response);
         chain.doFilter(request, wrapper);
-        if (response.isCommitted()) {
-            // we can't change response that is already finished
-            return;
-        }
-        final byte[] data = wrapper.getByteStream().toByteArray();
-        String page = new String(data, CharEncoding.UTF_8);
-        final PageAnalyzer analyzer = new PageAnalyzer(page, request);
-        if (analyzer.needsTransformation()) {
-            page = this.transform(page);
-            response.setContentType(MediaType.TEXT_HTML);
-            response.setContentLength(page.length());
-            response.setCharacterEncoding(CharEncoding.UTF_8);
-            response.getOutputStream().write(page.getBytes(CharEncoding.UTF_8));
-        } else {
+        if (!response.isCommitted()) {
+            byte[] data = wrapper.getByteStream().toByteArray();
+            String page = new String(data, CharEncoding.UTF_8);
+            final PageAnalyzer analyzer = new PageAnalyzer(page, request);
+            if (analyzer.needsTransformation()) {
+                page = this.transform(page);
+                data = page.getBytes(CharEncoding.UTF_8);
+                response.setContentType(MediaType.TEXT_HTML);
+                response.setCharacterEncoding(CharEncoding.UTF_8);
+                response.setContentLength(data.length);
+            }
             response.getOutputStream().write(data);
         }
     }
@@ -177,7 +174,7 @@ public final class XsltFilter implements Filter {
      * @checkstyle RedundantThrows (2 lines)
      */
     private String transform(final String xml) throws ServletException {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         final StringWriter writer = new StringWriter();
         try {
             final Source stylesheet = this.tfactory.getAssociatedStylesheet(
@@ -226,10 +223,10 @@ public final class XsltFilter implements Filter {
         final String output = writer.toString();
         Logger.debug(
             this,
-            "#tranform(%d chars): produced %d chars [%dms]",
+            "#tranform(%d chars): produced %d chars in %[nano]s",
             xml.length(),
             output.length(),
-            System.currentTimeMillis() - start
+            System.nanoTime() - start
         );
         return output;
     }

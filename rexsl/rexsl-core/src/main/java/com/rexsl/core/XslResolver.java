@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,9 +32,12 @@ package com.rexsl.core;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -78,6 +81,11 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     private transient JAXBContext context;
 
     /**
+     * Servlet request.
+     */
+    private transient HttpServletRequest request;
+
+    /**
      * Set servlet context from container, to be called by JAX-RS framework
      * because of {@link Context} annotation.
      * @param ctx The context
@@ -100,6 +108,15 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             "#setServletContext(%s): context injected by JAX-RS",
             ctx.getClass().getName()
         );
+    }
+
+    /**
+     * Set request to provide information about resourse context.
+     * @param req The request
+     */
+    @Context
+    public void setHttpServletRequest(final HttpServletRequest req) {
+        this.request = req;
     }
 
     /**
@@ -141,7 +158,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 try {
                     this.classes.add(cls);
                     this.context = JAXBContext.newInstance(
-                        this.classes.toArray(new Class[] {})
+                        this.classes.toArray(new Class[this.classes.size()])
                     );
                     Logger.info(
                         this,
@@ -174,7 +191,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @return The name of stylesheet
      * @see #getContext(Class)
      */
-    private static String stylesheet(final Class<?> type) {
+    private String stylesheet(final Class<?> type) {
         final Annotation antn = type.getAnnotation(Stylesheet.class);
         String stylesheet;
         if (antn == null) {
@@ -182,6 +199,22 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 "/xsl/%s.xsl",
                 type.getSimpleName()
             );
+            if (this.request != null) {
+                try {
+                    stylesheet = new URL(
+                        this.request.getScheme(),
+                        this.request.getServerName(),
+                        this.request.getServerPort(),
+                        String.format(
+                            "%s%s",
+                            this.request.getContextPath(),
+                            stylesheet
+                        )
+                    ).toString();
+                } catch (MalformedURLException ex) {
+                    throw new IllegalStateException(ex);
+                }
+            }
         } else {
             stylesheet = ((Stylesheet) antn).value();
         }

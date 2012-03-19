@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -95,4 +95,12 @@ public final class CloudAppenderTest {
         appender.close();
     }
 
+    /**
+     * CloudAppender validates it's state before run.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void validateAppenderState() {
+        final CloudAppender appender = new CloudAppender();
+        appender.activateOptions();
+    }
 }
