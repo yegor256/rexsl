@@ -220,6 +220,15 @@ public final class XslResolverTest {
         );
     }
 
+    /**
+     * XslResolver checks passed servlet context.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void setServletContext() {
+        final XslResolver resolver = new XslResolver();
+        resolver.setServletContext(null);
+    }
+
     @XmlRootElement(name = "page")
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Page {
