@@ -103,4 +103,14 @@ public final class CloudAppenderTest {
         final CloudAppender appender = new CloudAppender();
         appender.activateOptions();
     }
+
+    /**
+     * CloudAppender checks if feeder is set only once.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void setsFeeder() {
+        final CloudAppender appender = new CloudAppender();
+        appender.setFeeder(Mockito.mock(Feeder.class));
+        appender.setFeeder(Mockito.mock(Feeder.class));
+    }
 }

@@ -96,7 +96,7 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
      */
     public void setFeeder(final Feeder fdr) {
         if (this.feeder != null) {
-            throw new IllegalArgumentException("call #setFeeder() only once");
+            throw new IllegalStateException("call #setFeeder() only once");
         }
         this.feeder = fdr;
     }
