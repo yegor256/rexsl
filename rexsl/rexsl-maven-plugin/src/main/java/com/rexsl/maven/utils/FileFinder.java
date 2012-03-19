@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,50 +29,71 @@
  */
 package com.rexsl.maven.utils;
 
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.EnvironmentMocker;
 import java.io.File;
 import java.util.Collection;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.Test;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import org.apache.commons.io.FileUtils;
 
 /**
- * ScriptsFinder test.
+ * Contains methods to find and sort files.
+ *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id: ScriptsFinderTest.java 570 2011-12-25 16:32:21Z guard $
+ * @version $Id: FileFinder.java 464 2011-12-12 09:30:18Z guard $
  */
-public final class ScriptsFinderTest {
+public final class FileFinder {
 
     /**
-     * Test string.
+     * File extension.
      */
-    private static final String TEST = "assert true";
+    private final transient String extension;
 
     /**
-     * Checks alphabetical order.
-     * @throws Exception .
+     * Directory, containing scripts.
      */
-    @Test
-    public void testOrdered() throws Exception {
-        final Environment environment = new EnvironmentMocker()
-            .withTextFile("src/test/rexsl/setup/g.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/f.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/a.groovy", this.TEST)
-            .mock();
-        final File directory = environment.basedir();
-        final ScriptsFinder finder = new ScriptsFinder(directory);
-        final Collection<File> files = finder.ordered();
-        String previous = "";
-        for (File file : files) {
-            final String name = file.getName();
-            final int result = name.compareTo(previous);
-            MatcherAssert.assertThat(
-                "order",
-                result,
-                Matchers.greaterThanOrEqualTo(0)
-            );
-            previous = name;
-        }
+    private final transient File directory;
+
+    /**
+     * Creates new instance of <code>FileFinder</code>.
+     * @param dir Directory, containing scripts.
+     * @param ext File extension.
+     */
+    public FileFinder(final File dir, final String ext) {
+        this.directory = dir;
+        this.extension = ext;
+    }
+
+    /**
+     * Fetches scripts from the input directory.
+     * @return Collection of scripts.
+     */
+    private Collection<File> fetch() {
+        final String[] extensions = new String[]{this.extension};
+        return FileUtils.listFiles(
+            this.directory,
+            extensions,
+            true);
+    }
+
+    /**
+     * Returns <code>Set</code> of scripts in the alphabetical order.
+     * @return Set of scripts in the alphabetical order.
+     */
+    public Set<File> ordered() {
+        final Collection<File> scripts = this.fetch();
+        return new TreeSet<File>(scripts);
+    }
+
+    /**
+     * Returns <code>Set</code> of scripts in the random order.
+     * @return Set of scripts in the random order.
+     */
+    public Set<File> random() {
+        final List<File> scripts = (List<File>) this.fetch();
+        Collections.shuffle(scripts);
+        return new LinkedHashSet<File>(scripts);
     }
 }

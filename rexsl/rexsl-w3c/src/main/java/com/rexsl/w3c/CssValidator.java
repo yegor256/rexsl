@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,14 +32,47 @@ package com.rexsl.w3c;
 /**
  * Validator of CSS pages through W3C validation API.
  *
+ * Sometimes this Jigsaw validator makes mistakes, sometimes you just need to
+ * use some IE-specific feature, which is not CSS compliant. In this case you
+ * may add comments to the document, at the end of every line you want to ignore
+ * during validation, for example:
+ *
+ * <pre>
+ * div.test {
+ *   color: red;
+ *   #position: 50%; &#47;* JIGSAW: this is a IE_-related hack *&#47;
+ * }
+ * </pre>
+ *
+ * <p>You can also instruct the validator to ingore the entire file, by means
+ * of adding {@code JIGSAW IGNORE} comment anywhere in the text, for example:
+ *
+ * <pre>
+ * &#47;* JIGSAW IGNORE: it's an experimental file *&#47;
+ * div.test {
+ *   something-totally-incorrect:...
+ * }
+ * </pre>
+ *
+ * <p>Validation will happen anyway, but {@link ValidationResponse#valid()}
+ * will return {@code TRUE}. You will still be able to read errors and warnings
+ * from it, but it will be valid.
+ *
+ * <p>Objects of this interface should be immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API</a>
+ * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API, CSS</a>
  */
 public interface CssValidator {
 
     /**
      * Validate and return validation response.
+     *
+     * <p>The method should never throw runtime exceptions, no matter what
+     * happened with the HTTP connection to the W3C server. It will return
+     * an invalid response, but will never throw.
+     *
      * @param css The CSS stylesheet
      * @return The response
      */

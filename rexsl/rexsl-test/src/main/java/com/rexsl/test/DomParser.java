@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,6 +37,8 @@ import org.w3c.dom.Document;
 /**
  * Implementation of {@link TestResponse}.
  *
+ * <p>Objects of this class are immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
@@ -52,6 +54,14 @@ final class DomParser {
      * @param txt The XML in text
      */
     public DomParser(final String txt) {
+        if (txt == null) {
+            throw new IllegalArgumentException("NULL instead of XML");
+        }
+        if (txt.charAt(0) != '<') {
+            throw new IllegalArgumentException(
+                String.format("Doesn't look like XML: '%s'", txt)
+            );
+        }
         this.xml = txt;
     }
 

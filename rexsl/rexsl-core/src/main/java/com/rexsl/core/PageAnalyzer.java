@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -71,7 +71,9 @@ final class PageAnalyzer {
         final UserAgent agent = new UserAgent(
             this.request.getHeader(HttpHeaders.USER_AGENT)
         );
-        final String accept = this.request.getHeader(HttpHeaders.ACCEPT);
+        final TypesMatcher accept = new TypesMatcher(
+            this.request.getHeader(HttpHeaders.ACCEPT)
+        );
         // let's check whether we should transform or not
         // @checkstyle BooleanExpressionComplexity (1 line)
         final boolean dontTouch =
@@ -82,14 +84,27 @@ final class PageAnalyzer {
             // it doesn't refer to any stylesheet
             || !this.page.contains("<?xml-stylesheet ")
             // it's a pure XML client, requesting XML format
-            || this.isXmlExplicitlyRequested(accept)
+            || accept.explicit(MediaType.APPLICATION_XML)
             // the browser supports XSTL 2.0
-            || (agent.isXsltCapable() && this.acceptsXml(accept));
+            || (
+                agent.isXsltCapable()
+                && accept.accepts(MediaType.APPLICATION_XML)
+            );
         if (dontTouch) {
             Logger.debug(
                 this,
                 // @checkstyle LineLength (1 line)
-                "#filter('%s': %d chars): User-Agent='%s', Accept='%s', no need to transform",
+                "#needsTransformation('%s': %d chars): User-Agent='%s', Accept='%s', no need to transform",
+                this.request.getRequestURI(),
+                this.page.length(),
+                agent,
+                accept
+            );
+        } else {
+            Logger.debug(
+                this,
+                // @checkstyle LineLength (1 line)
+                "#filtneedsTransformationer('%s': %d chars): User-Agent='%s', Accept='%s', transformation required",
                 this.request.getRequestURI(),
                 this.page.length(),
                 agent,
@@ -97,44 +112,6 @@ final class PageAnalyzer {
             );
         }
         return !dontTouch;
-    }
-
-    /**
-     * Check if the application/xml MIME type is the only one there.
-     * @param header Accept header string from the request.
-     * @return If the application/XML MIME type is the one
-     */
-    private Boolean isXmlExplicitlyRequested(final String header) {
-        final Boolean requested = (header != null)
-            && (MediaType.APPLICATION_XML.equals(header));
-        Logger.debug(
-            this,
-            "#isXmlExplicitlyRequested('%s'): %b",
-            header,
-            requested
-        );
-        return requested;
-    }
-
-    /**
-     * Check if the "application/xml" MIME type is accepted.
-     * @param header Accept header string from the request.
-     * @return If the application/XML MIME type is present
-     * @todo #7 This implemetation is very very preliminary and should
-     *  be replaced with something more decent. I don't like the idea
-     *  of implementing this parsing functionality here. We should better
-     *  use some library: http://stackoverflow.com/questions/7705979
-     */
-    private Boolean acceptsXml(final String header) {
-        final Boolean accepts = (header != null)
-            && (header.contains(MediaType.APPLICATION_XML));
-        Logger.debug(
-            this,
-            "#acceptsXml('%s'): %b",
-            header,
-            accepts
-        );
-        return accepts;
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,6 +67,21 @@ final class UserAgent {
                 }
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder text = new StringBuilder();
+        for (Map.Entry<String, ProductVersion> token : this.tokens.entrySet()) {
+            if (text.length() > 0) {
+                text.append("; ");
+            }
+            text.append(token.getKey()).append("-").append(token.getValue());
+        }
+        return text.toString();
     }
 
     /**

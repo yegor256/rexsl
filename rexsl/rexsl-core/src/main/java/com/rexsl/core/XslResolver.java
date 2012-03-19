@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,9 +32,12 @@ package com.rexsl.core;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -78,6 +81,11 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     private transient JAXBContext context;
 
     /**
+     * Servlet request.
+     */
+    private transient HttpServletRequest request;
+
+    /**
      * Set servlet context from container, to be called by JAX-RS framework
      * because of {@link Context} annotation.
      * @param ctx The context
@@ -100,6 +108,15 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             "#setServletContext(%s): context injected by JAX-RS",
             ctx.getClass().getName()
         );
+    }
+
+    /**
+     * Set request to provide information about resourse context.
+     * @param req The request
+     */
+    @Context
+    public void setHttpServletRequest(final HttpServletRequest req) {
+        this.request = req;
     }
 
     /**
@@ -141,13 +158,15 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 try {
                     this.classes.add(cls);
                     this.context = JAXBContext.newInstance(
-                        this.classes.toArray(new Class[] {})
+                        this.classes.toArray(new Class[this.classes.size()])
                     );
                     Logger.info(
                         this,
-                        "#add(%s): added to JAXBContext (%d total)",
+                        // @checkstyle LineLength (1 line)
+                        "#add(%s): added to JAXBContext (%d total), stylesheet: '%s'",
                         cls.getName(),
-                        this.classes.size()
+                        this.classes.size(),
+                        this.stylesheet(cls)
                     );
                 } catch (javax.xml.bind.JAXBException ex) {
                     throw new IllegalStateException(ex);
@@ -180,11 +199,27 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 "/xsl/%s.xsl",
                 type.getSimpleName()
             );
+            if (this.request != null) {
+                try {
+                    stylesheet = new URL(
+                        this.request.getScheme(),
+                        this.request.getServerName(),
+                        this.request.getServerPort(),
+                        String.format(
+                            "%s%s",
+                            this.request.getContextPath(),
+                            stylesheet
+                        )
+                    ).toString();
+                } catch (MalformedURLException ex) {
+                    throw new IllegalStateException(ex);
+                }
+            }
         } else {
             stylesheet = ((Stylesheet) antn).value();
         }
         Logger.debug(
-            this,
+            XslResolver.class,
             "#stylesheet(%s): '%s' stylesheet discovered",
             type.getName(),
             stylesheet
@@ -254,7 +289,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @param type The class
      * @return The name of XSD file
      */
-    private String schema(final Class<?> type) {
+    private static String schema(final Class<?> type) {
         final Annotation antn = type.getAnnotation(Schema.class);
         String schema;
         if (antn == null) {
@@ -267,7 +302,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             }
         }
         Logger.debug(
-            this,
+            XslResolver.class,
             "#schema(%s): '%s' schema discovered",
             type.getName(),
             schema

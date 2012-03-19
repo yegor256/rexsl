@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -174,7 +174,7 @@ public final class EmbeddedContainer {
                 env,
                 new BindingBuilder(env).build()
             );
-            final ScriptsFinder finder = new ScriptsFinder(dir);
+            final FileFinder finder = new FileFinder(dir, "groovy");
             for (File script : finder.ordered()) {
                 Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
                 try {

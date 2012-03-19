@@ -43,12 +43,14 @@
 
     <xsl:template name="content">
         <form method="post" action="">
-            <input name="text" maxlength="50" id="data">
-                <xsl:attribute name="value">
-                    <xsl:value-of select="/page/text" />
-                </xsl:attribute>
-            </input>
-            <input value="Set" type="submit" />
+            <p>
+                <input name="text" maxlength="50" id="data">
+                    <xsl:attribute name="value">
+                        <xsl:value-of select="/page/text" />
+                    </xsl:attribute>
+                </input>
+                <input value="Set" type="submit" />
+            </p>
         </form>
     </xsl:template>
 

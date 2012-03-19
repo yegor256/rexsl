@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,39 +27,50 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.checks;
 
-import java.util.Set;
+import com.rexsl.maven.Environment;
+import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Test case for {@link ChecksProvider}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * Test case for {@link com.rexsl.maven.checks.JSUnitTestsCheck}.
+ * @author Evgeniy Nyavro (e.nyavro@gmail.com)
  * @version $Id$
  */
-public final class ChecksProviderTest {
+public final class JSUnitTestsCheckTest {
 
     /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
+     * JSStaticCheck can execute succeeding JS unit test.
+     * @throws Exception If something goes wrong
      */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogMocker().mock();
+    @Test
+    public void validatesCorrectJSFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withFile("src/main/webapp/js/script.js")
+            .withFile("src/test/rexsl/js/scriptTestOK.js")
+            .mock();
+        MatcherAssert.assertThat(
+            "valid JS test passes without problems",
+            new JSUnitTestsCheck().validate(env)
+        );
     }
 
     /**
-     * ChecksProvider can provide a set of checks.
-     * @throws Exception If something goes wrong inside
+     * JSStaticCheck can detect failed JS unit test.
+     * @throws Exception If something goes wrong
      */
     @Test
-    public void retrievesSetOfChecks() throws Exception {
-        final Set<Check> checks = new ChecksProvider().all();
-        MatcherAssert.assertThat(checks, Matchers.notNullValue());
-        MatcherAssert.assertThat(checks.size(), Matchers.greaterThan(0));
+    public void validatesIncorrectJSFile() throws Exception {
+        final Environment env = new EnvironmentMocker()
+            .withFile(String.format("src/main/webapp/js/%s", "script.js"))
+            .withFile("src/test/rexsl/js/scriptTestFailed.js")
+            .mock();
+        MatcherAssert.assertThat(
+            "JS test failed",
+            !new JSUnitTestsCheck().validate(env)
+        );
     }
 
 }

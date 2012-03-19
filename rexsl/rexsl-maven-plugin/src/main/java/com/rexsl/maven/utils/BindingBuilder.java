@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,7 +56,7 @@ public final class BindingBuilder {
     public BindingBuilder(final Environment env) {
         URI home;
         try {
-            home = new URI(String.format("http://localhost:%d", env.port()));
+            home = new URI(String.format("http://localhost:%d/", env.port()));
         } catch (java.net.URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }

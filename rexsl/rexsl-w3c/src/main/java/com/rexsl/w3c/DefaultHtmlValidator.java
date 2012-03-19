@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,20 +29,51 @@
  */
 package com.rexsl.w3c;
 
+import com.rexsl.test.TestResponse;
+import java.net.URI;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+
 /**
  * Implementation of (X)HTML validator.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-final class DefaultHtmlValidator implements HtmlValidator {
+final class DefaultHtmlValidator extends BaseValidator
+    implements HtmlValidator {
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public ValidationResponse validate(final String html) {
-        return new DefaultValidationResponse();
+        DefaultValidationResponse response;
+        final String field = "uploaded_file";
+        final URI uri = UriBuilder.fromUri("http://validator.w3.org/check")
+            .build();
+        try {
+            final TestResponse soap = this
+                .send(uri, this.entity(field, html, MediaType.TEXT_HTML))
+                .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
+                .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
+                .assertThat(
+                    new RetryPolicy(
+                        "/env:Envelope/env:Body/m:markupvalidationresponse"
+                    )
+                )
+                .assertXPath("//m:validity")
+                .assertXPath("//m:checkedby")
+                .assertXPath("//m:doctype")
+                .assertXPath("//m:charset");
+            response = this.build(soap);
+        // @checkstyle IllegalCatchCheck (1 line)
+        } catch (Throwable ex) {
+            response = this.failure(ex);
+        }
+        return response;
     }
 
 }

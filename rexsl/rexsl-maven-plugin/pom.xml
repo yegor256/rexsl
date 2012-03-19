@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
  *
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,12 +52,25 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version since="11 Mar 2012">2.0.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--<dependency>-->
+            <!--<artifactId>jslint4java</artifactId>-->
+            <!--<groupId>com.googlecode.jslint4java</groupId>-->
+            <!--<version>2.0.2</version>-->
+          <!--</dependency>-->
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -75,7 +88,6 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -349,6 +361,11 @@
             <artifactId>js</artifactId>
             <version since="4 Dec 2011">1.6R7</version>
         </dependency>
+        <dependency>
+            <groupId>org.xmlmatchers</groupId>
+            <artifactId>xml-matchers</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -386,6 +403,7 @@
                         -->
                         <!-- <pomInclude>run-all-correct/pom.xml</pomInclude> -->
                         <pomInclude>all-correct/pom.xml</pomInclude>
+                        <pomInclude>structure-failure/pom.xml</pomInclude>
                         <pomInclude>script-failure/pom.xml</pomInclude>
                         <pomInclude>xhtml-failure/pom.xml</pomInclude>
                         <pomInclude>xsd-failure/pom.xml</pomInclude>
@@ -435,6 +453,9 @@
                                 <copy verbose="yes" overwrite="yes"
                                     file="${com.rexsl:rexsl-w3c:jar}"
                                     tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-w3c/${project.version}/rexsl-w3c-${project.version}.jar"/>
+                                <copy verbose="yes" overwrite="yes"
+                                    file="${com.rexsl:rexsl-test:jar}"
+                                    tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-test/${project.version}/rexsl-test-${project.version}.jar"/>
                             </target>
                         </configuration>
                         <goals>

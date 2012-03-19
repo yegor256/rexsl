@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,43 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
-
-import com.rexsl.maven.checks.BinaryFilesCheck;
-import com.rexsl.maven.checks.CssStaticCheck;
-import com.rexsl.maven.checks.FilesStructureCheck;
-import com.rexsl.maven.checks.InContainerScriptsCheck;
-import com.rexsl.maven.checks.JSStaticCheck;
-import com.rexsl.maven.checks.JigsawCssCheck;
-import com.rexsl.maven.checks.WebXmlCheck;
-import com.rexsl.maven.checks.XhtmlOutputCheck;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
- * Provider of checks.
+ * Exception trap, experimental implementation.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @checkstyle ClassDataAbstractionCoupling (100 lines)
+ * @since 0.3.6
  */
-public final class ChecksProvider {
-
-    /**
-     * Get full collection of checks.
-     * @return List of checks
-     */
-    public Set<Check> all() {
-        final Set<Check> checks = new HashSet<Check>();
-        checks.add(new BinaryFilesCheck());
-        checks.add(new CssStaticCheck());
-        checks.add(new JigsawCssCheck());
-        checks.add(new JSStaticCheck());
-        checks.add(new FilesStructureCheck());
-        checks.add(new XhtmlOutputCheck());
-        checks.add(new InContainerScriptsCheck());
-        checks.add(new WebXmlCheck());
-        return checks;
-    }
-
-}
+package com.rexsl.trap;

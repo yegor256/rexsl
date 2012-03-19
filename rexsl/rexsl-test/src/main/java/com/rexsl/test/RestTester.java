@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,13 +41,14 @@ import javax.ws.rs.core.UriBuilder;
  * <p>For example (in your Groovy script):
  *
  * <pre>
- * import java.net.HttpURLConnection
  * import javax.ws.rs.core.HttpHeaders
  * import javax.ws.rs.core.MediaType
- * new RestTester.start(UriBuilder.fromUri(rexsl.home).path('/{id}').build(id))
+ * import javax.ws.rs.core.UriBuilder
+ * import org.hamcrest.Matchers
+ * RestTester.start(UriBuilder.fromUri(rexsl.home).path('/{id}').build(id))
  *   .header(HttpHeaders.USER_AGENT, 'Safari 4')
  *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
- *   .post('name=John Doe')
+ *   .post('renaming somebody', 'name=John Doe')
  *   .assertStatus(HttpURLConnection.HTTP_OK)
  *   .assertBody(Matchers.containsString('xml'))
  *   .assertXPath('/data/user[.="John Doe"]')
@@ -55,7 +56,8 @@ import javax.ws.rs.core.UriBuilder;
  *
  * <p>This example will make a {@code POST} request to the URI pre-built
  * by {@code UriBuilder}, providing headers and request body. Response will
- * be validated with matchers.
+ * be validated with matchers. See class {@link TestResponse} to get an idea
+ * of what you can do with the response once it's retrieved.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$

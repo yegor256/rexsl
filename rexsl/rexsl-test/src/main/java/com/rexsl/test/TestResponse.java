@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,15 +30,19 @@
 package com.rexsl.test;
 
 import java.util.List;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedMap;
 import org.hamcrest.Matcher;
 
 /**
  * Resonse returned by {@link TestClient}.
  *
+ * <p>Implementation of this interface shall be immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public interface TestResponse {
 
     /**
@@ -49,20 +53,20 @@ public interface TestResponse {
 
     /**
      * Find link in XML and return new client with this link as URI.
-     * @param query The path of the link
-     * @return New client
+     * @param query The path of the link, as XPath query
+     * @return New client ready to fetch content from this new page
      */
     TestClient rel(String query);
 
     /**
-     * Get body as a string.
+     * Get body as a string, assuming it's {@code UTF-8}.
      * @return The body
      */
     String getBody();
 
     /**
-     * Get status of the response as a number.
-     * @return The status
+     * Get status of the response as a positive integer number.
+     * @return The status code
      */
     Integer getStatus();
 
@@ -72,6 +76,13 @@ public interface TestResponse {
      * @return The list of node values (texts)
      */
     List<String> xpath(String query);
+
+    /**
+     * Retrieve nodes from the XML response.
+     * @param query The XPath query
+     * @return Collection of responses
+     */
+    List<TestResponse> nodes(String query);
 
     /**
      * Get status line of the response.
@@ -86,10 +97,33 @@ public interface TestResponse {
     MultivaluedMap<String, String> getHeaders();
 
     /**
+     * Get cookie.
+     * @param name Name of the cookie to get
+     * @return The cookie
+     */
+    Cookie cookie(String name);
+
+    /**
+     * Register additional namespace prefix for XPath.
+     * @param prefix The prefix to register
+     * @param uri Namespace URI
+     * @return This object
+     */
+    TestResponse registerNs(String prefix, Object uri);
+
+    /**
      * Fail and report a problem.
      * @param reason Reason of failure
      */
     void fail(String reason);
+
+    /**
+     * Assert something.
+     * @param assertion The assertion to use
+     * @return This object
+     * @since 0.3.4
+     */
+    TestResponse assertThat(AssertionPolicy assertion);
 
     /**
      * Verifies HTTP response status code against the provided absolute value,

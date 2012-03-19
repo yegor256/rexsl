@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,32 +27,24 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.trap;
 
-import com.rexsl.maven.packers.CssPacker;
-import com.rexsl.maven.packers.JsPacker;
-import com.rexsl.maven.packers.XslPacker;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
 
 /**
- * Provider of a collection of all packers.
+ * Notifier.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @since 0.3.6
  */
-public final class PackersProvider {
+public interface Notifier {
 
     /**
-     * Get full collection of packers.
-     * @return List of packers
+     * Notify about this defect.
+     * @param defect Plain text of the defect to notify about
+     * @throws IOException If some problem
      */
-    public Set<Packer> all() {
-        final Set<Packer> packers = new HashSet<Packer>();
-        packers.add(new CssPacker());
-        packers.add(new JsPacker());
-        packers.add(new XslPacker());
-        return packers;
-    }
+    void notify(String defect) throws IOException;
 
 }

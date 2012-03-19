@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,8 @@ package com.rexsl.w3c;
 /**
  * Validator of (X)HTML pages through W3C validation API.
  *
+ * <p>Objects of this interface should be immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
@@ -40,6 +42,11 @@ public interface HtmlValidator {
 
     /**
      * Validate and return validation response.
+     *
+     * <p>The method should never throw runtime exceptions, no matter what
+     * happened with the HTTP connection to the W3C server. It will return
+     * an invalid response, but will never throw.
+     *
      * @param html The HTML document
      * @return The response
      */

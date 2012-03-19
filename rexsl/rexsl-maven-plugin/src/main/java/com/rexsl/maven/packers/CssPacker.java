@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,7 @@ import org.apache.commons.lang.CharEncoding;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class CssPacker extends AbstractPacker {
+final class CssPacker extends AbstractPacker {
 
     /**
      * {@inheritDoc}

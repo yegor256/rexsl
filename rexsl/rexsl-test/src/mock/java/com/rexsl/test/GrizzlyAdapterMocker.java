@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,22 +29,14 @@
  */
 package com.rexsl.test;
 
-import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
-import com.ymock.util.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.URI;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
@@ -106,11 +98,11 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     @Override
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
-        String input;
+        String input = null;
         try {
             input = IOUtils.toString(request.getInputStream());
-        } catch (IOException ex) {
-            throw new IllegalStateException(ex);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         this.assertMethod(request, input);
         this.assertRequestUri(request, input);
@@ -197,6 +189,22 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      */
     public void setStatus(final int code) {
         this.status = code;
+    }
+
+    /**
+     * Check if adapter has body matcher.
+     * @return true if adapter has body matcher
+     */
+    public boolean hasBodyMatcher() {
+        return this.bodyMatcher!=null;
+    }
+
+    /**
+     * Check if adapter has at least one parameter matcher.
+     * @return true if adapter has parameter matcher
+     */
+    public boolean hasParamMatcher() {
+        return !this.paramMatchers.isEmpty();
     }
 
     /**

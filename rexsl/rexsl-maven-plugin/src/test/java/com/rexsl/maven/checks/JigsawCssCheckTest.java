@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,7 +62,6 @@ public final class JigsawCssCheckTest {
      * JigsawCssCheckTest can validate incorrect CSS files.
      * @throws Exception If something goes wrong
      */
-    @org.junit.Ignore
     @Test
     public void validatesIncorrectCssFile() throws Exception {
         final Environment env = new EnvironmentMocker()

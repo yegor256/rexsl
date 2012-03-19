@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,6 +62,7 @@ public final class RunMojo extends AbstractRexslMojo {
                 Thread.sleep(1000);
             } catch (java.lang.InterruptedException ex) {
                 container.stop();
+                Thread.currentThread().interrupt();
             }
         }
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,46 +33,57 @@ import java.net.URI;
 import java.util.List;
 
 /**
- * Response of validation.
+ * Response of HTML or CSS validation.
+ *
+ * <p>See {@link ValidatorBuilder} for explanation of how to get an instance
+ * of this interface.
+ *
+ * <p>Objects of this interface should be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
+ * @see ValidatorBuilder
+ * @see CssValidator#validate(String)
+ * @see HtmlValidator#validate(String)
+ * @see <a href="http://validator.w3.org/docs/api.html">W3C API, HTML</a>
+ * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API, CSS</a>
  */
 public interface ValidationResponse {
 
     /**
-     * The document is valid?
+     * The document is valid and has no errors or warnings?
      * @return Is it valid?
      */
     boolean valid();
 
     /**
-     * Checked by.
-     * @return URI
+     * Who checked the document (normally contains a URL of W3C server).
+     * @return URI of the server
      */
     URI checkedBy();
 
     /**
-     * Doctype of the document.
-     * @return Doctype
+     * DOCTYPE of the document, if detected by the validator (may be empty
+     * if {@code DOCTYPE} is not detected or if it's a CSS document).
+     * @return Doctype or empty string
      */
     String doctype();
 
     /**
-     * Charset of the document.
-     * @return Charset
+     * Charset of the document, if detected by the server (may be empty
+     * if charset is not detected or it's a CSS document).
+     * @return Charset of the document, e.g. {@code "UTF-8"}
      */
     String charset();
 
     /**
-     * Errors found.
-     * @return List of errors
+     * Returns list of errors found during validation.
+     * @return List of errors or an empty list if no errors found
      */
     List<Defect> errors();
 
     /**
-     * Warnings found.
+     * Returns lsit of warnings found during validation.
      * @return List of warnings
      */
     List<Defect> warnings();

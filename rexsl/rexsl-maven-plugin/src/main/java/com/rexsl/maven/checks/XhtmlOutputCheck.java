@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,7 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
+import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.GroovyExecutor;
 import com.rexsl.w3c.Defect;
 import com.rexsl.w3c.HtmlValidator;
@@ -40,10 +41,11 @@ import com.rexsl.w3c.ValidationResponse;
 import com.rexsl.w3c.ValidatorBuilder;
 import com.ymock.util.Logger;
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 import org.apache.commons.collections.ListUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Validate XHTML output.
@@ -52,7 +54,7 @@ import org.apache.commons.io.FilenameUtils;
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (2 lines)
  */
-public final class XhtmlOutputCheck implements Check {
+final class XhtmlOutputCheck implements Check {
 
     /**
      * Directory with XML files.
@@ -84,22 +86,25 @@ public final class XhtmlOutputCheck implements Check {
                 env.webdir()
             );
             final EmbeddedContainer container = EmbeddedContainer.start(env);
-            final String[] exts = new String[] {"xml"};
-            for (File xml : FileUtils.listFiles(dir, exts, true)) {
-                try {
-                    Logger.info(this, "Testing %s through...", xml);
-                    this.one(env, xml);
-                } catch (InternalCheckException ex) {
-                    Logger.warn(
-                        this,
-                        "Failed:\n%[exception]s",
-                        ex
-                    );
-                    success = false;
+            final Collection<File> files = new FileFinder(dir, "xml").random();
+            try {
+                for (File xml : files) {
+                    try {
+                        Logger.info(this, "Testing %s through...", xml);
+                        this.one(env, xml);
+                    } catch (InternalCheckException ex) {
+                        Logger.warn(
+                            this,
+                            "Failed:\n%[exception]s",
+                            ex
+                        );
+                        success = false;
+                    }
                 }
+            } finally {
+                container.stop();
+                Logger.info(this, "Embedded servlet container stopped");
             }
-            container.stop();
-            Logger.info(this, "Embedded servlet container stopped");
         } else {
             Logger.info(
                 this,
@@ -160,8 +165,9 @@ public final class XhtmlOutputCheck implements Check {
         if (!response.valid()) {
             Logger.error(
                 this,
-                "%s produced invalid XHTML",
-                xml
+                "%s produced invalid XHTML:\n%s",
+                xml,
+                StringEscapeUtils.escapeJava(xhtml).replace("\\n", "\n")
             );
             for (Defect defect : (List<Defect>) ListUtils
                 .union(response.errors(), response.warnings())

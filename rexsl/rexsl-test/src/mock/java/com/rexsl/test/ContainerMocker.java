@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,24 +30,10 @@
 package com.rexsl.test;
 
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
-import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
-import com.sun.grizzly.tcp.http11.GrizzlyRequest;
-import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import com.ymock.util.Logger;
-import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.URI;
-import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.UriBuilder;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 
 /**
@@ -78,7 +64,13 @@ public final class ContainerMocker {
      * @param matcher Matcher for body
      * @return This object
      */
+    // @todo #150 It is impossible to match parameter and body at the same time.
     public ContainerMocker expectBody(final Matcher<String> matcher) {
+        if (this.adapter.hasParamMatcher()) {
+            throw new RuntimeException(
+                "Cannot add body matcher. Adapter already has parameter matcher"
+            );
+        }
         this.adapter.setBodyMatcher(matcher);
         return this;
     }
@@ -109,8 +101,15 @@ public final class ContainerMocker {
      * @param matcher Matcher for its content
      * @return This object
      */
+    // @todo #150 It is impossible to match parameter and body at the same
+    //     time.
     public ContainerMocker expectParam(final String name,
         final Matcher<String> matcher) {
+        if (this.adapter.hasBodyMatcher()) {
+            throw new RuntimeException(
+                "Cannot add parameter matcher. Adapter already has body matcher"
+            );
+        }
         this.adapter.addParamMatcher(name, matcher);
         return this;
     }

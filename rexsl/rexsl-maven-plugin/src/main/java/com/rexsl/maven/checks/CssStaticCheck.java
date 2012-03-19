@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@ import com.ymock.util.Logger;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: CssStaticCheck.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class CssStaticCheck implements Check {
+final class CssStaticCheck implements Check {
 
     /**
      * {@inheritDoc}
