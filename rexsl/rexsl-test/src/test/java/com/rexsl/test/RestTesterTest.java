@@ -288,4 +288,21 @@ public final class RestTesterTest {
             .assertXPath("/text[contains(.,'\u0443\u0440\u0430')]");
     }
 
+    /**
+     * RestTester can use basic authentication scheme.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void sendsBasicAuthenticationHeader() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .expectHeader(
+                HttpHeaders.AUTHORIZATION,
+                Matchers.equalTo("Basic dXNlcjpwd2Q=")
+        ).mock();
+        RestTester
+            .start(UriBuilder.fromUri(container.home()).userInfo("user:pwd"))
+            .get("test with Basic authorization")
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
 }
