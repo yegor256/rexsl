@@ -33,9 +33,13 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.ymock.util.Logger;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ws.rs.core.HttpHeaders;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Implementation of {@link TestClient}.
@@ -164,6 +168,27 @@ final class JerseyTestClient implements TestClient {
         final WebResource.Builder builder = this.resource.getRequestBuilder();
         for (Header header : this.headers) {
             builder.header(header.getKey(), header.getValue());
+        }
+        final String info = this.home.getUserInfo();
+        if (info != null) {
+            final String[] parts = info.split(":", 2);
+            try {
+                builder.header(
+                    HttpHeaders.AUTHORIZATION,
+                    String.format(
+                        "Basic %s",
+                        Base64.encodeBase64String(
+                            String.format(
+                                "%s:%s",
+                                URLDecoder.decode(parts[0], CharEncoding.UTF_8),
+                                URLDecoder.decode(parts[1], CharEncoding.UTF_8)
+                            ).getBytes()
+                        )
+                    )
+                );
+            } catch (java.io.UnsupportedEncodingException ex) {
+                throw new IllegalStateException(ex);
+            }
         }
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
