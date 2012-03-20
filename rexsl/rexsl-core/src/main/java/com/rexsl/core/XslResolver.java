@@ -34,8 +34,8 @@ import java.io.File;
 import java.lang.annotation.Annotation;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
@@ -73,7 +73,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     /**
      * Classes to process.
      */
-    private final transient List<Class> classes = new ArrayList<Class>();
+    private final transient Set<Class> classes = new HashSet<Class>();
 
     /**
      * JAXB context.
