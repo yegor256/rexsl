@@ -93,7 +93,7 @@ final class TypesMatcher {
      * @return If the MIME type is accepted
      */
     public boolean accepts(final String match) {
-        boolean accepts = this.types.contains (match);
+        boolean accepts = this.types.contains(match);
         if (!accepts) {
             final String[] reqs = match.split(this.TYPE_SEP, 2);
             for (String type : this.types) {
