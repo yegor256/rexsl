@@ -33,6 +33,8 @@ import java.net.URL;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 import javax.xml.bind.ValidationEventLocator;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -47,7 +49,7 @@ public final class XsdEventHandlerTest {
      * XsdEventHandler throws exception on every event.
      * @throws Exception If something goes wrong
      */
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void throwsExceptionOnEveryEvent() throws Exception {
         final ValidationEventLocator locator =
             Mockito.mock(ValidationEventLocator.class);
@@ -58,7 +60,10 @@ public final class XsdEventHandlerTest {
         Mockito.doReturn("msg").when(event).getMessage();
         Mockito.doReturn(locator).when(event).getLocator();
         final ValidationEventHandler handler = new XsdEventHandler();
-        handler.handleEvent(event);
+        MatcherAssert.assertThat(
+            handler.handleEvent(event),
+            Matchers.is(false)
+        );
     }
 
 }
