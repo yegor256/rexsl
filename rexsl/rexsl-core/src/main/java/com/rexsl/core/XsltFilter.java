@@ -152,7 +152,7 @@ public final class XsltFilter implements Filter {
             new ByteArrayResponseWrapper(response);
         chain.doFilter(request, wrapper);
         if (!response.isCommitted()) {
-            byte[] data = wrapper.getByteStream().toByteArray();
+            byte[] data = wrapper.getByteArray();
             String page = new String(data, CharEncoding.UTF_8);
             final PageAnalyzer analyzer = new PageAnalyzer(page, request);
             if (analyzer.needsTransformation()) {

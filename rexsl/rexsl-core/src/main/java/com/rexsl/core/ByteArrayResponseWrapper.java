@@ -76,11 +76,11 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
     }
 
     /**
-     * Get the underlying byte stream.
-     * @return Byte stream that contains the response.
+     * Get the underlying byte array.
+     * @return Byte array that contains the response.
      */
-    public ByteArrayOutputStream getByteStream() {
-        return this.stream;
+    public byte[] getByteArray() {
+        return this.stream.toByteArray();
     }
 
     /**
