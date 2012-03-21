@@ -36,7 +36,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import junit.framework.Assert;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -87,7 +86,6 @@ public final class RestfulServletTest {
             .mock();
         final HttpServlet servlet = new RestfulServlet();
         servlet.init(config);
-        Assert.fail();
     }
 
     /**
@@ -103,7 +101,6 @@ public final class RestfulServletTest {
             .mock();
         final HttpServlet servlet = new RestfulServlet();
         servlet.init(config);
-        Assert.fail();
     }
 
     /**

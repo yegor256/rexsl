@@ -131,8 +131,10 @@ public final class RestfulServlet extends HttpServlet {
                 if (!match.matches()) {
                     throw new IllegalArgumentException(
                         String.format(
-                            "'%s' servlet parameter contains non-valid data",
-                            this.PACKAGES
+                            // @checkstyle LineLength (1 line)
+                            "'%s' servlet parameter contains non-valid data: %s",
+                            this.PACKAGES,
+                            pkg
                         )
                     );
                 }
