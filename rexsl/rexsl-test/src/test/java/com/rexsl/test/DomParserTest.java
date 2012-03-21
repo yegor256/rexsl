@@ -72,4 +72,23 @@ public final class DomParserTest {
             );
         }
     }
+
+    /**
+     * DomParser throws exception when it is not an XML at all.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsWhenNonXmlDocument() throws Exception {
+        new DomParser("some text, which is not an XML");
+    }
+
+    /**
+     * DomParser throws exception when it is NULL.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsWhenNull() throws Exception {
+        new DomParser(null);
+    }
+
 }
