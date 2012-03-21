@@ -36,6 +36,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import junit.framework.Assert;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -48,13 +49,18 @@ import org.junit.Test;
 public final class RestfulServletTest {
 
     /**
+     * Key for the packages parameter.
+     */
+    private static final String PACKAGES_KEY = "com.rexsl.PACKAGES";
+
+    /**
      * RestfulServlet can pass HTTP requests to Jersey for further processing.
      * @throws Exception If something goes wrong
      */
     @Test
     public void passesHttpRequestsToJersey() throws Exception {
         final ServletConfig config = new ServletConfigMocker()
-            .withParam("com.rexsl.PACKAGES", "com.rexsl.core")
+            .withParam(this.PACKAGES_KEY, "com.rexsl.core")
             .mock();
         final HttpServlet servlet = new RestfulServlet();
         servlet.init(config);
@@ -66,6 +72,38 @@ public final class RestfulServletTest {
             response.toString(),
             Matchers.containsString("\u0443\u0440\u0430")
         );
+    }
+
+    /**
+     * Attemps to create a new restful servlet with a configuration argument
+     * that contains a non-valid package.
+     * The package name contains hyphens.
+     * @throws Exception If something goes wrong
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void initWithNonValidPackageHyphens() throws Exception {
+        final ServletConfig config = new ServletConfigMocker()
+            .withParam(this.PACKAGES_KEY, "package-with-hyphens")
+            .mock();
+        final HttpServlet servlet = new RestfulServlet();
+        servlet.init(config);
+        Assert.fail();
+    }
+
+    /**
+     * Attemps to create a new restful servlet with a configuration argument
+     * that contains a non-valid package.
+     * One of the packages starts with a number.
+     * @throws Exception If something goes wrong
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void initWithNonValidPackageStartsWithNumber() throws Exception {
+        final ServletConfig config = new ServletConfigMocker()
+            .withParam(this.PACKAGES_KEY, "pa.1ck.age")
+            .mock();
+        final HttpServlet servlet = new RestfulServlet();
+        servlet.init(config);
+        Assert.fail();
     }
 
     /**
