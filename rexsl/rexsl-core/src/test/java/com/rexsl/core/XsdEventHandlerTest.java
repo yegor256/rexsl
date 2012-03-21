@@ -34,6 +34,8 @@ import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 import javax.xml.bind.ValidationEventLocator;
 import junit.framework.Assert;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -59,7 +61,7 @@ public final class XsdEventHandlerTest {
         Mockito.doReturn("msg").when(event).getMessage();
         Mockito.doReturn(locator).when(event).getLocator();
         final ValidationEventHandler handler = new XsdEventHandler();
-        Assert.assertFalse(handler.handleEvent(event));
+        MatcherAssert.assertThat(handler.handleEvent(event), Matchers.is(false));
     }
 
 }
