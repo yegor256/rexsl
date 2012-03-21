@@ -98,7 +98,7 @@ final class UserAgent {
      */
     private boolean isSafari() {
         return this.tokens.containsKey("Safari")
-            && this.isVersion("5");
+            && this.isVersionHigherOrEqual("5");
     }
 
     /**
@@ -107,15 +107,15 @@ final class UserAgent {
      */
     private boolean isChrome() {
         return this.tokens.containsKey("Chrome")
-            && this.isVersion("10");
+            && this.isVersionHigherOrEqual("10");
     }
 
     /**
-     * Check if the version is higher than this one.
+     * Check if the version is higher or equal than this one.
      * @param ver The version
-     * @return Is it?
+     * @return Returns true if version 'ver' is higher or equal than this object's version
      */
-    private boolean isVersion(final String ver) {
+    private boolean isVersionHigherOrEqual(final String ver) {
         final ProductVersion found = this.tokens.get("Version");
         boolean result = false;
         if (found != null) {
