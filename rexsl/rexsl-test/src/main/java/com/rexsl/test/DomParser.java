@@ -85,7 +85,10 @@ final class DomParser {
         } catch (javax.xml.parsers.ParserConfigurationException ex) {
             throw new IllegalStateException(ex);
         } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalArgumentException(
+                String.format("Invalid XML: \"%s\"", this.xml),
+                ex
+            );
         }
         return doc;
     }
