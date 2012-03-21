@@ -113,7 +113,7 @@ final class UserAgent {
     /**
      * Check if the version is higher or equal than this one.
      * @param ver The version
-     * @return true if version 'ver' is higher or equal than this object's version
+     * @return Returns true if version 'ver' is higher or equal than this object's version
      */
     private boolean isVersionHigherOrEqual(final String ver) {
         final ProductVersion found = this.tokens.get("Version");
