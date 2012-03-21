@@ -29,68 +29,66 @@
  */
 package com.rexsl.test;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
-import org.w3c.dom.Document;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * Implementation of {@link TestResponse}.
- *
- * <p>Objects of this class are immutable and thread-safe.
- *
+ * Test case for {@link DomParser}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class DomParser {
+public final class DomParserTest {
 
     /**
-     * The XML as a text.
+     * DomParser can parse XML text propertly.
+     * @throws Exception If something goes wrong inside
      */
-    private final transient String xml;
-
-    /**
-     * Public ctor.
-     * @param txt The XML in text
-     */
-    public DomParser(final String txt) {
-        if (txt == null) {
-            throw new IllegalArgumentException("NULL instead of XML");
-        }
-        if (txt.charAt(0) != '<') {
-            throw new IllegalArgumentException(
-                String.format("Doesn't look like XML: '%s'", txt)
-            );
-        }
-        this.xml = txt;
+    @Test
+    public void parsesIncomingXmlDocument() throws Exception {
+        final String xml = "<a><b>\u0443\u0440\u0430!</b></a>";
+        final DomParser parser = new DomParser(xml);
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(parser.document()),
+            XhtmlMatchers.hasXPath("/a/b")
+        );
     }
 
     /**
-     * Get document of body.
-     * @return The document
+     * DomParser throws exception when XML is invalid.
+     * @throws Exception If something goes wrong inside
      */
-    public Document document() {
-        Document doc;
+    @Test
+    public void throwsWhenInvalidXml() throws Exception {
+        final String xml = "<a><!-- broken XML -->";
         try {
-            final DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
-            // @checkstyle LineLength (1 line)
-            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-            factory.setNamespaceAware(true);
-            doc = factory
-                .newDocumentBuilder()
-                .parse(IOUtils.toInputStream(this.xml, CharEncoding.UTF_8));
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
-            throw new IllegalStateException(ex);
-        } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalArgumentException(
-                String.format("Invalid XML: \"%s\"", this.xml),
-                ex
+            new DomParser(xml).document();
+            Assert.fail("exception expected");
+        } catch (IllegalArgumentException ex) {
+            MatcherAssert.assertThat(
+                ex.getMessage(),
+                Matchers.containsString(xml)
             );
         }
-        return doc;
+    }
+
+    /**
+     * DomParser throws exception when it is not an XML at all.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsWhenNonXmlDocument() throws Exception {
+        new DomParser("some text, which is not an XML");
+    }
+
+    /**
+     * DomParser throws exception when it is NULL.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsWhenNull() throws Exception {
+        new DomParser(null);
     }
 
 }
