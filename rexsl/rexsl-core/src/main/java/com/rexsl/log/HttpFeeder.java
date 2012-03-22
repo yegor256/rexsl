@@ -29,6 +29,7 @@
  */
 package com.rexsl.log;
 
+import com.ymock.util.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -95,7 +96,7 @@ public final class HttpFeeder implements Feeder {
      */
     @Override
     public String toString() {
-        return String.format("HTTP POST to \"%s\"", this.url);
+        return Logger.format("HTTP POST to \"%s\"", this.url);
     }
 
     /**
@@ -105,7 +106,7 @@ public final class HttpFeeder implements Feeder {
     public void feed(final String text) throws IOException {
         if (this.split) {
             for (String line : text.split(CloudAppender.EOL)) {
-                this.post(String.format("%s%s", line, CloudAppender.EOL));
+                this.post(Logger.format("%s%s", line, CloudAppender.EOL));
             }
         } else {
             this.post(text);
@@ -144,7 +145,7 @@ public final class HttpFeeder implements Feeder {
         );
         if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
             throw new IOException(
-                String.format(
+                Logger.format(
                     "Invalid response code #%d from %s",
                     conn.getResponseCode(),
                     this.url

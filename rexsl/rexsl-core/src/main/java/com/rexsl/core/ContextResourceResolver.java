@@ -86,7 +86,7 @@ final class ContextResourceResolver implements URIResolver {
                 }
             } else {
                 throw new TransformerException(
-                    String.format(
+                    Logger.format(
                         "URI '%s' is not absolute, can't be resolved",
                         uri
                     )
@@ -140,7 +140,7 @@ final class ContextResourceResolver implements URIResolver {
         final int code = conn.getResponseCode();
         if (code != HttpURLConnection.HTTP_OK) {
             throw new IOException(
-                String.format(
+                Logger.format(
                     "Invalid HTTP response code %d at '%s'",
                     code,
                     uri

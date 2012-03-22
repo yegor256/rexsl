@@ -131,7 +131,7 @@ final class XhtmlOutputCheck implements Check {
             );
         }
         final String basename = FilenameUtils.getBaseName(file.getPath());
-        final String script = String.format("%s.groovy", basename);
+        final String script = Logger.format("%s.groovy", basename);
         final File groovy = new File(root, script);
         if (!groovy.exists()) {
             throw new InternalCheckException(

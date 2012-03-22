@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.aether;
 
+import com.ymock.util.Logger;
 import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.providers.http.LightweightHttpWagon;
 import org.sonatype.aether.connector.wagon.WagonProvider;
@@ -51,7 +52,7 @@ final class ManualWagonProvider implements WagonProvider {
             wagon = new LightweightHttpWagon();
         } else {
             throw new IllegalArgumentException(
-                String.format(
+                Logger.format(
                     "Unknown hint '%s', only 'http' allowed",
                     hint
                 )

@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.ymock.util.Logger;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -129,7 +130,7 @@ public final class RestTesterTest {
             )
             .post(
                 "testing of POST request",
-                String.format(
+                Logger.format(
                     "%s=%s",
                     name,
                     URLEncoder.encode(value, CharEncoding.UTF_8)

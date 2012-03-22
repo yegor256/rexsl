@@ -105,7 +105,7 @@ public final class StaticTemplate implements Template {
             );
         }
         if (!txt.contains(StaticTemplate.MARKER)) {
-            txt = String.format("%s\n%s", StaticTemplate.MARKER, txt);
+            txt = Logger.format("%s\n%s", StaticTemplate.MARKER, txt);
         }
         return txt;
     }

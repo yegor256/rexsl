@@ -72,7 +72,7 @@ class BaseValidator {
             .header(HttpHeaders.CONTENT_LENGTH, entity.length())
             .header(
                 HttpHeaders.CONTENT_TYPE,
-                String.format(
+                Logger.format(
                     "%s; boundary=%s",
                     MediaType.MULTIPART_FORM_DATA,
                     this.BOUNDARY

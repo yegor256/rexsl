@@ -29,6 +29,8 @@
  */
 package com.rexsl.w3c;
 
+import com.ymock.util.Logger;
+
 /**
  * Validation defect (error or warning) produced by {@link ValidationResponse}.
  *
@@ -95,7 +97,7 @@ public final class Defect {
      */
     @Override
     public String toString() {
-        return String.format(
+        return Logger.format(
             "[%d:%d] \"%s\", \"%s\", \"%s\", \"%s\"",
             this.iline,
             this.icolumn,

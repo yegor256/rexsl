@@ -156,7 +156,7 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
     @SuppressWarnings("PMD.SystemPrintln")
     public void run() {
         System.out.println(
-            String.format(
+            Logger.format(
                 "CloudAppender started to work with %s...",
                 this.feeder
             )
@@ -183,7 +183,7 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
             }
         }
         System.out.println(
-            String.format(
+            Logger.format(
                 "CloudAppender finished to work with %s.",
                 this.feeder
             )

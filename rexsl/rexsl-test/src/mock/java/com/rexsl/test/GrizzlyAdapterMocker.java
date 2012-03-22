@@ -32,6 +32,7 @@ package com.rexsl.test;
 import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
+import com.ymock.util.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.Collections;
@@ -321,7 +322,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
             .append("\n");
         for (Object name : Collections.list(request.getHeaderNames())) {
             builder.append(
-                String.format(
+                Logger.format(
                     "%s: [%s]\n",
                     (String) name,
                     StringUtils.join(

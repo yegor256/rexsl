@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
@@ -134,7 +135,7 @@ public final class ManifestsTest {
         final File file = File.createTempFile("test-", ".MF");
         FileUtils.writeStringToFile(
             file,
-            String.format("%s: %s\n", name, value)
+            Logger.format("%s: %s\n", name, value)
         );
         Manifests.append(file);
         MatcherAssert.assertThat(

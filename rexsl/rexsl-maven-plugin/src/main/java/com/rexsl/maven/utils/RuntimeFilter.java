@@ -156,7 +156,7 @@ public final class RuntimeFilter implements Filter {
             response.setIntHeader("Content-Length", content.length);
             response.addHeader(
                 "Rexsl-Filtered",
-                String.format("%d bytes", content.length)
+                Logger.format("%d bytes", content.length)
             );
         }
         response.getOutputStream().write(content);

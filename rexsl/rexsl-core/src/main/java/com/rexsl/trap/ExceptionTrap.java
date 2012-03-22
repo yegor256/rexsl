@@ -186,20 +186,20 @@ public final class ExceptionTrap extends HttpServlet {
      */
     private StringBuilder text(final HttpServletRequest request) {
         final StringBuilder text = new StringBuilder();
-        text.append(String.format("date: %s\n", new Date()));
+        text.append(Logger.format("date: %s\n", new Date()));
         this.append(text, request, "code");
         this.append(text, request, "message");
         this.append(text, request, "exception_type");
         this.append(text, request, "request_uri");
         final ServletContext ctx = this.getServletContext();
         text.append(
-            String.format(
+            Logger.format(
                 "servlet context path: \"%s\"\n",
                 request.getContextPath()
             )
         );
         text.append(
-            String.format(
+            Logger.format(
                 "requested: %s (%s) at %s:%d\n",
                 request.getRequestURL().toString(),
                 request.getMethod(),
@@ -208,7 +208,7 @@ public final class ExceptionTrap extends HttpServlet {
             )
         );
         text.append(
-            String.format(
+            Logger.format(
                 "remote: %s:%d (%s)\n",
                 request.getRemoteAddr(),
                 request.getRemotePort(),
@@ -216,7 +216,7 @@ public final class ExceptionTrap extends HttpServlet {
             )
         );
         text.append(
-            String.format(
+            Logger.format(
                 "servlet: \"%s\" (API %d.%d) at \"%s\"\n",
                 ctx.getServletContextName(),
                 ctx.getMajorVersion(),
@@ -242,7 +242,7 @@ public final class ExceptionTrap extends HttpServlet {
     private void append(final StringBuilder text,
         final HttpServletRequest request, final String suffix) {
         Object attr = request.getAttribute(
-            String.format("javax.servlet.error.%s", suffix)
+            Logger.format("javax.servlet.error.%s", suffix)
         );
         if (attr == null) {
             attr = "NULL";

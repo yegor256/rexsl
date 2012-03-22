@@ -31,6 +31,7 @@ package com.rexsl.maven.utils;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
+import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import java.util.concurrent.ConcurrentMap;
 import org.hamcrest.MatcherAssert;
@@ -57,7 +58,7 @@ public final class BindingBuilderTest {
             (ConcurrentMap<String, Object>) binding.getVariable("rexsl");
         MatcherAssert.assertThat(
             map.get("home").toString(),
-            Matchers.equalTo(String.format("http://localhost:%d/", env.port()))
+            Matchers.equalTo(Logger.format("http://localhost:%d/", env.port()))
         );
         MatcherAssert.assertThat(
             map.get("basedir").toString(),

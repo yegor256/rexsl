@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -56,7 +57,7 @@ final class ProductVersion implements Comparable<ProductVersion> {
             .split(text);
         final StringBuilder bldr = new StringBuilder();
         for (String part : parts) {
-            bldr.append(String.format("%4s.", part));
+            bldr.append(Logger.format("%4s.", part));
         }
         this.normalized = bldr.toString();
     }

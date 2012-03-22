@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.ymock.util.Logger;
 import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -158,7 +159,7 @@ public final class JaxbConverter {
             .getAnnotation(XmlType.class);
         if (type == null) {
             throw new IllegalArgumentException(
-                String.format(
+                Logger.format(
                     "XmlType annotation is absent at %[type]s",
                     obj
                 )

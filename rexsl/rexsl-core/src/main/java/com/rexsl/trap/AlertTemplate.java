@@ -60,7 +60,7 @@ final class AlertTemplate implements Template {
     @Override
     public String render(final String defect) {
         Logger.warn(this, "#render(..): %s", this.message);
-        return String.format(
+        return Logger.format(
             "<html><body><pre>%s\n\n%s</pre></body></html>",
             this.message,
             defect

@@ -31,6 +31,7 @@ package com.rexsl.maven;
 
 import com.google.common.io.Files;
 import com.rexsl.maven.utils.PortReserver;
+import com.ymock.util.Logger;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashSet;
@@ -95,7 +96,7 @@ public final class EnvironmentMocker {
         final InputStream stream = this.getClass().getResourceAsStream(res);
         if (stream == null) {
             throw new IllegalArgumentException(
-                String.format("resource '%s' not found", res)
+                Logger.format("resource '%s' not found", res)
             );
         }
         try {

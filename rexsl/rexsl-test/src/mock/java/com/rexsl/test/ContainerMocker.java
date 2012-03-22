@@ -213,7 +213,7 @@ public final class ContainerMocker {
      */
     public URI home() {
         try {
-            return new URI(String.format("http://localhost:%d/", this.port));
+            return new URI(Logger.format("http://localhost:%d/", this.port));
         } catch (java.net.URISyntaxException ex) {
             throw new IllegalStateException(ex);
         }

@@ -52,7 +52,7 @@ abstract class AbstractPacker implements Packer {
     public final void pack(final Environment env) {
         final File srcdir = new File(
             env.basedir(),
-            String.format("src/main/webapp/%s", this.extension())
+            Logger.format("src/main/webapp/%s", this.extension())
         );
         final File destdir = this.ddir(env);
         if (srcdir.exists()) {

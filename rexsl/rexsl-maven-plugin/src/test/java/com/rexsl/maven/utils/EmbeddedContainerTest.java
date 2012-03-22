@@ -33,6 +33,7 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import com.rexsl.maven.LogMocker;
 import com.rexsl.test.RestTester;
+import com.ymock.util.Logger;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import org.hamcrest.Matchers;
@@ -75,7 +76,7 @@ public final class EmbeddedContainerTest {
         StaticLoggerBinder.getSingleton().setMavenLog(lmocker.mock());
         final EmbeddedContainer container = EmbeddedContainer.start(env);
         final URI home = new URI(
-            String.format("http://localhost:%d/file.txt", env.port())
+            Logger.format("http://localhost:%d/file.txt", env.port())
         );
         RestTester.start(home)
             .get("get test data file")

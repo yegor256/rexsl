@@ -29,6 +29,7 @@
  */
 package com.rexsl.w3c;
 
+import com.ymock.util.Logger;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,10 +94,10 @@ final class DefaultValidationResponse implements ValidationResponse {
     @Override
     public String toString() {
         final StringBuilder text = new StringBuilder();
-        text.append(String.format("Validity: %B\n", this.ivalid));
-        text.append(String.format("Validator: \"%s\"\n", this.validator));
-        text.append(String.format("DOCTYPE: \"%s\"\n", this.type));
-        text.append(String.format("Charset: \"%s\"\n", this.encoding));
+        text.append(Logger.format("Validity: %B\n", this.ivalid));
+        text.append(Logger.format("Validator: \"%s\"\n", this.validator));
+        text.append(Logger.format("DOCTYPE: \"%s\"\n", this.type));
+        text.append(Logger.format("Charset: \"%s\"\n", this.encoding));
         text.append("Errors:\n").append(this.asText(this.ierrors));
         text.append("Warnings:\n").append(this.asText(this.iwarnings));
         return text.toString();
