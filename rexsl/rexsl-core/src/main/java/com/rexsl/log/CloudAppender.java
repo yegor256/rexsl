@@ -137,6 +137,7 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.SystemPrintln")
     public void append(final LoggingEvent event) {
         final StringBuilder buf = new StringBuilder();
         buf.append(this.getLayout().format(event));
@@ -146,7 +147,22 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
                 buf.append(text).append(this.EOL);
             }
         }
-        this.messages.offer(buf.toString());
+        final boolean correctlyInserted = this.messages.offer(buf.toString());
+        if (!correctlyInserted) {
+            System.out.println(
+                Logger.format(
+                    // @checkstyle LineLength (1 line)
+                    "CloudAppender doesn't have space available to store the event: %s",
+                    buf.toString()
+                )
+            );
+            Logger.warn(
+                this,
+                // @checkstyle LineLength (1 line)
+                "The messages queue has reached its capacity. The event couldn't be added: %s",
+                buf.toString()
+            );
+        }
     }
 
     /**
