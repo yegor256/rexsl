@@ -77,4 +77,41 @@ final class ProductVersion implements Comparable<ProductVersion> {
         return this.normalized.replace(" ", "");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        // @checkstyle MagicNumber (1 line)
+        int result = 31;
+        if (this.normalized != null) {
+            result += this.normalized.hashCode();
+        }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        boolean result = true;
+        if (obj == null) {
+            result = false;
+        }
+        if (result && this.getClass() != obj.getClass()) {
+            result = false;
+        }
+        if (result) {
+            final ProductVersion other = (ProductVersion) obj;
+            if ((this.normalized == null) && (other.normalized != null)) {
+                result = false;
+            // @checkstyle LineLength (1 line)
+            } else if ((this.normalized != null) && !this.normalized.equals(other.normalized)) {
+                result = false;
+            }
+        }
+        return result;
+    }
+
 }
