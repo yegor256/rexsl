@@ -45,6 +45,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SerializationUtils;
 
 /**
@@ -451,7 +452,7 @@ public final class Manifests {
                 ex
             );
         } finally {
-            stream.close();
+            IOUtils.closeQuietly(stream);
         }
         return props;
     }
