@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -73,7 +74,7 @@ final class ServletConfigWrapper implements FilterConfig {
      */
     @Override
     public String getFilterName() {
-        return String.format("%s-filter", this.config.getServletName());
+        return Logger.format("%s-filter", this.config.getServletName());
     }
 
     /**

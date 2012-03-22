@@ -30,6 +30,7 @@
 package com.rexsl.trap;
 
 import com.rexsl.core.Manifests;
+import com.ymock.util.Logger;
 import java.io.IOException;
 import java.util.Properties;
 import javax.mail.Address;
@@ -120,7 +121,7 @@ abstract class AbstractSmtpNotifier implements Notifier {
     protected final String prop(final String name) {
         if (!this.properties.containsKey(name)) {
             throw new IllegalStateException(
-                String.format("'%s' param not found", name)
+                Logger.format("'%s' param not found", name)
             );
         }
         String value = this.properties.getProperty(name);

@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.ymock.util.Logger;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
@@ -59,7 +60,7 @@ final class DomParser {
         }
         if (txt.charAt(0) != '<') {
             throw new IllegalArgumentException(
-                String.format("Doesn't look like XML: '%s'", txt)
+                Logger.format("Doesn't look like XML: '%s'", txt)
             );
         }
         this.xml = txt;
@@ -86,7 +87,7 @@ final class DomParser {
             throw new IllegalStateException(ex);
         } catch (org.xml.sax.SAXException ex) {
             throw new IllegalArgumentException(
-                String.format("Invalid XML: \"%s\"", this.xml),
+                Logger.format("Invalid XML: \"%s\"", this.xml),
                 ex
             );
         }

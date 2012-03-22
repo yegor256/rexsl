@@ -56,7 +56,7 @@ final class InContainerScriptsCheck implements Check {
         if (dir.exists()) {
             if (!env.webdir().exists()) {
                 throw new IllegalStateException(
-                    String.format(
+                    Logger.format(
                         "Webapp dir '%s' is absent, package the project first",
                         env.webdir()
                     )

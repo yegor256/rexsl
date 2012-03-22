@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.ymock.util.Logger;
 import java.io.ByteArrayInputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -67,7 +68,7 @@ public final class StringSourceTest {
         final DocumentBuilder builder = DocumentBuilderFactory.
             newInstance().
             newDocumentBuilder();
-        final String xmlString = String.format(
+        final String xmlString = Logger.format(
             "<nodeName>%s%s%s<a/><a withArg=\"%s\"/></nodeName>",
             "<?some instruction?>",
             "<!--comment-->",

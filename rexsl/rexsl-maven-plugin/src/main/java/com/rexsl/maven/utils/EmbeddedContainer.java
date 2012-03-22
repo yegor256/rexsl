@@ -76,7 +76,7 @@ public final class EmbeddedContainer {
     public static EmbeddedContainer start(final Environment env) {
         if (!env.webdir().exists()) {
             throw new IllegalArgumentException(
-                String.format(
+                Logger.format(
                     // @checkstyle LineLength (1 line)
                     "Directory %s is absent, maybe you forgot to 'package' the project?",
                     env.webdir()
@@ -202,7 +202,7 @@ public final class EmbeddedContainer {
         final List<String> urls = new ArrayList<String>();
         for (File path : env.classpath(true)) {
             if (path.isDirectory()) {
-                urls.add(String.format("%s/", path.getAbsolutePath()));
+                urls.add(Logger.format("%s/", path.getAbsolutePath()));
             } else {
                 urls.add(path.getAbsolutePath());
             }

@@ -132,7 +132,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
     private Message compress() throws IOException {
         final StringBuilder text = new StringBuilder();
         text.append(
-            String.format(
+            Logger.format(
                 // @checkstyle LineLength (1 line)
                 "During the last few mins there were %d exception(s):\n\n",
                 this.defects.size()

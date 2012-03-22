@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import java.util.Arrays;
 import java.util.Collection;
 import org.hamcrest.MatcherAssert;
@@ -107,7 +108,7 @@ public final class ProductVersionTest {
         MatcherAssert.assertThat(
             cmp,
             Matchers.describedAs(
-                String.format(
+                Logger.format(
                     "%d at [%s vs. %s]",
                     this.result,
                     this.left,

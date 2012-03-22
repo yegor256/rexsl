@@ -130,7 +130,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         try {
             mrsh = this.buildContext(type).createMarshaller();
             mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            final String header = String.format(
+            final String header = Logger.format(
                 "\n<?xml-stylesheet type='text/xsl' href='%s'?>",
                 StringEscapeUtils.escapeXml(this.stylesheet(type))
             );
@@ -197,7 +197,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         final Annotation antn = type.getAnnotation(Stylesheet.class);
         String stylesheet;
         if (antn == null) {
-            stylesheet = String.format(
+            stylesheet = Logger.format(
                 "/xsl/%s.xsl",
                 type.getSimpleName()
             );
@@ -207,7 +207,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                         this.request.getScheme(),
                         this.request.getServerName(),
                         this.request.getServerPort(),
-                        String.format(
+                        Logger.format(
                             "%s%s",
                             this.request.getContextPath(),
                             stylesheet
@@ -255,7 +255,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                     mrsh.setSchema(factory.newSchema(xsd));
                 } catch (org.xml.sax.SAXException ex) {
                     throw new IllegalStateException(
-                        String.format(
+                        Logger.format(
                             "Failed to use XSD schema from '%s' for class '%s'",
                             xsd,
                             type.getName()
@@ -295,7 +295,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         final Annotation antn = type.getAnnotation(Schema.class);
         String schema;
         if (antn == null) {
-            schema = String.format("%s.xsd", type.getName());
+            schema = Logger.format("%s.xsd", type.getName());
         } else {
             if (((Schema) antn).ignore()) {
                 schema = "";

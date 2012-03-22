@@ -185,7 +185,7 @@ public final class XsltFilter implements Filter {
             );
             if (stylesheet == null) {
                 throw new ServletException(
-                    String.format(
+                    Logger.format(
                         "No associated stylesheet found at:%n%s",
                         xml
                     )
@@ -205,7 +205,7 @@ public final class XsltFilter implements Filter {
             );
         } catch (TransformerConfigurationException ex) {
             throw new ServletException(
-                String.format(
+                Logger.format(
                     "Failed to configure XSL transformer: '%s'",
                     xml
                 ),
@@ -213,7 +213,7 @@ public final class XsltFilter implements Filter {
             );
         } catch (TransformerException ex) {
             throw new ServletException(
-                String.format(
+                Logger.format(
                     "Failed to transform XML to XHTML: '%s'",
                     xml
                 ),

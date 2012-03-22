@@ -31,6 +31,7 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
+import com.ymock.util.Logger;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
@@ -64,7 +65,7 @@ public final class JSUnitTestsCheckTest {
     @Test
     public void validatesIncorrectJSFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withFile(String.format("src/main/webapp/js/%s", "script.js"))
+            .withFile(Logger.format("src/main/webapp/js/%s", "script.js"))
             .withFile("src/test/rexsl/js/scriptTestFailed.js")
             .mock();
         MatcherAssert.assertThat(

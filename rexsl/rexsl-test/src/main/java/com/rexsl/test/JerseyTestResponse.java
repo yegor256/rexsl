@@ -205,7 +205,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public String getStatusLine() {
-        return String.format(
+        return Logger.format(
             "%d %s",
             this.response().getStatus(),
             this.response().getClientResponseStatus()
@@ -248,7 +248,7 @@ final class JerseyTestResponse implements TestResponse {
             }
         }
         MatcherAssert.assertThat(
-            String.format(
+            Logger.format(
                 "cookie '%s' not found in Set-Cookie header: '%s'",
                 name,
                 header
@@ -313,7 +313,7 @@ final class JerseyTestResponse implements TestResponse {
                     }
                     if (attempt >= this.MAX_ATTEMPTS) {
                         this.fail(
-                            String.format("failed after %d attempt(s)", attempt)
+                            Logger.format("failed after %d attempt(s)", attempt)
                         );
                     }
                     Logger.warn(

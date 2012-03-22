@@ -32,6 +32,7 @@ package com.rexsl.test;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.ymock.util.Logger;
 import java.net.URI;
 import javax.ws.rs.core.UriBuilder;
 
@@ -94,7 +95,7 @@ public final class RestTester {
     public static TestClient start(final URI uri) {
         if (!uri.isAbsolute()) {
             throw new IllegalArgumentException(
-                String.format(
+                Logger.format(
                     "URI '%s' has to be absolute",
                     uri
                 )

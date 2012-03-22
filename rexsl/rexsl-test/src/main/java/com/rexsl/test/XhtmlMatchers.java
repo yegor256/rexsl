@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.ymock.util.Logger;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
 import org.hamcrest.Matcher;
@@ -159,7 +160,7 @@ public final class XhtmlMatchers {
             .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
         for (int pos = 0; pos < namespaces.length; pos += 1) {
             ctx.withBinding(
-                String.format("ns%d", pos + 1),
+                Logger.format("ns%d", pos + 1),
                 namespaces[pos].toString()
             );
         }

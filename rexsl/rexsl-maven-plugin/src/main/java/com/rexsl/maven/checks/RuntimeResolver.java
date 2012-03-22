@@ -82,7 +82,7 @@ class RuntimeResolver implements URIResolver {
         }
         if (code != HttpURLConnection.HTTP_OK) {
             throw new TransformerException(
-                String.format(
+                Logger.format(
                     "URL %s returned %d code (instead of %d)",
                     url,
                     code,

@@ -67,7 +67,7 @@ public final class CheckMojo extends AbstractRexslMojo {
         for (Check check : checks) {
             if (!check.validate(this.env())) {
                 throw new MojoFailureException(
-                    String.format(
+                    Logger.format(
                         "%s check failed",
                         check.getClass().getName()
                     )

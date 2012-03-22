@@ -175,10 +175,10 @@ final class JerseyTestClient implements TestClient {
             try {
                 builder.header(
                     HttpHeaders.AUTHORIZATION,
-                    String.format(
+                    Logger.format(
                         "Basic %s",
                         Base64.encodeBase64String(
-                            String.format(
+                            Logger.format(
                                 "%s:%s",
                                 URLDecoder.decode(parts[0], CharEncoding.UTF_8),
                                 URLDecoder.decode(parts[1], CharEncoding.UTF_8)

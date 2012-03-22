@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
+import com.ymock.util.Logger;
 import java.util.ArrayList;
 import java.util.Formattable;
 import java.util.Formatter;
@@ -89,7 +90,7 @@ final class ClientResponseDecor implements Formattable {
         for (MultivaluedMap.Entry<String, List<String>> header
             : this.response.getHeaders().entrySet()) {
             builder.append(
-                String.format(
+                Logger.format(
                     "%s%s: %s%s",
                     this.INDENT,
                     header.getKey(),
@@ -103,7 +104,7 @@ final class ClientResponseDecor implements Formattable {
             .append(
                 StringUtils.join(
                     this.lines(this.body),
-                    String.format("%s%s", this.EOL, this.INDENT)
+                    Logger.format("%s%s", this.EOL, this.INDENT)
                 )
             )
             .append(this.EOL);
