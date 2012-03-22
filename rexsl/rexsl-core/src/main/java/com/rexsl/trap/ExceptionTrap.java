@@ -35,6 +35,7 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import javax.servlet.ServletContext;
@@ -230,6 +231,16 @@ public final class ExceptionTrap extends HttpServlet {
                 request.getAttribute("javax.servlet.error.exception")
             )
         );
+        text.append("request headers: ");
+        final Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            final String header = (String) headerNames.nextElement();
+            text.append(header).append(" ").append(request.getHeader(header));
+            if (headerNames.hasMoreElements()) {
+                text.append(", ");
+            }
+        }
+        text.append("\n ");
         return text;
     }
 

@@ -71,4 +71,31 @@ public final class ExceptionTrapTest {
         );
     }
 
+    /**
+     * ExceptionTrap can show all headers of the request.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void showHeaders() throws Exception {
+        final ServletConfig config = new ServletConfigMocker().mock();
+        final HttpServlet servlet = new ExceptionTrap();
+        servlet.init(config);
+        final HttpServletRequest request =
+            new HttpServletRequestMocker()
+                .withHeader("header1", "A")
+                .withHeader("header2", "B")
+                .mock();
+        final HttpServletResponse response =
+            Mockito.mock(HttpServletResponse.class);
+        final StringWriter writer = new StringWriter();
+        Mockito.doReturn(new PrintWriter(writer)).when(response).getWriter();
+        servlet.service(request, response);
+        MatcherAssert.assertThat(
+            writer.toString(),
+            Matchers.allOf(
+                Matchers.containsString("header1 A"),
+                Matchers.containsString("header2 B")
+            )
+        );
+    }
 }
