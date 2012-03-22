@@ -233,8 +233,8 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         final String input) {
         if (this.methodMatcher != null) {
             MatcherAssert.assertThat(
-                String.format(
-                    "HTTP method matches provided matcher in:%n%s",
+                Logger.format(
+                    "HTTP method matches provided matcher in:%s",
                     this.asText(request, input)
                 ),
                 request.getMethod(),
@@ -253,8 +253,8 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         for (ConcurrentMap.Entry<String, Matcher<String>> entry
             : this.paramMatchers.entrySet()) {
             MatcherAssert.assertThat(
-                String.format(
-                    "Param '%s' matches specified matcher in:%n%s",
+                Logger.format(
+                    "Param '%s' matches specified matcher in:%s",
                     entry.getKey(),
                     this.asText(request, input)
                 ),
@@ -274,8 +274,8 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         if (this.bodyMatcher != null) {
             try {
                 MatcherAssert.assertThat(
-                    String.format(
-                        "Body matches provided matcher in:%n%s",
+                    Logger.format(
+                        "Body matches provided matcher in:%s",
                         this.asText(request, input)
                     ),
                     IOUtils.toString(request.getInputStream()),
@@ -297,8 +297,8 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         for (ConcurrentMap.Entry<String, Matcher<String>> entry
             : this.headerMatchers.entrySet()) {
             MatcherAssert.assertThat(
-                String.format(
-                    "Header '%s' matches specified matcher in:%n%s",
+                Logger.format(
+                    "Header '%s' matches specified matcher in:%s",
                     entry.getKey(),
                     this.asText(request, input)
                 ),
