@@ -66,6 +66,16 @@ final class ServletConfigWrapper implements FilterConfig {
         final Properties props) {
         this.config = cfg;
         this.properties = props;
+        if (cfg == null) {
+            throw new IllegalArgumentException(
+                "ServletConfig parameter is null"
+            );
+        }
+        if (props == null) {
+            throw new IllegalArgumentException(
+                "Properties parameter is null"
+            );
+        }
     }
 
     /**
