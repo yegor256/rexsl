@@ -123,7 +123,7 @@ public final class ProductVersionTest {
      * @throws Exception If something goes wrong
      */
     @Test
-    public void testsThatEqualsIsConsistentWithCompareTo() throws Exception {
+    public void equalsIsConsistentWithCompareTo() throws Exception {
         final int cmp = this.left.compareTo(this.right);
         if (cmp == 0) {
             MatcherAssert.assertThat(
