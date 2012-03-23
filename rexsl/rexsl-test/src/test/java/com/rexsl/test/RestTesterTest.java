@@ -312,9 +312,37 @@ public final class RestTesterTest {
     @Test(expected = AssertionError.class)
     public void continuesOnConnectionError() throws Exception {
         RestTester
-            .start(UriBuilder.fromUri("http://absent.rexsl.com/"))
+            .start(UriBuilder.fromUri("http://absent-1.rexsl.com/"))
             .get("GET from non-existing host")
             .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can retry on connection error.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void retriesOnConnectionError() throws Exception {
+        RestTester
+            .start(UriBuilder.fromUri("http://absent-2.rexsl.com/"))
+            .get("GET from non-existing host, with attempt to retry")
+            .assertThat(
+                new AssertionPolicy() {
+                    @Override
+                    public void assertThat(final TestResponse response) {
+                        try {
+                            response.getStatus();
+                            throw new IllegalStateException();
+                        } catch (AssertionError ex) {
+                            assert ex != null;
+                        }
+                    }
+                    @Override
+                    public boolean again(final int attempt) {
+                        return false;
+                    }
+                }
+            );
     }
 
 }

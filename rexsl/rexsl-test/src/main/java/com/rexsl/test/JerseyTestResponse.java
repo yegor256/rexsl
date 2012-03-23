@@ -451,6 +451,7 @@ final class JerseyTestResponse implements TestResponse {
                 try {
                     this.iresponse = this.fetcher.fetch();
                 } catch (Exception ex) {
+                    Logger.warn(this, "Failed to fetch: %[exception]s", ex);
                     throw new AssertionError(ex);
                 }
             }
