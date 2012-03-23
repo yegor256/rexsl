@@ -439,12 +439,20 @@ final class JerseyTestResponse implements TestResponse {
 
     /**
      * Fetch and return response.
+     *
+     * <p>Throws {@link AssertionError} if anything goes wrong inside. Never
+     * throws anything else.
+     *
      * @return The response
      */
-    public ClientResponse response() {
+    private ClientResponse response() {
         synchronized (this) {
             if (this.iresponse == null) {
-                this.iresponse = this.fetcher.fetch();
+                try {
+                    this.iresponse = this.fetcher.fetch();
+                } catch (Exception ex) {
+                    throw new AssertionError(ex);
+                }
             }
             return this.iresponse;
         }
