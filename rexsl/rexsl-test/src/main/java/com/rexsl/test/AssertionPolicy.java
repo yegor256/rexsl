@@ -32,7 +32,7 @@ package com.rexsl.test;
 /**
  * Policy of assertion, used by {@link TestResponse}.
  *
- * <p>Implementation of this interface shall be immutable and thread-safe.
+ * <p>Implementation of this interface shouldn't be thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$

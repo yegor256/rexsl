@@ -277,7 +277,6 @@ public final class RestTesterTest {
      * @throws Exception If something goes wrong inside
      */
     @Test
-    @org.junit.Ignore
     public void acceptsUnicodeInXml() throws Exception {
         final ContainerMocker container = new ContainerMocker()
             .returnHeader(HttpHeaders.CONTENT_TYPE, "text/xml;charset=utf-8")
@@ -303,6 +302,18 @@ public final class RestTesterTest {
         RestTester
             .start(UriBuilder.fromUri(container.home()).userInfo("user:pwd"))
             .get("test with Basic authorization")
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can silently proceed on connection error.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void continuesOnConnectionError() throws Exception {
+        RestTester
+            .start(UriBuilder.fromUri("http://absent.rexsl.com/"))
+            .get("GET from non-existing host")
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
