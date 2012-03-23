@@ -29,12 +29,19 @@
  */
 package com.rexsl.log;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Level;
 import org.apache.log4j.SimpleLayout;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.RootLogger;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -44,8 +51,31 @@ import org.mockito.stubbing.Answer;
  * Test case for {@link CloudAppender}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (9 lines)
  */
 public final class CloudAppenderTest {
+
+    /**
+     * Out content.
+     */
+    private final transient ByteArrayOutputStream outContent =
+        new ByteArrayOutputStream();
+
+    /**
+     * Before.
+     */
+    @Before
+    public void setUpStreams() {
+        System.setOut(new PrintStream(this.outContent));
+    }
+
+    /**
+     * After.
+     */
+    @After
+    public void cleanUpStreams() {
+        System.setOut(System.out);
+    }
 
     /**
      * CloudAppender can send messages in background.
@@ -72,6 +102,7 @@ public final class CloudAppenderTest {
             this.getClass().getName(),
             new RootLogger(Level.DEBUG),
             Level.DEBUG,
+            // @checkstyle MultipleStringLiterals (2 lines)
             "some text to log",
             new IllegalArgumentException()
         );
@@ -90,6 +121,48 @@ public final class CloudAppenderTest {
                     Matchers.startsWith("DEBUG - some text to log\n"),
                     Matchers.containsString("IllegalArgumentException")
                 )
+            )
+        );
+        appender.close();
+    }
+
+    /**
+     * CloudAppender outputs an error message when the message queue is full.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void outputMessageWhenQueueIsFull() throws Exception {
+        final CloudAppender appender = new CloudAppender();
+        appender.setLayout(new SimpleLayout());
+        //set the size of the queue to a smaller value for easier testing
+        //of full queue
+        final Field messagesField =
+            CloudAppender.class.getDeclaredField("messages");
+        messagesField.setAccessible(true);
+        // @checkstyle MagicNumber (3 lines)
+        final int numElements = 500;
+        messagesField.set(
+            appender,
+            new LinkedBlockingQueue<String>(numElements)
+        );
+        final LoggingEvent event = new LoggingEvent(
+            this.getClass().getName(),
+            new RootLogger(Level.DEBUG),
+            Level.DEBUG,
+            "some text to log",
+            new IllegalArgumentException()
+        );
+        //it will insert the first 500 and fail attempting the
+        //last element's insertion
+        int index = 0;
+        while (index <= numElements) {
+            appender.append(event);
+            index += 1;
+        }
+        MatcherAssert.assertThat(
+            this.outContent.toString(),
+            Matchers.startsWith(
+                "CloudAppender doesn't have space available to store the event"
             )
         );
         appender.close();
