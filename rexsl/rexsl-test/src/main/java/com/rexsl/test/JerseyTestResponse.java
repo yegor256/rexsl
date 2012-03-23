@@ -59,7 +59,7 @@ import org.xmlmatchers.namespace.SimpleNamespaceContext;
 /**
  * Implementation of {@link TestResponse}.
  *
- * <p>Objects of this class are thread-safe.
+ * <p>Objects of this class are mutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -438,20 +438,31 @@ final class JerseyTestResponse implements TestResponse {
     }
 
     /**
-     * Fetch and return response.
+     * Fetch and return {@link ClientResponse}.
+     *
+     * <p>Throws {@link AssertionError} if anything goes wrong inside. Never
+     * throws anything else.
+     *
      * @return The response
      */
-    public ClientResponse response() {
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    private ClientResponse response() {
         synchronized (this) {
             if (this.iresponse == null) {
-                this.iresponse = this.fetcher.fetch();
+                try {
+                    this.iresponse = this.fetcher.fetch();
+                // @checkstyle IllegalCatch (1 line)
+                } catch (RuntimeException ex) {
+                    Logger.warn(this, "Failed to fetch: %[exception]s", ex);
+                    throw new AssertionError(ex);
+                }
             }
             return this.iresponse;
         }
     }
 
     /**
-     * Get document of body.
+     * Get document of the body.
      * @return The document
      */
     private Element element() {

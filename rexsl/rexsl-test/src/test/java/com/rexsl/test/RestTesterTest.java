@@ -277,7 +277,6 @@ public final class RestTesterTest {
      * @throws Exception If something goes wrong inside
      */
     @Test
-    @org.junit.Ignore
     public void acceptsUnicodeInXml() throws Exception {
         final ContainerMocker container = new ContainerMocker()
             .returnHeader(HttpHeaders.CONTENT_TYPE, "text/xml;charset=utf-8")
@@ -304,6 +303,46 @@ public final class RestTesterTest {
             .start(UriBuilder.fromUri(container.home()).userInfo("user:pwd"))
             .get("test with Basic authorization")
             .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can silently proceed on connection error.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void continuesOnConnectionError() throws Exception {
+        RestTester
+            .start(UriBuilder.fromUri("http://absent-1.rexsl.com/"))
+            .get("GET from non-existing host")
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can retry on connection error.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void retriesOnConnectionError() throws Exception {
+        RestTester
+            .start(UriBuilder.fromUri("http://absent-2.rexsl.com/"))
+            .get("GET from non-existing host, with attempt to retry")
+            .assertThat(
+                new AssertionPolicy() {
+                    @Override
+                    public void assertThat(final TestResponse response) {
+                        try {
+                            response.getStatus();
+                            throw new IllegalStateException();
+                        } catch (AssertionError ex) {
+                            assert ex != null;
+                        }
+                    }
+                    @Override
+                    public boolean again(final int attempt) {
+                        return false;
+                    }
+                }
+            );
     }
 
 }

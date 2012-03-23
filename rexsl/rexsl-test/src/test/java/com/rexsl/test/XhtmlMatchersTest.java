@@ -83,7 +83,6 @@ public final class XhtmlMatchersTest {
     }
 
     public static final class Foo {
-
         /**
          * {@inheritDoc}
          */
@@ -91,7 +90,6 @@ public final class XhtmlMatchersTest {
         public String toString() {
             return "<a><c/></a>";
         }
-
         /**
          * Property abc.
          * @return Value of abc
