@@ -78,4 +78,21 @@ final class ProductVersion implements Comparable<ProductVersion> {
         return this.normalized.replace(" ", "");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return this.normalized.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof ProductVersion
+            && ((ProductVersion) obj).normalized.equals(this.normalized);
+    }
+
 }

@@ -119,4 +119,39 @@ public final class ProductVersionTest {
         );
     }
 
+    /**
+     * ProductVersion equals method test.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void equalsIsConsistentWithCompareTo() throws Exception {
+        final int cmp = this.left.compareTo(this.right);
+        if (cmp == 0) {
+            MatcherAssert.assertThat(
+                this.left,
+                Matchers.describedAs(
+                    String.format(
+                        // @checkstyle MultipleStringLiterals (2 lines)
+                        "[%s vs. %s]",
+                        this.left,
+                        this.right
+                    ),
+                    Matchers.equalTo(this.right)
+                )
+            );
+        } else {
+            MatcherAssert.assertThat(
+                this.left,
+                Matchers.describedAs(
+                    String.format(
+                        "[%s vs. %s]",
+                        this.left,
+                        this.right
+                    ),
+                    Matchers.not(this.right)
+                )
+            );
+        }
+    }
+
 }
