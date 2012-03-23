@@ -128,7 +128,7 @@ import java.lang.annotation.Target;
 public @interface Stylesheet {
 
     /**
-     * Get it's value.
+     * Get its value.
      */
     String value();
 
