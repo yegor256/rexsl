@@ -383,7 +383,8 @@ public final class Manifests {
                     ex
                 );
             }
-            count += 1;
+            // @checkstyle IllegalTokenCheck (1 line)
+            count++;
         }
         Logger.info(
             Manifests.class,

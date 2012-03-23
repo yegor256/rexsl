@@ -158,7 +158,8 @@ public final class XhtmlMatchers {
             .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
             .withBinding("xsi", "http://www.w3.org/2001/XMLSchema-instance")
             .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
-        for (int pos = 0; pos < namespaces.length; pos += 1) {
+        // @checkstyle IllegalTokenCheck (1 line)
+        for (int pos = 0; pos < namespaces.length; pos++) {
             ctx.withBinding(
                 Logger.format("ns%d", pos + 1),
                 namespaces[pos].toString()

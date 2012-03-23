@@ -89,7 +89,8 @@ public final class HttpFeederTest {
         feeder.setUrl(container.home().toString());
         feeder.activateOptions();
         try {
-            for (int count = 0; count < this.MESSAGES_TO_SEND; count += 1) {
+            // @checkstyle IllegalTokenCheck (1 line)
+            for (int count = 0; count < this.MESSAGES_TO_SEND; count++) {
                 feeder.feed("some text\nmultiline");
             }
         } catch (IOException ex) {

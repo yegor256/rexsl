@@ -68,7 +68,8 @@ public final class RuntimeListener implements ServletContextListener {
                 } catch (com.rexsl.maven.utils.GroovyException ex) {
                     throw new IllegalStateException(ex);
                 }
-                counter += 1;
+                // @checkstyle IllegalTokenCheck (1 line)
+                counter++;
             }
             Logger.debug(
                 this,
