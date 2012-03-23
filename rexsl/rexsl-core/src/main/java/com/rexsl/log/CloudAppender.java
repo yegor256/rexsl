@@ -67,7 +67,7 @@ import org.apache.log4j.spi.LoggingEvent;
  * @since 0.3.2
  */
 @SuppressWarnings("PMD.DoNotUseThreads")
-public final class CloudAppender extends AppenderSkeleton implements Runnable {
+public final class CloudAppender extends AppenderSkeleton {
 
     /**
      * End of line.
@@ -120,7 +120,14 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
             );
         }
         super.activateOptions();
-        final Thread thread = new Thread(this);
+        final Thread thread = new Thread(
+            new Runnable() {
+                @Override
+                public void run() {
+                    CloudAppender.this.background();
+                }
+            }
+        );
         thread.setName(Logger.format("CloudAppender to %[type]s", this.feeder));
         thread.start();
     }
@@ -166,11 +173,11 @@ public final class CloudAppender extends AppenderSkeleton implements Runnable {
     }
 
     /**
-     * {@inheritDoc}
+     * Method to be executed by a thread in the background.
+     * Takes messages from the queue and feeds the feeder.
      */
-    @Override
     @SuppressWarnings("PMD.SystemPrintln")
-    public void run() {
+    private void background() {
         System.out.println(
             Logger.format(
                 "CloudAppender started to work with %s...",
