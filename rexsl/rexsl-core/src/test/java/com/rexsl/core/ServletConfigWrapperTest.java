@@ -46,7 +46,7 @@ public final class ServletConfigWrapperTest {
      * @throws Exception If something goes wrong
      */
     @Test(expected = IllegalArgumentException.class)
-    public void wrapperNullConfig() throws Exception {
+    public void throwsIfConfigNull() throws Exception {
         new ServletConfigWrapper(null, Mockito.mock(Properties.class));
     }
 
@@ -55,7 +55,7 @@ public final class ServletConfigWrapperTest {
      * @throws Exception If something goes wrong
      */
     @Test(expected = IllegalArgumentException.class)
-    public void wrapperNullProperties() throws Exception {
+    public void throwsIfPropertiesNull() throws Exception {
         new ServletConfigWrapper(Mockito.mock(ServletConfig.class), null);
     }
 }
