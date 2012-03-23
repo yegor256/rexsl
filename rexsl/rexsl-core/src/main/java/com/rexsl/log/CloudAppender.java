@@ -91,12 +91,6 @@ public final class CloudAppender extends AppenderSkeleton {
     private final transient AtomicBoolean alive = new AtomicBoolean(false);
 
     /**
-     * The worker.
-     */
-    private final transient CloudAppenderWorker worker =
-        new CloudAppenderWorker();
-
-    /**
      * Set feeder, option {@code feeder} in config.
      * @param fdr The feeder to use
      */
@@ -126,7 +120,14 @@ public final class CloudAppender extends AppenderSkeleton {
             );
         }
         super.activateOptions();
-        final Thread thread = new Thread(this.worker);
+        final Thread thread = new Thread(
+            new Runnable() {
+                @Override
+                public void run() {
+                    CloudAppender.this.background();
+                }
+            }
+        );
         thread.setName(Logger.format("CloudAppender to %[type]s", this.feeder));
         thread.start();
     }
@@ -155,48 +156,45 @@ public final class CloudAppender extends AppenderSkeleton {
         this.messages.offer(buf.toString());
     }
 
-    private class CloudAppenderWorker implements Runnable {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        @SuppressWarnings("PMD.SystemPrintln")
-        public void run() {
-            System.out.println(
-                String.format(
-                    "CloudAppender started to work with %s...",
-                    CloudAppender.this.feeder
-                )
-            );
-            CloudAppender.this.alive.set(true);
-            while (CloudAppender.this.alive.get()) {
-                String text;
-                try {
-                    text = CloudAppender.this.messages.take();
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-                try {
-                    CloudAppender.this.feeder.feed(text);
-                } catch (java.io.IOException ex) {
-                    System.out.println(
-                        Logger.format(
-                            "%sCloudAppender failed to report: %[exception]s",
-                            text,
-                            ex
-                        )
-                    );
-                }
+    /**
+     * Method to be executed by a thread in the background.
+     * Takes messages from the queue and feeds the feeder.
+     */
+    @SuppressWarnings("PMD.SystemPrintln")
+    private void background() {
+        System.out.println(
+            String.format(
+                "CloudAppender started to work with %s...",
+                this.feeder
+            )
+        );
+        this.alive.set(true);
+        while (this.alive.get()) {
+            String text;
+            try {
+                text = this.messages.take();
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+                break;
             }
-            System.out.println(
-                String.format(
-                    "CloudAppender finished to work with %s.",
-                    CloudAppender.this.feeder
-                )
-            );
+            try {
+                this.feeder.feed(text);
+            } catch (java.io.IOException ex) {
+                System.out.println(
+                    Logger.format(
+                        "%sCloudAppender failed to report: %[exception]s",
+                        text,
+                        ex
+                    )
+                );
+            }
         }
+        System.out.println(
+            String.format(
+                "CloudAppender finished to work with %s.",
+                this.feeder
+            )
+        );
     }
 
 }
