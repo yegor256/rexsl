@@ -30,11 +30,11 @@
 package com.rexsl.core;
 
 import com.ymock.util.Logger;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -104,7 +104,7 @@ final class ServletConfigWrapper implements FilterConfig {
      */
     @Override
     public Enumeration<String> getInitParameterNames() {
-        final List<String> names = new ArrayList<String>();
+        final Set<String> names = new HashSet<String>();
         for (Object name : this.properties.keySet()) {
             names.add((String) name);
         }

@@ -93,8 +93,8 @@ public final class ExceptionTrapTest {
         MatcherAssert.assertThat(
             writer.toString(),
             Matchers.allOf(
-                Matchers.containsString("header1 A"),
-                Matchers.containsString("header2 B")
+                Matchers.containsString("header1: A"),
+                Matchers.containsString("header2: B")
             )
         );
     }

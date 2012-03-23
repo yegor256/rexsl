@@ -225,22 +225,15 @@ public final class ExceptionTrap extends HttpServlet {
                 ctx.getServerInfo()
             )
         );
+        text.append("headers:\n")
+            .append(ExceptionTrap.headers(request))
+            .append(" \n");
         text.append(
             Logger.format(
                 "exception: %[exception]s\n",
                 request.getAttribute("javax.servlet.error.exception")
             )
         );
-        text.append("request headers: ");
-        final Enumeration headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            final String header = (String) headerNames.nextElement();
-            text.append(header).append(" ").append(request.getHeader(header));
-            if (headerNames.hasMoreElements()) {
-                text.append(", ");
-            }
-        }
-        text.append("\n ");
         return text;
     }
 
@@ -258,7 +251,11 @@ public final class ExceptionTrap extends HttpServlet {
         if (attr == null) {
             attr = "NULL";
         }
-        text.append(suffix).append(": ").append(attr.toString()).append("\n");
+        text.append(suffix)
+            // @checkstyle MultipleStringLiterals (1 line)
+            .append(": ")
+            .append(attr.toString())
+            .append("\n");
     }
 
     /**
@@ -291,6 +288,28 @@ public final class ExceptionTrap extends HttpServlet {
             }
         }
         return props;
+    }
+
+    /**
+     * Format headers.
+     * @param request The HTTP request
+     * @return Text with headers
+     */
+    private static String headers(final HttpServletRequest request) {
+        final StringBuilder text = new StringBuilder();
+        final Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            final String header = (String) headerNames.nextElement();
+            text.append("  ")
+                .append(header)
+                .append(": ")
+                .append(request.getHeader(header));
+            if (headerNames.hasMoreElements()) {
+                text.append(", ");
+            }
+            text.append("  \n");
+        }
+        return text.toString();
     }
 
 }
