@@ -33,6 +33,8 @@ import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
 import com.rexsl.test.TestResponseMocker;
 import java.net.HttpURLConnection;
+import org.hamcrest.MatcherAssert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -47,28 +49,38 @@ public final class RetryPolicyTest {
      * RetryPolicy can detect defective response.
      * @throws Exception If something goes wrong inside
      */
-    @Test(expected = AssertionError.class)
+    @Test
     public void detectsDefectiveResponse() throws Exception {
         final AssertionPolicy policy = new RetryPolicy("/a");
         final TestResponse response = new TestResponseMocker()
             .withBody("<!DOCTYPE a PUBLIC \"foo\"\"ff\"><a/>")
             .withStatus(HttpURLConnection.HTTP_NOT_FOUND)
             .mock();
-        policy.assertThat(response);
+        try {
+            policy.assertThat(response);
+            Assert.fail();
+        } catch (AssertionError ex) {
+            MatcherAssert.assertThat("", policy.again(1));
+        }
     }
 
     /**
      * RetryPolicy can detect defective response, with runtime exception.
      * @throws Exception If something goes wrong inside
      */
-    @Test(expected = AssertionError.class)
+    @Test
     public void detectsDefectiveResponseEvenWithException() throws Exception {
         final AssertionPolicy policy = new RetryPolicy("/foo");
         final TestResponse response = Mockito.mock(TestResponse.class);
         Mockito.doReturn(HttpURLConnection.HTTP_OK).when(response).getStatus();
         Mockito.doThrow(new AssertionError())
             .when(response).nodes(Mockito.anyString());
-        policy.assertThat(response);
+        try {
+            policy.assertThat(response);
+            Assert.fail();
+        } catch (AssertionError ex) {
+            MatcherAssert.assertThat("", policy.again(1));
+        }
     }
 
 }
