@@ -157,8 +157,7 @@ public final class CloudAppenderTest {
         int index = 0;
         while (index <= numElements) {
             appender.append(event);
-            // @checkstyle IllegalTokenCheck (1 line)
-            index++;
+            ++index;
         }
         MatcherAssert.assertThat(
             this.outContent.toString(),

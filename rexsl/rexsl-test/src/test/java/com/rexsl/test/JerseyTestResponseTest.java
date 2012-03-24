@@ -175,8 +175,7 @@ public final class JerseyTestResponseTest {
                 }
                 @Override
                 public boolean again(final int attempt) {
-                    // @checkstyle IllegalTokenCheck (1 line)
-                    this.num++;
+                    ++this.num;
                     return attempt < 2;
                 }
             }

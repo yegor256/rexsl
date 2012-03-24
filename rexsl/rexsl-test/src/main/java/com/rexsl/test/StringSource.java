@@ -114,8 +114,7 @@ final class StringSource extends DOMSource {
     public String toString() {
         final StringBuilder buf = new StringBuilder();
         final int length = this.xml.length();
-        // @checkstyle IllegalTokenCheck (1 line)
-        for (int pos = 0; pos < length; pos++) {
+        for (int pos = 0; pos < length; ++pos) {
             final char chr = this.xml.charAt(pos);
             // @checkstyle MagicNumber (1 line)
             if (chr > 0x7f) {
