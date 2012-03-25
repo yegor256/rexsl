@@ -383,7 +383,7 @@ public final class Manifests {
                     ex
                 );
             }
-            count += 1;
+            ++count;
         }
         Logger.info(
             Manifests.class,

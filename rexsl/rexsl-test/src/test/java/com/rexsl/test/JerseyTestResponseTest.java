@@ -175,7 +175,7 @@ public final class JerseyTestResponseTest {
                 }
                 @Override
                 public boolean again(final int attempt) {
-                    this.num += 1;
+                    ++this.num;
                     return attempt < 2;
                 }
             }

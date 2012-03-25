@@ -157,7 +157,7 @@ public final class CloudAppenderTest {
         int index = 0;
         while (index <= numElements) {
             appender.append(event);
-            index += 1;
+            ++index;
         }
         MatcherAssert.assertThat(
             this.outContent.toString(),

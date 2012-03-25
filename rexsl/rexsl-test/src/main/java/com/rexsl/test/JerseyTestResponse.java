@@ -187,7 +187,7 @@ final class JerseyTestResponse implements TestResponse {
     public List<String> xpath(final String query) {
         final NodeList nodes = this.nodelist(query);
         final List<String> items = new ArrayList<String>();
-        for (int idx = 0; idx < nodes.getLength(); idx += 1) {
+        for (int idx = 0; idx < nodes.getLength(); ++idx) {
             MatcherAssert.assertThat(
                 "Only /text() nodes or attributes are retrievable with xpath()",
                 nodes.item(idx).getNodeType(),
@@ -276,7 +276,7 @@ final class JerseyTestResponse implements TestResponse {
     public List<TestResponse> nodes(final String query) {
         final NodeList nodes = this.nodelist(query);
         final List<TestResponse> items = new ArrayList<TestResponse>();
-        for (int idx = 0; idx < nodes.getLength(); idx += 1) {
+        for (int idx = 0; idx < nodes.getLength(); ++idx) {
             MatcherAssert.assertThat(
                 "Only elements are retrievable with nodes()",
                 nodes.item(idx).getNodeType(),
@@ -307,7 +307,7 @@ final class JerseyTestResponse implements TestResponse {
                     assertion.assertThat(this);
                     break;
                 } catch (AssertionError ex) {
-                    attempt += 1;
+                    ++attempt;
                     if (!assertion.again(attempt)) {
                         throw ex;
                     }

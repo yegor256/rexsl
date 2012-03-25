@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Handler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.FilterConfig;
@@ -188,10 +189,9 @@ public final class RestfulServlet extends HttpServlet {
     private void reconfigureJUL() {
         final java.util.logging.Logger rootLogger =
             java.util.logging.LogManager.getLogManager().getLogger("");
-        final java.util.logging.Handler[] handlers =
-            rootLogger.getHandlers();
-        for (int idx = 0; idx < handlers.length; idx += 1) {
-            rootLogger.removeHandler(handlers[idx]);
+        final Handler[] handlers = rootLogger.getHandlers();
+        for (Handler handler : handlers) {
+            rootLogger.removeHandler(handler);
         }
         org.slf4j.bridge.SLF4JBridgeHandler.install();
         Logger.debug(this, "#julToSlf4j(): JUL forwarded to SLF4j");
