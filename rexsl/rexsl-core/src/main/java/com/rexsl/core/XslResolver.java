@@ -145,7 +145,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 type.getName()
             );
         } else {
-            mrsh = this.addXsdValidator(mrsh, type);
+            this.addXsdValidatorToMarshaller(mrsh, type);
         }
         return mrsh;
     }
@@ -230,13 +230,12 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     }
 
     /**
-     * Configure marhaller and return a new one (or the same).
+     * Configure marhaller adding a xsd validator.
      * @param mrsh The marshaller, already created and ready to marshal
      * @param type The class to be marshalled
-     * @return New marshalled to be used instead
      * @see #getContext(Class)
      */
-    private Marshaller addXsdValidator(final Marshaller mrsh,
+    private void addXsdValidatorToMarshaller(final Marshaller mrsh,
         final Class<?> type) {
         final String name = this.schema(type);
         if (name.isEmpty()) {
@@ -283,7 +282,6 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 );
             }
         }
-        return mrsh;
     }
 
     /**
