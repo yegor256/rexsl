@@ -56,13 +56,13 @@
         <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
-            <version rexsl="yes">1.0-SNAPSHOT</version>
+            <version rexsl="yes">0.3.6</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">1.0-SNAPSHOT</version>
+            <version rexsl="yes">0.3.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -96,7 +96,7 @@
             <plugin>
                 <groupId>com.rexsl</groupId>
                 <artifactId>rexsl-maven-plugin</artifactId>
-                <version rexsl="yes">1.0-SNAPSHOT</version>
+                <version rexsl="yes">0.3.6</version>
                 <executions>
                     <execution>
                         <goals>
