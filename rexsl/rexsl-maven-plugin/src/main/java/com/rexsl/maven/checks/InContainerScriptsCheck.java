@@ -37,6 +37,7 @@ import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.GroovyExecutor;
 import com.ymock.util.Logger;
 import java.io.File;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Validate the product in container, with Groovy scripts.
@@ -46,6 +47,18 @@ import java.io.File;
  */
 final class InContainerScriptsCheck implements Check {
 
+    /**
+     * Scope of tests to execute.
+     */
+    private final transient String testScope;
+
+    /**
+     * Ctor.
+     * @param scope Execute only scripts matching scope.
+     */
+    public InContainerScriptsCheck(final String scope) {
+        this.testScope = scope;
+    }
     /**
      * {@inheritDoc}
      */
@@ -91,6 +104,12 @@ final class InContainerScriptsCheck implements Check {
         boolean success = true;
         final FileFinder finder = new FileFinder(dir, "groovy");
         for (File script : finder.random()) {
+            if (this.testScope != null
+                && !FilenameUtils.removeExtension(script.getName())
+                    .matches(this.testScope)
+            ) {
+                continue;
+            }
             try {
                 Logger.info(this, "Testing '%s'...", script);
                 this.one(env, script);

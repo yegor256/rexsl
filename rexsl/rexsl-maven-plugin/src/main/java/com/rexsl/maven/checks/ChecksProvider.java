@@ -43,6 +43,11 @@ import java.util.Set;
 public final class ChecksProvider {
 
     /**
+     * Test scope.
+     */
+    private transient String testScope;
+
+    /**
      * Get full collection of checks.
      *
      * <p>Checks should be ordered by their complexity. Most simple and fast
@@ -59,10 +64,17 @@ public final class ChecksProvider {
         checks.add(new FilesStructureCheck());
         checks.add(new WebXmlCheck());
         checks.add(new RexslFilesCheck());
-        checks.add(new XhtmlOutputCheck());
-        checks.add(new InContainerScriptsCheck());
+        checks.add(new XhtmlOutputCheck(this.testScope));
+        checks.add(new InContainerScriptsCheck(this.testScope));
         checks.add(new JSUnitTestsCheck());
         return checks;
     }
 
+    /**
+     * Sets the scope of tests to execute.
+     * @param scope Pattern of test name
+     */
+    public void setTestScope(final String scope) {
+        this.testScope = scope;
+    }
 }

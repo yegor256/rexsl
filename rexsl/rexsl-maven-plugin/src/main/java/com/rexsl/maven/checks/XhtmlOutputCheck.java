@@ -67,10 +67,23 @@ final class XhtmlOutputCheck implements Check {
     private static final String GROOVY_DIR = "src/test/rexsl/xhtml";
 
     /**
+     * Scope of tests to execute.
+     */
+    private final transient String testScope;
+
+    /**
      * Validator.
      */
     private final transient HtmlValidator validator =
         new ValidatorBuilder().html();
+
+    /**
+     * Ctor.
+     * @param scope Execute only scripts matching scope.
+     */
+    public XhtmlOutputCheck(final String scope) {
+        this.testScope = scope;
+    }
 
     /**
      * {@inheritDoc}
@@ -89,6 +102,12 @@ final class XhtmlOutputCheck implements Check {
             final Collection<File> files = new FileFinder(dir, "xml").random();
             try {
                 for (File xml : files) {
+                    if (this.testScope != null
+                        && !FilenameUtils.removeExtension(xml.getName())
+                            .matches(this.testScope)
+                        ) {
+                        continue;
+                    }
                     try {
                         Logger.info(this, "Testing %s through...", xml);
                         this.one(env, xml);
