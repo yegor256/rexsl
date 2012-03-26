@@ -38,23 +38,25 @@
 
 ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
 
-  The idea is simple - to make a RESTful XML API available in a browser-friendly
-  format renderable with XSL stylesheets. With ReXSL you develop your web
-  application as a RESTful "web service". Then you add XSL stylesheets and every
-  XML response becomes a web page of your site.
+  The idea is simple - to make a
+  {{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}
+  XML API available in a browser-friendly
+  format renderable with
+  {{{http://en.wikipedia.org/wiki/XSL}XSL}} stylesheets.
+  With ReXSL you develop your web
+  application as a RESTful "web service" while XSL stylesheets transform it
+  to an HTML web site.
+
+  The diagram explains how components are connected to each other. It is a
+  classic
+  {{{http://en.wikipedia.org/wiki/Model–view–controller}MVC pattern}},
+  where {{{http://en.wikipedia.org/wiki/Java_Architecture_for_XML_Binding}JAXB}}
+  {{{http://en.wikipedia.org/wiki/Plain_Old_Java_Object}POJOs}} play a
+  role of a Model.
+  {{{http://en.wikipedia.org/wiki/Java_API_for_RESTful_Web_Services}JAX-RS}} resources are Controllers.
+  Stylesheets with a powerful XSL 2.0 language are Views.
 
 [texry/layers.png] UML diagram with layers
 
-  These articles will help you to start:
-
-   * {{{./start.html}Quick Start Guide}} explains how to create a new project
-     in five minutes;
-
-   * {{{./rexsl-test/apidocs/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
-     class for convenient in-container testing from Groovy scripts;
-
-   * {{{./rexsl-maven-plugin/index.html}<<<rexsl-maven-plugin>>> cookbook}}
-
-   * {{{./rexsl-core/index.html}<<<rexsl-core>>>}} module embeddable into your
-     web application
+  This article will help you to start: {{{./start.html}Quick Start Guide}}.
 

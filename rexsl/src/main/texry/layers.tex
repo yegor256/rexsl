@@ -44,37 +44,44 @@
     \addComponentIco{jaxrs}{}
     \draw [-triangle 60, dashed] (jaxb) -- (jaxrs);
     %
+    % SERVLET
+    \umlRectangle{servlet}{ReXSL Servlet}{component}{3cm}{right=1cm of jaxrs}
+    \addComponentIco{servlet}{}
+    \draw [-triangle 60, dashed] (servlet) -- (jaxrs);
+    %
     % FILTER
     \umlRectangle{filter}{ReXSL Filter}{component}{2.5cm}{above=2cm of jaxrs}
     \addComponentIco{filter}{}
-    \draw [-triangle 60, dashed] (jaxrs) -- node [uml2, solid, midway] (xml) {XML} (filter);
+    \draw [-triangle 60, dashed] (jaxrs) -- node [uml2, solid, fill=white, midway] (xml) {XML} (filter);
     %
     % XSL
-    \umlRectangle{xsl}{XSL}{component}{2.8cm}{left=2cm of xml}
+    \umlRectangle{xsl}{XSL}{component}{2.2cm}{left=2.5cm of xml}
     \addComponentIco{xsl}{}
-    \draw [dashed] (xml) -- node [uml2, solid] {+} (xsl);
+    \draw [dashed] (xml) -- node [uml2-comment] {<{}<attach>{}>} (xsl);
     %
     % CLIENT
-    \umlRectangle{client}{Client}{component}{2.5cm}{above left=2cm of filter, fill=white}
+    \umlRectangle{client}{XML Client}{component}{2.5cm}{right=2.5cm of filter, fill=white}
     \addComponentIco{client}{fill=white}
-    \draw [-triangle 60, dashed] (filter) -- node [uml2, solid, midway] {XML} (client);
+    \draw [-triangle 60, dashed] (filter) -- node [uml2, fill=white, solid, midway] {XML} (client);
+    \draw [-triangle 60, dashed] (client) -- (servlet);
     %
     % USER
     \umlActor{user}{User}{above right=2cm of filter}
-    \draw [-triangle 60, dashed] (filter) -- node [uml2, solid, midway] {HTML} (user);
+    \draw [-triangle 60, dashed] (filter) -- node [uml2, fill=white, solid, midway] {HTML} (user);
+    \draw [-triangle 60, dashed] (user) -- (servlet);
     %
     %
     \path [dashed] (filter.south)
-        +(4,-0.2)
-        [draw] -- +(-8,-0.2)
+        +(8,-0.2)
+        [draw] -- +(-7,-0.2)
         node [uml2, fill=none, draw=none, anchor=north west] {View};
     \path [dashed] (jaxrs.north)
-        +(4,0.2)
-        [draw] -- +(-8,0.2)
+        +(8,0.2)
+        [draw] -- +(-7,0.2)
         node [uml2, fill=none, draw=none, anchor=north west] {Controller};
     \path [dashed] (jaxb.north)
-        +(4,0.2)
-        [draw] -- +(-8,0.2)
+        +(8,0.2)
+        [draw] -- +(-7,0.2)
         node [uml2, fill=none, draw=none, anchor=north west] {Model};
 }
 \end{document}
