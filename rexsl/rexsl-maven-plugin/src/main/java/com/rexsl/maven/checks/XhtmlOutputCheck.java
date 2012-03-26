@@ -69,7 +69,7 @@ final class XhtmlOutputCheck implements Check {
     /**
      * Scope of tests to execute.
      */
-    private final transient String testScope;
+    private final transient String test;
 
     /**
      * Validator.
@@ -82,7 +82,7 @@ final class XhtmlOutputCheck implements Check {
      * @param scope Execute only scripts matching scope.
      */
     public XhtmlOutputCheck(final String scope) {
-        this.testScope = scope;
+        this.test = scope;
     }
 
     /**
@@ -102,10 +102,9 @@ final class XhtmlOutputCheck implements Check {
             final Collection<File> files = new FileFinder(dir, "xml").random();
             try {
                 for (File xml : files) {
-                    if (this.testScope != null
-                        && !FilenameUtils.removeExtension(xml.getName())
-                            .matches(this.testScope)
-                        ) {
+                    if (!FilenameUtils.removeExtension(xml.getName())
+                        .matches(this.test)
+                    ) {
                         continue;
                     }
                     try {

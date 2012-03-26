@@ -69,9 +69,12 @@ public final class CheckMojo extends AbstractRexslMojo {
         if (this.systemPropertyVariables != null) {
             this.injectVariables(this.systemPropertyVariables);
         }
-        final ChecksProvider checksProvider = new ChecksProvider();
-        checksProvider.setTestScope(this.test);
-        final Set<Check> checks = checksProvider.all();
+        final ChecksProvider provider = new ChecksProvider();
+        if (this.test == null) {
+            this.test = ".*";
+        }
+        provider.setTest(this.test);
+        final Set<Check> checks = provider.all();
         for (Check check : checks) {
             if (!check.validate(this.env())) {
                 throw new MojoFailureException(

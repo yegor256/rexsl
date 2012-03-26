@@ -49,7 +49,7 @@ public final class XhtmlOutputCheckTest {
     @SuppressWarnings("PMD.AvoidDuplicateLiterals")
     public void validatesPositiveSituation() throws Exception {
         final Environment env = new EnvironmentMocker()
-            // @checkstyle MultipleStringLiterals (7 lines)
+            // @checkstyle MultipleStringLiterals (8 lines)
             .withFile("target/webdir/xsl/layout.xsl")
             .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/index.xml")
@@ -57,7 +57,7 @@ public final class XhtmlOutputCheckTest {
             .mock();
         MatcherAssert.assertThat(
             "all tests pass fine",
-            new XhtmlOutputCheck(null).validate(env)
+            new XhtmlOutputCheck(".*").validate(env)
         );
     }
 
@@ -69,13 +69,13 @@ public final class XhtmlOutputCheckTest {
     @Test
     public void validatesWithMissedLayoutFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            // @checkstyle MultipleStringLiterals (4 lines)
+            // @checkstyle MultipleStringLiterals (6 lines)
             .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/index.xml")
             .mock();
         MatcherAssert.assertThat(
             "missed layout file situation is detected",
-            !new XhtmlOutputCheck(null).validate(env)
+            !new XhtmlOutputCheck(".*").validate(env)
         );
     }
 

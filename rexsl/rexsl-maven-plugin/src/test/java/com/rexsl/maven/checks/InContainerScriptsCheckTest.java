@@ -56,7 +56,7 @@ public final class InContainerScriptsCheckTest {
             .mock();
         MatcherAssert.assertThat(
             "all validations pass",
-            new InContainerScriptsCheck(null).validate(env)
+            new InContainerScriptsCheck(".*").validate(env)
         );
     }
 

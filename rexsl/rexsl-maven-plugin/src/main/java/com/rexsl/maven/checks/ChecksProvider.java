@@ -45,7 +45,7 @@ public final class ChecksProvider {
     /**
      * Test scope.
      */
-    private transient String testScope;
+    private transient String test;
 
     /**
      * Get full collection of checks.
@@ -64,8 +64,8 @@ public final class ChecksProvider {
         checks.add(new FilesStructureCheck());
         checks.add(new WebXmlCheck());
         checks.add(new RexslFilesCheck());
-        checks.add(new XhtmlOutputCheck(this.testScope));
-        checks.add(new InContainerScriptsCheck(this.testScope));
+        checks.add(new XhtmlOutputCheck(this.test));
+        checks.add(new InContainerScriptsCheck(this.test));
         checks.add(new JSUnitTestsCheck());
         return checks;
     }
@@ -74,7 +74,7 @@ public final class ChecksProvider {
      * Sets the scope of tests to execute.
      * @param scope Pattern of test name
      */
-    public void setTestScope(final String scope) {
-        this.testScope = scope;
+    public void setTest(final String scope) {
+        this.test = scope;
     }
 }

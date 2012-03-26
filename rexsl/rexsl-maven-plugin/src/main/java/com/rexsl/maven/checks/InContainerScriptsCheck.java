@@ -50,14 +50,14 @@ final class InContainerScriptsCheck implements Check {
     /**
      * Scope of tests to execute.
      */
-    private final transient String testScope;
+    private final transient String test;
 
     /**
      * Ctor.
      * @param scope Execute only scripts matching scope.
      */
     public InContainerScriptsCheck(final String scope) {
-        this.testScope = scope;
+        this.test = scope;
     }
     /**
      * {@inheritDoc}
@@ -104,9 +104,8 @@ final class InContainerScriptsCheck implements Check {
         boolean success = true;
         final FileFinder finder = new FileFinder(dir, "groovy");
         for (File script : finder.random()) {
-            if (this.testScope != null
-                && !FilenameUtils.removeExtension(script.getName())
-                    .matches(this.testScope)
+            if (!FilenameUtils.removeExtension(script.getName())
+                .matches(this.test)
             ) {
                 continue;
             }
