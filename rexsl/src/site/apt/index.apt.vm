@@ -39,7 +39,7 @@
 ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
 
   The idea is simple - to make a
-  {{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}
+  {{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}}
   XML API available in a browser-friendly
   format renderable with
   {{{http://en.wikipedia.org/wiki/XSL}XSL}} stylesheets.
@@ -72,7 +72,8 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
   {{{http://www.oracle.com/technetwork/java/javaee/servlet/index.html}Java Servlet API}},
   {{{http://en.wikipedia.org/wiki/Representational_State_Transfer}REST}},
   {{{http://en.wikipedia.org/wiki/HATEOAS}HATEOAS}},
-  {{{http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol}HTTP 1.1}}.
+  {{{http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol}HTTP 1.1}},
+  {{{http://en.wikipedia.org/wiki/Test-driven_development}TDD}}.
   If any of these technologies are new for you - ReXSL won't work. However, we strongly
   recommend to learn them :)
 
