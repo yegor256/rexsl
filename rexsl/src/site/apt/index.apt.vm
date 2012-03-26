@@ -39,7 +39,7 @@
 ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
 
   The idea is simple - to make a
-  {{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}
+  {{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}}
   XML API available in a browser-friendly
   format renderable with
   {{{http://en.wikipedia.org/wiki/XSL}XSL}} stylesheets.
