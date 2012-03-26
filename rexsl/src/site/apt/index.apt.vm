@@ -79,6 +79,11 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
   This article explains how to create a working web application
   using ReXSL in five minutes: {{{./start.html}Quick Start Guide}}.
 
+  ReXSL pays a lot of attention to unit and integration testing. Actually,
+  80% of our code is for helping you to test your application. As soon as
+  you understand how ReXSL works (and learn the technologies listed above),
+  read this article: {{{./testing.html}Introduction to ReXSL Testing}}.
+
   Post us a message in our
   {{{https://groups.google.com/forum/#!forum/rexsl}Google Newsgroup}}
   if you're interested or just
