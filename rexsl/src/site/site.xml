@@ -85,9 +85,10 @@
         <menu name="Overview">
             <item name="Introduction" href="index.html" />
             <item name="Quick Start" href="start.html" />
+            <item name="Testing" href="testing.html" />
         </menu>
-        <menu ref="reports" />
         <menu ref="modules" />
+        <menu ref="reports" />
     </body>
 
     <!--

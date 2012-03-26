@@ -7,7 +7,7 @@
  ------
 
 ~~
-~~ Copyright (c) 2011, ReXSL.com
+~~ Copyright (c) 2011-2012, ReXSL.com
 ~~ All rights reserved.
 ~~
 ~~ Redistribution and use in source and binary forms, with or without
@@ -37,23 +37,6 @@
 ~~
 
 ReXSL, Quick Start Guide
-
-  You should be familiar
-  with
-  {{{http://www.oracle.com/technetwork/java/javase/overview/index-jsp-136246.html}Java 6}},
-  {{{http://groovy.codehaus.org/}Groovy}},
-  {{{http://maven.apache.org/}Apache Maven}},
-  {{{http://www.w3.org/XML/}XML}},
-  {{{http://www.w3.org/TR/xslt20/}XSL 2.0}},
-  {{{http://www.w3.org/TR/xpath20/}XPath 2.0}},
-  {{{http://www.w3.org/XML/Schema}XML Schema}},
-  {{{http://jcp.org/en/jsr/detail?id=311}JAX-RS 2.0}},
-  {{{http://jaxb.java.net/}JAXB 2}},
-  {{{http://www.oracle.com/technetwork/java/javaee/servlet/index.html}Java Servlet API}},
-  {{{http://en.wikipedia.org/wiki/Representational_State_Transfer}REST}},
-  {{{http://en.wikipedia.org/wiki/HATEOAS}HATEOAS}},
-  {{{http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol}HTTP 1.1}}.
-  If any of these technologies are new for you - ReXSL won't work.
 
   Let's create a new project on top of ReXSL, in 5 minutes.
   Start with a new Maven project with the following directory structure
@@ -90,9 +73,7 @@ ReXSL, Quick Start Guide
           foo.Home.xsd
 +--
 
-  Maven <<<pom.xml>>> should look like this (latest version of ReXSL
-  is published in
-  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl/}Maven Central}}):
+  Maven <<<pom.xml>>> should look like this:
 
 +--
 <project>
@@ -132,13 +113,6 @@ ReXSL, Quick Start Guide
       <scope>test</scope>
     </dependency>
     <dependency>
-      <!-- XML matchers from http://code.google.com/p/xml-matchers/ -->
-      <groupId>org.xmlmatchers</groupId>
-      <artifactId>xml-matchers</artifactId>
-      <version>0.10</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <!-- Unit testing framework from http://www.junit.org/ -->
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -157,6 +131,7 @@ ReXSL, Quick Start Guide
           <execution>
             <goals>
               <goal>check</goal>
+              <goal>package</goal>
             </goals>
           </execution>
         </executions>
@@ -239,7 +214,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
 public class Home {
-  @XmlElement(name = "text")
+  @XmlElement
   public String getText() {
     return "Hello, world!";
   }
@@ -251,15 +226,15 @@ public class Home {
 +--
 package foo;
 import com.rexsl.test.JaxbConverter;
+import com.rexsl.test.XhtmlMatchers;
 import org.junit.Test;
-import org.xmlmatchers.XmlMatchers;
 public class HomeTest {
   @Test
   public void testXmlContents() {
     Home home = new Home();
     Assert.assertThat(
       JaxbConverter.the(home),
-      XmlMatchers.hasXPath("/page/text[contains(.,'world')]")
+      XhtmlMatchers.hasXPath("/page/text[contains(.,'world')]")
     );
   }
 }
@@ -303,11 +278,11 @@ import javax.ws.rs.core.UriBuilder
 RestTester.start(rexsl.home)
   .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
   .header(HttpHeaders.USER_AGENT, 'Safari')
-  .get()
+  .get('loading home page')
   .assertStatus(HttpURLConnection.HTTP_OK)
   .assertXPath("//xhtml:div[contains(.,'world')]")
 RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-address'))
-  .get()
+  .get('loading non-existing URL')
   .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
 +--
 
@@ -371,7 +346,11 @@ RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-address'))
   That's it. All you have to do now is to run <<<mvn package>>>
   and deploy your WAR to production server.
 
-  To test the system on your local machine run <<<mvn package rexsl:run>>>
-  and use your favorite browser to test the system. You can make
-  changes to your <<<webapp/*>>> files, they will become available
-  on-fly in web.
+  To test the system on your local machine run
+  <<<mvn package rexsl:run -Drexsl.port=9099>>>
+  and open <<<http://localhost:9099>>> with your favorite browser.
+
+  What's especially cool is that you can can make
+  changes to your <<<webapp/*>>> files and they will become available
+  on-fly in web (without restart of the application). Just refresh the page
+  in browser.

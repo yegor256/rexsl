@@ -699,10 +699,40 @@
                         </reportPlugins>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>com.texry</groupId>
+                    <artifactId>texry-maven-plugin</artifactId>
+                    <version since="23 Mar 2012">1.0-SNAPSHOT</version>
+                    <configuration>
+                        <closures>
+                            <file>header.tex</file>
+                            <file>uml2.tex</file>
+                        </closures>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
-            <!-- intentionally empty -->
+            <plugin>
+                <groupId>com.texry</groupId>
+                <artifactId>texry-maven-plugin</artifactId>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <file>layers.tex</file>
+                            </sources>
+                            <sources>
+                                <file>layers.tex</file>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
