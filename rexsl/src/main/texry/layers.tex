@@ -1,0 +1,80 @@
+%%
+%% Copyright (c) 2011-2012, ReXSL.com
+%% All rights reserved.
+%%
+%% Redistribution and use in source and binary forms, with or without
+%% modification, are permitted provided that the following conditions
+%% are met: 1) Redistributions of source code must retain the above
+%% copyright notice, this list of conditions and the following
+%% disclaimer. 2) Redistributions in binary form must reproduce the above
+%% copyright notice, this list of conditions and the following
+%% disclaimer in the documentation and/or other materials provided
+%% with the distribution. 3) Neither the name of the ReXSL.com nor
+%% the names of its contributors may be used to endorse or promote
+%% products derived from this software without specific prior written
+%% permission.
+%%
+%% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+%% "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+%% NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+%% FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+%% THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+%% INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+%% (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+%% SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+%% HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+%% STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+%% ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+%% OF THE POSSIBILITY OF SUCH DAMAGE.
+%%
+%% @version $Id$
+%%
+\documentclass{article}
+\input{header.tex}
+\input{uml2.tex}
+\begin{document}
+\tikzpic{
+    %
+    % JAXB
+    \umlRectangle{jaxb}{JAXB POJOs}{component}{2.9cm}{}
+    \addComponentIco{jaxb}{}
+    %
+    % JAX-RS
+    \umlRectangle{jaxrs}{JAX-RS resources}{component}{3cm}{above=1cm of jaxb}
+    \addComponentIco{jaxrs}{}
+    \draw [-triangle 60, dashed] (jaxb) -- (jaxrs);
+    %
+    % FILTER
+    \umlRectangle{filter}{ReXSL Filter}{component}{2.5cm}{above=2cm of jaxrs}
+    \addComponentIco{filter}{}
+    \draw [-triangle 60, dashed] (jaxrs) -- node [uml2, solid, midway] (xml) {XML} (filter);
+    %
+    % XSL
+    \umlRectangle{xsl}{XSL}{component}{2.8cm}{left=2cm of xml}
+    \addComponentIco{xsl}{}
+    \draw [dashed] (xml) -- node [uml2, solid] {+} (xsl);
+    %
+    % CLIENT
+    \umlRectangle{client}{Client}{component}{2.5cm}{above left=2cm of filter, fill=white}
+    \addComponentIco{client}{fill=white}
+    \draw [-triangle 60, dashed] (filter) -- node [uml2, solid, midway] {XML} (client);
+    %
+    % USER
+    \umlActor{user}{User}{above right=2cm of filter}
+    \draw [-triangle 60, dashed] (filter) -- node [uml2, solid, midway] {HTML} (user);
+    %
+    %
+    \path [dashed] (filter.south)
+        +(4,-0.2)
+        [draw] -- +(-8,-0.2)
+        node [uml2, fill=none, draw=none, anchor=north west] {View};
+    \path [dashed] (jaxrs.north)
+        +(4,0.2)
+        [draw] -- +(-8,0.2)
+        node [uml2, fill=none, draw=none, anchor=north west] {Controller};
+    \path [dashed] (jaxb.north)
+        +(4,0.2)
+        [draw] -- +(-8,0.2)
+        node [uml2, fill=none, draw=none, anchor=north west] {Model};
+}
+\end{document}

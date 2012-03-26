@@ -43,6 +43,8 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
   application as a RESTful "web service". Then you add XSL stylesheets and every
   XML response becomes a web page of your site.
 
+[texry/layers.png] UML diagram with layers
+
   These articles will help you to start:
 
    * {{{./start.html}Quick Start Guide}} explains how to create a new project
