@@ -58,7 +58,8 @@ public final class CheckMojo extends AbstractRexslMojo {
      * Scope of tests to check.
      * @parameter expression="${rexsl.test}"
      */
-    private transient String test;
+    @SuppressWarnings("PMD.ImmutableField")
+    private transient String test = ".*";
 
     /**
      * {@inheritDoc}
@@ -70,9 +71,6 @@ public final class CheckMojo extends AbstractRexslMojo {
             this.injectVariables(this.systemPropertyVariables);
         }
         final ChecksProvider provider = new ChecksProvider();
-        if (this.test == null) {
-            this.test = ".*";
-        }
         provider.setTest(this.test);
         final Set<Check> checks = provider.all();
         for (Check check : checks) {
