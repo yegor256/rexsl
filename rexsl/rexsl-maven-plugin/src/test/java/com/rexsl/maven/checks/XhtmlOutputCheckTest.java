@@ -46,9 +46,10 @@ public final class XhtmlOutputCheckTest {
      * @throws Exception If something goes wrong
      */
     @Test
+    @SuppressWarnings("PMD.AvoidDuplicateLiterals")
     public void validatesPositiveSituation() throws Exception {
         final Environment env = new EnvironmentMocker()
-            // @checkstyle MultipleStringLiterals (4 lines)
+            // @checkstyle MultipleStringLiterals (8 lines)
             .withFile("target/webdir/xsl/layout.xsl")
             .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/index.xml")
@@ -56,7 +57,7 @@ public final class XhtmlOutputCheckTest {
             .mock();
         MatcherAssert.assertThat(
             "all tests pass fine",
-            new XhtmlOutputCheck().validate(env)
+            new XhtmlOutputCheck(".*").validate(env)
         );
     }
 
@@ -68,13 +69,13 @@ public final class XhtmlOutputCheckTest {
     @Test
     public void validatesWithMissedLayoutFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            // @checkstyle MultipleStringLiterals (4 lines)
+            // @checkstyle MultipleStringLiterals (6 lines)
             .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/index.xml")
             .mock();
         MatcherAssert.assertThat(
             "missed layout file situation is detected",
-            !new XhtmlOutputCheck().validate(env)
+            !new XhtmlOutputCheck(".*").validate(env)
         );
     }
 
@@ -95,8 +96,27 @@ public final class XhtmlOutputCheckTest {
             .mock();
         MatcherAssert.assertThat(
             "non-valid XHTML situation is detected",
-            !new XhtmlOutputCheck().validate(env)
+            !new XhtmlOutputCheck(null).validate(env)
         );
     }
 
+    /**
+     * XhtmlOutputCheck can check only tests matching pattern.
+     */
+    @Test
+    public void checksOnlyMatchingTests() {
+        // @checkstyle MultipleStringLiterals (9 lines)
+        final Environment env = new EnvironmentMocker()
+            .withFile("target/webdir/xsl/layout.xsl")
+            .withFile("target/webdir/xsl/Home.xsl")
+            .withFile("src/test/rexsl/xml/index.xml")
+            .withFile("src/test/rexsl/xml/skippedInvalid.xml", "")
+            .withFile("src/test/rexsl/xhtml/index.groovy")
+            .withFile("src/test/rexsl/xhtml/skippedInvalid.groovy", "")
+            .mock();
+        MatcherAssert.assertThat(
+            "all tests pass fine",
+            new XhtmlOutputCheck("index").validate(env)
+        );
+    }
 }

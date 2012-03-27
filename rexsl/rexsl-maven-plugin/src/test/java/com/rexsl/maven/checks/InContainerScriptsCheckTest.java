@@ -47,6 +47,7 @@ public final class InContainerScriptsCheckTest {
      */
     @Test
     public void validatesCorrectProjectWithNoExceptions() throws Exception {
+        // @checkstyle MultipleStringLiterals (8 lines)
         final Environment env = new EnvironmentMocker()
             .withFile("target/webdir/xsl/layout.xsl")
             .withFile("target/webdir/xsl/Home.xsl")
@@ -55,8 +56,26 @@ public final class InContainerScriptsCheckTest {
             .mock();
         MatcherAssert.assertThat(
             "all validations pass",
-            new InContainerScriptsCheck().validate(env)
+            new InContainerScriptsCheck(".*").validate(env)
         );
     }
 
+    /**
+     * InContainerScriptsCheck can check only tests matching pattern.
+     */
+    @Test
+    public void checksOnlyMatchingTests() {
+        // @checkstyle MultipleStringLiterals (8 lines)
+        final Environment env = new EnvironmentMocker()
+            .withFile("target/webdir/xsl/layout.xsl")
+            .withFile("target/webdir/xsl/Home.xsl")
+            .withFile("target/webdir/WEB-INF/web.xml")
+            .withFile("src/test/rexsl/scripts/HomePage.groovy")
+            .withFile("src/test/rexsl/scripts/Skip.groovy", "")
+            .mock();
+        MatcherAssert.assertThat(
+            "all validations pass",
+            new InContainerScriptsCheck("HomePage").validate(env)
+        );
+    }
 }
