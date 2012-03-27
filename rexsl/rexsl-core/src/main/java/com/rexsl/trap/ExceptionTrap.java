@@ -304,9 +304,6 @@ public final class ExceptionTrap extends HttpServlet {
                 .append(header)
                 .append(": ")
                 .append(request.getHeader(header));
-            if (headerNames.hasMoreElements()) {
-                text.append(", ");
-            }
             text.append("  \n");
         }
         return text.toString();

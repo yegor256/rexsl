@@ -58,7 +58,7 @@ public final class HttpFeederTest {
         final String message = "hi there!";
         final ContainerMocker container = new ContainerMocker()
             .expectMethod(Matchers.equalTo(RestTester.POST))
-            // .expectBody(Matchers.equalTo(message))
+            // .expectBody(Matchers.containsString(message))
             .expectHeader(
                 HttpHeaders.CONTENT_TYPE,
                 Matchers.equalTo(MediaType.TEXT_PLAIN)

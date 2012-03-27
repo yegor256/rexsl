@@ -29,72 +29,42 @@
  */
 package com.rexsl.log;
 
-import com.ymock.util.Logger;
-import java.io.IOException;
+import com.rexsl.test.ContainerMocker;
+import com.rexsl.test.RestTester;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
- * Feeder through HTTP POST request.
- *
- * <p>The feeder can be configured to split all incoming texts to single lines
- * and post them
- * to the configured URL one by one. This mechanism may be required for
- * some cloud
- * logging platforms, for example for
- * <a href="http://www.loggly.com">loggly.com</a> (read their forum post about
- * <a href="http://forum.loggly.com/discussion/23">this problem</a>). You
- * enable splitting by {@code split} option set to {@code TRUE}.
- *
- * <p>The class is thread-safe.
- *
+ * Test case for {@link BulkHttpFeeder}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @since 0.3.2
  */
-public final class HttpFeeder extends AbstractHttpFeeder {
+public final class BulkHttpFeederTest {
 
     /**
-     * Shall we split lines before POST-ing?
-     * @since 0.3.6
+     * BulkHttpFeeder can send messages to HTTP via POST.
+     * @throws Exception If there is some problem inside
      */
-    private transient boolean split;
-
-    /**
-     * Set option {@code split}.
-     * @param yes Shall we split?
-     * @since 0.3.6
-     */
-    public void setSplit(final boolean yes) {
-        this.split = yes;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return Logger.format("HTTP POST to \"%s\"", this.getUrl());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void activateOptions() {
-        // empty, nothing to do here
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void feed(final String text) throws IOException {
-        if (this.split) {
-            for (String line : text.split(CloudAppender.EOL)) {
-                this.post(Logger.format("%s%s", line, CloudAppender.EOL));
-            }
-        } else {
-            this.post(text);
-        }
+    @Test
+    public void sendsMessagesToCloud() throws Exception {
+        final String message = "hi there!";
+        final ContainerMocker container = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.POST))
+            .expectBody(Matchers.containsString(message))
+            .expectHeader(
+                HttpHeaders.CONTENT_TYPE,
+                Matchers.equalTo(MediaType.TEXT_PLAIN)
+            )
+            .returnBody("posted")
+            .mock();
+        final BulkHttpFeeder feeder = new BulkHttpFeeder();
+        feeder.setUrl(container.home().toString());
+        feeder.setPeriod(2L);
+        feeder.activateOptions();
+        feeder.feed(message);
+        feeder.feed(message);
     }
 
 }
