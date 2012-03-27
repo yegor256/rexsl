@@ -31,40 +31,42 @@ package com.rexsl.log;
 
 import com.ymock.util.Logger;
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Feeder through HTTP POST request.
+ * Bulk feeder through HTTP POST request.
  *
- * <p>The feeder can be configured to split all incoming texts to single lines
- * and post them
- * to the configured URL one by one. This mechanism may be required for
- * some cloud
- * logging platforms, for example for
- * <a href="http://www.loggly.com">loggly.com</a> (read their forum post about
- * <a href="http://forum.loggly.com/discussion/23">this problem</a>). You
- * enable splitting by {@code split} option set to {@code TRUE}.
+ * <p>The feeder sends POST HTTP requests every X seconds (as configured
+ * with {@link setPeriod(int)}).
  *
  * <p>The class is thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @since 0.3.2
+ * @since 0.3.7
  */
-public final class HttpFeeder extends AbstractHttpFeeder {
+@SuppressWarnings("PMD.DoNotUseThreads")
+public final class BulkHttpFeeder extends AbstractHttpFeeder {
 
     /**
-     * Shall we split lines before POST-ing?
-     * @since 0.3.6
+     * Period in seconds.
+     * @checkstyle MagicNumber (2 lines)
      */
-    private transient boolean split;
+    private transient long period = 60L;
 
     /**
-     * Set option {@code split}.
-     * @param yes Shall we split?
-     * @since 0.3.6
+     * Buffer to send.
      */
-    public void setSplit(final boolean yes) {
-        this.split = yes;
+    @SuppressWarnings("PMD.AvoidStringBufferField")
+    private final transient StringBuffer buffer = new StringBuffer();
+
+    /**
+     * Set option {@code period}.
+     * @param secs Interval, in seconds
+     */
+    public void setPeriod(final long secs) {
+        this.period = secs;
     }
 
     /**
@@ -72,7 +74,7 @@ public final class HttpFeeder extends AbstractHttpFeeder {
      */
     @Override
     public String toString() {
-        return Logger.format("HTTP POST to \"%s\"", this.getUrl());
+        return Logger.format("HTTP bulk POST to \"%s\"", this.getUrl());
     }
 
     /**
@@ -80,7 +82,21 @@ public final class HttpFeeder extends AbstractHttpFeeder {
      */
     @Override
     public void activateOptions() {
-        // empty, nothing to do here
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
+            new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        BulkHttpFeeder.this.flush();
+                    } catch (java.io.IOException ex) {
+                        Logger.warn(this, "#run(): %[exception]s", ex);
+                    }
+                }
+            },
+            1L,
+            this.period,
+            TimeUnit.SECONDS
+        );
     }
 
     /**
@@ -88,13 +104,22 @@ public final class HttpFeeder extends AbstractHttpFeeder {
      */
     @Override
     public void feed(final String text) throws IOException {
-        if (this.split) {
-            for (String line : text.split(CloudAppender.EOL)) {
-                this.post(Logger.format("%s%s", line, CloudAppender.EOL));
-            }
-        } else {
-            this.post(text);
-        }
+        this.buffer.append(text);
+    }
+
+    /**
+     * Flush buffer through HTTP.
+     *
+     * @throws IOException If some IO problem inside
+     * @todo #296 This implemenation is not thread-safe. It's possible to
+     *  to get content from the buffer, and then some other thread will
+     *  add a line, and then we set length to zero. We will lose that line.
+     *  Synchronization should added into feed() and here.
+     */
+    private void flush() throws IOException {
+        final String text = this.buffer.toString();
+        this.buffer.setLength(0);
+        this.post(text);
     }
 
 }

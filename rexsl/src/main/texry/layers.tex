@@ -45,13 +45,13 @@
     \draw [-triangle 60, dashed] (jaxb) -- (jaxrs);
     %
     % SERVLET
-    \umlRectangle{servlet}{ReXSL Servlet}{component}{3cm}{right=1cm of jaxrs}
-    \addComponentIco{servlet}{}
+    \umlRectangle{servlet}{ReXSL Servlet}{component}{3cm}{right=1cm of jaxrs, fill=white}
+    \addComponentIco{servlet}{fill=white}
     \draw [-triangle 60, dashed] (servlet) -- (jaxrs);
     %
     % FILTER
-    \umlRectangle{filter}{ReXSL Filter}{component}{2.5cm}{above=2cm of jaxrs}
-    \addComponentIco{filter}{}
+    \umlRectangle{filter}{ReXSL Filter}{component}{2.5cm}{above=2cm of jaxrs, fill=white}
+    \addComponentIco{filter}{fill=white}
     \draw [-triangle 60, dashed] (jaxrs) -- node [uml2, solid, fill=white, midway] (xml) {XML} (filter);
     %
     % XSL
