@@ -186,36 +186,19 @@ final class JerseyTestClient implements TestClient {
             }
         }
         final WebResource.Builder builder = this.resource.getRequestBuilder();
-        final StringBuilder request = new StringBuilder();
-        for (Header header : this.headers) {
-            builder.header(header.getKey(), header.getValue());
-            request.append(header.getKey())
-                .append(": ")
-                .append(header.getValue())
-                .append(ClientResponseDecor.EOL);
-        }
         final long start = System.nanoTime();
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
             resp = builder.get(ClientResponse.class);
         } else {
             resp = builder.method(name, ClientResponse.class, body);
-            request.append(ClientResponseDecor.EOL).append(body);
         }
         Logger.debug(
             this,
             "#%s('%s'): HTTP request body:\n%s%s",
             name,
             this.home.getPath(),
-            ClientResponseDecor.INDENT,
-            request.toString().replace(
-                ClientResponseDecor.EOL,
-                String.format(
-                    "%s%s",
-                    ClientResponseDecor.EOL,
-                    ClientResponseDecor.INDENT
-                )
-            )
+            new RequestDecor(this.headers, body)
         );
         Logger.info(
             this,
@@ -229,21 +212,6 @@ final class JerseyTestClient implements TestClient {
             this.home
         );
         return resp;
-    }
-
-    /**
-     * One header.
-     */
-    private static final class Header
-        extends AbstractMap.SimpleEntry<String, String> {
-        /**
-         * Public ctor.
-         * @param key The name of it
-         * @param value The value
-         */
-        public Header(final String key, final String value) {
-            super(key, value);
-        }
     }
 
 }
