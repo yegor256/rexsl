@@ -52,12 +52,12 @@ final class ClientResponseDecor implements Formattable {
     /**
      * End of line.
      */
-    private static final String EOL = "\n";
+    public static final String EOL = "\n";
 
     /**
      * Indentation.
      */
-    private static final String INDENT = "    ";
+    public static final String INDENT = "    ";
 
     /**
      * The response.

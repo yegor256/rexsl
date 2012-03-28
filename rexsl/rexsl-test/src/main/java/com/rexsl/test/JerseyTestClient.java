@@ -164,16 +164,11 @@ final class JerseyTestClient implements TestClient {
      */
     private ClientResponse method(final String name, final String body,
         final String desc) {
-        final long start = System.nanoTime();
-        final WebResource.Builder builder = this.resource.getRequestBuilder();
-        for (Header header : this.headers) {
-            builder.header(header.getKey(), header.getValue());
-        }
         final String info = this.home.getUserInfo();
         if (info != null) {
             final String[] parts = info.split(":", 2);
             try {
-                builder.header(
+                this.header(
                     HttpHeaders.AUTHORIZATION,
                     Logger.format(
                         "Basic %s",
@@ -190,12 +185,38 @@ final class JerseyTestClient implements TestClient {
                 throw new IllegalStateException(ex);
             }
         }
+        final WebResource.Builder builder = this.resource.getRequestBuilder();
+        final StringBuilder request = new StringBuilder();
+        for (Header header : this.headers) {
+            builder.header(header.getKey(), header.getValue());
+            request.append(header.getKey())
+                .append(": ")
+                .append(header.getValue())
+                .append(ClientResponseDecor.EOL);
+        }
+        final long start = System.nanoTime();
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
             resp = builder.get(ClientResponse.class);
         } else {
             resp = builder.method(name, ClientResponse.class, body);
+            request.append(ClientResponseDecor.EOL).append(body);
         }
+        Logger.debug(
+            this,
+            "#%s('%s'): HTTP request body:\n%s%s",
+            name,
+            this.home.getPath(),
+            ClientResponseDecor.INDENT,
+            request.toString().replace(
+                ClientResponseDecor.EOL,
+                String.format(
+                    "%s%s",
+                    ClientResponseDecor.EOL,
+                    ClientResponseDecor.INDENT
+                )
+            )
+        );
         Logger.info(
             this,
             "#%s('%s'): \"%s\" completed in %[nano]s [%d %s]: %s",
