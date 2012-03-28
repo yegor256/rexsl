@@ -31,6 +31,8 @@ package com.rexsl.test;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
+import org.apache.commons.collections.IteratorUtils;
+import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -56,6 +58,45 @@ public final class XPathContextTest {
         MatcherAssert.assertThat(
             ctx.getNamespaceURI(prefix),
             Matchers.equalTo(namespace)
+        );
+    }
+
+    /**
+     * XPathContext can find prefix by namespace.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void findsPrefixByNamespace() throws Exception {
+        final String prefix = "ns2-foo";
+        final String namespace = "hey-it-is-a-new-namespace";
+        final NamespaceContext ctx = new XPathContext()
+            .add(prefix, namespace)
+            .add("other-prefix", "boom-boom");
+        MatcherAssert.assertThat(
+            ctx.getPrefix(namespace),
+            Matchers.equalTo(prefix)
+        );
+    }
+
+    /**
+     * XPathContext can find prefixes by namespace.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void findsPrefixesByNamespace() throws Exception {
+        final String first = "first-prefix";
+        final String second = "second-prefix";
+        final String namespace = "simple-short-namespace";
+        final NamespaceContext ctx = new XPathContext()
+            .add(first, namespace)
+            .add(second, namespace);
+        MatcherAssert.assertThat(
+            IteratorUtils.toList(ctx.getPrefixes(namespace)),
+            Matchers.allOf(
+                (Matcher) Matchers.hasSize(2),
+                Matchers.hasItem(first),
+                Matchers.hasItem(second)
+            )
         );
     }
 

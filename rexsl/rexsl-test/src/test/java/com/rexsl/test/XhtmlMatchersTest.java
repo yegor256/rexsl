@@ -29,6 +29,9 @@
  */
 package com.rexsl.test;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -67,11 +70,23 @@ public final class XhtmlMatchersTest {
     }
 
     /**
-     * XhtmlMatchers can match against type.
+     * XhtmlMatchers can match after JaxbConverter.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void matchesType() throws Exception {
+    public void matchesAfterJaxbConverter() throws Exception {
+        MatcherAssert.assertThat(
+            JaxbConverter.the(new Foo()),
+            XhtmlMatchers.hasXPath("/ns1:foo", Foo.NAMESPACE)
+        );
+    }
+
+    /**
+     * XhtmlMatchers can match against generic type.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void matchesWithGenericType() throws Exception {
         final Foo foo = new Foo();
         MatcherAssert.assertThat(
             foo,
@@ -82,7 +97,13 @@ public final class XhtmlMatchersTest {
         );
     }
 
+    @XmlType(name = "foo", namespace = Foo.NAMESPACE)
+    @XmlAccessorType(XmlAccessType.NONE)
     public static final class Foo {
+        /**
+         * XML namespace.
+         */
+        public static final String NAMESPACE = "foo-namespace";
         /**
          * {@inheritDoc}
          */
