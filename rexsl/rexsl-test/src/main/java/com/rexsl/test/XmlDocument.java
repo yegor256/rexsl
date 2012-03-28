@@ -29,71 +29,49 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.ymock.util.Logger;
-import java.util.Formattable;
-import java.util.Formatter;
 import java.util.List;
-import javax.ws.rs.core.MultivaluedMap;
-import org.apache.commons.lang.StringUtils;
 
 /**
- * Decor for {@link ClientResponse}.
+ * XML document.
  *
- * <p>Objects of this class are immutable and thread-safe.
+ * <p>Set of convenient XML manipulations:
+ *
+ * <pre>
+ * XmlDocument xml = new SimpleXml(content);
+ * for (XmlDocument employee : xml.nodes("//Employee")) {
+ *   String name = employee.xpath("name/text()").get(0);
+ *   // ...
+ * }
+ * </pre>
+ *
+ * <p>Implementation of this interface shall be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @since 0.3.7
  */
-final class ClientResponseDecor implements Formattable {
+public interface XmlDocument {
 
     /**
-     * The response.
+     * Find and return nodes matched by xpath.
+     * @param query The XPath query
+     * @return The list of node values (texts)
      */
-    private final transient ClientResponse response;
+    List<String> xpath(String query);
 
     /**
-     * Its body.
+     * Retrieve nodes from the XML response.
+     * @param query The XPath query
+     * @return Collection of responses
      */
-    private final transient String body;
+    List<XmlDocument> nodes(String query);
 
     /**
-     * Public ctor.
-     * @param resp The response
-     * @param text Body text
+     * Register additional namespace prefix for XPath.
+     * @param prefix The prefix to register
+     * @param uri Namespace URI
+     * @return This object
      */
-    public ClientResponseDecor(final ClientResponse resp, final String text) {
-        this.response = resp;
-        this.body = text;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @checkstyle ParameterNumber (4 lines)
-     */
-    @Override
-    public void formatTo(final Formatter formatter, final int flags,
-        final int width, final int precision) {
-        final StringBuilder builder = new StringBuilder();
-        for (MultivaluedMap.Entry<String, List<String>> header
-            : this.response.getHeaders().entrySet()) {
-            builder.append(
-                Logger.format(
-                    "%s%s: %s%s",
-                    RequestDecor.SPACES,
-                    header.getKey(),
-                    StringUtils.join(header.getValue(), ", "),
-                    RequestDecor.EOL
-                )
-            );
-        }
-        if (builder.length() > 0) {
-            builder.append(RequestDecor.EOL);
-        }
-        builder.append(RequestDecor.SPACES)
-            .append(RequestDecor.indent(this.body))
-            .append(RequestDecor.EOL);
-        formatter.format("%s", builder.toString());
-    }
+    XmlDocument registerNs(String prefix, Object uri);
 
 }

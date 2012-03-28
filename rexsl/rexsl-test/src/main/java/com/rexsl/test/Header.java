@@ -29,71 +29,25 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.ymock.util.Logger;
-import java.util.Formattable;
-import java.util.Formatter;
-import java.util.List;
-import javax.ws.rs.core.MultivaluedMap;
-import org.apache.commons.lang.StringUtils;
+import java.util.AbstractMap;
 
 /**
- * Decor for {@link ClientResponse}.
+ * HTTP header.
  *
  * <p>Objects of this class are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class ClientResponseDecor implements Formattable {
-
-    /**
-     * The response.
-     */
-    private final transient ClientResponse response;
-
-    /**
-     * Its body.
-     */
-    private final transient String body;
+final class Header extends AbstractMap.SimpleEntry<String, String> {
 
     /**
      * Public ctor.
-     * @param resp The response
-     * @param text Body text
+     * @param key The name of it
+     * @param value The value
      */
-    public ClientResponseDecor(final ClientResponse resp, final String text) {
-        this.response = resp;
-        this.body = text;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @checkstyle ParameterNumber (4 lines)
-     */
-    @Override
-    public void formatTo(final Formatter formatter, final int flags,
-        final int width, final int precision) {
-        final StringBuilder builder = new StringBuilder();
-        for (MultivaluedMap.Entry<String, List<String>> header
-            : this.response.getHeaders().entrySet()) {
-            builder.append(
-                Logger.format(
-                    "%s%s: %s%s",
-                    RequestDecor.SPACES,
-                    header.getKey(),
-                    StringUtils.join(header.getValue(), ", "),
-                    RequestDecor.EOL
-                )
-            );
-        }
-        if (builder.length() > 0) {
-            builder.append(RequestDecor.EOL);
-        }
-        builder.append(RequestDecor.SPACES)
-            .append(RequestDecor.indent(this.body))
-            .append(RequestDecor.EOL);
-        formatter.format("%s", builder.toString());
+    public Header(final String key, final String value) {
+        super(key, value);
     }
 
 }

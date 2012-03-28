@@ -34,7 +34,6 @@ import com.sun.jersey.api.client.WebResource;
 import com.ymock.util.Logger;
 import java.net.URI;
 import java.net.URLDecoder;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
@@ -164,16 +163,11 @@ final class JerseyTestClient implements TestClient {
      */
     private ClientResponse method(final String name, final String body,
         final String desc) {
-        final long start = System.nanoTime();
-        final WebResource.Builder builder = this.resource.getRequestBuilder();
-        for (Header header : this.headers) {
-            builder.header(header.getKey(), header.getValue());
-        }
         final String info = this.home.getUserInfo();
         if (info != null) {
             final String[] parts = info.split(":", 2);
             try {
-                builder.header(
+                this.header(
                     HttpHeaders.AUTHORIZATION,
                     Logger.format(
                         "Basic %s",
@@ -190,12 +184,24 @@ final class JerseyTestClient implements TestClient {
                 throw new IllegalStateException(ex);
             }
         }
+        final WebResource.Builder builder = this.resource.getRequestBuilder();
+        for (Header header : this.headers) {
+            builder.header(header.getKey(), header.getValue());
+        }
+        final long start = System.nanoTime();
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
             resp = builder.get(ClientResponse.class);
         } else {
             resp = builder.method(name, ClientResponse.class, body);
         }
+        Logger.debug(
+            this,
+            "#%s('%s'): HTTP request body:\n%s",
+            name,
+            this.home.getPath(),
+            new RequestDecor(this.headers, body)
+        );
         Logger.info(
             this,
             "#%s('%s'): \"%s\" completed in %[nano]s [%d %s]: %s",
@@ -208,21 +214,6 @@ final class JerseyTestClient implements TestClient {
             this.home
         );
         return resp;
-    }
-
-    /**
-     * One header.
-     */
-    private static final class Header
-        extends AbstractMap.SimpleEntry<String, String> {
-        /**
-         * Public ctor.
-         * @param key The name of it
-         * @param value The value
-         */
-        public Header(final String key, final String value) {
-            super(key, value);
-        }
     }
 
 }

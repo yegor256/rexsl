@@ -27,67 +27,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test.assertions;
+package com.rexsl.test;
 
-import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.TestResponse;
-import com.rexsl.test.XmlDocument;
 import org.hamcrest.MatcherAssert;
+import org.junit.Test;
 
 /**
- * Matches HTTP header against required value.
- *
+ * Test case for {@link DomPrinter}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @since 0.3.4
  */
-public final class XpathMatcher implements AssertionPolicy {
+public final class DomPrinterTest {
 
     /**
-     * The message to show.
+     * DomPrinter can print XML document.
+     * @throws Exception If something goes wrong inside
      */
-    private final transient String message;
-
-    /**
-     * The source.
-     */
-    private final transient XmlDocument xml;
-
-    /**
-     * The matcher to use.
-     */
-    private final transient String xpath;
-
-    /**
-     * Public ctor.
-     * @param msg The message to show
-     * @param src The source
-     * @param path The XPath to find there
-     */
-    public XpathMatcher(final String msg, final XmlDocument src,
-        final String path) {
-        this.message = msg;
-        this.xml = src;
-        this.xpath = path;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void assertThat(final TestResponse rsp) {
-        MatcherAssert.assertThat(
-            this.message,
-            !this.xml.nodes(this.xpath).isEmpty()
+    @Test
+    public void printsXmlDocument() throws Exception {
+        final String xml = "<a><b>\u0443\u0440\u0430!</b></a>";
+        final DomParser parser = new DomParser(xml);
+        final DomPrinter printer = new DomPrinter(
+            parser.document().getDocumentElement()
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean again(final int attempt) {
-        return false;
+        MatcherAssert.assertThat(
+            XhtmlConverter.the(printer.toString()),
+            XhtmlMatchers.hasXPath("/a/b")
+        );
     }
 
 }

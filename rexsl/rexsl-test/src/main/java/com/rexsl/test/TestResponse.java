@@ -29,21 +29,46 @@
  */
 package com.rexsl.test;
 
-import java.util.List;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedMap;
 import org.hamcrest.Matcher;
 
 /**
- * Resonse returned by {@link TestClient}.
+ * Response returned by {@link TestClient}.
  *
- * <p>Implementation of this interface shall be immutable and thread-safe.
+ * <p>It is used as an output of {@link TestClient}, which is an output of
+ * {@link RestTester}, for example:
+ *
+ * <pre>
+ * TestResponse resp = RestTester.start(new URI("http://www.google.com"))
+ *   .get("load from page of Google");
+ * if (resp.getStatus() == 200) {
+ *   // everything is fine
+ * } else if (resp.getStatus() == 404) {
+ *   // google.com not found, hm...
+ * }
+ * </pre>
+ *
+ * <p>{@link TestResponse} extends {@link XmlDocument}, which is a abstract
+ * of an XML document, which can be retrieved from itself. For example:
+ *
+ * <pre>
+ * TestResponse resp = RestTester.start(new URI("http://example.com"))
+ *   .get("load XML document");
+ * Collection&lt;XmlDocument&gt; employees = resp.nodes("/Staff/Employee");
+ * for (XmlDocument employee : employees) {
+ *   String name = employee.xpath("name/text()").get(0);
+ *   // ...
+ * }
+ * </pre>
+ *
+ * <p>Implementation of this interface shall be mutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public interface TestResponse {
+public interface TestResponse extends XmlDocument {
 
     /**
      * Follow the LOCATION header.
@@ -59,30 +84,10 @@ public interface TestResponse {
     TestClient rel(String query);
 
     /**
-     * Get body as a string, assuming it's {@code UTF-8}.
-     * @return The body
-     */
-    String getBody();
-
-    /**
      * Get status of the response as a positive integer number.
      * @return The status code
      */
     Integer getStatus();
-
-    /**
-     * Find and return nodes matched by xpath.
-     * @param query The XPath query
-     * @return The list of node values (texts)
-     */
-    List<String> xpath(String query);
-
-    /**
-     * Retrieve nodes from the XML response.
-     * @param query The XPath query
-     * @return Collection of responses
-     */
-    List<TestResponse> nodes(String query);
 
     /**
      * Get status line of the response.
@@ -104,11 +109,15 @@ public interface TestResponse {
     Cookie cookie(String name);
 
     /**
-     * Register additional namespace prefix for XPath.
-     * @param prefix The prefix to register
-     * @param uri Namespace URI
-     * @return This object
+     * Get body as a string, assuming it's {@code UTF-8}.
+     * @return The body
      */
+    String getBody();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     TestResponse registerNs(String prefix, Object uri);
 
     /**
@@ -141,19 +150,19 @@ public interface TestResponse {
     TestResponse assertStatus(Matcher<Integer> matcher);
 
     /**
+     * Verifies HTTP response body content against provided matcher.
+     * @param matcher The matcher to use
+     * @return This object
+     */
+    TestResponse assertBody(Matcher<String> matcher);
+
+    /**
      * Verifies HTTP header against provided matcher.
      * @param name Name of the header to match
      * @param matcher The matcher to use
      * @return This object
      */
     TestResponse assertHeader(String name, Matcher matcher);
-
-    /**
-     * Verifies HTTP response body content against provided matcher.
-     * @param matcher The matcher to use
-     * @return This object
-     */
-    TestResponse assertBody(Matcher<String> matcher);
 
     /**
      * Verifies HTTP response body XHTML/XML content against XPath query.

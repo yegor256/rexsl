@@ -29,41 +29,51 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
 import java.util.Formattable;
 import java.util.Formatter;
+import java.util.LinkedList;
 import java.util.List;
-import javax.ws.rs.core.MultivaluedMap;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Decor for {@link ClientResponse}.
+ * Decor for HTTP request.
  *
  * <p>Objects of this class are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class ClientResponseDecor implements Formattable {
+final class RequestDecor implements Formattable {
 
     /**
-     * The response.
+     * End of line.
      */
-    private final transient ClientResponse response;
+    public static final String EOL = "\n";
 
     /**
-     * Its body.
+     * Indentation.
+     */
+    public static final String SPACES = "    ";
+
+    /**
+     * The headers.
+     */
+    private final transient List<Header> headers;
+
+    /**
+     * The body.
      */
     private final transient String body;
 
     /**
      * Public ctor.
-     * @param resp The response
+     * @param hdrs The headers
      * @param text Body text
      */
-    public ClientResponseDecor(final ClientResponse resp, final String text) {
-        this.response = resp;
+    public RequestDecor(final List<Header> hdrs, final String text) {
+        this.headers = hdrs;
         this.body = text;
     }
 
@@ -75,25 +85,50 @@ final class ClientResponseDecor implements Formattable {
     public void formatTo(final Formatter formatter, final int flags,
         final int width, final int precision) {
         final StringBuilder builder = new StringBuilder();
-        for (MultivaluedMap.Entry<String, List<String>> header
-            : this.response.getHeaders().entrySet()) {
+        for (Header header : this.headers) {
             builder.append(
                 Logger.format(
                     "%s%s: %s%s",
                     RequestDecor.SPACES,
                     header.getKey(),
-                    StringUtils.join(header.getValue(), ", "),
+                    header.getValue(),
                     RequestDecor.EOL
                 )
             );
         }
-        if (builder.length() > 0) {
-            builder.append(RequestDecor.EOL);
+        builder.append(RequestDecor.EOL).append(RequestDecor.SPACES);
+        if (this.body.isEmpty()) {
+            builder.append("<<empty body>>");
+        } else {
+            builder.append(RequestDecor.indent(this.body))
+                .append(RequestDecor.EOL);
         }
-        builder.append(RequestDecor.SPACES)
-            .append(RequestDecor.indent(this.body))
-            .append(RequestDecor.EOL);
         formatter.format("%s", builder.toString());
+    }
+
+    /**
+     * Indent this text.
+     * @param text The text
+     * @return Indented text
+     */
+    public static String indent(final String text) {
+        return StringUtils.join(
+            RequestDecor.lines(text),
+            Logger.format("%s%s", RequestDecor.EOL, RequestDecor.SPACES)
+        );
+    }
+
+    /**
+     * Get all lines from the text.
+     * @param text The text
+     * @return Lines
+     */
+    private static List<String> lines(final String text) {
+        final List<String> lines = new LinkedList<String>();
+        for (String line : StringUtils.split(text, RequestDecor.EOL)) {
+            lines.add(StringEscapeUtils.escapeJava(line));
+        }
+        return lines;
     }
 
 }

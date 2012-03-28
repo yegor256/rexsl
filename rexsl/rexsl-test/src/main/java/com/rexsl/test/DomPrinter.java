@@ -29,71 +29,63 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.ymock.util.Logger;
-import java.util.Formattable;
-import java.util.Formatter;
-import java.util.List;
-import javax.ws.rs.core.MultivaluedMap;
-import org.apache.commons.lang.StringUtils;
+import java.io.StringWriter;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Element;
 
 /**
- * Decor for {@link ClientResponse}.
+ * Convenient printer of XML.
  *
  * <p>Objects of this class are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @since 0.3.7
  */
-final class ClientResponseDecor implements Formattable {
+final class DomPrinter {
 
     /**
-     * The response.
+     * Transformer factory.
      */
-    private final transient ClientResponse response;
+    public static final TransformerFactory FACTORY =
+        TransformerFactory.newInstance();
 
     /**
-     * Its body.
+     * The DOM element.
      */
-    private final transient String body;
+    private final transient Element element;
 
     /**
      * Public ctor.
-     * @param resp The response
-     * @param text Body text
+     * @param elm The element
      */
-    public ClientResponseDecor(final ClientResponse resp, final String text) {
-        this.response = resp;
-        this.body = text;
+    public DomPrinter(final Element elm) {
+        this.element = elm;
     }
 
     /**
      * {@inheritDoc}
-     * @checkstyle ParameterNumber (4 lines)
      */
     @Override
-    public void formatTo(final Formatter formatter, final int flags,
-        final int width, final int precision) {
-        final StringBuilder builder = new StringBuilder();
-        for (MultivaluedMap.Entry<String, List<String>> header
-            : this.response.getHeaders().entrySet()) {
-            builder.append(
-                Logger.format(
-                    "%s%s: %s%s",
-                    RequestDecor.SPACES,
-                    header.getKey(),
-                    StringUtils.join(header.getValue(), ", "),
-                    RequestDecor.EOL
-                )
+    public String toString() {
+        final StringWriter writer = new StringWriter();
+        try {
+            final Transformer transformer = DomPrinter.FACTORY.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(
+                new DOMSource(this.element),
+                new StreamResult(writer)
             );
+        } catch (javax.xml.transform.TransformerConfigurationException ex) {
+            throw new IllegalStateException(ex);
+        } catch (javax.xml.transform.TransformerException ex) {
+            throw new IllegalArgumentException(ex);
         }
-        if (builder.length() > 0) {
-            builder.append(RequestDecor.EOL);
-        }
-        builder.append(RequestDecor.SPACES)
-            .append(RequestDecor.indent(this.body))
-            .append(RequestDecor.EOL);
-        formatter.format("%s", builder.toString());
+        return writer.toString();
     }
 
 }

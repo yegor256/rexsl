@@ -36,7 +36,7 @@ import org.apache.commons.lang.CharEncoding;
 import org.w3c.dom.Document;
 
 /**
- * Implementation of {@link TestResponse}.
+ * Convenient parser of XML to DOM.
  *
  * <p>Objects of this class are immutable and thread-safe.
  *
