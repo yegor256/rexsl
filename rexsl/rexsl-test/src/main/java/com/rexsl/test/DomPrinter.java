@@ -29,69 +29,63 @@
  */
 package com.rexsl.test;
 
-import com.ymock.util.Logger;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
-import org.w3c.dom.Document;
+import java.io.StringWriter;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Element;
 
 /**
- * Convenient parser of XML to DOM.
+ * Convenient printer of XML.
  *
  * <p>Objects of this class are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @since 0.3.7
  */
-final class DomParser {
+final class DomPrinter {
 
     /**
-     * The XML as a text.
+     * Transformer factory.
      */
-    private final transient String xml;
+    public static final TransformerFactory FACTORY =
+        TransformerFactory.newInstance();
+
+    /**
+     * The DOM element.
+     */
+    private final transient Element element;
 
     /**
      * Public ctor.
-     * @param txt The XML in text
+     * @param elm The element
      */
-    public DomParser(final String txt) {
-        if (txt == null) {
-            throw new IllegalArgumentException("NULL instead of XML");
-        }
-        if (txt.charAt(0) != '<') {
-            throw new IllegalArgumentException(
-                Logger.format("Doesn't look like XML: '%s'", txt)
-            );
-        }
-        this.xml = txt;
+    public DomPrinter(final Element elm) {
+        this.element = elm;
     }
 
     /**
-     * Get document of body.
-     * @return The document
+     * {@inheritDoc}
      */
-    public Document document() {
-        Document doc;
+    @Override
+    public String toString() {
+        final StringWriter writer = new StringWriter();
         try {
-            final DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
-            // @checkstyle LineLength (1 line)
-            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-            factory.setNamespaceAware(true);
-            doc = factory
-                .newDocumentBuilder()
-                .parse(IOUtils.toInputStream(this.xml, CharEncoding.UTF_8));
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
-            throw new IllegalStateException(ex);
-        } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalArgumentException(
-                Logger.format("Invalid XML: \"%s\"", this.xml),
-                ex
+            final Transformer transformer = DomPrinter.FACTORY.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(
+                new DOMSource(this.element),
+                new StreamResult(writer)
             );
+        } catch (javax.xml.transform.TransformerConfigurationException ex) {
+            throw new IllegalStateException(ex);
+        } catch (javax.xml.transform.TransformerException ex) {
+            throw new IllegalArgumentException(ex);
         }
-        return doc;
+        return writer.toString();
     }
 
 }

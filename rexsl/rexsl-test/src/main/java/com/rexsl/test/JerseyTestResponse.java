@@ -37,24 +37,16 @@ import com.rexsl.test.assertions.XpathMatcher;
 import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
 import java.net.HttpCookie;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xmlmatchers.namespace.SimpleNamespaceContext;
 
 /**
  * Implementation of {@link TestResponse}.
@@ -86,21 +78,18 @@ final class JerseyTestResponse implements TestResponse {
     private transient ClientResponse iresponse;
 
     /**
-     * The body of response, should be loaded on demand in {@link #body()}.
-     * @see #body()
+     * The body of HTTP response, should be loaded on demand in
+     * {@link #getBody()}.
+     * @see #getBody()
      */
     private transient String body;
 
     /**
-     * Namespace context to use.
+     * The XML document in the body, should be loaded on demand in
+     * {@link #getXml()}.
+     * @see #getXml()
      */
-    private final transient SimpleNamespaceContext context;
-
-    /**
-     * Cached document, in the body.
-     * @see #element()
-     */
-    private transient Element elm;
+    private transient XmlDocument xml;
 
     /**
      * Public ctor.
@@ -108,25 +97,6 @@ final class JerseyTestResponse implements TestResponse {
      */
     public JerseyTestResponse(final JerseyFetcher ftch) {
         this.fetcher = ftch;
-        this.context = XhtmlMatchers.context();
-    }
-
-    /**
-     * Private ctor, for cloning.
-     * @param resp The response
-     * @param text Body
-     * @param element DOM element
-     * @param ctx Namespace context
-     * @checkstyle ParameterNumber (4 lines)
-     */
-    @SuppressWarnings("PMD.NullAssignment")
-    private JerseyTestResponse(final ClientResponse resp, final String text,
-        final Element element, final SimpleNamespaceContext ctx) {
-        this.fetcher = null;
-        this.iresponse = resp;
-        this.body = text;
-        this.elm = element;
-        this.context = ctx;
     }
 
     /**
@@ -160,13 +130,18 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public String getBody() {
-        synchronized (this) {
+        synchronized (this.fetcher) {
             if (this.body == null) {
                 if (this.response().hasEntity()) {
                     this.body = this.response().getEntity(String.class);
                 } else {
                     this.body = "";
                 }
+                Logger.debug(
+                    this,
+                    "#getBody(): HTTP response body:\n%s",
+                    new ClientResponseDecor(this.response(), this.body)
+                );
             }
             return this.body;
         }
@@ -185,19 +160,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public List<String> xpath(final String query) {
-        final NodeList nodes = this.nodelist(query);
-        final List<String> items = new ArrayList<String>();
-        for (int idx = 0; idx < nodes.getLength(); ++idx) {
-            MatcherAssert.assertThat(
-                "Only /text() nodes or attributes are retrievable with xpath()",
-                nodes.item(idx).getNodeType(),
-                Matchers.<Short>either(Matchers.equalTo(Node.TEXT_NODE))
-                    .or(Matchers.equalTo(Node.ATTRIBUTE_NODE))
-                    .or(Matchers.equalTo(Node.CDATA_SECTION_NODE))
-            );
-            items.add(nodes.item(idx).getNodeValue());
-        }
-        return items;
+        return this.getXml().xpath(query);
     }
 
     /**
@@ -264,7 +227,9 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse registerNs(final String prefix, final Object uri) {
-        this.context.withBinding(prefix, uri.toString());
+        synchronized (this.fetcher) {
+            this.xml = this.getXml().registerNs(prefix, uri);
+        }
         return this;
     }
 
@@ -272,26 +237,8 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public List<TestResponse> nodes(final String query) {
-        final NodeList nodes = this.nodelist(query);
-        final List<TestResponse> items = new ArrayList<TestResponse>();
-        for (int idx = 0; idx < nodes.getLength(); ++idx) {
-            MatcherAssert.assertThat(
-                "Only elements are retrievable with nodes()",
-                nodes.item(idx).getNodeType(),
-                Matchers.equalTo(Node.ELEMENT_NODE)
-            );
-            items.add(
-                new JerseyTestResponse(
-                    this.response(),
-                    this.body,
-                    (Element) nodes.item(idx),
-                    this.context
-                )
-            );
-        }
-        return items;
+    public List<XmlDocument> nodes(final String query) {
+        return this.getXml().nodes(query);
     }
 
     /**
@@ -300,7 +247,7 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     @SuppressWarnings("PMD.NullAssignment")
     public TestResponse assertThat(final AssertionPolicy assertion) {
-        synchronized (this) {
+        synchronized (this.fetcher) {
             int attempt = 0;
             while (true) {
                 try {
@@ -324,7 +271,7 @@ final class JerseyTestResponse implements TestResponse {
                     );
                     this.iresponse = null;
                     this.body = null;
-                    this.elm = null;
+                    this.xml = null;
                 }
             }
             return this;
@@ -430,8 +377,8 @@ final class JerseyTestResponse implements TestResponse {
                     StringEscapeUtils.escapeJava(xpath),
                     new ClientResponseDecor(this.response(), this.getBody())
                 ),
-                XhtmlConverter.the(this.element()),
-                XhtmlMatchers.hasXPath(xpath, this.context)
+                this.getXml(),
+                xpath
             )
         );
         return this;
@@ -447,7 +394,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private ClientResponse response() {
-        synchronized (this) {
+        synchronized (this.fetcher) {
             if (this.iresponse == null) {
                 try {
                     this.iresponse = this.fetcher.fetch();
@@ -462,39 +409,16 @@ final class JerseyTestResponse implements TestResponse {
     }
 
     /**
-     * Get document of the body.
-     * @return The document
+     * Get XmlDocument of the body.
+     * @return The XML document
      */
-    private Element element() {
-        synchronized (this) {
-            if (this.elm == null) {
-                this.elm = new DomParser(this.getBody())
-                    .document()
-                    .getDocumentElement();
+    public XmlDocument getXml() {
+        synchronized (this.fetcher) {
+            if (this.xml == null) {
+                this.xml = new SimpleXml(this.getBody());
             }
-            return this.elm;
+            return this.xml;
         }
-    }
-
-    /**
-     * Retrieve and return a nodelist for XPath query.
-     * @param query XPath query
-     * @return List of DOM nodes
-     */
-    private NodeList nodelist(final String query) {
-        NodeList nodes;
-        try {
-            final XPath xpath = XPathFactory.newInstance().newXPath();
-            xpath.setNamespaceContext(this.context);
-            nodes = (NodeList) xpath.evaluate(
-                query,
-                this.element(),
-                XPathConstants.NODESET
-            );
-        } catch (javax.xml.xpath.XPathExpressionException ex) {
-            throw new AssertionError(ex);
-        }
-        return nodes;
     }
 
 }

@@ -27,67 +27,51 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test.assertions;
+package com.rexsl.test;
 
-import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.TestResponse;
-import com.rexsl.test.XmlDocument;
-import org.hamcrest.MatcherAssert;
+import java.util.List;
 
 /**
- * Matches HTTP header against required value.
+ * XML document.
+ *
+ * <p>Set of convenient XML manipulations:
+ *
+ * <pre>
+ * XmlDocument xml = new SimpleXml(content);
+ * for (XmlDocument employee : xml.nodes("//Employee")) {
+ *   String name = employee.xpath("name/text()").get(0);
+ *   // ...
+ * }
+ * </pre>
+ *
+ * <p>Implementation of this interface shall be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @since 0.3.4
+ * @since 0.3.7
  */
-public final class XpathMatcher implements AssertionPolicy {
+public interface XmlDocument {
 
     /**
-     * The message to show.
+     * Find and return nodes matched by xpath.
+     * @param query The XPath query
+     * @return The list of node values (texts)
      */
-    private final transient String message;
+    List<String> xpath(String query);
 
     /**
-     * The source.
+     * Retrieve nodes from the XML response.
+     * @param query The XPath query
+     * @return Collection of responses
      */
-    private final transient XmlDocument xml;
+    List<XmlDocument> nodes(String query);
 
     /**
-     * The matcher to use.
+     * Register additional namespace prefix for XPath.
+     * @param prefix The prefix to register
+     * @param uri Namespace URI
+     * @return This object
      */
-    private final transient String xpath;
-
-    /**
-     * Public ctor.
-     * @param msg The message to show
-     * @param src The source
-     * @param path The XPath to find there
-     */
-    public XpathMatcher(final String msg, final XmlDocument src,
-        final String path) {
-        this.message = msg;
-        this.xml = src;
-        this.xpath = path;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void assertThat(final TestResponse rsp) {
-        MatcherAssert.assertThat(
-            this.message,
-            !this.xml.nodes(this.xpath).isEmpty()
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean again(final int attempt) {
-        return false;
-    }
+    XmlDocument registerNs(String prefix, Object uri);
 
 }
