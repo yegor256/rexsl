@@ -99,8 +99,10 @@ final class ClientResponseDecor implements Formattable {
                 )
             );
         }
-        builder.append(this.EOL)
-            .append(this.INDENT)
+        if (builder.length() > 0) {
+            builder.append(this.EOL);
+        }
+        builder.append(this.INDENT)
             .append(
                 StringUtils.join(
                     this.lines(this.body),
