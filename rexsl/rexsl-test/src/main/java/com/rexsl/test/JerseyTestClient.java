@@ -34,7 +34,6 @@ import com.sun.jersey.api.client.WebResource;
 import com.ymock.util.Logger;
 import java.net.URI;
 import java.net.URLDecoder;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
@@ -186,6 +185,9 @@ final class JerseyTestClient implements TestClient {
             }
         }
         final WebResource.Builder builder = this.resource.getRequestBuilder();
+        for (Header header : this.headers) {
+            builder.header(header.getKey(), header.getValue());
+        }
         final long start = System.nanoTime();
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
@@ -195,7 +197,7 @@ final class JerseyTestClient implements TestClient {
         }
         Logger.debug(
             this,
-            "#%s('%s'): HTTP request body:\n%s%s",
+            "#%s('%s'): HTTP request body:\n%s",
             name,
             this.home.getPath(),
             new RequestDecor(this.headers, body)

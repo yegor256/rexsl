@@ -31,12 +31,10 @@ package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
-import java.util.ArrayList;
 import java.util.Formattable;
 import java.util.Formatter;
 import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -82,7 +80,7 @@ final class ClientResponseDecor implements Formattable {
             builder.append(
                 Logger.format(
                     "%s%s: %s%s",
-                    RequestDecor.INDENT,
+                    RequestDecor.SPACES,
                     header.getKey(),
                     StringUtils.join(header.getValue(), ", "),
                     RequestDecor.EOL
@@ -90,9 +88,9 @@ final class ClientResponseDecor implements Formattable {
             );
         }
         if (builder.length() > 0) {
-            builder.append(this.EOL);
+            builder.append(RequestDecor.EOL);
         }
-        builder.append(RequestDecor.INDENT)
+        builder.append(RequestDecor.SPACES)
             .append(RequestDecor.indent(this.body))
             .append(RequestDecor.EOL);
         formatter.format("%s", builder.toString());

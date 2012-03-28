@@ -29,13 +29,11 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
-import java.util.ArrayList;
 import java.util.Formattable;
 import java.util.Formatter;
+import java.util.LinkedList;
 import java.util.List;
-import javax.ws.rs.core.MultivaluedMap;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -57,7 +55,7 @@ final class RequestDecor implements Formattable {
     /**
      * Indentation.
      */
-    public static final String INDENT = "    ";
+    public static final String SPACES = "    ";
 
     /**
      * The headers.
@@ -71,7 +69,7 @@ final class RequestDecor implements Formattable {
 
     /**
      * Public ctor.
-     * @param hrds The headers
+     * @param hdrs The headers
      * @param text Body text
      */
     public RequestDecor(final List<Header> hdrs, final String text) {
@@ -91,14 +89,14 @@ final class RequestDecor implements Formattable {
             builder.append(
                 Logger.format(
                     "%s%s: %s%s",
-                    RequestDecor.INDENT,
+                    RequestDecor.SPACES,
                     header.getKey(),
                     header.getValue(),
                     RequestDecor.EOL
                 )
             );
         }
-        builder.append(RequestDecor.EOL).append(RequestDecor.INDENT);
+        builder.append(RequestDecor.EOL).append(RequestDecor.SPACES);
         if (this.body.isEmpty()) {
             builder.append("<<empty body>>");
         } else {
@@ -116,7 +114,7 @@ final class RequestDecor implements Formattable {
     public static String indent(final String text) {
         return StringUtils.join(
             RequestDecor.lines(text),
-            Logger.format("%s%s", RequestDecor.EOL, RequestDecor.INDENT)
+            Logger.format("%s%s", RequestDecor.EOL, RequestDecor.SPACES)
         );
     }
 
@@ -126,7 +124,7 @@ final class RequestDecor implements Formattable {
      * @return Lines
      */
     private static List<String> lines(final String text) {
-        final List<String> lines = new ArrayList<String>();
+        final List<String> lines = new LinkedList<String>();
         for (String line : StringUtils.split(text, RequestDecor.EOL)) {
             lines.add(StringEscapeUtils.escapeJava(line));
         }
