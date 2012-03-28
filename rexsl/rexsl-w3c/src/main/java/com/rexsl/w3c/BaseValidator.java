@@ -31,6 +31,7 @@ package com.rexsl.w3c;
 
 import com.rexsl.test.RestTester;
 import com.rexsl.test.TestResponse;
+import com.rexsl.test.XmlDocument;
 import com.ymock.util.Logger;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
@@ -120,7 +121,7 @@ class BaseValidator {
      * @param soap The response
      * @return The validation response just built
      */
-    protected final DefaultValidationResponse build(final TestResponse soap) {
+    protected final DefaultValidationResponse build(final XmlDocument soap) {
         final DefaultValidationResponse resp = new DefaultValidationResponse(
             "true".equals(this.textOf(soap.xpath("//m:validity/text()"))),
             UriBuilder.fromUri(
@@ -129,10 +130,10 @@ class BaseValidator {
             this.textOf(soap.xpath("//m:doctype/text()")),
             this.textOf(soap.xpath("//m:charset/text()"))
         );
-        for (TestResponse node : soap.nodes("//m:error")) {
+        for (XmlDocument node : soap.nodes("//m:error")) {
             resp.addError(this.defect(node));
         }
-        for (TestResponse node : soap.nodes("//m:warning")) {
+        for (XmlDocument node : soap.nodes("//m:warning")) {
             resp.addWarning(this.defect(node));
         }
         return resp;
@@ -168,7 +169,7 @@ class BaseValidator {
      * @param node The node
      * @return The defect
      */
-    private Defect defect(final TestResponse node) {
+    private Defect defect(final XmlDocument node) {
         return new Defect(
             this.intOf(node.xpath("m:line/text()")),
             this.intOf(node.xpath("m:col/text()")),

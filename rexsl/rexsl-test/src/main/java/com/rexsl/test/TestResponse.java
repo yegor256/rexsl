@@ -67,6 +67,7 @@ import org.hamcrest.Matcher;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public interface TestResponse extends XmlDocument {
 
     /**
@@ -112,6 +113,12 @@ public interface TestResponse extends XmlDocument {
      * @return The body
      */
     String getBody();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    TestResponse registerNs(String prefix, Object uri);
 
     /**
      * Fail and report a problem.
