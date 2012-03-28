@@ -40,7 +40,7 @@ import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
 /**
- * Convenient internal implementation of NamespaceContext.
+ * Convenient internal implementation of {@link NamespaceContext}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -62,6 +62,20 @@ final class XPathContext implements NamespaceContext {
         this.map.put("xs", "http://www.w3.org/2001/XMLSchema");
         this.map.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
         this.map.put("xsl", "http://www.w3.org/1999/XSL/Transform");
+    }
+
+    /**
+     * Public ctor with custom namespaces.
+     * @param namespaces List of namespaces
+     */
+    public XPathContext(final Object... namespaces) {
+        this();
+        for (int pos = 0; pos < namespaces.length; ++pos) {
+            this.map.put(
+                Logger.format("ns%d", pos + 1),
+                namespaces[pos].toString()
+            );
+        }
     }
 
     /**
@@ -142,22 +156,6 @@ final class XPathContext implements NamespaceContext {
      */
     public XPathContext add(final String prefix, final Object namespace) {
         return new XPathContext(this.map, prefix, namespace);
-    }
-
-    /**
-     * Context with pre-defined prefixes.
-     * @param namespaces Optional namespaces
-     * @return The context to use later in assertions
-     */
-    public static XPathContext context(final Object... namespaces) {
-        XPathContext ctx = new XPathContext();
-        for (int pos = 0; pos < namespaces.length; ++pos) {
-            ctx = ctx.add(
-                Logger.format("ns%d", pos + 1),
-                namespaces[pos].toString()
-            );
-        }
-        return ctx;
     }
 
 }
