@@ -84,18 +84,14 @@ public final class XPathContextTest {
      */
     @Test
     public void findsPrefixesByNamespace() throws Exception {
-        final String first = "first-prefix";
-        final String second = "second-prefix";
         final String namespace = "simple-short-namespace";
-        final NamespaceContext ctx = new XPathContext()
-            .add(first, namespace)
-            .add(second, namespace);
+        final NamespaceContext ctx = new XPathContext(namespace, namespace);
         MatcherAssert.assertThat(
             IteratorUtils.toList(ctx.getPrefixes(namespace)),
             Matchers.allOf(
                 (Matcher) Matchers.hasSize(2),
-                Matchers.hasItem(first),
-                Matchers.hasItem(second)
+                Matchers.hasItem("ns1"),
+                Matchers.hasItem("ns2")
             )
         );
     }

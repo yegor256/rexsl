@@ -97,7 +97,7 @@ public final class XhtmlMatchersTest {
         );
     }
 
-    @XmlType(name = "foo", namespace = Foo.NAMESPACE)
+    @XmlType(name = "foo", namespace = XhtmlMatchersTest.Foo.NAMESPACE)
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Foo {
         /**

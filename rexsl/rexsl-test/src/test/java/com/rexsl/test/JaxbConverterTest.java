@@ -84,7 +84,7 @@ public final class JaxbConverterTest {
         MatcherAssert.assertThat(
             JaxbConverter.the(employee, JaxbConverterTest.Foo.class),
             XhtmlMatchers.hasXPath(
-                "/employee/ns1:injected/ns1:name",
+                "/employee/injected/ns1:name",
                 Foo.NAMESPACE
             )
         );
@@ -135,7 +135,7 @@ public final class JaxbConverterTest {
         }
     }
 
-    @XmlType(name = "foo", namespace = Foo.NAMESPACE)
+    @XmlType(name = "foo", namespace = JaxbConverterTest.Foo.NAMESPACE)
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Foo {
         /**
@@ -146,7 +146,7 @@ public final class JaxbConverterTest {
          * Simple name.
          * @return The name
          */
-        @XmlElement
+        @XmlElement(namespace = JaxbConverterTest.Foo.NAMESPACE)
         public String getName() {
             return "Foo: \u0443\u0440\u0430";
         }
