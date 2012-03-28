@@ -32,6 +32,7 @@ package com.rexsl.maven;
 import com.rexsl.maven.checks.ChecksProvider;
 import com.ymock.util.Logger;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -67,21 +68,23 @@ public final class CheckMojo extends AbstractRexslMojo {
     @Override
     protected void run() throws MojoFailureException {
         final long start = System.nanoTime();
-        if (this.systemPropertyVariables != null) {
-            this.injectVariables(this.systemPropertyVariables);
-        }
+        final Properties before = this.inject();
         final ChecksProvider provider = new ChecksProvider();
         provider.setTest(this.test);
         final Set<Check> checks = provider.all();
-        for (Check check : checks) {
-            if (!check.validate(this.env())) {
-                throw new MojoFailureException(
-                    Logger.format(
-                        "%s check failed",
-                        check.getClass().getName()
-                    )
-                );
+        try {
+            for (Check check : checks) {
+                if (!check.validate(this.env())) {
+                    throw new MojoFailureException(
+                        Logger.format(
+                            "%s check failed",
+                            check.getClass().getName()
+                        )
+                    );
+                }
             }
+        } finally {
+            this.revert(before);
         }
         Logger.info(
             this,
@@ -91,19 +94,34 @@ public final class CheckMojo extends AbstractRexslMojo {
     }
 
     /**
-     * Inject system property variables.
-     * @param vars The variables to inject
+     * Sets the system properties to the argument passed.
+     * @param properties The properties.
      */
-    private void injectVariables(final Map<String, String> vars) {
-        for (Map.Entry<String, String> var : vars.entrySet()) {
-            System.setProperty(var.getKey(), var.getValue());
-            Logger.info(
-                this,
-                "System variable '%s' set to '%s'",
-                var.getKey(),
-                var.getValue()
-            );
+    private void revert(final Properties properties) {
+        System.setProperties(properties);
+    }
+
+    /**
+     * Injects system property variables and returns the properties as
+     * they are before being modified in the method.
+     * @return The properties before being modified
+     */
+    private Properties inject() {
+        final Properties systemProperties = new Properties();
+        systemProperties.putAll(System.getProperties());
+        if (this.systemPropertyVariables != null) {
+            for (Map.Entry<String, String> var
+                : this.systemPropertyVariables.entrySet()) {
+                System.setProperty(var.getKey(), var.getValue());
+                Logger.info(
+                    this,
+                    "System variable '%s' set to '%s'",
+                    var.getKey(),
+                    var.getValue()
+                );
+            }
         }
+        return systemProperties;
     }
 
 }
