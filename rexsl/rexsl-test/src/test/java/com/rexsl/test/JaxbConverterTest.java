@@ -96,6 +96,19 @@ public final class JaxbConverterTest {
      */
     @Test
     public void convertsNonRootObject() throws Exception {
+        final Object object = new JaxbConverterTest.Bar();
+        MatcherAssert.assertThat(
+            JaxbConverter.the(object),
+            XhtmlMatchers.hasXPath("/bar/name")
+        );
+    }
+
+    /**
+     * JaxbConverter can convert an object without XmlRootElement annotation.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void convertsNonRootObjectWithNamespace() throws Exception {
         final Object object = new JaxbConverterTest.Foo();
         MatcherAssert.assertThat(
             JaxbConverter.the(object),
@@ -149,6 +162,19 @@ public final class JaxbConverterTest {
         @XmlElement(namespace = JaxbConverterTest.Foo.NAMESPACE)
         public String getName() {
             return "Foo: \u0443\u0440\u0430";
+        }
+    }
+
+    @XmlType(name = "bar")
+    @XmlAccessorType(XmlAccessType.NONE)
+    public static final class Bar {
+        /**
+         * Simple name.
+         * @return The name
+         */
+        @XmlElement
+        public String getName() {
+            return "Bar: \u0443\u0440\u0430";
         }
     }
 
