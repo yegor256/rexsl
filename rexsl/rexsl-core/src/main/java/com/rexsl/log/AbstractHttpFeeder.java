@@ -42,13 +42,15 @@ import org.apache.commons.lang.CharEncoding;
 /**
  * Abstract feeder through HTTP POST request.
  *
+ * <p>The class has to be public in order to allow LOG4J to access it.
+ *
  * <p>The class is thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.2
  */
-abstract class AbstractHttpFeeder implements Feeder {
+public abstract class AbstractHttpFeeder implements Feeder {
 
     /**
      * The URL to post to.
