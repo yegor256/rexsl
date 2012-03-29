@@ -153,6 +153,7 @@ public final class JaxbConverter {
      * Get type name, if XmlType annotation is present (exception otherwise).
      * @param obj The object
      * @return Qualified name
+     * @see XmlElement#namespace()
      */
     private static QName qname(final Object obj) {
         final XmlType type = (XmlType) obj.getClass()
@@ -165,7 +166,13 @@ public final class JaxbConverter {
                 )
             );
         }
-        return new QName(type.namespace(), type.name());
+        QName qname;
+        if ("##default".equals(type.namespace())) {
+            qname = new QName(type.name());
+        } else {
+            qname = new QName(type.namespace(), type.name());
+        }
+        return qname;
     }
 
 }
