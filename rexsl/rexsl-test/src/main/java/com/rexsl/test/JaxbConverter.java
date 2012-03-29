@@ -113,7 +113,7 @@ public final class JaxbConverter {
         Object subject = object;
         if (intro.getElementName(object) == null) {
             subject = new JAXBElement(
-                new QName(JaxbConverter.typeName(object)),
+                JaxbConverter.qname(object),
                 object.getClass(),
                 object
             );
@@ -152,9 +152,9 @@ public final class JaxbConverter {
     /**
      * Get type name, if XmlType annotation is present (exception otherwise).
      * @param obj The object
-     * @return Name
+     * @return Qualified name
      */
-    private static String typeName(final Object obj) {
+    private static QName qname(final Object obj) {
         final XmlType type = (XmlType) obj.getClass()
             .getAnnotation(XmlType.class);
         if (type == null) {
@@ -165,7 +165,7 @@ public final class JaxbConverter {
                 )
             );
         }
-        return type.name();
+        return new QName(type.namespace(), type.name());
     }
 
 }

@@ -29,11 +29,9 @@
  */
 package com.rexsl.test;
 
-import com.ymock.util.Logger;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
 import org.hamcrest.Matcher;
-import org.xmlmatchers.namespace.SimpleNamespaceContext;
 import org.xmlmatchers.xpath.HasXPath;
 
 /**
@@ -67,7 +65,7 @@ public final class XhtmlMatchers {
      * @return Matcher suitable for JUnit/Hamcrest matching
      */
     public static Matcher<Source> hasXPath(final String query) {
-        return XhtmlMatchers.hasXPath(query, XhtmlMatchers.context());
+        return XhtmlMatchers.hasXPath(query, new XPathContext());
     }
 
     /**
@@ -90,7 +88,7 @@ public final class XhtmlMatchers {
      */
     public static Matcher<Source> hasXPath(final String query,
         final Object... namespaces) {
-        return XhtmlMatchers.hasXPath(query, XhtmlMatchers.context(namespaces));
+        return XhtmlMatchers.hasXPath(query, new XPathContext(namespaces));
     }
 
     /**
@@ -113,7 +111,7 @@ public final class XhtmlMatchers {
      * @since 0.3
      */
     public static <T> Matcher<T> withXPath(final String query) {
-        return new PlainXpathMatcher<T>(query, XhtmlMatchers.context());
+        return new PlainXpathMatcher<T>(query, new XPathContext());
     }
 
     /**
@@ -127,9 +125,7 @@ public final class XhtmlMatchers {
      */
     public static <T> Matcher<T> withXPath(final String query,
         final Object... namespaces) {
-        return new PlainXpathMatcher<T>(query,
-            XhtmlMatchers.context(namespaces)
-        );
+        return new PlainXpathMatcher<T>(query, new XPathContext(namespaces));
     }
 
     /**
@@ -144,27 +140,6 @@ public final class XhtmlMatchers {
     public static <T> Matcher<T> withXPath(final String query,
         final NamespaceContext ctx) {
         return new PlainXpathMatcher<T>(query, ctx);
-    }
-
-    /**
-     * Context with pre-defined prefixes.
-     * @param namespaces Optional namespaces
-     * @return The context to use later in assertions
-     */
-    @SuppressWarnings("PMD.DefaultPackage")
-    static SimpleNamespaceContext context(final Object... namespaces) {
-        final SimpleNamespaceContext ctx = new SimpleNamespaceContext()
-            .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
-            .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
-            .withBinding("xsi", "http://www.w3.org/2001/XMLSchema-instance")
-            .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
-        for (int pos = 0; pos < namespaces.length; ++pos) {
-            ctx.withBinding(
-                Logger.format("ns%d", pos + 1),
-                namespaces[pos].toString()
-            );
-        }
-        return ctx;
     }
 
 }

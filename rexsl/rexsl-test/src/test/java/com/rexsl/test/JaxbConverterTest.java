@@ -83,7 +83,10 @@ public final class JaxbConverterTest {
         employee.inject(new JaxbConverterTest.Foo());
         MatcherAssert.assertThat(
             JaxbConverter.the(employee, JaxbConverterTest.Foo.class),
-            XhtmlMatchers.hasXPath("/employee/injected/name")
+            XhtmlMatchers.hasXPath(
+                "/employee/injected/ns1:name",
+                Foo.NAMESPACE
+            )
         );
     }
 
@@ -96,7 +99,7 @@ public final class JaxbConverterTest {
         final Object object = new JaxbConverterTest.Foo();
         MatcherAssert.assertThat(
             JaxbConverter.the(object),
-            XhtmlMatchers.hasXPath("/foo/name")
+            XhtmlMatchers.hasXPath("/ns1:foo/ns1:name", Foo.NAMESPACE)
         );
     }
 
@@ -132,14 +135,18 @@ public final class JaxbConverterTest {
         }
     }
 
-    @XmlType(name = "foo")
+    @XmlType(name = "foo", namespace = JaxbConverterTest.Foo.NAMESPACE)
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Foo {
+        /**
+         * XML namespace.
+         */
+        public static final String NAMESPACE = "foo-namespace";
         /**
          * Simple name.
          * @return The name
          */
-        @XmlElement
+        @XmlElement(namespace = JaxbConverterTest.Foo.NAMESPACE)
         public String getName() {
             return "Foo: \u0443\u0440\u0430";
         }
