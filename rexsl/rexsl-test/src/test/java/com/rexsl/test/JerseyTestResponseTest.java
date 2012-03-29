@@ -73,10 +73,12 @@ public final class JerseyTestResponseTest {
     @Test
     public void assertsWithXpath() throws Exception {
         final ClientResponse resp = new ClientResponseMocker()
-            .withEntity("<x><y>\u0443\u0440\u0430!</y></x>")
+            .withEntity("<x a='1'><!-- hi --><y>\u0443\u0440\u0430!</y></x>")
             .mock();
         new JerseyTestResponse(this.fetcher(resp))
             .assertXPath("//y[.='\u0443\u0440\u0430!']")
+            .assertXPath("/x/@a")
+            .assertXPath("/x/comment()")
             .assertXPath("/x/y[contains(.,'\u0430')]");
     }
 

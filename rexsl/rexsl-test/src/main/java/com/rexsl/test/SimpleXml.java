@@ -36,7 +36,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -59,14 +58,14 @@ public final class SimpleXml implements XmlDocument {
     /**
      * Cached document.
      */
-    private final transient Element element;
+    private final transient Node node;
 
     /**
      * Public ctor.
      * @param text Body
      */
     public SimpleXml(final String text) {
-        this.element = new DomParser(text)
+        this.node = new DomParser(text)
             .document()
             .getDocumentElement();
         this.context = new XPathContext();
@@ -74,11 +73,11 @@ public final class SimpleXml implements XmlDocument {
 
     /**
      * Private ctor.
-     * @param elm The element
+     * @param nde The node
      * @param ctx Namespace context
      */
-    private SimpleXml(final Element elm, final XPathContext ctx) {
-        this.element = elm;
+    private SimpleXml(final Node nde, final XPathContext ctx) {
+        this.node = nde;
         this.context = ctx;
     }
 
@@ -107,7 +106,7 @@ public final class SimpleXml implements XmlDocument {
      */
     @Override
     public SimpleXml registerNs(final String prefix, final Object uri) {
-        return new SimpleXml(this.element, this.context.add(prefix, uri));
+        return new SimpleXml(this.node, this.context.add(prefix, uri));
     }
 
     /**
@@ -119,12 +118,7 @@ public final class SimpleXml implements XmlDocument {
         final NodeList nodes = this.nodelist(query);
         final List<XmlDocument> items = new ArrayList<XmlDocument>();
         for (int idx = 0; idx < nodes.getLength(); ++idx) {
-            MatcherAssert.assertThat(
-                "Only elements are retrievable with nodes()",
-                nodes.item(idx).getNodeType(),
-                Matchers.equalTo(Node.ELEMENT_NODE)
-            );
-            items.add(new SimpleXml((Element) nodes.item(idx), this.context));
+            items.add(new SimpleXml(nodes.item(idx), this.context));
         }
         return items;
     }
@@ -141,7 +135,7 @@ public final class SimpleXml implements XmlDocument {
             xpath.setNamespaceContext(this.context);
             nodes = (NodeList) xpath.evaluate(
                 query,
-                this.element,
+                this.node,
                 XPathConstants.NODESET
             );
         } catch (javax.xml.xpath.XPathExpressionException ex) {

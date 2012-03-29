@@ -46,11 +46,11 @@ public interface AssertionPolicy {
      *
      * <p>Validity information about the response should be collected in
      * this method and stored in the object's variable. Later you should use
-     * it in {@link again(int)} in order to inform the caller of whether it
+     * it in {@link #again(int)} in order to inform the caller of whether it
      * should retry the request or not.
      *
      * <p>If the method doesn't throw {@link AssertionError} it means that
-     * everything went fine and {@link again(int)} will never be called.
+     * everything went fine and {@link #again(int)} will never be called.
      *
      * @param response The response to assert
      */
