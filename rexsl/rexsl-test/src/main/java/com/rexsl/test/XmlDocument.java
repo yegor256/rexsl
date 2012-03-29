@@ -53,9 +53,14 @@ import java.util.List;
 public interface XmlDocument {
 
     /**
-     * Find and return nodes matched by xpath.
+     * Find and return text elements or attributes matched by xpath.
+     *
+     * <p>The XPath query should point to text elements or attributes in the
+     * XML document. If any nodes of different types (elements, comments, etc.)
+     * are found in result node list - an {@link AssertionError} will be thrown.
+     *
      * @param query The XPath query
-     * @return The list of node values (texts)
+     * @return The list of string values (texts)
      */
     List<String> xpath(String query);
 
@@ -70,7 +75,7 @@ public interface XmlDocument {
      * Register additional namespace prefix for XPath.
      * @param prefix The prefix to register
      * @param uri Namespace URI
-     * @return This object
+     * @return A new object, with registered namespace
      */
     XmlDocument registerNs(String prefix, Object uri);
 
