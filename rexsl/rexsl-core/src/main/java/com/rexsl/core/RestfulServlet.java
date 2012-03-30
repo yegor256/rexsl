@@ -173,12 +173,15 @@ public final class RestfulServlet extends HttpServlet {
         throws ServletException, IOException {
         final long start = System.nanoTime();
         this.jersey.service(request, response);
+        final long nano = System.nanoTime() - start;
         Logger.debug(
             this,
             "#service(%s): by Jersey in %[nano]s",
             request.getRequestURI(),
-            System.nanoTime() - start
+            nano
         );
+        // @checkstyle MagicNumber (1 line)
+        response.addHeader("Rexsl-Millis", Long.toString(nano / 1000));
     }
 
     /**
