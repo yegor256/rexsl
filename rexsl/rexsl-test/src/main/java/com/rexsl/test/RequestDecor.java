@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.ymock.util.Logger;
+import java.util.Collection;
 import java.util.Formattable;
 import java.util.Formatter;
 import java.util.LinkedList;
@@ -60,7 +61,7 @@ final class RequestDecor implements Formattable {
     /**
      * The headers.
      */
-    private final transient List<Header> headers;
+    private final transient Collection<Header> headers;
 
     /**
      * The body.
@@ -72,7 +73,7 @@ final class RequestDecor implements Formattable {
      * @param hdrs The headers
      * @param text Body text
      */
-    public RequestDecor(final List<Header> hdrs, final String text) {
+    public RequestDecor(final Collection<Header> hdrs, final String text) {
         this.headers = hdrs;
         this.body = text;
     }

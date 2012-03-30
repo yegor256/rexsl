@@ -72,6 +72,11 @@ final class JerseyTestResponse implements TestResponse {
     private final transient JerseyFetcher fetcher;
 
     /**
+     * Decorated request.
+     */
+    private final transient RequestDecor request;
+
+    /**
      * The response, should be initialized on demand in {@link #response()}.
      * @see #response()
      */
@@ -94,9 +99,12 @@ final class JerseyTestResponse implements TestResponse {
     /**
      * Public ctor.
      * @param ftch Response fetcher
+     * @param rqst Decorated request, for logging purposes
      */
-    public JerseyTestResponse(final JerseyFetcher ftch) {
+    public JerseyTestResponse(final JerseyFetcher ftch,
+        final RequestDecor rqst) {
         this.fetcher = ftch;
+        this.request = rqst;
     }
 
     /**
@@ -107,9 +115,10 @@ final class JerseyTestResponse implements TestResponse {
         final List<String> links = this.xpath(query);
         MatcherAssert.assertThat(
             Logger.format(
-                "XPath '%s' not found in:\n%s",
+                "XPath '%s' not found in:\n%s\nHTTP request:\n%s",
                 StringEscapeUtils.escapeJava(query),
-                new ClientResponseDecor(this.response(), this.getBody())
+                new ClientResponseDecor(this.response(), this.getBody()),
+                this.request
             ),
             links,
             Matchers.hasSize(1)
@@ -302,9 +311,10 @@ final class JerseyTestResponse implements TestResponse {
         this.assertThat(
             new StatusMatcher(
                 Logger.format(
-                    "HTTP status code has to be equal to %d in:\n%s",
+                    "HTTP code has to be equal to #%d in:\n%s\nRequest:\n%s",
                     status,
-                    new ClientResponseDecor(this.response(), this.getBody())
+                    new ClientResponseDecor(this.response(), this.getBody()),
+                    this.request
                 ),
                 Matchers.equalTo(status)
             )
@@ -320,8 +330,9 @@ final class JerseyTestResponse implements TestResponse {
         this.assertThat(
             new StatusMatcher(
                 Logger.format(
-                    "HTTP status code has to match:\n%s",
-                    new ClientResponseDecor(this.response(), this.getBody())
+                    "HTTP status code has to match:\n%s\nRequest:\n%s",
+                    new ClientResponseDecor(this.response(), this.getBody()),
+                    this.request
                 ),
                 matcher
             )
@@ -337,9 +348,10 @@ final class JerseyTestResponse implements TestResponse {
         this.assertThat(
             new HeaderMatcher(
                 Logger.format(
-                    "HTTP header '%s' has to match:\n%s",
+                    "HTTP header '%s' has to match:\n%s\nRequest:\n%s",
                     name,
-                    new ClientResponseDecor(this.response(), this.getBody())
+                    new ClientResponseDecor(this.response(), this.getBody()),
+                    this.request
                 ),
                 name,
                 matcher
@@ -356,8 +368,9 @@ final class JerseyTestResponse implements TestResponse {
         this.assertThat(
             new BodyMatcher(
                 Logger.format(
-                    "HTTP response content has to match:\n%s",
-                    new ClientResponseDecor(this.response(), this.getBody())
+                    "HTTP response content has to match:\n%s\nRequest:\n%s",
+                    new ClientResponseDecor(this.response(), this.getBody()),
+                    this.request
                 ),
                 matcher
             )
@@ -373,9 +386,10 @@ final class JerseyTestResponse implements TestResponse {
         this.assertThat(
             new XpathMatcher(
                 Logger.format(
-                    "XPath '%s' has to exist in:\n%s",
+                    "XPath '%s' has to exist in:\n%s\nRequest:\n%s",
                     StringEscapeUtils.escapeJava(xpath),
-                    new ClientResponseDecor(this.response(), this.getBody())
+                    new ClientResponseDecor(this.response(), this.getBody()),
+                    this.request
                 ),
                 this.getXml(),
                 xpath

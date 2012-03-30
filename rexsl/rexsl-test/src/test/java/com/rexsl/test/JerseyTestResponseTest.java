@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import javax.ws.rs.core.HttpHeaders;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -46,6 +47,12 @@ import org.mockito.Mockito;
 public final class JerseyTestResponseTest {
 
     /**
+     * The request decor.
+     */
+    private final transient RequestDecor decor =
+        new RequestDecor(new ArrayList<Header>(), "HTTP request body");
+
+    /**
      * TestResponse can find nodes with XPath.
      * @throws Exception If something goes wrong inside
      */
@@ -55,7 +62,7 @@ public final class JerseyTestResponseTest {
             .withEntity("<r><a>\u0443\u0440\u0430!</a><a>B</a></r>")
             .mock();
         final TestResponse response =
-            new JerseyTestResponse(this.fetcher(resp));
+            new JerseyTestResponse(this.fetcher(resp), this.decor);
         MatcherAssert.assertThat(
             response.xpath("//a/text()"),
             Matchers.hasSize(2)
@@ -75,7 +82,7 @@ public final class JerseyTestResponseTest {
         final ClientResponse resp = new ClientResponseMocker()
             .withEntity("<x a='1'><!-- hi --><y>\u0443\u0440\u0430!</y></x>")
             .mock();
-        new JerseyTestResponse(this.fetcher(resp))
+        new JerseyTestResponse(this.fetcher(resp), this.decor)
             .assertXPath("//y[.='\u0443\u0440\u0430!']")
             .assertXPath("/x/@a")
             .assertXPath("/x/comment()")
@@ -92,7 +99,7 @@ public final class JerseyTestResponseTest {
             // @checkstyle LineLength (1 line)
             .withEntity("<html xmlns='http://www.w3.org/1999/xhtml'><div>\u0443\u0440\u0430!</div></html>")
             .mock();
-        new JerseyTestResponse(this.fetcher(resp))
+        new JerseyTestResponse(this.fetcher(resp), this.decor)
             .assertXPath("/xhtml:html/xhtml:div")
             .assertXPath("//xhtml:div[.='\u0443\u0440\u0430!']");
     }
@@ -106,9 +113,9 @@ public final class JerseyTestResponseTest {
         final ClientResponse resp = new ClientResponseMocker()
             .withEntity("<a xmlns='urn:foo'><b>yes!</b></a>")
             .mock();
-        final TestResponse response = new JerseyTestResponse(this.fetcher(resp))
-            .registerNs("foo", "urn:foo")
-            .assertXPath("/foo:a/foo:b[.='yes!']");
+        final TestResponse response = new JerseyTestResponse(
+            this.fetcher(resp), this.decor
+        ).registerNs("foo", "urn:foo").assertXPath("/foo:a/foo:b[.='yes!']");
         MatcherAssert.assertThat(
             response.xpath("//foo:b/text()").get(0),
             Matchers.equalTo("yes!")
@@ -125,7 +132,7 @@ public final class JerseyTestResponseTest {
             .withEntity("<root><a><x>1</x></a><a><x>2</x></a></root>")
             .mock();
         final TestResponse response =
-            new JerseyTestResponse(this.fetcher(resp));
+            new JerseyTestResponse(this.fetcher(resp), this.decor);
         MatcherAssert.assertThat(
             response.nodes("//a"),
             Matchers.hasSize(2)
@@ -142,8 +149,9 @@ public final class JerseyTestResponseTest {
      */
     @Test(expected = AssertionError.class)
     public void failsOnDemand() throws Exception {
-        new JerseyTestResponse(this.fetcher(new ClientResponseMocker().mock()))
-            .fail("some reason");
+        new JerseyTestResponse(
+            this.fetcher(new ClientResponseMocker().mock()), this.decor
+        ).fail("some reason");
     }
 
     /**
@@ -152,8 +160,9 @@ public final class JerseyTestResponseTest {
      */
     @Test(expected = AssertionError.class)
     public void assertsHttpStatusCode() throws Exception {
-        new JerseyTestResponse(this.fetcher(new ClientResponseMocker().mock()))
-            .assertStatus(HttpURLConnection.HTTP_NOT_FOUND);
+        new JerseyTestResponse(
+            this.fetcher(new ClientResponseMocker().mock()), this.decor
+        ).assertStatus(HttpURLConnection.HTTP_NOT_FOUND);
     }
 
     /**
@@ -165,7 +174,7 @@ public final class JerseyTestResponseTest {
         final JerseyFetcher fetcher = Mockito.mock(JerseyFetcher.class);
         Mockito.doReturn(new ClientResponseMocker().mock())
             .when(fetcher).fetch();
-        new JerseyTestResponse(fetcher).assertThat(
+        new JerseyTestResponse(fetcher, this.decor).assertThat(
             new AssertionPolicy() {
                 private transient int num;
                 @Override
@@ -199,7 +208,7 @@ public final class JerseyTestResponseTest {
             )
             .mock();
         final TestResponse response =
-            new JerseyTestResponse(this.fetcher(resp));
+            new JerseyTestResponse(this.fetcher(resp), this.decor);
         MatcherAssert.assertThat(
             response.cookie("cookie1"),
             Matchers.allOf(
