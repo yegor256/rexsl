@@ -72,6 +72,27 @@ final class JerseyTestClient implements TestClient {
     public JerseyTestClient(final WebResource res) {
         this.resource = res;
         this.home = res.getURI();
+        final String info = this.home.getUserInfo();
+        if (info != null) {
+            final String[] parts = info.split(":", 2);
+            try {
+                this.header(
+                    HttpHeaders.AUTHORIZATION,
+                    Logger.format(
+                        "Basic %s",
+                        Base64.encodeBase64String(
+                            Logger.format(
+                                "%s:%s",
+                                URLDecoder.decode(parts[0], CharEncoding.UTF_8),
+                                URLDecoder.decode(parts[1], CharEncoding.UTF_8)
+                            ).getBytes()
+                        )
+                    )
+                );
+            } catch (java.io.UnsupportedEncodingException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
     }
 
     /**
@@ -118,7 +139,8 @@ final class JerseyTestClient implements TestClient {
                     return JerseyTestClient.this
                         .method(RestTester.GET, "", desc);
                 }
-            }
+            },
+            new RequestDecor(this.headers, "")
         );
     }
 
@@ -127,14 +149,16 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse post(final String desc, final Object body) {
+        final String content = body.toString();
         return new JerseyTestResponse(
             new JerseyFetcher() {
                 @Override
                 public ClientResponse fetch() {
                     return JerseyTestClient.this
-                        .method(RestTester.POST, body.toString(), desc);
+                        .method(RestTester.POST, content, desc);
                 }
-            }
+            },
+            new RequestDecor(this.headers, content)
         );
     }
 
@@ -143,14 +167,16 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse put(final String desc, final Object body) {
+        final String content = body.toString();
         return new JerseyTestResponse(
             new JerseyFetcher() {
                 @Override
                 public ClientResponse fetch() {
                     return JerseyTestClient.this
-                        .method(RestTester.PUT, body.toString(), desc);
+                        .method(RestTester.PUT, content, desc);
                 }
-            }
+            },
+            new RequestDecor(this.headers, content)
         );
     }
 
@@ -163,27 +189,6 @@ final class JerseyTestClient implements TestClient {
      */
     private ClientResponse method(final String name, final String body,
         final String desc) {
-        final String info = this.home.getUserInfo();
-        if (info != null) {
-            final String[] parts = info.split(":", 2);
-            try {
-                this.header(
-                    HttpHeaders.AUTHORIZATION,
-                    Logger.format(
-                        "Basic %s",
-                        Base64.encodeBase64String(
-                            Logger.format(
-                                "%s:%s",
-                                URLDecoder.decode(parts[0], CharEncoding.UTF_8),
-                                URLDecoder.decode(parts[1], CharEncoding.UTF_8)
-                            ).getBytes()
-                        )
-                    )
-                );
-            } catch (java.io.UnsupportedEncodingException ex) {
-                throw new IllegalStateException(ex);
-            }
-        }
         final WebResource.Builder builder = this.resource.getRequestBuilder();
         for (Header header : this.headers) {
             builder.header(header.getKey(), header.getValue());
