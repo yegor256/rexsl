@@ -181,9 +181,20 @@ class BaseValidator {
     }
 
     /**
-     * Get text from list of strings.
+     * Get text from list of strings, returned by
+     * {@link XmlDocument#xpath(String)}.
+     *
+     * <p>This method is required to simplify manipulations with XPath returned
+     * list of strings (returned by {@link TestResponse#xpath(String)} above).
+     * The list of strings normally (!) contains one element or no elements. If
+     * there are no elements it means that the XPath is not found in the
+     * document. In this case we should return an empty string. If any elements
+     * are found - we're interested only in the first one. All others are
+     * ignored, because simply should not exist (if our XPath query is correct).
+     *
      * @param lines The lines to work with
      * @return The value
+     * @see #intOf(List)
      */
     private String textOf(final List<String> lines) {
         String text;
@@ -197,8 +208,12 @@ class BaseValidator {
 
     /**
      * Get text from list of strings.
+     *
+     * <p>See explanation of {@link #textOf(List)}.
+     *
      * @param lines The lines to work with
      * @return The value
+     * @see #textOf(List)
      */
     private int intOf(final List<String> lines) {
         int value;
