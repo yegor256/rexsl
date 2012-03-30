@@ -29,7 +29,8 @@
  */
 package com.rexsl.maven;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import org.apache.maven.plugin.logging.Log;
 import org.mockito.Mockito;
@@ -52,7 +53,7 @@ public final class LogMocker {
     /**
      * Lines recorded.
      */
-    private final transient List<String> messages = new ArrayList<String>();
+    private final transient List<String> messages = new LinkedList<String>();
 
     /**
      * Public ctor.
@@ -86,7 +87,7 @@ public final class LogMocker {
      * @return The messages
      */
     public List<String> getMessages() {
-        return this.messages;
+        return Collections.unmodifiableList(this.messages);
     }
 
 }

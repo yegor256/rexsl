@@ -30,18 +30,21 @@
 package com.rexsl.maven.utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Contains methods to find and sort files.
+ * Convenient finder of files by extension in a given directory.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: FileFinder.java 464 2011-12-12 09:30:18Z guard $
  */
 public final class FileFinder {
@@ -52,14 +55,14 @@ public final class FileFinder {
     private final transient String extension;
 
     /**
-     * Directory, containing scripts.
+     * Directory.
      */
     private final transient File directory;
 
     /**
-     * Creates new instance of <code>FileFinder</code>.
-     * @param dir Directory, containing scripts.
-     * @param ext File extension.
+     * Public ctor.
+     * @param dir Directory, containing files
+     * @param ext File extension to search for
      */
     public FileFinder(final File dir, final String ext) {
         this.directory = dir;
@@ -67,33 +70,33 @@ public final class FileFinder {
     }
 
     /**
-     * Fetches scripts from the input directory.
-     * @return Collection of scripts.
+     * Returns {@link SortedSet} of files in an alphabetical order.
+     * @return Set of files
      */
-    private Collection<File> fetch() {
-        final String[] extensions = new String[]{this.extension};
-        return FileUtils.listFiles(
-            this.directory,
-            extensions,
-            true);
+    public SortedSet<File> ordered() {
+        return new TreeSet<File>(this.fetch());
     }
 
     /**
-     * Returns <code>Set</code> of scripts in the alphabetical order.
-     * @return Set of scripts in the alphabetical order.
-     */
-    public Set<File> ordered() {
-        final Collection<File> scripts = this.fetch();
-        return new TreeSet<File>(scripts);
-    }
-
-    /**
-     * Returns <code>Set</code> of scripts in the random order.
-     * @return Set of scripts in the random order.
+     * Returns {@link Set} of files in a random order.
+     * @return Set of files
      */
     public Set<File> random() {
-        final List<File> scripts = (List<File>) this.fetch();
+        final List<File> scripts = new ArrayList<File>(this.fetch());
         Collections.shuffle(scripts);
         return new LinkedHashSet<File>(scripts);
     }
+
+    /**
+     * Fetches files from the directory.
+     * @return Collection of file found
+     */
+    private Collection<File> fetch() {
+        return FileUtils.listFiles(
+            this.directory,
+            new String[] {this.extension},
+            true
+        );
+    }
+
 }

@@ -58,8 +58,7 @@ import javax.mail.internet.MimeMultipart;
  * @since 0.3.6
  */
 @SuppressWarnings("PMD.DoNotUseThreads")
-public final class SmtpBulkNotifier extends AbstractSmtpNotifier
-    implements Runnable {
+public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
 
     /**
      * Maximum allowed interval in minutes.
@@ -85,7 +84,12 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
         super(props);
         final long interval = this.interval();
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
-            this,
+            new Runnable() {
+                @Override
+                public void run() {
+                    SmtpBulkNotifier.this.background();
+                }
+            },
             0L,
             interval,
             TimeUnit.MINUTES
@@ -108,10 +112,9 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier
     }
 
     /**
-     * {@inheritDoc}
+     * Run this on background and send emails.
      */
-    @Override
-    public void run() {
+    private void background() {
         synchronized (this) {
             if (!this.defects.isEmpty()) {
                 try {

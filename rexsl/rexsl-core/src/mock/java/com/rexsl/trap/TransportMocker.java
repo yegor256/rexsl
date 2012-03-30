@@ -51,7 +51,7 @@ public final class TransportMocker extends Transport {
     public TransportMocker(final Session session, final URLName name) {
         super(session, name);
         Logger.info(
-            this,
+            TransportMocker.class,
             "#TransportMocker('%[type]s', '%s'): instantiated",
             session,
             name
