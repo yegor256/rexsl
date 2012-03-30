@@ -37,6 +37,10 @@ import java.util.regex.Pattern;
 /**
  * User-agent HTTP header wrapper.
  *
+ * <p>This class is instantiated in {@link PageAnalyzer#needsTransformation()}
+ * method, using the value of {@code User-Agent} HTTP header. If such a header
+ * doesn't exist in the request - {@code NULL} value will be used instead.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see <a href="http://tools.ietf.org/html/rfc2616#section-14.43">RFC-2616</a>
@@ -44,7 +48,7 @@ import java.util.regex.Pattern;
 final class UserAgent {
 
     /**
-     * List of tokens found.
+     * List of tokens found in {@code User-Agent} HTTP header.
      */
     @SuppressWarnings("PMD.UseConcurrentHashMap")
     private final transient Map<String, ProductVersion> tokens =
@@ -52,7 +56,17 @@ final class UserAgent {
 
     /**
      * Public ctor.
-     * @param text The text of HTTP header
+     *
+     * <p>The class can be instantiated with a text value of {@code User-Agent}
+     * HTTP header or {@code NULL}. If {@code NULL} is provided we just ignore
+     * it and assume that the header is empty (user agent is not specified).
+     * Such a mechanism is required for a unification of user agent
+     * manipulations in {@link PageAnalyzer}. That class should have an instance
+     * of {@link UserAgent} no matter what. That's why we accept
+     * {@code NULL} here.
+     *
+     * @param text The text of HTTP header or {@code NULL} if such
+     *  a header is absent in the HTTP request
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public UserAgent(final String text) {
