@@ -63,6 +63,13 @@ public final class CheckMojo extends AbstractRexslMojo {
     private transient String test = ".*";
 
     /**
+     * Check to perform.
+     * @parameter expression="${rexsl.check}"
+     */
+    @SuppressWarnings("PMD.ImmutableField")
+    private transient String check;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -71,14 +78,15 @@ public final class CheckMojo extends AbstractRexslMojo {
         final Properties before = this.inject();
         final ChecksProvider provider = new ChecksProvider();
         provider.setTest(this.test);
+        provider.setCheck(this.check);
         final Set<Check> checks = provider.all();
         try {
-            for (Check check : checks) {
-                if (!check.validate(this.env())) {
+            for (Check chck : checks) {
+                if (!chck.validate(this.env())) {
                     throw new MojoFailureException(
                         Logger.format(
                             "%s check failed",
-                            check.getClass().getName()
+                            chck.getClass().getName()
                         )
                     );
                 }

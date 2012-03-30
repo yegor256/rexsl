@@ -48,6 +48,11 @@ public final class ChecksProvider {
     private transient String test;
 
     /**
+     * Check to perform.
+     */
+    private transient Class<? extends Check> check;
+
+    /**
      * Get full collection of checks.
      *
      * <p>Checks should be ordered by their complexity. Most simple and fast
@@ -58,16 +63,31 @@ public final class ChecksProvider {
      */
     public Set<Check> all() {
         final Set<Check> checks = new LinkedHashSet<Check>();
-        checks.add(new BinaryFilesCheck());
-        checks.add(new JigsawCssCheck());
-        checks.add(new JSStaticCheck());
-        checks.add(new FilesStructureCheck());
-        checks.add(new WebXmlCheck());
-        checks.add(new RexslFilesCheck());
-        checks.add(new XhtmlOutputCheck(this.test));
-        checks.add(new InContainerScriptsCheck(this.test));
-        checks.add(new JSUnitTestsCheck());
+        this.addCheck(checks, new BinaryFilesCheck());
+        this.addCheck(checks, new JigsawCssCheck());
+        this.addCheck(checks, new JSStaticCheck());
+        this.addCheck(checks, new FilesStructureCheck());
+        this.addCheck(checks, new WebXmlCheck());
+        this.addCheck(checks, new RexslFilesCheck());
+        this.addCheck(checks, new XhtmlOutputCheck(this.test));
+        this.addCheck(checks, new InContainerScriptsCheck(this.test));
+        this.addCheck(checks, new JSUnitTestsCheck());
         return checks;
+    }
+
+    /**
+     * Adds a Check object to the Check set. If the check variable is not
+     * null it will only add the check if it pertains to that class.
+     *
+     * @param checks The set of checks.
+     * @param chck The check to be added.
+     */
+    private void addCheck(final Set<Check> checks, final Check chck) {
+        if (this.check == null) {
+            checks.add(chck);
+        } else if (chck.getClass().equals(this.check)) {
+            checks.add(chck);
+        }
     }
 
     /**
@@ -77,4 +97,21 @@ public final class ChecksProvider {
     public void setTest(final String scope) {
         this.test = scope;
     }
+
+    /**
+     * Sets the scope of tests to execute.
+     * @param chck Name of the check class of the check to perform.
+     */
+    public void setCheck(final String chck) {
+        if (chck != null) {
+            try {
+                this.check = (Class<? extends Check>) Class.forName(
+                    String.format("com.rexsl.maven.checks.%s", chck)
+                );
+            } catch (ClassNotFoundException cnfe) {
+                throw new IllegalArgumentException(cnfe);
+            }
+        }
+    }
+
 }

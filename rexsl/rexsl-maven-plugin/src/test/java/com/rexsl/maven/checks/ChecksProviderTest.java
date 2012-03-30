@@ -63,4 +63,22 @@ public final class ChecksProviderTest {
         MatcherAssert.assertThat(checks.size(), Matchers.greaterThan(0));
     }
 
+    /**
+     * ChecksProvider can provide a set of checks.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void retrievesSpecifiedCheck() throws Exception {
+        final ChecksProvider checksProvider = new ChecksProvider();
+        final String sCheck = "JigsawCssCheck";
+        checksProvider.setCheck(sCheck);
+        final Set<Check> checks = checksProvider.all();
+        MatcherAssert.assertThat(checks, Matchers.notNullValue());
+        MatcherAssert.assertThat(checks.size(), Matchers.is(1));
+        MatcherAssert.assertThat(
+            checks.iterator().next().getClass().getSimpleName(),
+            Matchers.is(sCheck)
+        );
+    }
+
 }
