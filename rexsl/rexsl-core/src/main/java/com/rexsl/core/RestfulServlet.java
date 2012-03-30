@@ -120,33 +120,32 @@ public final class RestfulServlet extends HttpServlet {
                     this.PACKAGES
                 )
             );
-        } else {
-            for (String pkg : StringUtils.split(param, this.COMMA)) {
-                if (packages.contains(pkg)) {
-                    continue;
-                }
-                final Pattern ptrn = Pattern.compile(
-                    "^([a-z_]{1}[a-z0-9_]*(\\.[a-z_]{1}[a-z0-9_]*)*)$"
-                );
-                final Matcher match = ptrn.matcher(pkg);
-                if (!match.matches()) {
-                    throw new IllegalArgumentException(
-                        Logger.format(
-                            // @checkstyle LineLength (1 line)
-                            "'%s' servlet parameter contains non-valid data: %s",
-                            this.PACKAGES,
-                            pkg
-                        )
-                    );
-                }
-                packages.add(pkg);
-                Logger.info(
-                    this,
-                    "#init(): '%s' package added (%d total)",
-                    pkg,
-                    packages.size()
+        }
+        for (String pkg : StringUtils.split(param, this.COMMA)) {
+            if (packages.contains(pkg)) {
+                continue;
+            }
+            final Pattern ptrn = Pattern.compile(
+                "^([a-z_]{1}[a-z0-9_]*(\\.[a-z_]{1}[a-z0-9_]*)*)$"
+            );
+            final Matcher match = ptrn.matcher(pkg);
+            if (!match.matches()) {
+                throw new IllegalArgumentException(
+                    Logger.format(
+                        // @checkstyle LineLength (1 line)
+                        "'%s' servlet parameter contains non-valid data: %s",
+                        this.PACKAGES,
+                        pkg
+                    )
                 );
             }
+            packages.add(pkg);
+            Logger.info(
+                this,
+                "#init(): '%s' package added (%d total)",
+                pkg,
+                packages.size()
+            );
         }
         final Properties props = new Properties();
         props.setProperty(
