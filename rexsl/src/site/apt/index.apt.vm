@@ -92,3 +92,4 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
   ticket to {{{http://trac.rexsl.com/rexsl}our Trac}} when something
   doesn't work or you need more features.
 
+  Currently deployed revision: <<<${buildNumber}>>>
