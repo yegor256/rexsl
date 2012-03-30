@@ -402,7 +402,6 @@ public final class Manifests {
      * @see #load()
      */
     private static Set<URL> urls() {
-        final Set<URL> urls = new HashSet<URL>();
         Enumeration<URL> resources;
         try {
             resources = Thread.currentThread().getContextClassLoader()
@@ -410,6 +409,7 @@ public final class Manifests {
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
+        final Set<URL> urls = new HashSet<URL>();
         while (resources.hasMoreElements()) {
             urls.add(resources.nextElement());
         }
