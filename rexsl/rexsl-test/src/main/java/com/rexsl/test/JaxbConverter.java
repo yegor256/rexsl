@@ -43,8 +43,7 @@ import javax.xml.transform.Source;
  * JAXB-empowered object to XML converting utility.
  *
  * <p>The object has to be annotated with JAXB annotations
- * in order to be convertable.
- * Let's consider an example JAXB-annotated class:
+ * in order to be convertable. Let's consider an example JAXB-annotated class:
  *
  * <pre>
  * import javax.xml.bind.annotation.XmlAccessType;
@@ -95,6 +94,15 @@ public final class JaxbConverter {
 
     /**
      * Convert an object to XML.
+     *
+     * <p>The method will throw {@link AssertionError} if marshalling of
+     * provided object fails for some reason.
+     *
+     * <p>The name of the method is motivated by
+     * <a href="http://code.google.com/p/xml-matchers/">xmlatchers</a> project
+     * and their {@code XmlMatchers.the(String)} method. Looks like this name
+     * is short enough and convenient for unit tests.
+     *
      * @param object The object to convert
      * @param deps Dependencies that we should take into account
      * @return DOM source/document
@@ -123,7 +131,7 @@ public final class JaxbConverter {
         try {
             mrsh.marshal(subject, writer);
         } catch (javax.xml.bind.JAXBException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new AssertionError(ex);
         }
         final String xml = writer.toString();
         return new StringSource(xml);
@@ -159,7 +167,7 @@ public final class JaxbConverter {
         final XmlType type = (XmlType) obj.getClass()
             .getAnnotation(XmlType.class);
         if (type == null) {
-            throw new IllegalArgumentException(
+            throw new AssertionError(
                 Logger.format(
                     "XmlType annotation is absent at %[type]s",
                     obj
