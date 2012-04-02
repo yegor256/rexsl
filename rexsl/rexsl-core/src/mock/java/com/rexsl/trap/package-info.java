@@ -27,42 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.log;
 
 /**
- * Feeder to console.
- *
- * <p>The class is thread-safe.
+ * Exception trap, experimental implementation, mockers.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @since 0.3.2
+ * @since 0.3.6
  */
-public final class ConsoleFeeder implements Feeder {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return "Console Feeder";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("PMD.SystemPrintln")
-    public void feed(final String text) {
-        System.out.print(text);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void activateOptions() {
-        // intentionally empty
-    }
-
-}
+package com.rexsl.trap;

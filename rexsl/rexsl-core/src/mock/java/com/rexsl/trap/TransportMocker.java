@@ -47,6 +47,8 @@ public final class TransportMocker extends Transport {
 
     /**
      * Public ctor.
+     * @param session The session
+     * @param name Name of destination
      */
     public TransportMocker(final Session session, final URLName name) {
         super(session, name);
@@ -84,6 +86,7 @@ public final class TransportMocker extends Transport {
 
     /**
      * {@inheritDoc}
+     * @checkstyle ParameterNumber (4 lines)
      */
     @Override
     public void connect(final String host, final int port, final String user,

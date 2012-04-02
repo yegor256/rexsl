@@ -134,8 +134,6 @@ public final class CloudAppenderTest {
     public void outputMessageWhenQueueIsFull() throws Exception {
         final CloudAppender appender = new CloudAppender();
         appender.setLayout(new SimpleLayout());
-        //set the size of the queue to a smaller value for easier testing
-        //of full queue
         final Field messagesField =
             CloudAppender.class.getDeclaredField("messages");
         messagesField.setAccessible(true);
@@ -152,8 +150,6 @@ public final class CloudAppenderTest {
             "some text to log",
             new IllegalArgumentException()
         );
-        //it will insert the first 500 and fail attempting the
-        //last element's insertion
         int index = 0;
         while (index <= numElements) {
             appender.append(event);

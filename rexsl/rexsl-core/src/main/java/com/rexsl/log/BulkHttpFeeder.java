@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  * Bulk feeder through HTTP POST request.
  *
  * <p>The feeder sends POST HTTP requests every X seconds (as configured
- * with {@link setPeriod(int)}).
+ * with {@link #setPeriod(long)}).
  *
  * <p>The class is thread-safe.
  *
