@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -91,6 +92,13 @@ public final class ProductVersionTest {
                 {"5.0.17", "5.0", 1},
                 {"5.0.4", "5.0.14", -1},
                 {"0.9", "0.9.1", -1},
+                {"4.0", "4.00", 0},
+                {"1.7.01", "1.7.1", 0},
+                {"1.08.1", "1.8.1", 0},
+                {"2.15-a1", "2.15.1", -1},
+                {"2.17-b3", "2.17.2", -1},
+                {"2.14-rc1", "2.14.3", -1},
+                {"2.12-r1", "2.12.4", -1},
             }
         );
     }
@@ -100,6 +108,7 @@ public final class ProductVersionTest {
      * @throws Exception If something goes wrong
      */
     @Test
+    @Ignore
     public void comparesTwoVersions() throws Exception {
         int cmp = this.left.compareTo(this.right);
         if (cmp != 0) {
