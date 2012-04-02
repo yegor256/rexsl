@@ -123,7 +123,11 @@ final class JSUnitTestsCheck implements Check {
                 )
             );
             engine.put("base", base.getAbsolutePath());
-            engine.eval(reader);
+            try {
+                engine.eval(reader);
+            } finally {
+                reader.close();
+            }
             final Invocable invocable = (Invocable) engine;
             final Object res = invocable.invokeFunction(
                 "runTest",
