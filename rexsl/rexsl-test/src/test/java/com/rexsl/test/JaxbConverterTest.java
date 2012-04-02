@@ -116,6 +116,9 @@ public final class JaxbConverterTest {
         );
     }
 
+    /**
+     * Dummy test object.
+     */
     @XmlRootElement(name = "employee")
     @XmlAccessorType(XmlAccessType.NONE)
     private static final class Employee {
@@ -148,6 +151,9 @@ public final class JaxbConverterTest {
         }
     }
 
+    /**
+     * Dummy test object.
+     */
     @XmlType(name = "foo", namespace = JaxbConverterTest.Foo.NAMESPACE)
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Foo {
@@ -165,6 +171,9 @@ public final class JaxbConverterTest {
         }
     }
 
+    /**
+     * Dummy test object.
+     */
     @XmlType(name = "bar")
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Bar {

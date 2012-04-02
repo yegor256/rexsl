@@ -73,7 +73,8 @@ public final class StringSourceTest {
             "<?some instruction?>",
             "<!--comment-->",
             "<a>withText</a>",
-            "value");
+            "value"
+        );
         final Node node = builder.parse(
             new ByteArrayInputStream(xmlString.getBytes())
         );
