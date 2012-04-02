@@ -62,7 +62,7 @@ public final class ConsoleFeeder implements Feeder {
      */
     @Override
     public void activateOptions() {
-        // empty
+        // intentionally empty
     }
 
 }

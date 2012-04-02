@@ -48,49 +48,52 @@ import org.hamcrest.MatcherAssert;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
 
     /**
      * Body matcher.
      */
-    private Matcher<String> bodyMatcher;
+    private transient Matcher<String> bodyMatcher;
 
     /**
      * Method matcher.
      */
-    private Matcher<String> methodMatcher;
+    private transient Matcher<String> methodMatcher;
 
     /**
      * Request URI matcher.
      */
-    private Matcher<String> requestUriMatcher;
+    private transient Matcher<String> requestUriMatcher;
 
     /**
      * Param matchers.
+     * @checkstyle LineLength (2 lines)
      */
-    private ConcurrentMap<String, Matcher<String>> paramMatchers =
+    private final transient ConcurrentMap<String, Matcher<String>> paramMatchers =
         new ConcurrentHashMap<String, Matcher<String>>();
 
     /**
      * Header matchers.
+     * @checkstyle LineLength (2 lines)
      */
-    private ConcurrentMap<String, Matcher<String>> headerMatchers =
+    private final transient ConcurrentMap<String, Matcher<String>> headerMatchers =
         new ConcurrentHashMap<String, Matcher<String>>();
 
     /**
      * Content to return.
      */
-    private String body = "";
+    private transient String body = "";
 
     /**
      * Status to return.
      */
-    private int status = HttpURLConnection.HTTP_OK;
+    private transient int status = HttpURLConnection.HTTP_OK;
 
     /**
      * Headers to return.
      */
-    private final ConcurrentMap<String, String> headers =
+    private final transient ConcurrentMap<String, String> headers =
         new ConcurrentHashMap<String, String>();
 
     /**
@@ -102,11 +105,11 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         String input = null;
         try {
             input = IOUtils.toString(request.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            throw new IllegalStateException(ex);
         }
         this.assertMethod(request, input);
-        this.assertRequestUri(request, input);
+        this.assertRequestUri(request);
         this.assertParams(request, input);
         this.assertBody(request, input);
         this.assertHeaders(request, input);
@@ -194,15 +197,15 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
 
     /**
      * Check if adapter has body matcher.
-     * @return true if adapter has body matcher
+     * @return True if adapter has body matcher
      */
     public boolean hasBodyMatcher() {
-        return this.bodyMatcher!=null;
+        return this.bodyMatcher != null;
     }
 
     /**
      * Check if adapter has at least one parameter matcher.
-     * @return true if adapter has parameter matcher
+     * @return True if adapter has parameter matcher
      */
     public boolean hasParamMatcher() {
         return !this.paramMatchers.isEmpty();
@@ -211,10 +214,8 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     /**
      * Make assertions about request URI.
      * @param request The HTTP grizzly request
-     * @param input Incoming stream of data
      */
-    private void assertRequestUri(final GrizzlyRequest request,
-        final String input) {
+    private void assertRequestUri(final GrizzlyRequest request) {
         if (this.requestUriMatcher != null) {
             MatcherAssert.assertThat(
                 "Request-URI matches provided matcher",
@@ -316,8 +317,10 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      */
     private String asText(final GrizzlyRequest request, final String input) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(request.getMethod()).append(" ")
-            .append(request.getRequestURI()).append(" ")
+        builder.append(request.getMethod())
+            .append(" ")
+            .append(request.getRequestURI())
+            .append("  ")
             .append(request.getProtocol())
             .append("\n");
         for (Object name : Collections.list(request.getHeaderNames())) {

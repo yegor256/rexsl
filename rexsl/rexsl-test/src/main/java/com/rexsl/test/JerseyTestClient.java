@@ -108,7 +108,7 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestClient header(final String name, final Object value) {
-        synchronized (this) {
+        synchronized (this.headers) {
             boolean exists = false;
             for (Header header : this.headers) {
                 if (header.getKey().equals(name)

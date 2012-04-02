@@ -110,18 +110,7 @@ public final class XslResolverTest {
     @Ignore
     @Test
     public void avoidsDuplicatedMarshallerCreation() throws Exception {
-        // PowerMockito.mockStatic(JAXBContext.class);
-        // final JAXBContext context = mock(JAXBContext.class);
-        // final Marshaller mrsh = mock(Marshaller.class);
-        // doReturn(mrsh).when(context).createMarshaller();
-        // when(JAXBContext.newInstance(anyString())).thenReturn(context);
-        // final XslResolver resolver = new XslResolver();
-        // final XslResolver spy = spy(resolver);
-        // spy.getContext(Object.class);
-        // verify(spy, times(1)).createContext();
-        // reset(spy);
-        // spy.getContRRText(Object.class);
-        // verify(spy, times(0)).createContext();
+        // not implemented yet
     }
 
     /**
@@ -229,6 +218,9 @@ public final class XslResolverTest {
         resolver.setServletContext(null);
     }
 
+    /**
+     * Sample page for testing.
+     */
     @XmlRootElement(name = "page")
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Page {
@@ -261,6 +253,9 @@ public final class XslResolverTest {
         }
     }
 
+    /**
+     * Injectable element.
+     */
     @XmlRootElement(name = "injectable")
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Injectable {
@@ -274,6 +269,9 @@ public final class XslResolverTest {
         }
     }
 
+    /**
+     * Just a dummy object.
+     */
     @XmlRootElement(name = "page")
     @XmlAccessorType(XmlAccessType.NONE)
     @Stylesheet("test")

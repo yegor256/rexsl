@@ -41,6 +41,7 @@ import org.hamcrest.Matchers;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class ContainerMocker {
 
     /**
@@ -63,11 +64,11 @@ public final class ContainerMocker {
      * Expect body.
      * @param matcher Matcher for body
      * @return This object
+     * @todo #150 It is impossible to match parameter and body at the same time.
      */
-    // @todo #150 It is impossible to match parameter and body at the same time.
     public ContainerMocker expectBody(final Matcher<String> matcher) {
         if (this.adapter.hasParamMatcher()) {
-            throw new RuntimeException(
+            throw new IllegalStateException(
                 "Cannot add body matcher. Adapter already has parameter matcher"
             );
         }
@@ -100,13 +101,13 @@ public final class ContainerMocker {
      * @param name Name of the param
      * @param matcher Matcher for its content
      * @return This object
+     * @todo #150 It is impossible to match parameter and body at the same
+     *  time.
      */
-    // @todo #150 It is impossible to match parameter and body at the same
-    //     time.
     public ContainerMocker expectParam(final String name,
         final Matcher<String> matcher) {
         if (this.adapter.hasBodyMatcher()) {
-            throw new RuntimeException(
+            throw new IllegalStateException(
                 "Cannot add parameter matcher. Adapter already has body matcher"
             );
         }
@@ -171,6 +172,7 @@ public final class ContainerMocker {
 
     /**
      * Mock it, and return this object.
+     * @return This object
      */
     public ContainerMocker mock() {
         this.port = this.reservePort();
@@ -210,6 +212,7 @@ public final class ContainerMocker {
 
     /**
      * Get its home.
+     * @return URL of the started container
      */
     public URI home() {
         try {
@@ -221,6 +224,7 @@ public final class ContainerMocker {
 
     /**
      * Reserve port.
+     * @return Reserved TCP port
      */
     private Integer reservePort() {
         ServerSocket socket;

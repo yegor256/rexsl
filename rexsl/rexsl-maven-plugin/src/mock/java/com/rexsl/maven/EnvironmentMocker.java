@@ -55,7 +55,7 @@ public final class EnvironmentMocker {
     /**
      * Temporary folder.
      */
-    public transient File basedir;
+    private final transient File basedir;
 
     /**
      * Public ctor.
@@ -83,7 +83,7 @@ public final class EnvironmentMocker {
      * @return This object
      */
     public EnvironmentMocker withFile(final String name) {
-        return this.withFile(name, name.substring(name.lastIndexOf("/") + 1));
+        return this.withFile(name, name.substring(name.lastIndexOf('/') + 1));
     }
 
     /**
@@ -138,6 +138,7 @@ public final class EnvironmentMocker {
      * With default classpath.
      * @return This object
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public EnvironmentMocker withDefaultClasspath() {
         final Set<File> files = new HashSet<File>();
         for (String file : System.getProperty("java.class.path")

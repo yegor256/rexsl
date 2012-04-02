@@ -155,7 +155,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @param cls The class we should add
      */
     public void add(final Class cls) {
-        synchronized (this) {
+        synchronized (this.classes) {
             if (!this.classes.contains(cls)) {
                 try {
                     this.classes.add(cls);

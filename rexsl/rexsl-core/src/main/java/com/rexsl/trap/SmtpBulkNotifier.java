@@ -106,7 +106,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
      */
     @Override
     public void notify(final String defect) throws IOException {
-        synchronized (this) {
+        synchronized (this.defects) {
             this.defects.add(new Defect(defect));
         }
     }
@@ -115,7 +115,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
      * Run this on background and send emails.
      */
     private void background() {
-        synchronized (this) {
+        synchronized (this.defects) {
             if (!this.defects.isEmpty()) {
                 try {
                     final Message message = this.compress();

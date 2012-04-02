@@ -27,56 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
-
-import org.mockito.Mockito;
 
 /**
- * Mocker of {@link TestResponse}.
- * @author Yegor Bugayenko (yegor@netbout.com)
+ * Maven plugin, mockers.
+ *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class TestResponseMocker {
-
-    /**
-     * Mock.
-     */
-    private final transient TestResponse response =
-        Mockito.mock(TestResponse.class);
-
-    /**
-     * Public ctor.
-     */
-    public TestResponseMocker() {
-        this.withBody("");
-    }
-
-    /**
-     * Return this body.
-     * @param body The body
-     * @return This object
-     */
-    public TestResponseMocker withBody(final String body) {
-        Mockito.doReturn(body).when(this.response).getBody();
-        return this;
-    }
-
-    /**
-     * Return this status code.
-     * @param code The status code
-     * @return This object
-     */
-    public TestResponseMocker withStatus(final int code) {
-        Mockito.doReturn(code).when(this.response).getStatus();
-        return this;
-    }
-
-    /**
-     * Mock it.
-     * @return Mocked class
-     */
-    public TestResponse mock() {
-        return this.response;
-    }
-
-}
+package com.rexsl.maven;
