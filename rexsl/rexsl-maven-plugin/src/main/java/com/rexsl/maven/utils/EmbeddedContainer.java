@@ -69,8 +69,14 @@ public final class EmbeddedContainer {
 
     /**
      * Create and start Grizzly container.
+     *
+     * <p>{@code ctx.setParentLoaderPriority(false)} is called because of
+     * a classloading conflict between Maven classloader and
+     * Jetty WebApp classloader.
+     *
      * @param env The environment
      * @return The container
+     * @see <a href="http://docs.codehaus.org/display/JETTY/Classloading">Jetty Classloading</a>
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public static EmbeddedContainer start(final Environment env) {
@@ -85,9 +91,6 @@ public final class EmbeddedContainer {
         }
         final Server server = new Server(env.port());
         final WebAppContext ctx = new WebAppContext();
-        // it is required because of classloading conflict between
-        // Maven classloader and Jetty WebApp classloader
-        // @see http://docs.codehaus.org/display/JETTY/Classloading
         ctx.setParentLoaderPriority(false);
         if (env.useRuntimeFiltering()) {
             ctx.addFilter(
@@ -156,7 +159,6 @@ public final class EmbeddedContainer {
             StringUtils.join(folders, ";")
         );
         params.put(
-            // this parameter is used by com.rexsl.core.XslResolver
             "com.rexsl.core.XSD_FOLDER",
             new File(env.basedir(), "src/test/rexsl/xsd").getPath()
         );

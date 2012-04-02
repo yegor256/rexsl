@@ -27,47 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
-
-import org.apache.maven.project.MavenProject;
-import org.mockito.Mockito;
 
 /**
- * Mocker of {@link MavenProject}.
+ * Maven plugin, mockers.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class MavenProjectMocker {
-
-    /**
-     * The mock.
-     */
-    private final transient MavenProject project =
-        Mockito.mock(MavenProject.class);
-
-    /**
-     * Public ctor.
-     */
-    public MavenProjectMocker() {
-        this.withPackaging("war");
-    }
-
-    /**
-     * With this packaging name.
-     * @param pkg The name
-     * @return This object
-     */
-    public MavenProjectMocker withPackaging(final String pkg) {
-        Mockito.doReturn(pkg).when(this.project).getPackaging();
-        return this;
-    }
-
-    /**
-     * Mock it.
-     * @return Mocked project
-     */
-    public MavenProject mock() {
-        return this.project;
-    }
-
-}
+package com.rexsl.maven;

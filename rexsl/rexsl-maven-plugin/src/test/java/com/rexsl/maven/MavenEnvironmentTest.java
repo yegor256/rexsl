@@ -84,7 +84,6 @@ public final class MavenEnvironmentTest {
         final MavenProject project = Mockito.mock(MavenProject.class);
         final Properties props = new Properties();
         new MavenEnvironment(project, props);
-        // todo...
     }
 
 }

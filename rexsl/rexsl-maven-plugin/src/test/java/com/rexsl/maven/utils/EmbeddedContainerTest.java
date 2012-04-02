@@ -91,12 +91,6 @@ public final class EmbeddedContainerTest {
             "runtime filter destroyed",
             "XSLT filter destroyed",
         };
-        // for (String message : messages) {
-        //     MatcherAssert.assertThat(
-        //         lmocker.getMessages(),
-        //         Matchers.hasItem(Matchers.containsString(message))
-        //     );
-        // }
     }
 
 }
