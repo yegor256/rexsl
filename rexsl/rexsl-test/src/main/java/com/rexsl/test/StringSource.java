@@ -102,7 +102,7 @@ final class StringSource extends DOMSource {
      */
     private Transformer getTransformer()
         throws TransformerConfigurationException {
-        synchronized (this) {
+        synchronized (this.TFACTORY) {
             return this.TFACTORY.newTransformer();
         }
     }
