@@ -65,9 +65,9 @@ public final class StringSourceTest {
      */
     @Test
     public void formatIncomingNode() throws Exception {
-        final DocumentBuilder builder = DocumentBuilderFactory.
-            newInstance().
-            newDocumentBuilder();
+        final DocumentBuilder builder = DocumentBuilderFactory
+            .newInstance()
+            .newDocumentBuilder();
         final String xmlString = Logger.format(
             "<nodeName>%s%s%s<a/><a withArg=\"%s\"/></nodeName>",
             "<?some instruction?>",

@@ -103,8 +103,8 @@ public final class ManifestsTest {
     @Test(expected = IllegalStateException.class)
     public void throwsExceptionWhen() throws Exception {
         final File file = new File(
-            Thread.currentThread().getContextClassLoader().
-                getResource("META-INF/MANIFEST_INVALID.MF").getFile()
+            Thread.currentThread().getContextClassLoader()
+                .getResource("META-INF/MANIFEST_INVALID.MF").getFile()
         );
         Manifests.append(file);
     }
