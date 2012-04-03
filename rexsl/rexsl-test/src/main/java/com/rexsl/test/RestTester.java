@@ -34,6 +34,7 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.ymock.util.Logger;
 import java.net.URI;
+import java.util.Map;
 import javax.ws.rs.core.UriBuilder;
 
 /**
@@ -92,6 +93,7 @@ public final class RestTester {
      * @param uri URI of the entry point
      * @return The client ready to process the request
      */
+    @SuppressWarnings("PMD.UseConcurrentHashMap")
     public static TestClient start(final URI uri) {
         if (!uri.isAbsolute()) {
             throw new IllegalArgumentException(
@@ -102,8 +104,10 @@ public final class RestTester {
             );
         }
         final ClientConfig config = new DefaultClientConfig();
-        config.getProperties()
-            .put(ClientConfig.PROPERTY_FOLLOW_REDIRECTS, false);
+        final Map<String, Object> props = config.getProperties();
+        props.put(ClientConfig.PROPERTY_FOLLOW_REDIRECTS, false);
+        // @checkstyle MagicNumber (1 line)
+        props.put(ClientConfig.PROPERTY_CONNECT_TIMEOUT, new Integer(5 * 1000));
         URI dest = uri;
         if ("".equals(dest.getPath())) {
             dest = UriBuilder.fromUri(uri).path("/").build();
