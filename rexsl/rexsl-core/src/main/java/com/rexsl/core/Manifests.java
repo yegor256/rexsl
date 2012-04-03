@@ -34,6 +34,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -152,7 +154,7 @@ public final class Manifests {
      * Failures registered during loading.
      * @see #load()
      */
-    private static Map<URL, String> failures;
+    private static Map<URI, String> failures;
 
     /**
      * It's a utility class, can't be instantiated.
@@ -367,19 +369,19 @@ public final class Manifests {
      */
     private static Map<String, String> load() {
         final long start = System.nanoTime();
-        Manifests.failures = new ConcurrentHashMap<URL, String>();
+        Manifests.failures = new ConcurrentHashMap<URI, String>();
         final Map<String, String> attrs =
             new ConcurrentHashMap<String, String>();
         Integer count = 0;
-        for (URL url : Manifests.urls()) {
+        for (URI uri : Manifests.uris()) {
             try {
-                attrs.putAll(Manifests.loadOneFile(url));
+                attrs.putAll(Manifests.loadOneFile(uri.toURL()));
             } catch (IOException ex) {
-                Manifests.failures.put(url, ex.getMessage());
+                Manifests.failures.put(uri, ex.getMessage());
                 Logger.error(
                     Manifests.class,
                     "#load(): '%s' failed %[exception]s",
-                    url,
+                    uri,
                     ex
                 );
             }
@@ -401,7 +403,7 @@ public final class Manifests {
      * @return The list of URLs
      * @see #load()
      */
-    private static Set<URL> urls() {
+    private static Set<URI> uris() {
         Enumeration<URL> resources;
         try {
             resources = Thread.currentThread().getContextClassLoader()
@@ -409,11 +411,15 @@ public final class Manifests {
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
-        final Set<URL> urls = new HashSet<URL>();
+        final Set<URI> uris = new HashSet<URI>();
         while (resources.hasMoreElements()) {
-            urls.add(resources.nextElement());
+            try {
+                uris.add(resources.nextElement().toURI());
+            } catch (URISyntaxException ex) {
+                throw new IllegalStateException(ex);
+            }
         }
-        return urls;
+        return uris;
     }
 
     /**
