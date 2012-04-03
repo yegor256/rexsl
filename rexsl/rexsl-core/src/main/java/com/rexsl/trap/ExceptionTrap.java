@@ -134,8 +134,11 @@ public final class ExceptionTrap extends HttpServlet {
                 Logger.error(this, "#service(): %[exception]s", ex);
             }
         }
-        response.getWriter().print(this.template.render(text.toString()));
-        response.getWriter().close();
+        try {
+            response.getWriter().print(this.template.render(text.toString()));
+        } finally {
+            response.getWriter().close();
+        }
         Logger.error(this, "#service():\n%s", text);
     }
 
