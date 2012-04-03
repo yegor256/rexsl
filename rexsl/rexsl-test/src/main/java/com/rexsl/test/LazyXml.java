@@ -38,6 +38,7 @@ import java.util.List;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see <a href="http://trac.fazend.com/rexsl/ticket/324">introduced in ticket #324</a>
  */
 final class LazyXml implements XmlDocument {
 
