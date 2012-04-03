@@ -427,7 +427,7 @@ final class JerseyTestResponse implements TestResponse {
      * @return The XML document
      */
     public XmlDocument getXml() {
-        synchronized (this.fetcher) {
+        synchronized (this.xml) {
             if (this.xml == null) {
                 this.xml = new SimpleXml(this.getBody());
             }

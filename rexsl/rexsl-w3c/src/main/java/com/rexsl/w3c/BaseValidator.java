@@ -151,6 +151,10 @@ class BaseValidator {
             "unknown-doctype",
             "no-encoding"
         );
+        String message = error.getMessage();
+        if (message == null) {
+            message = "";
+        }
         resp.addError(
             new Defect(
                 0,
@@ -158,7 +162,7 @@ class BaseValidator {
                 "",
                 Logger.format("%[exception]s", error),
                 "",
-                error.getMessage()
+                message
             )
         );
         return resp;
