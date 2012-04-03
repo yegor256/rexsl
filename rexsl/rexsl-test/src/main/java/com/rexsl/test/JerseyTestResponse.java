@@ -424,12 +424,16 @@ final class JerseyTestResponse implements TestResponse {
 
     /**
      * Get XmlDocument of the body.
+     *
+     * <p>It uses {@code this.fetcher} as a synchronization lock because at
+     * the time of method execution {@code this.xml} may be {@code NULL}.
+     *
      * @return The XML document
      */
     public XmlDocument getXml() {
         synchronized (this.fetcher) {
             if (this.xml == null) {
-                this.xml = new SimpleXml(this.getBody());
+                this.xml = new LazyXml(this, new XPathContext());
             }
             return this.xml;
         }

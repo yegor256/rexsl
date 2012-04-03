@@ -65,10 +65,19 @@ public final class SimpleXml implements XmlDocument {
      * @param text Body
      */
     public SimpleXml(final String text) {
+        this(text, new XPathContext());
+    }
+
+    /**
+     * Private ctor.
+     * @param text The source
+     * @param ctx Namespace context
+     */
+    SimpleXml(final String text, final XPathContext ctx) {
         this.node = new DomParser(text)
             .document()
             .getDocumentElement();
-        this.context = new XPathContext();
+        this.context = ctx;
     }
 
     /**
