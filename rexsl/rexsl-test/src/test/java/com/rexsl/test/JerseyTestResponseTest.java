@@ -32,9 +32,12 @@ package com.rexsl.test;
 import com.sun.jersey.api.client.ClientResponse;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
+import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -144,6 +147,37 @@ public final class JerseyTestResponseTest {
     }
 
     /**
+     * TestResponse can retrieve data from Json format.
+     * @throws Exception If something goes wrong inside
+     * @todo #216 Complete implementation in a similar way to class SimpleXml.
+     *  SimpleXml uses xpath query language; similarly a query
+     *  language for json should be used here
+     *  Jackson seems a good choice for this (http://jackson.codehaus.org/)
+     *  using the tree model or data binding approach
+     */
+    @Test
+    @Ignore
+    public void findsDataInJsonFormat() throws Exception {
+        final String data =
+            "{\"data\":[{id:\"12\",name:\"John\"},{id:\"13\",name:\"Dan\"}]}";
+        final ClientResponse resp = new ClientResponseMocker()
+            .withEntity(data)
+            .mock();
+        final TestResponse response =
+            new JerseyTestResponse(this.fetcher(resp), this.decor);
+        final List<String> name = response.assertJson("data[1]").json(
+            "data[1].name"
+        );
+        MatcherAssert.assertThat(
+            name,
+            Matchers.allOf(
+                Matchers.hasSize(1),
+                (Matcher) Matchers.hasItem("Peter")
+            )
+        );
+    }
+
+    /**
      * TestResponse can fail on demand.
      * @throws Exception If something goes wrong inside
      */
@@ -231,5 +265,4 @@ public final class JerseyTestResponseTest {
             }
         };
     }
-
 }

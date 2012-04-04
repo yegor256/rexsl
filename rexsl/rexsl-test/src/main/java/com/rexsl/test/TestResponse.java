@@ -62,13 +62,16 @@ import org.hamcrest.Matcher;
  * }
  * </pre>
  *
+ * <p>{@link TestResponse} also extends {@link JsonDocument}, which is an
+ * abstract of a Json document, which can be retrieved from itself.
+ *
  * <p>Implementation of this interface shall be mutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public interface TestResponse extends XmlDocument {
+public interface TestResponse extends XmlDocument, JsonDocument {
 
     /**
      * Follow the LOCATION header.
@@ -170,5 +173,12 @@ public interface TestResponse extends XmlDocument {
      * @return This object
      */
     TestResponse assertXPath(String xpath);
+
+    /**
+     * Verifies the Json data against the element identifier argument.
+     * @param element Element in the Json data of this object
+     * @return This object
+     */
+    TestResponse assertJson(String element);
 
 }

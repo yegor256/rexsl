@@ -97,6 +97,13 @@ final class JerseyTestResponse implements TestResponse {
     private transient XmlDocument xml;
 
     /**
+     * The Json document in the body, should be loaded on demand in
+     * {@link #getJson()}.
+     * @see #getJson()
+     */
+    private transient JsonDocument jsonDocument;
+
+    /**
      * Public ctor.
      * @param ftch Response fetcher
      * @param rqst Decorated request, for logging purposes
@@ -437,6 +444,43 @@ final class JerseyTestResponse implements TestResponse {
             }
             return this.xml;
         }
+    }
+
+    /**
+     * Get JsonDocument of the body.
+     * @return The Json document
+     */
+    public JsonDocument getJson() {
+        synchronized (this.fetcher) {
+            if (this.jsonDocument == null) {
+                this.jsonDocument = new SimpleJson(this.getBody());
+            }
+            return this.jsonDocument;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse assertJson(final String element) {
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> json(final String query) {
+        return this.getJson().json(query);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<JsonDocument> nodesJson(final String query) {
+        return this.getJson().nodesJson(query);
     }
 
 }
