@@ -122,9 +122,6 @@ public final class RestfulServlet extends HttpServlet {
             );
         }
         for (String pkg : StringUtils.split(param, this.COMMA)) {
-            if (packages.contains(pkg)) {
-                continue;
-            }
             final Pattern ptrn = Pattern.compile(
                 "^([a-z_]{1}[a-z0-9_]*(\\.[a-z_]{1}[a-z0-9_]*)*)$"
             );
