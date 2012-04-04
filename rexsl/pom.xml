@@ -351,6 +351,7 @@
                                         <links>
                                             <link>http://download.oracle.com/javaee/6/api/</link>
                                         </links>
+                                        <detectLinks>true</detectLinks>
                                         <tags>
                                             <!--
                                             Here we instruct plugin to use custom tag

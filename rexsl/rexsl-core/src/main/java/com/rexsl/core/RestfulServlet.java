@@ -33,9 +33,9 @@ import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 import com.ymock.util.Logger;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Handler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,7 +77,6 @@ import org.apache.commons.lang.StringUtils;
  * contains incorrect data. We will consider a package is valid if and only if
  * it abides to the Java package naming conventions.
  *
- *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see <a href="http://www.rexsl.com">Introduction to ReXSL</a>
@@ -90,7 +89,7 @@ import org.apache.commons.lang.StringUtils;
 public final class RestfulServlet extends HttpServlet {
 
     /**
-     * Comma.
+     * Comma, a separator between package names.
      */
     private static final String COMMA = ",";
 
@@ -110,7 +109,7 @@ public final class RestfulServlet extends HttpServlet {
      */
     @Override
     public void init(final ServletConfig config) throws ServletException {
-        final List<String> packages = new ArrayList<String>();
+        final Set<String> packages = new HashSet<String>();
         packages.add(this.getClass().getPackage().getName());
         final String param = config.getInitParameter(this.PACKAGES);
         if (param == null) {
@@ -122,9 +121,6 @@ public final class RestfulServlet extends HttpServlet {
             );
         }
         for (String pkg : StringUtils.split(param, this.COMMA)) {
-            if (packages.contains(pkg)) {
-                continue;
-            }
             final Pattern ptrn = Pattern.compile(
                 "^([a-z_]{1}[a-z0-9_]*(\\.[a-z_]{1}[a-z0-9_]*)*)$"
             );
@@ -181,7 +177,7 @@ public final class RestfulServlet extends HttpServlet {
             nano
         );
         // @checkstyle MagicNumber (1 line)
-        response.addHeader("Rexsl-Millis", Long.toString(nano / 1000));
+        response.addHeader("Rexsl-Millis", Long.toString(nano / (1000 * 1000)));
     }
 
     /**
