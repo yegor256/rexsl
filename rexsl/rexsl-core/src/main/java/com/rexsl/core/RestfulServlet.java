@@ -33,9 +33,9 @@ import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 import com.ymock.util.Logger;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Handler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,7 +110,7 @@ public final class RestfulServlet extends HttpServlet {
      */
     @Override
     public void init(final ServletConfig config) throws ServletException {
-        final List<String> packages = new ArrayList<String>();
+        final Set<String> packages = new HashSet<String>();
         packages.add(this.getClass().getPackage().getName());
         final String param = config.getInitParameter(this.PACKAGES);
         if (param == null) {
