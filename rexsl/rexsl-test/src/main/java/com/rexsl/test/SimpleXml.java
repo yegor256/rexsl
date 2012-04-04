@@ -62,6 +62,21 @@ public final class SimpleXml implements XmlDocument {
 
     /**
      * Public ctor.
+     *
+     * <p>The object is created with a default implementation of
+     * {@link javax.xml.namespace.NamespaceContext}, which already defines a
+     * number of namespaces, for convenience, including:
+     *
+     * <pre>
+     * xhtml: http://www.w3.org/1999/xhtml
+     * xs: http://www.w3.org/2001/XMLSchema
+     * xsi: http://www.w3.org/2001/XMLSchema-instance
+     * xsl: http://www.w3.org/1999/XSL/Transform
+     * </pre>
+     *
+     * <p>In future versions we will add more namespaces (submit a ticket if
+     * you need more of them defined here).
+     *
      * @param text Body
      */
     public SimpleXml(final String text) {

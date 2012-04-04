@@ -123,6 +123,10 @@ public final class XslResolver implements ContextResolver<Marshaller> {
 
     /**
      * {@inheritDoc}
+     *
+     * <p>JAXBContext is thread-safe, that's why we don't synchronize here.
+     *
+     * @see <a href="http://jaxb.java.net/guide/Performance_and_thread_safety.html">JAXBContext is thread-safe</a>
      */
     @Override
     public Marshaller getContext(final Class<?> type) {

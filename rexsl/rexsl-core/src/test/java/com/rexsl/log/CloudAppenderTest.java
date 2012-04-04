@@ -118,7 +118,7 @@ public final class CloudAppenderTest {
         Mockito.verify(feeder).feed(
             Mockito.argThat(
                 Matchers.<String>allOf(
-                    Matchers.startsWith("DEBUG - some text to log\n"),
+                    Matchers.startsWith("DEBUG - some text to log"),
                     Matchers.containsString("IllegalArgumentException")
                 )
             )

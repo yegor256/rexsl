@@ -38,12 +38,11 @@ import java.net.URI;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @checkstyle ClassDataAbstractionCoupling (200 lines)
  */
 public interface TestClient {
 
     /**
-     * Destination of the client.
+     * Get destination of the client.
      * @return This destination
      */
     URI uri();
@@ -57,14 +56,14 @@ public interface TestClient {
     TestClient header(String name, Object value);
 
     /**
-     * Execute GET request.
+     * Execute {@code GET} request.
      * @param description Short description of the operation
      * @return This object
      */
     TestResponse get(String description);
 
     /**
-     * Execute POST request.
+     * Execute {@code POST} request.
      * @param description Short description of the operation
      * @param body Request entity as a string
      * @return This object
@@ -72,7 +71,7 @@ public interface TestClient {
     TestResponse post(String description, Object body);
 
     /**
-     * Execute PUT request.
+     * Execute {@code PUT} request.
      * @param description Short description of the operation
      * @param body Request entity as a string
      * @return This object

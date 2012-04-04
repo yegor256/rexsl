@@ -116,6 +116,18 @@ public final class XhtmlMatchers {
 
     /**
      * Matches content agains XPath query, with custom namespaces.
+     *
+     * <p>Every namespace from the {@code namespaces} list will be assigned to
+     * its own prefix, in order of appearance. Start with {@code 1}.
+     * For example:
+     *
+     * <pre>
+     * MatcherAssert.assert(
+     *   "&lt;foo xmlns='my-namespace'&gt;&lt;/foo&gt;",
+     *   XhtmlMatchers.withXPath("/ns1:foo", "my-namespace")
+     * );
+     * </pre>
+     *
      * @param <T> type of the object to match
      * @param query The query
      * @param namespaces List of namespaces

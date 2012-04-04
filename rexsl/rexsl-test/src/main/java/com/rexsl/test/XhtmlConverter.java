@@ -33,7 +33,7 @@ import javax.xml.transform.Source;
 import org.w3c.dom.Node;
 
 /**
- * Convert a string to XML source.
+ * Convenient converter of text/node to XML source.
  *
  * <p>It's a convenient utility class to convert a string to XML DOM source,
  * which can be used then in assertions. For example:
@@ -72,6 +72,12 @@ public final class XhtmlConverter {
 
     /**
      * Convert it to XML.
+     *
+     * <p>The name of the method is motivated by
+     * <a href="http://code.google.com/p/xml-matchers/">xmlatchers</a> project
+     * and their {@code XmlMatchers.the(String)} method. Looks like this name
+     * is short enough and convenient for unit tests.
+     *
      * @param text The text to convert
      * @return DOM source/document
      */
@@ -80,7 +86,7 @@ public final class XhtmlConverter {
     }
 
     /**
-     * Convert it to XML.
+     * Convert provided DOM node to XML.
      * @param node The node to convert
      * @return DOM source/document
      */

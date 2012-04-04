@@ -32,6 +32,49 @@ package com.rexsl.test;
 /**
  * Policy of assertion, used by {@link TestResponse}.
  *
+ * <p>Assertion policy is used in {@link TestResponse} in order to validate
+ * REST response before further processing. Consider this example:
+ *
+ * <pre>
+ * String data = RestTester.start(new URI("http://example.com"))
+ *   .assertThat(retryOnFailure)
+ *   .assertXPath("//data")
+ *   .xpath("//data/text()")
+ *   .get(0);
+ * </pre>
+ *
+ * <p>This code will 1) retrieve the document from the provided
+ * {@link java.net.URI}, 2) make sure that it has an XML node addressed by
+ * {@code "//data"} XPath, 3) retrieve all nodes by that XPath, and
+ * 4) use the first element in the found collection of texts. But, before
+ * doing all this a {@code retryOnFailure} assertion policy will be used:
+ *
+ * <pre>
+ * AssertionPolicy retryOnFailure = new AssertionPolicy() {
+ *   private boolean valid;
+ *   &#64;Override
+ *   public void assertThat(TestResponse response) {
+ *     if (response.getStatus() != HttpURLConnection.HTTP_OK) {
+ *       throw new AssertionError("invalid HTTP status, will try again");
+ *     }
+ *     this.valid = true;
+ *   }
+ *   &#64;Override
+ *   public boolean again(int attempt) {
+ *     return !this.valid;
+ *   }
+ * }
+ * </pre>
+ *
+ * <p>{@link AssertionPolicy#assertThat(TestResponse)} will be called right
+ * after the document is retrieved from the server. Actually, it will be called
+ * even earlier, even before the HTTP request is made. In the example above
+ * the request will be made inside {@code response.getStatus()}. If it will
+ * fail for some reason (host not found, for example) - an exception will be
+ * thrown and {@code this.valid} will stay in {@code FALSE} status. Thus, it
+ * is a bullet-proof design, where you can control everything, including
+ * network errors.
+ *
  * <p>Implementation of this interface shouldn't be thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)

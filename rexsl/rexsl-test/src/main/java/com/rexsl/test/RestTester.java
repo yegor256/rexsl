@@ -61,6 +61,27 @@ import javax.ws.rs.core.UriBuilder;
  * be validated with matchers. See class {@link TestResponse} to get an idea
  * of what you can do with the response once it's retrieved.
  *
+ * <p>Also you can use this class for data retrieval, for example:
+ *
+ * <pre>
+ * String html = RestTester.start(new URI("http://www.rexsl.com"))
+ *   .get('read home page of ReXSL.com')
+ *   .assertStatus(HttpURLConnection.HTTP_OK)
+ *   .getBody();
+ * </pre>
+ *
+ * <p>Besides that, it can be used as a convenient manipulator of XML nodes:
+ *
+ * <pre>
+ * List&lt;XmlDocument&gt; emps = RestTester.start(new URI("http://localhost"))
+ *   .get('reading data of all employees')
+ *   .assertStatus(HttpURLConnection.HTTP_OK)
+ *   .nodes("//employees/employee");
+ * for (XmlDocument employee : emps) {
+ *   String name = employee.xpath("name/text()").get(0);
+ * }
+ * </pre>
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */

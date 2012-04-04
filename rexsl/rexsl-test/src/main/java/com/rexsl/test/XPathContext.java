@@ -88,6 +88,15 @@ final class XPathContext implements NamespaceContext {
         final String prefix, final Object namespace) {
         this();
         this.map.putAll(old);
+        if (this.map.containsKey(prefix)) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "prefix '%s' already registered for namespace '%s'",
+                    prefix,
+                    this.map.get(prefix)
+                )
+            );
+        }
         this.map.put(prefix, namespace.toString());
     }
 

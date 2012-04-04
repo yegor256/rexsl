@@ -29,7 +29,7 @@
  */
 
 /**
- * Test package.
+ * RESTful client, for tests (but not only).
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
