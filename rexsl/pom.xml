@@ -112,7 +112,7 @@
 
     <ciManagement>
         <system>hudson</system>
-        <url>http://hudson.rexsl.com/hudson/job/rexsl</url>
+        <url>http://hudson.rexsl.com:8081/hudson/job/rexsl/</url>
     </ciManagement>
 
     <scm>
