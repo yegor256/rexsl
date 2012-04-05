@@ -60,13 +60,12 @@ public abstract class AbstractHttpFeeder implements Feeder {
     /**
      * Set option {@code url}.
      * @param addr The URL
+     * @throws java.net.MalformedURLException If format of the URL is
+     *  not correct
      */
-    public final void setUrl(final String addr) {
-        try {
-            this.url = new URL(addr);
-        } catch (java.net.MalformedURLException ex) {
-            throw new IllegalArgumentException(ex);
-        }
+    public final void setUrl(final String addr)
+        throws java.net.MalformedURLException {
+        this.url = new URL(addr);
     }
 
     /**
