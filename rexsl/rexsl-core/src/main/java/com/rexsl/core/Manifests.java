@@ -424,9 +424,18 @@ public final class Manifests {
 
     /**
      * Load attributes from one file.
+     *
+     * <p>Inside the method we catch {@code RuntimeException} (which may look
+     * suspicious) in order to protect our execution flow from expected (!)
+     * exceptions from {@link Manifest#getMainAttributes()}. For some reason,
+     * this JDK method doesn't throw checked exceptions if {@code MANIFEST.MF}
+     * file format is broken. Instead, it throws a runtime exception (an
+     * unchecked one), which we should catch in such an inconvenient way.
+     *
      * @param url The URL of it
      * @return The attributes loaded
      * @see #load()
+     * @see tickets #193 and #323
      * @throws IOException If some problem happens
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
