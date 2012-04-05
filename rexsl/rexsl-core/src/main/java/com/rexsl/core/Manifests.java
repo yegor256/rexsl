@@ -346,7 +346,7 @@ public final class Manifests {
         final long start = System.nanoTime();
         Map<String, String> attrs;
         try {
-            attrs = Manifests.loadOneFile(file.toURL());
+            attrs = Manifests.loadOneFile(file.toURI().toURL());
         } catch (java.net.MalformedURLException ex) {
             throw new IllegalStateException(ex);
         } catch (IOException ex) {

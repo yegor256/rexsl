@@ -106,8 +106,6 @@ abstract class AbstractSmtpNotifier implements Notifier {
             message.setSubject(this.prop("subject"));
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
-        } catch (javax.mail.NoSuchProviderException ex) {
-            throw new IOException(ex);
         } catch (javax.mail.MessagingException ex) {
             throw new IOException(ex);
         }
