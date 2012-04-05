@@ -104,18 +104,12 @@ final class InContainerScriptsCheck implements Check {
         boolean success = true;
         final FileFinder finder = new FileFinder(dir, "groovy");
         for (File script : finder.random()) {
-            if (!FilenameUtils.removeExtension(script.getName())
-                .matches(this.test)
-            ) {
+            final String name = FilenameUtils.removeExtension(script.getName());
+            if (!name.matches(this.test)) {
                 continue;
             }
-            try {
-                Logger.info(this, "Testing '%s'...", script);
-                this.one(env, script);
-            } catch (InternalCheckException ex) {
-                Logger.warn(this, "Test failed: %s", ex.getMessage());
-                success = false;
-            }
+            Logger.info(this, "Testing '%s'...", script);
+            success &= this.one(env, script);
         }
         return success;
     }
@@ -124,20 +118,23 @@ final class InContainerScriptsCheck implements Check {
      * Check one script.
      * @param env The environment
      * @param script Check this particular Groovy script
-     * @throws InternalCheckException If some failure inside
+     * @return TRUE if this script is valid (no errors)
      */
-    private void one(final Environment env, final File script)
-        throws InternalCheckException {
+    private boolean one(final Environment env, final File script) {
         Logger.debug(this, "Running %s", script);
         final GroovyExecutor exec = new GroovyExecutor(
             env,
             new BindingBuilder(env).build()
         );
+        boolean valid;
         try {
             exec.execute(script);
+            valid = true;
         } catch (com.rexsl.maven.utils.GroovyException ex) {
-            throw new InternalCheckException(ex);
+            Logger.warn(this, "Test failed: %s", ex.getMessage());
+            valid = false;
         }
+        return valid;
     }
 
 }

@@ -79,7 +79,7 @@ public final class RestfulServletTest {
      * The package name contains hyphens.
      * @throws Exception If something goes wrong
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = javax.servlet.ServletException.class)
     public void initWithNonValidPackageHyphens() throws Exception {
         final ServletConfig config = new ServletConfigMocker()
             .withParam(this.PACKAGES_KEY, "package-with-hyphens")
@@ -94,7 +94,7 @@ public final class RestfulServletTest {
      * One of the packages starts with a number.
      * @throws Exception If something goes wrong
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = javax.servlet.ServletException.class)
     public void initWithNonValidPackageStartsWithNumber() throws Exception {
         final ServletConfig config = new ServletConfigMocker()
             .withParam(this.PACKAGES_KEY, "pa.1ck.age")

@@ -77,6 +77,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      * {@code xml}, etc.) to be executed during test.
      *
      * @parameter expression="${rexsl.test}" default-value=".*"
+     * @since 0.3.6
      */
     @SuppressWarnings("PMD.ImmutableField")
     private transient String test = ".*";
@@ -85,6 +86,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      * Name of the check class to execute (if not set -
      * all checks are executed).
      * @parameter expression="${rexsl.check}"
+     * @since 0.3.6
      */
     @SuppressWarnings("PMD.ImmutableField")
     private transient String check;

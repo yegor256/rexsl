@@ -303,14 +303,15 @@ public final class Manifests {
      *
      * @param ctx Servlet context
      * @see #Manifests()
+     * @throws IOException If some I/O problem inside
      */
-    public static void append(final ServletContext ctx) {
+    public static void append(final ServletContext ctx) throws IOException {
         final long start = System.nanoTime();
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
         } catch (java.net.MalformedURLException ex) {
-            throw new IllegalStateException(ex);
+            throw new IOException(ex);
         }
         if (main == null) {
             Logger.warn(
@@ -319,12 +320,7 @@ public final class Manifests {
                 ctx.getClass().getName()
             );
         } else {
-            final Map<String, String> attrs;
-            try {
-                attrs = Manifests.loadOneFile(main);
-            } catch (IOException ex) {
-                throw new IllegalStateException(ex);
-            }
+            final Map<String, String> attrs = Manifests.loadOneFile(main);
             Manifests.attributes.putAll(attrs);
             Logger.info(
                 Manifests.class,
@@ -341,16 +337,15 @@ public final class Manifests {
     /**
      * Append attributes from the file.
      * @param file The file to load attributes from
+     * @throws IOException If some I/O problem inside
      */
-    public static void append(final File file) {
+    public static void append(final File file) throws IOException {
         final long start = System.nanoTime();
         Map<String, String> attrs;
         try {
-            attrs = Manifests.loadOneFile(file.toURL());
+            attrs = Manifests.loadOneFile(file.toURI().toURL());
         } catch (java.net.MalformedURLException ex) {
-            throw new IllegalStateException(ex);
-        } catch (IOException ex) {
-            throw new IllegalStateException(ex);
+            throw new IOException(ex);
         }
         Manifests.attributes.putAll(attrs);
         Logger.info(
@@ -365,6 +360,11 @@ public final class Manifests {
 
     /**
      * Load attributes from classpath.
+     *
+     * <p>This method doesn't throw any checked exceptions because it is called
+     * from a static context above. It's just more convenient to catch all
+     * exceptions here than above in a static call block.
+     *
      * @return All found attributes
      */
     private static Map<String, String> load() {
@@ -400,6 +400,11 @@ public final class Manifests {
 
     /**
      * Find all URLs.
+     *
+     * <p>This method doesn't throw any checked exceptions just for convenience
+     * of calling of it (above in {@linke #load}), although it is clear that
+     * {@link IOException} is a good candidate for being thrown out of it.
+     *
      * @return The list of URLs
      * @see #load()
      */
@@ -408,7 +413,7 @@ public final class Manifests {
         try {
             resources = Thread.currentThread().getContextClassLoader()
                 .getResources("META-INF/MANIFEST.MF");
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalStateException(ex);
         }
         final Set<URI> uris = new HashSet<URI>();
@@ -424,9 +429,18 @@ public final class Manifests {
 
     /**
      * Load attributes from one file.
+     *
+     * <p>Inside the method we catch {@code RuntimeException} (which may look
+     * suspicious) in order to protect our execution flow from expected (!)
+     * exceptions from {@link Manifest#getMainAttributes()}. For some reason,
+     * this JDK method doesn't throw checked exceptions if {@code MANIFEST.MF}
+     * file format is broken. Instead, it throws a runtime exception (an
+     * unchecked one), which we should catch in such an inconvenient way.
+     *
      * @param url The URL of it
      * @return The attributes loaded
      * @see #load()
+     * @see tickets #193 and #323
      * @throws IOException If some problem happens
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
