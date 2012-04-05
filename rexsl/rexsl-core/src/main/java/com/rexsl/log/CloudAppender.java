@@ -70,9 +70,14 @@ import org.apache.log4j.spi.LoggingEvent;
 public final class CloudAppender extends AppenderSkeleton {
 
     /**
-     * End of line.
+     * End of line, for our own internal presentation.
+     *
+     * <p>We use this symbol in order to separate lines in buffer, not in order
+     * to show them to the user. Thus, it's platform independent symbol and
+     * will work on any OS (incl. Windows).
      */
-    public static final String EOL = "\n";
+    @SuppressWarnings("PMD.DefaultPackage")
+    static final String EOL = "\n";
 
     /**
      * Queue of messages to send to server.
