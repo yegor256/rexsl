@@ -94,7 +94,11 @@ public final class XsltFilter implements Filter {
         final ServletContext context = config.getServletContext();
         this.tfactory = TransformerFactory.newInstance();
         this.tfactory.setURIResolver(new ContextResourceResolver(context));
-        Manifests.append(context);
+        try {
+            Manifests.append(context);
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        }
         Logger.info(
             this,
             "#init(%s): XSLT filter initialized (ReXSL version: %s)",

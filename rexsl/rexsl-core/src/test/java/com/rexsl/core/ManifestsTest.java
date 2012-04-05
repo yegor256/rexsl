@@ -100,8 +100,8 @@ public final class ManifestsTest {
      * Manifests can throw an exception loading file with empty attribute.
      * @throws Exception If something goes wrong
      */
-    @Test(expected = IllegalStateException.class)
-    public void throwsExceptionWhen() throws Exception {
+    @Test(expected = java.io.IOException.class)
+    public void throwsExceptionWhenNoAttributes() throws Exception {
         final File file = new File(
             Thread.currentThread().getContextClassLoader()
                 .getResource("META-INF/MANIFEST_INVALID.MF").getFile()
