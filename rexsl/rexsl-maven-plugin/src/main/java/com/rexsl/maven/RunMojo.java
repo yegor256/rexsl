@@ -34,7 +34,15 @@ import com.ymock.util.Logger;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
- * Run WAR as a web server.
+ * Run WAR as a web server to enable interactive testing of a web application.
+ *
+ * <p>Run {@code mvn clean package rexsl:run -Drexsl.port=9099} and open
+ * your browser at {@code http://localhost:9099/}. You will see the front page
+ * of your application. What is especially interesting is that you can make
+ * changes to static resources ({@code xsl}, {@code css} and other files in
+ * {@code src/main/webapp}) and then just refresh the page in a browser.
+ * New versions of the files will be delivered. That's how you can interactively
+ * test your XSL stylesheets.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
