@@ -49,6 +49,23 @@ public final class CheckMojo extends AbstractRexslMojo {
 
     /**
      * System variables to be set before running tests.
+     *
+     * <p>You define them in a similar way as {@code maven-surefire-plugin}, for
+     * example you want to reconfigure LOG4J just for the tests:
+     *
+     * <pre>
+     * &lt;plugin>
+     *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+     *   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
+     *   &lt;version&gt;...&lt;/version&gt;
+     *   &lt;configuration&gt;
+     *     &lt;systemPropertyVariables&gt;
+     *       &lt;log4j.configuration&gt;./x.props&lt;/log4j.configuration&gt;
+     *     &lt;/systemPropertyVariables&gt;
+     *   &lt;/configuration&gt;
+     * &lt;/plugin&gt;
+     * </pre>
+     *
      * @parameter
      * @since 0.3
      */
@@ -56,14 +73,17 @@ public final class CheckMojo extends AbstractRexslMojo {
     private transient Map<String, String> systemPropertyVariables;
 
     /**
-     * Scope of tests to check.
-     * @parameter expression="${rexsl.test}"
+     * Regular expression that determines tests ({@code groovy},
+     * {@code xml}, etc.) to be executed during test.
+     *
+     * @parameter expression="${rexsl.test}" default-value=".*"
      */
     @SuppressWarnings("PMD.ImmutableField")
     private transient String test = ".*";
 
     /**
-     * Check to perform.
+     * Name of the check class to execute (if not set -
+     * all checks are executed).
      * @parameter expression="${rexsl.check}"
      */
     @SuppressWarnings("PMD.ImmutableField")

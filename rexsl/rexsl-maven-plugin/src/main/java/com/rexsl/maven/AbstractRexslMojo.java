@@ -76,7 +76,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
     private transient String webappDirectory;
 
     /**
-     * TPC port to bind to.
+     * TPC port to bind to (by default a random port is used).
      * @parameter expression="${rexsl.port}"
      */
     private transient Integer port;
