@@ -113,7 +113,7 @@ public final class RestfulServlet extends HttpServlet {
         packages.add(this.getClass().getPackage().getName());
         final String param = config.getInitParameter(this.PACKAGES);
         if (param == null) {
-            throw new IllegalArgumentException(
+            throw new ServletException(
                 Logger.format(
                     "'%s' servlet parameter is mandatory",
                     this.PACKAGES
@@ -126,7 +126,7 @@ public final class RestfulServlet extends HttpServlet {
             );
             final Matcher match = ptrn.matcher(pkg);
             if (!match.matches()) {
-                throw new IllegalArgumentException(
+                throw new ServletException(
                     Logger.format(
                         // @checkstyle LineLength (1 line)
                         "'%s' servlet parameter contains non-valid data: %s",
