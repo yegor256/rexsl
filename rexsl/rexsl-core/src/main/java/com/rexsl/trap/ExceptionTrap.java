@@ -166,7 +166,9 @@ public final class ExceptionTrap extends HttpServlet {
             final String[] values = param.split(",");
             list = new ArrayList<T>(values.length);
             for (String value : values) {
-                final URI uri = URI.create(value.replaceAll("\\p{Cntrl}", ""));
+                final URI uri = URI.create(
+                    value.replaceAll("[\\p{Cntrl}\\p{Space}]+", "")
+                );
                 final Properties props = this.props(uri);
                 try {
                     list.add(

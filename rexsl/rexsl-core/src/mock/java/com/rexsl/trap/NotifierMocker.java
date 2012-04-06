@@ -71,13 +71,18 @@ public final class NotifierMocker implements Notifier {
     }
 
     /**
-     * Get recent instance instantiated.
-     * @return The instance
+     * Get recent instance instantiated and removes it from the pool
+     * (returns NULL if there are no more instances).
+     * @return The instance or NULL
      */
-    public static NotifierMocker recent() {
-        return NotifierMocker.INSTANCES.get(
-            NotifierMocker.INSTANCES.size() - 1
-        );
+    public static NotifierMocker poll() {
+        NotifierMocker notifier = null;
+        if (!NotifierMocker.INSTANCES.isEmpty()) {
+            final int pos = NotifierMocker.INSTANCES.size() - 1;
+            notifier = NotifierMocker.INSTANCES.get(pos);
+            NotifierMocker.INSTANCES.remove(pos);
+        }
+        return notifier;
     }
 
     /**

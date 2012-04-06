@@ -119,8 +119,41 @@ public final class ExceptionTrapTest {
             .when(response).getWriter();
         servlet.service(request, response);
         MatcherAssert.assertThat(
-            NotifierMocker.recent().properties().getProperty("alpha"),
+            NotifierMocker.poll().properties().getProperty("alpha"),
             Matchers.equalTo("foo")
+        );
+    }
+
+    /**
+     * ExceptionTrap can use two notifiers.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void usesTwoCustomNotifiers() throws Exception {
+        final ServletConfig config = new ServletConfigMocker().withParam(
+            Notifier.class.getName(),
+            String.format("%s, %1$s", NotifierMocker.class.getName())
+        ).mock();
+        final HttpServlet servlet = new ExceptionTrap();
+        servlet.init(config);
+        final HttpServletRequest request =
+            new HttpServletRequestMocker().mock();
+        final HttpServletResponse response =
+            Mockito.mock(HttpServletResponse.class);
+        Mockito.doReturn(new PrintWriter(new StringWriter()))
+            .when(response).getWriter();
+        servlet.service(request, response);
+        MatcherAssert.assertThat(
+            NotifierMocker.poll(),
+            Matchers.notNullValue()
+        );
+        MatcherAssert.assertThat(
+            NotifierMocker.poll(),
+            Matchers.notNullValue()
+        );
+        MatcherAssert.assertThat(
+            NotifierMocker.poll(),
+            Matchers.nullValue()
         );
     }
 
