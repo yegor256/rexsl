@@ -37,6 +37,7 @@ import java.util.Properties;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -71,6 +72,11 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
     private static final long MIN_INTERVAL = 5L;
 
     /**
+     * Running thread.
+     */
+    private final transient ScheduledFuture future;
+
+    /**
      * List of reported defect.
      */
     private final transient Queue<Defect> defects =
@@ -83,17 +89,19 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
     public SmtpBulkNotifier(final Properties props) {
         super(props);
         final long interval = this.interval();
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
-            new Runnable() {
-                @Override
-                public void run() {
-                    SmtpBulkNotifier.this.background();
-                }
-            },
-            0L,
-            interval,
-            TimeUnit.MINUTES
-        );
+        this.future = Executors
+            .newSingleThreadScheduledExecutor()
+            .scheduleAtFixedRate(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        SmtpBulkNotifier.this.background();
+                    }
+                },
+                0L,
+                interval,
+                TimeUnit.MINUTES
+            );
         Logger.info(
             this,
             "#SmtpBulkNotifier(): started with %dmin interval",
@@ -112,14 +120,24 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() throws IOException {
+        this.background();
+        if (!this.future.cancel(true)) {
+            throw new IOException("Failed to close scheduled future");
+        }
+    }
+
+    /**
      * Run this on background and send emails.
      */
     private void background() {
         synchronized (this.defects) {
             if (!this.defects.isEmpty()) {
                 try {
-                    final Message message = this.compress();
-                    this.send(message);
+                    this.send(this.compress());
                 } catch (IOException ex) {
                     Logger.error(this, "#run(): %[exception]s", ex);
                 }

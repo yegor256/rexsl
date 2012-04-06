@@ -59,6 +59,7 @@ public final class SmtpBulkNotifierTest {
         notifier.notify("some text");
         notifier.notify("some other text");
         notifier.notify("some another text");
+        notifier.close();
     }
 
 }

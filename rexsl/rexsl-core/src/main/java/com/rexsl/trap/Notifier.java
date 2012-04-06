@@ -29,6 +29,7 @@
  */
 package com.rexsl.trap;
 
+import java.io.Closeable;
 import java.io.IOException;
 
 /**
@@ -38,7 +39,7 @@ import java.io.IOException;
  * @version $Id$
  * @since 0.3.6
  */
-public interface Notifier {
+public interface Notifier extends Closeable {
 
     /**
      * Notify about this defect.

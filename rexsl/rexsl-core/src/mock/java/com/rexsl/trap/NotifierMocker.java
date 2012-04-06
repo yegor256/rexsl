@@ -71,6 +71,14 @@ public final class NotifierMocker implements Notifier {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() {
+        // nothing to do
+    }
+
+    /**
      * Get recent instance instantiated and removes it from the pool
      * (returns NULL if there are no more instances).
      * @return The instance or NULL
