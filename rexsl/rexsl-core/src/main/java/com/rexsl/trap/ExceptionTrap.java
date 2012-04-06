@@ -83,6 +83,12 @@ import org.apache.commons.lang.CharEncoding;
  * the class in {@link Properties}. See {@link SmtpNotifier} and
  * {@link SmtpBulkNotifier} for better examples.
  *
+ * <p>Spaces and all control chars (new lines, tabs, etc) are automatically
+ * removed from param values.
+ *
+ * <p>Multiple values can be separated by commas. If you want to use comma
+ * inside an URI replace it with {@code %2C}.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.6
@@ -157,13 +163,14 @@ public final class ExceptionTrap extends HttpServlet {
         if (param == null) {
             list = new ArrayList<T>();
         } else {
-            final String[] uris = param.trim().split("\\s+");
-            list = new ArrayList<T>(uris.length);
-            for (String uri : uris) {
+            final String[] values = param.split(",");
+            list = new ArrayList<T>(values.length);
+            for (String value : values) {
+                final URI uri = URI.create(value.replaceAll("\\p{Cntrl}", ""));
                 final Properties props = this.props(uri);
                 try {
                     list.add(
-                        (T) Class.forName(URI.create(uri).getPath())
+                        (T) Class.forName(uri.getPath())
                             .getConstructor(Properties.class)
                             .newInstance(props)
                     );
@@ -268,9 +275,9 @@ public final class ExceptionTrap extends HttpServlet {
      * @throws ServletException If some defect inside
      * @checkstyle RedundantThrows (3 lines)
      */
-    public static Properties props(final String uri) throws ServletException {
+    public static Properties props(final URI uri) throws ServletException {
         final Properties props = new Properties();
-        final String[] parts = uri.split("\\?");
+        final String[] parts = uri.toString().split("\\?");
         if (parts.length > 1) {
             final String query = parts[1];
             for (String param : query.split("&")) {

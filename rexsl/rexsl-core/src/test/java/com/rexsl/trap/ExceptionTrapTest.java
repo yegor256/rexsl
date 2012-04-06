@@ -98,4 +98,30 @@ public final class ExceptionTrapTest {
             )
         );
     }
+
+    /**
+     * ExceptionTrap can use a custom notifier.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void usesCustomNotifierForExceptionReporting() throws Exception {
+        final ServletConfig config = new ServletConfigMocker().withParam(
+            Notifier.class.getName(),
+            String.format("%s ?\nalpha=\tfoo ", NotifierMocker.class.getName())
+        ).mock();
+        final HttpServlet servlet = new ExceptionTrap();
+        servlet.init(config);
+        final HttpServletRequest request =
+            new HttpServletRequestMocker().mock();
+        final HttpServletResponse response =
+            Mockito.mock(HttpServletResponse.class);
+        Mockito.doReturn(new PrintWriter(new StringWriter()))
+            .when(response).getWriter();
+        servlet.service(request, response);
+        MatcherAssert.assertThat(
+            NotifierMocker.recent().properties().getProperty("alpha"),
+            Matchers.equalTo("foo")
+        );
+    }
+
 }

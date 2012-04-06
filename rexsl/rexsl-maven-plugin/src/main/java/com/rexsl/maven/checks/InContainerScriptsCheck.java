@@ -131,7 +131,12 @@ final class InContainerScriptsCheck implements Check {
             exec.execute(script);
             valid = true;
         } catch (com.rexsl.maven.utils.GroovyException ex) {
-            Logger.warn(this, "Test failed: %s", ex.getMessage());
+            Logger.warn(
+                this,
+                "Test failed (%s): %s",
+                script,
+                ex.getMessage()
+            );
             valid = false;
         }
         return valid;

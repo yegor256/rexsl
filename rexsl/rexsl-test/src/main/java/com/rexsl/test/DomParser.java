@@ -58,7 +58,7 @@ final class DomParser {
         if (txt == null) {
             throw new IllegalArgumentException("NULL instead of XML");
         }
-        if (txt.charAt(0) != '<') {
+        if (txt.isEmpty() || txt.charAt(0) != '<') {
             throw new IllegalArgumentException(
                 Logger.format("Doesn't look like XML: '%s'", txt)
             );
