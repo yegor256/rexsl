@@ -46,7 +46,9 @@ import javax.mail.Message;
  *  &lt;init-param&gt;
  *   &lt;param-name&gt;com.rexsl.trap.Notifier&lt;/param-name&gt;
  *   &lt;param-value&gt;
- *    com.rexsl.trap.SmtpNotifier?to=me&#64;example.com&amp;...
+ *    com.rexsl.trap.SmtpNotifier?to=me&#64;example.com
+ *    &amp;subject=Runtime%20problem%20at%20example%2Ecom
+ *    &amp;from=no-replyexample%2Ecom
  *   &lt;/param-value&gt;
  *  &lt;/init-param&gt;
  * &lt;/servlet&gt;
@@ -67,6 +69,9 @@ import javax.mail.Message;
  * <p>In this case we will try to find and read {@code My-Host} attribute from
  * one of available {@code MANIFEST.MF} files (read more in
  * {@link com.rexsl.core.Manifests}). See also {@link SmtpBulkNotifier}.
+ *
+ * <p>Spaces and any control symbols (new lines, tabs, etc) inside
+ * the URI are removed automatically.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
