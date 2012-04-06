@@ -43,6 +43,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
 /**
@@ -57,7 +58,7 @@ import org.apache.commons.lang.CharEncoding;
  *  &lt;init-param&gt;
  *   &lt;param-name&gt;com.rexsl.trap.Template&lt;/param-name&gt;
  *   &lt;param-value&gt;
- *    com.rexsl.trap.ResourceTemplate?resource=com/example/Trap-Template.html
+ *    com.rexsl.trap.StaticTemplate?uri=com/example/Trap-Template.html
  *   &lt;/param-value&gt;
  *  &lt;/init-param&gt;
  *  &lt;init-param&gt;
@@ -119,6 +120,16 @@ public final class ExceptionTrap extends HttpServlet {
             this.template = new AlertTemplate("One HTML template expected");
         } else {
             this.template = templates.get(0);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void destroy() {
+        for (Notifier notifier : this.notifiers) {
+            IOUtils.closeQuietly(notifier);
         }
     }
 
@@ -277,7 +288,7 @@ public final class ExceptionTrap extends HttpServlet {
      * @throws ServletException If some defect inside
      * @checkstyle RedundantThrows (3 lines)
      */
-    public static Properties props(final URI uri) throws ServletException {
+    private static Properties props(final URI uri) throws ServletException {
         final Properties props = new Properties();
         final String[] parts = uri.toString().split("\\?");
         if (parts.length > 1) {

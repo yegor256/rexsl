@@ -37,7 +37,28 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
- * Template from static URL, loaded just one on setup.
+ * Template from static URL, loaded just once on setup.
+ *
+ * <p>This is how you configure it in {@code web.xml}:
+ *
+ * <pre>
+ * &lt;servlet>
+ *  &lt;servlet-name&gt;ExceptionTrap&lt;/servlet-name&gt;
+ *  &lt;servlet-class&gt;com.rexsl.trap.ExceptionTrap&lt;/servlet-class&gt;
+ *  &lt;init-param&gt;
+ *   &lt;param-name&gt;com.rexsl.trap.Template&lt;/param-name&gt;
+ *   &lt;param-value&gt;
+ *    com.rexsl.trap.StaticTemplate?uri=/com/example/page.html
+ *   &lt;/param-value&gt;
+ *  &lt;/init-param&gt;
+ * &lt;/servlet&gt;
+ * </pre>
+ *
+ * <p>Only one parameter is required in {@code param-value}: {@code uri}. It has
+ * to point to the file (resource) with HTML page, which will be returned by
+ * {@link render(String)} after a simple pre-formatting. During that
+ * pre-formatting all <tt>"${text}"</tt> markers will be replaced with the
+ * text provided to {@link render(String)}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$

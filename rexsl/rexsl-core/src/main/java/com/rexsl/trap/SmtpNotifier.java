@@ -68,15 +68,19 @@ import javax.mail.Message;
  *
  * <p>In this case we will try to find and read {@code My-Host} attribute from
  * one of available {@code MANIFEST.MF} files (read more in
- * {@link com.rexsl.core.Manifests}). See also {@link SmtpBulkNotifier}.
+ * {@link com.rexsl.core.Manifests}).
  *
  * <p>Spaces and any control symbols (new lines, tabs, etc) inside
  * the URI are removed automatically.
+ *
+ * <p>We recommend to use {@link SmtpBulkNotifier}, which caches messages in
+ * a temporary buffer and sends them all together every X seconds/minutes.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.6
  * @see <a href="http://docs.oracle.com/javaee/6/api/javax/mail/package-summary.html">javax.mail</a>
+ * @see SmtpBulkNotifier
  */
 public final class SmtpNotifier extends AbstractSmtpNotifier {
 
@@ -100,6 +104,14 @@ public final class SmtpNotifier extends AbstractSmtpNotifier {
             throw new IOException(ex);
         }
         this.send(message);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() throws IOException {
+        // nothing to close here
     }
 
 }
