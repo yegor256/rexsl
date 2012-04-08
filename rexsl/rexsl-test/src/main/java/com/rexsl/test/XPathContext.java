@@ -56,12 +56,19 @@ final class XPathContext implements NamespaceContext {
 
     /**
      * Public ctor.
+     *
+     * <p>Since this class is private in the package users won't be able
+     * to see this code and its documentation. That's why all these prefixes
+     * and namespaces should be documented in
+     * {@link SimpleXml#SimpleXml(String)} ctor. When adding/changing this
+     * list - don't forget to document it there.
      */
     public XPathContext() {
         this.map.put("xhtml", "http://www.w3.org/1999/xhtml");
         this.map.put("xs", "http://www.w3.org/2001/XMLSchema");
         this.map.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
         this.map.put("xsl", "http://www.w3.org/1999/XSL/Transform");
+        this.map.put("svg", "http://www.w3.org/2000/svg");
     }
 
     /**
