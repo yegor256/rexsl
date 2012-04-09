@@ -196,6 +196,7 @@ public final class MavenEnvironment implements Environment {
                     if (dep.getArtifactId().equals(exists.getArtifactId())
                         && dep.getGroupId().equals(exists.getGroupId())) {
                         found = true;
+                        break;
                     }
                 }
                 if (!found) {
