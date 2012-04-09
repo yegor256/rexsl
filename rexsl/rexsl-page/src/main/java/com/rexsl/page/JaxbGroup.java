@@ -123,10 +123,10 @@ public final class JaxbGroup {
     }
 
     /**
-     * Public factory method.
-     * @param grp Group of elements
-     * @param name Name of parent element
-     * @return The object just created
+     * Creates a new JAXB-annotated collection of elements.
+     * @param grp Group of elements (JAXB-annotated)
+     * @param name Name of parent XML element
+     * @return JAXB-annotated object, just created
      */
     public static Object build(final Collection grp, final String name) {
         synchronized (JaxbGroup.READY) {

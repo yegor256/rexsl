@@ -82,7 +82,7 @@ import org.apache.commons.lang.StringUtils;
  *     return new PageBuilder()
  *       .stylesheet("/xsl/front.xsl")
  *       .build(MyPage.class)
- *       .add(new JaxbBundle("score", 2));
+ *       .add(new JaxbBundle("score", 2).element());
  *   }
  * }
  * </pre>
@@ -101,7 +101,6 @@ import org.apache.commons.lang.StringUtils;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.7
- * @see BasePage
  * @see JaxbGroup
  * @see JaxbBundle
  */

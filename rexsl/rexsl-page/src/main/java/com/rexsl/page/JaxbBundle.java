@@ -41,22 +41,36 @@ import org.w3c.dom.Element;
  * JAXB bundle.
  *
  * <p>It's a convenient instrument that enables on-fly creation of DOM/XML
- * structures, for example (
- * <a href="http://en.wikipedia.org/wiki/Fluent_interface">fluent
+ * structures, for example
+ * (<a href="http://en.wikipedia.org/wiki/Fluent_interface">fluent
  * interface</a>):
  *
  * <pre>
  * final org.w3c.dom.Element elm = new JaxbBundle("root")
  *   .add("employee")
  *     .attr("age", "28")
- *     .add("dept")
+ *     .add("dept", "Software")
  *       .attr("country", "DE")
- *       .add("salary", "> \u20AC 50,000")
- *       .up()
- *       .add("boss", "Charles de Batz-Castelmore d'Artagnan")
- *       .up()
  *     .up()
- *   .up();
+ *     .add("salary", "> \u20AC 50,000")
+ *     .up()
+ *     .add("rank", "high")
+ *   .up()
+ *   .attr("time", new Date())
+ *   .element();
+ * </pre>
+ *
+ * <p>If you convert this {@code elm} to XML this is how it will look:
+ *
+ * <pre>
+ * &lt;?xml version="1.0" ?&gt;
+ * &lt;root time="Sun Jul 20 16:17:00 EDT 1969"&gt;
+ *   &lt;employee age="28"&gt;
+ *     &lt;dept country="DE"&gt;Software&lt;/dept&gt;
+ *     &lt;salary&gt;> &#x20AC; 50,000&lt;/salary&gt;
+ *     &lt;rank&gt;high&lt;/rank&gt;
+ *   &lt;/employee&gt;
+ * &lt;/root&gt;
  * </pre>
  *
  * <p>Then, you can add this {@link Element} to your JAXB object, and return
@@ -119,14 +133,16 @@ public final class JaxbBundle {
         new ConcurrentHashMap<String, String>();
 
     /**
-     * Default ctor, for JAXB.
+     * Default ctor, for JAXB (always throws a runtime exception).
      */
     public JaxbBundle() {
-        throw new IllegalStateException("illegal call");
+        throw new IllegalStateException(
+            "JaxbBundle() ctor can't be used, use JaxbBundle(String) instead"
+        );
     }
 
     /**
-     * Public ctor.
+     * Public ctor, with just a name of XML element an no content.
      * @param nam The name of it
      */
     public JaxbBundle(final String nam) {
@@ -136,9 +152,9 @@ public final class JaxbBundle {
     }
 
     /**
-     * Public ctor.
-     * @param nam The name of it
-     * @param text The content
+     * Public ctor, with XML element name and its content.
+     * @param nam The name of XML element
+     * @param text Plain text content
      */
     public JaxbBundle(final String nam, final Object text) {
         this.parent = null;
@@ -168,9 +184,10 @@ public final class JaxbBundle {
     }
 
     /**
-     * Add new child.
-     * @param nam The name of child
-     * @return This object
+     * Add new child XML element.
+     * @param nam The name of child element
+     * @return The child bundle (use {@link #up()} on it in order to get back to
+     *  this object)
      */
     public JaxbBundle add(final String nam) {
         return this.add(nam, "");
@@ -180,7 +197,8 @@ public final class JaxbBundle {
      * Add new child with text value.
      * @param nam The name of child
      * @param txt The text
-     * @return This object
+     * @return The child bundle (use {@link #up()} on it in order to get back to
+     *  this object)
      */
     public JaxbBundle add(final String nam, final Object txt) {
         if (txt == null) {
@@ -198,9 +216,9 @@ public final class JaxbBundle {
     }
 
     /**
-     * Add attribute.
+     * Add XML attribute to this bundle.
      * @param nam The name of attribute
-     * @param val The value
+     * @param val The plain text value
      * @return This object
      */
     public JaxbBundle attr(final String nam, final Object val) {
@@ -209,7 +227,7 @@ public final class JaxbBundle {
     }
 
     /**
-     * Return parent.
+     * Return parent bundle.
      * @return The parent bundle
      * @checkstyle MethodName (3 lines)
      */
@@ -219,7 +237,7 @@ public final class JaxbBundle {
     }
 
     /**
-     * Get DOM element.
+     * Convert this bundle into DOM/XML {@link Element}.
      * @return The element
      */
     public Element element() {

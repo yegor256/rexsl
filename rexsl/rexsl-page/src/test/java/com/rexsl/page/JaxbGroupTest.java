@@ -27,58 +27,74 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.page;
 
-import com.rexsl.maven.Check;
-import java.util.Set;
+import com.rexsl.test.JaxbConverter;
+import com.rexsl.test.XhtmlMatchers;
+import java.util.Arrays;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Test case for {@link ChecksProvider}.
+ * Test case for {@link JaxbGroup}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class ChecksProviderTest {
+public final class JaxbGroupTest {
 
     /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogMocker().mock();
-    }
-
-    /**
-     * ChecksProvider can provide a set of checks.
-     * @throws Exception If something goes wrong inside
+     * JaxbGroup can be converted to XML text.
+     * @throws Exception If there is some problem inside
      */
     @Test
-    public void retrievesSetOfChecks() throws Exception {
-        final Set<Check> checks = new ChecksProvider().all();
-        MatcherAssert.assertThat(checks, Matchers.notNullValue());
-        MatcherAssert.assertThat(checks.size(), Matchers.greaterThan(0));
-    }
-
-    /**
-     * ChecksProvider can provide a set of checks.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void retrievesSpecifiedCheck() throws Exception {
-        final ChecksProvider checksProvider = new ChecksProvider();
-        final String sCheck = "JigsawCssCheck";
-        checksProvider.setCheck(sCheck);
-        final Set<Check> checks = checksProvider.all();
-        MatcherAssert.assertThat(checks, Matchers.notNullValue());
-        MatcherAssert.assertThat(checks.size(), Matchers.is(1));
-        MatcherAssert.assertThat(
-            checks.iterator().next().getClass().getSimpleName(),
-            Matchers.is(sCheck)
+    public void convertsItselfToXml() throws Exception {
+        final Object group = JaxbGroup.build(
+            Arrays.asList(new Object[] {new Dummy("e1"), new Dummy("e2")}),
+            "group"
         );
+        MatcherAssert.assertThat(
+            JaxbConverter.the(group),
+            Matchers.allOf(
+                XhtmlMatchers.hasXPath("/group[count(dummy) = 2]"),
+                XhtmlMatchers.hasXPath("/group/dummy[text='e1']"),
+                XhtmlMatchers.hasXPath("/group/dummy[text='e2']")
+            )
+        );
+    }
+
+    /**
+     * Dummy element of collection.
+     */
+    @XmlRootElement
+    public static final class Dummy {
+        /**
+         * The text.
+         */
+        private final transient String text;
+        /**
+         * Public ctor, for JAXB.
+         */
+        public Dummy() {
+            throw new IllegalStateException();
+        }
+        /**
+         * Public ctor.
+         * @param txt The text
+         */
+        public Dummy(final String txt) {
+            this.text = txt;
+        }
+        /**
+         * Get text.
+         * @return The text
+         */
+        @XmlElement
+        public String getText() {
+            return this.text;
+        }
     }
 
 }
