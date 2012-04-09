@@ -82,7 +82,7 @@ import org.w3c.dom.Element;
  * a declaration of a new POJO every time you need to return a small piece
  * of XML data.
  *
- * <p>The class is immutable and thread-safe.
+ * <p>The class is mutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$

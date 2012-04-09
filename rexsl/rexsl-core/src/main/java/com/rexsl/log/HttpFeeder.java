@@ -79,6 +79,14 @@ public final class HttpFeeder extends AbstractHttpFeeder {
      * {@inheritDoc}
      */
     @Override
+    public void close() {
+        // nothing to close here
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void activateOptions() {
         // empty, nothing to do here
     }

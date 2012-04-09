@@ -51,6 +51,7 @@
         <module>rexsl-w3c</module>
         <module>rexsl-test</module>
         <module>rexsl-core</module>
+        <module>rexsl-page</module>
         <module>rexsl-maven-plugin</module>
     </modules>
 
