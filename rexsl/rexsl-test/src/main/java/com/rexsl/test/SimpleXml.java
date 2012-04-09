@@ -72,6 +72,7 @@ public final class SimpleXml implements XmlDocument {
      * xs: http://www.w3.org/2001/XMLSchema
      * xsi: http://www.w3.org/2001/XMLSchema-instance
      * xsl: http://www.w3.org/1999/XSL/Transform
+     * svg: http://www.w3.org/2000/svg
      * </pre>
      *
      * <p>In future versions we will add more namespaces (submit a ticket if
