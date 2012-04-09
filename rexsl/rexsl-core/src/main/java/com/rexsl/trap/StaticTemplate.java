@@ -56,9 +56,9 @@ import org.apache.commons.lang.StringEscapeUtils;
  *
  * <p>Only one parameter is required in {@code param-value}: {@code uri}. It has
  * to point to the file (resource) with HTML page, which will be returned by
- * {@link render(String)} after a simple pre-formatting. During that
+ * {@link #render(String)} after a simple pre-formatting. During that
  * pre-formatting all <tt>"${text}"</tt> markers will be replaced with the
- * text provided to {@link render(String)}.
+ * text provided to {@link #render(String)}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
