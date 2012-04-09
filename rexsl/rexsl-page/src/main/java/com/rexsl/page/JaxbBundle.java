@@ -52,7 +52,7 @@ import org.w3c.dom.Element;
  *     .add("dept", "Software")
  *       .attr("country", "DE")
  *     .up()
- *     .add("salary", "> \u20AC 50,000")
+ *     .add("salary", "> &#92;u20AC 50,000")
  *     .up()
  *     .add("rank", "high")
  *   .up()
@@ -67,7 +67,7 @@ import org.w3c.dom.Element;
  * &lt;root time="Sun Jul 20 16:17:00 EDT 1969"&gt;
  *   &lt;employee age="28"&gt;
  *     &lt;dept country="DE"&gt;Software&lt;/dept&gt;
- *     &lt;salary&gt;> &#x20AC; 50,000&lt;/salary&gt;
+ *     &lt;salary&gt;&amp;gt; &#x20AC; 50,000&lt;/salary&gt;
  *     &lt;rank&gt;high&lt;/rank&gt;
  *   &lt;/employee&gt;
  * &lt;/root&gt;
@@ -85,7 +85,7 @@ import org.w3c.dom.Element;
  *     return new JaxbBundle("employee")
  *       .attr("age", "35")
  *       .attr("country", "DE")
- *       .add("salary", "> \u20AC 50,000")
+ *       .add("salary", "> &#92;u20AC 50,000")
  *       .up()
  *       .element();
  *   }
