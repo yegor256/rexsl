@@ -96,10 +96,6 @@ import org.apache.commons.lang.StringUtils;
  * &lt;/page&gt;
  * </pre>
  *
- * <p>Take a look at {@link BasePage} class that already implements the majority
- * of features you may need in your application. You can extend it for your
- * own needs or use "as is".
- *
  * <p>The class is mutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
