@@ -49,7 +49,7 @@ public class MainRs {
     return new PageBuilder()
       .stylesheet("/xsl/front.xsl")
       .build(BasePage.class)
-      .add(new JaxbBundle("score", 123));
+      .add(new JaxbBundle("score", 123).element());
   }
 }
 +--
