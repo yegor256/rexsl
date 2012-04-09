@@ -51,6 +51,12 @@ import javax.mail.internet.MimeMessage;
 abstract class AbstractSmtpNotifier implements Notifier {
 
     /**
+     * End of line, according to RFC2049.
+     * @see <a href="http://www.ietf.org/rfc/rfc2049.txt">RFC 2049</a>
+     */
+    protected static final String CRLF = "\r\n";
+
+    /**
      * SMTP session.
      */
     private final transient Session session;
@@ -84,10 +90,8 @@ abstract class AbstractSmtpNotifier implements Notifier {
      * @throws IOException If some problem inside
      */
     protected final void send(final Message message) throws IOException {
+        final Transport transport = this.transport();
         try {
-            final Transport transport = this.session.getTransport(
-                this.prop("transport")
-            );
             transport.connect(
                 this.prop("mail.smtp.host"),
                 Integer.parseInt(this.prop("mail.smtp.port")),
@@ -105,10 +109,30 @@ abstract class AbstractSmtpNotifier implements Notifier {
             );
             message.setSubject(this.prop("subject"));
             transport.sendMessage(message, message.getAllRecipients());
-            transport.close();
+        } catch (javax.mail.MessagingException ex) {
+            throw new IOException(ex);
+        } finally {
+            try {
+                transport.close();
+            } catch (javax.mail.MessagingException ex) {
+                Logger.error(this, "#send(..): failed %[exception]s", ex);
+            }
+        }
+    }
+
+    /**
+     * Create transport.
+     * @return The transport just created
+     * @throws IOException If some problem inside
+     */
+    private Transport transport() throws IOException {
+        Transport transport;
+        try {
+            transport = this.session.getTransport(this.prop("transport"));
         } catch (javax.mail.MessagingException ex) {
             throw new IOException(ex);
         }
+        return transport;
     }
 
     /**

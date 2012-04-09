@@ -31,8 +31,9 @@ package com.rexsl.log;
 
 import com.ymock.util.Logger;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -91,9 +92,9 @@ public final class CloudAppender extends AppenderSkeleton {
     private transient Feeder feeder;
 
     /**
-     * Are we still alive?
+     * The future we're running in.
      */
-    private final transient AtomicBoolean alive = new AtomicBoolean(false);
+    private transient Future future;
 
     /**
      * Set feeder, option {@code feeder} in config.
@@ -125,7 +126,7 @@ public final class CloudAppender extends AppenderSkeleton {
             );
         }
         super.activateOptions();
-        final Thread thread = new Thread(
+        this.future = Executors.newSingleThreadExecutor().submit(
             new Runnable() {
                 @Override
                 public void run() {
@@ -133,8 +134,6 @@ public final class CloudAppender extends AppenderSkeleton {
                 }
             }
         );
-        thread.setName(Logger.format("CloudAppender to %[type]s", this.feeder));
-        thread.start();
     }
 
     /**
@@ -142,7 +141,9 @@ public final class CloudAppender extends AppenderSkeleton {
      */
     @Override
     public void close() {
-        this.alive.set(false);
+        if (this.future != null && !this.future.cancel(true)) {
+            throw new IllegalStateException("Failed to close future");
+        }
     }
 
     /**
@@ -189,8 +190,7 @@ public final class CloudAppender extends AppenderSkeleton {
                 this.feeder
             )
         );
-        this.alive.set(true);
-        while (this.alive.get()) {
+        while (true) {
             String text;
             try {
                 text = this.messages.take();

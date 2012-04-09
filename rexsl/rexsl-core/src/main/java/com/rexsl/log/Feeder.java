@@ -29,6 +29,7 @@
  */
 package com.rexsl.log;
 
+import java.io.Closeable;
 import java.io.IOException;
 import org.apache.log4j.spi.OptionHandler;
 
@@ -41,7 +42,7 @@ import org.apache.log4j.spi.OptionHandler;
  * @version $Id$
  * @since 0.3.2
  */
-public interface Feeder extends OptionHandler {
+public interface Feeder extends OptionHandler, Closeable {
 
     /**
      * Send this text to the cloud right now (wait as much as necessary).

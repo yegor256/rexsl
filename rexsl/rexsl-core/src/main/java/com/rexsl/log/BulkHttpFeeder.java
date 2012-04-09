@@ -32,6 +32,7 @@ package com.rexsl.log;
 import com.ymock.util.Logger;
 import java.io.IOException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -62,6 +63,11 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
     private final transient StringBuffer buffer = new StringBuffer();
 
     /**
+     * The future we're running in.
+     */
+    private transient Future future;
+
+    /**
      * Set option {@code period}.
      * @param secs Interval, in seconds
      */
@@ -81,22 +87,34 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
      * {@inheritDoc}
      */
     @Override
+    public void close() throws IOException {
+        if (!this.future.cancel(true)) {
+            throw new IOException("Failed to close scheduled future");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void activateOptions() {
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
-            new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        BulkHttpFeeder.this.flush();
-                    } catch (java.io.IOException ex) {
-                        Logger.warn(this, "#run(): %[exception]s", ex);
+        this.future = Executors
+            .newSingleThreadScheduledExecutor()
+            .scheduleAtFixedRate(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            BulkHttpFeeder.this.flush();
+                        } catch (java.io.IOException ex) {
+                            Logger.warn(this, "#run(): %[exception]s", ex);
+                        }
                     }
-                }
-            },
-            1L,
-            this.period,
-            TimeUnit.SECONDS
-        );
+                },
+                1L,
+                this.period,
+                TimeUnit.SECONDS
+            );
     }
 
     /**

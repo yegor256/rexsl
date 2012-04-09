@@ -99,7 +99,7 @@ public final class SmtpNotifier extends AbstractSmtpNotifier {
     public void notify(final String defect) throws IOException {
         final Message message = this.message();
         try {
-            message.setText(defect);
+            message.setText(defect.replace("\n", AbstractSmtpNotifier.CRLF));
         } catch (javax.mail.MessagingException ex) {
             throw new IOException(ex);
         }

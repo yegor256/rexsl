@@ -157,7 +157,7 @@ public final class CloudAppenderTest {
         }
         MatcherAssert.assertThat(
             this.outContent.toString(),
-            Matchers.startsWith(
+            Matchers.containsString(
                 "CloudAppender doesn't have space available to store the event"
             )
         );

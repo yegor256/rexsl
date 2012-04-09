@@ -80,34 +80,43 @@ public abstract class AbstractHttpFeeder implements Feeder {
      * POST one line of text.
      * @param text The text to post
      * @throws IOException If failed to post
+     * @todo #341 Would be much better to use RestTester here, but it
+     *  will mean that rexsl-test module will become a transitive dependency
+     *  of rexsl-core, which is not a good idea..
      */
     protected final void post(final String text) throws IOException {
         final HttpURLConnection conn =
             (HttpURLConnection) this.url.openConnection();
-        conn.setConnectTimeout((int) TimeUnit.MINUTES.toMillis(1L));
-        conn.setReadTimeout((int) TimeUnit.MINUTES.toMillis(1L));
-        conn.setDoOutput(true);
         try {
-            conn.setRequestMethod("POST");
-        } catch (java.net.ProtocolException ex) {
-            throw new IOException(ex);
-        }
-        conn.setRequestProperty(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
-        IOUtils.write(
-            text,
-            conn.getOutputStream(),
-            CharEncoding.UTF_8
-        );
-        if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            throw new IOException(
-                Logger.format(
-                    "Invalid response code #%d from %s",
-                    conn.getResponseCode(),
-                    this.url
-                )
+            conn.setConnectTimeout((int) TimeUnit.MINUTES.toMillis(1L));
+            conn.setReadTimeout((int) TimeUnit.MINUTES.toMillis(1L));
+            conn.setDoOutput(true);
+            try {
+                conn.setRequestMethod("POST");
+            } catch (java.net.ProtocolException ex) {
+                throw new IOException(ex);
+            }
+            conn.setRequestProperty(
+                HttpHeaders.CONTENT_TYPE,
+                MediaType.TEXT_PLAIN
             );
+            IOUtils.write(
+                text,
+                conn.getOutputStream(),
+                CharEncoding.UTF_8
+            );
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new IOException(
+                    Logger.format(
+                        "Invalid response code #%d from %s",
+                        conn.getResponseCode(),
+                        this.url
+                    )
+                );
+            }
+        } finally {
+            conn.disconnect();
         }
-        conn.disconnect();
     }
 
 }
