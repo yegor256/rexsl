@@ -115,10 +115,10 @@ public final class JaxbGroup {
     }
 
     /**
-     * Private ctor.
+     * Protected ctor, for on-fly instantiating (you're not supposed to use it).
      * @param grp Group of elements
      */
-    private JaxbGroup(final Collection grp) {
+    protected JaxbGroup(final Collection grp) {
         this.group = grp;
     }
 
@@ -206,7 +206,7 @@ public final class JaxbGroup {
             ctc.defrost();
             Logger.debug(
                 JaxbGroup.class,
-                "#construct('%s'): class %s created",
+                "#construct('%s'): class %s constructed",
                 name,
                 cls.getName()
             );
