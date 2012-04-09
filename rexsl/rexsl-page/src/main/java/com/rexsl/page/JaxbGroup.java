@@ -171,10 +171,11 @@ public final class JaxbGroup {
      */
     private static String mnemo(final boolean empty, final String name) {
         return String.format(
-            "%s$%s%B",
+            "%s$%s$%s",
             JaxbGroup.class.getName(),
             name,
-            !empty
+            // @checkstyle AvoidInlineConditionals (1 line)
+            empty ? "empty" : "full"
         );
     }
 
