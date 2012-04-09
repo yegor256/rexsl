@@ -27,58 +27,39 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.maven;
 
-import com.rexsl.maven.Check;
 import java.util.Set;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
- * Test case for {@link ChecksProvider}.
+ * Provider of checks.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class ChecksProviderTest {
+public interface ChecksProvider {
 
     /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
+     * Get full collection of checks.
+     *
+     * <p>Checks should be ordered by their complexity. Most simple and fast
+     * checks should go first, in order to fail build faster. Most heavy and
+     * slow checks should be at the end of the list.
+     *
+     * @return List of checks
      */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogMocker().mock();
-    }
+    Set<Check> all();
 
     /**
-     * ChecksProvider can provide a set of checks.
-     * @throws Exception If something goes wrong inside
+     * Sets the scope of tests to execute.
+     * @param scope Pattern of test name
      */
-    @Test
-    public void retrievesSetOfChecks() throws Exception {
-        final Set<Check> checks = new ChecksProvider().all();
-        MatcherAssert.assertThat(checks, Matchers.notNullValue());
-        MatcherAssert.assertThat(checks.size(), Matchers.greaterThan(0));
-    }
+    void setTest(String scope);
 
     /**
-     * ChecksProvider can provide a set of checks.
-     * @throws Exception If something goes wrong inside
+     * Sets the scope of tests to execute.
+     * @param chck Name of the check class of the check to perform.
      */
-    @Test
-    public void retrievesSpecifiedCheck() throws Exception {
-        final ChecksProvider checksProvider = new ChecksProvider();
-        final String sCheck = "JigsawCssCheck";
-        checksProvider.setCheck(sCheck);
-        final Set<Check> checks = checksProvider.all();
-        MatcherAssert.assertThat(checks, Matchers.notNullValue());
-        MatcherAssert.assertThat(checks.size(), Matchers.is(1));
-        MatcherAssert.assertThat(
-            checks.iterator().next().getClass().getSimpleName(),
-            Matchers.is(sCheck)
-        );
-    }
+    void setCheck(String chck);
 
 }

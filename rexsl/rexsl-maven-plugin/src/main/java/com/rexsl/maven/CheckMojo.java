@@ -29,7 +29,7 @@
  */
 package com.rexsl.maven;
 
-import com.rexsl.maven.checks.ChecksProvider;
+import com.rexsl.maven.checks.DefaultChecksProvider;
 import com.ymock.util.Logger;
 import java.util.Map;
 import java.util.Properties;
@@ -92,16 +92,28 @@ public final class CheckMojo extends AbstractRexslMojo {
     private transient String check;
 
     /**
+     * Checks provider.
+     */
+    private transient ChecksProvider provider = new DefaultChecksProvider();
+
+    /**
+     * Set checks provider.
+     * @param prov The provider to set
+     */
+    public void setChecksProvider(final ChecksProvider prov) {
+        this.provider = prov;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     protected void run() throws MojoFailureException {
         final long start = System.nanoTime();
         final Properties before = this.inject();
-        final ChecksProvider provider = new ChecksProvider();
-        provider.setTest(this.test);
-        provider.setCheck(this.check);
-        final Set<Check> checks = provider.all();
+        this.provider.setTest(this.test);
+        this.provider.setCheck(this.check);
+        final Set<Check> checks = this.provider.all();
         try {
             for (Check chck : checks) {
                 if (!chck.validate(this.env())) {

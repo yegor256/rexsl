@@ -570,24 +570,6 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-               <groupId>org.powermock</groupId>
-               <artifactId>powermock-core</artifactId>
-               <version since="2 Sep 2011">1.4.9</version>
-               <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-module-junit4</artifactId>
-                <version since="2 Sep 2011">1.4.9</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito</artifactId>
-                <version since="2 Sep 2011">1.4.9</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <!-- Logging facility. -->
                 <groupId>com.ymock</groupId>
                 <artifactId>ymock-util</artifactId>

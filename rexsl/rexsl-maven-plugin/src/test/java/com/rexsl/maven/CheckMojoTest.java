@@ -29,7 +29,6 @@
  */
 package com.rexsl.maven;
 
-import com.rexsl.maven.checks.ChecksProvider;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,11 +39,7 @@ import org.apache.maven.project.MavenProject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.repository.LocalRepository;
 
@@ -53,8 +48,6 @@ import org.sonatype.aether.repository.LocalRepository;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ CheckMojo.class, ChecksProvider.class })
 public final class CheckMojoTest {
 
     /**
@@ -78,16 +71,13 @@ public final class CheckMojoTest {
      */
     @Test
     public void restoresSystemPropertiesAfterExecution() throws Exception {
-        PowerMockito.mockStatic(ChecksProvider.class);
-        final ChecksProvider provider =
-            PowerMockito.mock(ChecksProvider.class);
+        final ChecksProvider provider = Mockito.mock(ChecksProvider.class);
         final Set<Check> checks = new HashSet<Check>();
         final Check check = new CheckMocker().withResult(true).mock();
         checks.add(check);
         Mockito.doReturn(checks).when(provider).all();
-        PowerMockito.whenNew(ChecksProvider.class).withNoArguments()
-            .thenReturn(provider);
         final CheckMojo mojo = this.mojo();
+        mojo.setChecksProvider(provider);
         final MavenProject project = new MavenProjectMocker().mock();
         mojo.setProject(project);
         final Field sysPropField =
@@ -129,16 +119,13 @@ public final class CheckMojoTest {
      */
     @Test
     public void onePositiveCheckIsExecuted() throws Exception {
-        PowerMockito.mockStatic(ChecksProvider.class);
-        final ChecksProvider provider =
-            PowerMockito.mock(ChecksProvider.class);
+        final ChecksProvider provider = Mockito.mock(ChecksProvider.class);
         final Set<Check> checks = new HashSet<Check>();
         final Check check = new CheckMocker().withResult(true).mock();
         checks.add(check);
         Mockito.doReturn(checks).when(provider).all();
-        PowerMockito.whenNew(ChecksProvider.class).withNoArguments()
-            .thenReturn(provider);
         final CheckMojo mojo = this.mojo();
+        mojo.setChecksProvider(provider);
         final MavenProject project = new MavenProjectMocker().mock();
         mojo.setProject(project);
         mojo.execute();

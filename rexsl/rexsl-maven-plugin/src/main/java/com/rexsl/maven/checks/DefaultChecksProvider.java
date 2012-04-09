@@ -30,6 +30,7 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
+import com.rexsl.maven.ChecksProvider;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -40,7 +41,7 @@ import java.util.Set;
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (100 lines)
  */
-public final class ChecksProvider {
+public final class DefaultChecksProvider implements ChecksProvider {
 
     /**
      * Test scope.
@@ -53,14 +54,9 @@ public final class ChecksProvider {
     private transient Class<? extends Check> check;
 
     /**
-     * Get full collection of checks.
-     *
-     * <p>Checks should be ordered by their complexity. Most simple and fast
-     * checks should go first, in order to fail build faster. Most heavy and
-     * slow checks should be at the end of the list.
-     *
-     * @return List of checks
+     * {@inheritDoc}
      */
+    @Override
     public Set<Check> all() {
         final Set<Check> checks = new LinkedHashSet<Check>();
         this.addCheck(checks, new BinaryFilesCheck());
@@ -76,6 +72,30 @@ public final class ChecksProvider {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setTest(final String scope) {
+        this.test = scope;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setCheck(final String chck) {
+        if (chck != null) {
+            try {
+                this.check = (Class<? extends Check>) Class.forName(
+                    String.format("com.rexsl.maven.checks.%s", chck)
+                );
+            } catch (ClassNotFoundException cnfe) {
+                throw new IllegalArgumentException(cnfe);
+            }
+        }
+    }
+
+    /**
      * Adds a Check object to the Check set. If the check variable is not
      * null it will only add the check if it pertains to that class.
      *
@@ -87,30 +107,6 @@ public final class ChecksProvider {
             checks.add(chck);
         } else if (chck.getClass().equals(this.check)) {
             checks.add(chck);
-        }
-    }
-
-    /**
-     * Sets the scope of tests to execute.
-     * @param scope Pattern of test name
-     */
-    public void setTest(final String scope) {
-        this.test = scope;
-    }
-
-    /**
-     * Sets the scope of tests to execute.
-     * @param chck Name of the check class of the check to perform.
-     */
-    public void setCheck(final String chck) {
-        if (chck != null) {
-            try {
-                this.check = (Class<? extends Check>) Class.forName(
-                    String.format("com.rexsl.maven.checks.%s", chck)
-                );
-            } catch (ClassNotFoundException cnfe) {
-                throw new IllegalArgumentException(cnfe);
-            }
         }
     }
 
