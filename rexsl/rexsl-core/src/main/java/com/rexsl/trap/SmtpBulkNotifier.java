@@ -153,21 +153,22 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
     private Message compress() throws IOException {
         final StringBuilder text = new StringBuilder();
         text.append(
-            Logger.format(
-                // @checkstyle LineLength (1 line)
-                "During the last few mins there were %d exception(s):\n\n",
-                this.defects.size()
+            String.format(
+                "During the last few mins there were %d exception(s):%s%2$s",
+                this.defects.size(),
+                AbstractSmtpNotifier.CRLF
             )
         );
         final StringBuilder attachment = new StringBuilder();
         final Iterator<Defect> iterator = this.defects.iterator();
         while (iterator.hasNext()) {
             final Defect defect = iterator.next();
-            text.append(defect.date()).append("\n");
+            text.append(defect.date()).append(AbstractSmtpNotifier.CRLF);
             attachment.append(defect.text()).append("\n\n");
             iterator.remove();
         }
-        text.append("\nDetailed information is attached in text file.");
+        text.append(AbstractSmtpNotifier.CRLF)
+            .append("Detailed information is attached in text file.");
         return this.mime(text.toString(), attachment.toString());
     }
 

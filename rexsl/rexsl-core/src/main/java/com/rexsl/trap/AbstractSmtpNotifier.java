@@ -51,6 +51,12 @@ import javax.mail.internet.MimeMessage;
 abstract class AbstractSmtpNotifier implements Notifier {
 
     /**
+     * End of line, according to RFC2049.
+     * @see <a href="http://www.ietf.org/rfc/rfc2049.txt">RFC 2049</a>
+     */
+    protected static final String CRLF = "\r\n";
+
+    /**
      * SMTP session.
      */
     private final transient Session session;
