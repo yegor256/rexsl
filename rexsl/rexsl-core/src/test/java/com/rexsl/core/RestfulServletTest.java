@@ -59,7 +59,7 @@ public final class RestfulServletTest {
     @Test
     public void passesHttpRequestsToJersey() throws Exception {
         final ServletConfig config = new ServletConfigMocker()
-            .withParam(this.PACKAGES_KEY, "com.rexsl.core")
+            .withParam(this.PACKAGES_KEY, "\t\ncom.rexsl.core  \r")
             .mock();
         final HttpServlet servlet = new RestfulServlet();
         servlet.init(config);
