@@ -37,7 +37,10 @@ import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.GroovyExecutor;
 import com.ymock.util.Logger;
 import java.io.File;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Validate the product in container, with Groovy scripts.
@@ -103,13 +106,24 @@ final class InContainerScriptsCheck implements Check {
     private boolean run(final File dir, final Environment env) {
         boolean success = true;
         final FileFinder finder = new FileFinder(dir, "groovy");
+        final Set<String> failed = new LinkedHashSet<String>();
         for (File script : finder.random()) {
             final String name = FilenameUtils.removeExtension(script.getName());
             if (!name.matches(this.test)) {
                 continue;
             }
             Logger.info(this, "Testing '%s'...", script);
-            success &= this.one(env, script);
+            if (!this.one(env, script)) {
+                success = false;
+                failed.add(script.getName());
+            }
+        }
+        if (!failed.isEmpty()) {
+            Logger.warn(
+                this,
+                "In-container check failed because of:\n  %s",
+                StringUtils.join(failed, "\n  ")
+            );
         }
         return success;
     }
