@@ -57,3 +57,21 @@ ReXSL Testing Facility
   <scope>test</scope>
 </dependency>
 +--
+
+  This module also contains a very useful Mocking tool in   {{{./testapidocs/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}. To use it you should include this dependencies into your project:
+
++--
+<dependency>
+  <groupId>com.rexsl</groupId>
+  <artifactId>rexsl-test</artifactId>
+  <version>${releasedVersion}</version>
+  <classifier>mock</classifier>
+  <scope>test</scope>
+</dependency>
+<dependency>
+  <groupId>com.sun.grizzly</groupId>
+  <artifactId>grizzly-servlet-webserver</artifactId>
+  <version>1.9.10</version>
+  <scope>test</scope>
+</dependency>
++--

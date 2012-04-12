@@ -38,8 +38,32 @@ import org.hamcrest.Matchers;
 
 /**
  * Mocker of Java Servlet container.
+ *
+ * <p>A convenient tool to test your application classes against a web
+ * service. For example:
+ *
+ * <pre>
+ * URI home = new ContainerMocker()
+ *   .expectMethod("GET")
+ *   .expectHeader("Accept", Matchers.startsWith("text/"))
+ *   .returnBody("&lt;done/&gt;")
+ *   .returnStatus(200)
+ *   .mock()
+ *   .home();
+ * // sometime later
+ * RestTester.start(home)
+ *   .header("Accept", "text/xml")
+ *   .get("Load sample page")
+ *   .assertStatus(200);
+ * </pre>
+ *
+ * <p>Keep in mind that container automatically reserves a new free TCP port
+ * and works until JVM is shut down. The only way to stop it is to call
+ * {@link #stop()}.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see RestTester
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class ContainerMocker {
@@ -87,9 +111,10 @@ public final class ContainerMocker {
     }
 
     /**
-     * Expect this method.
+     * Expect this HTTP method (take a look at {@link RestTester} constants).
      * @param matcher Name of the method to expect.
      * @return This object
+     * @see RestTester
      */
     public ContainerMocker expectMethod(final Matcher<String> matcher) {
         this.adapter.setMethodMatcher(matcher);
@@ -183,7 +208,7 @@ public final class ContainerMocker {
     }
 
     /**
-     * Mock it, and return this object.
+     * Start container (to use in &#64;Before-annotated unit test method).
      */
     public void start() {
         try {
@@ -199,7 +224,7 @@ public final class ContainerMocker {
     }
 
     /**
-     * Stop Servlet container.
+     * Stop container (to use in &#64;After-annotated unit test method).
      */
     public void stop() {
         this.gws.stop();
@@ -212,7 +237,7 @@ public final class ContainerMocker {
 
     /**
      * Get its home.
-     * @return URL of the started container
+     * @return URI of the started container
      */
     public URI home() {
         try {
