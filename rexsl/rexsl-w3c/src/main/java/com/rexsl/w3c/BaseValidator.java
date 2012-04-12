@@ -109,8 +109,6 @@ class BaseValidator {
             entity.addPart("output", new StringBody("soap12"));
             entity.writeTo(stream);
             return stream.toString(CharEncoding.UTF_8);
-        } catch (java.io.UnsupportedEncodingException ex) {
-            throw new IllegalArgumentException(ex);
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
