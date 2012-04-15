@@ -116,7 +116,7 @@ final class UserAgent {
     }
 
     /**
-     * Check if this is Safari.
+     * Check if this is Google Chrome.
      * @return Is it?
      */
     private boolean isChrome() {
