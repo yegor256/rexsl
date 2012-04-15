@@ -1,0 +1,282 @@
+/**
+ * Copyright (c) 2011-2012, ReXSL.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met: 1) Redistributions of source code must retain the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer. 2) Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3) Neither the name of the ReXSL.com nor
+ * the names of its contributors may be used to endorse or promote
+ * products derived from this software without specific prior written
+ * permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+ * NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.page;
+
+import com.rexsl.core.XslResolver;
+import java.net.URI;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlMixed;
+import javax.xml.bind.annotation.XmlRootElement;
+import org.w3c.dom.Element;
+
+/**
+ * HATEOAS link.
+ *
+ * <p>This is how it is supposed to be used, for example:
+ *
+ * <pre>
+ * &#64;Path("/alpha")
+ * public class MainRs {
+ *   &#64;GET
+ *   &#64;Produces(MediaTypes.APPLICATION_XML)
+ *   public BasePage front() {
+ *     return new PageBuilder()
+ *       .stylesheet("/xsl/front.xsl")
+ *       .build(BasePage.class)
+ *       .link(new Link("search", "./s"))
+ *       .link(new Link("start", "/start"));
+ *   }
+ * }
+ * </pre>
+ *
+ * <p>That is how an XML will look like (if the site is deployed to
+ * {@code http://example.com/foo/}):
+ *
+ * <pre>
+ * &lt;?xml version="1.0" ?&gt;
+ * &lt;?xml-stylesheet type='text/xsl' href='/xsl/front.xsl'?&gt;
+ * &lt;page&gt;
+ *   &lt;links&gt;
+ *     &lt;link rel="search" href="http://example.com/foo/alpha/s"
+ *       type="application/xml"/&gt;
+ *     &lt;link rel="start" href="http://example.com/foo/start"
+ *       type="application/xml"/&gt;
+ *   &lt;/links&gt;
+ * &lt;/page&gt;
+ * </pre>
+ *
+ * <p>Sometimes it's necessary to add more information to the link, besides the
+ * the mandatory {@code rel}, {@code href}, and {@code type} attributes. That's
+ * how you can specify more:
+ *
+ * <pre>
+ * return new PageBuilder()
+ *   .build(BasePage.class)
+ *   .link(new Link("search", "./s").with(new JaxbBundle("name", "John Doe")))
+ * </pre>
+ *
+ * <p>The result XML will look like:
+ *
+ * <pre>
+ * &lt;?xml version="1.0" ?&gt;
+ * &lt;?xml-stylesheet type='text/xsl' href='/xsl/front.xsl'?&gt;
+ * &lt;page&gt;
+ *   &lt;links&gt;
+ *     &lt;link rel="search" href="http://example.com/foo/alpha/s"
+ *       type="application/xml"/&gt;
+ *       &lt;name&gt;John Doe&lt;/name&gt;
+ *     &lt;/link&gt;
+ *   &lt;/links&gt;
+ * &lt;/page&gt;
+ * </pre>
+ *
+ * <p>The class is mutable and thread-safe.
+ *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @version $Id$
+ */
+@XmlRootElement(name = "link")
+@XmlAccessorType(XmlAccessType.NONE)
+public final class Link {
+
+    /**
+     * Name of {@code rel} attribute.
+     */
+    private final transient String rel;
+
+    /**
+     * The type of resource there.
+     */
+    private final transient String type;
+
+    /**
+     * Optional sub-elements.
+     */
+    private final transient List<Object> elements =
+        new CopyOnWriteArrayList<Object>();
+
+    /**
+     * Content of {@code href} attribute, with URI.
+     */
+    private transient String href;
+
+    /**
+     * Public ctor for JAXB (always throws a runtime exception).
+     *
+     * <p>You're not supposed to use this ctor (it is here just for compliance
+     * with JAXB implementations). Use other ctors instead.
+     */
+    public Link() {
+        throw new IllegalStateException("This ctor should never be called");
+    }
+
+    /**
+     * Public ctor.
+     * @param rname The "rel" of it
+     * @param link The href
+     */
+    public Link(final String rname, final String link) {
+        this(rname, UriBuilder.fromPath(link).build());
+    }
+
+    /**
+     * Public ctor.
+     * @param rname The "rel" of it
+     * @param uri The href
+     */
+    public Link(final String rname, final URI uri) {
+        this(rname, uri, MediaType.TEXT_XML);
+    }
+
+    /**
+     * Public ctor.
+     * @param rname The "rel" of it
+     * @param builder URI builder
+     */
+    public Link(final String rname, final UriBuilder builder) {
+        this(rname, builder.build(), MediaType.TEXT_XML);
+    }
+
+    /**
+     * Public ctor.
+     * @param rname The "rel" of it
+     * @param uri The href
+     * @param tpe Media type of destination
+     */
+    public Link(final String rname, final URI uri, final String tpe) {
+        if (rname == null) {
+            throw new IllegalArgumentException("REL attribute can't be NULL");
+        }
+        if (uri == null) {
+            throw new IllegalArgumentException("HREF attribute can't be NULL");
+        }
+        if (tpe == null) {
+            throw new IllegalArgumentException("TYPE attribute can't be NULL");
+        }
+        if (rname.isEmpty()) {
+            throw new IllegalArgumentException("REL attribute can't be empty");
+        }
+        if (tpe.isEmpty()) {
+            throw new IllegalArgumentException("TYPE attribute can't be empty");
+        }
+        this.rel = rname;
+        this.href = uri.toString();
+        this.type = tpe;
+    }
+
+    /**
+     * REL attribute of the link.
+     * @return The name
+     */
+    @XmlAttribute
+    public String getRel() {
+        return this.rel;
+    }
+
+    /**
+     * HREF attribute of the link.
+     * @return The url
+     */
+    @XmlAttribute
+    public String getHref() {
+        return this.href;
+    }
+
+    /**
+     * Type of destination resource.
+     * @return The type
+     */
+    @XmlAttribute
+    public String getType() {
+        return this.type;
+    }
+
+    /**
+     * Get all elements.
+     * @return Full list of injected elements
+     */
+    @XmlAnyElement(lax = true)
+    @XmlMixed
+    public List<Object> getElements() {
+        return this.elements;
+    }
+
+    /**
+     * Add new sub-element.
+     * @param element The sub-element to add
+     * @return This object
+     */
+    public Link with(final Object element) {
+        this.elements.add(element);
+        return this;
+    }
+
+    /**
+     * Add new JAXB bundle.
+     * @param bundle The bundle to add
+     * @return This object
+     */
+    public Link with(final JaxbBundle bundle) {
+        this.with(bundle.element());
+        return this;
+    }
+
+    /**
+     * Attach to this resource.
+     * @param res The resource to attach to
+     */
+    void attachTo(final Resource res) {
+        synchronized (this.elements) {
+            if (this.href.charAt(0) == '.') {
+                this.href = res.uriInfo().getRequestUriBuilder()
+                    .clone()
+                    .path(this.href.substring(1))
+                    .build()
+                    .toString();
+            } else if (this.href.charAt(0) == '/') {
+                this.href = res.uriInfo().getBaseUriBuilder()
+                    .clone()
+                    .path(this.href)
+                    .build()
+                    .toString();
+            }
+        }
+    }
+
+}

@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
@@ -28,22 +26,48 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.page;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.ext.Providers;
+
+/**
+ * JAX-RS resource has to implement this interface, in order to be
+ * injectable into {@link BasePage}.
  *
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
-    http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="rexsl-w3c">
+ * @since 0.3.7
+ * @see BasePage
+ */
+public interface Resource {
 
-    <body>
-        <menu ref="parent" />
-        <menu name="Overview">
-            <item name="Introduction" href="./index.html" />
-            <item name="API" href="apidocs/index.html" />
-        </menu>
-        <menu ref="reports" />
-    </body>
+    /**
+     * Get URI Info.
+     * @return URI info
+     */
+    UriInfo uriInfo();
 
-</project>
+    /**
+     * All registered JAX-RS providers.
+     * @return Providers
+     */
+    Providers providers();
+
+    /**
+     * All Http Headers.
+     * @return Headers
+     */
+    HttpHeaders httpHeaders();
+
+    /**
+     * Request just received.
+     * @return The request
+     */
+    HttpServletRequest httpServletRequest();
+
+}
