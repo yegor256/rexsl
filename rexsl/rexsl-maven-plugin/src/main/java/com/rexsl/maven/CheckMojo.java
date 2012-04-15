@@ -116,6 +116,7 @@ public final class CheckMojo extends AbstractRexslMojo {
         final Set<Check> checks = this.provider.all();
         try {
             for (Check chck : checks) {
+                Logger.info(this, "%[type]s running...", chck);
                 if (!chck.validate(this.env())) {
                     throw new MojoFailureException(
                         Logger.format(
