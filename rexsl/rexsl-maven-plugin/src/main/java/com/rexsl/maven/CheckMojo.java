@@ -125,6 +125,7 @@ public final class CheckMojo extends AbstractRexslMojo {
                         )
                     );
                 }
+                Logger.info(this, "%[type]s didn't find any problems", chck);
             }
         } finally {
             this.revert(before);
