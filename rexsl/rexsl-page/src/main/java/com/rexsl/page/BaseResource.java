@@ -33,19 +33,43 @@ import com.ymock.util.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
 /**
  * Base implementation of {@link Resource}.
  *
+ * <p>It is recommended to use this class as a base of all your JAX-RS resource
+ * classes and construct pages with {@link PageBuilder},
+ * on top of {@link BasePage}, for example:
+ *
+ * <pre>
+ * &#64;Path("/")
+ * public class MainRs extends BaseResource {
+ *   &#64;GET
+ *   &#64;Produces(MediaTypes.APPLICATION_XML)
+ *   public BasePage front() {
+ *     return new PageBuilder()
+ *       .stylesheet("/xsl/front.xsl")
+ *       .build(BasePage.class)
+ *       .init(this)
+ *       .append(new JaxbBundle("text", "Hello!"));
+ *   }
+ * }
+ * </pre>
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.7
  * @see BasePage
+ * @see PageBuilder
  */
 public class BaseResource implements Resource {
+
+    /**
+     * Start time of page building.
+     */
+    private final transient long start = System.currentTimeMillis();
 
     /**
      * List of known JAX-RS providers, injected by JAX-RS implementation.
@@ -66,6 +90,14 @@ public class BaseResource implements Resource {
      * HTTP servlet request, injected by JAX-RS implementation.
      */
     private transient HttpServletRequest ihttpRequest;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final long started() {
+        return this.start;
+    }
 
     /**
      * {@inheritDoc}

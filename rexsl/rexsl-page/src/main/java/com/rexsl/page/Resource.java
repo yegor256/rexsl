@@ -31,7 +31,6 @@ package com.rexsl.page;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
@@ -45,6 +44,12 @@ import javax.ws.rs.ext.Providers;
  * @see BasePage
  */
 public interface Resource {
+
+    /**
+     * When this resource creation was started by JAX-RS implementation.
+     * @return Time in milliseconds
+     */
+    long started();
 
     /**
      * Get URI Info.

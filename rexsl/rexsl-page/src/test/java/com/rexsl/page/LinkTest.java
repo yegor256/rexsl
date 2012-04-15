@@ -29,7 +29,6 @@
  */
 package com.rexsl.page;
 
-import com.rexsl.page.JaxbBundle;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
 import javax.ws.rs.core.MediaType;

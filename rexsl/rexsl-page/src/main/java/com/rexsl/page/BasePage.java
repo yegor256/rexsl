@@ -29,19 +29,12 @@
  */
 package com.rexsl.page;
 
-import com.rexsl.core.Schema;
-import com.rexsl.core.Stylesheet;
 import com.rexsl.core.XslResolver;
 import com.ymock.util.Logger;
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -51,7 +44,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Base page.
@@ -59,7 +51,7 @@ import org.apache.commons.lang.StringUtils;
  * <p>Use it as a base class for your own page, for example:
  *
  * <pre>
- * public class MyPage extends BasePage&lt;MyPage&gt; {
+ * public class MyBasePage extends BasePage&lt;MyPage&gt; {
  *   &#64;XmlAnyElement(lax = true)
  *   &#64;XmlElement
  *   public String getUser() {
@@ -72,21 +64,55 @@ import org.apache.commons.lang.StringUtils;
  * {@link JaxbGroup}/{@link JaxbBundle} instead of defining own methods
  * annotated with {@code @XmlElement}.
  *
+ * <p>Don't forget to call {@link #init(Resource)} right after the page is
+ * built by {@link PageBuilder}, for example:
+ *
+ * <pre>
+ * &#64;Path("/")
+ * public class MainRs extends BaseResource {
+ *   &#64;GET
+ *   &#64;Produces(MediaTypes.APPLICATION_XML)
+ *   public BasePage front() {
+ *     return new PageBuilder()
+ *       .stylesheet("/xsl/front.xsl")
+ *       .build(BasePage.class)
+ *       .init(this);
+ *   }
+ * }
+ * </pre>
+ *
+ * <p>JAX-RS resource classes should implement {@link Resource} or even
+ * extend {@link BaseResource}, which is preferred.
+ *
+ * <p>This class adds {@code date} and {@code ip} attributes to the page, and
+ * {@code links} and {@code millis} element. Thus, an empty page (if you don't
+ * {@link #append(Object)} anything to it) will look like:
+ *
+ * <pre>
+ * &lt;?xml version="1.0" ?&gt;
+ * &lt;page date="2012-04-15T07:07Z" ip="127.0.0.1"&gt;
+ *   &lt;links /&gt;
+ *   &lt;millis&gt;234&lt;/millis&gt;
+ * &lt;/page&gt;
+ * </pre>
+ *
+ * <p>This functionality is not changeable. If this is not what you need in
+ * your page - just don't use this class and create your own. However, we
+ * believe that the majority of web applications need this information in
+ * their XML pages.
+ *
  * <p>The class is mutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.7
  * @see PageBuilder
+ * @see Resource
+ * @see BaseResource
  */
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
 public class BasePage<T extends BasePage, R extends Resource> {
-
-    /**
-     * Start time of page building.
-     */
-    private final transient long start = System.currentTimeMillis();
 
     /**
      * The resource.
@@ -127,7 +153,8 @@ public class BasePage<T extends BasePage, R extends Resource> {
     public final T append(final Object element) {
         this.elements.add(element);
         if (!(element instanceof org.w3c.dom.Element)) {
-            final XslResolver resolver = (XslResolver) this.resource.providers()
+            final XslResolver resolver = (XslResolver) this.home()
+                .providers()
                 .getContextResolver(
                     Marshaller.class,
                     MediaType.APPLICATION_XML_TYPE
@@ -152,6 +179,9 @@ public class BasePage<T extends BasePage, R extends Resource> {
      * @return The home resource
      */
     public final R home() {
+        if (this.resource == null) {
+            throw new IllegalStateException("call BasePage#init() first");
+        }
         return this.resource;
     }
 
@@ -161,9 +191,7 @@ public class BasePage<T extends BasePage, R extends Resource> {
      * @return This object
      */
     public final T link(final Link link) {
-        if (this.resource != null) {
-            link.attachTo(this.resource);
-        }
+        link.attachTo(this.home());
         this.links.add(link);
         return (T) this;
     }
@@ -219,7 +247,7 @@ public class BasePage<T extends BasePage, R extends Resource> {
      */
     @XmlElement
     public final long getMillis() {
-        return System.currentTimeMillis() - this.start;
+        return System.currentTimeMillis() - this.home().started();
     }
 
 }

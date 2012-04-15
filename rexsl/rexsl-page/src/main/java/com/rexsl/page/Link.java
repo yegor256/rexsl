@@ -29,21 +29,17 @@
  */
 package com.rexsl.page;
 
-import com.rexsl.core.XslResolver;
 import java.net.URI;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.w3c.dom.Element;
 
 /**
  * HATEOAS link.
@@ -105,6 +101,14 @@ import org.w3c.dom.Element;
  *   &lt;/links&gt;
  * &lt;/page&gt;
  * </pre>
+ *
+ * <p>URI provided as a second parameter of any constructor of this class
+ * may be absolute or relative. It is relative if it starts with a slash
+ * ({@code "/"}) or a dot ({@link "."}). URIs started with a slash are related
+ * to the absolute path of the deployed application. URIs started with a dot
+ * are related to the path of the currently rendered page. To get the
+ * information about current context {@link #attachTo(Resource)} method
+ * is used. It is being called by {@link BasePage#init(Resource)}.
  *
  * <p>The class is mutable and thread-safe.
  *
@@ -258,10 +262,11 @@ public final class Link {
     }
 
     /**
-     * Attach to this resource.
+     * Attach to this resource and make {@code HREF} attribute
+     * absolute, using the URI information of the resource.
      * @param res The resource to attach to
      */
-    void attachTo(final Resource res) {
+    public void attachTo(final Resource res) {
         synchronized (this.elements) {
             if (this.href.charAt(0) == '.') {
                 this.href = res.uriInfo().getRequestUriBuilder()
