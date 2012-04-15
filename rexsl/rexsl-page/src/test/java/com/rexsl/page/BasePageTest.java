@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
@@ -28,22 +26,44 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ */
+package com.rexsl.page;
+
+import com.rexsl.test.JaxbConverter;
+import com.rexsl.test.XhtmlMatchers;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+
+/**
+ * Test case for {@link BasePage}.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
-    http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="rexsl-w3c">
+ */
+public final class BasePageTest {
 
-    <body>
-        <menu ref="parent" />
-        <menu name="Overview">
-            <item name="Introduction" href="./index.html" />
-            <item name="API" href="apidocs/index.html" />
-        </menu>
-        <menu ref="reports" />
-    </body>
+    /**
+     * BasePage can be converted to XML.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void convertsToXml() throws Exception {
+        final BasePage page = new BasePage()
+            .init(new ResourceMocker().mock())
+            .append(new JaxbBundle("title", "hello, world!"))
+            .link(new Link("test", "/foo"));
+        MatcherAssert.assertThat(
+            JaxbConverter.the(page),
+            Matchers.allOf(
+                XhtmlMatchers.hasXPath("/page/@date"),
+                XhtmlMatchers.hasXPath("/page/@ip"),
+                XhtmlMatchers.hasXPath("/page/millis"),
+                XhtmlMatchers.hasXPath("/page/title[. = 'hello, world!']"),
+                XhtmlMatchers.hasXPath("/page/links/link[@rel = 'home']"),
+                XhtmlMatchers.hasXPath("/page/links/link[@rel = 'self']"),
+                XhtmlMatchers.hasXPath("/page/links/link[@rel = 'test']")
+            )
+        );
+    }
 
-</project>
+}

@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
@@ -28,22 +26,45 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ */
+package com.rexsl.page;
+
+import com.rexsl.test.JaxbConverter;
+import com.rexsl.test.XhtmlMatchers;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+
+/**
+ * Test case for {@link Link}.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
-    http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="rexsl-w3c">
+ */
+public final class LinkTest {
 
-    <body>
-        <menu ref="parent" />
-        <menu name="Overview">
-            <item name="Introduction" href="./index.html" />
-            <item name="API" href="apidocs/index.html" />
-        </menu>
-        <menu ref="reports" />
-    </body>
+    /**
+     * Link can be converted to XML.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void convertsToXml() throws Exception {
+        final Link link = new Link(
+            "foo",
+            UriBuilder.fromUri("http://bar").build(),
+            MediaType.TEXT_XML
+        );
+        link.with(new JaxbBundle("label", "some label"));
+        MatcherAssert.assertThat(
+            JaxbConverter.the(link),
+            Matchers.allOf(
+                XhtmlMatchers.hasXPath("/link[@rel='foo']"),
+                XhtmlMatchers.hasXPath("/link[@href='http://bar']"),
+                XhtmlMatchers.hasXPath("/link[@type='text/xml']"),
+                XhtmlMatchers.hasXPath("/link[label='some label']")
+            )
+        );
+    }
 
-</project>
+}

@@ -127,6 +127,17 @@
             <version since="27 Sep 2011">1.3.04</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <!--
+            Javax Servlet API 2.4. We're using this old version intentionally,
+            in order to make the framework compatible with all possible (incl.
+            very old) web containers. See ticket #42 for more information.
+            -->
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version since="26 Oct 2011">2.4</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>

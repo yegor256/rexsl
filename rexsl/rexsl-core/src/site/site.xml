@@ -41,6 +41,7 @@
         <menu ref="parent" />
         <menu name="Overview">
             <item name="Introduction" href="index.html" />
+            <item name="API" href="apidocs/index.html" />
             <item name="Log4j Cloud Appender" href="log.html" />
             <item name="Exception Trap" href="trap.html" />
         </menu>

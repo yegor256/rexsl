@@ -38,7 +38,8 @@
 
 RESTful Page Modeling
 
-  With this module you can build REST XML response much faster:
+  With this module you can build REST XML response much faster
+  (provided you defined <<<BasePage>>> class yourself already):
 
 +--
 @Path("/")
@@ -49,7 +50,7 @@ public class MainRs {
     return new PageBuilder()
       .stylesheet("/xsl/front.xsl")
       .build(BasePage.class)
-      .add(new JaxbBundle("score", 123).element());
+      .add(new JaxbBundle("score", 123));
   }
 }
 +--
@@ -58,6 +59,7 @@ public class MainRs {
 
 +--
 <?xml version="1.0" ?>
+<?xml-stylesheet type='text/xsl' href='/xsl/front.xsl'?>
 <page>
   <score>123</score>
 </page>

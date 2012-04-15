@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
@@ -28,22 +26,59 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ */
+package com.rexsl.page;
+
+import java.net.URI;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+import org.mockito.Mockito;
+
+/**
+ * Builds an instance of {@link UriInfo}.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
-    http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="rexsl-w3c">
+ */
+public final class UriInfoMocker {
 
-    <body>
-        <menu ref="parent" />
-        <menu name="Overview">
-            <item name="Introduction" href="./index.html" />
-            <item name="API" href="apidocs/index.html" />
-        </menu>
-        <menu ref="reports" />
-    </body>
+    /**
+     * The mock.
+     */
+    private final transient UriInfo info = Mockito.mock(UriInfo.class);
 
-</project>
+    /**
+     * Public ctor.
+     */
+    public UriInfoMocker() {
+        this.withRequestUri(
+            UriBuilder.fromUri("http://localhost:99/local").build()
+        );
+    }
+
+    /**
+     * With this request URI.
+     * @param uri The URI
+     * @return This object
+     */
+    public UriInfoMocker withRequestUri(final URI uri) {
+        Mockito.doReturn(uri).when(this.info).getRequestUri();
+        Mockito.doReturn(UriBuilder.fromUri(uri))
+            .when(this.info).getBaseUriBuilder();
+        Mockito.doReturn(UriBuilder.fromUri(uri))
+            .when(this.info).getRequestUriBuilder();
+        Mockito.doReturn(UriBuilder.fromUri(uri))
+            .when(this.info).getAbsolutePathBuilder();
+        Mockito.doReturn(uri).when(this.info).getAbsolutePath();
+        Mockito.doReturn(uri).when(this.info).getBaseUri();
+        return this;
+    }
+
+    /**
+     * Build an instance of provided class.
+     * @return The resource just created
+     */
+    public UriInfo mock() {
+        return this.info;
+    }
+
+}

@@ -56,15 +56,14 @@ import org.apache.commons.lang.StringUtils;
  *
  * <pre>
  * &#64;XmlRootElement(name = "page")
- * public class MyPage {
- *   public Collection elements = new LinkedList();
- *   public Page add(Object element) {
- *     this.elements.add(element)
+ * public class MyPage extends BasePage {
+ *   public String title;
+ *   public BasePage title(String text) {
+ *     this.title = text;
  *   }
- *   &#64;XmlAnyElement(lax = true)
- *   &#64;XmlMixed
- *   public Collection getElements() {
- *     return this.elements;
+ *   &#64;XmlElement
+ *   public String getTitle() {
+ *     return this.title;
  *   }
  * }
  * </pre>
@@ -78,11 +77,12 @@ import org.apache.commons.lang.StringUtils;
  * public class MainRs {
  *   &#64;GET
  *   &#64;Produces(MediaTypes.APPLICATION_XML)
- *   public Page front() {
+ *   public MyPage front() {
  *     return new PageBuilder()
  *       .stylesheet("/xsl/front.xsl")
  *       .build(MyPage.class)
- *       .add(new JaxbBundle("score", 2).element());
+ *       .append(new JaxbBundle("score", 2))
+ *       .title("Hello, world!");
  *   }
  * }
  * </pre>
@@ -91,16 +91,22 @@ import org.apache.commons.lang.StringUtils;
  *
  * <pre>
  * &lt;?xml version="1.0" ?&gt;
+ * &lt;?xml-stylesheet type='text/xsl' href='/xsl/front.xsl'?&gt;
  * &lt;page&gt;
  *   &lt;score&gt;2&lt;/score&gt;
+ *   &lt;title&gt;Hello, world!&lt;/title&gt;
  * &lt;/page&gt;
  * </pre>
+ *
+ * <p>We recommend to extend {@link BasePage}, since it already implements
+ * a few most popular and necessary methods and properties.
  *
  * <p>The class is mutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.7
+ * @see BasePage
  * @see JaxbGroup
  * @see JaxbBundle
  */
