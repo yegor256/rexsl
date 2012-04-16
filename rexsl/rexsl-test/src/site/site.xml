@@ -42,6 +42,7 @@
         <menu name="Overview">
             <item name="Introduction" href="index.html" />
             <item name="API" href="apidocs/index.html" />
+            <item name="Mock API" href="testapidocs/index.html" />
         </menu>
         <menu ref="reports" />
     </body>
