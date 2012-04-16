@@ -28,13 +28,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.rexsl.test.XhtmlConverter
 import com.rexsl.test.XhtmlMatchers
 import org.junit.Assert
 import org.junit.matchers.JUnitMatchers
 
 Assert.assertThat(rexsl.document, JUnitMatchers.containsString('say hello'))
 Assert.assertThat(
-    XhtmlConverter.the(rexsl.document),
+    rexsl.document,
     XhtmlMatchers.hasXPath("//div[contains(.,'say hello')]")
 )

@@ -535,22 +535,6 @@
             </dependency>
             <dependency>
                 <!--
-                XML matchers.
-                @see http://code.google.com/p/xml-matchers/wiki/Tutorial
-                -->
-                <groupId>org.xmlmatchers</groupId>
-                <artifactId>xml-matchers</artifactId>
-                <version since="23 Sep 2011">0.10</version>
-                <scope>test</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hamcrest</groupId>
-                        <artifactId>hamcrest-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <!--
                 Assertions and matchers for unit tests.
                 @link http://code.google.com/p/hamcrest/wiki/Tutorial
                 -->

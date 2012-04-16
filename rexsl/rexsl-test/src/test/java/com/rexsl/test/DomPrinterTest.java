@@ -51,7 +51,7 @@ public final class DomPrinterTest {
             parser.document().getDocumentElement()
         );
         MatcherAssert.assertThat(
-            XhtmlConverter.the(printer.toString()),
+            printer,
             XhtmlMatchers.hasXPath("/a/b")
         );
     }

@@ -78,7 +78,9 @@ ReXSL core module
   {{{./apidocs/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}} is converting
   XML output documents into XHTML when necessary.
 
-  This dependency you add to <<<pom.xml>>>:
+  This dependency you add to <<<pom.xml>>> (or download
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-core/${releasedVersion}/rexsl-core-${releasedVersion}.jar}rexsl-core-${releasedVersion}.jar}}
+  and add it to classpath):
 
 +--
 <dependency>

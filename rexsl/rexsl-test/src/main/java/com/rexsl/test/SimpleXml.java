@@ -31,6 +31,10 @@ package com.rexsl.test;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
@@ -81,28 +85,32 @@ public final class SimpleXml implements XmlDocument {
      * @param text Body
      */
     public SimpleXml(final String text) {
-        this(text, new XPathContext());
+        this(
+            new DomParser(text).document().getDocumentElement(),
+            new XPathContext()
+        );
+    }
+
+    /**
+     * Public ctor.
+     *
+     * <p>The object is created with a default implementation of
+     * {@link javax.xml.namespace.NamespaceContext}, which already defines a
+     * number of namespaces, see {@link SimpleXml#SimpleXml(String)}.
+     *
+     * @param source DOM source
+     */
+    public SimpleXml(final Source source) {
+        this(SimpleXml.transform(source), new XPathContext());
     }
 
     /**
      * Private ctor.
-     * @param text The source
+     * @param dom The source
      * @param ctx Namespace context
      */
-    SimpleXml(final String text, final XPathContext ctx) {
-        this.node = new DomParser(text)
-            .document()
-            .getDocumentElement();
-        this.context = ctx;
-    }
-
-    /**
-     * Private ctor.
-     * @param nde The node
-     * @param ctx Namespace context
-     */
-    private SimpleXml(final Node nde, final XPathContext ctx) {
-        this.node = nde;
+    private SimpleXml(final Node dom, final XPathContext ctx) {
+        this.node = dom;
         this.context = ctx;
     }
 
@@ -149,6 +157,14 @@ public final class SimpleXml implements XmlDocument {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public XmlDocument merge(final NamespaceContext ctx) {
+        return new SimpleXml(this.node, this.context.merge(ctx));
+    }
+
+    /**
      * Retrieve and return a nodelist for XPath query.
      * @param query XPath query
      * @return List of DOM nodes
@@ -167,6 +183,25 @@ public final class SimpleXml implements XmlDocument {
             throw new AssertionError(ex);
         }
         return nodes;
+    }
+
+    /**
+     * Transform source to DOM node.
+     * @param source The source
+     * @return The node
+     */
+    private static Node transform(final Source source) {
+        final DOMResult result = new DOMResult();
+        try {
+            TransformerFactory.newInstance()
+                .newTransformer()
+                .transform(source, result);
+        } catch (javax.xml.transform.TransformerConfigurationException ex) {
+            throw new IllegalStateException(ex);
+        } catch (javax.xml.transform.TransformerException ex) {
+            throw new IllegalStateException(ex);
+        }
+        return result.getNode();
     }
 
 }

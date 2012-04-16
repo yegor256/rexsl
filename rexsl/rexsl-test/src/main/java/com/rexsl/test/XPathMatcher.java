@@ -29,69 +29,70 @@
  */
 package com.rexsl.test;
 
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.w3c.dom.Node;
 
 /**
- * Convenient converter of text/node to XML source.
+ * Matcher of XPath against a plain string.
  *
- * <p>It's a convenient utility class to convert a string to XML DOM source,
- * which can be used then in assertions. For example:
- *
- * <pre>
- * import com.rexsl.test.XhtmlConverter;
- * import com.rexsl.test.XhtmlMatchers;
- * import org.junit.Assert;
- * import org.junit.Test;
- * public final class EmployeeTest {
- *   &#64;Test
- *   public void testXmlContent() throws Exception {
- *     String xml = ... // get it somewhere
- *     Assert.assertThat(
- *       XhtmlConverter.the(xml),
- *       XhtmlMatchers.hasXPath("/employee/name[.='John Doe']")
- *     );
- *   }
- * }
- * </pre>
- *
- * <p>The class is similar to {@code org.xmlmatchers.XmlConverters}, but it
- * doesn't crash on XML documents with links to external DTD's.
+ * <p>Objects of this class are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @since 0.3.7
  */
-public final class XhtmlConverter {
+final class XPathMatcher<T> extends TypeSafeMatcher<T> {
 
     /**
-     * Private ctor.
+     * The XPath to use.
      */
-    private XhtmlConverter() {
-        // intentionally empty
+    private final transient String xpath;
+
+    /**
+     * The context to use.
+     */
+    private final transient NamespaceContext context;
+
+    /**
+     * Public ctor.
+     * @param query The query
+     * @param ctx The context
+     */
+    public XPathMatcher(final String query, final NamespaceContext ctx) {
+        super();
+        this.xpath = query;
+        this.context = ctx;
     }
 
     /**
-     * Convert it to XML.
-     *
-     * <p>The name of the method is motivated by
-     * <a href="http://code.google.com/p/xml-matchers/">xmlatchers</a> project
-     * and their {@code XmlMatchers.the(String)} method. Looks like this name
-     * is short enough and convenient for unit tests.
-     *
-     * @param text The text to convert
-     * @return DOM source/document
+     * {@inheritDoc}
      */
-    public static Source the(final String text) {
-        return new StringSource(text);
+    @Override
+    public boolean matchesSafely(final T input) {
+        Source source;
+        if (input instanceof Source) {
+            source = (Source) input;
+        } else if (input instanceof Node) {
+            source = new StringSource((Node) input);
+        } else {
+            source = new StringSource(input.toString());
+        }
+        return !new SimpleXml(source)
+            .merge(this.context)
+            .nodes(this.xpath)
+            .isEmpty();
     }
 
     /**
-     * Convert provided DOM node to XML.
-     * @param node The node to convert
-     * @return DOM source/document
+     * {@inheritDoc}
      */
-    public static Source the(final Node node) {
-        return new StringSource(node);
+    @Override
+    public void describeTo(final Description description) {
+        description.appendText("an XML document with XPath ")
+            .appendText(this.xpath);
     }
 
 }

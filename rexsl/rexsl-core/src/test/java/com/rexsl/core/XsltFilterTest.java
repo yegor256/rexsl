@@ -29,7 +29,6 @@
  */
 package com.rexsl.core;
 
-import com.rexsl.test.XhtmlConverter;
 import com.rexsl.test.XhtmlMatchers;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -82,11 +81,11 @@ public final class XsltFilterTest {
         filter.doFilter(request, response, chain);
         filter.destroy();
         MatcherAssert.assertThat(
-            XhtmlConverter.the(response.toString()),
+            response,
             XhtmlMatchers.hasXPath("//xhtml:div[.='\u0443\u0440\u0430']")
         );
         MatcherAssert.assertThat(
-            XhtmlConverter.the(response.toString()),
+            response,
             XhtmlMatchers.hasXPath("/xhtml:html/xhtml:p[.='\u0443']")
         );
     }

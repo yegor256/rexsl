@@ -67,7 +67,9 @@ public class MainRs {
 
   Isn't it neat? :) Start reading from {{{./apidocs/com/rexsl/page/PageBuilder.html}<<<com.rexsl.page.PageBuilder>>>}}.
 
-  Include this dependency into your project:
+  Include this dependency into your project (or download
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-page/${releasedVersion}/rexsl-page-${releasedVersion}.jar}rexsl-page-${releasedVersion}.jar}}
+  and add to classpath):
 
 +--
 <dependency>
