@@ -27,29 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.w3c;
 
 /**
- * Validator of (X)HTML pages through W3C validation API.
- *
- * <p>Objects of this interface should be immutable and thread-safe.
+ * W3C validators, mocks.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-public interface HtmlValidator {
-
-    /**
-     * Validate and return validation response.
-     *
-     * <p>The method should never throw runtime exceptions, no matter what
-     * happened with the HTTP connection to the W3C server. It will return
-     * an invalid response, but will never throw.
-     *
-     * @param html The HTML document
-     * @return The response
-     */
-    ValidationResponse validate(String html);
-
-}
+package com.rexsl.w3c;

@@ -97,6 +97,13 @@
             <version rexsl="yes">1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-w3c</artifactId>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
+            <classifier>mock</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.ymock</groupId>
             <artifactId>ymock-util</artifactId>
         </dependency>
@@ -263,11 +270,6 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version since="6 Jan 2012">3.2.1</version>
         </dependency>
         <dependency>
             <!--
@@ -485,6 +487,7 @@
                                     <target>
                                         <available file="${csslint.js}" property="present"/>
                                         <get verbose="yes" usetimestamp="true" skipexisting="true"
+                                            ignoreerrors="true" maxtime="10"
                                             src="https://raw.github.com/stubbornella/csslint/master/release/csslint-rhino.js"
                                             dest="${csslint.js}"/>
                                     </target>

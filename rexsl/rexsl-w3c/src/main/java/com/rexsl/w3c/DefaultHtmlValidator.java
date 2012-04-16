@@ -32,7 +32,6 @@ package com.rexsl.w3c;
 import com.rexsl.test.TestResponse;
 import java.net.URI;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
 
 /**
  * Implementation of (X)HTML validator.
@@ -41,8 +40,28 @@ import javax.ws.rs.core.UriBuilder;
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-final class DefaultHtmlValidator extends BaseValidator
-    implements HtmlValidator {
+final class DefaultHtmlValidator extends BaseValidator implements Validator {
+
+    /**
+     * The URI to use in W3C.
+     */
+    private final transient URI uri;
+
+    /**
+     * Public ctor with default entry point.
+     */
+    public DefaultHtmlValidator() {
+        this(URI.create("http://validator.w3.org/check"));
+    }
+
+    /**
+     * Public ctor.
+     * @param entry Entry point to use
+     */
+    public DefaultHtmlValidator(final URI entry) {
+        super();
+        this.uri = entry;
+    }
 
     /**
      * {@inheritDoc}
@@ -51,12 +70,12 @@ final class DefaultHtmlValidator extends BaseValidator
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public ValidationResponse validate(final String html) {
         DefaultValidationResponse response;
-        final String field = "uploaded_file";
-        final URI uri = UriBuilder.fromUri("http://validator.w3.org/check")
-            .build();
         try {
             final TestResponse soap = this
-                .send(uri, this.entity(field, html, MediaType.TEXT_HTML))
+                .send(
+                    this.uri,
+                    this.entity("uploaded_file", html, MediaType.TEXT_HTML)
+            )
                 .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
                 .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
                 .assertThat(

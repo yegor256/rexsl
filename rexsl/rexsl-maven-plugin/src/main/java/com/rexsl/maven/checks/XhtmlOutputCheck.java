@@ -36,14 +36,14 @@ import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.GroovyExecutor;
 import com.rexsl.w3c.Defect;
-import com.rexsl.w3c.HtmlValidator;
 import com.rexsl.w3c.ValidationResponse;
+import com.rexsl.w3c.Validator;
 import com.rexsl.w3c.ValidatorBuilder;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
-import org.apache.commons.collections.ListUtils;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -74,15 +74,24 @@ final class XhtmlOutputCheck implements Check {
     /**
      * Validator.
      */
-    private final transient HtmlValidator validator =
-        new ValidatorBuilder().html();
+    private final transient Validator validator;
 
     /**
-     * Ctor.
+     * Default public ctor.
      * @param scope Execute only scripts matching scope.
      */
     public XhtmlOutputCheck(final String scope) {
+        this(scope, new ValidatorBuilder().html());
+    }
+
+    /**
+     * Full ctor, for tests mostly.
+     * @param scope Execute only scripts matching scope.
+     * @param val HTML validator
+     */
+    public XhtmlOutputCheck(final String scope, final Validator val) {
         this.test = scope;
+        this.validator = val;
     }
 
     /**
@@ -187,9 +196,10 @@ final class XhtmlOutputCheck implements Check {
                 xml,
                 StringEscapeUtils.escapeJava(xhtml).replace("\\n", "\n")
             );
-            for (Defect defect : (List<Defect>) ListUtils
-                .union(response.errors(), response.warnings())
-            ) {
+            final Set<Defect> defects = new HashSet<Defect>();
+            defects.addAll(response.errors());
+            defects.addAll(response.warnings());
+            for (Defect defect : defects) {
                 Logger.error(
                     this,
                     "[%d] %s: %s",

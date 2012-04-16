@@ -96,6 +96,23 @@ public final class Defect {
      * {@inheritDoc}
      */
     @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object defect) {
+        return defect instanceof Defect
+            && this.hashCode() == defect.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString() {
         return Logger.format(
             "[%d:%d] \"%s\", \"%s\", \"%s\", \"%s\"",

@@ -32,15 +32,15 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.FileFinder;
-import com.rexsl.w3c.CssValidator;
 import com.rexsl.w3c.Defect;
 import com.rexsl.w3c.ValidationResponse;
+import com.rexsl.w3c.Validator;
 import com.rexsl.w3c.ValidatorBuilder;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
-import org.apache.commons.collections.ListUtils;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -61,8 +61,22 @@ final class JigsawCssCheck implements Check {
     /**
      * Validator.
      */
-    private final transient CssValidator validator =
-        new ValidatorBuilder().css();
+    private final transient Validator validator;
+
+    /**
+     * Public ctor, default.
+     */
+    public JigsawCssCheck() {
+        this(new ValidatorBuilder().css());
+    }
+
+    /**
+     * Public ctor, with custom validator.
+     * @param val The validator to use
+     */
+    public JigsawCssCheck(final Validator val) {
+        this.validator = val;
+    }
 
     /**
      * {@inheritDoc}
@@ -108,9 +122,10 @@ final class JigsawCssCheck implements Check {
             throw new InternalCheckException(ex);
         }
         final ValidationResponse response = this.validator.validate(page);
-        for (Defect defect : (List<Defect>) ListUtils
-            .union(response.errors(), response.warnings())
-        ) {
+        final Set<Defect> defects = new HashSet<Defect>();
+        defects.addAll(response.errors());
+        defects.addAll(response.warnings());
+        for (Defect defect : defects) {
             Logger.error(
                 this,
                 "[%d] %s: %s",

@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
@@ -28,23 +26,47 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ */
+package com.rexsl.w3c;
+
+import org.mockito.Mockito;
+
+/**
+ * Mocker of {@link ValidationResponse}.
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0
-    http://maven.apache.org/xsd/decoration-1.0.0.xsd"
-    name="rexsl-page">
+ */
+public final class ValidationResponseMocker {
 
-    <body>
-        <menu ref="parent" />
-        <menu name="Overview">
-            <item name="Introduction" href="index.html" />
-            <item name="API" href="apidocs/index.html" />
-            <item name="Mock API" href="testapidocs/index.html" />
-        </menu>
-        <menu ref="reports" />
-    </body>
+    /**
+     * The mock.
+     */
+    private final transient ValidationResponse response =
+        Mockito.mock(ValidationResponse.class);
 
-</project>
+    /**
+     * Public ctor.
+     */
+    public ValidationResponseMocker() {
+        this.withValidity(true);
+    }
+
+    /**
+     * With this validity status.
+     * @param valid Status
+     * @return This object
+     */
+    public ValidationResponseMocker withValidity(final boolean valid) {
+        Mockito.doReturn(valid).when(this.response).valid();
+        return this;
+    }
+
+    /**
+     * Get mocked object.
+     * @return The response
+     */
+    public ValidationResponse mock() {
+        return this.response;
+    }
+
+}
