@@ -43,8 +43,7 @@ import java.util.Set;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see ValidatorBuilder
- * @see CssValidator#validate(String)
- * @see HtmlValidator#validate(String)
+ * @see Validator#validate(String)
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API, HTML</a>
  * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API, CSS</a>
  */

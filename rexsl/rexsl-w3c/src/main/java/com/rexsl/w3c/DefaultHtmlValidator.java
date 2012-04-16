@@ -40,8 +40,7 @@ import javax.ws.rs.core.MediaType;
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-final class DefaultHtmlValidator extends BaseValidator
-    implements HtmlValidator {
+final class DefaultHtmlValidator extends BaseValidator implements Validator {
 
     /**
      * The URI to use in W3C.

@@ -56,7 +56,7 @@ public final class DefaultCssValidatorTest {
             + "<m:checkedby>W3C</m:checkedby>"
             + "</m:cssvalidationresponse></env:Body></env:Envelope>"
         ).mock().home();
-        final CssValidator validator = new DefaultCssValidator(uri);
+        final Validator validator = new DefaultCssValidator(uri);
         final ValidationResponse response = validator.validate("* { }");
         MatcherAssert.assertThat(response.toString(), response.valid());
     }
@@ -76,7 +76,7 @@ public final class DefaultCssValidatorTest {
             + "<m:checkedby>somebody</m:checkedby>"
             + "</m:cssvalidationresponse></env:Body></e:Envelope>"
         ).mock().home();
-        final CssValidator validator = new DefaultCssValidator(uri);
+        final Validator validator = new DefaultCssValidator(uri);
         final ValidationResponse response = validator.validate("");
         MatcherAssert.assertThat(response.toString(), !response.valid());
     }
@@ -87,7 +87,7 @@ public final class DefaultCssValidatorTest {
      */
     @Test
     public void ignoresEntireDocument() throws Exception {
-        final CssValidator validator = new DefaultCssValidator();
+        final Validator validator = new DefaultCssValidator();
         final ValidationResponse response = validator.validate(
             // @checkstyle RegexpSingleline (1 line)
             "/* hey */\n\n/* JIGSAW IGNORE: .. */\n\n* { abc: cde }\n"

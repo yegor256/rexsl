@@ -40,8 +40,7 @@ import java.util.regex.Pattern;
  * @version $Id$
  * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API</a>
  */
-final class DefaultCssValidator extends BaseValidator
-    implements CssValidator {
+final class DefaultCssValidator extends BaseValidator implements Validator {
 
     /**
      * The URI to use in W3C.

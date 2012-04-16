@@ -31,6 +31,8 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
+import com.rexsl.w3c.Validator;
+import com.rexsl.w3c.ValidatorMocker;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
@@ -49,15 +51,16 @@ public final class XhtmlOutputCheckTest {
     @SuppressWarnings("PMD.AvoidDuplicateLiterals")
     public void validatesPositiveSituation() throws Exception {
         final Environment env = new EnvironmentMocker()
-            // @checkstyle MultipleStringLiterals (8 lines)
+            // @checkstyle MultipleStringLiterals (4 lines)
             .withFile("target/webdir/xsl/layout.xsl")
             .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/index.xml")
             .withFile("src/test/rexsl/xhtml/index.groovy")
             .mock();
+        final Validator validator = new ValidatorMocker().mock();
         MatcherAssert.assertThat(
-            "all tests pass fine",
-            new XhtmlOutputCheck(".*").validate(env)
+            "all tests passed fine",
+            new XhtmlOutputCheck(".+", validator).validate(env)
         );
     }
 
@@ -73,9 +76,10 @@ public final class XhtmlOutputCheckTest {
             .withFile("target/webdir/xsl/Home.xsl")
             .withFile("src/test/rexsl/xml/index.xml")
             .mock();
+        final Validator validator = new ValidatorMocker().mock();
         MatcherAssert.assertThat(
             "missed layout file situation is detected",
-            !new XhtmlOutputCheck(".*").validate(env)
+            !new XhtmlOutputCheck(".*", validator).validate(env)
         );
     }
 
@@ -94,9 +98,10 @@ public final class XhtmlOutputCheckTest {
             .withFile("src/test/rexsl/xml/invalid-index.xml")
             .withFile("src/test/rexsl/xhtml/invalid-index.groovy")
             .mock();
+        final Validator validator = new ValidatorMocker().mock();
         MatcherAssert.assertThat(
             "non-valid XHTML situation is detected",
-            !new XhtmlOutputCheck(null).validate(env)
+            !new XhtmlOutputCheck(null, validator).validate(env)
         );
     }
 
@@ -114,9 +119,10 @@ public final class XhtmlOutputCheckTest {
             .withFile("src/test/rexsl/xhtml/index.groovy")
             .withFile("src/test/rexsl/xhtml/skippedInvalid.groovy", "")
             .mock();
+        final Validator validator = new ValidatorMocker().mock();
         MatcherAssert.assertThat(
             "all tests pass fine",
-            new XhtmlOutputCheck("index").validate(env)
+            new XhtmlOutputCheck("index", validator).validate(env)
         );
     }
 }

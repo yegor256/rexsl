@@ -61,7 +61,7 @@ public final class DefaultHtmlValidatorTest {
             + "<m:charset>UTF-8</m:charset>"
             + "</m:markupvalidationresponse></env:Body></env:Envelope>"
         ).mock().home();
-        final HtmlValidator validator = new DefaultHtmlValidator(uri);
+        final Validator validator = new DefaultHtmlValidator(uri);
         final ValidationResponse response = validator.validate("<html/>");
         MatcherAssert.assertThat(response.toString(), response.valid());
     }
@@ -86,7 +86,7 @@ public final class DefaultHtmlValidatorTest {
             .returnBody("oops...")
             .mock()
             .home();
-        final HtmlValidator validator = new DefaultHtmlValidator(uri);
+        final Validator validator = new DefaultHtmlValidator(uri);
         final ValidationResponse response = validator.validate("<a/>");
         MatcherAssert.assertThat(response.toString(), !response.valid());
     }

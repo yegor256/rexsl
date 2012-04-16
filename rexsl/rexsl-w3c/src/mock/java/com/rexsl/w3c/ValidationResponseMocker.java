@@ -27,56 +27,46 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.w3c;
 
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.w3c.ValidationResponseMocker;
-import com.rexsl.w3c.Validator;
-import com.rexsl.w3c.ValidatorMocker;
-import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
- * Test case for {@link JigsawCssCheck}.
- * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * Mocker of {@link ValidationResponse}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class JigsawCssCheckTest {
+public final class ValidationResponseMocker {
 
     /**
-     * JigsawCssCheckTest can validate correct CSS files.
-     * @throws Exception If something goes wrong
+     * The mock.
      */
-    @Test
-    public void validatesCorrectCssFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/css/valid.css")
-            .mock();
-        final Validator validator = new ValidatorMocker().mock();
-        MatcherAssert.assertThat(
-            "valid CSS passes without problems",
-            new JigsawCssCheck(validator).validate(env)
-        );
+    private final transient ValidationResponse response =
+        Mockito.mock(ValidationResponse.class);
+
+    /**
+     * Public ctor.
+     */
+    public ValidationResponseMocker() {
+        this.withValidity(true);
     }
 
     /**
-     * JigsawCssCheckTest can validate incorrect CSS files.
-     * @throws Exception If something goes wrong
+     * With this validity status.
+     * @param valid Status
+     * @return This object
      */
-    @Test
-    public void validatesIncorrectCssFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withFile("src/main/webapp/css/invalid.css")
-            .mock();
-        final Validator validator = new ValidatorMocker().withResponse(
-            new ValidationResponseMocker().withValidity(false).mock()
-        ).mock();
-        MatcherAssert.assertThat(
-            "invalid CSS is caught",
-            !new JigsawCssCheck(validator).validate(env)
-        );
+    public ValidationResponseMocker withValidity(final boolean valid) {
+        Mockito.doReturn(valid).when(this.response).valid();
+        return this;
+    }
+
+    /**
+     * Get mocked object.
+     * @return The response
+     */
+    public ValidationResponse mock() {
+        return this.response;
     }
 
 }

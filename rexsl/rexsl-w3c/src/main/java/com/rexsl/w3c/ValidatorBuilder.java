@@ -59,8 +59,7 @@ package com.rexsl.w3c;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see ValidationResponse
- * @see HtmlValidator
- * @see CssValidator
+ * @see Validator
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
 public final class ValidatorBuilder {
@@ -68,20 +67,20 @@ public final class ValidatorBuilder {
     /**
      * Static instance of HTML validator.
      */
-    private static final HtmlValidator HTML_VALIDATOR =
+    private static final Validator HTML_VALIDATOR =
         new DefaultHtmlValidator();
 
     /**
      * Static instance of CSS validator.
      */
-    private static final CssValidator CSS_VALIDATOR =
+    private static final Validator CSS_VALIDATOR =
         new DefaultCssValidator();
 
     /**
      * Build HTML validator.
      * @return The validator
      */
-    public HtmlValidator html() {
+    public Validator html() {
         return this.HTML_VALIDATOR;
     }
 
@@ -89,7 +88,7 @@ public final class ValidatorBuilder {
      * Build CSS validator.
      * @return The validator
      */
-    public CssValidator css() {
+    public Validator css() {
         return this.CSS_VALIDATOR;
     }
 
