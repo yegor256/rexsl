@@ -32,11 +32,22 @@ package com.rexsl.w3c;
 /**
  * Validator of (X)HTML pages through W3C validation API.
  *
- * <p>Objects of this interface should be immutable and thread-safe.
+ * <p>Retrieve it from {@link ValidatorBuilder} and use like this:
+ *
+ * <pre>
+ * HtmlValidator validator = new ValidatorBuilder().html();
+ * ValidationResponse response = validator.validate(text);
+ * if (!response.valid()) {
+ *   // report about a problem
+ * }
+ * </pre>
+ *
+ * <p>Implementation must should be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
+ * @see ValidatorBuilder
  */
 public interface HtmlValidator {
 

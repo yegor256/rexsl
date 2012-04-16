@@ -36,14 +36,14 @@ package com.rexsl.w3c;
  * validator:
  *
  * <pre>
- * final HtmlValidator validator = new ValidatorBuilder().html();
+ * HtmlValidator validator = new ValidatorBuilder().html();
  * </pre>
  *
  * <p>Now you can use it in order to validate your HTML document against
  * W3C rules:
  *
  * <pre>
- * final ValidationResponse response = validator.validate(
+ * ValidationResponse response = validator.validate(
  *   "&lt;html&gt;&lt;body&gt;...&lt;/body&gt;&lt;/html&gt;"
  * );
  * </pre>
@@ -59,6 +59,8 @@ package com.rexsl.w3c;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see ValidationResponse
+ * @see HtmlValidator
+ * @see CssValidator
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
 public final class ValidatorBuilder {

@@ -56,7 +56,7 @@ import org.apache.http.entity.mime.content.StringBody;
 class BaseValidator {
 
     /**
-     * Boundary for HTTP POST form data.
+     * Boundary for HTTP POST form data (just some random data).
      */
     protected static final String BOUNDARY = "vV9olNqRj00PC4OIlM7";
 
@@ -68,9 +68,9 @@ class BaseValidator {
      */
     protected final TestResponse send(final URI uri, final String entity) {
         return RestTester.start(uri)
-            .header(HttpHeaders.USER_AGENT, "ReXSL")
+            .header(HttpHeaders.USER_AGENT, "ReXSL-W3C")
             .header(HttpHeaders.ACCEPT, "application/soap+xml")
-            .header(HttpHeaders.CONTENT_LENGTH, entity.length())
+            .header(HttpHeaders.CONTENT_LENGTH, entity.getBytes().length)
             .header(
                 HttpHeaders.CONTENT_TYPE,
                 Logger.format(
@@ -145,7 +145,7 @@ class BaseValidator {
     protected final DefaultValidationResponse failure(final Throwable error) {
         final DefaultValidationResponse resp = new DefaultValidationResponse(
             false,
-            URI.create("http://localhost/"),
+            URI.create("http://localhost/failure"),
             "unknown-doctype",
             "no-encoding"
         );
@@ -162,6 +162,21 @@ class BaseValidator {
                 "",
                 message
             )
+        );
+        return resp;
+    }
+
+    /**
+     * Build a success response.
+     * @param type Media type of resource just processed
+     * @return The validation response just built
+     */
+    protected final DefaultValidationResponse success(final String type) {
+        final DefaultValidationResponse resp = new DefaultValidationResponse(
+            true,
+            URI.create("http://localhost/success"),
+            type,
+            CharEncoding.UTF_8
         );
         return resp;
     }

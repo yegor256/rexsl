@@ -31,8 +31,9 @@ package com.rexsl.w3c;
 
 import com.ymock.util.Logger;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Default implementaiton of validation response.
@@ -63,14 +64,14 @@ final class DefaultValidationResponse implements ValidationResponse {
     private final transient String encoding;
 
     /**
-     * List of errors found.
+     * Set of errors found.
      */
-    private final transient List<Defect> ierrors = new ArrayList<Defect>();
+    private final transient Set<Defect> ierrors = new HashSet<Defect>();
 
     /**
-     * List of warnings found.
+     * Set of warnings found.
      */
-    private final transient List<Defect> iwarnings = new ArrayList<Defect>();
+    private final transient Set<Defect> iwarnings = new HashSet<Defect>();
 
     /**
      * Public ctor.
@@ -139,16 +140,16 @@ final class DefaultValidationResponse implements ValidationResponse {
      * {@inheritDoc}
      */
     @Override
-    public List<Defect> errors() {
-        return new ArrayList<Defect>(this.ierrors);
+    public Set<Defect> errors() {
+        return Collections.unmodifiableSet(this.ierrors);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Defect> warnings() {
-        return new ArrayList<Defect>(this.iwarnings);
+    public Set<Defect> warnings() {
+        return Collections.unmodifiableSet(this.iwarnings);
     }
 
     /**
@@ -177,10 +178,10 @@ final class DefaultValidationResponse implements ValidationResponse {
 
     /**
      * Convert list of defects into string.
-     * @param defects List of them
+     * @param defects Set of them
      * @return The text
      */
-    private String asText(final List<Defect> defects) {
+    private String asText(final Set<Defect> defects) {
         final StringBuilder text = new StringBuilder();
         for (Defect defect : defects) {
             text.append("  ").append(defect.toString()).append("\n");

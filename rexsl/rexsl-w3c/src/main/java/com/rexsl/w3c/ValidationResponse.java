@@ -30,7 +30,7 @@
 package com.rexsl.w3c;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Response of HTML or CSS validation.
@@ -38,7 +38,7 @@ import java.util.List;
  * <p>See {@link ValidatorBuilder} for explanation of how to get an instance
  * of this interface.
  *
- * <p>Objects of this interface should be immutable and thread-safe.
+ * <p>Implementation must be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -80,12 +80,12 @@ public interface ValidationResponse {
      * Returns list of errors found during validation.
      * @return List of errors or an empty list if no errors found
      */
-    List<Defect> errors();
+    Set<Defect> errors();
 
     /**
      * Returns lsit of warnings found during validation.
      * @return List of warnings
      */
-    List<Defect> warnings();
+    Set<Defect> warnings();
 
 }

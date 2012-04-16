@@ -29,6 +29,8 @@
  */
 package com.rexsl.w3c;
 
+import com.rexsl.test.ContainerMocker;
+import java.net.URI;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
@@ -45,9 +47,38 @@ public final class DefaultCssValidatorTest {
      */
     @Test
     public void validatesCssDocument() throws Exception {
-        final CssValidator validator = new DefaultCssValidator();
+        final URI uri = new ContainerMocker().returnBody(
+            // @checkstyle StringLiteralsConcatenation (6 lines)
+            "<env:Envelope xmlns:env='http://www.w3.org/2003/05/soap-envelope'>"
+            + "<env:Body><m:cssvalidationresponse"
+            + " xmlns:m='http://www.w3.org/2005/07/css-validator'>"
+            + "<m:validity>true</m:validity>"
+            + "<m:checkedby>W3C</m:checkedby>"
+            + "</m:cssvalidationresponse></env:Body></env:Envelope>"
+        ).mock().home();
+        final CssValidator validator = new DefaultCssValidator(uri);
         final ValidationResponse response = validator.validate("* { }");
         MatcherAssert.assertThat(response.toString(), response.valid());
+    }
+
+    /**
+     * DefaultCssValidator can validate CSS document, with invalid content.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void validatesInvalidCssDocument() throws Exception {
+        final URI uri = new ContainerMocker().returnBody(
+            // @checkstyle StringLiteralsConcatenation (6 lines)
+            "<e:Envelope xmlns:e='http://www.w3.org/2003/05/soap-envelope'>"
+            + "<env:Body><m:cssvalidationresponse "
+            + " xmlns:m='http://www.w3.org/2005/07/css-validator'> "
+            + "<m:validity>false</m:validity>"
+            + "<m:checkedby>somebody</m:checkedby>"
+            + "</m:cssvalidationresponse></env:Body></e:Envelope>"
+        ).mock().home();
+        final CssValidator validator = new DefaultCssValidator(uri);
+        final ValidationResponse response = validator.validate("");
+        MatcherAssert.assertThat(response.toString(), !response.valid());
     }
 
     /**

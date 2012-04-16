@@ -32,7 +32,17 @@ package com.rexsl.w3c;
 /**
  * Validator of CSS pages through W3C validation API.
  *
- * Sometimes this Jigsaw validator makes mistakes, sometimes you just need to
+ * <p>Retrieve it from {@link ValidatorBuilder} and use like this:
+ *
+ * <pre>
+ * HtmlValidator validator = new ValidatorBuilder().css();
+ * ValidationResponse response = validator.validate(text);
+ * if (!response.valid()) {
+ *   // report about a problem
+ * }
+ * </pre>
+ *
+ * <p>Sometimes this Jigsaw validator makes mistakes, sometimes you just need to
  * use some IE-specific feature, which is not CSS compliant. In this case you
  * may add comments to the document, at the end of every line you want to ignore
  * during validation, for example:
@@ -63,6 +73,7 @@ package com.rexsl.w3c;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API, CSS</a>
+ * @see ValidatorBuilder
  */
 public interface CssValidator {
 
