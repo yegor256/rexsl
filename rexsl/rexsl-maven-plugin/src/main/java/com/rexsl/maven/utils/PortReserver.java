@@ -48,8 +48,11 @@ public final class PortReserver {
         int port;
         try {
             final ServerSocket socket = new ServerSocket(0);
-            port = socket.getLocalPort();
-            socket.close();
+            try {
+                port = socket.getLocalPort();
+            } finally {
+                socket.close();
+            }
         } catch (java.io.IOException ex) {
             throw new IllegalStateException("Failed to reserve port", ex);
         }

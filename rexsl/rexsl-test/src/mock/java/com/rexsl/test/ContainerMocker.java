@@ -252,15 +252,14 @@ public final class ContainerMocker {
      * @return Reserved TCP port
      */
     private Integer reservePort() {
-        ServerSocket socket;
+        Integer reserved;
         try {
-            socket = new ServerSocket(0);
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        }
-        final Integer reserved = socket.getLocalPort();
-        try {
-            socket.close();
+            final ServerSocket socket = new ServerSocket(0);
+            try {
+                reserved = socket.getLocalPort();
+            } finally {
+                socket.close();
+            }
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
