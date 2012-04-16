@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import java.util.List;
+import javax.xml.namespace.NamespaceContext;
 
 /**
  * Lazy implementation of {@link XmlDocument}.
@@ -75,7 +76,8 @@ final class LazyXml implements XmlDocument {
      */
     @Override
     public List<String> xpath(final String query) {
-        return new SimpleXml(this.response.getBody(), this.context)
+        return new SimpleXml(this.response.getBody())
+            .merge(this.context)
             .xpath(query);
     }
 
@@ -84,8 +86,17 @@ final class LazyXml implements XmlDocument {
      */
     @Override
     public List<XmlDocument> nodes(final String query) {
-        return new SimpleXml(this.response.getBody(), this.context)
+        return new SimpleXml(this.response.getBody())
+            .merge(this.context)
             .nodes(query);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public XmlDocument merge(final NamespaceContext ctx) {
+        return new LazyXml(this.response, this.context.merge(ctx));
     }
 
 }

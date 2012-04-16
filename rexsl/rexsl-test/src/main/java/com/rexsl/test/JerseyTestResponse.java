@@ -42,6 +42,7 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.namespace.NamespaceContext;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
@@ -245,6 +246,17 @@ final class JerseyTestResponse implements TestResponse {
     public TestResponse registerNs(final String prefix, final Object uri) {
         synchronized (this.fetcher) {
             this.xml = this.getXml().registerNs(prefix, uri);
+        }
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse merge(final NamespaceContext ctx) {
+        synchronized (this.fetcher) {
+            this.xml = this.getXml().merge(ctx);
         }
         return this;
     }

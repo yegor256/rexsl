@@ -49,10 +49,21 @@ public final class XhtmlMatchersTest {
      */
     @Test
     public void matchesWithCustomNamespace() throws Exception {
-        final String text = "<a xmlns='foo'><file>abc.txt</file></a>";
         MatcherAssert.assertThat(
-            XhtmlConverter.the(text),
+            "<a xmlns='foo'><file>abc.txt</file></a>",
             XhtmlMatchers.hasXPath("/ns1:a/ns1:file[.='abc.txt']", "foo")
+        );
+    }
+
+    /**
+     * XhtmlMatchers can report incorrect match.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void doesntMatch() throws Exception {
+        MatcherAssert.assertThat(
+            "<a/>",
+            Matchers.not(XhtmlMatchers.hasXPath("/foo"))
         );
     }
 
@@ -64,9 +75,9 @@ public final class XhtmlMatchersTest {
     public void matchesPlainString() throws Exception {
         MatcherAssert.assertThat(
             "<b xmlns='bar'><file>abc.txt</file></b>",
-            XhtmlMatchers.withXPath("/ns1:b/ns1:file[.='abc.txt']", "bar")
+            XhtmlMatchers.hasXPath("/ns1:b/ns1:file[.='abc.txt']", "bar")
         );
-        MatcherAssert.assertThat("<a><b/></a>", XhtmlMatchers.withXPath("//b"));
+        MatcherAssert.assertThat("<a><b/></a>", XhtmlMatchers.hasXPath("//b"));
     }
 
     /**
@@ -92,7 +103,7 @@ public final class XhtmlMatchersTest {
             foo,
             Matchers.allOf(
                 Matchers.hasProperty("abc", Matchers.containsString("some")),
-                XhtmlMatchers.<Foo>withXPath("//c")
+                XhtmlMatchers.<Foo>hasXPath("//c")
             )
         );
     }

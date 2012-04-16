@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import java.util.List;
+import javax.xml.namespace.NamespaceContext;
 
 /**
  * XML document.
@@ -104,5 +105,17 @@ public interface XmlDocument {
      * @return A new XML document, with this additional namespace registered
      */
     XmlDocument registerNs(String prefix, Object uri);
+
+    /**
+     * Append this namespace context to the existing one.
+     *
+     * <p>The existing context (inside this object) and the new one provided
+     * will be merged together. The existing context will be have higher
+     * priority.
+     *
+     * @param context The context to append
+     * @return A new XML document, with a merged context on board
+     */
+    XmlDocument merge(NamespaceContext context);
 
 }

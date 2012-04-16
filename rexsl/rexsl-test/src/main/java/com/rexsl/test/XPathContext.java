@@ -36,6 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
@@ -53,6 +54,12 @@ final class XPathContext implements NamespaceContext {
      */
     private final transient ConcurrentMap<String, String> map =
         new ConcurrentHashMap<String, String>();
+
+    /**
+     * List of contexts to use.
+     */
+    private final transient List<NamespaceContext> contexts =
+        new CopyOnWriteArrayList<NamespaceContext>();
 
     /**
      * Public ctor.
@@ -117,6 +124,14 @@ final class XPathContext implements NamespaceContext {
         }
         String namespace = this.map.get(prefix);
         if (namespace == null) {
+            for (NamespaceContext ctx : this.contexts) {
+                namespace = ctx.getNamespaceURI(prefix);
+                if (namespace != null) {
+                    break;
+                }
+            }
+        }
+        if (namespace == null) {
             if (prefix.equals(XMLConstants.XML_NS_PREFIX)) {
                 namespace = XMLConstants.XML_NS_URI;
             } else if (prefix.equals(XMLConstants.XMLNS_ATTRIBUTE)) {
@@ -155,6 +170,12 @@ final class XPathContext implements NamespaceContext {
                 prefixes.add(entry.getKey());
             }
         }
+        for (NamespaceContext ctx : this.contexts) {
+            final Iterator<String> iterator = ctx.getPrefixes(namespace);
+            while (iterator.hasNext()) {
+                prefixes.add(iterator.next());
+            }
+        }
         if (namespace.equals(XMLConstants.XML_NS_URI)) {
             prefixes.add(XMLConstants.XML_NS_PREFIX);
         }
@@ -172,6 +193,19 @@ final class XPathContext implements NamespaceContext {
      */
     public XPathContext add(final String prefix, final Object namespace) {
         return new XPathContext(this.map, prefix, namespace);
+    }
+
+    /**
+     * Add new context.
+     * @param context The context to merge into this one
+     * @return New context
+     */
+    public XPathContext merge(final NamespaceContext context) {
+        final XPathContext ctx = new XPathContext();
+        ctx.map.putAll(this.map);
+        ctx.contexts.addAll(this.contexts);
+        ctx.contexts.add(context);
+        return ctx;
     }
 
 }

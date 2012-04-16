@@ -32,9 +32,7 @@ package com.rexsl.test;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
 import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.xmlmatchers.xpath.HasXPath;
 
 /**
  * Matcher of XPath against a plain string.
@@ -43,31 +41,46 @@ import org.xmlmatchers.xpath.HasXPath;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @since 0.2.6
+ * @since 0.3.7
  */
-final class PlainXpathMatcher<T> extends TypeSafeMatcher<T> {
+final class XPathMatcher<T> extends TypeSafeMatcher<T> {
 
     /**
-     * Real matcher.
+     * The XPath to use.
      */
-    private final transient Matcher<Source> matcher;
+    private final transient String xpath;
+
+    /**
+     * The context to use.
+     */
+    private final transient NamespaceContext context;
 
     /**
      * Public ctor.
      * @param query The query
      * @param ctx The context
      */
-    public PlainXpathMatcher(final String query, final NamespaceContext ctx) {
+    public XPathMatcher(final String query, final NamespaceContext ctx) {
         super();
-        this.matcher = HasXPath.hasXPath(query, ctx);
+        this.xpath = query;
+        this.context = ctx;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean matchesSafely(final T text) {
-        return this.matcher.matches(XhtmlConverter.the(text.toString()));
+    public boolean matchesSafely(final T input) {
+        Source source;
+        if (input instanceof Source) {
+            source = (Source) input;
+        } else {
+            source = XhtmlConverter.the(input.toString());
+        }
+        return !new SimpleXml(source)
+            .merge(this.context)
+            .nodes(this.xpath)
+            .isEmpty();
     }
 
     /**
@@ -75,7 +88,8 @@ final class PlainXpathMatcher<T> extends TypeSafeMatcher<T> {
      */
     @Override
     public void describeTo(final Description description) {
-        this.matcher.describeTo(description);
+        description.appendText("an XML document with XPath ")
+            .appendText(this.xpath);
     }
 
 }
