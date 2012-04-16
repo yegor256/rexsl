@@ -43,11 +43,13 @@ ReXSL Testing Facility
 
    * {{{./apidocs/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
 
-   * {{{./apidocs/com/rexsl/test/XhtmlConverter.html}<<<com.rexsl.test.XhtmlConverter>>>}}
-
    * {{{./apidocs/com/rexsl/test/JaxbConverter.html}<<<com.rexsl.test.JaxbConverter>>>}}
 
-  Include this dependency into your project:
+   * {{{./apidocs/com/rexsl/test/SimpleXml.html}<<<com.rexsl.test.SimpleXml>>>}}
+
+  Include this dependency into your project (or download
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${releasedVersion}/rexsl-test-${releasedVersion}.jar}rexsl-test-${releasedVersion}.jar}}
+  and add to classpath):
 
 +--
 <dependency>
@@ -58,7 +60,12 @@ ReXSL Testing Facility
 </dependency>
 +--
 
-  This module also contains a very useful Mocking tool in   {{{./testapidocs/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}. To use it you should include this dependencies into your project:
+  This module also contains a very useful Mocking tool in
+  {{{./testapidocs/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}.
+  To use it you should include this dependencies into your project
+  (or download
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${releasedVersion}/rexsl-test-${releasedVersion}-mock.jar}rexsl-test-${releasedVersion}-mock.jar}}
+  and add to classpath):
 
 +--
 <dependency>

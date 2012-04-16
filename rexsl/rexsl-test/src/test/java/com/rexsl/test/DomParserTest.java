@@ -50,7 +50,7 @@ public final class DomParserTest {
         final String xml = "<a><b>\u0443\u0440\u0430!</b></a>";
         final DomParser parser = new DomParser(xml);
         MatcherAssert.assertThat(
-            XhtmlConverter.the(parser.document()),
+            parser.document(),
             XhtmlMatchers.hasXPath("/a/b")
         );
     }

@@ -31,7 +31,6 @@ package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.test.XhtmlConverter;
 import com.rexsl.test.XhtmlMatchers;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
@@ -61,7 +60,7 @@ public final class XslPackerTest {
         new XslPacker().pack(env);
         MatcherAssert.assertThat("file created", dest.exists());
         MatcherAssert.assertThat(
-            XhtmlConverter.the(FileUtils.readFileToString(dest)),
+            FileUtils.readFileToString(dest),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath("//xsl:template"),
                 XhtmlMatchers.hasXPath("//xhtml:body"),

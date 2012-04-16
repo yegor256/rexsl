@@ -39,8 +39,8 @@ import org.hamcrest.Matcher;
  *
  * <pre>
  * MatcherAssert.assertThat(
- *   "&lt;root&gt;&lt;a/&gt;&lt;/root&gt;",
- *   XhtmlMatchers.withXPath("/root/a[.='']")
+ *   "&lt;root&gt;&lt;a&gt;hello&lt;/a&gt;&lt;/root&gt;",
+ *   XhtmlMatchers.hasXPath("/root/a[.='hello']")
  * );
  * </pre>
  *
@@ -76,7 +76,7 @@ public final class XhtmlMatchers {
      *
      * <pre>
      * MatcherAssert.assert(
-     *   XhtmlConverter.the("&lt;foo xmlns='my-namespace'&gt;&lt;/foo&gt;"),
+     *   "&lt;foo xmlns='my-namespace'&gt;&lt;/foo&gt;",
      *   XhtmlMatchers.hasXPath("/ns1:foo", "my-namespace")
      * );
      * </pre>

@@ -29,7 +29,6 @@
  */
 package com.rexsl.core;
 
-import com.rexsl.test.XhtmlConverter;
 import com.rexsl.test.XhtmlMatchers;
 import java.io.StringWriter;
 import javax.servlet.ServletContext;
@@ -92,7 +91,7 @@ public final class XslResolverTest {
         final StringWriter writer = new StringWriter();
         mrsh.marshal(page, writer);
         MatcherAssert.assertThat(
-            XhtmlConverter.the(writer.toString()),
+            writer,
             XhtmlMatchers.hasXPath("/page/injectable/name")
         );
     }
@@ -109,14 +108,14 @@ public final class XslResolverTest {
         final StringWriter writer = new StringWriter();
         mrsh.marshal(page, writer);
         MatcherAssert.assertThat(
-            XhtmlConverter.the(writer.toString()),
+            writer,
             XhtmlMatchers.hasXPath(
                 // @checkstyle LineLength (1 line)
                 "/processing-instruction('xml-stylesheet')[contains(.,\"href='/xsl/Page.xsl'\")]"
             )
         );
         MatcherAssert.assertThat(
-            XhtmlConverter.the(writer.toString()),
+            writer,
             XhtmlMatchers.hasXPath(
                 // @checkstyle LineLength (1 line)
                 "/processing-instruction('xml-stylesheet')[contains(.,\"type='text/xsl'\")]"
@@ -146,7 +145,7 @@ public final class XslResolverTest {
         final StringWriter writer = new StringWriter();
         mrsh.marshal(page, writer);
         MatcherAssert.assertThat(
-            XhtmlConverter.the(writer.toString()),
+            writer,
             XhtmlMatchers.hasXPath(
                 // @checkstyle LineLength (1 line)
                 "/processing-instruction('xml-stylesheet')[contains(.,\"href='http://localhost:8080/sample/xsl/Page.xsl'\")]"
@@ -166,7 +165,7 @@ public final class XslResolverTest {
         final StringWriter writer = new StringWriter();
         mrsh.marshal(bar, writer);
         MatcherAssert.assertThat(
-            XhtmlConverter.the(writer.toString()),
+            writer,
             XhtmlMatchers.hasXPath(
                 // @checkstyle LineLength (1 line)
                 "/processing-instruction('xml-stylesheet')[contains(.,\"href='test'\")]"

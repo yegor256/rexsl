@@ -33,6 +33,7 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
+import org.w3c.dom.Node;
 
 /**
  * Matcher of XPath against a plain string.
@@ -74,8 +75,10 @@ final class XPathMatcher<T> extends TypeSafeMatcher<T> {
         Source source;
         if (input instanceof Source) {
             source = (Source) input;
+        } else if (input instanceof Node) {
+            source = new StringSource((Node) input);
         } else {
-            source = XhtmlConverter.the(input.toString());
+            source = new StringSource(input.toString());
         }
         return !new SimpleXml(source)
             .merge(this.context)

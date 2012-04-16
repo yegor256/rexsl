@@ -32,15 +32,19 @@ package com.rexsl.test;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Test case for {@link XhtmlMatchers}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class XhtmlMatchersTest {
 
     /**
@@ -105,6 +109,90 @@ public final class XhtmlMatchersTest {
                 Matchers.hasProperty("abc", Matchers.containsString("some")),
                 XhtmlMatchers.<Foo>hasXPath("//c")
             )
+        );
+    }
+
+    /**
+     * XhtmlMatchers can convert text to XML.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void convertsTextToXml() throws Exception {
+        MatcherAssert.assertThat(
+            "<html><body><p>\u0443</p></body></html>",
+            XhtmlMatchers.hasXPath("/html/body/p[.='\u0443']")
+        );
+    }
+
+    /**
+     * XhtmlMatchers can convert text to XML, with Unicode inside.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void convertsTextToXmlWithUnicode() throws Exception {
+        MatcherAssert.assertThat(
+            "<a>\u8514  &#8250;</a>",
+            XhtmlMatchers.hasXPath("/a")
+        );
+    }
+
+    /**
+     * XhtmlMatchers can handle processing instructions.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void preservesProcessingInstructions() throws Exception {
+        MatcherAssert.assertThat(
+            "<?xml version='1.0'?><?pi name='foo'?><a/>",
+            XhtmlMatchers.hasXPath(
+                "/processing-instruction('pi')[contains(.,'foo')]"
+            )
+        );
+    }
+
+    /**
+     * XhtmlMatchers can handle DOCTYPE, which potentially may cause troubles.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void processesDocumentsWithDoctype() throws Exception {
+        final String text =
+            // @checkstyle StringLiteralsConcatenation (6 lines)
+            "<?xml version='1.0'?>"
+            + "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'"
+            + " 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>"
+            + "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>"
+            + "<body><p>\u0443\u0440\u0430!</p></body>"
+            + "</html>";
+        MatcherAssert.assertThat(
+            text,
+            Matchers.allOf(
+                XhtmlMatchers.hasXPath("/*"),
+                XhtmlMatchers.hasXPath("//*"),
+                XhtmlMatchers.hasXPath(
+                    "/xhtml:html/xhtml:body/xhtml:p[.='\u0443\u0440\u0430!']"
+                ),
+                XhtmlMatchers.hasXPath("//xhtml:p[contains(., '\u0443')]")
+            )
+        );
+    }
+
+    /**
+     * XhtmlMatchers can convert W3C Node to XML.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void convertsNodeToXml() throws Exception {
+        final Document doc = DocumentBuilderFactory
+            .newInstance()
+            .newDocumentBuilder()
+            .newDocument();
+        final Element root = doc.createElement("foo-1");
+        root.appendChild(doc.createTextNode("boom"));
+        doc.appendChild(root);
+        MatcherAssert.assertThat(
+            doc,
+            XhtmlMatchers.hasXPath("/foo-1[.='boom']")
         );
     }
 

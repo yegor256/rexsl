@@ -30,7 +30,6 @@
 package com.rexsl.page;
 
 import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlConverter;
 import com.rexsl.test.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -61,7 +60,7 @@ public final class JaxbBundleTest {
                 .up()
             .up();
         MatcherAssert.assertThat(
-            XhtmlConverter.the(bundle.element()),
+            bundle.element(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath(
                     "/root/employee[@age='10']/dept[country='DE']"

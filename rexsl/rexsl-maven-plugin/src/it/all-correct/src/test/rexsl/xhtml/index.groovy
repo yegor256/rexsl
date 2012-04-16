@@ -29,13 +29,12 @@
  */
 package com.rexsl.foo.xhtml
 
-import com.rexsl.test.XhtmlConverter
 import com.rexsl.test.XhtmlMatchers
 import org.junit.Assert
 import org.junit.matchers.JUnitMatchers
 
 Assert.assertThat(rexsl.document, JUnitMatchers.containsString('hello'))
 Assert.assertThat(
-    XhtmlConverter.the(rexsl.document),
+    rexsl.document,
     XhtmlMatchers.hasXPath("//xhtml:input[contains(@value,'hello')]")
 )
