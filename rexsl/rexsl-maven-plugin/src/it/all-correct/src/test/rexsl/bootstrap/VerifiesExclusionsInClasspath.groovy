@@ -33,10 +33,16 @@ import org.apache.commons.io.FilenameUtils
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 
-def loader = (URLClassLoader) Matchers.class.getClassLoader()
-loader.getURLs().each { url ->
+def loader = (URLClassLoader) Matchers.classLoader
+loader.findResources('org/hamcrest/Matcher.class').each { url ->
     MatcherAssert.assertThat(
-        FilenameUtils.getBaseName(url.getFile()),
+        url.toString(),
+        Matchers.containsString('hamcrest-core-1.2.1')
+    )
+}
+loader.URLs.each { url ->
+    MatcherAssert.assertThat(
+        FilenameUtils.getBaseName(url.file),
         Matchers.not(Matchers.equalTo('hamcrest-core-1.1'))
     )
 }

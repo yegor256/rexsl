@@ -36,6 +36,7 @@ import java.util.LinkedHashSet;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
@@ -182,19 +183,14 @@ public final class MavenEnvironment implements Environment {
         final DepsResolver resolver =
             new DepsResolver(this.project, this.localRepo);
         Logger.debug(this, "Full tree of artifacts in classpath:");
-        for (Artifact root : this.roots(tonly)) {
-            Logger.debug(
-                this,
-                "  %s:%s:%s",
-                root.getGroupId(),
-                root.getArtifactId(),
-                root.getVersion()
-            );
-            for (Artifact dep : resolver.deps(root)) {
+        for (RootArtifact root : this.roots(tonly)) {
+            Logger.debug(this, "  %s", root);
+            for (Artifact dep : resolver.deps(root.artifact())) {
                 boolean found = false;
                 for (Artifact exists : artifacts) {
                     if (dep.getArtifactId().equals(exists.getArtifactId())
-                        && dep.getGroupId().equals(exists.getGroupId())) {
+                        && dep.getGroupId().equals(exists.getGroupId())
+                        && dep.getClassifier().equals(exists.getClassifier())) {
                         found = true;
                         break;
                     }
@@ -202,21 +198,34 @@ public final class MavenEnvironment implements Environment {
                 if (found) {
                     Logger.debug(
                         this,
-                        "    %s:%s:%s (duplicate, ignored)",
+                        "    %s:%s:%s:%s (duplicate, ignored)",
                         dep.getGroupId(),
                         dep.getArtifactId(),
+                        dep.getClassifier(),
                         dep.getVersion()
                     );
-                } else {
-                    artifacts.add(dep);
+                    continue;
+                }
+                if (root.excluded(dep)) {
                     Logger.debug(
                         this,
-                        "    %s:%s:%s",
+                        "    %s:%s:%s:%s (excluded)",
                         dep.getGroupId(),
                         dep.getArtifactId(),
+                        dep.getClassifier(),
                         dep.getVersion()
                     );
+                    continue;
                 }
+                artifacts.add(dep);
+                Logger.debug(
+                    this,
+                    "    %s:%s:%s:%s",
+                    dep.getGroupId(),
+                    dep.getArtifactId(),
+                    dep.getClassifier(),
+                    dep.getVersion()
+                );
             }
         }
         return artifacts;
@@ -229,21 +238,23 @@ public final class MavenEnvironment implements Environment {
      * @see #artifacts()
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    private Set<Artifact> roots(final boolean tonly) {
-        final Set<Artifact> roots = new LinkedHashSet<Artifact>();
-        for (org.apache.maven.artifact.Artifact artf
-            : this.project.getDependencyArtifacts()) {
+    private Set<RootArtifact> roots(final boolean tonly) {
+        final Set<RootArtifact> roots = new LinkedHashSet<RootArtifact>();
+        for (Dependency dep : this.project.getDependencies()) {
             if (!org.apache.maven.artifact.Artifact.SCOPE_TEST
-                .equals(artf.getScope()) && tonly) {
+                .equals(dep.getScope()) && tonly) {
                 continue;
             }
             roots.add(
-                new DefaultArtifact(
-                    artf.getGroupId(),
-                    artf.getArtifactId(),
-                    artf.getClassifier(),
-                    artf.getType(),
-                    artf.getVersion()
+                new RootArtifact(
+                    new DefaultArtifact(
+                        dep.getGroupId(),
+                        dep.getArtifactId(),
+                        dep.getClassifier(),
+                        dep.getType(),
+                        dep.getVersion()
+                    ),
+                    dep.getExclusions()
                 )
             );
         }
