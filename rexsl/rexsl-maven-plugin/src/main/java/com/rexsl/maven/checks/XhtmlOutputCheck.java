@@ -54,6 +54,8 @@ import org.apache.commons.lang.StringEscapeUtils;
  * All details of this check should be explained in the JavaDoc of
  * {@link DefaultChecksProvider}.
  *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (2 lines)

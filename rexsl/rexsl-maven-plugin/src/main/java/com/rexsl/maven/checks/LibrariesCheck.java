@@ -35,8 +35,8 @@ import com.rexsl.maven.utils.FileFinder;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.commons.io.FilenameUtils;
@@ -48,6 +48,8 @@ import org.apache.commons.io.FilenameUtils;
  * All details of this check should be explained in the JavaDoc of
  * {@link DefaultChecksProvider}.
  *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
@@ -57,10 +59,12 @@ final class LibrariesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public boolean validate(final Environment env) {
         final File dir = new File(env.webdir(), "WEB-INF/lib");
         int errors = 0;
-        final Map<String, File> classes = new HashMap<String, File>();
+        final ConcurrentMap<String, File> classes =
+            new ConcurrentHashMap<String, File>();
         for (File file : new FileFinder(dir, "jar").ordered()) {
             JarFile jar;
             try {
@@ -92,4 +96,5 @@ final class LibrariesCheck implements Check {
         }
         return errors == 0;
     }
+
 }
