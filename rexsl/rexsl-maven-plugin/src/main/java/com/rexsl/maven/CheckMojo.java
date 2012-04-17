@@ -50,14 +50,15 @@ public final class CheckMojo extends AbstractRexslMojo {
     /**
      * System variables to be set before running tests.
      *
-     * <p>You define them in a similar way as {@code maven-surefire-plugin}, for
-     * example you want to reconfigure LOG4J just for the tests:
+     * <p>You define them in a similar way as in
+     * <a href="http://maven.apache.org/plugins/maven-surefire-plugin/"
+     * >maven-surefire-plugin</a>,
+     * for example you want to reconfigure LOG4J just for the tests:
      *
      * <pre>
      * &lt;plugin>
      *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
      *   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
-     *   &lt;version&gt;...&lt;/version&gt;
      *   &lt;configuration&gt;
      *     &lt;systemPropertyVariables&gt;
      *       &lt;log4j.configuration&gt;./x.props&lt;/log4j.configuration&gt;

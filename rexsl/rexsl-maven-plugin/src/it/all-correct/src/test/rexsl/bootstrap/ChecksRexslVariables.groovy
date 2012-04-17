@@ -32,7 +32,8 @@ package com.rexsl.foo.bootstrap
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 
-MatcherAssert.assertThat(
-    new File(rexsl.webdir, "/WEB-INF/lib").exists(),
-    Matchers.is(true)
-)
+MatcherAssert.assertThat(rexsl, Matchers.instanceOf(Map.class))
+MatcherAssert.assertThat(rexsl.basedir.exists(), Matchers.is(true))
+MatcherAssert.assertThat(rexsl.webdir.exists(), Matchers.is(true))
+def libs = new File(rexsl.webdir, 'WEB-INF/lib')
+MatcherAssert.assertThat(libs.path, libs.exists())
