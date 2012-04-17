@@ -39,6 +39,7 @@ import org.junit.Test;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 public final class PageBuilderTest {
 
     /**
@@ -46,7 +47,7 @@ public final class PageBuilderTest {
      * @throws Exception If there is some problem inside
      */
     @Test
-    public void testJaxbIsWorking() throws Exception {
+    public void buildsJaxbPageConvertableToXml() throws Exception {
         final String stylesheet = "test-stylesheet";
         final Object page = new PageBuilder()
             .stylesheet(stylesheet)
@@ -55,6 +56,21 @@ public final class PageBuilderTest {
             JaxbConverter.the(page),
             XhtmlMatchers.hasXPath("/foo/message[contains(.,'hello')]")
         );
+    }
+
+    /**
+     * Child class can be converted to XML through JAXB.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void buildsJaxbPageFromBareClass() throws Exception {
+        new PageBuilder().build(BarePage.class);
+    }
+
+    /**
+     * Sample dummy page.
+     */
+    public static class BarePage extends BasePageMocker {
     }
 
 }

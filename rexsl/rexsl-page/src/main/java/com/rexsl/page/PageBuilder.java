@@ -41,6 +41,7 @@ import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.AttributeInfo;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.StringMemberValue;
@@ -272,27 +273,29 @@ public final class PageBuilder {
      */
     private Collection<Annotation> annotations(final CtClass dest,
         final CtClass parent) {
-        final AnnotationsAttribute attrib =
-            (AnnotationsAttribute) parent.getClassFile()
-                .getAttribute(AnnotationsAttribute.visibleTag)
-                .copy(dest.getClassFile().getConstPool(), new HashMap());
-        final Annotation[] all = attrib.getAnnotations();
         final Collection<Annotation> result = new ArrayList<Annotation>();
-        final List<String> names = new ArrayList<String>();
-        for (Annotation annotation : all) {
-            result.add(annotation);
-            names.add(annotation.getTypeName());
+        final AttributeInfo originals =
+            parent.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
+        if (originals != null) {
+            final AnnotationsAttribute attrib = (AnnotationsAttribute) originals
+                .copy(dest.getClassFile().getConstPool(), new HashMap());
+            final Annotation[] all = attrib.getAnnotations();
+            final List<String> names = new ArrayList<String>();
+            for (Annotation annotation : all) {
+                result.add(annotation);
+                names.add(annotation.getTypeName());
+            }
+            Logger.debug(
+                this,
+                // @checkstyle LineLength (1 line)
+                "#annotations(%s, %s): %d found in base class, %d of them are copied: %s",
+                dest.getName(),
+                parent.getName(),
+                all.length,
+                result.size(),
+                StringUtils.join(names, ", ")
+            );
         }
-        Logger.debug(
-            this,
-            // @checkstyle LineLength (1 line)
-            "#annotations(%s, %s): %d found in base class, %d of them are copied: %s",
-            dest.getName(),
-            parent.getName(),
-            all.length,
-            result.size(),
-            StringUtils.join(names, ", ")
-        );
         return result;
     }
 

@@ -169,7 +169,8 @@ public final class JaxbConverter {
         if (type == null) {
             throw new AssertionError(
                 Logger.format(
-                    "XmlType annotation is absent at %[type]s",
+                    // @checkstyle LineLength (1 line)
+                    "@XmlType or @XmlRootElement annotation required at %[type]s",
                     obj
                 )
             );

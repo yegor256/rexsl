@@ -30,9 +30,9 @@
 package com.rexsl.foo;
 
 import com.rexsl.test.JaxbConverter;
+import com.rexsl.test.XhtmlMatchers;
 import org.junit.Assert;
 import org.junit.Test;
-import org.xmlmatchers.XmlMatchers;
 
 /**
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -45,7 +45,7 @@ public final class HomeTest {
         Home home = new Home();
         Assert.assertThat(
             JaxbConverter.the(home),
-            XmlMatchers.hasXPath("/page/text[contains(.,'Hello')]")
+            XhtmlMatchers.hasXPath("/page/text[contains(.,'Hello')]")
         );
     }
 
