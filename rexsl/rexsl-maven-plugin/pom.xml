@@ -170,6 +170,12 @@
             <artifactId>plexus-container-default</artifactId>
             <version since="15 Sep 2011">1.0-beta-3.0.5</version>
             <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.sonatype.aether</groupId>
@@ -261,7 +267,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -312,6 +318,12 @@
             <groupId>com.rempl.plugins</groupId>
             <artifactId>rempl-maven-plugin</artifactId>
             <version since="19 Sep 2011">1.1.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <!-- Forward all LOG4J calls to SLF4J -->

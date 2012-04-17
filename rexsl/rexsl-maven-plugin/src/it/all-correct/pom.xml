@@ -94,6 +94,16 @@
             <groupId>com.ymock</groupId>
             <artifactId>ymock-util</artifactId>
             <version since="26 Feb 2012">1.0.5</version>
+            <exclusions>
+                <exclusion>
+                    <!--
+                    It's a bug in ymock:
+                    @see http://trac.fazend.com/ymock/ticket/49
+                    -->
+                    <groupId>org.mockito</groupId>
+                    <artifactId>mockito-all</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <!--
@@ -106,24 +116,10 @@
             <version since="18 Dec 2011">3.5.0</version>
         </dependency>
         <dependency>
-            <!-- Assertions and matchers for unit tests. -->
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version since="23 Dec 2011">1.2.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- Assertions and matchers for unit tests. -->
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version since="23 Dec 2011">1.2.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <!-- Unit testing framework from http://www.junit.org/ -->
             <groupId>junit</groupId>
             <artifactId>junit-dep</artifactId>
-            <version since="23 Dec 2011">4.8.2</version>
+            <version since="23 Dec 2011">4.10</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -133,11 +129,35 @@
             </exclusions>
         </dependency>
         <dependency>
+            <!-- Assertions and matchers for unit tests. -->
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version since="23 Dec 2011">1.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <!-- Assertions and matchers for unit tests. -->
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version since="23 Dec 2011">1.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <!-- Selenium web testing framework, see Selenium.groovy -->
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version since="30 Oct 2011">2.9.0</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <!-- Forward all calls to SLF4J to LOG4J. -->
