@@ -37,6 +37,8 @@ import javax.servlet.ServletContext;
 /**
  * Runtime environment, for {@link RuntimeListener}.
  *
+ * <p>{@link ServletContext} is filled with values in {@link EmbeddedContainer}.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */

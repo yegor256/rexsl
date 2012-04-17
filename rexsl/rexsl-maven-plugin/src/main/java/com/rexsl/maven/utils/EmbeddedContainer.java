@@ -148,7 +148,7 @@ public final class EmbeddedContainer {
         );
         params.put(
             "com.rexsl.maven.utils.WEBDIR",
-            env.basedir().getAbsolutePath()
+            env.webdir().getAbsolutePath()
         );
         params.put(
             "com.rexsl.maven.utils.PORT",
