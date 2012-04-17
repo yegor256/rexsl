@@ -33,6 +33,7 @@ import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
 import com.ymock.util.Logger;
 import java.net.HttpURLConnection;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Retry policy of assertion.
@@ -79,11 +80,19 @@ final class RetryPolicy implements AssertionPolicy {
      */
     @Override
     public boolean again(final int attempt) {
+        final long delay = attempt * 2L;
         Logger.warn(
             this,
-            "#again(#%d): W3C XML response is broken",
-            attempt
+            "#again(#%d): W3C XML response is broken, waiting %d sec..",
+            attempt,
+            delay
         );
+        try {
+            TimeUnit.SECONDS.sleep(delay);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(ex);
+        }
         return !this.valid;
     }
 
