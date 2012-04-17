@@ -44,14 +44,6 @@ import org.apache.commons.io.filefilter.NotFileFilter;
 /**
  * Checks that all files are text ones.
  *
- * <p>You shouldn't keep any binary files (images, video, etc.) in
- * {@code src/main/webapp} folder and deploy them inside your {@code WAR}
- * package. Instead, you should use some storage service
- * (<a href="http://aws.amazon.com/s3">Amazon S3</a>, for example) and a
- * content delivery network (CDN) on top of it
- * (<a href="http://aws.amazon.com/cloudfront">Amazon CloudFront</a>,
- * for example).
- *
  * <p>This check validates all files found in {@code src/main/webapp} and
  * fails your build if any binary files are found there.
  *

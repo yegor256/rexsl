@@ -37,6 +37,10 @@ import java.io.File;
 /**
  * Validates web.xml file against it's XSD schema.
  *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link DefaultChecksProvider}.
+ *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: WebXmlCheck.java 204 2011-10-26 21:15:28Z guard $

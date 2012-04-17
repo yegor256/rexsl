@@ -45,6 +45,10 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Validate the product in container, with Groovy scripts.
  *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link DefaultChecksProvider}.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */

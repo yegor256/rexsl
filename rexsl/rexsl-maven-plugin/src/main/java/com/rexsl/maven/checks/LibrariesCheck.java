@@ -31,75 +31,65 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.utils.FileFinder;
 import com.ymock.util.Logger;
 import java.io.File;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import org.apache.commons.io.FilenameUtils;
 
 /**
- * Validates CSS files against style sheet rules.
+ * Checks that JAR libraries in WEB-INF/lib don't conflict.
  *
  * <p>Since this class is NOT public its documentation is not available online.
  * All details of this check should be explained in the JavaDoc of
  * {@link DefaultChecksProvider}.
  *
- * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: CssStaticCheck.java 204 2011-10-26 21:15:28Z guard $
- * @see <a href="http://www.mozilla.org/rhino/jsc.html">Rhino JavaScript to Java compiler</a>
- * @see <a href="https://github.com/stubbornella/csslint/wiki/Command-line-interface">CSSLint Command Line Interface</a>
+ * @version $Id$
  */
-final class CssStaticCheck implements Check {
+final class LibrariesCheck implements Check {
 
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean validate(final Environment env) {
-        final File csslint = new File(
-            this.getClass().getResource("/CssLint.class").getFile()
-        );
-        final ProcessBuilder builder = new ProcessBuilder(
-            "java",
-            "-classpath",
-            StringUtils.join(
-                env.classpath(false),
-                System.getProperty("path.separator")
-            ),
-            "CssLint",
-            env.basedir().getPath(),
-            "--format=compact"
-        );
-        builder.directory(csslint.getParentFile());
-        String report;
-        try {
-            final Process process = builder.start();
-            if (process.waitFor() != 0) {
-                throw new IllegalStateException(
-                    IOUtils.toString(process.getErrorStream())
-                );
+        final File dir = new File(env.webdir(), "WEB-INF/lib");
+        int errors = 0;
+        final Map<String, File> classes = new HashMap<String, File>();
+        for (File file : new FileFinder(dir, "jar").ordered()) {
+            JarFile jar;
+            try {
+                jar = new JarFile(file);
+            } catch (java.io.IOException ex) {
+                throw new IllegalArgumentException(ex);
             }
-            report = IOUtils.toString(process.getInputStream());
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(ex);
+            final Enumeration<JarEntry> entries = jar.entries();
+            while (entries.hasMoreElements()) {
+                final JarEntry entry = entries.nextElement();
+                if (!entry.getName().endsWith(".class")) {
+                    continue;
+                }
+                if (classes.containsKey(entry.getName())) {
+                    Logger.warn(
+                        this,
+                        "%s: %s conflicts with %s",
+                        entry.getName(),
+                        FilenameUtils.getBaseName(
+                            classes.get(entry.getName()).getPath()
+                        ),
+                        FilenameUtils.getBaseName(file.getPath())
+                    );
+                    ++errors;
+                } else {
+                    classes.put(entry.getName(), file);
+                }
+            }
         }
-        return this.isValid(report);
+        return errors == 0;
     }
-
-    /**
-     * Validate the report from CSSLint.
-     * @param report The report (one problem per line)
-     * @return True if it's valid (no errors)
-     */
-    private boolean isValid(final String report) {
-        final String[] lines = report.split("\n|\r\n");
-        for (String line : lines) {
-            Logger.warn(this, "%s", line);
-        }
-        return lines.length == 0;
-    }
-
 }

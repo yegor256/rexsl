@@ -50,6 +50,10 @@ import org.apache.commons.lang.StringEscapeUtils;
 /**
  * Validate XHTML output.
  *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link DefaultChecksProvider}.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (2 lines)
