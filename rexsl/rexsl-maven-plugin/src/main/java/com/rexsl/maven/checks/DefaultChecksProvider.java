@@ -37,6 +37,23 @@ import java.util.Set;
 /**
  * Provider of checks.
  *
+ * <h2>BinaryFilesCheck</h2>
+ *
+ * <p>You shouldn't keep any binary files (images, video, etc.) in
+ * {@code src/main/webapp} folder and deploy them inside your {@code WAR}
+ * package. Instead, you should use some storage service
+ * (<a href="http://aws.amazon.com/s3">Amazon S3</a>, for example) and a
+ * content delivery network (CDN) on top of it
+ * (<a href="http://aws.amazon.com/cloudfront">Amazon CloudFront</a>,
+ * for example).
+ *
+ * <h2>CssStaticCheck</h2>
+ *
+ * <p>{@code CssLint.class} file is created by Rhino JavaScript-to-Java
+ * compiler during {@code process-sources} Maven phase (see {@code pom.xml}
+ * file). Here we're just executing this class in a standalone process, in
+ * order to capture its output into string.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (100 lines)
@@ -65,6 +82,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
         this.addCheck(checks, new FilesStructureCheck());
         this.addCheck(checks, new WebXmlCheck());
         this.addCheck(checks, new RexslFilesCheck());
+        this.addCheck(checks, new LibrariesCheck());
         this.addCheck(checks, new XhtmlOutputCheck(this.test));
         this.addCheck(checks, new InContainerScriptsCheck(this.test));
         this.addCheck(checks, new JSUnitTestsCheck());

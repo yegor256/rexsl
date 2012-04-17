@@ -48,6 +48,12 @@ import org.codehaus.plexus.util.IOUtil;
 /**
  * Checks JS Unit tests.
  *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link DefaultChecksProvider}.
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
  * @version $Id$
  */

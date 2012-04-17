@@ -31,11 +31,18 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.utils.FileFinder;
 import com.ymock.util.Logger;
 import java.io.File;
+import java.util.Enumeration;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import org.apache.commons.io.FilenameUtils;
 
 /**
- * Validate location of files/dirs.
+ * Checks that JAR libraries in WEB-INF/lib don't conflict.
  *
  * <p>Since this class is NOT public its documentation is not available online.
  * All details of this check should be explained in the JavaDoc of
@@ -46,7 +53,7 @@ import java.io.File;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class FilesStructureCheck implements Check {
+final class LibrariesCheck implements Check {
 
     /**
      * {@inheritDoc}
@@ -54,28 +61,40 @@ final class FilesStructureCheck implements Check {
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public boolean validate(final Environment env) {
-        final String[] names = {
-            "src/main/webapp/",
-            "src/main/webapp/robots.txt",
-            "src/main/webapp/xsl/",
-            "src/main/webapp/WEB-INF/web.xml",
-            "src/test/rexsl/xml/",
-            "src/test/rexsl/xhtml/",
-            "src/test/rexsl/scripts/",
-            "src/test/rexsl/xsd/",
-        };
-        boolean success = true;
-        for (String name : names) {
-            final File file = new File(env.basedir(), name);
-            if (!file.exists()) {
-                Logger.warn(
-                    this,
-                    "File '%s' is absent, but should be there",
-                    file
-                );
-                success = false;
+        final File dir = new File(env.webdir(), "WEB-INF/lib");
+        int errors = 0;
+        final ConcurrentMap<String, File> classes =
+            new ConcurrentHashMap<String, File>();
+        for (File file : new FileFinder(dir, "jar").ordered()) {
+            JarFile jar;
+            try {
+                jar = new JarFile(file);
+            } catch (java.io.IOException ex) {
+                throw new IllegalArgumentException(ex);
+            }
+            final Enumeration<JarEntry> entries = jar.entries();
+            while (entries.hasMoreElements()) {
+                final JarEntry entry = entries.nextElement();
+                if (!entry.getName().endsWith(".class")) {
+                    continue;
+                }
+                if (classes.containsKey(entry.getName())) {
+                    Logger.warn(
+                        this,
+                        "%s: %s conflicts with %s",
+                        entry.getName(),
+                        FilenameUtils.getBaseName(
+                            classes.get(entry.getName()).getPath()
+                        ),
+                        FilenameUtils.getBaseName(file.getPath())
+                    );
+                    ++errors;
+                } else {
+                    classes.put(entry.getName(), file);
+                }
             }
         }
-        return success;
+        return errors == 0;
     }
+
 }
