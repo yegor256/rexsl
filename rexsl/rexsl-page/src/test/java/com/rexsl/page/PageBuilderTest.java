@@ -46,7 +46,7 @@ public final class PageBuilderTest {
      * @throws Exception If there is some problem inside
      */
     @Test
-    public void testJaxbIsWorking() throws Exception {
+    public void buildsJaxbPageConvertableToXml() throws Exception {
         final String stylesheet = "test-stylesheet";
         final Object page = new PageBuilder()
             .stylesheet(stylesheet)
@@ -55,6 +55,25 @@ public final class PageBuilderTest {
             JaxbConverter.the(page),
             XhtmlMatchers.hasXPath("/foo/message[contains(.,'hello')]")
         );
+    }
+
+    /**
+     * Child class can be converted to XML through JAXB.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void buildsJaxbPageFromBareClass() throws Exception {
+        final Object page = new PageBuilder().build(BarePage.class);
+        MatcherAssert.assertThat(
+            JaxbConverter.the(page),
+            XhtmlMatchers.hasXPath("/foo/message")
+        );
+    }
+
+    /**
+     * Sample dummy page.
+     */
+    public static class BarePage extends BasePageMocker {
     }
 
 }
