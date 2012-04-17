@@ -199,7 +199,15 @@ public final class MavenEnvironment implements Environment {
                         break;
                     }
                 }
-                if (!found) {
+                if (found) {
+                    Logger.debug(
+                        this,
+                        "    %s:%s:%s (duplicate, ignored)",
+                        dep.getGroupId(),
+                        dep.getArtifactId(),
+                        dep.getVersion()
+                    );
+                } else {
                     artifacts.add(dep);
                     Logger.debug(
                         this,
