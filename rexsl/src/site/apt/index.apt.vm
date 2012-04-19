@@ -86,6 +86,8 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
   {{{http://www.springsource.org/}Spring MVC}},
   {{{http://struts.apache.org/}Struts}},
   {{{http://tapestry.apache.org/}Tapestry}},
+  {{{http://en.wikipedia.org/wiki/Apache_Cocoon}Cocoon}},
+  {{{http://www.contextfw.net/}Context Framework}},
   and others:
 
    * Graphic design evolves in parallel with Java classes
