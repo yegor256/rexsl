@@ -87,7 +87,6 @@ ReXSL core module
   <groupId>com.rexsl</groupId>
   <artifactId>rexsl-core</artifactId>
   <version>${releasedVersion}</version>
-  <scope>runtime</scope>
 </dependency>
 +--
 
@@ -96,10 +95,10 @@ ReXSL core module
   {{{./apidocs/com/rexsl/core/Manifests.html}<<<Manifests>>>}} is
   a convenient accessor to <<<MANIFEST.MF>>> files of your web application.
 
-  {{{./apidocs/com/rexsl/core/Stylesheet.html}<<<Stylesheet>>>}} annotation
+  {{{./apidocs/com/rexsl/core/annotations/Stylesheet.html}<<<Stylesheet>>>}} annotation
   enables re-configuration of XSL stylesheet name for a JAXB-annotated object.
 
-  {{{./apidocs/com/rexsl/core/Schema.html}<<<Schema>>>}} annotation
+  {{{./apidocs/com/rexsl/core/annotations/Schema.html}<<<Schema>>>}} annotation
   lets you set the name of XML Schema of a JAXB-annotated object.
 
   {{{./apidocs/com/rexsl/trap/ExceptionTrap.html}<<<ExceptionTrap>>>}} servlet

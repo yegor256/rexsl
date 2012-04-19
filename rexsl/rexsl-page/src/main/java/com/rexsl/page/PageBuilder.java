@@ -29,8 +29,8 @@
  */
 package com.rexsl.page;
 
-import com.rexsl.core.Schema;
-import com.rexsl.core.Stylesheet;
+import com.rexsl.core.annotations.Schema;
+import com.rexsl.core.annotations.Stylesheet;
 import com.ymock.util.Logger;
 import java.net.URI;
 import java.util.ArrayList;
