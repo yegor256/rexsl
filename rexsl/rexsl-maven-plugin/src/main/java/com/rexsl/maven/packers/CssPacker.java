@@ -42,8 +42,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
 /**
- * Packager of CSS files. 
- * 
+ * Packager of CSS files.
+ *
  * <p>All comments and unnecessary spaces are removed.
  *
  * <p>Since this class is NOT public its documentation is not available online.
