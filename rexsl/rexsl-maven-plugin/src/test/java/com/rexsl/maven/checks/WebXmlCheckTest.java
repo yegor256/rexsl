@@ -38,8 +38,6 @@ import org.junit.Test;
  * Test case for {@link WebXmlCheck}.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
- * @todo #65:1h Implement XMLSchemaValidator with test and remove Ignore
- *  annotations.
  */
 public final class WebXmlCheckTest {
 
@@ -50,7 +48,7 @@ public final class WebXmlCheckTest {
     @Test
     public void validatesCorrectWebXmlFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withFile(WebXmlCheck.WEB_XML, "valid-web.xml")
+            .withFile("src/main/webapp/WEB-INF/web.xml", "valid-web.xml")
             .mock();
         MatcherAssert.assertThat(
             "valid web.xml passes with problems",
@@ -65,7 +63,7 @@ public final class WebXmlCheckTest {
     @Test
     public void validatesIncorrectWebXmlFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withFile(WebXmlCheck.WEB_XML, "invalid-web.xml")
+            .withFile("src/main/webapp/WEB-INF/web.xml", "invalid-web.xml")
             .mock();
         MatcherAssert.assertThat(
             "invalid web.xml is caught",

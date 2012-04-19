@@ -37,7 +37,9 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * Validates web.xml file against it's XSD schema.
@@ -55,16 +57,19 @@ import org.xml.sax.SAXException;
 final class WebXmlCheck implements Check {
 
     /**
-     * Contains path to web.xml file.
+     * Total numbers of errors.
      */
-    public static final String WEB_XML = "src/main/webapp/WEB-INF/web.xml";
+    private transient int errors;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean validate(final Environment env) {
-        final File file = new File(env.basedir(), this.WEB_XML);
+        final File file = new File(
+            env.basedir(),
+            "src/main/webapp/WEB-INF/web.xml"
+        );
         boolean valid = false;
         if (file.exists()) {
             valid = this.validate(file);
@@ -94,8 +99,23 @@ final class WebXmlCheck implements Check {
         } catch (ParserConfigurationException exception) {
             throw new IllegalStateException(exception);
         }
-        final WebXmlErrorHandler handler = new WebXmlErrorHandler(file);
-        builder.setErrorHandler(handler);
+        this.errors = 0;
+        builder.setErrorHandler(
+            new ErrorHandler() {
+                @Override
+                public void warning(final SAXParseException excn) {
+                    WebXmlCheck.this.error(excn);
+                }
+                @Override
+                public void error(final SAXParseException excn) {
+                    WebXmlCheck.this.error(excn);
+                }
+                @Override
+                public void fatalError(final SAXParseException excn) {
+                    WebXmlCheck.this.error(excn);
+                }
+            }
+        );
         try {
             builder.parse(file);
         } catch (SAXException exception) {
@@ -103,6 +123,20 @@ final class WebXmlCheck implements Check {
         } catch (IOException exception) {
             throw new IllegalStateException(exception);
         }
-        return handler.isEmpty();
+        return this.errors == 0;
     }
+
+    /**
+     * Registers validation error.
+     * @param excn Exception to be added to the container.
+     */
+    private void error(final SAXParseException excn) {
+        Logger.error(
+            this,
+            "web.xml error: %s",
+            excn.getMessage()
+        );
+        ++this.errors;
+    }
+
 }
