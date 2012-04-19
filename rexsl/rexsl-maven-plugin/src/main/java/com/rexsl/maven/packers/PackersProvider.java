@@ -36,6 +36,26 @@ import java.util.Set;
 /**
  * Provider of a collection of all packers.
  *
+ * <p>Packers are executed in the order they are listed here.
+ *
+ * <h3>CssPacker</h3>
+ *
+ * <p>All files from {@code src/main/webapp/css} (CSS stylesheets) are
+ * compressed using YUI compressor. Then, they are
+ * saved to {@code target/../css}.
+ *
+ * <h3>JsPacker</h3>
+ *
+ * <p>All files from {@code src/main/webapp/js} (JavaScript files) are
+ * compressed using YUI compressor. Then, they are
+ * saved to {@code target/../js}.
+ *
+ * <h3>XslPacker</h3>
+ *
+ * <p>All files from {@code src/main/webapp/xsl} (XSL stylesheets) are
+ * compressed as XML documents and all comments are removed. Then, they are
+ * saved to {@code target/../xsl}.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */

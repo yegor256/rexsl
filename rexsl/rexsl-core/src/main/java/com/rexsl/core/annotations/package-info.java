@@ -27,65 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.packers;
-
-import com.yahoo.platform.yui.compressor.CssCompressor;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
 
 /**
- * Packager of CSS files.
- *
- * <p>All comments and unnecessary spaces are removed.
- *
- * <p>Since this class is NOT public its documentation is not available online.
- * All details of this check should be explained in the JavaDoc of
- * {@link PackersProvider}.
- *
- * <p>The class is immutable and thread-safe.
+ * Core artifact of ReXSL framework, annotations.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class CssPacker extends AbstractPacker {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String extension() {
-        return "css";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void pack(final File src, final File dest) throws IOException {
-        final Reader input = new InputStreamReader(
-            new FileInputStream(src),
-            CharEncoding.UTF_8
-        );
-        try {
-            final Writer output = new OutputStreamWriter(
-                new FileOutputStream(dest),
-                CharEncoding.UTF_8
-            );
-            try {
-                new CssCompressor(input).compress(output, -1);
-            } finally {
-                IOUtils.closeQuietly(output);
-            }
-        } finally {
-            IOUtils.closeQuietly(input);
-        }
-    }
-}
+package com.rexsl.core.annotations;

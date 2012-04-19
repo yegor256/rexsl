@@ -38,7 +38,8 @@
 
 Log4j Cloud Appender
 
-  Read {{{./apidocs/com/rexsl/core/log/CloudAppender.html}CloudAppender}} javadoc.
+  Read {{{./apidocs/com/rexsl/core/log/CloudAppender.html}CloudAppender}}
+  javadoc.
 
   Configure it in your <<<log4j.properties>>> like this (just an example,
   which uses {{{http://www.loggly.com}loggly.com}} HTTP log
@@ -51,7 +52,7 @@ log4j.appender.LOGGLY.feeder=com.rexsl.log.HttpFeeder
 log4j.appender.LOGGLY.feeder.url=https://logs.loggly.com/inputs/0604e96...
 log4j.appender.LOGGLY.feeder.split=true
 log4j.appender.LOGGLY.layout=org.apache.log4j.PatternLayout
-log4j.appender.LOGGLY.layout.ConversionPattern = [%5p] %t %c: %m\n
+log4j.appender.LOGGLY.layout.ConversionPattern=[%5p] %t %c: %m%n
 +--
 
   You can extend it with your own feeding mechanisms. Just implement

@@ -38,7 +38,8 @@
 
 Exception Trap
 
-  Read {{{./apidocs/com/rexsl/core/trap/ExceptionTrap.html}ExceptionTrap}} javadoc.
+  Read {{{./apidocs/com/rexsl/core/trap/ExceptionTrap.html}ExceptionTrap}}
+  javadoc.
 
   Configure it in your <<<WEB-INF/web.xml>>> like this:
 
@@ -52,7 +53,7 @@ Exception Trap
   </init-param>
   <init-param>
     <param-name>com.rexsl.trap.Notifier</param-name>
-    <param-value>com.rexsl.trap.SmtpNotifier?...
+    <param-value>com.rexsl.trap.SmtpNotifier?...</param-value>
   </init-param>
 </servlet>
 <servlet-mapping>

@@ -45,6 +45,11 @@ import org.apache.commons.lang.StringUtils;
  * All details of this check should be explained in the JavaDoc of
  * {@link DefaultChecksProvider}.
  *
+ * <p>{@code CssLint.class} file is created by Rhino JavaScript-to-Java
+ * compiler during {@code process-sources} Maven phase (see {@code pom.xml}
+ * file). Here we're just executing this class in a standalone process, in
+ * order to capture its output into string.
+ *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: CssStaticCheck.java 204 2011-10-26 21:15:28Z guard $

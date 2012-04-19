@@ -37,7 +37,11 @@ import java.util.Set;
 /**
  * Provider of checks.
  *
- * <h2>BinaryFilesCheck</h2>
+ * <p>This class is NOT thread-safe.
+ *
+ * <p>Checks are executed in the order they are listed here.
+ *
+ * <h3>BinaryFilesCheck</h3>
  *
  * <p>You shouldn't keep any binary files (images, video, etc.) in
  * {@code src/main/webapp} folder and deploy them inside your {@code WAR}
@@ -45,14 +49,92 @@ import java.util.Set;
  * (<a href="http://aws.amazon.com/s3">Amazon S3</a>, for example) and a
  * content delivery network (CDN) on top of it
  * (<a href="http://aws.amazon.com/cloudfront">Amazon CloudFront</a>,
- * for example).
+ * for example). This check validates that no binary files are located inside
+ * {@code src/main/webapp} and complains if anything found.
  *
- * <h2>CssStaticCheck</h2>
+ * <h3>JigsawCssCheck</h3>
  *
- * <p>{@code CssLint.class} file is created by Rhino JavaScript-to-Java
- * compiler during {@code process-sources} Maven phase (see {@code pom.xml}
- * file). Here we're just executing this class in a standalone process, in
- * order to capture its output into string.
+ * <p>All CSS stylesheets from {@code src/main/webapp/css} folder are sent
+ * to W3C Jigsaw validator. Any defect found will fail the build. Read more
+ * about this validation in {@link com.rexsl.w3c.Validator}.
+ *
+ * <h3>JSStaticCheck</h3>
+ *
+ * <p>JavaScript files from {@code src/main/webapp/js} are validated with YUI.
+ * This test is not implemented yet.
+ *
+ * <h3>FilesStructureCheck</h3>
+ *
+ * <p>The following structure of directories and files is enforced inside
+ * {@code src/main/webapp} and {@code src/test/rexsl}
+ * (all of them should be present):
+ *
+ * <pre>
+ * src/main/webapp
+ *   /xsl
+ *   /WEB-INF/web.xml
+ *   /robots.txt
+ * src/test/rexsl
+ *   /xml
+ *   /scripts
+ *   /xsd
+ *   /xhtml
+ * </pre>
+ *
+ * <h3>WebXmlCheck</h3>
+ *
+ * <p>The check validates {@code src/main/webapp/WEB-INF/web.xml} XML file
+ * against its XSD schema and fails the build if any incosistencies are
+ * detected.
+ *
+ * <h3>RexslFilesCheck</h3>
+ *
+ * <p>Test folders should contain files of certain types only:
+ *
+ * <pre>
+ * src/test/rexsl
+ *   /xml/*.xml
+ *   /scripts/*.groovy
+ *   /xsd/*.xsd
+ *   /xhtml/*.groovy
+ *   /bootstrap/*.groovy
+ *   /setup/*.groovy
+ * </pre>
+ *
+ * <p>If any other types of files are found in these folders the check will
+ * complain and fail the build.
+ *
+ * <h3>LibrariesCheck</h3>
+ *
+ * <p>The check verifies all libraries from {@code target/.../WEB-INF/lib}
+ * and finds conflicts between them.
+ *
+ * <h3>XhtmlOutputCheck</h3>
+ *
+ * <p>XML pages from {@code src/test/rexsl/xml} are transformed to XHTML using
+ * XSL stylesheets attatched to them. Then, produced HTML pages are sent to
+ * W3C validator. And then, they are sent to designated groovy scripts
+ * from {@code src/test/rexsl/xhtml}. Name of Groovy script should be identical
+ * to the name of the XML page (except the extension, of course). Keep in mind
+ * that Groovy pre-compiles scripts to Java classes, that's why names should
+ * obey Java class naming rules.
+ *
+ * <p>Content of a created XHTML page is sent to the Groovy script in
+ * {@code rexsl.document} variable. It's very convenient to use
+ * {@link com.rexsl.test.XhtmlMatchers} methods to assert certain XPath
+ * queries on the HTML documents.
+ *
+ * <h3>InContainerScriptsCheck</h3>
+ *
+ * <p>The check starts an embedded Java Servlet container and runs Groovy
+ * scripts from {@code src/test/rexsl/scripts}, one by one. Scripts can
+ * use {@link com.rexsl.test.RestTester} class to test the application
+ * through its RESTful interface. The URI of the running application is
+ * supplied in {@code rexsl.home} variable.
+ *
+ * <h3>JSUnitTestsCheck</h3>
+ *
+ * <p>TBD...
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -114,8 +196,10 @@ public final class DefaultChecksProvider implements ChecksProvider {
     }
 
     /**
-     * Adds a Check object to the Check set. If the check variable is not
-     * null it will only add the check if it pertains to that class.
+     * Adds a Check object to the Check set.
+     *
+     * <p>If the check variable is not {@code NULL} it will only add
+     * the check if it pertains to that class.
      *
      * @param checks The set of checks.
      * @param chck The check to be added.
