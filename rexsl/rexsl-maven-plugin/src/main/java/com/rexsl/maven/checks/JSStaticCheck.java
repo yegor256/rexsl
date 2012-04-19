@@ -108,7 +108,7 @@ final class JSStaticCheck implements Check {
      * @param file Script file to check
      * @throws InternalCheckException If some failure inside
      * @return Is script valid?
-     * @todo #112! Enable commented code when yui finish migration
+     * @todo #112! Move the code above to this method when yui finish migration
      *  to Rhino 1.7R3
      */
     private boolean one(final File file) throws InternalCheckException {

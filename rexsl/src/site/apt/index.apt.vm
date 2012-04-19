@@ -77,6 +77,27 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
   If any of these technologies are new for you - ReXSL won't work. However, we strongly
   recommend to learn them :)
 
+  These are the reasons why you should consider ReXSL over other Java web front
+  frameworks like
+  {{{http://en.wikipedia.org/wiki/JavaServer_Faces}JSF}},
+  {{{http://en.wikipedia.org/wiki/JavaServer_Pages}JSP}},
+  {{{http://en.wikipedia.org/wiki/Java_Servlet}Servlets}},
+  {{{http://wicket.apache.org/}Wicket}},
+  {{{http://www.springsource.org/}Spring MVC}},
+  {{{http://struts.apache.org/}Struts}},
+  {{{http://tapestry.apache.org/}Tapestry}},
+  and others:
+
+   * Graphic design evolves in parallel with Java classes
+
+   * Web front-end is an API at the same time
+
+   * Static analysis of generated CSS and HTML is build automated
+
+   * Layout is decoupled from data
+
+   * many others... (to be continued)
+
   This article explains how to create a working web application
   using ReXSL in five minutes: {{{./start.html}Quick Start Guide}}.
 
