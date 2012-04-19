@@ -7,7 +7,7 @@
  ------
 
 ~~
-~~ Copyright (c) 2011, ReXSL.com
+~~ Copyright (c) 2011-2012, ReXSL.com
 ~~ All rights reserved.
 ~~
 ~~ Redistribution and use in source and binary forms, with or without
@@ -42,9 +42,39 @@ ReXSL Maven Plugin
 
   This plugin is helping you to test your ReXSL-powered
   web application and perform some pre-packaging changes to your
-  web assets (like CSS/XSL stylesheets, JavaScript code, images, etc.)
+  web assets (like CSS/XSL stylesheets, JavaScript code, etc.)
 
   Read more about its {{{./usage.html}usage}}.
+
+  The workflow of the plugin is this:
+
+   [[1]] Statically analyze the content of <<<src/main/webapp>>> and fail
+     if any prohibited content found there, for example incorrectly formatted
+     CSS stylesheet or <<<web.xml>>> file not compliant to its XSD schema.
+
+   [[2]] Perform XSL transformations on all <<<xml>>> files found in
+     <<<src/test/rexsl/xml>>> (using your XSL stylesheets attached to them)
+     and validate that resulting HTML documents are compliant to the rules
+     of W3C and your <<<groovy>>> files found in <<<src/test/rexsl/xhtml>>>.
+
+   [[3]] Run all pre-start <<<groovy>>> scripts from
+     <<<src/test/rexsl/bootstrap>>>
+     from plugin class loader.
+
+   [[4]] Start Java servlet container (Jetty) with your classes and resources,
+     emulating its real deployment to a real container.
+
+   [[5]] Run all startup data initializing <<<groovy>>> scripts from
+     <<<src/test/rexsl/setup>>>, inside the container and in its class loader.
+
+   [[6]] Run all <<<groovy>>> tests found in <<<src/test/rexsl/scripts>>>.
+
+   [[7]] Shutdown the container and report success.
+
+  Of course, at any step build may fail.
+
+  Detailed list of all checks is
+  {{{./apidocs/com/rexsl/maven/checks/DefaultChecksProvider.html}here}}.
 
   There are a number of cookbook advices, which will help:
 

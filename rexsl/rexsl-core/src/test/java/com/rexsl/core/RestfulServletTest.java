@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,13 +48,18 @@ import org.junit.Test;
 public final class RestfulServletTest {
 
     /**
+     * Key for the packages parameter.
+     */
+    private static final String PACKAGES_KEY = "com.rexsl.PACKAGES";
+
+    /**
      * RestfulServlet can pass HTTP requests to Jersey for further processing.
      * @throws Exception If something goes wrong
      */
     @Test
     public void passesHttpRequestsToJersey() throws Exception {
         final ServletConfig config = new ServletConfigMocker()
-            .withParam("com.rexsl.PACKAGES", "com.rexsl.core")
+            .withParam(this.PACKAGES_KEY, "\t\ncom.rexsl.core  \r")
             .mock();
         final HttpServlet servlet = new RestfulServlet();
         servlet.init(config);
@@ -66,6 +71,36 @@ public final class RestfulServletTest {
             response.toString(),
             Matchers.containsString("\u0443\u0440\u0430")
         );
+    }
+
+    /**
+     * Attemps to create a new restful servlet with a configuration argument
+     * that contains a non-valid package.
+     * The package name contains hyphens.
+     * @throws Exception If something goes wrong
+     */
+    @Test(expected = javax.servlet.ServletException.class)
+    public void initWithNonValidPackageHyphens() throws Exception {
+        final ServletConfig config = new ServletConfigMocker()
+            .withParam(this.PACKAGES_KEY, "package-with-hyphens")
+            .mock();
+        final HttpServlet servlet = new RestfulServlet();
+        servlet.init(config);
+    }
+
+    /**
+     * Attemps to create a new restful servlet with a configuration argument
+     * that contains a non-valid package.
+     * One of the packages starts with a number.
+     * @throws Exception If something goes wrong
+     */
+    @Test(expected = javax.servlet.ServletException.class)
+    public void initWithNonValidPackageStartsWithNumber() throws Exception {
+        final ServletConfig config = new ServletConfigMocker()
+            .withParam(this.PACKAGES_KEY, "pa.1ck.age")
+            .mock();
+        final HttpServlet servlet = new RestfulServlet();
+        servlet.init(config);
     }
 
     /**

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,11 +29,12 @@
  */
 package com.rexsl.core;
 
-import java.util.ArrayList;
+import com.ymock.util.Logger;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -66,6 +67,16 @@ final class ServletConfigWrapper implements FilterConfig {
         final Properties props) {
         this.config = cfg;
         this.properties = props;
+        if (cfg == null) {
+            throw new IllegalArgumentException(
+                "ServletConfig parameter is null"
+            );
+        }
+        if (props == null) {
+            throw new IllegalArgumentException(
+                "Properties parameter is null"
+            );
+        }
     }
 
     /**
@@ -73,7 +84,7 @@ final class ServletConfigWrapper implements FilterConfig {
      */
     @Override
     public String getFilterName() {
-        return String.format("%s-filter", this.config.getServletName());
+        return Logger.format("%s-filter", this.config.getServletName());
     }
 
     /**
@@ -93,7 +104,7 @@ final class ServletConfigWrapper implements FilterConfig {
      */
     @Override
     public Enumeration<String> getInitParameterNames() {
-        final List<String> names = new ArrayList<String>();
+        final Set<String> names = new HashSet<String>();
         for (Object name : this.properties.keySet()) {
             names.add((String) name);
         }

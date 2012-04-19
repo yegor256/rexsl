@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,16 @@
  */
 package com.rexsl.test;
 
+import com.ymock.util.Logger;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.w3c.dom.Document;
 
 /**
- * Implementation of {@link TestResponse}.
+ * Convenient parser of XML to DOM.
+ *
+ * <p>Objects of this class are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -52,6 +55,14 @@ final class DomParser {
      * @param txt The XML in text
      */
     public DomParser(final String txt) {
+        if (txt == null) {
+            throw new IllegalArgumentException("NULL instead of XML");
+        }
+        if (txt.isEmpty() || txt.charAt(0) != '<') {
+            throw new IllegalArgumentException(
+                Logger.format("Doesn't look like XML: '%s'", txt)
+            );
+        }
         this.xml = txt;
     }
 
@@ -71,11 +82,14 @@ final class DomParser {
                 .newDocumentBuilder()
                 .parse(IOUtils.toInputStream(this.xml, CharEncoding.UTF_8));
         } catch (java.io.IOException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalStateException(ex);
         } catch (javax.xml.parsers.ParserConfigurationException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalStateException(ex);
         } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalArgumentException(
+                Logger.format("Invalid XML: \"%s\"", this.xml),
+                ex
+            );
         }
         return doc;
     }

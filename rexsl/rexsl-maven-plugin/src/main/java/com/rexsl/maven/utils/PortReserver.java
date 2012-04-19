@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,12 +44,15 @@ public final class PortReserver {
      * Find and return the first available port.
      * @return The port number
      */
-    public Integer port() {
-        Integer port;
+    public int port() {
+        int port;
         try {
             final ServerSocket socket = new ServerSocket(0);
-            port = socket.getLocalPort();
-            socket.close();
+            try {
+                port = socket.getLocalPort();
+            } finally {
+                socket.close();
+            }
         } catch (java.io.IOException ex) {
             throw new IllegalStateException("Failed to reserve port", ex);
         }

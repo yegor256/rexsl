@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -70,6 +70,6 @@ public interface Environment {
      * Get port number, that can be used for a web container in runtime.
      * @return The port number, just allocated/reserved
      */
-    Integer port();
+    int port();
 
 }

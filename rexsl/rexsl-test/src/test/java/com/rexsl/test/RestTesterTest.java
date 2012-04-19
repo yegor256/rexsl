@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.ymock.util.Logger;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -107,20 +108,17 @@ public final class RestTesterTest {
     /**
      * RestTester can send body with HTTP POST request.
      * @throws Exception If something goes wrong inside
-     * @todo #85 This test doesn't work for some reason, and I can't understand
-     *  what exactly is the problem. Grizzly container doesn't understand
-     *  POST params passed in HTTP request body. While Jersey understands them
-     *  perfectly in rexsl-maven-plugin invoker tests. Maybe getParameters()
-     *  method in GrizzlyHttpRequest doesn't work properly with POST params?
+     * @todo #151 Is it possible to initialize input variable with
+     *  InputStream from request without side effects on request?
+     *  request's parameters retrieve is done lazily and requires
+     *  InputStream rewinded to it's start
      */
     @Test
     @org.junit.Ignore
-    public void sendsTextWithPostRequest() throws Exception {
+    public void sendsTextWithPostRequestMatchParam() throws Exception {
         final String name = "postparam";
         final String value = "some random value of this param \"&^%*;'\"";
         final ContainerMocker container = new ContainerMocker()
-            .expectBody(Matchers.containsString(name))
-            .expectBody(Matchers.containsString(value))
             .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(RestTester.POST))
             .mock();
@@ -132,11 +130,40 @@ public final class RestTesterTest {
             )
             .post(
                 "testing of POST request",
-                String.format(
+                Logger.format(
                     "%s=%s",
                     name,
                     URLEncoder.encode(value, CharEncoding.UTF_8)
                 )
+            )
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can send body with HTTP POST request.
+     * @throws Exception If something goes wrong inside
+     * @todo #151 Is it possible to initialize input variable with
+     *  InputStream from request without side effects on request?
+     *  request's parameters retrieve is done lazily and requires
+     *  InputStream rewinded to it's start
+     */
+    @Test
+    @org.junit.Ignore
+    public void sendsTextWithPostRequestMatchBody() throws Exception {
+        final String value = "some body value with \"&^%*;'\"";
+        final ContainerMocker container = new ContainerMocker()
+            .expectBody(Matchers.containsString("with"))
+            .expectMethod(Matchers.equalTo(RestTester.POST))
+            .mock();
+        RestTester
+            .start(container.home())
+            .header(
+                HttpHeaders.CONTENT_TYPE,
+                MediaType.APPLICATION_FORM_URLENCODED
+            )
+            .post(
+                "testing of POST request body",
+                URLEncoder.encode(value, CharEncoding.UTF_8)
             )
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
@@ -250,7 +277,6 @@ public final class RestTesterTest {
      * @throws Exception If something goes wrong inside
      */
     @Test
-    @org.junit.Ignore
     public void acceptsUnicodeInXml() throws Exception {
         final ContainerMocker container = new ContainerMocker()
             .returnHeader(HttpHeaders.CONTENT_TYPE, "text/xml;charset=utf-8")
@@ -260,6 +286,63 @@ public final class RestTesterTest {
             .start(UriBuilder.fromUri(container.home()).path("/barbar"))
             .get("unicode conversion")
             .assertXPath("/text[contains(.,'\u0443\u0440\u0430')]");
+    }
+
+    /**
+     * RestTester can use basic authentication scheme.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void sendsBasicAuthenticationHeader() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .expectHeader(
+                HttpHeaders.AUTHORIZATION,
+                Matchers.equalTo("Basic dXNlcjpwd2Q=")
+        ).mock();
+        RestTester
+            .start(UriBuilder.fromUri(container.home()).userInfo("user:pwd"))
+            .get("test with Basic authorization")
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can silently proceed on connection error.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void continuesOnConnectionError() throws Exception {
+        RestTester
+            .start(UriBuilder.fromUri("http://absent-1.rexsl.com/"))
+            .get("GET from non-existing host")
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestTester can retry on connection error.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void retriesOnConnectionError() throws Exception {
+        RestTester
+            .start(UriBuilder.fromUri("http://absent-2.rexsl.com/"))
+            .get("GET from non-existing host, with attempt to retry")
+            .assertThat(
+                new AssertionPolicy() {
+                    @Override
+                    public void assertThat(final TestResponse response) {
+                        try {
+                            response.getStatus();
+                            throw new IllegalStateException();
+                        } catch (AssertionError ex) {
+                            assert ex != null;
+                        }
+                    }
+                    @Override
+                    public boolean again(final int attempt) {
+                        return false;
+                    }
+                }
+            );
     }
 
 }

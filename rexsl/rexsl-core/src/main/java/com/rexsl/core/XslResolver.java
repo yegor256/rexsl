@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,12 +29,17 @@
  */
 package com.rexsl.core;
 
+import com.rexsl.core.annotations.Schema;
+import com.rexsl.core.annotations.Stylesheet;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -70,12 +75,17 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     /**
      * Classes to process.
      */
-    private final transient List<Class> classes = new ArrayList<Class>();
+    private final transient Set<Class> classes = new HashSet<Class>();
 
     /**
      * JAXB context.
      */
     private transient JAXBContext context;
+
+    /**
+     * Servlet request.
+     */
+    private transient HttpServletRequest request;
 
     /**
      * Set servlet context from container, to be called by JAX-RS framework
@@ -84,7 +94,9 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      */
     @Context
     public void setServletContext(final ServletContext ctx) {
-        assert ctx != null : "ServletContext can't be NULL";
+        if (ctx == null) {
+            throw new IllegalArgumentException("ServletContext can't be NULL");
+        }
         final String name = ctx.getInitParameter("com.rexsl.core.XSD_FOLDER");
         if (name != null) {
             this.xsdFolder = new File(name);
@@ -103,7 +115,20 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     }
 
     /**
+     * Set request to provide information about resourse context.
+     * @param req The request
+     */
+    @Context
+    public void setHttpServletRequest(final HttpServletRequest req) {
+        this.request = req;
+    }
+
+    /**
      * {@inheritDoc}
+     *
+     * <p>JAXBContext is thread-safe, that's why we don't synchronize here.
+     *
+     * @see <a href="http://jaxb.java.net/guide/Performance_and_thread_safety.html">JAXBContext is thread-safe</a>
      */
     @Override
     public Marshaller getContext(final Class<?> type) {
@@ -111,7 +136,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         try {
             mrsh = this.buildContext(type).createMarshaller();
             mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            final String header = String.format(
+            final String header = Logger.format(
                 "\n<?xml-stylesheet type='text/xsl' href='%s'?>",
                 StringEscapeUtils.escapeXml(this.stylesheet(type))
             );
@@ -126,7 +151,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 type.getName()
             );
         } else {
-            mrsh = this.addXsdValidator(mrsh, type);
+            this.addXsdValidatorToMarshaller(mrsh, type);
         }
         return mrsh;
     }
@@ -136,18 +161,20 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @param cls The class we should add
      */
     public void add(final Class cls) {
-        synchronized (this) {
+        synchronized (this.classes) {
             if (!this.classes.contains(cls)) {
                 try {
                     this.classes.add(cls);
                     this.context = JAXBContext.newInstance(
-                        this.classes.toArray(new Class[] {})
+                        this.classes.toArray(new Class[this.classes.size()])
                     );
                     Logger.info(
                         this,
-                        "#add(%s): added to JAXBContext (%d total)",
+                        // @checkstyle LineLength (1 line)
+                        "#add(%s): added to JAXBContext (%d total), stylesheet: '%s'",
                         cls.getName(),
-                        this.classes.size()
+                        this.classes.size(),
+                        this.stylesheet(cls)
                     );
                 } catch (javax.xml.bind.JAXBException ex) {
                     throw new IllegalStateException(ex);
@@ -176,15 +203,31 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         final Annotation antn = type.getAnnotation(Stylesheet.class);
         String stylesheet;
         if (antn == null) {
-            stylesheet = String.format(
+            stylesheet = Logger.format(
                 "/xsl/%s.xsl",
                 type.getSimpleName()
             );
+            if (this.request != null) {
+                try {
+                    stylesheet = new URL(
+                        this.request.getScheme(),
+                        this.request.getServerName(),
+                        this.request.getServerPort(),
+                        Logger.format(
+                            "%s%s",
+                            this.request.getContextPath(),
+                            stylesheet
+                        )
+                    ).toString();
+                } catch (MalformedURLException ex) {
+                    throw new IllegalStateException(ex);
+                }
+            }
         } else {
             stylesheet = ((Stylesheet) antn).value();
         }
         Logger.debug(
-            this,
+            XslResolver.class,
             "#stylesheet(%s): '%s' stylesheet discovered",
             type.getName(),
             stylesheet
@@ -193,13 +236,12 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     }
 
     /**
-     * Configure marhaller and return a new one (or the same).
+     * Configure marhaller adding a xsd validator.
      * @param mrsh The marshaller, already created and ready to marshal
      * @param type The class to be marshalled
-     * @return New marshalled to be used instead
      * @see #getContext(Class)
      */
-    private Marshaller addXsdValidator(final Marshaller mrsh,
+    private void addXsdValidatorToMarshaller(final Marshaller mrsh,
         final Class<?> type) {
         final String name = this.schema(type);
         if (name.isEmpty()) {
@@ -218,7 +260,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                     mrsh.setSchema(factory.newSchema(xsd));
                 } catch (org.xml.sax.SAXException ex) {
                     throw new IllegalStateException(
-                        String.format(
+                        Logger.format(
                             "Failed to use XSD schema from '%s' for class '%s'",
                             xsd,
                             type.getName()
@@ -246,7 +288,6 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 );
             }
         }
-        return mrsh;
     }
 
     /**
@@ -254,11 +295,11 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @param type The class
      * @return The name of XSD file
      */
-    private String schema(final Class<?> type) {
+    private static String schema(final Class<?> type) {
         final Annotation antn = type.getAnnotation(Schema.class);
         String schema;
         if (antn == null) {
-            schema = String.format("%s.xsd", type.getName());
+            schema = Logger.format("%s.xsd", type.getName());
         } else {
             if (((Schema) antn).ignore()) {
                 schema = "";
@@ -267,7 +308,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             }
         }
         Logger.debug(
-            this,
+            XslResolver.class,
             "#schema(%s): '%s' schema discovered",
             type.getName(),
             schema

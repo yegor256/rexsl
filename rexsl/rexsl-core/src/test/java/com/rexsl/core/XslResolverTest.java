@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,11 +29,12 @@
  */
 package com.rexsl.core;
 
-import com.rexsl.test.XhtmlConverter;
+import com.rexsl.core.annotations.Stylesheet;
+import com.rexsl.test.XhtmlMatchers;
 import java.io.StringWriter;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.ext.ContextResolver;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -44,12 +45,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.xmlmatchers.XmlMatchers;
 
 /**
  * Test case for {@link XslResolver}.
@@ -57,8 +53,6 @@ import org.xmlmatchers.XmlMatchers;
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ XslResolver.class, JAXBContext.class })
 public final class XslResolverTest {
 
     /**
@@ -73,33 +67,6 @@ public final class XslResolverTest {
     }
 
     /**
-     * XslResolver throws exception when Marshaller throws.
-     * @throws Exception If something goes wrong
-     */
-    @Test(expected = IllegalStateException.class)
-    public void throwsExceptionWhenMarshallerReports() throws Exception {
-        PowerMockito.mockStatic(JAXBContext.class);
-        Mockito.when(JAXBContext.newInstance(Mockito.any(Class.class)))
-            .thenThrow(new JAXBException(""));
-        new XslResolver().getContext(Object.class);
-    }
-
-    /**
-     * XslResolver throws exception when Marshaller throws.
-     * @throws Exception If something goes wrong
-     */
-    @Test(expected = IllegalStateException.class)
-    public void throwsWhenCreateMarshallerException() throws Exception {
-        PowerMockito.mockStatic(JAXBContext.class);
-        final JAXBContext context = Mockito.mock(JAXBContext.class);
-        Mockito.when(context.createMarshaller())
-            .thenThrow(new JAXBException(""));
-        Mockito.when(JAXBContext.newInstance(Mockito.any(Class.class)))
-            .thenReturn(context);
-        new XslResolver().getContext(Object.class);
-    }
-
-    /**
      * XslResolvers can avoid duplicated creation of marshaller.
      * @throws Exception If something goes wrong
      * @todo #3 This test is not working at the moment, but it should. We have
@@ -108,18 +75,7 @@ public final class XslResolverTest {
     @Ignore
     @Test
     public void avoidsDuplicatedMarshallerCreation() throws Exception {
-        // PowerMockito.mockStatic(JAXBContext.class);
-        // final JAXBContext context = mock(JAXBContext.class);
-        // final Marshaller mrsh = mock(Marshaller.class);
-        // doReturn(mrsh).when(context).createMarshaller();
-        // when(JAXBContext.newInstance(anyString())).thenReturn(context);
-        // final XslResolver resolver = new XslResolver();
-        // final XslResolver spy = spy(resolver);
-        // spy.getContext(Object.class);
-        // verify(spy, times(1)).createContext();
-        // reset(spy);
-        // spy.getContext(Object.class);
-        // verify(spy, times(0)).createContext();
+        // not implemented yet
     }
 
     /**
@@ -136,8 +92,8 @@ public final class XslResolverTest {
         final StringWriter writer = new StringWriter();
         mrsh.marshal(page, writer);
         MatcherAssert.assertThat(
-            XhtmlConverter.the(writer.toString()),
-            XmlMatchers.hasXPath("/page/injectable/name")
+            writer,
+            XhtmlMatchers.hasXPath("/page/injectable/name")
         );
     }
 
@@ -153,17 +109,47 @@ public final class XslResolverTest {
         final StringWriter writer = new StringWriter();
         mrsh.marshal(page, writer);
         MatcherAssert.assertThat(
-            XhtmlConverter.the(writer.toString()),
-            XmlMatchers.hasXPath(
+            writer,
+            XhtmlMatchers.hasXPath(
                 // @checkstyle LineLength (1 line)
                 "/processing-instruction('xml-stylesheet')[contains(.,\"href='/xsl/Page.xsl'\")]"
             )
         );
         MatcherAssert.assertThat(
-            XhtmlConverter.the(writer.toString()),
-            XmlMatchers.hasXPath(
+            writer,
+            XhtmlMatchers.hasXPath(
                 // @checkstyle LineLength (1 line)
                 "/processing-instruction('xml-stylesheet')[contains(.,\"type='text/xsl'\")]"
+            )
+        );
+    }
+
+    /**
+     * XslResolver can inject absolute URLs.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void injectsAbsolutePath() throws Exception {
+        final XslResolver resolver = new XslResolver();
+        final ServletContext context = Mockito.mock(ServletContext.class);
+        resolver.setServletContext(context);
+        final HttpServletRequest request = new HttpServletRequestMocker()
+            .mock();
+        Mockito.doReturn("http").when(request).getScheme();
+        Mockito.doReturn("localhost").when(request).getServerName();
+        Mockito.doReturn("/sample").when(request).getContextPath();
+        final int port = 8080;
+        Mockito.doReturn(port).when(request).getServerPort();
+        resolver.setHttpServletRequest(request);
+        final Marshaller mrsh = resolver.getContext(XslResolverTest.Page.class);
+        final Page page = new XslResolverTest.Page();
+        final StringWriter writer = new StringWriter();
+        mrsh.marshal(page, writer);
+        MatcherAssert.assertThat(
+            writer,
+            XhtmlMatchers.hasXPath(
+                // @checkstyle LineLength (1 line)
+                "/processing-instruction('xml-stylesheet')[contains(.,\"href='http://localhost:8080/sample/xsl/Page.xsl'\")]"
             )
         );
     }
@@ -180,14 +166,26 @@ public final class XslResolverTest {
         final StringWriter writer = new StringWriter();
         mrsh.marshal(bar, writer);
         MatcherAssert.assertThat(
-            XhtmlConverter.the(writer.toString()),
-            XmlMatchers.hasXPath(
+            writer,
+            XhtmlMatchers.hasXPath(
                 // @checkstyle LineLength (1 line)
                 "/processing-instruction('xml-stylesheet')[contains(.,\"href='test'\")]"
             )
         );
     }
 
+    /**
+     * XslResolver checks passed servlet context.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void setServletContext() {
+        final XslResolver resolver = new XslResolver();
+        resolver.setServletContext(null);
+    }
+
+    /**
+     * Sample page for testing.
+     */
     @XmlRootElement(name = "page")
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Page {
@@ -220,6 +218,9 @@ public final class XslResolverTest {
         }
     }
 
+    /**
+     * Injectable element.
+     */
     @XmlRootElement(name = "injectable")
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Injectable {
@@ -233,6 +234,9 @@ public final class XslResolverTest {
         }
     }
 
+    /**
+     * Just a dummy object.
+     */
     @XmlRootElement(name = "page")
     @XmlAccessorType(XmlAccessType.NONE)
     @Stylesheet("test")

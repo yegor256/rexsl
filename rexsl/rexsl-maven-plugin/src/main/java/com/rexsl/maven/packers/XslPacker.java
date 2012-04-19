@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,13 +47,21 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Packager of XSL files. All XML comments and unnecessary spaces are removed.
+ * Packager of XSL files.
+ *
+ * <p>All XML comments and unnecessary spaces are removed.
+ *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link PackersProvider}.
+ *
+ * <p>The class is immutable and thread-safe.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class XslPacker extends AbstractPacker {
+final class XslPacker extends AbstractPacker {
 
     /**
      * Document builder factory.

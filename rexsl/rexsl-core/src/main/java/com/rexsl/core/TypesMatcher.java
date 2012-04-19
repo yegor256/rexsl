@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,8 +29,9 @@
  */
 package com.rexsl.core;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import com.ymock.util.Logger;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Media types matcher.
@@ -52,9 +53,9 @@ final class TypesMatcher {
     private static final String ASTERIX = "*";
 
     /**
-     * Media types and their levels.
+     * Media types.
      */
-    private final transient Collection<String> types = new ArrayList<String>();
+    private final transient Set<String> types = new HashSet<String>();
 
     /**
      * Public ctor.
@@ -67,6 +68,14 @@ final class TypesMatcher {
                 this.types.add(parts[0]);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return Logger.format("%[list]s", this.types);
     }
 
     /**
@@ -84,13 +93,7 @@ final class TypesMatcher {
      * @return If the MIME type is accepted
      */
     public boolean accepts(final String match) {
-        boolean accepts = false;
-        for (String type : this.types) {
-            if (type.equals(match)) {
-                accepts = true;
-                break;
-            }
-        }
+        boolean accepts = this.types.contains(match);
         if (!accepts) {
             final String[] reqs = match.split(this.TYPE_SEP, 2);
             for (String type : this.types) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.ws.rs.core.HttpHeaders;
@@ -127,7 +128,7 @@ public final class PageAnalyzerTest {
         MatcherAssert.assertThat(
             new PageAnalyzer(this.page, mocker.mock()).needsTransformation(),
             Matchers.describedAs(
-                String.format(
+                Logger.format(
                     "'%s' with '%s' by '%s'",
                     this.page,
                     this.accept,

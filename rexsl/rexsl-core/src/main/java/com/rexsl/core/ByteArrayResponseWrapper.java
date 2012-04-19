@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -76,11 +76,11 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
     }
 
     /**
-     * Get the underlying byte stream.
-     * @return Byte stream that contains the response.
+     * Get the underlying byte array.
+     * @return Byte array that contains the response.
      */
-    public ByteArrayOutputStream getByteStream() {
-        return this.stream;
+    public byte[] getByteArray() {
+        return this.stream.toByteArray();
     }
 
     /**

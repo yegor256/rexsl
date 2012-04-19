@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,17 +29,49 @@
  */
 package com.rexsl.test;
 
-import java.util.List;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedMap;
 import org.hamcrest.Matcher;
 
 /**
- * Resonse returned by {@link TestClient}.
+ * Response returned by {@link TestClient}.
+ *
+ * <p>It is used as an output of {@link TestClient}, which is an output of
+ * {@link RestTester}, for example:
+ *
+ * <pre>
+ * TestResponse resp = RestTester.start(new URI("http://www.google.com"))
+ *   .get("load from page of Google");
+ * if (resp.getStatus() == 200) {
+ *   // everything is fine
+ * } else if (resp.getStatus() == 404) {
+ *   // google.com not found, hm...
+ * }
+ * </pre>
+ *
+ * <p>{@link TestResponse} extends {@link XmlDocument}, which is a abstract
+ * of an XML document, which can be retrieved from itself. For example:
+ *
+ * <pre>
+ * TestResponse resp = RestTester.start(new URI("http://example.com"))
+ *   .get("load XML document");
+ * Collection&lt;XmlDocument&gt; employees = resp.nodes("/Staff/Employee");
+ * for (XmlDocument employee : employees) {
+ *   String name = employee.xpath("name/text()").get(0);
+ *   // ...
+ * }
+ * </pre>
+ *
+ * <p>{@link TestResponse} also extends {@link JsonDocument}, which is an
+ * abstract of a Json document, which can be retrieved from itself.
+ *
+ * <p>Implementation of this interface shall be mutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public interface TestResponse {
+@SuppressWarnings("PMD.TooManyMethods")
+public interface TestResponse extends XmlDocument, JsonDocument {
 
     /**
      * Follow the LOCATION header.
@@ -49,29 +81,16 @@ public interface TestResponse {
 
     /**
      * Find link in XML and return new client with this link as URI.
-     * @param query The path of the link
-     * @return New client
+     * @param query The path of the link, as XPath query
+     * @return New client ready to fetch content from this new page
      */
     TestClient rel(String query);
 
     /**
-     * Get body as a string.
-     * @return The body
-     */
-    String getBody();
-
-    /**
-     * Get status of the response as a number.
-     * @return The status
+     * Get status of the response as a positive integer number.
+     * @return The status code
      */
     Integer getStatus();
-
-    /**
-     * Find and return nodes matched by xpath.
-     * @param query The XPath query
-     * @return The list of node values (texts)
-     */
-    List<String> xpath(String query);
 
     /**
      * Get status line of the response.
@@ -86,10 +105,37 @@ public interface TestResponse {
     MultivaluedMap<String, String> getHeaders();
 
     /**
+     * Get cookie.
+     * @param name Name of the cookie to get
+     * @return The cookie
+     */
+    Cookie cookie(String name);
+
+    /**
+     * Get body as a string, assuming it's {@code UTF-8}.
+     * @return The body
+     */
+    String getBody();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    TestResponse registerNs(String prefix, Object uri);
+
+    /**
      * Fail and report a problem.
      * @param reason Reason of failure
      */
     void fail(String reason);
+
+    /**
+     * Assert something.
+     * @param assertion The assertion to use
+     * @return This object
+     * @since 0.3.4
+     */
+    TestResponse assertThat(AssertionPolicy assertion);
 
     /**
      * Verifies HTTP response status code against the provided absolute value,
@@ -107,6 +153,13 @@ public interface TestResponse {
     TestResponse assertStatus(Matcher<Integer> matcher);
 
     /**
+     * Verifies HTTP response body content against provided matcher.
+     * @param matcher The matcher to use
+     * @return This object
+     */
+    TestResponse assertBody(Matcher<String> matcher);
+
+    /**
      * Verifies HTTP header against provided matcher.
      * @param name Name of the header to match
      * @param matcher The matcher to use
@@ -115,17 +168,17 @@ public interface TestResponse {
     TestResponse assertHeader(String name, Matcher matcher);
 
     /**
-     * Verifies HTTP response body content against provided matcher.
-     * @param matcher The matcher to use
-     * @return This object
-     */
-    TestResponse assertBody(Matcher<String> matcher);
-
-    /**
      * Verifies HTTP response body XHTML/XML content against XPath query.
      * @param xpath Query to use
      * @return This object
      */
     TestResponse assertXPath(String xpath);
+
+    /**
+     * Verifies the Json data against the element identifier argument.
+     * @param element Element in the Json data of this object
+     * @return This object
+     */
+    TestResponse assertJson(String element);
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,6 +49,7 @@ public final class BinaryFilesCheckTest {
     public void validatesTextFile() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withTextFile("src/main/webapp/valid-text.txt", "")
+            .withTextFile("src/main/webapp/js/script.js", "")
             .withTextFile("src/main/webapp/.svn/entries", "")
             .mock();
         MatcherAssert.assertThat(

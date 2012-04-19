@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,9 @@ package com.rexsl.test;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.ymock.util.Logger;
 import java.net.URI;
+import java.util.Map;
 import javax.ws.rs.core.UriBuilder;
 
 /**
@@ -41,13 +43,14 @@ import javax.ws.rs.core.UriBuilder;
  * <p>For example (in your Groovy script):
  *
  * <pre>
- * import java.net.HttpURLConnection
  * import javax.ws.rs.core.HttpHeaders
  * import javax.ws.rs.core.MediaType
- * new RestTester.start(UriBuilder.fromUri(rexsl.home).path('/{id}').build(id))
+ * import javax.ws.rs.core.UriBuilder
+ * import org.hamcrest.Matchers
+ * RestTester.start(UriBuilder.fromUri(rexsl.home).path('/{id}').build(id))
  *   .header(HttpHeaders.USER_AGENT, 'Safari 4')
  *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
- *   .post('name=John Doe')
+ *   .post('renaming somebody', 'name=John Doe')
  *   .assertStatus(HttpURLConnection.HTTP_OK)
  *   .assertBody(Matchers.containsString('xml'))
  *   .assertXPath('/data/user[.="John Doe"]')
@@ -55,7 +58,29 @@ import javax.ws.rs.core.UriBuilder;
  *
  * <p>This example will make a {@code POST} request to the URI pre-built
  * by {@code UriBuilder}, providing headers and request body. Response will
- * be validated with matchers.
+ * be validated with matchers. See class {@link TestResponse} to get an idea
+ * of what you can do with the response once it's retrieved.
+ *
+ * <p>Also you can use this class for data retrieval, for example:
+ *
+ * <pre>
+ * String html = RestTester.start(new URI("http://www.rexsl.com"))
+ *   .get('read home page of ReXSL.com')
+ *   .assertStatus(HttpURLConnection.HTTP_OK)
+ *   .getBody();
+ * </pre>
+ *
+ * <p>Besides that, it can be used as a convenient manipulator of XML nodes:
+ *
+ * <pre>
+ * List&lt;XmlDocument&gt; emps = RestTester.start(new URI("http://localhost"))
+ *   .get('reading data of all employees')
+ *   .assertStatus(HttpURLConnection.HTTP_OK)
+ *   .nodes("//employees/employee");
+ * for (XmlDocument employee : emps) {
+ *   String name = employee.xpath("name/text()").get(0);
+ * }
+ * </pre>
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -89,18 +114,21 @@ public final class RestTester {
      * @param uri URI of the entry point
      * @return The client ready to process the request
      */
+    @SuppressWarnings("PMD.UseConcurrentHashMap")
     public static TestClient start(final URI uri) {
         if (!uri.isAbsolute()) {
             throw new IllegalArgumentException(
-                String.format(
+                Logger.format(
                     "URI '%s' has to be absolute",
                     uri
                 )
             );
         }
         final ClientConfig config = new DefaultClientConfig();
-        config.getProperties()
-            .put(ClientConfig.PROPERTY_FOLLOW_REDIRECTS, false);
+        final Map<String, Object> props = config.getProperties();
+        props.put(ClientConfig.PROPERTY_FOLLOW_REDIRECTS, false);
+        // @checkstyle MagicNumber (1 line)
+        props.put(ClientConfig.PROPERTY_CONNECT_TIMEOUT, new Integer(5 * 1000));
         URI dest = uri;
         if ("".equals(dest.getPath())) {
             dest = UriBuilder.fromUri(uri).path("/").build();

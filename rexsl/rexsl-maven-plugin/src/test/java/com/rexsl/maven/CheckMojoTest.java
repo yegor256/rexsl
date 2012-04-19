@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,17 +29,17 @@
  */
 package com.rexsl.maven;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.repository.LocalRepository;
 
@@ -48,8 +48,6 @@ import org.sonatype.aether.repository.LocalRepository;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ CheckMojo.class, ChecksProvider.class })
 public final class CheckMojoTest {
 
     /**
@@ -64,6 +62,41 @@ public final class CheckMojoTest {
         mojo.setLog(log);
         mojo.execute();
         Mockito.verify(log).info("execution skipped because of 'skip' option");
+    }
+
+    /**
+     * CheckMojo injects system properties when running, but restores them
+     * before exiting.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void restoresSystemPropertiesAfterExecution() throws Exception {
+        final ChecksProvider provider = Mockito.mock(ChecksProvider.class);
+        final Set<Check> checks = new HashSet<Check>();
+        final Check check = new CheckMocker().withResult(true).mock();
+        checks.add(check);
+        Mockito.doReturn(checks).when(provider).all();
+        final CheckMojo mojo = this.mojo();
+        mojo.setChecksProvider(provider);
+        final MavenProject project = new MavenProjectMocker().mock();
+        mojo.setProject(project);
+        final Field sysPropField =
+            CheckMojo.class.getDeclaredField("systemPropertyVariables");
+        sysPropField.setAccessible(true);
+        final ConcurrentHashMap<String, String> systemProperties =
+            new ConcurrentHashMap<String, String>();
+        systemProperties.put("new-property", "some-value");
+        sysPropField.set(
+            mojo,
+            systemProperties
+        );
+        final int beforeCount = System.getProperties().size();
+        mojo.execute();
+        final int afterCount = System.getProperties().size();
+        MatcherAssert.assertThat(
+            beforeCount,
+            Matchers.is(afterCount)
+        );
     }
 
     /**
@@ -86,16 +119,13 @@ public final class CheckMojoTest {
      */
     @Test
     public void onePositiveCheckIsExecuted() throws Exception {
-        PowerMockito.mockStatic(ChecksProvider.class);
-        final ChecksProvider provider =
-            PowerMockito.mock(ChecksProvider.class);
+        final ChecksProvider provider = Mockito.mock(ChecksProvider.class);
         final Set<Check> checks = new HashSet<Check>();
         final Check check = new CheckMocker().withResult(true).mock();
         checks.add(check);
         Mockito.doReturn(checks).when(provider).all();
-        PowerMockito.whenNew(ChecksProvider.class).withNoArguments()
-            .thenReturn(provider);
         final CheckMojo mojo = this.mojo();
+        mojo.setChecksProvider(provider);
         final MavenProject project = new MavenProjectMocker().mock();
         mojo.setProject(project);
         mojo.execute();

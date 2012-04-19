@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,20 @@
  */
 package com.rexsl.test;
 
-import javax.xml.transform.Source;
+import javax.xml.namespace.NamespaceContext;
 import org.hamcrest.Matcher;
-import org.xmlmatchers.namespace.SimpleNamespaceContext;
-import org.xmlmatchers.xpath.HasXPath;
 
 /**
  * Convenient set of matchers for XHTML/XML content.
+ *
+ * <p>For example:
+ *
+ * <pre>
+ * MatcherAssert.assertThat(
+ *   "&lt;root&gt;&lt;a&gt;hello&lt;/a&gt;&lt;/root&gt;",
+ *   XhtmlMatchers.hasXPath("/root/a[.='hello']")
+ * );
+ * </pre>
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -54,13 +61,46 @@ public final class XhtmlMatchers {
      * Matches content agains XPath query.
      * @param query The query
      * @return Matcher suitable for JUnit/Hamcrest matching
+     * @param <T> Type of XML content provided
      */
-    public static Matcher<Source> hasXPath(final String query) {
-        final SimpleNamespaceContext context = new SimpleNamespaceContext()
-            .withBinding("xhtml", "http://www.w3.org/1999/xhtml")
-            .withBinding("xs", "http://www.w3.org/2001/XMLSchema")
-            .withBinding("xsl", "http://www.w3.org/1999/XSL/Transform");
-        return HasXPath.hasXPath(query, context);
+    public static <T> Matcher<T> hasXPath(final String query) {
+        return XhtmlMatchers.hasXPath(query, new XPathContext());
+    }
+
+    /**
+     * Matches content agains XPath query, with custom namespaces.
+     *
+     * <p>Every namespace from the {@code namespaces} list will be assigned to
+     * its own prefix, in order of appearance. Start with {@code 1}.
+     * For example:
+     *
+     * <pre>
+     * MatcherAssert.assert(
+     *   "&lt;foo xmlns='my-namespace'&gt;&lt;/foo&gt;",
+     *   XhtmlMatchers.hasXPath("/ns1:foo", "my-namespace")
+     * );
+     * </pre>
+     *
+     * @param query The query
+     * @param namespaces List of namespaces
+     * @return Matcher suitable for JUnit/Hamcrest matching
+     * @param <T> Type of XML content provided
+     */
+    public static <T> Matcher<T> hasXPath(final String query,
+        final Object... namespaces) {
+        return XhtmlMatchers.hasXPath(query, new XPathContext(namespaces));
+    }
+
+    /**
+     * Matches content agains XPath query, with custom context.
+     * @param query The query
+     * @param ctx The context
+     * @return Matcher suitable for JUnit/Hamcrest matching
+     * @param <T> Type of XML content provided
+     */
+    public static <T> Matcher<T> hasXPath(final String query,
+        final NamespaceContext ctx) {
+        return new XPathMatcher(query, ctx);
     }
 
 }

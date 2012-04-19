@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,8 +29,12 @@
  */
 package com.rexsl.w3c;
 
+import com.ymock.util.Logger;
+
 /**
- * Validation defect.
+ * Validation defect (error or warning) produced by {@link ValidationResponse}.
+ *
+ * <p>Objects of this class are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -61,7 +65,7 @@ public final class Defect {
     /**
      * Message id.
      */
-    private final transient int imessageId;
+    private final transient String imessageId;
 
     /**
      * The message.
@@ -78,18 +82,51 @@ public final class Defect {
      * @param message Message text
      * @checkstyle ParameterNumber (5 lines)
      */
-    protected Defect(final int line, final int column, final String source,
-        final String explanation, final int mid, final String message) {
+    Defect(final int line, final int column, final String source,
+        final String explanation, final String mid, final String message) {
         this.iline = line;
         this.icolumn = column;
-        this.isource = source;
-        this.iexplanation = explanation;
-        this.imessageId = mid;
-        this.imessage = message;
+        this.isource = source.trim();
+        this.iexplanation = explanation.trim();
+        this.imessageId = mid.trim();
+        this.imessage = message.trim();
     }
 
     /**
-     * Line.
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object defect) {
+        return defect instanceof Defect
+            && this.hashCode() == defect.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return Logger.format(
+            "[%d:%d] \"%s\", \"%s\", \"%s\", \"%s\"",
+            this.iline,
+            this.icolumn,
+            this.isource,
+            this.iexplanation,
+            this.imessageId,
+            this.imessage
+        );
+    }
+
+    /**
+     * Line number, where the defect was found.
      * @return Line number
      */
     public int line() {
@@ -97,7 +134,7 @@ public final class Defect {
     }
 
     /**
-     * Column.
+     * Column number inside the line.
      * @return Column number
      */
     public int column() {
@@ -105,8 +142,8 @@ public final class Defect {
     }
 
     /**
-     * Source line.
-     * @return Text
+     * Source line, as quoted by W3C validator.
+     * @return Full text of the source line
      */
     public String source() {
         return this.isource;
@@ -121,16 +158,16 @@ public final class Defect {
     }
 
     /**
-     * Message ID.
+     * Message ID, according to W3C API.
      * @return The ID
      */
-    public int messageId() {
+    public String messageId() {
         return this.imessageId;
     }
 
     /**
-     * Text of message.
-     * @return Text
+     * Text of the message.
+     * @return The message returned by W3C server
      */
     public String message() {
         return this.imessage;

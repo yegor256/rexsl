@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,20 +29,100 @@
  */
 package com.rexsl.w3c;
 
+import com.rexsl.test.TestResponse;
+import java.net.URI;
+import java.util.regex.Pattern;
+
 /**
  * Default implementation of CSS validator.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API</a>
  */
-final class DefaultCssValidator implements CssValidator {
+final class DefaultCssValidator extends BaseValidator implements Validator {
+
+    /**
+     * The URI to use in W3C.
+     */
+    private final transient URI uri;
+
+    /**
+     * Public ctor with default entry point.
+     */
+    public DefaultCssValidator() {
+        this(URI.create("http://jigsaw.w3.org/css-validator/validator"));
+    }
+
+    /**
+     * Public ctor.
+     * @param entry Entry point to use
+     */
+    public DefaultCssValidator(final URI entry) {
+        super();
+        this.uri = entry;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public ValidationResponse validate(final String css) {
-        return new DefaultValidationResponse();
+        ValidationResponse response;
+        final Pattern pattern = Pattern.compile(
+            ".*^/\\* JIGSAW IGNORE: [^\\n]+\\*/$.*",
+            Pattern.MULTILINE | Pattern.DOTALL
+        );
+        if (pattern.matcher(css).matches()) {
+            response = this.success("");
+        } else {
+            response = this.processed(css);
+        }
+        return response;
+    }
+
+    /**
+     * Return a response after real processing of the CSS.
+     * @param css The CSS stylesheet to check
+     * @return The response
+     */
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
+    private ValidationResponse processed(final String css) {
+        DefaultValidationResponse response;
+        try {
+            final TestResponse soap = this
+                .send(
+                    this.uri,
+                    this.entity("file", this.filter(css), "text/css")
+            )
+                .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
+                .registerNs("m", "http://www.w3.org/2005/07/css-validator")
+                .assertThat(
+                    new RetryPolicy(
+                        "/env:Envelope/env:Body/m:cssvalidationresponse"
+                    )
+                )
+                .assertXPath("//m:validity")
+                .assertXPath("//m:checkedby");
+            response = this.build(soap);
+        // @checkstyle IllegalCatchCheck (1 line)
+        } catch (Throwable ex) {
+            response = this.failure(ex);
+        }
+        return response;
+    }
+
+    /**
+     * Exclude problematic lines from CSS.
+     * @param css The css document
+     * @return New document, with lines excluded
+     */
+    private String filter(final String css) {
+        return Pattern.compile(
+            "^/\\* JIGSAW: [^\\n]+\\*/$",
+            Pattern.MULTILINE | Pattern.DOTALL
+        ).matcher(css).replaceAll("");
     }
 
 }

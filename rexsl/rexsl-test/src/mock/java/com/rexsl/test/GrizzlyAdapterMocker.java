@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,22 +29,15 @@
  */
 package com.rexsl.test;
 
-import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import com.ymock.util.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.URI;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
@@ -55,49 +48,52 @@ import org.hamcrest.MatcherAssert;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
 
     /**
      * Body matcher.
      */
-    private Matcher<String> bodyMatcher;
+    private transient Matcher<String> bodyMatcher;
 
     /**
      * Method matcher.
      */
-    private Matcher<String> methodMatcher;
+    private transient Matcher<String> methodMatcher;
 
     /**
      * Request URI matcher.
      */
-    private Matcher<String> requestUriMatcher;
+    private transient Matcher<String> requestUriMatcher;
 
     /**
      * Param matchers.
+     * @checkstyle LineLength (2 lines)
      */
-    private ConcurrentMap<String, Matcher<String>> paramMatchers =
+    private final transient ConcurrentMap<String, Matcher<String>> paramMatchers =
         new ConcurrentHashMap<String, Matcher<String>>();
 
     /**
      * Header matchers.
+     * @checkstyle LineLength (2 lines)
      */
-    private ConcurrentMap<String, Matcher<String>> headerMatchers =
+    private final transient ConcurrentMap<String, Matcher<String>> headerMatchers =
         new ConcurrentHashMap<String, Matcher<String>>();
 
     /**
      * Content to return.
      */
-    private String body = "";
+    private transient String body = "";
 
     /**
      * Status to return.
      */
-    private int status = HttpURLConnection.HTTP_OK;
+    private transient int status = HttpURLConnection.HTTP_OK;
 
     /**
      * Headers to return.
      */
-    private final ConcurrentMap<String, String> headers =
+    private final transient ConcurrentMap<String, String> headers =
         new ConcurrentHashMap<String, String>();
 
     /**
@@ -106,14 +102,14 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     @Override
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
-        String input;
+        String input = null;
         try {
             input = IOUtils.toString(request.getInputStream());
         } catch (IOException ex) {
             throw new IllegalStateException(ex);
         }
         this.assertMethod(request, input);
-        this.assertRequestUri(request, input);
+        this.assertRequestUri(request);
         this.assertParams(request, input);
         this.assertBody(request, input);
         this.assertHeaders(request, input);
@@ -200,12 +196,26 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     }
 
     /**
+     * Check if adapter has body matcher.
+     * @return True if adapter has body matcher
+     */
+    public boolean hasBodyMatcher() {
+        return this.bodyMatcher != null;
+    }
+
+    /**
+     * Check if adapter has at least one parameter matcher.
+     * @return True if adapter has parameter matcher
+     */
+    public boolean hasParamMatcher() {
+        return !this.paramMatchers.isEmpty();
+    }
+
+    /**
      * Make assertions about request URI.
      * @param request The HTTP grizzly request
-     * @param input Incoming stream of data
      */
-    private void assertRequestUri(final GrizzlyRequest request,
-        final String input) {
+    private void assertRequestUri(final GrizzlyRequest request) {
         if (this.requestUriMatcher != null) {
             MatcherAssert.assertThat(
                 "Request-URI matches provided matcher",
@@ -224,8 +234,8 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         final String input) {
         if (this.methodMatcher != null) {
             MatcherAssert.assertThat(
-                String.format(
-                    "HTTP method matches provided matcher in:%n%s",
+                Logger.format(
+                    "HTTP method matches provided matcher in:%s",
                     this.asText(request, input)
                 ),
                 request.getMethod(),
@@ -244,8 +254,8 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         for (ConcurrentMap.Entry<String, Matcher<String>> entry
             : this.paramMatchers.entrySet()) {
             MatcherAssert.assertThat(
-                String.format(
-                    "Param '%s' matches specified matcher in:%n%s",
+                Logger.format(
+                    "Param '%s' matches specified matcher in:%s",
                     entry.getKey(),
                     this.asText(request, input)
                 ),
@@ -265,8 +275,8 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         if (this.bodyMatcher != null) {
             try {
                 MatcherAssert.assertThat(
-                    String.format(
-                        "Body matches provided matcher in:%n%s",
+                    Logger.format(
+                        "Body matches provided matcher in:%s",
                         this.asText(request, input)
                     ),
                     IOUtils.toString(request.getInputStream()),
@@ -288,8 +298,8 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         for (ConcurrentMap.Entry<String, Matcher<String>> entry
             : this.headerMatchers.entrySet()) {
             MatcherAssert.assertThat(
-                String.format(
-                    "Header '%s' matches specified matcher in:%n%s",
+                Logger.format(
+                    "Header '%s' matches specified matcher in:%s",
                     entry.getKey(),
                     this.asText(request, input)
                 ),
@@ -307,13 +317,15 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      */
     private String asText(final GrizzlyRequest request, final String input) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(request.getMethod()).append(" ")
-            .append(request.getRequestURI()).append(" ")
+        builder.append(request.getMethod())
+            .append(" ")
+            .append(request.getRequestURI())
+            .append("  ")
             .append(request.getProtocol())
             .append("\n");
         for (Object name : Collections.list(request.getHeaderNames())) {
             builder.append(
-                String.format(
+                Logger.format(
                     "%s: [%s]\n",
                     (String) name,
                     StringUtils.join(

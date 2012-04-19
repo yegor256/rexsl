@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,15 +29,6 @@
  */
 package com.rexsl.maven;
 
-import com.rexsl.maven.checks.BinaryFilesCheck;
-import com.rexsl.maven.checks.CssStaticCheck;
-import com.rexsl.maven.checks.FilesStructureCheck;
-import com.rexsl.maven.checks.InContainerScriptsCheck;
-import com.rexsl.maven.checks.JSStaticCheck;
-import com.rexsl.maven.checks.JigsawCssCheck;
-import com.rexsl.maven.checks.WebXmlCheck;
-import com.rexsl.maven.checks.XhtmlOutputCheck;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -45,25 +36,30 @@ import java.util.Set;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @checkstyle ClassDataAbstractionCoupling (100 lines)
  */
-public final class ChecksProvider {
+public interface ChecksProvider {
 
     /**
      * Get full collection of checks.
+     *
+     * <p>Checks should be ordered by their complexity. Most simple and fast
+     * checks should go first, in order to fail build faster. Most heavy and
+     * slow checks should be at the end of the list.
+     *
      * @return List of checks
      */
-    public Set<Check> all() {
-        final Set<Check> checks = new HashSet<Check>();
-        checks.add(new BinaryFilesCheck());
-        checks.add(new CssStaticCheck());
-        checks.add(new JigsawCssCheck());
-        checks.add(new JSStaticCheck());
-        checks.add(new FilesStructureCheck());
-        checks.add(new XhtmlOutputCheck());
-        checks.add(new InContainerScriptsCheck());
-        checks.add(new WebXmlCheck());
-        return checks;
-    }
+    Set<Check> all();
+
+    /**
+     * Sets the scope of tests to execute.
+     * @param scope Pattern of test name
+     */
+    void setTest(String scope);
+
+    /**
+     * Sets the scope of tests to execute.
+     * @param chck Name of the check class of the check to perform.
+     */
+    void setCheck(String chck);
 
 }

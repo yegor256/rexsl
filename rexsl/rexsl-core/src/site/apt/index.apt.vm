@@ -7,7 +7,7 @@
  ------
 
 ~~
-~~ Copyright (c) 2011, ReXSL.com
+~~ Copyright (c) 2011-2012, ReXSL.com
 ~~ All rights reserved.
 ~~
 ~~ Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@
 
 ReXSL core module
 
-  Read {{{./apidocs/com/rexsl/core/index.html}JavaDoc}} of the module.
+  Read {{{./apidocs}JavaDoc}} of the module.
 
   There are two classes that you should use in your project (both
   of them are always mandatory):
@@ -78,25 +78,33 @@ ReXSL core module
   {{{./apidocs/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}} is converting
   XML output documents into XHTML when necessary.
 
-  This dependency you add to <<<pom.xml>>>:
+  This dependency you add to <<<pom.xml>>> (or download
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-core/${releasedVersion}/rexsl-core-${releasedVersion}.jar}rexsl-core-${releasedVersion}.jar}}
+  and add it to classpath):
 
 +--
 <dependency>
   <groupId>com.rexsl</groupId>
   <artifactId>rexsl-core</artifactId>
   <version>${releasedVersion}</version>
-  <scope>runtime</scope>
 </dependency>
 +--
 
-* Supplementary Classess
+* Supplementary Classes
 
   {{{./apidocs/com/rexsl/core/Manifests.html}<<<Manifests>>>}} is
   a convenient accessor to <<<MANIFEST.MF>>> files of your web application.
 
-  {{{./apidocs/com/rexsl/core/Stylesheet.html}<<<Stylesheet>>>}} annotation
+  {{{./apidocs/com/rexsl/core/annotations/Stylesheet.html}<<<Stylesheet>>>}} annotation
   enables re-configuration of XSL stylesheet name for a JAXB-annotated object.
 
-  {{{./apidocs/com/rexsl/core/Schema.html}<<<Schema>>>}} annotation
+  {{{./apidocs/com/rexsl/core/annotations/Schema.html}<<<Schema>>>}} annotation
   lets you set the name of XML Schema of a JAXB-annotated object.
+
+  {{{./apidocs/com/rexsl/trap/ExceptionTrap.html}<<<ExceptionTrap>>>}} servlet
+  helps you to catch all uncaught exceptions and manage them gracefully, showing
+  some information to your end-users and letting you know by email and/or log.
+
+  {{{./apidocs/com/rexsl/log/CloudAppender.html}<<<CloudAppender>>>}} is
+  a log4j appender for logging your events directly to some cloud platform.
 

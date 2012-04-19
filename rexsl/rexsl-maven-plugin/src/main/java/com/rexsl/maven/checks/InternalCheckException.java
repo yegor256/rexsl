@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,15 @@
  */
 package com.rexsl.maven.checks;
 
+import com.ymock.util.Logger;
+
 /**
  * Internal exception.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class InternalCheckException extends Exception {
+final class InternalCheckException extends Exception {
 
     /**
      * Default ctor.
@@ -55,7 +57,7 @@ public final class InternalCheckException extends Exception {
     /**
      * Ctor.
      * @param cause The cause
-     * @param args Agruments for String.format()
+     * @param args Agruments for Logger.format()
      */
     public InternalCheckException(final String cause, final Object... args) {
         super(InternalCheckException.toText(cause, args));
@@ -64,13 +66,13 @@ public final class InternalCheckException extends Exception {
     /**
      * To message.
      * @param cause The cause
-     * @param args Agruments for String.format()
+     * @param args Agruments for Logger.format()
      * @return Compiled text
      */
     private static String toText(final String cause, final Object... args) {
         String text;
         if (args.length > 0) {
-            text = String.format(cause, args);
+            text = Logger.format(cause, args);
         } else {
             text = cause;
         }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,18 +30,24 @@
 package com.rexsl.core;
 
 import com.ymock.util.Logger;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SerializationUtils;
 
 /**
@@ -148,7 +154,7 @@ public final class Manifests {
      * Failures registered during loading.
      * @see #load()
      */
-    private static Map<URL, String> failures;
+    private static Map<URI, String> failures;
 
     /**
      * It's a utility class, can't be instantiated.
@@ -183,7 +189,7 @@ public final class Manifests {
                     "Atribute '%s' not found in MANIFEST.MF file(s) among %d other attribute(s) %[list]s and %d injection(s)",
                     name,
                     Manifests.attributes.size(),
-                    Manifests.attributes.keySet(),
+                    new TreeSet<String>(Manifests.attributes.keySet()),
                     Manifests.INJECTED.size()
                 )
             );
@@ -289,17 +295,23 @@ public final class Manifests {
     /**
      * Append attributes from the web application {@code MANIFEST.MF}, called
      * from {@link XsltFilter#init(FilterConfig)}.
+     *
+     * <p>You can call this method in your own
+     * {@link javax.servlet.Filter} or
+     * {@link javax.servlet.ServletContextListener},
+     * in order to inject {@code MANIFEST.MF} attributes to the class.
+     *
      * @param ctx Servlet context
      * @see #Manifests()
+     * @throws IOException If some I/O problem inside
      */
-    @SuppressWarnings("PMD.DefaultPackage")
-    static void append(final ServletContext ctx) {
-        final long start = System.currentTimeMillis();
+    public static void append(final ServletContext ctx) throws IOException {
+        final long start = System.nanoTime();
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
         } catch (java.net.MalformedURLException ex) {
-            throw new IllegalStateException(ex);
+            throw new IOException(ex);
         }
         if (main == null) {
             Logger.warn(
@@ -312,88 +324,131 @@ public final class Manifests {
             Manifests.attributes.putAll(attrs);
             Logger.info(
                 Manifests.class,
-                "#append(%s): %d attributes loaded from %s in %dms: %[list]s",
+                "#append(%s): %d attribs loaded from %s in %[nano]s: %[list]s",
                 ctx.getClass().getName(),
                 attrs.size(),
                 main,
-                System.currentTimeMillis() - start,
-                attrs.keySet()
+                System.nanoTime() - start,
+                new TreeSet<String>(attrs.keySet())
             );
         }
     }
 
     /**
+     * Append attributes from the file.
+     * @param file The file to load attributes from
+     * @throws IOException If some I/O problem inside
+     */
+    public static void append(final File file) throws IOException {
+        final long start = System.nanoTime();
+        Map<String, String> attrs;
+        try {
+            attrs = Manifests.loadOneFile(file.toURI().toURL());
+        } catch (java.net.MalformedURLException ex) {
+            throw new IOException(ex);
+        }
+        Manifests.attributes.putAll(attrs);
+        Logger.info(
+            Manifests.class,
+            "#append('%s'): %d attributes loaded in %[nano]s: %[list]s",
+            file,
+            attrs.size(),
+            System.nanoTime() - start,
+            new TreeSet<String>(attrs.keySet())
+        );
+    }
+
+    /**
      * Load attributes from classpath.
+     *
+     * <p>This method doesn't throw any checked exceptions because it is called
+     * from a static context above. It's just more convenient to catch all
+     * exceptions here than above in a static call block.
+     *
      * @return All found attributes
      */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static Map<String, String> load() {
-        final long start = System.currentTimeMillis();
-        Manifests.failures = new ConcurrentHashMap<URL, String>();
+        final long start = System.nanoTime();
+        Manifests.failures = new ConcurrentHashMap<URI, String>();
         final Map<String, String> attrs =
             new ConcurrentHashMap<String, String>();
         Integer count = 0;
-        for (URL url : Manifests.urls()) {
+        for (URI uri : Manifests.uris()) {
             try {
-                attrs.putAll(Manifests.loadOneFile(url));
-            // @checkstyle IllegalCatch (1 line)
-            } catch (Exception ex) {
-                Manifests.failures.put(url, ex.getMessage());
+                attrs.putAll(Manifests.loadOneFile(uri.toURL()));
+            } catch (IOException ex) {
+                Manifests.failures.put(uri, ex.getMessage());
                 Logger.error(
                     Manifests.class,
                     "#load(): '%s' failed %[exception]s",
-                    url,
+                    uri,
                     ex
                 );
             }
-            count += 1;
+            ++count;
         }
         Logger.info(
             Manifests.class,
-            "#load(): %d attributes loaded from %d URL(s) in %dms: %[list]s",
+            "#load(): %d attribs loaded from %d URL(s) in %[nano]s: %[list]s",
             attrs.size(),
             count,
-            System.currentTimeMillis() - start,
-            attrs.keySet()
+            System.nanoTime() - start,
+            new TreeSet<String>(attrs.keySet())
         );
         return attrs;
     }
 
     /**
      * Find all URLs.
+     *
+     * <p>This method doesn't throw any checked exceptions just for convenience
+     * of calling of it (above in {@linke #load}), although it is clear that
+     * {@link IOException} is a good candidate for being thrown out of it.
+     *
      * @return The list of URLs
      * @see #load()
      */
-    private static Set<URL> urls() {
-        final Set<URL> urls = new HashSet<URL>();
+    private static Set<URI> uris() {
         Enumeration<URL> resources;
         try {
             resources = Thread.currentThread().getContextClassLoader()
                 .getResources("META-INF/MANIFEST.MF");
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalStateException(ex);
         }
+        final Set<URI> uris = new HashSet<URI>();
         while (resources.hasMoreElements()) {
-            urls.add(resources.nextElement());
+            try {
+                uris.add(resources.nextElement().toURI());
+            } catch (URISyntaxException ex) {
+                throw new IllegalStateException(ex);
+            }
         }
-        return urls;
+        return uris;
     }
 
     /**
      * Load attributes from one file.
+     *
+     * <p>Inside the method we catch {@code RuntimeException} (which may look
+     * suspicious) in order to protect our execution flow from expected (!)
+     * exceptions from {@link Manifest#getMainAttributes()}. For some reason,
+     * this JDK method doesn't throw checked exceptions if {@code MANIFEST.MF}
+     * file format is broken. Instead, it throws a runtime exception (an
+     * unchecked one), which we should catch in such an inconvenient way.
+     *
      * @param url The URL of it
      * @return The attributes loaded
      * @see #load()
+     * @see tickets #193 and #323
+     * @throws IOException If some problem happens
      */
-    private static Map<String, String> loadOneFile(final URL url) {
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    private static Map<String, String> loadOneFile(final URL url)
+        throws IOException {
         final Map<String, String> props =
             new ConcurrentHashMap<String, String>();
-        InputStream stream;
-        try {
-            stream = url.openStream();
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        }
+        final InputStream stream = url.openStream();
         try {
             final Manifest manifest = new Manifest(stream);
             final Attributes attrs = manifest.getMainAttributes();
@@ -406,21 +461,18 @@ public final class Manifests {
                 "#loadOneFile('%s'): %d attributes loaded (%[list]s)",
                 url,
                 props.size(),
-                props.keySet()
+                new TreeSet<String>(props.keySet())
             );
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
+        // @checkstyle IllegalCatch (1 line)
+        } catch (RuntimeException ex) {
+            Logger.error(
+                Manifests.class,
+                "#getMainAttributes(): '%s' failed %[exception]s",
+                url,
+                ex
+            );
         } finally {
-            try {
-                stream.close();
-            } catch (java.io.IOException ex) {
-                Logger.error(
-                    Manifests.class,
-                    "#loadOneFile('%s'): %[exception]s",
-                    url,
-                    ex
-                );
-            }
+            IOUtils.closeQuietly(stream);
         }
         return props;
     }

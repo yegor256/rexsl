@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,11 +31,10 @@ package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
+import com.rexsl.maven.utils.FileFinder;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import org.apache.commons.io.FileUtils;
 
 /**
  * Abstract packer.
@@ -53,16 +52,11 @@ abstract class AbstractPacker implements Packer {
     public final void pack(final Environment env) {
         final File srcdir = new File(
             env.basedir(),
-            String.format("src/main/webapp/%s", this.extension())
+            Logger.format("src/main/webapp/%s", this.extension())
         );
         final File destdir = this.ddir(env);
         if (srcdir.exists()) {
-            final Collection<File> files = FileUtils.listFiles(
-                srcdir,
-                new String[] {this.extension()},
-                true
-            );
-            for (File src : files) {
+            for (File src : new FileFinder(srcdir, this.extension()).random()) {
                 final File dest = new File(destdir, src.getName());
                 try {
                     this.pack(src, dest);

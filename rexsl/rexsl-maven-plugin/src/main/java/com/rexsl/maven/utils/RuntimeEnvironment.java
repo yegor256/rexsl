@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,6 +36,8 @@ import javax.servlet.ServletContext;
 
 /**
  * Runtime environment, for {@link RuntimeListener}.
+ *
+ * <p>{@link ServletContext} is filled with values in {@link EmbeddedContainer}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -95,8 +97,8 @@ final class RuntimeEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
-    public Integer port() {
-        return Integer.valueOf(
+    public int port() {
+        return Integer.parseInt(
             this.context.getInitParameter("com.rexsl.maven.utils.PORT")
         );
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,8 +31,11 @@ package com.rexsl.maven;
 
 import com.google.common.io.Files;
 import com.rexsl.maven.utils.PortReserver;
+import com.ymock.util.Logger;
 import java.io.File;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.mockito.Mockito;
@@ -52,7 +55,7 @@ public final class EnvironmentMocker {
     /**
      * Temporary folder.
      */
-    public transient File basedir;
+    private final transient File basedir;
 
     /**
      * Public ctor.
@@ -80,7 +83,7 @@ public final class EnvironmentMocker {
      * @return This object
      */
     public EnvironmentMocker withFile(final String name) {
-        return this.withFile(name, name.substring(name.lastIndexOf("/") + 1));
+        return this.withFile(name, name.substring(name.lastIndexOf('/') + 1));
     }
 
     /**
@@ -93,7 +96,7 @@ public final class EnvironmentMocker {
         final InputStream stream = this.getClass().getResourceAsStream(res);
         if (stream == null) {
             throw new IllegalArgumentException(
-                String.format("resource '%s' not found", res)
+                Logger.format("resource '%s' not found", res)
             );
         }
         try {
@@ -117,6 +120,32 @@ public final class EnvironmentMocker {
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
+        return this;
+    }
+
+    /**
+     * With this folder in basedir.
+     * @param name File name
+     * @return This object
+     */
+    public EnvironmentMocker withFolder(final String name) {
+        final File dest = new File(this.basedir, name);
+        dest.mkdirs();
+        return this;
+    }
+
+    /**
+     * With default classpath.
+     * @return This object
+     */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    public EnvironmentMocker withDefaultClasspath() {
+        final Set<File> files = new HashSet<File>();
+        for (String file : System.getProperty("java.class.path")
+            .split(System.getProperty("path.separator"))) {
+            files.add(new File(file));
+        }
+        Mockito.doReturn(files).when(this.env).classpath(Mockito.anyBoolean());
         return this;
     }
 

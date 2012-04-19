@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,24 +31,33 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.w3c.CssValidator;
+import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.w3c.Defect;
 import com.rexsl.w3c.ValidationResponse;
+import com.rexsl.w3c.Validator;
 import com.rexsl.w3c.ValidatorBuilder;
 import com.ymock.util.Logger;
 import java.io.File;
-import java.util.List;
-import org.apache.commons.collections.ListUtils;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Validates CSS files.
+ *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link DefaultChecksProvider}.
+ *
+ * <p>The class is immutable and thread-safe.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: JigsawCssCheck.java 204 2011-10-26 21:15:28Z guard $
  */
-public final class JigsawCssCheck implements Check {
+final class JigsawCssCheck implements Check {
 
     /**
      * Directory with CSS files.
@@ -58,19 +67,33 @@ public final class JigsawCssCheck implements Check {
     /**
      * Validator.
      */
-    private final transient CssValidator validator =
-        new ValidatorBuilder().css();
+    private final transient Validator validator;
+
+    /**
+     * Public ctor, default.
+     */
+    public JigsawCssCheck() {
+        this(new ValidatorBuilder().css());
+    }
+
+    /**
+     * Public ctor, with custom validator.
+     * @param val The validator to use
+     */
+    public JigsawCssCheck(final Validator val) {
+        this.validator = val;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean validate(final Environment env) {
-        final File dir = new File(env.webdir(), this.CSS_DIR);
+        final File dir = new File(env.basedir(), this.CSS_DIR);
         boolean success = true;
         if (dir.exists()) {
-            final String[] exts = new String[] {"css"};
-            for (File css : FileUtils.listFiles(dir, exts, true)) {
+            final Collection<File> files = new FileFinder(dir, "css").random();
+            for (File css : files) {
                 try {
                     this.one(css);
                 } catch (InternalCheckException ex) {
@@ -105,23 +128,25 @@ public final class JigsawCssCheck implements Check {
             throw new InternalCheckException(ex);
         }
         final ValidationResponse response = this.validator.validate(page);
+        final Set<Defect> defects = new HashSet<Defect>();
+        defects.addAll(response.errors());
+        defects.addAll(response.warnings());
+        for (Defect defect : defects) {
+            Logger.error(
+                this,
+                "[%d] %s: %s",
+                defect.line(),
+                defect.message(),
+                defect.source()
+            );
+        }
         if (!response.valid()) {
             Logger.error(
                 this,
-                "%s contains invalid CSS",
-                file
+                "%s contains invalid CSS (see errors above):\n%s",
+                file,
+                StringEscapeUtils.escapeJava(page).replace("\\n", "\n")
             );
-            for (Defect defect : (List<Defect>) ListUtils
-                .union(response.errors(), response.warnings())
-            ) {
-                Logger.error(
-                    this,
-                    "[%d] %s: %s",
-                    defect.line(),
-                    defect.message(),
-                    defect.source()
-                );
-            }
             throw new InternalCheckException(
                 "CSS validation failed with %d errors and %d warnings",
                 response.errors().size(),

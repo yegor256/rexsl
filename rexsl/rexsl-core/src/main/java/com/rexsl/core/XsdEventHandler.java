@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,16 +46,15 @@ final class XsdEventHandler implements ValidationEventHandler {
      */
     @Override
     public boolean handleEvent(final ValidationEvent event) {
-        throw new IllegalStateException(
-            Logger.format(
-                "JAXB error: \"%s\" at '%s' [%d:%d]: %[document]s",
-                event.getMessage(),
-                event.getLocator().getURL(),
-                event.getLocator().getLineNumber(),
-                event.getLocator().getColumnNumber(),
-                event.getLocator().getNode()
-            )
+        Logger.error(
+            "JAXB error: \"%s\" at '%s' [%d:%d]: %[document]s",
+            event.getMessage(),
+            event.getLocator().getURL(),
+            event.getLocator().getLineNumber(),
+            event.getLocator().getColumnNumber(),
+            event.getLocator().getNode()
         );
+        return false;
     }
 
 }

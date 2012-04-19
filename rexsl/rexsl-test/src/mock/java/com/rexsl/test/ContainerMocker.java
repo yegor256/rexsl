@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,31 +30,42 @@
 package com.rexsl.test;
 
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
-import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
-import com.sun.grizzly.tcp.http11.GrizzlyRequest;
-import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import com.ymock.util.Logger;
-import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.URI;
-import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.UriBuilder;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 
 /**
  * Mocker of Java Servlet container.
+ *
+ * <p>A convenient tool to test your application classes against a web
+ * service. For example:
+ *
+ * <pre>
+ * URI home = new ContainerMocker()
+ *   .expectMethod("GET")
+ *   .expectHeader("Accept", Matchers.startsWith("text/"))
+ *   .returnBody("&lt;done/&gt;")
+ *   .returnStatus(200)
+ *   .mock()
+ *   .home();
+ * // sometime later
+ * RestTester.start(home)
+ *   .header("Accept", "text/xml")
+ *   .get("Load sample page")
+ *   .assertStatus(200);
+ * </pre>
+ *
+ * <p>Keep in mind that container automatically reserves a new free TCP port
+ * and works until JVM is shut down. The only way to stop it is to call
+ * {@link #stop()}.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see RestTester
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class ContainerMocker {
 
     /**
@@ -77,8 +88,14 @@ public final class ContainerMocker {
      * Expect body.
      * @param matcher Matcher for body
      * @return This object
+     * @todo #150 It is impossible to match parameter and body at the same time.
      */
     public ContainerMocker expectBody(final Matcher<String> matcher) {
+        if (this.adapter.hasParamMatcher()) {
+            throw new IllegalStateException(
+                "Cannot add body matcher. Adapter already has parameter matcher"
+            );
+        }
         this.adapter.setBodyMatcher(matcher);
         return this;
     }
@@ -94,9 +111,10 @@ public final class ContainerMocker {
     }
 
     /**
-     * Expect this method.
+     * Expect this HTTP method (take a look at {@link RestTester} constants).
      * @param matcher Name of the method to expect.
      * @return This object
+     * @see RestTester
      */
     public ContainerMocker expectMethod(final Matcher<String> matcher) {
         this.adapter.setMethodMatcher(matcher);
@@ -108,9 +126,16 @@ public final class ContainerMocker {
      * @param name Name of the param
      * @param matcher Matcher for its content
      * @return This object
+     * @todo #150 It is impossible to match parameter and body at the same
+     *  time.
      */
     public ContainerMocker expectParam(final String name,
         final Matcher<String> matcher) {
+        if (this.adapter.hasBodyMatcher()) {
+            throw new IllegalStateException(
+                "Cannot add parameter matcher. Adapter already has body matcher"
+            );
+        }
         this.adapter.addParamMatcher(name, matcher);
         return this;
     }
@@ -172,6 +197,7 @@ public final class ContainerMocker {
 
     /**
      * Mock it, and return this object.
+     * @return This object
      */
     public ContainerMocker mock() {
         this.port = this.reservePort();
@@ -182,7 +208,7 @@ public final class ContainerMocker {
     }
 
     /**
-     * Mock it, and return this object.
+     * Start container (to use in &#64;Before-annotated unit test method).
      */
     public void start() {
         try {
@@ -198,7 +224,7 @@ public final class ContainerMocker {
     }
 
     /**
-     * Stop Servlet container.
+     * Stop container (to use in &#64;After-annotated unit test method).
      */
     public void stop() {
         this.gws.stop();
@@ -211,10 +237,11 @@ public final class ContainerMocker {
 
     /**
      * Get its home.
+     * @return URI of the started container
      */
     public URI home() {
         try {
-            return new URI(String.format("http://localhost:%d/", this.port));
+            return new URI(Logger.format("http://localhost:%d/", this.port));
         } catch (java.net.URISyntaxException ex) {
             throw new IllegalStateException(ex);
         }
@@ -222,17 +249,17 @@ public final class ContainerMocker {
 
     /**
      * Reserve port.
+     * @return Reserved TCP port
      */
     private Integer reservePort() {
-        ServerSocket socket;
+        Integer reserved;
         try {
-            socket = new ServerSocket(0);
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        }
-        final Integer reserved = socket.getLocalPort();
-        try {
-            socket.close();
+            final ServerSocket socket = new ServerSocket(0);
+            try {
+                reserved = socket.getLocalPort();
+            } finally {
+                socket.close();
+            }
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }

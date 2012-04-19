@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -84,7 +84,6 @@ public final class MavenEnvironmentTest {
         final MavenProject project = Mockito.mock(MavenProject.class);
         final Properties props = new Properties();
         new MavenEnvironment(project, props);
-        // todo...
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,26 +33,34 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
+import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.GroovyExecutor;
 import com.rexsl.w3c.Defect;
-import com.rexsl.w3c.HtmlValidator;
 import com.rexsl.w3c.ValidationResponse;
+import com.rexsl.w3c.Validator;
 import com.rexsl.w3c.ValidatorBuilder;
 import com.ymock.util.Logger;
 import java.io.File;
-import java.util.List;
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.io.FileUtils;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Validate XHTML output.
+ *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link DefaultChecksProvider}.
+ *
+ * <p>The class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (2 lines)
  */
-public final class XhtmlOutputCheck implements Check {
+final class XhtmlOutputCheck implements Check {
 
     /**
      * Directory with XML files.
@@ -65,10 +73,32 @@ public final class XhtmlOutputCheck implements Check {
     private static final String GROOVY_DIR = "src/test/rexsl/xhtml";
 
     /**
+     * Scope of tests to execute.
+     */
+    private final transient String test;
+
+    /**
      * Validator.
      */
-    private final transient HtmlValidator validator =
-        new ValidatorBuilder().html();
+    private final transient Validator validator;
+
+    /**
+     * Default public ctor.
+     * @param scope Execute only scripts matching scope.
+     */
+    public XhtmlOutputCheck(final String scope) {
+        this(scope, new ValidatorBuilder().html());
+    }
+
+    /**
+     * Full ctor, for tests mostly.
+     * @param scope Execute only scripts matching scope.
+     * @param val HTML validator
+     */
+    public XhtmlOutputCheck(final String scope, final Validator val) {
+        this.test = scope;
+        this.validator = val;
+    }
 
     /**
      * {@inheritDoc}
@@ -84,22 +114,30 @@ public final class XhtmlOutputCheck implements Check {
                 env.webdir()
             );
             final EmbeddedContainer container = EmbeddedContainer.start(env);
-            final String[] exts = new String[] {"xml"};
-            for (File xml : FileUtils.listFiles(dir, exts, true)) {
-                try {
-                    Logger.info(this, "Testing %s through...", xml);
-                    this.one(env, xml);
-                } catch (InternalCheckException ex) {
-                    Logger.warn(
-                        this,
-                        "Failed:\n%[exception]s",
-                        ex
-                    );
-                    success = false;
+            final Collection<File> files = new FileFinder(dir, "xml").random();
+            try {
+                for (File xml : files) {
+                    if (!FilenameUtils.removeExtension(xml.getName())
+                        .matches(this.test)
+                    ) {
+                        continue;
+                    }
+                    try {
+                        Logger.info(this, "Testing %s through...", xml);
+                        this.one(env, xml);
+                    } catch (InternalCheckException ex) {
+                        Logger.warn(
+                            this,
+                            "Failed:\n%[exception]s",
+                            ex
+                        );
+                        success = false;
+                    }
                 }
+            } finally {
+                container.stop();
+                Logger.info(this, "Embedded servlet container stopped");
             }
-            container.stop();
-            Logger.info(this, "Embedded servlet container stopped");
         } else {
             Logger.info(
                 this,
@@ -126,7 +164,7 @@ public final class XhtmlOutputCheck implements Check {
             );
         }
         final String basename = FilenameUtils.getBaseName(file.getPath());
-        final String script = String.format("%s.groovy", basename);
+        final String script = Logger.format("%s.groovy", basename);
         final File groovy = new File(root, script);
         if (!groovy.exists()) {
             throw new InternalCheckException(
@@ -160,12 +198,14 @@ public final class XhtmlOutputCheck implements Check {
         if (!response.valid()) {
             Logger.error(
                 this,
-                "%s produced invalid XHTML",
-                xml
+                "%s produced invalid XHTML:\n%s",
+                xml,
+                StringEscapeUtils.escapeJava(xhtml).replace("\\n", "\n")
             );
-            for (Defect defect : (List<Defect>) ListUtils
-                .union(response.errors(), response.warnings())
-            ) {
+            final Set<Defect> defects = new HashSet<Defect>();
+            defects.addAll(response.errors());
+            defects.addAll(response.warnings());
+            for (Defect defect : defects) {
                 Logger.error(
                     this,
                     "[%d] %s: %s",

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,8 +29,11 @@
  */
 package com.rexsl.w3c;
 
+import com.ymock.util.Logger;
 import java.net.URI;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Default implementaiton of validation response.
@@ -41,11 +44,72 @@ import java.util.List;
 final class DefaultValidationResponse implements ValidationResponse {
 
     /**
+     * Is it valid?
+     */
+    private transient boolean ivalid;
+
+    /**
+     * Who validated it?
+     */
+    private final transient URI validator;
+
+    /**
+     * DOCTYPE of the document.
+     */
+    private final transient String type;
+
+    /**
+     * The encoding.
+     */
+    private final transient String encoding;
+
+    /**
+     * Set of errors found.
+     */
+    private final transient Set<Defect> ierrors = new HashSet<Defect>();
+
+    /**
+     * Set of warnings found.
+     */
+    private final transient Set<Defect> iwarnings = new HashSet<Defect>();
+
+    /**
+     * Public ctor.
+     * @param val The document is valid?
+     * @param server Who validated it?
+     * @param tpe DOCTYPE of the document
+     * @param enc Charset of the document
+     * @checkstyle ParameterNumber (3 lines)
+     */
+    public DefaultValidationResponse(final boolean val, final URI server,
+        final String tpe, final String enc) {
+        this.ivalid = val;
+        this.validator = server;
+        this.type = tpe;
+        this.encoding = enc;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder text = new StringBuilder();
+        text.append(Logger.format("Validity: %B\n", this.ivalid));
+        text.append(Logger.format("Validator: \"%s\"\n", this.validator));
+        text.append(Logger.format("DOCTYPE: \"%s\"\n", this.type));
+        text.append(Logger.format("Charset: \"%s\"\n", this.encoding));
+        text.append("Errors:\n").append(this.asText(this.ierrors));
+        text.append("Warnings:\n").append(this.asText(this.iwarnings));
+        return text.toString();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public boolean valid() {
-        return true;
+        return this.ivalid;
     }
 
     /**
@@ -53,7 +117,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      */
     @Override
     public URI checkedBy() {
-        return null;
+        return this.validator;
     }
 
     /**
@@ -61,7 +125,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      */
     @Override
     public String doctype() {
-        return null;
+        return this.type;
     }
 
     /**
@@ -69,23 +133,60 @@ final class DefaultValidationResponse implements ValidationResponse {
      */
     @Override
     public String charset() {
-        return null;
+        return this.encoding;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Defect> errors() {
-        return null;
+    public Set<Defect> errors() {
+        return Collections.unmodifiableSet(this.ierrors);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Defect> warnings() {
-        return null;
+    public Set<Defect> warnings() {
+        return Collections.unmodifiableSet(this.iwarnings);
+    }
+
+    /**
+     * Set validity flag.
+     * @param flag The flag to set
+     */
+    public void setValid(final boolean flag) {
+        this.ivalid = flag;
+    }
+
+    /**
+     * Add error.
+     * @param error The error to add
+     */
+    public void addError(final Defect error) {
+        this.ierrors.add(error);
+    }
+
+    /**
+     * Add warning.
+     * @param warning The warning to add
+     */
+    public void addWarning(final Defect warning) {
+        this.iwarnings.add(warning);
+    }
+
+    /**
+     * Convert list of defects into string.
+     * @param defects Set of them
+     * @return The text
+     */
+    private String asText(final Set<Defect> defects) {
+        final StringBuilder text = new StringBuilder();
+        for (Defect defect : defects) {
+            text.append("  ").append(defect.toString()).append("\n");
+        }
+        return text.toString();
     }
 
 }

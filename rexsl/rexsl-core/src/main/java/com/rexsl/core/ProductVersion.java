@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -56,7 +57,7 @@ final class ProductVersion implements Comparable<ProductVersion> {
             .split(text);
         final StringBuilder bldr = new StringBuilder();
         for (String part : parts) {
-            bldr.append(String.format("%4s.", part));
+            bldr.append(Logger.format("%4s.", part));
         }
         this.normalized = bldr.toString();
     }
@@ -66,13 +67,7 @@ final class ProductVersion implements Comparable<ProductVersion> {
      */
     @Override
     public int compareTo(final ProductVersion ver) {
-        int result = this.normalized.compareTo(ver.normalized);
-        if (result > 1) {
-            result = 1;
-        } else if (result < -1) {
-            result = -1;
-        }
-        return result;
+        return this.normalized.compareTo(ver.normalized);
     }
 
     /**
@@ -81,6 +76,23 @@ final class ProductVersion implements Comparable<ProductVersion> {
     @Override
     public String toString() {
         return this.normalized.replace(" ", "");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return this.normalized.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof ProductVersion
+            && ((ProductVersion) obj).normalized.equals(this.normalized);
     }
 
 }

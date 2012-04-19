@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -74,18 +74,12 @@ final class PageAnalyzer {
         final TypesMatcher accept = new TypesMatcher(
             this.request.getHeader(HttpHeaders.ACCEPT)
         );
-        // let's check whether we should transform or not
         // @checkstyle BooleanExpressionComplexity (1 line)
         final boolean dontTouch =
-            // page is empty
             this.page.isEmpty()
-            // it doesn't look like XML
             || !this.page.startsWith("<?xml ")
-            // it doesn't refer to any stylesheet
             || !this.page.contains("<?xml-stylesheet ")
-            // it's a pure XML client, requesting XML format
             || accept.explicit(MediaType.APPLICATION_XML)
-            // the browser supports XSTL 2.0
             || (
                 agent.isXsltCapable()
                 && accept.accepts(MediaType.APPLICATION_XML)
@@ -94,7 +88,17 @@ final class PageAnalyzer {
             Logger.debug(
                 this,
                 // @checkstyle LineLength (1 line)
-                "#filter('%s': %d chars): User-Agent='%s', Accept='%s', no need to transform",
+                "#needsTransformation('%s': %d chars): User-Agent='%s', Accept='%s', no need to transform",
+                this.request.getRequestURI(),
+                this.page.length(),
+                agent,
+                accept
+            );
+        } else {
+            Logger.debug(
+                this,
+                // @checkstyle LineLength (1 line)
+                "#filtneedsTransformationer('%s': %d chars): User-Agent='%s', Accept='%s', transformation required",
                 this.request.getRequestURI(),
                 this.page.length(),
                 agent,

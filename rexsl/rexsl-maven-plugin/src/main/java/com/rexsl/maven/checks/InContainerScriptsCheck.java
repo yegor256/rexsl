@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,19 +33,41 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
+import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.GroovyExecutor;
-import com.rexsl.maven.utils.ScriptsFinder;
 import com.ymock.util.Logger;
 import java.io.File;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Validate the product in container, with Groovy scripts.
  *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link DefaultChecksProvider}.
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class InContainerScriptsCheck implements Check {
+final class InContainerScriptsCheck implements Check {
 
+    /**
+     * Scope of tests to execute.
+     */
+    private final transient String test;
+
+    /**
+     * Ctor.
+     * @param scope Execute only scripts matching scope.
+     */
+    public InContainerScriptsCheck(final String scope) {
+        this.test = scope;
+    }
     /**
      * {@inheritDoc}
      */
@@ -56,7 +78,7 @@ public final class InContainerScriptsCheck implements Check {
         if (dir.exists()) {
             if (!env.webdir().exists()) {
                 throw new IllegalStateException(
-                    String.format(
+                    Logger.format(
                         "Webapp dir '%s' is absent, package the project first",
                         env.webdir()
                     )
@@ -89,15 +111,25 @@ public final class InContainerScriptsCheck implements Check {
      */
     private boolean run(final File dir, final Environment env) {
         boolean success = true;
-        final ScriptsFinder finder = new ScriptsFinder(dir);
+        final FileFinder finder = new FileFinder(dir, "groovy");
+        final Set<String> failed = new LinkedHashSet<String>();
         for (File script : finder.random()) {
-            try {
-                Logger.info(this, "Testing '%s'...", script);
-                this.one(env, script);
-            } catch (InternalCheckException ex) {
-                Logger.warn(this, "Test failed: %s", ex.getMessage());
-                success = false;
+            final String name = FilenameUtils.removeExtension(script.getName());
+            if (!name.matches(this.test)) {
+                continue;
             }
+            Logger.info(this, "Testing '%s'...", script);
+            if (!this.one(env, script)) {
+                success = false;
+                failed.add(script.getName());
+            }
+        }
+        if (!failed.isEmpty()) {
+            Logger.warn(
+                this,
+                "In-container check failed because of:\n  %s",
+                StringUtils.join(failed, "\n  ")
+            );
         }
         return success;
     }
@@ -106,20 +138,28 @@ public final class InContainerScriptsCheck implements Check {
      * Check one script.
      * @param env The environment
      * @param script Check this particular Groovy script
-     * @throws InternalCheckException If some failure inside
+     * @return TRUE if this script is valid (no errors)
      */
-    private void one(final Environment env, final File script)
-        throws InternalCheckException {
+    private boolean one(final Environment env, final File script) {
         Logger.debug(this, "Running %s", script);
         final GroovyExecutor exec = new GroovyExecutor(
             env,
             new BindingBuilder(env).build()
         );
+        boolean valid;
         try {
             exec.execute(script);
+            valid = true;
         } catch (com.rexsl.maven.utils.GroovyException ex) {
-            throw new InternalCheckException(ex);
+            Logger.warn(
+                this,
+                "Test failed (%s): %s",
+                script,
+                ex.getMessage()
+            );
+            valid = false;
         }
+        return valid;
     }
 
 }

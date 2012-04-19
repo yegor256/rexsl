@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.ymock.util.Logger;
 import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -42,8 +43,7 @@ import javax.xml.transform.Source;
  * JAXB-empowered object to XML converting utility.
  *
  * <p>The object has to be annotated with JAXB annotations
- * in order to be convertable.
- * Let's consider an example JAXB-annotated class:
+ * in order to be convertable. Let's consider an example JAXB-annotated class:
  *
  * <pre>
  * import javax.xml.bind.annotation.XmlAccessType;
@@ -94,6 +94,15 @@ public final class JaxbConverter {
 
     /**
      * Convert an object to XML.
+     *
+     * <p>The method will throw {@link AssertionError} if marshalling of
+     * provided object fails for some reason.
+     *
+     * <p>The name of the method is motivated by
+     * <a href="http://code.google.com/p/xml-matchers/">xmlatchers</a> project
+     * and their {@code XmlMatchers.the(String)} method. Looks like this name
+     * is short enough and convenient for unit tests.
+     *
      * @param object The object to convert
      * @param deps Dependencies that we should take into account
      * @return DOM source/document
@@ -112,7 +121,7 @@ public final class JaxbConverter {
         Object subject = object;
         if (intro.getElementName(object) == null) {
             subject = new JAXBElement(
-                new QName(JaxbConverter.typeName(object)),
+                JaxbConverter.qname(object),
                 object.getClass(),
                 object
             );
@@ -122,7 +131,7 @@ public final class JaxbConverter {
         try {
             mrsh.marshal(subject, writer);
         } catch (javax.xml.bind.JAXBException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new AssertionError(ex);
         }
         final String xml = writer.toString();
         return new StringSource(xml);
@@ -151,20 +160,28 @@ public final class JaxbConverter {
     /**
      * Get type name, if XmlType annotation is present (exception otherwise).
      * @param obj The object
-     * @return Name
+     * @return Qualified name
+     * @see XmlElement#namespace()
      */
-    private static String typeName(final Object obj) {
+    private static QName qname(final Object obj) {
         final XmlType type = (XmlType) obj.getClass()
             .getAnnotation(XmlType.class);
         if (type == null) {
-            throw new IllegalArgumentException(
-                String.format(
-                    "XmlType annotation is absent at %[type]s",
+            throw new AssertionError(
+                Logger.format(
+                    // @checkstyle LineLength (1 line)
+                    "@XmlType or @XmlRootElement annotation required at %[type]s",
                     obj
                 )
             );
         }
-        return type.name();
+        QName qname;
+        if ("##default".equals(type.namespace())) {
+            qname = new QName(type.name());
+        } else {
+            qname = new QName(type.namespace(), type.name());
+        }
+        return qname;
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,9 +33,17 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.ymock.util.Logger;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ws.rs.core.HttpHeaders;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Implementation of {@link TestClient}.
+ *
+ * <p>Objects of this class are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -45,7 +53,12 @@ final class JerseyTestClient implements TestClient {
     /**
      * Jersey web resource.
      */
-    private final transient WebResource.Builder builder;
+    private final transient WebResource resource;
+
+    /**
+     * Headers.
+     */
+    private final transient List<Header> headers = new ArrayList<Header>();
 
     /**
      * Entry point.
@@ -57,8 +70,29 @@ final class JerseyTestClient implements TestClient {
      * @param res The resource to work with
      */
     public JerseyTestClient(final WebResource res) {
-        this.builder = res.getRequestBuilder();
+        this.resource = res;
         this.home = res.getURI();
+        final String info = this.home.getUserInfo();
+        if (info != null) {
+            final String[] parts = info.split(":", 2);
+            try {
+                this.header(
+                    HttpHeaders.AUTHORIZATION,
+                    Logger.format(
+                        "Basic %s",
+                        Base64.encodeBase64String(
+                            Logger.format(
+                                "%s:%s",
+                                URLDecoder.decode(parts[0], CharEncoding.UTF_8),
+                                URLDecoder.decode(parts[1], CharEncoding.UTF_8)
+                            ).getBytes()
+                        )
+                    )
+                );
+            } catch (java.io.UnsupportedEncodingException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
     }
 
     /**
@@ -74,9 +108,23 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestClient header(final String name, final Object value) {
-        Logger.debug(this, "#header('%s', '%s'): set", name, value);
-        this.builder.header(name, value.toString());
-        return this;
+        synchronized (this.headers) {
+            boolean exists = false;
+            for (Header header : this.headers) {
+                if (header.getKey().equals(name)
+                    && header.getValue().toString().equals(value.toString())) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (exists) {
+                Logger.debug(this, "#header('%s', '%s'): dupe", name, value);
+            } else {
+                this.headers.add(new Header(name, value.toString()));
+                Logger.debug(this, "#header('%s', '%s'): set", name, value);
+            }
+            return this;
+        }
     }
 
     /**
@@ -84,7 +132,16 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse get(final String desc) {
-        return this.method(RestTester.GET, "", desc);
+        return new JerseyTestResponse(
+            new JerseyFetcher() {
+                @Override
+                public ClientResponse fetch() {
+                    return JerseyTestClient.this
+                        .method(RestTester.GET, "", desc);
+                }
+            },
+            new RequestDecor(this.headers, "")
+        );
     }
 
     /**
@@ -92,7 +149,17 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse post(final String desc, final Object body) {
-        return this.method(RestTester.POST, body.toString(), desc);
+        final String content = body.toString();
+        return new JerseyTestResponse(
+            new JerseyFetcher() {
+                @Override
+                public ClientResponse fetch() {
+                    return JerseyTestClient.this
+                        .method(RestTester.POST, content, desc);
+                }
+            },
+            new RequestDecor(this.headers, content)
+        );
     }
 
     /**
@@ -100,7 +167,17 @@ final class JerseyTestClient implements TestClient {
      */
     @Override
     public TestResponse put(final String desc, final Object body) {
-        return this.method(RestTester.PUT, body.toString(), desc);
+        final String content = body.toString();
+        return new JerseyTestResponse(
+            new JerseyFetcher() {
+                @Override
+                public ClientResponse fetch() {
+                    return JerseyTestClient.this
+                        .method(RestTester.PUT, content, desc);
+                }
+            },
+            new RequestDecor(this.headers, content)
+        );
     }
 
     /**
@@ -110,27 +187,38 @@ final class JerseyTestClient implements TestClient {
      * @param desc Description of the operation, for logging
      * @return The response
      */
-    public TestResponse method(final String name, final String body,
+    private ClientResponse method(final String name, final String body,
         final String desc) {
-        final long start = System.currentTimeMillis();
+        final WebResource.Builder builder = this.resource.getRequestBuilder();
+        for (Header header : this.headers) {
+            builder.header(header.getKey(), header.getValue());
+        }
+        final long start = System.nanoTime();
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
-            resp = this.builder.get(ClientResponse.class);
+            resp = builder.get(ClientResponse.class);
         } else {
-            resp = this.builder.method(name, ClientResponse.class, body);
+            resp = builder.method(name, ClientResponse.class, body);
         }
+        Logger.debug(
+            this,
+            "#%s('%s'): HTTP request body:\n%s",
+            name,
+            this.home.getPath(),
+            new RequestDecor(this.headers, body)
+        );
         Logger.info(
             this,
-            "#%s('%s'): \"%s\" completed in %dms [%d %s]: %s",
+            "#%s('%s'): \"%s\" completed in %[nano]s [%d %s]: %s",
             name,
             this.home.getPath(),
             desc,
-            System.currentTimeMillis() - start,
+            System.nanoTime() - start,
             resp.getStatus(),
             resp.getClientResponseStatus(),
             this.home
         );
-        return new JerseyTestResponse(resp);
+        return resp;
     }
 
 }

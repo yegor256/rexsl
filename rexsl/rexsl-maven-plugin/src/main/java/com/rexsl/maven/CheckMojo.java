@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,8 +29,10 @@
  */
 package com.rexsl.maven;
 
+import com.rexsl.maven.checks.DefaultChecksProvider;
 import com.ymock.util.Logger;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -47,6 +49,24 @@ public final class CheckMojo extends AbstractRexslMojo {
 
     /**
      * System variables to be set before running tests.
+     *
+     * <p>You define them in a similar way as in
+     * <a href="http://maven.apache.org/plugins/maven-surefire-plugin/"
+     * >maven-surefire-plugin</a>,
+     * for example you want to reconfigure LOG4J just for the tests:
+     *
+     * <pre>
+     * &lt;plugin>
+     *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+     *   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
+     *   &lt;configuration&gt;
+     *     &lt;systemPropertyVariables&gt;
+     *       &lt;log4j.configuration&gt;./x.props&lt;/log4j.configuration&gt;
+     *     &lt;/systemPropertyVariables&gt;
+     *   &lt;/configuration&gt;
+     * &lt;/plugin&gt;
+     * </pre>
+     *
      * @parameter
      * @since 0.3
      */
@@ -54,46 +74,99 @@ public final class CheckMojo extends AbstractRexslMojo {
     private transient Map<String, String> systemPropertyVariables;
 
     /**
+     * Regular expression that determines tests ({@code groovy},
+     * {@code xml}, etc.) to be executed during test.
+     *
+     * @parameter expression="${rexsl.test}" default-value=".*"
+     * @since 0.3.6
+     */
+    @SuppressWarnings("PMD.ImmutableField")
+    private transient String test = ".*";
+
+    /**
+     * Name of the check class to execute (if not set -
+     * all checks are executed).
+     * @parameter expression="${rexsl.check}"
+     * @since 0.3.6
+     */
+    @SuppressWarnings("PMD.ImmutableField")
+    private transient String check;
+
+    /**
+     * Checks provider.
+     */
+    private transient ChecksProvider provider = new DefaultChecksProvider();
+
+    /**
+     * Set checks provider.
+     * @param prov The provider to set
+     */
+    public void setChecksProvider(final ChecksProvider prov) {
+        this.provider = prov;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     protected void run() throws MojoFailureException {
-        final long start = System.currentTimeMillis();
-        if (this.systemPropertyVariables != null) {
-            this.injectVariables(this.systemPropertyVariables);
-        }
-        final Set<Check> checks = new ChecksProvider().all();
-        for (Check check : checks) {
-            if (!check.validate(this.env())) {
-                throw new MojoFailureException(
-                    String.format(
-                        "%s check failed",
-                        check.getClass().getName()
-                    )
-                );
+        final long start = System.nanoTime();
+        final Properties before = this.inject();
+        this.provider.setTest(this.test);
+        this.provider.setCheck(this.check);
+        final Set<Check> checks = this.provider.all();
+        try {
+            for (Check chck : checks) {
+                Logger.info(this, "%[type]s running...", chck);
+                if (!chck.validate(this.env())) {
+                    throw new MojoFailureException(
+                        Logger.format(
+                            "%s check failed",
+                            chck.getClass().getName()
+                        )
+                    );
+                }
+                Logger.info(this, "%[type]s didn't find any problems", chck);
             }
+        } finally {
+            this.revert(before);
         }
         Logger.info(
             this,
-            "All ReXSL checks passed in %dms",
-            System.currentTimeMillis() - start
+            "All ReXSL checks passed in %[nano]s",
+            System.nanoTime() - start
         );
     }
 
     /**
-     * Inject system property variables.
-     * @param vars The variables to inject
+     * Sets the system properties to the argument passed.
+     * @param properties The properties.
      */
-    private void injectVariables(final Map<String, String> vars) {
-        for (Map.Entry<String, String> var : vars.entrySet()) {
-            System.setProperty(var.getKey(), var.getValue());
-            Logger.info(
-                this,
-                "System variable '%s' set to '%s'",
-                var.getKey(),
-                var.getValue()
-            );
+    private void revert(final Properties properties) {
+        System.setProperties(properties);
+    }
+
+    /**
+     * Injects system property variables and returns the properties as
+     * they are before being modified in the method.
+     * @return The properties before being modified
+     */
+    private Properties inject() {
+        final Properties systemProperties = new Properties();
+        systemProperties.putAll(System.getProperties());
+        if (this.systemPropertyVariables != null) {
+            for (Map.Entry<String, String> var
+                : this.systemPropertyVariables.entrySet()) {
+                System.setProperty(var.getKey(), var.getValue());
+                Logger.info(
+                    this,
+                    "System variable '%s' set to '%s'",
+                    var.getKey(),
+                    var.getValue()
+                );
+            }
         }
+        return systemProperties;
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,18 +29,19 @@
  */
 package com.rexsl.core;
 
-import com.rexsl.test.XhtmlConverter;
 import com.rexsl.test.XhtmlMatchers;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link XslFilter}.
@@ -80,13 +81,39 @@ public final class XsltFilterTest {
         filter.doFilter(request, response, chain);
         filter.destroy();
         MatcherAssert.assertThat(
-            XhtmlConverter.the(response.toString()),
+            response,
             XhtmlMatchers.hasXPath("//xhtml:div[.='\u0443\u0440\u0430']")
         );
         MatcherAssert.assertThat(
-            XhtmlConverter.the(response.toString()),
+            response,
             XhtmlMatchers.hasXPath("/xhtml:html/xhtml:p[.='\u0443']")
         );
+    }
+
+    /**
+     * XsltFilter can pass binary content through.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void doesntTouchBinaryContent() throws Exception {
+        final byte[] binary = new byte[] {(byte) 0x00, (byte) 0xff};
+        final FilterChain chain = new FilterChainMocker()
+            .withOutput(binary)
+            .mock();
+        final Filter filter = new XsltFilter();
+        filter.init(new FilterConfigMocker().mock());
+        final ServletOutputStream stream =
+            Mockito.mock(ServletOutputStream.class);
+        final HttpServletResponse response =
+            Mockito.mock(HttpServletResponse.class);
+        Mockito.doReturn(stream).when(response).getOutputStream();
+        filter.doFilter(
+            new HttpServletRequestMocker().mock(),
+            response,
+            chain
+        );
+        filter.destroy();
+        Mockito.verify(stream).write(binary);
     }
 
 }

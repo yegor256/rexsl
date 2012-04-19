@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -69,14 +69,20 @@ public final class EmbeddedContainer {
 
     /**
      * Create and start Grizzly container.
+     *
+     * <p>{@code ctx.setParentLoaderPriority(false)} is called because of
+     * a classloading conflict between Maven classloader and
+     * Jetty WebApp classloader.
+     *
      * @param env The environment
      * @return The container
+     * @see <a href="http://docs.codehaus.org/display/JETTY/Classloading">Jetty Classloading</a>
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public static EmbeddedContainer start(final Environment env) {
         if (!env.webdir().exists()) {
             throw new IllegalArgumentException(
-                String.format(
+                Logger.format(
                     // @checkstyle LineLength (1 line)
                     "Directory %s is absent, maybe you forgot to 'package' the project?",
                     env.webdir()
@@ -85,9 +91,6 @@ public final class EmbeddedContainer {
         }
         final Server server = new Server(env.port());
         final WebAppContext ctx = new WebAppContext();
-        // it is required because of classloading conflict between
-        // Maven classloader and Jetty WebApp classloader
-        // @see http://docs.codehaus.org/display/JETTY/Classloading
         ctx.setParentLoaderPriority(false);
         if (env.useRuntimeFiltering()) {
             ctx.addFilter(
@@ -145,18 +148,17 @@ public final class EmbeddedContainer {
         );
         params.put(
             "com.rexsl.maven.utils.WEBDIR",
-            env.basedir().getAbsolutePath()
+            env.webdir().getAbsolutePath()
         );
         params.put(
             "com.rexsl.maven.utils.PORT",
-            env.port().toString()
+            String.valueOf(env.port())
         );
         params.put(
             "com.rexsl.maven.utils.RUNTIME_FOLDERS",
             StringUtils.join(folders, ";")
         );
         params.put(
-            // this parameter is used by com.rexsl.core.XslResolver
             "com.rexsl.core.XSD_FOLDER",
             new File(env.basedir(), "src/test/rexsl/xsd").getPath()
         );
@@ -174,7 +176,7 @@ public final class EmbeddedContainer {
                 env,
                 new BindingBuilder(env).build()
             );
-            final ScriptsFinder finder = new ScriptsFinder(dir);
+            final FileFinder finder = new FileFinder(dir, "groovy");
             for (File script : finder.ordered()) {
                 Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
                 try {
@@ -202,7 +204,7 @@ public final class EmbeddedContainer {
         final List<String> urls = new ArrayList<String>();
         for (File path : env.classpath(true)) {
             if (path.isDirectory()) {
-                urls.add(String.format("%s/", path.getAbsolutePath()));
+                urls.add(Logger.format("%s/", path.getAbsolutePath()));
             } else {
                 urls.add(path.getAbsolutePath());
             }

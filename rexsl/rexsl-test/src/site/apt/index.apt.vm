@@ -7,7 +7,7 @@
  ------
 
 ~~
-~~ Copyright (c) 2011, ReXSL.com
+~~ Copyright (c) 2011-2012, ReXSL.com
 ~~ All rights reserved.
 ~~
 ~~ Redistribution and use in source and binary forms, with or without
@@ -43,17 +43,42 @@ ReXSL Testing Facility
 
    * {{{./apidocs/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
 
-   * {{{./apidocs/com/rexsl/test/XhtmlConverter.html}<<<com.rexsl.test.XhtmlConverter>>>}}
-
    * {{{./apidocs/com/rexsl/test/JaxbConverter.html}<<<com.rexsl.test.JaxbConverter>>>}}
 
-  Include this dependency into your project:
+   * {{{./apidocs/com/rexsl/test/SimpleXml.html}<<<com.rexsl.test.SimpleXml>>>}}
+
+  Include this dependency into your project (or download
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${releasedVersion}/rexsl-test-${releasedVersion}.jar}rexsl-test-${releasedVersion}.jar}}
+  and add to classpath):
 
 +--
 <dependency>
   <groupId>com.rexsl</groupId>
   <artifactId>rexsl-test</artifactId>
   <version>${releasedVersion}</version>
+  <scope>test</scope>
+</dependency>
++--
+
+  This module also contains a very useful Mocking tool in
+  {{{./testapidocs/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}.
+  To use it you should include this dependencies into your project
+  (or download
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${releasedVersion}/rexsl-test-${releasedVersion}-mock.jar}rexsl-test-${releasedVersion}-mock.jar}}
+  and add to classpath):
+
++--
+<dependency>
+  <groupId>com.rexsl</groupId>
+  <artifactId>rexsl-test</artifactId>
+  <version>${releasedVersion}</version>
+  <classifier>mock</classifier>
+  <scope>test</scope>
+</dependency>
+<dependency>
+  <groupId>com.sun.grizzly</groupId>
+  <artifactId>grizzly-servlet-webserver</artifactId>
+  <version>1.9.10</version>
   <scope>test</scope>
 </dependency>
 +--

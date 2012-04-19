@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -156,7 +156,7 @@ public final class RuntimeFilter implements Filter {
             response.setIntHeader("Content-Length", content.length);
             response.addHeader(
                 "Rexsl-Filtered",
-                String.format("%d bytes", content.length)
+                Logger.format("%d bytes", content.length)
             );
         }
         response.getOutputStream().write(content);

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -99,7 +99,9 @@ public final class ServletOutputStreamMocker {
                     }
                 }
             ).when(this.stream)
-            .write((byte[]) Mockito.any(), Mockito.anyInt(), Mockito.anyInt());
+                .write(
+                    (byte[]) Mockito.any(), Mockito.anyInt(), Mockito.anyInt()
+                );
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }

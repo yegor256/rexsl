@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,13 +42,21 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
 /**
- * Packager of JS files. All comments, spaces, and unnecessary language
+ * Packager of JS files.
+ *
+ * <p>All comments, spaces, and unnecessary language
  * constructs are removed.
+ *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link PackersProvider}.
+ *
+ * <p>The class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class JsPacker extends AbstractPacker {
+final class JsPacker extends AbstractPacker {
 
     /**
      * {@inheritDoc}

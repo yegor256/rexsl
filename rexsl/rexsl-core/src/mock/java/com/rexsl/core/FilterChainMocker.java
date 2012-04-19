@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,11 +29,7 @@
  */
 package com.rexsl.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.CharEncoding;
@@ -79,10 +75,41 @@ public final class FilterChainMocker {
                         return null;
                     }
                 }
-            ).when(this.chain).doFilter(
-                Mockito.any(HttpServletRequest.class),
-                Mockito.any(HttpServletResponse.class)
-            );
+            ).when(this.chain)
+                .doFilter(
+                    Mockito.any(HttpServletRequest.class),
+                    Mockito.any(HttpServletResponse.class)
+                );
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
+        } catch (javax.servlet.ServletException ex) {
+            throw new IllegalStateException(ex);
+        }
+        return this;
+    }
+
+    /**
+     * With this output.
+     * @param data The output
+     * @return This object
+     */
+    public FilterChainMocker withOutput(final byte[] data) {
+        try {
+            Mockito.doAnswer(
+                new Answer() {
+                    public Object answer(final InvocationOnMock invocation)
+                        throws java.io.IOException {
+                        final HttpServletResponse response =
+                            (HttpServletResponse) invocation.getArguments()[1];
+                        response.getOutputStream().write(data);
+                        return null;
+                    }
+                }
+            ).when(this.chain)
+                .doFilter(
+                    Mockito.any(HttpServletRequest.class),
+                    Mockito.any(HttpServletResponse.class)
+                );
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         } catch (javax.servlet.ServletException ex) {

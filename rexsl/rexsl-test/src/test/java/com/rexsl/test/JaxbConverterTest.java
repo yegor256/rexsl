@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -83,7 +83,10 @@ public final class JaxbConverterTest {
         employee.inject(new JaxbConverterTest.Foo());
         MatcherAssert.assertThat(
             JaxbConverter.the(employee, JaxbConverterTest.Foo.class),
-            XhtmlMatchers.hasXPath("/employee/injected/name")
+            XhtmlMatchers.hasXPath(
+                "/employee/injected/ns1:name",
+                Foo.NAMESPACE
+            )
         );
     }
 
@@ -93,13 +96,29 @@ public final class JaxbConverterTest {
      */
     @Test
     public void convertsNonRootObject() throws Exception {
-        final Object object = new JaxbConverterTest.Foo();
+        final Object object = new JaxbConverterTest.Bar();
         MatcherAssert.assertThat(
             JaxbConverter.the(object),
-            XhtmlMatchers.hasXPath("/foo/name")
+            XhtmlMatchers.hasXPath("/bar/name")
         );
     }
 
+    /**
+     * JaxbConverter can convert an object without XmlRootElement annotation.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void convertsNonRootObjectWithNamespace() throws Exception {
+        final Object object = new JaxbConverterTest.Foo();
+        MatcherAssert.assertThat(
+            JaxbConverter.the(object),
+            XhtmlMatchers.hasXPath("/ns1:foo/ns1:name", Foo.NAMESPACE)
+        );
+    }
+
+    /**
+     * Dummy test object.
+     */
     @XmlRootElement(name = "employee")
     @XmlAccessorType(XmlAccessType.NONE)
     private static final class Employee {
@@ -132,16 +151,39 @@ public final class JaxbConverterTest {
         }
     }
 
-    @XmlType(name = "foo")
+    /**
+     * Dummy test object.
+     */
+    @XmlType(name = "foo", namespace = JaxbConverterTest.Foo.NAMESPACE)
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Foo {
+        /**
+         * XML namespace.
+         */
+        public static final String NAMESPACE = "foo-namespace";
+        /**
+         * Simple name.
+         * @return The name
+         */
+        @XmlElement(namespace = JaxbConverterTest.Foo.NAMESPACE)
+        public String getName() {
+            return "Foo: \u0443\u0440\u0430";
+        }
+    }
+
+    /**
+     * Dummy test object.
+     */
+    @XmlType(name = "bar")
+    @XmlAccessorType(XmlAccessType.NONE)
+    public static final class Bar {
         /**
          * Simple name.
          * @return The name
          */
         @XmlElement
         public String getName() {
-            return "Foo: \u0443\u0440\u0430";
+            return "Bar: \u0443\u0440\u0430";
         }
     }
 

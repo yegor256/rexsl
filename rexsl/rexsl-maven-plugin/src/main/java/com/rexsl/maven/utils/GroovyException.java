@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package com.rexsl.maven.utils;
+
+import com.ymock.util.Logger;
 
 /**
  * Groovy-generated exception.
@@ -64,13 +66,13 @@ public final class GroovyException extends Exception {
     /**
      * To message.
      * @param cause The cause
-     * @param args Agruments for String.format()
+     * @param args Agruments for Logger.format()
      * @return Compiled text
      */
     private static String toText(final String cause, final Object... args) {
         String text;
         if (args.length > 0) {
-            text = String.format(cause, args);
+            text = Logger.format(cause, args);
         } else {
             text = cause;
         }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,8 +54,9 @@ public final class ServletContextMocker {
      * @param content The content of it
      * @return This object
      */
-    public ServletContextMocker withResource(final String name,
-        final String content) {
+    public ServletContextMocker withResource(
+        final String name, final String content
+    ) {
         InputStream stream;
         try {
             stream = IOUtils.toInputStream(content, CharEncoding.UTF_8);

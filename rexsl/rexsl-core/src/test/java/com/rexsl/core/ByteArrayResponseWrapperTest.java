@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,7 @@ public final class ByteArrayResponseWrapperTest {
         final String text = "some text, \u0443\u0440\u0430!";
         wrapper.getOutputStream().write(text.getBytes(CharEncoding.UTF_8));
         MatcherAssert.assertThat(
-            wrapper.getByteStream().toString(CharEncoding.UTF_8),
+            new String(wrapper.getByteArray(), CharEncoding.UTF_8),
             Matchers.equalTo(text)
         );
     }

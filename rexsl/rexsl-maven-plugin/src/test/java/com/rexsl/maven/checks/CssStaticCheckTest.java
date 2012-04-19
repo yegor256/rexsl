@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,19 +39,22 @@ import org.junit.Test;
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
- * @todo #56 Implement CSS stylesheet validation and enable all test methods in
- *  this class.
  */
 public final class CssStaticCheckTest {
 
     /**
      * CssStaticCheck can validate correct CSS file.
      * @throws Exception If something goes wrong
+     * @todo #105 The validation doesn't work. CSSLint, for some reason,
+     *  returns incorrect report when being executed from Maven. When the same
+     *  file is executed from command line it works correctly. I don't know
+     *  why it's happening.
      */
-    @org.junit.Ignore
     @Test
+    @org.junit.Ignore
     public void validatesCorrectCssFile() throws Exception {
         final Environment env = new EnvironmentMocker()
+            .withDefaultClasspath()
             .withFile("src/main/webapp/css/valid.css")
             .mock();
         MatcherAssert.assertThat(
@@ -64,10 +67,11 @@ public final class CssStaticCheckTest {
      * CssStaticCheck can validate incorrect CSS file.
      * @throws Exception If something goes wrong
      */
-    @org.junit.Ignore
     @Test
+    @org.junit.Ignore
     public void validatesIncorrectCssFile() throws Exception {
         final Environment env = new EnvironmentMocker()
+            .withDefaultClasspath()
             .withFile("src/main/webapp/css/invalid.css")
             .mock();
         MatcherAssert.assertThat(

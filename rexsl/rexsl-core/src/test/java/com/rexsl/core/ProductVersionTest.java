@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.ymock.util.Logger;
 import java.util.Arrays;
 import java.util.Collection;
 import org.hamcrest.MatcherAssert;
@@ -100,10 +101,14 @@ public final class ProductVersionTest {
      */
     @Test
     public void comparesTwoVersions() throws Exception {
+        int cmp = this.left.compareTo(this.right);
+        if (cmp != 0) {
+            cmp = cmp / Math.abs(cmp);
+        }
         MatcherAssert.assertThat(
-            this.left.compareTo(this.right),
+            cmp,
             Matchers.describedAs(
-                String.format(
+                Logger.format(
                     "%d at [%s vs. %s]",
                     this.result,
                     this.left,
@@ -112,6 +117,41 @@ public final class ProductVersionTest {
                 Matchers.equalTo(this.result)
             )
         );
+    }
+
+    /**
+     * ProductVersion equals method test.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void equalsIsConsistentWithCompareTo() throws Exception {
+        final int cmp = this.left.compareTo(this.right);
+        if (cmp == 0) {
+            MatcherAssert.assertThat(
+                this.left,
+                Matchers.describedAs(
+                    String.format(
+                        // @checkstyle MultipleStringLiterals (2 lines)
+                        "[%s vs. %s]",
+                        this.left,
+                        this.right
+                    ),
+                    Matchers.equalTo(this.right)
+                )
+            );
+        } else {
+            MatcherAssert.assertThat(
+                this.left,
+                Matchers.describedAs(
+                    String.format(
+                        "[%s vs. %s]",
+                        this.left,
+                        this.right
+                    ),
+                    Matchers.not(this.right)
+                )
+            );
+        }
     }
 
 }

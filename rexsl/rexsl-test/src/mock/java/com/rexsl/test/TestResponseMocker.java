@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,12 +29,6 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
-import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ws.rs.core.MultivaluedMap;
 import org.mockito.Mockito;
 
 /**
@@ -64,6 +58,16 @@ public final class TestResponseMocker {
      */
     public TestResponseMocker withBody(final String body) {
         Mockito.doReturn(body).when(this.response).getBody();
+        return this;
+    }
+
+    /**
+     * Return this status code.
+     * @param code The status code
+     * @return This object
+     */
+    public TestResponseMocker withStatus(final int code) {
+        Mockito.doReturn(code).when(this.response).getStatus();
         return this;
     }
 

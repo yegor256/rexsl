@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -86,7 +86,7 @@ final class ContextResourceResolver implements URIResolver {
                 }
             } else {
                 throw new TransformerException(
-                    String.format(
+                    Logger.format(
                         "URI '%s' is not absolute, can't be resolved",
                         uri
                     )
@@ -113,7 +113,9 @@ final class ContextResourceResolver implements URIResolver {
      * @return The stream opened or NULL if nothing found
      */
     private InputStream local(final String path) {
-        final InputStream stream = this.context.getResourceAsStream(path);
+        final InputStream stream = this.context.getResourceAsStream(
+            URI.create(path).getPath()
+        );
         if (stream != null) {
             Logger.debug(
                 this,
@@ -131,14 +133,14 @@ final class ContextResourceResolver implements URIResolver {
      * @throws IOException If some problem happens
      */
     private InputStream fetch(final URI uri) throws IOException {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         final HttpURLConnection conn =
             (HttpURLConnection) uri.toURL().openConnection();
         conn.connect();
         final int code = conn.getResponseCode();
         if (code != HttpURLConnection.HTTP_OK) {
             throw new IOException(
-                String.format(
+                Logger.format(
                     "Invalid HTTP response code %d at '%s'",
                     code,
                     uri
@@ -147,11 +149,11 @@ final class ContextResourceResolver implements URIResolver {
         }
         Logger.debug(
             this,
-            "#fetch('%s'): retrieved %d bytes of type '%s' [%dms]",
+            "#fetch('%s'): retrieved %d bytes of type '%s' in %[nano]s",
             uri,
             conn.getContentLength(),
             conn.getContentType(),
-            System.currentTimeMillis() - start
+            System.nanoTime() - start
         );
         return conn.getInputStream();
     }

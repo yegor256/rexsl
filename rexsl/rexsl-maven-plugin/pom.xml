@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
  *
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,12 +52,27 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version since="11 Mar 2012">2.0.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--
+        <dependency>
+            <artifactId>jslint4java</artifactId>
+            <groupId>com.googlecode.jslint4java</groupId>
+            <version>2.0.2</version>
+        </dependency>
+        -->
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -75,12 +90,18 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-w3c</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-w3c</artifactId>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
+            <classifier>mock</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.ymock</groupId>
@@ -149,6 +170,12 @@
             <artifactId>plexus-container-default</artifactId>
             <version since="15 Sep 2011">1.0-beta-3.0.5</version>
             <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.sonatype.aether</groupId>
@@ -191,7 +218,7 @@
             <version since="15 Sep 2011">1.0-beta-7</version>
             <exclusions>
                 <exclusion>
-                    <!-- it's an old version -->
+                    <!-- it's an old version, should be excluded -->
                     <groupId>nekohtml</groupId>
                     <artifactId>nekohtml</artifactId>
                 </exclusion>
@@ -210,7 +237,7 @@
             <version since="11 Oct 2011">8.0.2.v20111006</version>
             <exclusions>
                 <exclusion>
-                    <!-- we want to replace it with proper Servlet API artifact -->
+                    <!-- we want to replace it with proper Servlet API artifact below -->
                     <groupId>org.mortbay.jetty</groupId>
                     <artifactId>servlet-api</artifactId>
                 </exclusion>
@@ -236,23 +263,11 @@
         </dependency>
         <dependency>
             <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
+            <artifactId>junit-dep</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -261,11 +276,6 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version since="6 Jan 2012">3.2.1</version>
         </dependency>
         <dependency>
             <!--
@@ -308,6 +318,12 @@
             <groupId>com.rempl.plugins</groupId>
             <artifactId>rempl-maven-plugin</artifactId>
             <version since="19 Sep 2011">1.1.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <!-- Forward all LOG4J calls to SLF4J -->
@@ -352,6 +368,14 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version since="26 Oct 2011">1.6</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
@@ -386,6 +410,7 @@
                         -->
                         <!-- <pomInclude>run-all-correct/pom.xml</pomInclude> -->
                         <pomInclude>all-correct/pom.xml</pomInclude>
+                        <pomInclude>structure-failure/pom.xml</pomInclude>
                         <pomInclude>script-failure/pom.xml</pomInclude>
                         <pomInclude>xhtml-failure/pom.xml</pomInclude>
                         <pomInclude>xsd-failure/pom.xml</pomInclude>
@@ -420,7 +445,6 @@
                 see the ticket #30 for more information.
                 -->
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version since="26 Oct 2011">1.6</version>
                 <executions>
                     <execution>
                         <phase>pre-integration-test</phase>
@@ -435,6 +459,9 @@
                                 <copy verbose="yes" overwrite="yes"
                                     file="${com.rexsl:rexsl-w3c:jar}"
                                     tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-w3c/${project.version}/rexsl-w3c-${project.version}.jar"/>
+                                <copy verbose="yes" overwrite="yes"
+                                    file="${com.rexsl:rexsl-test:jar}"
+                                    tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-test/${project.version}/rexsl-test-${project.version}.jar"/>
                             </target>
                         </configuration>
                         <goals>
@@ -445,5 +472,63 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>csslint</id>
+            <activation>
+                <file><exists>pom.xml</exists></file>
+            </activation>
+            <properties>
+                <csslint.js>${project.build.outputDirectory}/CssLint.js</csslint.js>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version since="26 Oct 2011">1.6</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <target>
+                                        <available file="${csslint.js}" property="present"/>
+                                        <get verbose="yes" usetimestamp="true" skipexisting="true"
+                                            ignoreerrors="true" maxtime="10"
+                                            src="https://raw.github.com/stubbornella/csslint/master/release/csslint-rhino.js"
+                                            dest="${csslint.js}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version since="18 Mar 2012">1.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>process-sources</phase>
+                                <configuration>
+                                    <mainClass>org.mozilla.javascript.tools.jsc.Main</mainClass>
+                                    <arguments>
+                                        <argument>-o</argument>
+                                        <argument>CssLint.class</argument>
+                                        <argument>${csslint.js}</argument>
+                                    </arguments>
+                                </configuration>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

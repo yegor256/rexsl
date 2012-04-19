@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,8 +29,8 @@
  */
 package com.rexsl.maven.aether;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
@@ -79,6 +79,11 @@ public final class DepsResolver {
      * List of transitive deps of the artifact.
      * @param root The artifact to work with
      * @return The list of dependencies
+     * @todo #134 This "IF NOT NULL" validation is a workaround, since I don't
+     *  know what the actual problem is. Looks like sometimes (for some unknown
+     *  reason) #classpathFilter() returns NULL. When exactly this may happen
+     *  I have no idea. That's why this workaround. Sometime later we should
+     *  do a proper testing and reproduce this defect in a test.
      */
     public List<Artifact> deps(final Artifact root) {
         final CollectRequest crq = new CollectRequest();
@@ -96,18 +101,20 @@ public final class DepsResolver {
         session.setLocalRepositoryManager(
             system.newLocalRepositoryManager(local)
         );
-        Collection<ArtifactResult> results;
-        try {
-            results = system.resolveDependencies(
-                session,
-                new DependencyRequest(crq, filter)
-            ).getArtifactResults();
-        } catch (DependencyResolutionException ex) {
-            throw new IllegalStateException(ex);
-        }
-        final List<Artifact> deps = new ArrayList<Artifact>();
-        for (ArtifactResult res : results) {
-            deps.add(res.getArtifact());
+        final List<Artifact> deps = new LinkedList<Artifact>();
+        if (filter != null) {
+            Collection<ArtifactResult> results;
+            try {
+                results = system.resolveDependencies(
+                    session,
+                    new DependencyRequest(crq, filter)
+                ).getArtifactResults();
+            } catch (DependencyResolutionException ex) {
+                throw new IllegalStateException(ex);
+            }
+            for (ArtifactResult res : results) {
+                deps.add(res.getArtifact());
+            }
         }
         return deps;
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,31 +30,22 @@
 package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
-import java.util.ArrayList;
+import com.ymock.util.Logger;
 import java.util.Formattable;
 import java.util.Formatter;
 import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
  * Decor for {@link ClientResponse}.
  *
+ * <p>Objects of this class are immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 final class ClientResponseDecor implements Formattable {
-
-    /**
-     * End of line.
-     */
-    private static final String EOL = "\n";
-
-    /**
-     * Indentation.
-     */
-    private static final String INDENT = "    ";
 
     /**
      * The response.
@@ -87,38 +78,22 @@ final class ClientResponseDecor implements Formattable {
         for (MultivaluedMap.Entry<String, List<String>> header
             : this.response.getHeaders().entrySet()) {
             builder.append(
-                String.format(
+                Logger.format(
                     "%s%s: %s%s",
-                    this.INDENT,
+                    RequestDecor.SPACES,
                     header.getKey(),
                     StringUtils.join(header.getValue(), ", "),
-                    this.EOL
+                    RequestDecor.EOL
                 )
             );
         }
-        builder.append(this.EOL)
-            .append(this.INDENT)
-            .append(
-                StringUtils.join(
-                    this.lines(this.body),
-                    String.format("%s%s", this.EOL, this.INDENT)
-                )
-            )
-            .append(this.EOL);
-        formatter.format("%s", builder.toString());
-    }
-
-    /**
-     * Get all lines from the text.
-     * @param text The text
-     * @return Lines
-     */
-    private List<String> lines(final String text) {
-        final List<String> lines = new ArrayList<String>();
-        for (String line : StringUtils.split(text, this.EOL)) {
-            lines.add(StringEscapeUtils.escapeJava(line));
+        if (builder.length() > 0) {
+            builder.append(RequestDecor.EOL);
         }
-        return lines;
+        builder.append(RequestDecor.SPACES)
+            .append(RequestDecor.indent(this.body))
+            .append(RequestDecor.EOL);
+        formatter.format("%s", builder.toString());
     }
 
 }

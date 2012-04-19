@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,6 +31,9 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
+import com.rexsl.w3c.ValidationResponseMocker;
+import com.rexsl.w3c.Validator;
+import com.rexsl.w3c.ValidatorMocker;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
@@ -39,7 +42,6 @@ import org.junit.Test;
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @todo #10 Implement CSS validation and enable all test methods in this class
  */
 public final class JigsawCssCheckTest {
 
@@ -52,9 +54,10 @@ public final class JigsawCssCheckTest {
         final Environment env = new EnvironmentMocker()
             .withFile("src/main/webapp/css/valid.css")
             .mock();
+        final Validator validator = new ValidatorMocker().mock();
         MatcherAssert.assertThat(
             "valid CSS passes without problems",
-            new JigsawCssCheck().validate(env)
+            new JigsawCssCheck(validator).validate(env)
         );
     }
 
@@ -62,15 +65,17 @@ public final class JigsawCssCheckTest {
      * JigsawCssCheckTest can validate incorrect CSS files.
      * @throws Exception If something goes wrong
      */
-    @org.junit.Ignore
     @Test
     public void validatesIncorrectCssFile() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withFile("src/main/webapp/css/invalid.css")
             .mock();
+        final Validator validator = new ValidatorMocker().withResponse(
+            new ValidationResponseMocker().withValidity(false).mock()
+        ).mock();
         MatcherAssert.assertThat(
             "invalid CSS is caught",
-            !new JigsawCssCheck().validate(env)
+            !new JigsawCssCheck(validator).validate(env)
         );
     }
 

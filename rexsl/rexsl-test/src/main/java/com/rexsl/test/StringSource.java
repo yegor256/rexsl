@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,17 +29,32 @@
  */
 package com.rexsl.test;
 
+import java.io.StringWriter;
 import java.util.Locale;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Node;
 
 /**
  * Private class for DOM to String converting.
  *
+ * <p>Objects of this class are immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 final class StringSource extends DOMSource {
+
+    /**
+     * Transformer factory.
+     */
+    private static final TransformerFactory TFACTORY =
+        TransformerFactory.newInstance();
 
     /**
      * The XML itself.
@@ -59,12 +74,37 @@ final class StringSource extends DOMSource {
     /**
      * Public ctor.
      * @param node The node
-     * @todo #107 We should transform Node into text and assign to this.xml
      */
     public StringSource(final Node node) {
         super();
-        this.xml = "xml";
+        final StringWriter writer = new StringWriter();
+        try {
+            final Transformer transformer = this.getTransformer();
+            transformer.setOutputProperty(
+                OutputKeys.OMIT_XML_DECLARATION,
+                "yes"
+            );
+            transformer.transform(
+                new DOMSource(node),
+                new StreamResult(writer)
+            );
+        } catch (TransformerException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        this.xml = writer.toString();
         super.setNode(node);
+    }
+
+    /**
+     * Thread safe construct Transfomer.
+     * @return Transformer, never null
+     * @throws TransformerConfigurationException Transfomer problem
+     */
+    private Transformer getTransformer()
+        throws TransformerConfigurationException {
+        synchronized (this.TFACTORY) {
+            return this.TFACTORY.newTransformer();
+        }
     }
 
     /**
@@ -74,7 +114,7 @@ final class StringSource extends DOMSource {
     public String toString() {
         final StringBuilder buf = new StringBuilder();
         final int length = this.xml.length();
-        for (int pos = 0; pos < length; pos += 1) {
+        for (int pos = 0; pos < length; ++pos) {
             final char chr = this.xml.charAt(pos);
             // @checkstyle MagicNumber (1 line)
             if (chr > 0x7f) {

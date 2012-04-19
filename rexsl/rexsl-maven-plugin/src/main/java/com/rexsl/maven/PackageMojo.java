@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,11 +29,49 @@
  */
 package com.rexsl.maven;
 
+import com.rexsl.maven.packers.PackersProvider;
 import com.ymock.util.Logger;
 import java.util.Set;
 
 /**
  * Package resources.
+ *
+ * <p>Text resources should be packed before they got delivered to the
+ * {@code WAR} package. For example, comments should be removed from CSS and
+ * XSL stylesheets, JavaScripts should be minified, etc. We have a number of
+ * convenient packers that do this job, you just need to call them. First of
+ * a {@code package} goal should be called:
+ *
+ * <pre>
+ * &lt;plugin>
+ *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+ *   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
+ *   &lt;version&gt;...&lt;/version&gt;
+ *   &lt;executions&gt;
+ *     &lt;execution&gt;
+ *       &lt;phase&gt;&lt;phase&gt;
+ *       &lt;goals&gt;
+ *         &lt;goal&gt;package&lt;/goal&gt;
+ *       &lt;/goals&gt;
+ *     &lt;/execution&gt;
+ *   &lt;/executions&gt;
+ * &lt;/plugin&gt;
+ * </pre>
+ *
+ * <p>The goal will package all files it knows about and place their packaged
+ * (minified) versions into {@code webappDirectory}. Then, you should configure
+ * {@code maven-war-plugin} to not touch these files again (to avoid their
+ * packaging):
+ *
+ * <pre>
+ * &lt;plugin>
+ *   &lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;
+ *   &lt;configuration&gt;
+ *     &lt;warSourceExcludes&gt;js/**, css/**, xsl/**&lt;/warSourceExcludes&gt;
+ *     [..]
+ *   &lt;/configuration&gt;
+ * &lt;/plugin&gt;
+ * </pre>
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -48,15 +86,15 @@ public final class PackageMojo extends AbstractRexslMojo {
      */
     @Override
     protected void run() {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         final Set<Packer> packers = new PackersProvider().all();
         for (Packer packer : packers) {
             packer.pack(this.env());
         }
         Logger.info(
             this,
-            "Packaging finished in %dms",
-            System.currentTimeMillis() - start
+            "Packaging finished in %[nano]s",
+            System.nanoTime() - start
         );
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,8 @@
  */
 package com.rexsl.maven;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import org.apache.maven.plugin.logging.Log;
 import org.mockito.Mockito;
@@ -52,7 +53,7 @@ public final class LogMocker {
     /**
      * Lines recorded.
      */
-    private final transient List<String> messages = new ArrayList<String>();
+    private final transient List<String> messages = new LinkedList<String>();
 
     /**
      * Public ctor.
@@ -62,7 +63,6 @@ public final class LogMocker {
             public Object answer(final InvocationOnMock invocation) {
                 final String text = (String) invocation.getArguments()[0];
                 LogMocker.this.messages.add(text);
-                // System.out.println(text);
                 return null;
             }
         };
@@ -86,7 +86,7 @@ public final class LogMocker {
      * @return The messages
      */
     public List<String> getMessages() {
-        return this.messages;
+        return Collections.unmodifiableList(this.messages);
     }
 
 }

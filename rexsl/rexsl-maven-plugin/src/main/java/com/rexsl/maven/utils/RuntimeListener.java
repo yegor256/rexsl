@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,7 +49,7 @@ public final class RuntimeListener implements ServletContextListener {
     @Override
     @SuppressWarnings("PMD.UseProperClassLoader")
     public void contextInitialized(final ServletContextEvent event) {
-        final long start = System.currentTimeMillis();
+        final long start = System.nanoTime();
         final Environment env = new RuntimeEnvironment(
             event.getServletContext()
         );
@@ -60,7 +60,7 @@ public final class RuntimeListener implements ServletContextListener {
                 event.getServletContext().getClassLoader(),
                 new BindingBuilder(env).build()
             );
-            final ScriptsFinder finder = new ScriptsFinder(dir);
+            final FileFinder finder = new FileFinder(dir, "groovy");
             for (File script : finder.ordered()) {
                 Logger.info(this, "Running '%s'...", script);
                 try {
@@ -68,15 +68,15 @@ public final class RuntimeListener implements ServletContextListener {
                 } catch (com.rexsl.maven.utils.GroovyException ex) {
                     throw new IllegalStateException(ex);
                 }
-                counter += 1;
+                ++counter;
             }
             Logger.debug(
                 this,
                 // @checkstyle LineLength (1 line)
-                "#contextInitialized(%s): initialized with %d script(s) in %dms",
+                "#contextInitialized(%s): initialized with %d script(s) in %[nano]s",
                 event.getClass().getName(),
                 counter,
-                System.currentTimeMillis() - start
+                System.nanoTime() - start
             );
         } else {
             Logger.info(
