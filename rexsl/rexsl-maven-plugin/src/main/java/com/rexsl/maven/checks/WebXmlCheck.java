@@ -36,7 +36,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -93,11 +92,11 @@ final class WebXmlCheck implements Check {
             "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
             "http://www.w3.org/2001/XMLSchema"
         );
-        DocumentBuilder builder = null;
+        DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
-        } catch (ParserConfigurationException exception) {
-            throw new IllegalStateException(exception);
+        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            throw new IllegalStateException(ex);
         }
         this.errors = 0;
         builder.setErrorHandler(
@@ -133,7 +132,9 @@ final class WebXmlCheck implements Check {
     private void error(final SAXParseException excn) {
         Logger.error(
             this,
-            "web.xml error: %s",
+            "web.xml[%d:%d]: %s",
+            excn.getLineNumber(),
+            excn.getColumnNumber(),
             excn.getMessage()
         );
         ++this.errors;
