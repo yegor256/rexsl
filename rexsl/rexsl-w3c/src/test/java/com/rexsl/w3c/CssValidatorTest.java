@@ -35,14 +35,14 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 /**
- * Test case for {@link DefaultCssValidator}.
+ * Test case for {@link CssValidator}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class DefaultCssValidatorTest {
+public final class CssValidatorTest {
 
     /**
-     * DefaultCssValidator can validate CSS document.
+     * CssValidator can validate CSS document.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -56,13 +56,13 @@ public final class DefaultCssValidatorTest {
             + "<m:checkedby>W3C</m:checkedby>"
             + "</m:cssvalidationresponse></env:Body></env:Envelope>"
         ).mock().home();
-        final Validator validator = new DefaultCssValidator(uri);
+        final Validator validator = new CssValidator(uri);
         final ValidationResponse response = validator.validate("* { }");
         MatcherAssert.assertThat(response.toString(), response.valid());
     }
 
     /**
-     * DefaultCssValidator can validate CSS document, with invalid content.
+     * CssValidator can validate CSS document, with invalid content.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -76,18 +76,18 @@ public final class DefaultCssValidatorTest {
             + "<m:checkedby>somebody</m:checkedby>"
             + "</m:cssvalidationresponse></env:Body></e:Envelope>"
         ).mock().home();
-        final Validator validator = new DefaultCssValidator(uri);
+        final Validator validator = new CssValidator(uri);
         final ValidationResponse response = validator.validate("");
         MatcherAssert.assertThat(response.toString(), !response.valid());
     }
 
     /**
-     * DefaultCssValidator can ignore the entire document.
+     * CssValidator can ignore the entire document.
      * @throws Exception If something goes wrong inside
      */
     @Test
     public void ignoresEntireDocument() throws Exception {
-        final Validator validator = new DefaultCssValidator();
+        final Validator validator = new CssValidator();
         final ValidationResponse response = validator.validate(
             // @checkstyle RegexpSingleline (1 line)
             "/* hey */\n\n/* JIGSAW IGNORE: .. */\n\n* { abc: cde }\n"

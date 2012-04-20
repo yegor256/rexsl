@@ -30,7 +30,7 @@
 package com.rexsl.w3c;
 
 /**
- * Validator of CSS pages through W3C validation API.
+ * Validator of HTML/CSS pages through W3C validation API.
  *
  * <p>Retrieve it from {@link ValidatorBuilder} and use like this:
  *
@@ -68,11 +68,13 @@ package com.rexsl.w3c;
  * will return {@code TRUE}. You will still be able to read errors and warnings
  * from it, but it will be valid.
  *
- * <p>Objects of this interface should be immutable and thread-safe.
+ * <p>Implementation must be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API, CSS</a>
+ * @see <a href="http://validator.w3.org/docs/api.html">W3C API for HTML</a>
+ * @see <a href="http://validator.w3.org/docs/users.html">mobileOK API</a>
+ * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API for CSS</a>
  * @see ValidatorBuilder
  */
 public interface Validator {
@@ -84,9 +86,9 @@ public interface Validator {
      * happened with the HTTP connection to the W3C server. It will return
      * an invalid response, but will never throw.
      *
-     * @param css The CSS stylesheet
+     * @param content The content of CSS/HTML page
      * @return The response
      */
-    ValidationResponse validate(String css);
+    ValidationResponse validate(String content);
 
 }

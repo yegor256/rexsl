@@ -29,62 +29,70 @@
  */
 package com.rexsl.w3c;
 
+import com.rexsl.test.TestResponse;
 import java.net.URI;
-import java.util.Set;
+import javax.ws.rs.core.MediaType;
 
 /**
- * Response of HTML or CSS validation.
- *
- * <p>See {@link ValidatorBuilder} for explanation of how to get an instance
- * of this interface.
- *
- * <p>Implementation must be thread-safe.
+ * Implementation of (X)HTML validator.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see ValidatorBuilder
- * @see Validator#validate(String)
- * @see <a href="http://validator.w3.org/docs/api.html">W3C API, HTML</a>
- * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API, CSS</a>
+ * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
-public interface ValidationResponse {
+final class HtmlValidator extends BaseValidator implements Validator {
 
     /**
-     * The document is valid and has no errors or warnings?
-     * @return Is it valid?
+     * The URI to use in W3C.
      */
-    boolean valid();
+    private final transient URI uri;
 
     /**
-     * Who checked the document (normally contains a URL of W3C server).
-     * @return URI of the server
+     * Public ctor with default entry point.
      */
-    URI checkedBy();
+    public HtmlValidator() {
+        this(URI.create("http://validator.w3.org/check"));
+    }
 
     /**
-     * DOCTYPE of the document, if detected by the validator (may be empty
-     * if {@code DOCTYPE} is not detected or if it's a CSS document).
-     * @return Doctype or empty string
+     * Public ctor.
+     * @param entry Entry point to use
      */
-    String doctype();
+    public HtmlValidator(final URI entry) {
+        super();
+        this.uri = entry;
+    }
 
     /**
-     * Charset of the document, if detected by the server (may be empty
-     * if charset is not detected or it's a CSS document).
-     * @return Charset of the document, e.g. {@code "UTF-8"}
+     * {@inheritDoc}
      */
-    String charset();
-
-    /**
-     * Returns list of errors found during validation.
-     * @return List of errors or an empty list if no errors found
-     */
-    Set<Defect> errors();
-
-    /**
-     * Returns lsit of warnings found during validation.
-     * @return List of warnings
-     */
-    Set<Defect> warnings();
+    @Override
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
+    public ValidationResponse validate(final String html) {
+        DefaultValidationResponse response;
+        try {
+            final TestResponse soap = this
+                .send(
+                    this.uri,
+                    this.entity("uploaded_file", html, MediaType.TEXT_HTML)
+            )
+                .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
+                .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
+                .assertThat(
+                    new RetryPolicy(
+                        "/env:Envelope/env:Body/m:markupvalidationresponse"
+                    )
+                )
+                .assertXPath("//m:validity")
+                .assertXPath("//m:checkedby")
+                .assertXPath("//m:doctype")
+                .assertXPath("//m:charset");
+            response = this.build(soap);
+        // @checkstyle IllegalCatchCheck (1 line)
+        } catch (Throwable ex) {
+            response = this.failure(ex);
+        }
+        return response;
+    }
 
 }

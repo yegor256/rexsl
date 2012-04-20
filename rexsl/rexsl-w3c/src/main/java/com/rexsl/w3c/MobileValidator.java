@@ -30,17 +30,18 @@
 package com.rexsl.w3c;
 
 import com.rexsl.test.TestResponse;
+import com.rexsl.test.XmlDocument;
 import java.net.URI;
-import java.util.regex.Pattern;
+import javax.ws.rs.core.MediaType;
 
 /**
- * Default implementation of CSS validator.
+ * MobileOK validator.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API</a>
+ * @see <a href="http://validator.w3.org/docs/users.html">mobileOK API</a>
  */
-final class DefaultCssValidator extends BaseValidator implements Validator {
+final class MobileValidator extends BaseValidator implements Validator {
 
     /**
      * The URI to use in W3C.
@@ -50,15 +51,15 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
     /**
      * Public ctor with default entry point.
      */
-    public DefaultCssValidator() {
-        this(URI.create("http://jigsaw.w3.org/css-validator/validator"));
+    public MobileValidator() {
+        this(URI.create("http://validator.w3.org/mobile/check"));
     }
 
     /**
      * Public ctor.
      * @param entry Entry point to use
      */
-    public DefaultCssValidator(final URI entry) {
+    public MobileValidator(final URI entry) {
         super();
         this.uri = entry;
     }
@@ -67,62 +68,44 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    public ValidationResponse validate(final String css) {
-        ValidationResponse response;
-        final Pattern pattern = Pattern.compile(
-            ".*^/\\* JIGSAW IGNORE: [^\\n]+\\*/$.*",
-            Pattern.MULTILINE | Pattern.DOTALL
-        );
-        if (pattern.matcher(css).matches()) {
-            response = this.success("");
-        } else {
-            response = this.processed(css);
-        }
-        return response;
-    }
-
-    /**
-     * Return a response after real processing of the CSS.
-     * @param css The CSS stylesheet to check
-     * @return The response
-     */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    private ValidationResponse processed(final String css) {
+    @SuppressWarnings({
+        "PMD.AvoidCatchingThrowable",
+        "PMD.AvoidInstantiatingObjectsInLoops"
+    })
+    public ValidationResponse validate(final String html) {
         DefaultValidationResponse response;
         try {
             final TestResponse soap = this
                 .send(
                     this.uri,
-                    this.entity("file", this.filter(css), "text/css")
+                    this.entity("uploaded_file", html, MediaType.TEXT_HTML)
             )
-                .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
-                .registerNs("m", "http://www.w3.org/2005/07/css-validator")
-                .assertThat(
-                    new RetryPolicy(
-                        "/env:Envelope/env:Body/m:cssvalidationresponse"
+                // @checkstyle LineLength (1 line)
+                .registerNs("rsp", "http://www.w3.org/2009/10/unicorn/observationresponse")
+                .assertThat(new RetryPolicy("/rsp:observationresponse"));
+            response = new DefaultValidationResponse(
+                soap.nodes("/*/rsp:message").isEmpty(),
+                this.uri,
+                "HTML",
+                "UTF-8"
+            );
+            for (XmlDocument node : soap.nodes("//rsp:message")) {
+                response.addError(
+                    new Defect(
+                        0,
+                        0,
+                        this.textOf(node.xpath("rsp:title/text()")),
+                        this.textOf(node.xpath("rsp:description/text()")),
+                        "",
+                        ""
                     )
-                )
-                .assertXPath("//m:validity")
-                .assertXPath("//m:checkedby");
-            response = this.build(soap);
+                );
+            }
         // @checkstyle IllegalCatchCheck (1 line)
         } catch (Throwable ex) {
             response = this.failure(ex);
         }
         return response;
-    }
-
-    /**
-     * Exclude problematic lines from CSS.
-     * @param css The css document
-     * @return New document, with lines excluded
-     */
-    private String filter(final String css) {
-        return Pattern.compile(
-            "^/\\* JIGSAW: [^\\n]+\\*/$",
-            Pattern.MULTILINE | Pattern.DOTALL
-        ).matcher(css).replaceAll("");
     }
 
 }

@@ -60,25 +60,29 @@ package com.rexsl.w3c;
  * @version $Id$
  * @see ValidationResponse
  * @see Validator
- * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
 public final class ValidatorBuilder {
 
     /**
      * Static instance of HTML validator.
      */
-    private static final Validator HTML_VALIDATOR =
-        new DefaultHtmlValidator();
+    private static final Validator HTML_VALIDATOR = new HtmlValidator();
 
     /**
      * Static instance of CSS validator.
      */
-    private static final Validator CSS_VALIDATOR =
-        new DefaultCssValidator();
+    private static final Validator CSS_VALIDATOR = new CssValidator();
+
+    /**
+     * Static instance of mobileOK validator.
+     */
+    private static final Validator MOBILE_VALIDATOR = new MobileValidator();
 
     /**
      * Build HTML validator.
      * @return The validator
+     * @see <a href="http://validator.w3.org/docs/api.html">W3C API for HTML</a>
+     * @see Validator
      */
     public Validator html() {
         return this.HTML_VALIDATOR;
@@ -87,9 +91,21 @@ public final class ValidatorBuilder {
     /**
      * Build CSS validator.
      * @return The validator
+     * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API for CSS</a>
+     * @see Validator
      */
     public Validator css() {
         return this.CSS_VALIDATOR;
+    }
+
+    /**
+     * Build mobileOK validator.
+     * @return The validator
+     * @see <a href="http://validator.w3.org/docs/users.html">mobileOK API</a>
+     * @see Validator
+     */
+    public Validator mobile() {
+        return this.MOBILE_VALIDATOR;
     }
 
 }

@@ -213,7 +213,7 @@ class BaseValidator {
      * @return The value
      * @see #intOf(List)
      */
-    private String textOf(final List<String> lines) {
+    protected final String textOf(final List<String> lines) {
         String text;
         if (lines.isEmpty()) {
             text = "";
@@ -232,7 +232,7 @@ class BaseValidator {
      * @return The value
      * @see #textOf(List)
      */
-    private int intOf(final List<String> lines) {
+    protected final int intOf(final List<String> lines) {
         int value;
         if (lines.isEmpty()) {
             value = 0;
