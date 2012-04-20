@@ -44,8 +44,9 @@ W3C Validator in Java
 
 +--
 String xhtml = "<html><body><p>Hello, world!</p></body></html>";
-ValidationResponse response = new ValidatorBuilder().html().validate(xhtml);
-assert response.valid();
+assert new ValidatorBuilder().html().validate(xhtml).valid();
+// similar mechanism for mobileOK
+assert new ValidatorBuilder().mobile().validate(xhtml).valid();
 +--
 
   Similar mechanism for CSS:
@@ -57,7 +58,8 @@ assert response.valid();
 +--
 
   This dependency you add to <<<pom.xml>>> (or download
-  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-w3c/${releasedVersion}/}rexsl-w3c.jar}}):
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-w3c/${releasedVersion}/}rexsl-w3c-${releasedVersion}.jar}}
+  and add it to classpath):
 
 +--
 <dependency>
