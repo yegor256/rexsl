@@ -29,9 +29,13 @@
  */
 package com.rexsl.test;
 
+import java.io.File;
+import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Test case for {@link SimpleXml}.
@@ -40,6 +44,13 @@ import org.junit.Test;
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class SimpleXmlTest {
+
+    /**
+     * Temporary folder.
+     * @checkstyle VisibilityModifier (3 lines)
+     */
+    @Rule
+    public transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
      * SimpleXml can find nodes with XPath.
@@ -105,9 +116,12 @@ public final class SimpleXmlTest {
      */
     @Test
     public void findsDocumentNodesWithXpathAndReturnsThem() throws Exception {
-        final XmlDocument doc = new SimpleXml(
+        final File file = this.temp.newFile("temp.xml");
+        FileUtils.writeStringToFile(
+            file,
             "<root><a><x>1</x></a><a><x>2</x></a></root>"
         );
+        final XmlDocument doc = new SimpleXml(file);
         MatcherAssert.assertThat(
             doc.nodes("//a"),
             Matchers.hasSize(2)
