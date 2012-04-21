@@ -31,6 +31,8 @@ package com.rexsl.test;
 
 import java.io.File;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Rule;
@@ -97,16 +99,20 @@ public final class SimpleXmlTest {
      */
     @Test
     public void findsWithXpathWithCustomNamespace() throws Exception {
-        final XmlDocument doc = new SimpleXml(
-            "<a xmlns='urn:foo'><b>yes!</b></a>"
-        ).registerNs("foo", "urn:foo");
+        final File file = this.temp.newFile("temp-1.xml");
+        FileUtils.writeStringToFile(
+            file,
+            "<a xmlns='urn:foo'><b>\u0433!</b></a>",
+            CharEncoding.UTF_8
+        );
+        final XmlDocument doc = new SimpleXml(file).registerNs("f", "urn:foo");
         MatcherAssert.assertThat(
-            doc.nodes("/foo:a/foo:b[.='yes!']"),
+            doc.nodes("/f:a/f:b[.='\u0433!']"),
             Matchers.hasSize(1)
         );
         MatcherAssert.assertThat(
-            doc.xpath("//foo:b/text()").get(0),
-            Matchers.equalTo("yes!")
+            doc.xpath("//f:b/text()").get(0),
+            Matchers.equalTo("\u0433!")
         );
     }
 
@@ -116,12 +122,9 @@ public final class SimpleXmlTest {
      */
     @Test
     public void findsDocumentNodesWithXpathAndReturnsThem() throws Exception {
-        final File file = this.temp.newFile("temp.xml");
-        FileUtils.writeStringToFile(
-            file,
-            "<root><a><x>1</x></a><a><x>2</x></a></root>"
+        final XmlDocument doc = new SimpleXml(
+            IOUtils.toInputStream("<root><a><x>1</x></a><a><x>2</x></a></root>")
         );
-        final XmlDocument doc = new SimpleXml(file);
         MatcherAssert.assertThat(
             doc.nodes("//a"),
             Matchers.hasSize(2)
