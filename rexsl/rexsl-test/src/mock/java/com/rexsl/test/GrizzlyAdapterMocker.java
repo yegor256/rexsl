@@ -39,6 +39,7 @@ import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -83,7 +84,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     /**
      * Content to return.
      */
-    private transient String body = "";
+    private transient byte[] body = new byte[] {};
 
     /**
      * Status to return.
@@ -119,11 +120,11 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         }
         response.setStatus(this.status);
         try {
-            response.getWriter().println(this.body);
+            response.getStream().write(this.body);
         } catch (IOException ex) {
             throw new IllegalStateException(ex);
         }
-        response.setContentLength(this.body.length());
+        response.setContentLength(this.body.length);
     }
 
     /**
@@ -175,7 +176,20 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      * @param content The body to return
      */
     public void setBody(final String content) {
-        this.body = content;
+        try {
+            this.body = content.getBytes(CharEncoding.UTF_8);
+        } catch (java.io.UnsupportedEncodingException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    /**
+     * Set body.
+     * @param content The body to return
+     */
+    public void setBody(final byte[] content) {
+        this.body = new byte[content.length];
+        System.arraycopy(content, 0, this.body, 0, content.length);
     }
 
     /**
