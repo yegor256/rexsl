@@ -58,7 +58,7 @@ public final class RestTesterTest {
         final ContainerMocker container = new ContainerMocker()
             .expectRequestUri(Matchers.containsString("foo"))
             .expectMethod(Matchers.equalTo(RestTester.GET))
-            .returnBody("hello!!")
+            .returnBody("hello!!".getBytes(CharEncoding.UTF_8))
             .mock();
         RestTester
             .start(UriBuilder.fromUri(container.home()).path("/foo"))

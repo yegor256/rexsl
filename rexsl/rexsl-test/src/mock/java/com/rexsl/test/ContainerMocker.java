@@ -175,6 +175,16 @@ public final class ContainerMocker {
     }
 
     /**
+     * Return this body.
+     * @param body The body
+     * @return This object
+     */
+    public ContainerMocker returnBody(final byte[] body) {
+        this.adapter.setBody(body);
+        return this;
+    }
+
+    /**
      * Return this header.
      * @param name Header's name
      * @param value Header's value
