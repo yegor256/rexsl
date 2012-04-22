@@ -114,9 +114,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
      */
     @Override
     public void notify(final String defect) throws IOException {
-        synchronized (this.defects) {
-            this.defects.add(new Defect(defect));
-        }
+        this.defects.add(new Defect(defect));
     }
 
     /**
