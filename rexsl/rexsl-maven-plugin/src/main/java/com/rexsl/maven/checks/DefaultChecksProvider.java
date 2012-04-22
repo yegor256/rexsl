@@ -81,12 +81,6 @@ import java.util.Set;
  *   /xhtml
  * </pre>
  *
- * <h3>WebXmlCheck</h3>
- *
- * <p>The check validates {@code src/main/webapp/WEB-INF/web.xml} XML file
- * against its XSD schema and fails the build if any incosistencies are
- * detected.
- *
  * <h3>RexslFilesCheck</h3>
  *
  * <p>Test folders should contain files of certain types only:
@@ -136,6 +130,12 @@ import java.util.Set;
  *
  * <p>TBD...
  *
+ * <h3>WebXmlCheck</h3>
+ *
+ * <p>The check validates {@code src/main/webapp/WEB-INF/web.xml} XML file
+ * against its XSD schema and fails the build if any incosistencies are
+ * detected. Validation may take some time (15-45 seconds).
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (100 lines)
@@ -162,12 +162,12 @@ public final class DefaultChecksProvider implements ChecksProvider {
         this.addCheck(checks, new JigsawCssCheck());
         this.addCheck(checks, new JSStaticCheck());
         this.addCheck(checks, new FilesStructureCheck());
-        this.addCheck(checks, new WebXmlCheck());
         this.addCheck(checks, new RexslFilesCheck());
         this.addCheck(checks, new LibrariesCheck());
         this.addCheck(checks, new XhtmlOutputCheck(this.test));
         this.addCheck(checks, new InContainerScriptsCheck(this.test));
         this.addCheck(checks, new JSUnitTestsCheck());
+        this.addCheck(checks, new WebXmlCheck());
         return checks;
     }
 
