@@ -39,6 +39,12 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Validates CSS files against style sheet rules.
  *
+ * <p>The class is immutable and thread-safe.
+ *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link DefaultChecksProvider}.
+ *
  * <p>{@code CssLint.class} file is created by Rhino JavaScript-to-Java
  * compiler during {@code process-sources} Maven phase (see {@code pom.xml}
  * file). Here we're just executing this class in a standalone process, in

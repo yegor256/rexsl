@@ -29,6 +29,8 @@
  */
 package com.rexsl.core;
 
+import com.rexsl.core.annotations.Schema;
+import com.rexsl.core.annotations.Stylesheet;
 import com.ymock.util.Logger;
 import java.io.File;
 import java.lang.annotation.Annotation;

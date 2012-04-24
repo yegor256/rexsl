@@ -47,7 +47,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Packager of XSL files. All XML comments and unnecessary spaces are removed.
+ * Packager of XSL files.
+ *
+ * <p>All XML comments and unnecessary spaces are removed.
+ *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link PackersProvider}.
+ *
+ * <p>The class is immutable and thread-safe.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)

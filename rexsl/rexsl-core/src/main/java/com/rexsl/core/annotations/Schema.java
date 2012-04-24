@@ -27,55 +27,39 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.core.annotations;
 
-import com.rexsl.maven.Check;
-import com.rexsl.maven.Environment;
-import com.ymock.util.Logger;
-import java.io.File;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Validate location of files/dirs.
+ * Annotation for a class, to indicate which XML Schema to validate its
+ * XML output against.
  *
- * <p>Since this class is NOT public its documentation is not available online.
- * All details of this check should be explained in the JavaDoc of
- * {@link DefaultChecksProvider}.
- *
- * <p>The class is immutable and thread-safe.
+ * <p>If this annotation is omitted ReXSL assumes that XML Schema is named
+ * after class full name plus {@code .xsd} extenstion.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see <a href="http://trac.fazend.com/rexsl/ticket/47">Feature was introduced in ticket #47</a>
+ * @since 0.3
  */
-final class FilesStructureCheck implements Check {
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Schema {
 
     /**
-     * {@inheritDoc}
+     * Get it's value.
      */
-    @Override
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public boolean validate(final Environment env) {
-        final String[] names = {
-            "src/main/webapp/",
-            "src/main/webapp/robots.txt",
-            "src/main/webapp/xsl/",
-            "src/main/webapp/WEB-INF/web.xml",
-            "src/test/rexsl/xml/",
-            "src/test/rexsl/xhtml/",
-            "src/test/rexsl/scripts/",
-            "src/test/rexsl/xsd/",
-        };
-        boolean success = true;
-        for (String name : names) {
-            final File file = new File(env.basedir(), name);
-            if (!file.exists()) {
-                Logger.warn(
-                    this,
-                    "File '%s' is absent, but should be there",
-                    file
-                );
-                success = false;
-            }
-        }
-        return success;
-    }
+    String value();
+
+    /**
+     * Should we ignore this schema validation?
+     */
+    boolean ignore() default false;
+
 }

@@ -53,25 +53,8 @@ Introduction to ReXSL Testing
 
   Interesting part is integration and catapult testing. To be continued...
 
-  Most important integration testing "checks":
-
-   * {{{./rexsl-maven-plugin/apidocs/com/rexsl/maven/checks/InContainerScriptsCheck.html}InContainerScriptsCheck}}:
-   starts a container and executes your Groovy scripts;
-
-   * {{{./rexsl-maven-plugin/apidocs/com/rexsl/maven/checks/XhtmlOutputCheck.html}XhtmlOutputCheck}}:
-   applies XSL stylesheets to static XML files and validates resulting (X)HTML;
-
-   * {{{./rexsl-maven-plugin/apidocs/com/rexsl/maven/checks/CssStaticCheck.html}CssStaticCheck}}:
-   using {{{http://www.csslint.net/}CSSLint}} performs static analysis of CSS stylesheets;
-
-   * {{{./rexsl-maven-plugin/apidocs/com/rexsl/maven/checks/JigsawCssCheck.html}JigsawCssCheck}}:
-   validates CSS stylesheets against {{{http://www.w3.org/Jigsaw/}W3C Jigsaw}} validator;
-
-   * {{{./rexsl-maven-plugin/apidocs/com/rexsl/maven/checks/JSStaticCheck.html}JSStaticCheck}}:
-   runs JavaScripts static code analysis, using {{{http://www.jslint.com/}JSLint}};
-
-   * {{{./rexsl-maven-plugin/apidocs/com/rexsl/maven/checks/WebXmlCheck.html}WebXmlCheck}}:
-   validates <<<web.xml>>> against Servlet API schema;
+  Most important integration testing
+  {{{./rexsl-maven-plugin/apidocs/com/rexsl/maven/checks/DefaultChecksProvider.html}"checks"}}.
 
   Some new checks will appear in the next versions of ReXSL Maven plugin.
 

@@ -40,6 +40,12 @@ import org.apache.commons.io.FileUtils;
 /**
  * Validates Java script files against style sheet rules.
  *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link DefaultChecksProvider}.
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: JSStaticCheck.java 204 2011-10-26 21:15:28Z guard $
@@ -102,7 +108,7 @@ final class JSStaticCheck implements Check {
      * @param file Script file to check
      * @throws InternalCheckException If some failure inside
      * @return Is script valid?
-     * @todo #112! Enable commented code when yui finish migration
+     * @todo #112! Move the code above to this method when yui finish migration
      *  to Rhino 1.7R3
      */
     private boolean one(final File file) throws InternalCheckException {

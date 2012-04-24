@@ -29,6 +29,9 @@
  */
 package com.rexsl.test;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.namespace.NamespaceContext;
@@ -38,6 +41,9 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.w3c.dom.Node;
@@ -65,7 +71,7 @@ public final class SimpleXml implements XmlDocument {
     private final transient Node node;
 
     /**
-     * Public ctor.
+     * Public ctor, from XML as a text.
      *
      * <p>The object is created with a default implementation of
      * {@link javax.xml.namespace.NamespaceContext}, which already defines a
@@ -92,7 +98,7 @@ public final class SimpleXml implements XmlDocument {
     }
 
     /**
-     * Public ctor.
+     * Public ctor, from a DOM source.
      *
      * <p>The object is created with a default implementation of
      * {@link javax.xml.namespace.NamespaceContext}, which already defines a
@@ -102,6 +108,34 @@ public final class SimpleXml implements XmlDocument {
      */
     public SimpleXml(final Source source) {
         this(SimpleXml.transform(source), new XPathContext());
+    }
+
+    /**
+     * Public ctor, from XML in a file.
+     *
+     * <p>The object is created with a default implementation of
+     * {@link javax.xml.namespace.NamespaceContext}, which already defines a
+     * number of namespaces, see {@link SimpleXml#SimpleXml(String)}.
+     *
+     * @param file XML file
+     * @throws IOException In case of I/O problem
+     */
+    public SimpleXml(final File file) throws IOException {
+        this(FileUtils.readFileToString(file, CharEncoding.UTF_8));
+    }
+
+    /**
+     * Public ctor, from input stream.
+     *
+     * <p>The object is created with a default implementation of
+     * {@link javax.xml.namespace.NamespaceContext}, which already defines a
+     * number of namespaces, see {@link SimpleXml#SimpleXml(String)}.
+     *
+     * @param stream The input stream
+     * @throws IOException In case of I/O problem
+     */
+    public SimpleXml(final InputStream stream) throws IOException {
+        this(IOUtils.toString(stream, CharEncoding.UTF_8));
     }
 
     /**

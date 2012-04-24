@@ -8,7 +8,7 @@
         <servlet-name>RestfulServlet</servlet-name>
     </servlet>
     <servlet-mapping>
-        <servlet-name>RestfulServlet</servlet-name>
         <url-pattern>/*</url-pattern>
+        <servlet-name>RestfulServlet</servlet-name>
     </servlet-mapping>
 </web-app>

@@ -33,9 +33,21 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.ymock.util.Logger;
 import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * Validates web.xml file against it's XSD schema.
+ *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link DefaultChecksProvider}.
+ *
+ * <p>The class is immutable and thread-safe.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -44,23 +56,24 @@ import java.io.File;
 final class WebXmlCheck implements Check {
 
     /**
-     * Contains path to web.xml file.
+     * Total numbers of errors.
      */
-    public static final String WEB_XML = "src/main/webapp/WEB-INF/web.xml";
+    private transient int errors;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean validate(final Environment env) {
-        final File file = new File(env.basedir(), this.WEB_XML);
-        boolean valid = true;
-        if (!file.exists()) {
-            Logger.warn(this, "File '%s' is absent, but should be there", file);
-            valid = false;
-        }
-        if (valid) {
+        final File file = new File(
+            env.basedir(),
+            "src/main/webapp/WEB-INF/web.xml"
+        );
+        boolean valid = false;
+        if (file.exists()) {
             valid = this.validate(file);
+        } else {
+            Logger.warn(this, "File '%s' is absent, but should be there", file);
         }
         return valid;
     }
@@ -71,7 +84,60 @@ final class WebXmlCheck implements Check {
      * @return True if file is valid, <code>false</code> if file is invalid.
      */
     private boolean validate(final File file) {
-        Logger.debug(this, "Validating file %s", file);
-        return true;
+        final DocumentBuilderFactory factory =
+            DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setValidating(true);
+        factory.setAttribute(
+            "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+            "http://www.w3.org/2001/XMLSchema"
+        );
+        DocumentBuilder builder;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            throw new IllegalStateException(ex);
+        }
+        this.errors = 0;
+        builder.setErrorHandler(
+            new ErrorHandler() {
+                @Override
+                public void warning(final SAXParseException excn) {
+                    WebXmlCheck.this.error(excn);
+                }
+                @Override
+                public void error(final SAXParseException excn) {
+                    WebXmlCheck.this.error(excn);
+                }
+                @Override
+                public void fatalError(final SAXParseException excn) {
+                    WebXmlCheck.this.error(excn);
+                }
+            }
+        );
+        try {
+            builder.parse(file);
+        } catch (SAXException exception) {
+            throw new IllegalStateException(exception);
+        } catch (IOException exception) {
+            throw new IllegalStateException(exception);
+        }
+        return this.errors == 0;
     }
+
+    /**
+     * Registers validation error.
+     * @param excn Exception to be added to the container.
+     */
+    private void error(final SAXParseException excn) {
+        Logger.error(
+            this,
+            "web.xml[%d:%d]: %s",
+            excn.getLineNumber(),
+            excn.getColumnNumber(),
+            excn.getMessage()
+        );
+        ++this.errors;
+    }
+
 }

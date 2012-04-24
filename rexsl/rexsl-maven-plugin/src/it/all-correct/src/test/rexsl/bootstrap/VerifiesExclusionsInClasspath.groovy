@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2012, ReXSL.com
+ * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,55 +27,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
+package com.rexsl.foo.bootstrap
 
-import com.rexsl.maven.Check;
-import com.rexsl.maven.Environment;
-import com.ymock.util.Logger;
-import java.io.File;
+import org.apache.commons.io.FilenameUtils
+import org.hamcrest.MatcherAssert
+import org.hamcrest.Matchers
 
-/**
- * Validate location of files/dirs.
- *
- * <p>Since this class is NOT public its documentation is not available online.
- * All details of this check should be explained in the JavaDoc of
- * {@link DefaultChecksProvider}.
- *
- * <p>The class is immutable and thread-safe.
- *
- * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- */
-final class FilesStructureCheck implements Check {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public boolean validate(final Environment env) {
-        final String[] names = {
-            "src/main/webapp/",
-            "src/main/webapp/robots.txt",
-            "src/main/webapp/xsl/",
-            "src/main/webapp/WEB-INF/web.xml",
-            "src/test/rexsl/xml/",
-            "src/test/rexsl/xhtml/",
-            "src/test/rexsl/scripts/",
-            "src/test/rexsl/xsd/",
-        };
-        boolean success = true;
-        for (String name : names) {
-            final File file = new File(env.basedir(), name);
-            if (!file.exists()) {
-                Logger.warn(
-                    this,
-                    "File '%s' is absent, but should be there",
-                    file
-                );
-                success = false;
-            }
-        }
-        return success;
-    }
+def loader = (URLClassLoader) Matchers.classLoader
+loader.findResources('org/hamcrest/Matcher.class').each { url ->
+    MatcherAssert.assertThat(
+        url.toString(),
+        Matchers.containsString('hamcrest-core-1.2.1')
+    )
+}
+loader.URLs.each { url ->
+    MatcherAssert.assertThat(
+        FilenameUtils.getBaseName(url.file),
+        Matchers.not(Matchers.equalTo('hamcrest-core-1.1'))
+    )
 }

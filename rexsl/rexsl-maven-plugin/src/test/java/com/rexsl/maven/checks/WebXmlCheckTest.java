@@ -32,27 +32,28 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Test case for {@link WebXmlCheck}.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @version $Id$
- * @todo #65:1h Implement XMLSchemaValidator with test and remove Ignore
- *  annotations.
  */
 public final class WebXmlCheckTest {
+
+    /**
+     * Location of web.xml.
+     */
+    private static final String FILE = "src/main/webapp/WEB-INF/web.xml";
 
     /**
      * WebXmlCheck can validate correct web.xml file.
      * @throws Exception If something goes wrong
      */
-    @Ignore
     @Test
     public void validatesCorrectWebXmlFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withTextFile(WebXmlCheck.WEB_XML, "valid-web.xml")
+            .withFile(WebXmlCheckTest.FILE, "valid-web.xml")
             .mock();
         MatcherAssert.assertThat(
             "valid web.xml passes with problems",
@@ -64,11 +65,10 @@ public final class WebXmlCheckTest {
      * WebXmlCheck can validate incorrect web.xml file.
      * @throws Exception If something goes wrong
      */
-    @Ignore
     @Test
     public void validatesIncorrectWebXmlFile() throws Exception {
         final Environment env = new EnvironmentMocker()
-            .withTextFile(WebXmlCheck.WEB_XML, "invalid-web.xml")
+            .withFile(WebXmlCheckTest.FILE, "invalid-web.xml")
             .mock();
         MatcherAssert.assertThat(
             "invalid web.xml is caught",

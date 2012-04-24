@@ -42,8 +42,16 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
 /**
- * Packager of JS files. All comments, spaces, and unnecessary language
+ * Packager of JS files.
+ *
+ * <p>All comments, spaces, and unnecessary language
  * constructs are removed.
+ *
+ * <p>Since this class is NOT public its documentation is not available online.
+ * All details of this check should be explained in the JavaDoc of
+ * {@link PackersProvider}.
+ *
+ * <p>The class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$

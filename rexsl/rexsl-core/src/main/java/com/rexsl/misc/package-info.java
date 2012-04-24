@@ -27,55 +27,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.checks;
-
-import com.rexsl.maven.Check;
-import com.rexsl.maven.Environment;
-import com.ymock.util.Logger;
-import java.io.File;
 
 /**
- * Validate location of files/dirs.
- *
- * <p>Since this class is NOT public its documentation is not available online.
- * All details of this check should be explained in the JavaDoc of
- * {@link DefaultChecksProvider}.
- *
- * <p>The class is immutable and thread-safe.
+ * Miscellaneous tools.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class FilesStructureCheck implements Check {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public boolean validate(final Environment env) {
-        final String[] names = {
-            "src/main/webapp/",
-            "src/main/webapp/robots.txt",
-            "src/main/webapp/xsl/",
-            "src/main/webapp/WEB-INF/web.xml",
-            "src/test/rexsl/xml/",
-            "src/test/rexsl/xhtml/",
-            "src/test/rexsl/scripts/",
-            "src/test/rexsl/xsd/",
-        };
-        boolean success = true;
-        for (String name : names) {
-            final File file = new File(env.basedir(), name);
-            if (!file.exists()) {
-                Logger.warn(
-                    this,
-                    "File '%s' is absent, but should be there",
-                    file
-                );
-                success = false;
-            }
-        }
-        return success;
-    }
-}
+package com.rexsl.misc;

@@ -73,6 +73,9 @@ ReXSL Maven Plugin
 
   Of course, at any step build may fail.
 
+  Detailed list of all checks is
+  {{{./apidocs/com/rexsl/maven/checks/DefaultChecksProvider.html}here}}.
+
   There are a number of cookbook advices, which will help:
 
    * {{{./setup.html}How to add application data before tests?}}

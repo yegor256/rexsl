@@ -27,39 +27,78 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.core;
+package com.rexsl.maven;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.ymock.util.Logger;
+import java.util.List;
+import org.apache.maven.model.Exclusion;
+import org.sonatype.aether.artifact.Artifact;
 
 /**
- * Annotation for a class, to indicate which XML Schema to validate its
- * XML output against.
- *
- * <p>If this annotation is omitted ReXSL assumes that XML Schema is named
- * after class full name plus {@code .xsd} extenstion.
+ * One root artifact found in the project.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @see <a href="http://trac.fazend.com/rexsl/ticket/47">Feature was introduced in ticket #47</a>
- * @since 0.3
  */
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Schema {
+final class RootArtifact {
 
     /**
-     * Get it's value.
+     * The artifact.
      */
-    String value();
+    private final transient Artifact art;
 
     /**
-     * Should we ignore this schema validation?
+     * Exclusions.
      */
-    boolean ignore() default false;
+    private final transient List<Exclusion> exclusions;
+
+    /**
+     * Ctor.
+     * @param artifact The artifact
+     * @param excl Exclusions
+     */
+    public RootArtifact(final Artifact artifact, final List<Exclusion> excl) {
+        this.art = artifact;
+        this.exclusions = excl;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return Logger.format(
+            "%s:%s:%s (%d exclusions)",
+            this.art.getGroupId(),
+            this.art.getArtifactId(),
+            this.art.getVersion(),
+            this.exclusions.size()
+        );
+    }
+
+    /**
+     * Get artifact.
+     * @return The artifact
+     */
+    public Artifact artifact() {
+        return this.art;
+    }
+
+    /**
+     * Is this one should be excluded?
+     * @param artifact The artifact to check
+     * @return TRUE if it should be excluded
+     */
+    public boolean excluded(final Artifact artifact) {
+        boolean excluded = false;
+        for (Exclusion exclusion : this.exclusions) {
+            if (exclusion.getArtifactId().equals(artifact.getArtifactId())
+                && exclusion.getGroupId().equals(artifact.getGroupId())) {
+                excluded = true;
+                break;
+            }
+        }
+        return excluded;
+    }
 
 }
