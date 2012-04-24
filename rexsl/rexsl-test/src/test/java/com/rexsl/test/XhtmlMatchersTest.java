@@ -211,6 +211,22 @@ public final class XhtmlMatchersTest {
         );
     }
 
+    /**
+     * XhtmlMatchers can match XPaths with custom namespace.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void hasXPathWithNamespace() throws Exception {
+        MatcherAssert.assertThat(
+            "<a xmlns='goo'><file>jkl.txt</file><file>mno.txt</file></a>",
+            XhtmlMatchers.hasXPaths(
+                (Object) "goo",
+                "/ns1:a/ns1:file[.='jkl.txt']",
+                "/ns1:a/ns1:file[.='mno.txt']"
+            )
+        );
+    }
+
     @XmlType(name = "foo", namespace = XhtmlMatchersTest.Foo.NAMESPACE)
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Foo {
