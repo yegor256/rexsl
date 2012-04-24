@@ -82,4 +82,15 @@ public final class DefaultChecksProviderTest {
         );
     }
 
+    /**
+     * ChecksProvider setCheck verifies if it's argument is not null.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void setCheck() throws Exception {
+        final ChecksProvider checksProvider = new DefaultChecksProvider();
+        final String sCheck = "abcd";
+        checksProvider.setCheck(sCheck);
+    }
+
 }

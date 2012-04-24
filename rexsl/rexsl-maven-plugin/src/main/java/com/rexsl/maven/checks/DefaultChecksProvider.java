@@ -31,6 +31,7 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.ChecksProvider;
+import com.ymock.util.Logger;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -190,7 +191,14 @@ public final class DefaultChecksProvider implements ChecksProvider {
                     String.format("com.rexsl.maven.checks.%s", chck)
                 );
             } catch (ClassNotFoundException cnfe) {
-                throw new IllegalArgumentException(cnfe);
+                Logger.info(this, "Available checks:");
+                for (Check item : this.all()) {
+                    Logger.info(this, item.getClass().getSimpleName());
+                }
+                throw new IllegalArgumentException(
+                    "Selected check not found",
+                    cnfe
+                );
             }
         }
     }
