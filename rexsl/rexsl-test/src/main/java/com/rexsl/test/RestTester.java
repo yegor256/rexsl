@@ -128,7 +128,7 @@ public final class RestTester {
         final Map<String, Object> props = config.getProperties();
         props.put(ClientConfig.PROPERTY_FOLLOW_REDIRECTS, false);
         // @checkstyle MagicNumber (1 line)
-        props.put(ClientConfig.PROPERTY_CONNECT_TIMEOUT, new Integer(5 * 1000));
+        props.put(ClientConfig.PROPERTY_CONNECT_TIMEOUT, 5 * 1000);
         URI dest = uri;
         if ("".equals(dest.getPath())) {
             dest = UriBuilder.fromUri(uri).path("/").build();

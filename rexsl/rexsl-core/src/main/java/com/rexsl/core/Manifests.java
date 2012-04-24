@@ -372,7 +372,7 @@ public final class Manifests {
         Manifests.failures = new ConcurrentHashMap<URI, String>();
         final Map<String, String> attrs =
             new ConcurrentHashMap<String, String>();
-        Integer count = 0;
+        int count = 0;
         for (URI uri : Manifests.uris()) {
             try {
                 attrs.putAll(Manifests.loadOneFile(uri.toURL()));

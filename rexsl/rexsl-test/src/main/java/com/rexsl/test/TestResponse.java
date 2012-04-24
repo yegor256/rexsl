@@ -90,7 +90,7 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * Get status of the response as a positive integer number.
      * @return The status code
      */
-    Integer getStatus();
+    int getStatus();
 
     /**
      * Get status line of the response.

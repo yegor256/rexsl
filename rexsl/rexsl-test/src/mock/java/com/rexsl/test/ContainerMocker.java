@@ -82,7 +82,7 @@ public final class ContainerMocker {
     /**
      * Port where it works.
      */
-    private transient Integer port;
+    private transient int port;
 
     /**
      * Expect body.
@@ -261,8 +261,8 @@ public final class ContainerMocker {
      * Reserve port.
      * @return Reserved TCP port
      */
-    private Integer reservePort() {
-        Integer reserved;
+    private int reservePort() {
+        int reserved;
         try {
             final ServerSocket socket = new ServerSocket(0);
             try {
