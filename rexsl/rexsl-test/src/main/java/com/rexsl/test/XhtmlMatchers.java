@@ -107,46 +107,16 @@ public final class XhtmlMatchers {
     }
 
     /**
-     * Matches content against group of XPaths, with custom context.
+     * Matches content against list of XPaths.
      * @param xpaths The query
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @param <T> Type of XML content provided
      */
-    public static <T> Matcher<T> hasXPaths(
-        final String...xpaths
-    ) {
-        return XhtmlMatchers.hasXPaths(new XPathContext(), xpaths);
-    }
-
-    /**
-     * Matches content against group of XPaths, with namespace.
-     * @param namespace The namespace to use
-     * @param xpaths The query
-     * @return Matcher suitable for JUnit/Hamcrest matching
-     * @param <T> Type of XML content provided
-     */
-    public static <T> Matcher<T> hasXPaths(
-        final Object namespace,
-        final String...xpaths
-    ) {
-        return XhtmlMatchers.hasXPaths(new XPathContext(namespace), xpaths);
-    }
-
-    /**
-     * Matches content against group of XPaths, with namespace context.
-     * @param ctx The namespace context
-     * @param xpaths The query
-     * @return Matcher suitable for JUnit/Hamcrest matching
-     * @param <T> Type of XML content provided
-     */
-    public static <T> Matcher<T> hasXPaths(
-        final NamespaceContext ctx,
-        final String...xpaths
-    ) {
+    public static <T> Matcher<T> hasXPaths(final String...xpaths) {
         final List<Matcher<? super T>> list =
             new ArrayList<Matcher<? super T>>();
         for (String xpath : xpaths) {
-            list.add(XhtmlMatchers.<T>hasXPath(xpath, ctx));
+            list.add(XhtmlMatchers.<T>hasXPath(xpath));
         }
         return Matchers.allOf(list);
     }
