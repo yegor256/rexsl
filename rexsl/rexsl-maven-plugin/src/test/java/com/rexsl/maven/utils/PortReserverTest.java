@@ -48,9 +48,9 @@ public final class PortReserverTest {
     @Test
     public void canReserverTcpPort() throws Exception {
         new LogMocker().mock();
-        final Integer first = new PortReserver().port();
+        final int first = new PortReserver().port();
         MatcherAssert.assertThat(first, Matchers.greaterThan(0));
-        final Integer second = new PortReserver().port();
+        final int second = new PortReserver().port();
         MatcherAssert.assertThat(second, Matchers.greaterThan(0));
         MatcherAssert.assertThat(first, Matchers.not(Matchers.equalTo(second)));
     }

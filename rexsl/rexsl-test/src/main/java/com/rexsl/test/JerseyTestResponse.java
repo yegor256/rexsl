@@ -168,7 +168,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public Integer getStatus() {
+    public int getStatus() {
         return this.response().getStatus();
     }
 

@@ -44,5 +44,5 @@ for (attempt in 0..5) {
         .assertStatus(HttpURLConnection.HTTP_OK)
         .assertHeader(HttpHeaders.CONTENT_LENGTH, Matchers.equalTo(original.length().toString()))
         .body
-    Assert.assertThat(new Long(body.length()), Matchers.equalTo(original.length()))
+    Assert.assertThat(body.length(), Matchers.equalTo(original.length()))
 }
