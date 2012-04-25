@@ -29,8 +29,11 @@
  */
 package com.rexsl.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.namespace.NamespaceContext;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 
 /**
  * Convenient set of matchers for XHTML/XML content.
@@ -103,4 +106,18 @@ public final class XhtmlMatchers {
         return new XPathMatcher(query, ctx);
     }
 
+    /**
+     * Matches content against list of XPaths.
+     * @param xpaths The query
+     * @return Matcher suitable for JUnit/Hamcrest matching
+     * @param <T> Type of XML content provided
+     */
+    public static <T> Matcher<T> hasXPaths(final String...xpaths) {
+        final List<Matcher<? super T>> list =
+            new ArrayList<Matcher<? super T>>();
+        for (String xpath : xpaths) {
+            list.add(XhtmlMatchers.<T>hasXPath(xpath));
+        }
+        return Matchers.allOf(list);
+    }
 }

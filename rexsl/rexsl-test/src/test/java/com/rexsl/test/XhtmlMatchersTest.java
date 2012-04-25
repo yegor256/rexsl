@@ -196,6 +196,21 @@ public final class XhtmlMatchersTest {
         );
     }
 
+    /**
+     * XhtmlMatchers can match group of XPaths.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void hasXPaths() throws Exception {
+        MatcherAssert.assertThat(
+            "<b><file>def.txt</file><file>ghi.txt</file></b>",
+            XhtmlMatchers.hasXPaths(
+                "/b/file[.='def.txt']",
+                "/b/file[.='ghi.txt']"
+            )
+        );
+    }
+
     @XmlType(name = "foo", namespace = XhtmlMatchersTest.Foo.NAMESPACE)
     @XmlAccessorType(XmlAccessType.NONE)
     public static final class Foo {
