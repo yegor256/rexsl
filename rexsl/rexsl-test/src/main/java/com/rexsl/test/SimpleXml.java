@@ -154,7 +154,7 @@ public final class SimpleXml implements XmlDocument {
     @Override
     public List<String> xpath(final String query) {
         final NodeList nodes = this.nodelist(query);
-        final List<String> items = new ArrayList<String>();
+        final List<String> items = new ArrayList<String>(nodes.getLength());
         for (int idx = 0; idx < nodes.getLength(); ++idx) {
             MatcherAssert.assertThat(
                 "Only /text() nodes or attributes are retrievable with xpath()",
@@ -165,7 +165,7 @@ public final class SimpleXml implements XmlDocument {
             );
             items.add(nodes.item(idx).getNodeValue());
         }
-        return items;
+        return new ListWrapper<String>(items, this.node, query);
     }
 
     /**
@@ -183,11 +183,12 @@ public final class SimpleXml implements XmlDocument {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public List<XmlDocument> nodes(final String query) {
         final NodeList nodes = this.nodelist(query);
-        final List<XmlDocument> items = new ArrayList<XmlDocument>();
+        final List<XmlDocument> items =
+            new ArrayList<XmlDocument>(nodes.getLength());
         for (int idx = 0; idx < nodes.getLength(); ++idx) {
             items.add(new SimpleXml(nodes.item(idx), this.context));
         }
-        return items;
+        return new ListWrapper<XmlDocument>(items, this.node, query);
     }
 
     /**

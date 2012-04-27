@@ -29,16 +29,12 @@
  */
 package com.rexsl.test;
 
-import java.io.StringWriter;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import com.ymock.util.Logger;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Node;
 
 /**
- * Convenient printer of XML.
+ * Node not found in XmlDocument.
  *
  * <p>Objects of this class are immutable and thread-safe.
  *
@@ -46,46 +42,24 @@ import org.w3c.dom.Node;
  * @version $Id$
  * @since 0.3.7
  */
-final class DomPrinter {
-
-    /**
-     * Transformer factory.
-     */
-    public static final TransformerFactory FACTORY =
-        TransformerFactory.newInstance();
-
-    /**
-     * The DOM node.
-     */
-    private final transient Node node;
+public final class NodeNotFoundException extends IndexOutOfBoundsException {
 
     /**
      * Public ctor.
-     * @param elm The node
+     * @param message Error message
+     * @param node The XML with error
+     * @param xpath The address
      */
-    public DomPrinter(final Node elm) {
-        this.node = elm;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        final StringWriter writer = new StringWriter();
-        try {
-            final Transformer transformer = DomPrinter.FACTORY.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.transform(
-                new DOMSource(this.node),
-                new StreamResult(writer)
-            );
-        } catch (javax.xml.transform.TransformerConfigurationException ex) {
-            throw new IllegalStateException(ex);
-        } catch (javax.xml.transform.TransformerException ex) {
-            throw new IllegalArgumentException(ex);
-        }
-        return writer.toString();
+    public NodeNotFoundException(final String message, final Node node,
+        final String xpath) {
+        super(
+            Logger.format(
+                "XPath '%s' not found in '%s': %s",
+                StringEscapeUtils.escapeJava(xpath),
+                StringEscapeUtils.escapeJava(new DomPrinter(node).toString()),
+                message
+        )
+        );
     }
 
 }

@@ -750,9 +750,6 @@
                             <sources>
                                 <file>layers.tex</file>
                             </sources>
-                            <sources>
-                                <file>layers.tex</file>
-                            </sources>
                         </configuration>
                     </execution>
                 </executions>
