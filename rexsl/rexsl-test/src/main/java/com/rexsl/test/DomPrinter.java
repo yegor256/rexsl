@@ -35,7 +35,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * Convenient printer of XML.
@@ -55,16 +55,16 @@ final class DomPrinter {
         TransformerFactory.newInstance();
 
     /**
-     * The DOM element.
+     * The DOM node.
      */
-    private final transient Element element;
+    private final transient Node node;
 
     /**
      * Public ctor.
-     * @param elm The element
+     * @param elm The node
      */
-    public DomPrinter(final Element elm) {
-        this.element = elm;
+    public DomPrinter(final Node elm) {
+        this.node = elm;
     }
 
     /**
@@ -77,7 +77,7 @@ final class DomPrinter {
             final Transformer transformer = DomPrinter.FACTORY.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.transform(
-                new DOMSource(this.element),
+                new DOMSource(this.node),
                 new StreamResult(writer)
             );
         } catch (javax.xml.transform.TransformerConfigurationException ex) {

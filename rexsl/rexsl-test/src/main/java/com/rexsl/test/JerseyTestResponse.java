@@ -37,6 +37,7 @@ import com.rexsl.test.assertions.XpathMatcher;
 import com.sun.jersey.api.client.ClientResponse;
 import com.ymock.util.Logger;
 import java.net.HttpCookie;
+import java.util.Collections;
 import java.util.List;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
@@ -63,7 +64,7 @@ final class JerseyTestResponse implements TestResponse {
 
     /**
      * How many attempts to make when {@link #assertThat(AssertionPolicy)}
-     * reports problem.
+     * reports a problem.
      */
     private static final int MAX_ATTEMPTS = 8;
 
@@ -230,8 +231,7 @@ final class JerseyTestResponse implements TestResponse {
         MatcherAssert.assertThat(
             Logger.format(
                 "cookie '%s' not found in Set-Cookie header: '%s'",
-                name,
-                header
+                name, header
             ),
             cookie,
             Matchers.notNullValue()
@@ -266,7 +266,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public List<XmlDocument> nodes(final String query) {
-        return this.getXml().nodes(query);
+        return Collections.unmodifiableList(this.getXml().nodes(query));
     }
 
     /**
@@ -295,9 +295,7 @@ final class JerseyTestResponse implements TestResponse {
                         this,
                         // @checkstyle LineLength (1 line)
                         "#assertThat(%[type]s): attempt #%d failed, re-trying: %[exception]s",
-                        assertion,
-                        attempt,
-                        ex
+                        assertion, attempt, ex
                     );
                     this.iresponse = null;
                     this.body = null;
@@ -494,7 +492,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public List<JsonDocument> nodesJson(final String query) {
-        return this.getJson().nodesJson(query);
+        return Collections.unmodifiableList(this.getJson().nodesJson(query));
     }
 
 }

@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import com.ymock.util.Logger;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.w3c.dom.Node;
 
 /**
  * Node not found in XmlDocument.
@@ -45,19 +46,19 @@ public final class NodeNotFoundException extends IndexOutOfBoundsException {
 
     /**
      * Public ctor.
+     * @param message Error message
+     * @param node The XML with error
      * @param xpath The address
-     * @param xml The XML with error
-     * @param cause Root cause of the problem
      */
-    public NodeNotFoundException(final String xpath, final String xml,
-        final IndexOutOfBoundsException cause) {
+    public NodeNotFoundException(final String message, final Node node,
+        final String xpath) {
         super(
             Logger.format(
-                "XPath '%s' not found in '%s': %[exception]s",
+                "XPath '%s' not found in '%s': %s",
                 StringEscapeUtils.escapeJava(xpath),
-                StringEscapeUtils.escapeJava(xml),
-                cause
-            )
+                StringEscapeUtils.escapeJava(new DomPrinter(node).toString()),
+                message
+        )
         );
     }
 

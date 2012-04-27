@@ -51,6 +51,7 @@ import javax.xml.namespace.NamespaceContext;
  * @version $Id$
  * @since 0.3.7
  * @see SimpleXml
+ * @see NodeNotFoundException
  */
 public interface XmlDocument {
 
@@ -73,6 +74,7 @@ public interface XmlDocument {
      *
      * @param query The XPath query
      * @return The list of string values (texts)
+     * @see NodeNotFoundException
      */
     List<String> xpath(String query);
 
@@ -84,6 +86,7 @@ public interface XmlDocument {
      *
      * @param query The XPath query
      * @return Collection of DOM nodes
+     * @see NodeNotFoundException
      */
     List<XmlDocument> nodes(String query);
 
