@@ -135,4 +135,13 @@ public final class SimpleXmlTest {
         );
     }
 
+    /**
+     * SimpleXml can throw custom exception when XPath not found.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = NodeNotFoundException.class)
+    public void throwsCustomExceptionWhenXpathNotFound() throws Exception {
+        new SimpleXml("<root/>").xpath("/absent-node/text()").get(0);
+    }
+
 }

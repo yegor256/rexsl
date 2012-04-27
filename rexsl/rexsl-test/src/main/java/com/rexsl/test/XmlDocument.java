@@ -68,6 +68,9 @@ public interface XmlDocument {
      * (use {@code xpath(..).get(0)}). But when/if you need to get more than
      * just a plain text - use {@link #nodes(String)}.
      *
+     * <p>The {@link List} returned will throw {@link NodeNotFoundException} if
+     * you try to access a node which wasn't found by this XPath query.
+     *
      * @param query The XPath query
      * @return The list of string values (texts)
      */
@@ -75,6 +78,10 @@ public interface XmlDocument {
 
     /**
      * Retrieve DOM nodes from the XML response.
+     *
+     * <p>The {@link List} returned will throw {@link NodeNotFoundException} if
+     * you try to access a node which wasn't found by this XPath query.
+     *
      * @param query The XPath query
      * @return Collection of DOM nodes
      */
