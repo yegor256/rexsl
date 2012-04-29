@@ -73,7 +73,7 @@ final class WebXmlCheck implements Check {
         if (file.exists()) {
             valid = this.validate(file);
         } else {
-            Logger.warn(this, "File '%s' is absent, but should be there", file);
+            Logger.warn(this, "File '%s' is absent", file);
         }
         return valid;
     }

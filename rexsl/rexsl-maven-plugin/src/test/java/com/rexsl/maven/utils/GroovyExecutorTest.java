@@ -33,6 +33,8 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import groovy.lang.Binding;
 import java.io.File;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -50,11 +52,17 @@ public final class GroovyExecutorTest {
     public void executesSimpleGroovyScript() throws Exception {
         final String name = "src/test.groovy";
         final Environment env = new EnvironmentMocker()
-            .withTextFile(name, "println('hello, world')")
+            .withTextFile(name, "builder.append('hello, world!')")
             .mock();
         final Binding binding = new BindingBuilder(env).build();
+        final StringBuilder builder = new StringBuilder();
+        binding.setVariable("builder", builder);
         final GroovyExecutor exec = new GroovyExecutor(env, binding);
         exec.execute(new File(env.basedir(), name));
+        MatcherAssert.assertThat(
+            builder.toString(),
+            Matchers.equalTo("hello, world!")
+        );
     }
 
     /**
@@ -65,13 +73,20 @@ public final class GroovyExecutorTest {
     public void worksWithSpecifiedClassloader() throws Exception {
         final String name = "src/foo.groovy";
         final Environment env = new EnvironmentMocker()
-            .withTextFile(name, "println('hello, everybody')")
+            .withTextFile(name, "bldr.append('hi there!')")
             .mock();
+        final Binding binding = new BindingBuilder(env).build();
+        final StringBuilder builder = new StringBuilder();
+        binding.setVariable("bldr", builder);
         final GroovyExecutor exec = new GroovyExecutor(
             Thread.currentThread().getContextClassLoader(),
-            new BindingBuilder(env).build()
+            binding
         );
         exec.execute(new File(env.basedir(), name));
+        MatcherAssert.assertThat(
+            builder.toString(),
+            Matchers.equalTo("hi there!")
+        );
     }
 
 }

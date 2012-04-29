@@ -111,7 +111,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      * Set name of check to run.
      * @param chk Name of check (short class name)
      */
-    public void setCheck(final Sting chk) {
+    public void setCheck(final String chk) {
         this.check = chk;
     }
 
@@ -119,7 +119,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      * Set name of test to run.
      * @param tst Name of test
      */
-    public void setTest(final Sting tst) {
+    public void setTest(final String tst) {
         this.test = tst;
     }
 
