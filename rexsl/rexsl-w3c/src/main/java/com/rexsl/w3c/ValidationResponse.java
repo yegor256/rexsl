@@ -30,6 +30,7 @@
 package com.rexsl.w3c;
 
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.Set;
 
 /**
@@ -73,7 +74,7 @@ public interface ValidationResponse {
      * if charset is not detected or it's a CSS document).
      * @return Charset of the document, e.g. {@code "UTF-8"}
      */
-    String charset();
+    Charset charset();
 
     /**
      * Returns list of errors found during validation.

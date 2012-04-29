@@ -60,7 +60,7 @@ public final class RetryPolicyTest {
             policy.assertThat(response);
             Assert.fail();
         } catch (AssertionError ex) {
-            MatcherAssert.assertThat("", policy.again(1));
+            MatcherAssert.assertThat("", policy.isRetryNeeded(1));
         }
     }
 
@@ -79,7 +79,7 @@ public final class RetryPolicyTest {
             policy.assertThat(response);
             Assert.fail();
         } catch (AssertionError ex) {
-            MatcherAssert.assertThat("", policy.again(1));
+            MatcherAssert.assertThat("", policy.isRetryNeeded(1));
         }
     }
 

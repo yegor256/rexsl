@@ -338,7 +338,7 @@ public final class RestTesterTest {
                         }
                     }
                     @Override
-                    public boolean again(final int attempt) {
+                    public boolean isRetryNeeded(final int attempt) {
                         return false;
                     }
                 }
