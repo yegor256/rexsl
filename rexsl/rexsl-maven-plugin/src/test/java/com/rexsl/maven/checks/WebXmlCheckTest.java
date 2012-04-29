@@ -31,7 +31,11 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
+import com.rexsl.test.RestTester;
+import java.net.HttpURLConnection;
+import java.net.URI;
 import org.hamcrest.MatcherAssert;
+import org.junit.Assume;
 import org.junit.Test;
 
 /**
@@ -52,6 +56,7 @@ public final class WebXmlCheckTest {
      */
     @Test
     public void validatesCorrectWebXmlFile() throws Exception {
+        Assume.assumeTrue(WebXmlCheckTest.online());
         final Environment env = new EnvironmentMocker()
             .withFile(WebXmlCheckTest.FILE, "valid-web.xml")
             .mock();
@@ -67,6 +72,7 @@ public final class WebXmlCheckTest {
      */
     @Test
     public void validatesIncorrectWebXmlFile() throws Exception {
+        Assume.assumeTrue(WebXmlCheckTest.online());
         final Environment env = new EnvironmentMocker()
             .withFile(WebXmlCheckTest.FILE, "invalid-web.xml")
             .mock();
@@ -74,6 +80,22 @@ public final class WebXmlCheckTest {
             "invalid web.xml is caught",
             !new WebXmlCheck().validate(env)
         );
+    }
+
+    /**
+     * Are we onine?
+     * @return TRUE if we're online
+     */
+    private static boolean online() {
+        boolean online;
+        try {
+            online = RestTester.start(
+                URI.create("http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd")
+            ).get("validate it").getStatus() == HttpURLConnection.HTTP_OK;
+        } catch (AssertionError ex) {
+            online = false;
+        }
+        return online;
     }
 
 }

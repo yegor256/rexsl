@@ -31,13 +31,14 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.test.RestTester;
 import com.ymock.util.Logger;
 import java.io.File;
-import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
@@ -73,13 +74,13 @@ final class WebXmlCheck implements Check {
         if (!exists) {
             Logger.warn(this, "File '%s' is absent", file);
         }
-        return exists && this.validate(file);
+        return exists && (WebXmlCheck.offline() || this.validate(file));
     }
 
     /**
      * Performs validation of the specified XML file against it's XSD schema.
      * @param file File to be validated.
-     * @return True if file is valid, <code>false</code> if file is invalid.
+     * @return If file is valid returns {@code TRUE}
      */
     private boolean validate(final File file) {
         final DocumentBuilderFactory factory =
@@ -92,6 +93,10 @@ final class WebXmlCheck implements Check {
         );
         DocumentBuilder builder;
         try {
+            factory.setFeature(
+                "http://apache.org/xml/features/continue-after-fatal-error",
+                true
+            );
             builder = factory.newDocumentBuilder();
         } catch (javax.xml.parsers.ParserConfigurationException ex) {
             throw new IllegalStateException(ex);
@@ -115,10 +120,10 @@ final class WebXmlCheck implements Check {
         );
         try {
             builder.parse(file);
-        } catch (SAXException exception) {
-            throw new IllegalStateException(exception);
-        } catch (IOException exception) {
-            throw new IllegalStateException(exception);
+        } catch (org.xml.sax.SAXException ex) {
+            throw new IllegalStateException(ex);
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(ex);
         }
         return this.errors == 0;
     }
@@ -138,6 +143,28 @@ final class WebXmlCheck implements Check {
             excn.getMessage()
         );
         ++this.errors;
+    }
+
+    /**
+     * Are we offline?
+     * @return TRUE if we're offline
+     */
+    private static boolean offline() {
+        boolean offline;
+        try {
+            offline = RestTester.start(
+                URI.create("http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd")
+            ).get("validate it").getStatus() != HttpURLConnection.HTTP_OK;
+        } catch (AssertionError ex) {
+            offline = true;
+        }
+        if (offline) {
+            Logger.warn(
+                WebXmlCheck.class,
+                "We're offline, can't validate web.xml"
+            );
+        }
+        return offline;
     }
 
 }
