@@ -59,11 +59,11 @@ final class TypesMatcher {
 
     /**
      * Public ctor.
-     * @param text The text of header
+     * @param header The text of HTTP "Accept" header
      */
-    public TypesMatcher(final String text) {
-        if (text != null) {
-            for (String range : text.trim().split(",")) {
+    public TypesMatcher(final String header) {
+        if (header != null) {
+            for (String range : header.trim().split(",")) {
                 final String[] parts = range.trim().split(";", 2);
                 this.types.add(parts[0]);
             }
