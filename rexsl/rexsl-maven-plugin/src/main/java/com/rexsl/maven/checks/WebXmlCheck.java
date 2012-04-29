@@ -69,13 +69,11 @@ final class WebXmlCheck implements Check {
             env.basedir(),
             "src/main/webapp/WEB-INF/web.xml"
         );
-        boolean valid = false;
-        if (file.exists()) {
-            valid = this.validate(file);
-        } else {
+        final boolean exists = file.exists();
+        if (!exists) {
             Logger.warn(this, "File '%s' is absent", file);
         }
-        return valid;
+        return exists && this.validate(file);
     }
 
     /**
