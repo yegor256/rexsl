@@ -75,7 +75,7 @@ package com.rexsl.test;
  * is a bullet-proof design, where you can control everything, including
  * network errors.
  *
- * <p>Implementation of this interface shouldn't be thread-safe.
+ * <p>Implementation of this interface need NOT be thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$

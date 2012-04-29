@@ -103,15 +103,15 @@ final class WebXmlCheck implements Check {
             new ErrorHandler() {
                 @Override
                 public void warning(final SAXParseException excn) {
-                    WebXmlCheck.this.error(excn);
+                    WebXmlCheck.this.error("WARNING", excn);
                 }
                 @Override
                 public void error(final SAXParseException excn) {
-                    WebXmlCheck.this.error(excn);
+                    WebXmlCheck.this.error("ERROR", excn);
                 }
                 @Override
                 public void fatalError(final SAXParseException excn) {
-                    WebXmlCheck.this.error(excn);
+                    WebXmlCheck.this.error("FATAL", excn);
                 }
             }
         );
@@ -127,14 +127,16 @@ final class WebXmlCheck implements Check {
 
     /**
      * Registers validation error.
+     * @param level Level of error
      * @param excn Exception to be added to the container.
      */
-    private void error(final SAXParseException excn) {
+    private void error(final String level, final SAXParseException excn) {
         Logger.error(
             this,
-            "web.xml[%d:%d]: %s",
+            "web.xml[%d:%d] %s: %s",
             excn.getLineNumber(),
             excn.getColumnNumber(),
+            level,
             excn.getMessage()
         );
         ++this.errors;
