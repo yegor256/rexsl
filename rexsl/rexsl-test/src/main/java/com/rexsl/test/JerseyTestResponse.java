@@ -63,12 +63,6 @@ import org.hamcrest.Matchers;
 final class JerseyTestResponse implements TestResponse {
 
     /**
-     * How many attempts to make when {@link #assertThat(AssertionPolicy)}
-     * reports a problem.
-     */
-    private static final int MAX_ATTEMPTS = 8;
-
-    /**
      * Fetcher of response.
      */
     private final transient JerseyFetcher fetcher;
@@ -283,7 +277,7 @@ final class JerseyTestResponse implements TestResponse {
                     break;
                 } catch (AssertionError ex) {
                     ++attempt;
-                    if (!assertion.again(attempt)) {
+                    if (!assertion.isRetryNeeded(attempt)) {
                         throw ex;
                     }
                     if (attempt >= this.MAX_ATTEMPTS) {

@@ -79,7 +79,7 @@ final class RetryPolicy implements AssertionPolicy {
      * {@inheritDoc}
      */
     @Override
-    public boolean again(final int attempt) {
+    public boolean isRetryNeeded(final int attempt) {
         final long delay = attempt * 2L;
         Logger.warn(
             this,

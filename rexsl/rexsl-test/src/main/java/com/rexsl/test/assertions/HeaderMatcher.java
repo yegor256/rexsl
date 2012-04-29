@@ -87,7 +87,7 @@ public final class HeaderMatcher implements AssertionPolicy {
      * {@inheritDoc}
      */
     @Override
-    public boolean again(final int attempt) {
+    public boolean isRetryNeeded(final int attempt) {
         return false;
     }
 
