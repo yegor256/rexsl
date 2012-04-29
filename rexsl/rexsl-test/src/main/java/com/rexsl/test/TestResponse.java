@@ -74,6 +74,12 @@ import org.hamcrest.Matcher;
 public interface TestResponse extends XmlDocument, JsonDocument {
 
     /**
+     * How many attempts to make when {@link #assertThat(AssertionPolicy)}
+     * reports a problem.
+     */
+    int MAX_ATTEMPTS = 8;
+
+    /**
      * Follow the LOCATION header.
      * @return New client
      */

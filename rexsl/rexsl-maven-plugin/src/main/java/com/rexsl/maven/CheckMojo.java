@@ -80,16 +80,18 @@ public final class CheckMojo extends AbstractRexslMojo {
      * @parameter expression="${rexsl.test}" default-value=".*"
      * @since 0.3.6
      */
-    @SuppressWarnings("PMD.ImmutableField")
     private transient String test = ".*";
 
     /**
      * Name of the check class to execute (if not set -
      * all checks are executed).
+     *
+     * <p>Set it to some irrelevant value in order to see a full list of
+     * available checks, for example: {@code mvn rexsl:check -Drexsl.check=foo}.
+     *
      * @parameter expression="${rexsl.check}"
      * @since 0.3.6
      */
-    @SuppressWarnings("PMD.ImmutableField")
     private transient String check;
 
     /**
@@ -106,6 +108,22 @@ public final class CheckMojo extends AbstractRexslMojo {
     }
 
     /**
+     * Set name of check to run.
+     * @param chk Name of check (short class name)
+     */
+    public void setCheck(final String chk) {
+        this.check = chk;
+    }
+
+    /**
+     * Set name of test to run.
+     * @param tst Name of test
+     */
+    public void setTest(final String tst) {
+        this.test = tst;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -117,16 +135,7 @@ public final class CheckMojo extends AbstractRexslMojo {
         final Set<Check> checks = this.provider.all();
         try {
             for (Check chck : checks) {
-                Logger.info(this, "%[type]s running...", chck);
-                if (!chck.validate(this.env())) {
-                    throw new MojoFailureException(
-                        Logger.format(
-                            "%s check failed",
-                            chck.getClass().getName()
-                        )
-                    );
-                }
-                Logger.info(this, "%[type]s didn't find any problems", chck);
+                this.single(chck);
             }
         } finally {
             this.revert(before);
@@ -139,11 +148,36 @@ public final class CheckMojo extends AbstractRexslMojo {
     }
 
     /**
-     * Sets the system properties to the argument passed.
-     * @param properties The properties.
+     * Run single test.
+     * @param chck The check to run
+     * @throws MojoFailureException If case of problem inside
      */
-    private void revert(final Properties properties) {
-        System.setProperties(properties);
+    private void single(final Check chck) throws MojoFailureException {
+        Logger.info(this, "%[type]s running...", chck);
+        final long start = System.nanoTime();
+        if (!chck.validate(this.env())) {
+            throw new MojoFailureException(
+                Logger.format(
+                    "%s check failed in %[nano]s",
+                    chck.getClass().getName(),
+                    System.nanoTime() - start
+                )
+            );
+        }
+        Logger.info(
+            this,
+            "%[type]s completed in %[nano]s",
+            chck,
+            System.nanoTime() - start
+        );
+    }
+
+    /**
+     * Sets the system properties to the argument passed.
+     * @param before The properties.
+     */
+    private void revert(final Properties before) {
+        System.setProperties(before);
     }
 
     /**
@@ -152,8 +186,8 @@ public final class CheckMojo extends AbstractRexslMojo {
      * @return The properties before being modified
      */
     private Properties inject() {
-        final Properties systemProperties = new Properties();
-        systemProperties.putAll(System.getProperties());
+        final Properties before = new Properties();
+        before.putAll(System.getProperties());
         if (this.systemPropertyVariables != null) {
             for (Map.Entry<String, String> var
                 : this.systemPropertyVariables.entrySet()) {
@@ -166,7 +200,7 @@ public final class CheckMojo extends AbstractRexslMojo {
                 );
             }
         }
-        return systemProperties;
+        return before;
     }
 
 }

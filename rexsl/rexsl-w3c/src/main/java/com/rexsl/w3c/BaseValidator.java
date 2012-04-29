@@ -126,7 +126,7 @@ class BaseValidator {
                 this.textOf(soap.xpath("//m:checkedby/text()"))
             ).build(),
             this.textOf(soap.xpath("//m:doctype/text()")),
-            this.textOf(soap.xpath("//m:charset/text()"))
+            this.charset(this.textOf(soap.xpath("//m:charset/text()")))
         );
         for (XmlDocument node : soap.nodes("//m:error")) {
             resp.addError(this.defect(node));
@@ -147,7 +147,7 @@ class BaseValidator {
             false,
             URI.create("http://localhost/failure"),
             "unknown-doctype",
-            "no-encoding"
+            Charset.defaultCharset()
         );
         String message = error.getMessage();
         if (message == null) {
@@ -176,7 +176,7 @@ class BaseValidator {
             true,
             URI.create("http://localhost/success"),
             type,
-            CharEncoding.UTF_8
+            Charset.defaultCharset()
         );
         return resp;
     }
@@ -240,6 +240,21 @@ class BaseValidator {
             value = Integer.parseInt(lines.get(0));
         }
         return value;
+    }
+
+    /**
+     * Convert text to charset.
+     * @param text Text representation of charset
+     * @return The charset
+     */
+    private Charset charset(final String text) {
+        Charset charset;
+        if (text.isEmpty()) {
+            charset = Charset.defaultCharset();
+        } else {
+            charset = Charset.forName(text);
+        }
+        return charset;
     }
 
 }

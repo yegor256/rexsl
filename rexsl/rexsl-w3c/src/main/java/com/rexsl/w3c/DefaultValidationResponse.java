@@ -31,6 +31,7 @@ package com.rexsl.w3c;
 
 import com.ymock.util.Logger;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -61,7 +62,7 @@ final class DefaultValidationResponse implements ValidationResponse {
     /**
      * The encoding.
      */
-    private final transient String encoding;
+    private final transient Charset encoding;
 
     /**
      * Set of errors found.
@@ -82,7 +83,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      * @checkstyle ParameterNumber (3 lines)
      */
     public DefaultValidationResponse(final boolean val, final URI server,
-        final String tpe, final String enc) {
+        final String tpe, final Charset enc) {
         this.ivalid = val;
         this.validator = server;
         this.type = tpe;
@@ -132,7 +133,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      * {@inheritDoc}
      */
     @Override
-    public String charset() {
+    public Charset charset() {
         return this.encoding;
     }
 

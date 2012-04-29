@@ -36,8 +36,7 @@ import groovy.util.GroovyScriptEngine;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Collection;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -79,12 +78,8 @@ public final class GroovyExecutor {
      * @param bnd The binding
      */
     public GroovyExecutor(final Environment env, final Binding bnd) {
-        final Set<URL> urls = new LinkedHashSet<URL>();
-        for (URL url : GroovyExecutor.fetch(env)) {
-            urls.add(url);
-        }
         this.classloader = new URLClassLoader(
-            urls.toArray(new URL[urls.size()]),
+            GroovyExecutor.fetch(env),
             Thread.currentThread().getContextClassLoader()
         );
         this.binding = bnd;
@@ -112,7 +107,8 @@ public final class GroovyExecutor {
             );
         } catch (java.io.IOException ex) {
             throw new IllegalArgumentException(
-                Logger.format("IOException: %[exception]s", ex)
+                Logger.format("IOException: %[exception]s", ex),
+                ex
             );
         }
         try {
@@ -120,7 +116,8 @@ public final class GroovyExecutor {
         // @checkstyle IllegalCatch (1 line)
         } catch (Throwable ex) {
             throw new GroovyException(
-                Logger.format("Exception: %[exception]s", ex)
+                Logger.format("Exception: %[exception]s", ex),
+                ex
             );
         }
     }
@@ -128,16 +125,19 @@ public final class GroovyExecutor {
     /**
      * Retrieve URLs from env.
      * @param env The environment
-     * @return Set of URLs
+     * @return Array of URLs
      */
-    private static Set<URL> fetch(final Environment env) {
-        final Set<URL> urls = new LinkedHashSet<URL>();
-        for (File path : env.classpath(false)) {
+    private static URL[] fetch(final Environment env) {
+        final Collection<File> files = env.classpath(false);
+        final URL[] urls = new URL[files.size()];
+        int pos = 0;
+        for (File file : files) {
             try {
-                urls.add(path.toURI().toURL());
+                urls[pos] = file.toURI().toURL();
             } catch (java.net.MalformedURLException ex) {
                 throw new IllegalArgumentException(ex);
             }
+            ++pos;
         }
         return urls;
     }

@@ -219,7 +219,7 @@ public final class JerseyTestResponseTest {
                     }
                 }
                 @Override
-                public boolean again(final int attempt) {
+                public boolean isRetryNeeded(final int attempt) {
                     ++this.num;
                     return attempt < 2;
                 }

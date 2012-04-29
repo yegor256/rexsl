@@ -60,7 +60,7 @@ package com.rexsl.test;
  *     this.valid = true;
  *   }
  *   &#64;Override
- *   public boolean again(int attempt) {
+ *   public boolean isRetryNeeded(int attempt) {
  *     return !this.valid;
  *   }
  * }
@@ -75,7 +75,7 @@ package com.rexsl.test;
  * is a bullet-proof design, where you can control everything, including
  * network errors.
  *
- * <p>Implementation of this interface shouldn't be thread-safe.
+ * <p>Implementation of this interface need NOT be thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -89,11 +89,13 @@ public interface AssertionPolicy {
      *
      * <p>Validity information about the response should be collected in
      * this method and stored in the object's variable. Later you should use
-     * it in {@link #again(int)} in order to inform the caller of whether it
+     * it in {@link #isRetryNeeded(int)} in order to inform
+     * the caller of whether it
      * should retry the request or not.
      *
      * <p>If the method doesn't throw {@link AssertionError} it means that
-     * everything went fine and {@link #again(int)} will never be called.
+     * everything went fine and {@link #isRetryNeeded(int)} will
+     * never be called.
      *
      * @param response The response to assert
      */
@@ -101,10 +103,20 @@ public interface AssertionPolicy {
 
     /**
      * Do we need to re-fetch the page and try again?
+     *
+     * <p>This method is called by
+     * {@link TestResponse#assertThat(AssertionPolicy)} before the next
+     * attempt, in order to check whether it is required. {@link TestResponse}
+     * keeps track of attempts (so you don't have to do it here) and will stop
+     * making them after {@link TestResponse#MAX_ATTEMPTS}. In most cases
+     * you don't need to store this attempt number locally.
+     * If {@code retryAgain()} returns {@code TRUE} {@link TestResponse}
+     * will try again, otherwise it will throw an exception.
+     *
      * @param attempt Number of attempt we're trying to make (will not ask for
      *  attempt #0, but will start from #1)
      * @return Yes, we should try again (if {@code TRUE})
      */
-    boolean again(int attempt);
+    boolean isRetryNeeded(int attempt);
 
 }
