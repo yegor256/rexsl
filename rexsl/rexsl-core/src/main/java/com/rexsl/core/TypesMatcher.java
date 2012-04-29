@@ -45,12 +45,12 @@ final class TypesMatcher {
     /**
      * Separator between type and subtype.
      */
-    private static final String TYPE_SEP = "/";
+    private static final String SEPARATOR = "/";
 
     /**
      * Asterix sign.
      */
-    private static final String ASTERIX = "*";
+    private static final String ASTERISK = "*";
 
     /**
      * Media types.
@@ -95,14 +95,14 @@ final class TypesMatcher {
     public boolean accepts(final String match) {
         boolean accepts = this.types.contains(match);
         if (!accepts) {
-            final String[] reqs = match.split(this.TYPE_SEP, 2);
+            final String[] reqs = match.split(this.SEPARATOR, 2);
             for (String type : this.types) {
-                final String[] parts = type.split(this.TYPE_SEP, 2);
-                if (!this.ASTERIX.equals(parts[0])
+                final String[] parts = type.split(this.SEPARATOR, 2);
+                if (!this.ASTERISK.equals(parts[0])
                     && !parts[0].equals(reqs[0])) {
                     continue;
                 }
-                if (!this.ASTERIX.equals(parts[1])
+                if (!this.ASTERISK.equals(parts[1])
                     && !parts[1].equals(reqs[1])) {
                     continue;
                 }
