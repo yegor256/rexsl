@@ -80,16 +80,18 @@ public final class CheckMojo extends AbstractRexslMojo {
      * @parameter expression="${rexsl.test}" default-value=".*"
      * @since 0.3.6
      */
-    @SuppressWarnings("PMD.ImmutableField")
     private transient String test = ".*";
 
     /**
      * Name of the check class to execute (if not set -
      * all checks are executed).
+     *
+     * <p>Set it to some irrelevant value in order to see a full list of
+     * available checks, for example: {@code mvn rexsl:check -Drexsl.check=foo}.
+     *
      * @parameter expression="${rexsl.check}"
      * @since 0.3.6
      */
-    @SuppressWarnings("PMD.ImmutableField")
     private transient String check;
 
     /**
@@ -103,6 +105,22 @@ public final class CheckMojo extends AbstractRexslMojo {
      */
     public void setChecksProvider(final ChecksProvider prov) {
         this.provider = prov;
+    }
+
+    /**
+     * Set name of check to run.
+     * @param chk Name of check (short class name)
+     */
+    public void setCheck(final Sting chk) {
+        this.check = chk;
+    }
+
+    /**
+     * Set name of test to run.
+     * @param tst Name of test
+     */
+    public void setTest(final Sting tst) {
+        this.test = tst;
     }
 
     /**
