@@ -29,9 +29,9 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.log.Logger;
 import com.rexsl.core.annotations.Schema;
 import com.rexsl.core.annotations.Stylesheet;
-import com.ymock.util.Logger;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;

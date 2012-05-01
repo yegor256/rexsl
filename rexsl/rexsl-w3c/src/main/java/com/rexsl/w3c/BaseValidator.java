@@ -29,10 +29,10 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.log.Logger;
 import com.rexsl.test.RestTester;
 import com.rexsl.test.TestResponse;
 import com.rexsl.test.XmlDocument;
-import com.ymock.util.Logger;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.nio.charset.Charset;

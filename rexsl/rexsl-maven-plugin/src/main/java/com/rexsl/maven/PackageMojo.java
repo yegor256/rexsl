@@ -29,8 +29,8 @@
  */
 package com.rexsl.maven;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.packers.PackersProvider;
-import com.ymock.util.Logger;
 import java.util.Set;
 
 /**

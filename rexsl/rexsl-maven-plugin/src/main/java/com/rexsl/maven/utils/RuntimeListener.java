@@ -29,8 +29,8 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
-import com.ymock.util.Logger;
 import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

@@ -29,7 +29,7 @@
  */
 package com.rexsl.core;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 

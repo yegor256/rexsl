@@ -29,7 +29,7 @@
  */
 package com.rexsl.core;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;

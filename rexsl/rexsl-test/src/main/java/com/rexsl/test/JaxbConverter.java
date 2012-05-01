@@ -29,7 +29,7 @@
  */
 package com.rexsl.test;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;

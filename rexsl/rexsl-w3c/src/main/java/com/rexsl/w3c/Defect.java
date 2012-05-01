@@ -29,7 +29,7 @@
  */
 package com.rexsl.w3c;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 
 /**
  * Validation defect (error or warning) produced by {@link ValidationResponse}.

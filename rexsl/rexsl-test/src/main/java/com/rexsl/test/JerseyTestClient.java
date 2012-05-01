@@ -29,9 +29,9 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.log.Logger;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import com.ymock.util.Logger;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.ArrayList;

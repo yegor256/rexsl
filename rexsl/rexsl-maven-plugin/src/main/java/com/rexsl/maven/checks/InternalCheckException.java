@@ -29,7 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 
 /**
  * Internal exception.

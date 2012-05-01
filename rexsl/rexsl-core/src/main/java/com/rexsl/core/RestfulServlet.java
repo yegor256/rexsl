@@ -29,9 +29,9 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.log.Logger;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
-import com.ymock.util.Logger;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Properties;

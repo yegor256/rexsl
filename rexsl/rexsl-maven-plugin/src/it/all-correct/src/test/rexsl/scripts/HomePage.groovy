@@ -30,7 +30,7 @@
 package com.rexsl.foo.scripts
 
 import com.rexsl.test.RestTester
-import com.ymock.util.Logger
+import com.jcabi.log.Logger
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder

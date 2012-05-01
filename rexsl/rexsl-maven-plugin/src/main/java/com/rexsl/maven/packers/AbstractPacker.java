@@ -29,10 +29,10 @@
  */
 package com.rexsl.maven.packers;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Packer;
 import com.rexsl.maven.utils.FileFinder;
-import com.ymock.util.Logger;
 import java.io.File;
 import java.io.IOException;
 

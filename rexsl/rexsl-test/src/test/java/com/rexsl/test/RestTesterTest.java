@@ -29,7 +29,7 @@
  */
 package com.rexsl.test;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URLEncoder;

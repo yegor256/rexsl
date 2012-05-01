@@ -29,8 +29,8 @@
  */
 package com.rexsl.maven;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.utils.EmbeddedContainer;
-import com.ymock.util.Logger;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**

@@ -29,9 +29,9 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.ymock.util.Logger;
 import java.io.File;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;

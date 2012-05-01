@@ -29,13 +29,13 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.GroovyExecutor;
-import com.ymock.util.Logger;
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;

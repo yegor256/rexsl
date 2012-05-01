@@ -33,7 +33,7 @@ package com.rexsl.foo.bootstrap
 // (the script) from servlet context listener injected into the application
 // by embedded container on-fly.
 import com.rexsl.foo.Data
-import com.ymock.util.Logger
+import com.jcabi.log.Logger
 
 Logger.info(this, 'StartsDataHolder running...')
 

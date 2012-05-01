@@ -29,9 +29,9 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
-import com.ymock.util.Logger;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 

@@ -29,7 +29,7 @@
  */
 package com.rexsl.trap;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Properties;

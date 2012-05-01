@@ -29,8 +29,8 @@
  */
 package com.rexsl.maven;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.utils.PortReserver;
-import com.ymock.util.Logger;
 import java.util.Properties;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;

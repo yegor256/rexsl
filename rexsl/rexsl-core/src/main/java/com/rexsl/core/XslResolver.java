@@ -29,9 +29,9 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.log.Logger;
 import com.rexsl.core.annotations.Schema;
 import com.rexsl.core.annotations.Stylesheet;
-import com.ymock.util.Logger;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.net.MalformedURLException;

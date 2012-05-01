@@ -29,7 +29,7 @@
  */
 package com.rexsl.log;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import java.io.IOException;
 
 /**

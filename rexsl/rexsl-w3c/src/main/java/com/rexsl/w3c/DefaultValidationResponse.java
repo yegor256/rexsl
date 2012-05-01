@@ -29,7 +29,7 @@
  */
 package com.rexsl.w3c;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Collections;

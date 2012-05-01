@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.FileFinder;
@@ -36,7 +37,6 @@ import com.rexsl.w3c.Defect;
 import com.rexsl.w3c.ValidationResponse;
 import com.rexsl.w3c.Validator;
 import com.rexsl.w3c.ValidatorBuilder;
-import com.ymock.util.Logger;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
