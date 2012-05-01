@@ -29,7 +29,7 @@
  */
 package com.rexsl.trap;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 
 /**
  * Template with no behavior, just to alert the user that there is a problem

@@ -29,9 +29,9 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
-import com.ymock.util.Logger;
 import groovy.lang.Binding;
 import java.util.concurrent.ConcurrentMap;
 import org.hamcrest.MatcherAssert;

@@ -29,8 +29,8 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.log.Logger;
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
-import com.ymock.util.Logger;
 import java.net.ServerSocket;
 import java.net.URI;
 import org.hamcrest.Matcher;

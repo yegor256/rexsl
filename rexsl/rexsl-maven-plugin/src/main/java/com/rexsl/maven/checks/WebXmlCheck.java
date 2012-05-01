@@ -29,10 +29,10 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.test.RestTester;
-import com.ymock.util.Logger;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URI;

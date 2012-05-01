@@ -30,8 +30,8 @@
 package com.rexsl.maven;
 
 import com.google.common.io.Files;
+import com.jcabi.log.Logger;
 import com.rexsl.maven.utils.PortReserver;
-import com.ymock.util.Logger;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashSet;

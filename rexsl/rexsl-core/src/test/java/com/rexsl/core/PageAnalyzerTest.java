@@ -29,7 +29,7 @@
  */
 package com.rexsl.core;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.ws.rs.core.HttpHeaders;

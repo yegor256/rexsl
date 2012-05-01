@@ -29,7 +29,7 @@
  */
 package com.rexsl.test;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import java.io.ByteArrayInputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

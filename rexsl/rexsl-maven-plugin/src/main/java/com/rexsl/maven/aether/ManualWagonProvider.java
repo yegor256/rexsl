@@ -29,7 +29,7 @@
  */
 package com.rexsl.maven.aether;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.providers.http.LightweightHttpWagon;
 import org.sonatype.aether.connector.wagon.WagonProvider;

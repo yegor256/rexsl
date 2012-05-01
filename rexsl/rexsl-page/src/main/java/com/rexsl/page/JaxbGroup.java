@@ -29,7 +29,7 @@
  */
 package com.rexsl.page;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;

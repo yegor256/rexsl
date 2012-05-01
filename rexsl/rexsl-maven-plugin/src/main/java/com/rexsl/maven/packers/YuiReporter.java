@@ -29,7 +29,7 @@
  */
 package com.rexsl.maven.packers;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 

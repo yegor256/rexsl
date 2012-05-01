@@ -29,7 +29,7 @@
  */
 package com.rexsl.test;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Node;
 

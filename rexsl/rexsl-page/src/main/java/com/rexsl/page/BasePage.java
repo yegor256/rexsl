@@ -29,8 +29,8 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.log.Logger;
 import com.rexsl.core.XslResolver;
-import com.ymock.util.Logger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;

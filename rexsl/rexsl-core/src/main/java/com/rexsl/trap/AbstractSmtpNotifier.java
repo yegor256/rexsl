@@ -29,8 +29,8 @@
  */
 package com.rexsl.trap;
 
+import com.jcabi.log.Logger;
 import com.rexsl.core.Manifests;
-import com.ymock.util.Logger;
 import java.io.IOException;
 import java.util.Properties;
 import javax.mail.Address;

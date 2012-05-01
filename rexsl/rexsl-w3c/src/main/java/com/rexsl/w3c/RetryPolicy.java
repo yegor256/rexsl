@@ -29,9 +29,9 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
-import com.ymock.util.Logger;
 import java.net.HttpURLConnection;
 import java.util.concurrent.TimeUnit;
 

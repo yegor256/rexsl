@@ -29,7 +29,7 @@
  */
 package com.rexsl.foo;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.FormParam;

@@ -29,7 +29,7 @@
  */
 package com.rexsl.maven;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import java.util.List;
 import org.apache.maven.model.Exclusion;
 import org.sonatype.aether.artifact.Artifact;

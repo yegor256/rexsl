@@ -29,13 +29,13 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.log.Logger;
 import com.rexsl.test.assertions.BodyMatcher;
 import com.rexsl.test.assertions.Failure;
 import com.rexsl.test.assertions.HeaderMatcher;
 import com.rexsl.test.assertions.StatusMatcher;
 import com.rexsl.test.assertions.XpathMatcher;
 import com.sun.jersey.api.client.ClientResponse;
-import com.ymock.util.Logger;
 import java.net.HttpCookie;
 import java.util.Collections;
 import java.util.List;

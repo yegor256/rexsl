@@ -29,10 +29,10 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.log.Logger;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.ymock.util.Logger;
 import java.net.URI;
 import java.util.Map;
 import javax.ws.rs.core.UriBuilder;

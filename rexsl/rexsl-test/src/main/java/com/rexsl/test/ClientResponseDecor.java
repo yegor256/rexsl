@@ -29,8 +29,8 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.log.Logger;
 import com.sun.jersey.api.client.ClientResponse;
-import com.ymock.util.Logger;
 import java.util.Formattable;
 import java.util.Formatter;
 import java.util.List;

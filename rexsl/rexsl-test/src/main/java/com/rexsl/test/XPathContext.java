@@ -29,7 +29,7 @@
  */
 package com.rexsl.test;
 
-import com.ymock.util.Logger;
+import com.jcabi.log.Logger;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;

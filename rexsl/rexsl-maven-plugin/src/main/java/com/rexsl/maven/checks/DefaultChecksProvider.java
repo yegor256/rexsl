@@ -29,9 +29,9 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.ChecksProvider;
-import com.ymock.util.Logger;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

@@ -29,8 +29,8 @@
  */
 package com.rexsl.maven;
 
+import com.jcabi.log.Logger;
 import com.rexsl.maven.aether.DepsResolver;
-import com.ymock.util.Logger;
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Properties;
