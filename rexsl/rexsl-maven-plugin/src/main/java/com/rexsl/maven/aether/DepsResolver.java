@@ -102,7 +102,7 @@ public final class DepsResolver {
             system.newLocalRepositoryManager(local)
         );
         final List<Artifact> deps = new LinkedList<Artifact>();
-        if (filter != null) {
+        if (filter != null && system != null) {
             Collection<ArtifactResult> results;
             try {
                 results = system.resolveDependencies(
