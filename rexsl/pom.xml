@@ -175,6 +175,12 @@
             <!-- we need this repo because of SNAPSHOT status of the project -->
             <id>sonatype.snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
