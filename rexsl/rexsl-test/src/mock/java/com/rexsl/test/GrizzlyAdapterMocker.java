@@ -36,10 +36,10 @@ import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.Collections;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -84,7 +84,12 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     /**
      * Content to return.
      */
-    private transient byte[] body = new byte[] {};
+    private transient Callable<byte[]> body = new Callable<byte[]>() {
+        @Override
+        public byte[] call() {
+            return "".getBytes();
+        }
+    };
 
     /**
      * Status to return.
@@ -101,6 +106,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
         String input = null;
@@ -119,12 +125,19 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
             response.addHeader(entry.getKey(), entry.getValue());
         }
         response.setStatus(this.status);
+        byte[] bytes;
         try {
-            response.getStream().write(this.body);
+            bytes = this.body.call();
+        // @checkstyle IllegalCatch (1 line)
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
+        }
+        try {
+            response.getStream().write(bytes);
         } catch (IOException ex) {
             throw new IllegalStateException(ex);
         }
-        response.setContentLength(this.body.length);
+        response.setContentLength(bytes.length);
     }
 
     /**
@@ -173,23 +186,10 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
 
     /**
      * Set body.
-     * @param content The body to return
+     * @param callable The body to return
      */
-    public void setBody(final String content) {
-        try {
-            this.body = content.getBytes(CharEncoding.UTF_8);
-        } catch (java.io.UnsupportedEncodingException ex) {
-            throw new IllegalStateException(ex);
-        }
-    }
-
-    /**
-     * Set body.
-     * @param content The body to return
-     */
-    public void setBody(final byte[] content) {
-        this.body = new byte[content.length];
-        System.arraycopy(content, 0, this.body, 0, content.length);
+    public void setBody(final Callable<byte[]> callable) {
+        this.body = callable;
     }
 
     /**

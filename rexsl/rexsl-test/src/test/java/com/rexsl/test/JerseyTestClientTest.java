@@ -30,9 +30,11 @@
 package com.rexsl.test;
 
 import java.net.HttpURLConnection;
+import java.util.concurrent.Callable;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 /**
@@ -60,6 +62,48 @@ public final class JerseyTestClientTest {
             .assertStatus(HttpURLConnection.HTTP_OK);
         client.get("third request")
             .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * TestClient can recover after first assertion error.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void recoversAfterFirstAssertionError() throws Exception {
+        final ContainerMocker container = new ContainerMocker().returnBody(
+            new Callable<byte[]>() {
+                private transient int retry;
+                @Override
+                public byte[] call() {
+                    String output;
+                    if (this.retry <= 2) {
+                        output = "<failure />";
+                    } else {
+                        output = "<success />";
+                    }
+                    ++this.retry;
+                    return output.getBytes();
+                }
+            }
+        ).mock();
+        RestTester.start(container.home())
+            .get("download content in two attempts")
+            .assertThat(
+                new AssertionPolicy() {
+                    @Override
+                    public void assertThat(final TestResponse response) {
+                        MatcherAssert.assertThat(
+                            response.getBody(),
+                            XhtmlMatchers.hasXPath("//success")
+                        );
+                    }
+                    @Override
+                    public boolean isRetryNeeded(final int attempt) {
+                        return true;
+                    }
+                }
+            )
+            .assertXPath("/success");
     }
 
 }
