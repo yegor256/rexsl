@@ -65,6 +65,9 @@ import org.hamcrest.Matcher;
  * <p>{@link TestResponse} also extends {@link JsonDocument}, which is an
  * abstract of a Json document, which can be retrieved from itself.
  *
+ * <p>In case of any problems inside (connection, time-outs, assertions, etc.)
+ * implementation has to throw {@link AssertionError}.
+ *
  * <p>Implementation of this interface shall be mutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -77,7 +80,7 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * How many attempts to make when {@link #assertThat(AssertionPolicy)}
      * reports a problem.
      */
-    int MAX_ATTEMPTS = 8;
+    int MAX_ATTEMPTS = 4;
 
     /**
      * Follow the LOCATION header.
@@ -130,13 +133,15 @@ public interface TestResponse extends XmlDocument, JsonDocument {
     TestResponse registerNs(String prefix, Object uri);
 
     /**
-     * Fail and report a problem.
+     * Fail and report a problem (throws {@link AssertionError} with the
+     * message provided).
      * @param reason Reason of failure
      */
     void fail(String reason);
 
     /**
-     * Assert something.
+     * Assert something ({@link AssertionError} will be thrown if assertion
+     * fails).
      * @param assertion The assertion to use
      * @return This object
      * @since 0.3.4
@@ -152,21 +157,24 @@ public interface TestResponse extends XmlDocument, JsonDocument {
     TestResponse assertStatus(int status);
 
     /**
-     * Verifies HTTP response status code against the provided matcher.
+     * Verifies HTTP response status code against the provided matcher,
+     * and throws {@link AssertionError} in case of mismatch.
      * @param matcher Matcher to validate status code
      * @return This object
      */
     TestResponse assertStatus(Matcher<Integer> matcher);
 
     /**
-     * Verifies HTTP response body content against provided matcher.
+     * Verifies HTTP response body content against provided matcher,
+     * and throws {@link AssertionError} in case of mismatch.
      * @param matcher The matcher to use
      * @return This object
      */
     TestResponse assertBody(Matcher<String> matcher);
 
     /**
-     * Verifies HTTP header against provided matcher.
+     * Verifies HTTP header against provided matcher, and throws
+     * {@link AssertionError} in case of mismatch.
      * @param name Name of the header to match
      * @param matcher The matcher to use
      * @return This object
@@ -174,14 +182,16 @@ public interface TestResponse extends XmlDocument, JsonDocument {
     TestResponse assertHeader(String name, Matcher matcher);
 
     /**
-     * Verifies HTTP response body XHTML/XML content against XPath query.
+     * Verifies HTTP response body XHTML/XML content against XPath query,
+     * and throws {@link AssertionError} in case of mismatch.
      * @param xpath Query to use
      * @return This object
      */
     TestResponse assertXPath(String xpath);
 
     /**
-     * Verifies the Json data against the element identifier argument.
+     * Verifies the Json data against the element identifier argument,
+     * and throws {@link AssertionError} in case of mismatch.
      * @param element Element in the Json data of this object
      * @return This object
      */

@@ -106,6 +106,8 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
                 .assertXPath("//m:validity")
                 .assertXPath("//m:checkedby");
             response = this.build(soap);
+        } catch (AssertionError ex) {
+            response = this.success(ex.getMessage());
         // @checkstyle IllegalCatchCheck (1 line)
         } catch (Throwable ex) {
             response = this.failure(ex);
