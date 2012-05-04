@@ -262,17 +262,13 @@ public final class Link {
     }
 
     /**
-     * Add a query param to the link.
-     * @param name The name of it
-     * @param value The value
+     * Set HREF attribute of the link.
+     * @param uri The value of it
      * @return This object
      */
-    public Link queryParam(final String name, final String value) {
+    public void setHref(final String uri) {
         synchronized (this.elements) {
-            this.href = UriBuilder.fromUri(this.href)
-                .queryParam(name, value)
-                .build()
-                .toString();
+            this.href = uri;
         }
         return this;
     }
