@@ -262,6 +262,16 @@ public final class Link {
     }
 
     /**
+     * Set HREF attribute of the link.
+     * @param uri The value of it
+     */
+    public void setHref(final String uri) {
+        synchronized (this.elements) {
+            this.href = uri;
+        }
+    }
+
+    /**
      * Attach to this resource and make {@code HREF} attribute
      * absolute, using the URI information of the resource.
      * @param res The resource to attach to
