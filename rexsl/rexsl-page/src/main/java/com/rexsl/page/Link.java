@@ -264,13 +264,11 @@ public final class Link {
     /**
      * Set HREF attribute of the link.
      * @param uri The value of it
-     * @return This object
      */
     public void setHref(final String uri) {
         synchronized (this.elements) {
             this.href = uri;
         }
-        return this;
     }
 
     /**
