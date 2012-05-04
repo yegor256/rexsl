@@ -262,6 +262,22 @@ public final class Link {
     }
 
     /**
+     * Add a query param to the link.
+     * @param name The name of it
+     * @param value The value
+     * @return This object
+     */
+    public Link queryParam(final String name, final String value) {
+        synchronized (this.elements) {
+            this.href = UriBuilder.fromUri(this.href)
+                .queryParam(name, value)
+                .build()
+                .toString();
+        }
+        return this;
+    }
+
+    /**
      * Attach to this resource and make {@code HREF} attribute
      * absolute, using the URI information of the resource.
      * @param res The resource to attach to
