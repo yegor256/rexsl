@@ -95,4 +95,16 @@ public final class DefaultCssValidatorTest {
         MatcherAssert.assertThat(response.toString(), response.valid());
     }
 
+    /**
+     * DefaultCssValidator can succeed if W3C response is broken.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void succeedsWithBrokenWebResponse() throws Exception {
+        final URI uri = new ContainerMocker().returnBody("<x/>").mock().home();
+        final Validator validator = new DefaultCssValidator(uri);
+        final ValidationResponse response = validator.validate("");
+        MatcherAssert.assertThat(response.toString(), response.valid());
+    }
+
 }

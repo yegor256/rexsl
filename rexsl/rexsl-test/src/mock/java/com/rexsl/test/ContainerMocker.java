@@ -33,6 +33,8 @@ import com.jcabi.log.Logger;
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import java.net.ServerSocket;
 import java.net.URI;
+import java.util.concurrent.Callable;
+import org.apache.commons.lang.CharEncoding;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
@@ -170,8 +172,11 @@ public final class ContainerMocker {
      * @return This object
      */
     public ContainerMocker returnBody(final String body) {
-        this.adapter.setBody(body);
-        return this;
+        try {
+            return this.returnBody(body.getBytes(CharEncoding.UTF_8));
+        } catch (java.io.UnsupportedEncodingException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**
@@ -180,6 +185,24 @@ public final class ContainerMocker {
      * @return This object
      */
     public ContainerMocker returnBody(final byte[] body) {
+        return this.returnBody(
+            new Callable<byte[]>() {
+                @Override
+                public byte[] call() {
+                    final byte[] bytes = new byte[body.length];
+                    System.arraycopy(body, 0, bytes, 0, body.length);
+                    return bytes;
+                }
+            }
+        );
+    }
+
+    /**
+     * Return this body.
+     * @param body The body to return
+     * @return This object
+     */
+    public ContainerMocker returnBody(final Callable<byte[]> body) {
         this.adapter.setBody(body);
         return this;
     }
