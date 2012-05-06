@@ -36,6 +36,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.apache.commons.lang.SerializationUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -48,18 +49,13 @@ import org.junit.Test;
 public final class RestfulServletTest {
 
     /**
-     * Key for the packages parameter.
-     */
-    private static final String PACKAGES_KEY = "com.rexsl.PACKAGES";
-
-    /**
      * RestfulServlet can pass HTTP requests to Jersey for further processing.
      * @throws Exception If something goes wrong
      */
     @Test
     public void passesHttpRequestsToJersey() throws Exception {
         final ServletConfig config = new ServletConfigMocker()
-            .withParam(this.PACKAGES_KEY, "\t\ncom.rexsl.core  \r")
+            .withParam(RestfulServlet.PACKAGES, "\t\ncom.rexsl.core  \r")
             .mock();
         final HttpServlet servlet = new RestfulServlet();
         servlet.init(config);
@@ -82,7 +78,7 @@ public final class RestfulServletTest {
     @Test(expected = javax.servlet.ServletException.class)
     public void initWithNonValidPackageHyphens() throws Exception {
         final ServletConfig config = new ServletConfigMocker()
-            .withParam(this.PACKAGES_KEY, "package-with-hyphens")
+            .withParam(RestfulServlet.PACKAGES, "package-with-hyphens")
             .mock();
         final HttpServlet servlet = new RestfulServlet();
         servlet.init(config);
@@ -97,10 +93,36 @@ public final class RestfulServletTest {
     @Test(expected = javax.servlet.ServletException.class)
     public void initWithNonValidPackageStartsWithNumber() throws Exception {
         final ServletConfig config = new ServletConfigMocker()
-            .withParam(this.PACKAGES_KEY, "pa.1ck.age")
+            .withParam(RestfulServlet.PACKAGES, "pa.1ck.age")
             .mock();
         final HttpServlet servlet = new RestfulServlet();
         servlet.init(config);
+    }
+
+    /**
+     * RestfulServlet can be serialized and de-serialized.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void serializesItselfToStreamAndBack() throws Exception {
+        final ServletConfig config = new ServletConfigMocker().withParam(
+            RestfulServlet.PACKAGES,
+            this.getClass().getPackage().getName()
+        ).mock();
+        final HttpServlet servlet = new RestfulServlet();
+        servlet.init(config);
+        final HttpServletResponse response = new HttpServletResponseMocker()
+            .expectStatus(HttpServletResponse.SC_OK)
+            .mock();
+        HttpServlet.class.cast(
+            SerializationUtils.deserialize(
+                SerializationUtils.serialize(servlet)
+            )
+        ).service(new HttpServletRequestMocker().mock(), response);
+        MatcherAssert.assertThat(
+            response.toString(),
+            Matchers.startsWith("\u0443")
+        );
     }
 
     /**

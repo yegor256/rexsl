@@ -89,19 +89,42 @@ import org.apache.commons.lang.StringUtils;
 public final class RestfulServlet extends HttpServlet {
 
     /**
+     * Name of servlet param.
+     * @since 0.3.7
+     */
+    public static final String PACKAGES = "com.rexsl.PACKAGES";
+
+    /**
+     * Serialization marker.
+     */
+    private static final long serialVersionUID = 0x7526FA78EED21470L;
+
+    /**
      * Comma, a separator between package names.
      */
     private static final String COMMA = ",";
 
     /**
-     * Name of servlet param.
-     */
-    private static final String PACKAGES = "com.rexsl.PACKAGES";
-
-    /**
      * Jersey servlet.
      */
-    private final transient ServletContainer jersey = new ServletContainer();
+    private ServletContainer jersey = new ServletContainer();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return this.jersey.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof RestfulServlet
+            && this.hashCode() == obj.hashCode();
+    }
 
     /**
      * {@inheritDoc}
@@ -157,6 +180,22 @@ public final class RestfulServlet extends HttpServlet {
             "#init(%s): servlet initialized with Jersey JAX-RS implementation",
             config.getClass().getName()
         );
+    }
+
+    /**
+     * Get jersey servlet, before serialization.
+     * @param servlet The servlet to set
+     */
+    public ServletContainer getJersey() {
+        return this.jersey;
+    }
+
+    /**
+     * Set jersey servlet, after de-serialization.
+     * @param servlet The servlet to set
+     */
+    public void setJersey(final ServletContainer servlet) {
+        this.jersey = servlet;
     }
 
     /**
