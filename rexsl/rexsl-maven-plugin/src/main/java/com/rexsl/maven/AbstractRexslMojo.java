@@ -41,8 +41,20 @@ import org.sonatype.aether.RepositorySystemSession;
 /**
  * Abstract mojo.
  *
+ * <p>We import {@link StaticLoggerBinder} from SLF4J package, but this
+ * class actually is not from slf4j artifact. Instead, we are using
+ * {@code com.rempl.plugins:rempl-maven-plugin} artifact, where this class
+ * is defined. Additional information about how exactly this reloading
+ * works can be found at SLF4J documentation. This implementation of
+ * {@link StaticLoggerBinder} forwards all SLF4J calls to Maven log.
+ *
+ * <p>This class is public because Maven needs it this way.
+ *
+ * <p>The class is NOT thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @see <a href="http://www.slf4j.org/manual.html">SLF4J manual</a>
  */
 public abstract class AbstractRexslMojo extends AbstractMojo {
 
