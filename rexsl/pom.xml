@@ -164,7 +164,7 @@
         This property has to be updated every time you release
         a new version to Maven Central
         -->
-        <releasedVersion>0.3.6</releasedVersion>
+        <releasedVersion>0.3.7</releasedVersion>
     </properties>
     <repositories>
         <!--
