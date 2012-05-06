@@ -32,6 +32,10 @@
  * Validate that the build really validated XSL files.
  */
 
+import com.rexsl.test.XhtmlMatchers
+import org.hamcrest.MatcherAssert
+import org.hamcrest.Matchers
+
 def log = new File(basedir, 'build.log')
 assert log.text.contains('All ReXSL checks passed')
 
@@ -44,5 +48,11 @@ assert log.text.contains('servlet initialized')
 def css = new File(basedir, 'target/all-correct-1.0/css/screen.css')
 assert css.exists()
 assert !css.text.contains('/**')
-//def xsl = new File(basedir, 'target/all-corect-1.0/xsl/layout.xsl')
-//assert !xsl.contains('<!--')
+
+def xsl = new File(basedir, 'target/all-correct-1.0/xsl/layout.xsl')
+MatcherAssert.assertThat(xsl,
+    Matchers.allOf(
+        Matchers.not(XhtmlMatchers.hasXPath('//comment()')),
+        XhtmlMatchers.hasXPath('//xhtml:div[.="1.0"]')
+    )
+)

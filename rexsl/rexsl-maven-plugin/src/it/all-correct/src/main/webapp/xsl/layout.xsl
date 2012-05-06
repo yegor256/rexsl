@@ -51,6 +51,7 @@
                 <div id="content">
                     <xsl:call-template name="content" />
                 </div>
+                <div id="packaged">${project.version}</div>
             </body>
         </html>
     </xsl:template>
