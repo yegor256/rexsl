@@ -57,7 +57,7 @@ public final class JsPackerTest {
                 "function sum(num) {var i, sum = 0; for (i = 1; i <= num; i++) {sum += i;}}"
         ).mock();
         final File dest = new File(env.webdir(), "js/simple.js");
-        new JsPacker().pack(env);
+        new JsPacker().pack(env, false);
         MatcherAssert.assertThat("packed file created", dest.exists());
         MatcherAssert.assertThat(
             FileUtils.readFileToString(dest),

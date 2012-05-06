@@ -57,7 +57,7 @@ public final class XslPackerTest {
             .withFile("src/main/webapp/xsl/layout.xsl")
             .mock();
         final File dest = new File(env.webdir(), "xsl/layout.xsl");
-        new XslPacker().pack(env);
+        new XslPacker().pack(env, false);
         MatcherAssert.assertThat("file created", dest.exists());
         MatcherAssert.assertThat(
             FileUtils.readFileToString(dest),

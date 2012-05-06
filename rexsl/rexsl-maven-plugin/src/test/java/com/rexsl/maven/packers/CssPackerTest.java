@@ -56,7 +56,7 @@ public final class CssPackerTest {
                 "\u002F* test */ a: { color: red; }"
         ).mock();
         final File dest = new File(env.webdir(), "css/foo.css");
-        new CssPacker().pack(env);
+        new CssPacker().pack(env, false);
         MatcherAssert.assertThat("file is created", dest.exists());
         MatcherAssert.assertThat(
             FileUtils.readFileToString(dest),

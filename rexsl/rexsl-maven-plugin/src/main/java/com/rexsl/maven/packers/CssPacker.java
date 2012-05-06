@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -69,11 +70,8 @@ final class CssPacker extends AbstractPacker {
      * {@inheritDoc}
      */
     @Override
-    protected void pack(final File src, final File dest) throws IOException {
-        final Reader input = new InputStreamReader(
-            new FileInputStream(src),
-            CharEncoding.UTF_8
-        );
+    protected void pack(final Reader input, final File dest)
+        throws IOException {
         try {
             final Writer output = new OutputStreamWriter(
                 new FileOutputStream(dest),

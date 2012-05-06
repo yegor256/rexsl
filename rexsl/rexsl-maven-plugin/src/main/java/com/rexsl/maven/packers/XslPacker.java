@@ -31,6 +31,7 @@ package com.rexsl.maven.packers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -45,6 +46,7 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 /**
  * Packager of XSL files.
@@ -93,11 +95,14 @@ final class XslPacker extends AbstractPacker {
      * {@inheritDoc}
      */
     @Override
-    protected void pack(final File src, final File dest) throws IOException {
+    protected void pack(final Reader input, final File dest)
+        throws IOException {
         this.DFACTORY.setNamespaceAware(true);
         Document document;
         try {
-            document = this.DFACTORY.newDocumentBuilder().parse(src);
+            document = this.DFACTORY
+                .newDocumentBuilder()
+                .parse(new InputSource(input));
         } catch (javax.xml.parsers.ParserConfigurationException ex) {
             throw new IllegalStateException(ex);
         } catch (org.xml.sax.SAXException ex) {

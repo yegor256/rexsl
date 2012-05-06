@@ -40,7 +40,8 @@ public interface Packer {
     /**
      * Package files inside the destination folder.
      * @param env The environment
+     * @param filtering Shall resources be filtered before packaging?
      */
-    void pack(final Environment env);
+    void pack(Environment env, boolean filtering);
 
 }

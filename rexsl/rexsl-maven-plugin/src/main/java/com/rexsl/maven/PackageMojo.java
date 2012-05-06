@@ -82,6 +82,24 @@ import java.util.Set;
 public final class PackageMojo extends AbstractRexslMojo {
 
     /**
+     * Static resources (CSS, XSL, JS, etc.) should be filtered before
+     * packaging.
+     *
+     * @parameter expression="${rexsl.filtering}"
+     * @since 0.3.7
+     * @see <a href="http://trac.rexsl.com/rexsl/ticket/342">Introduced in ticket #342</a>
+     */
+    private transient boolean filtering;
+
+    /**
+     * Set filtering.
+     * @param fltr Shall we filter before packaging?
+     */
+    public void setFiltering(final boolean fltr) {
+        this.filtering = fltr;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -89,7 +107,7 @@ public final class PackageMojo extends AbstractRexslMojo {
         final long start = System.nanoTime();
         final Set<Packer> packers = new PackersProvider().all();
         for (Packer packer : packers) {
-            packer.pack(this.env());
+            packer.pack(this.env(), this.filtering);
         }
         Logger.info(
             this,
