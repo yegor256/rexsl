@@ -29,6 +29,7 @@
  */
 package com.rexsl.test.assertions;
 
+import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
 import org.hamcrest.Matcher;
@@ -37,16 +38,13 @@ import org.hamcrest.MatcherAssert;
 /**
  * Matches HTTP header against required value.
  *
+ * <p>This class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.4
  */
 public final class HeaderMatcher implements AssertionPolicy {
-
-    /**
-     * The message to show.
-     */
-    private final transient String message;
 
     /**
      * Header's name.
@@ -60,13 +58,10 @@ public final class HeaderMatcher implements AssertionPolicy {
 
     /**
      * Public ctor.
-     * @param msg The message to show
      * @param hdr The name of the header to match
      * @param mtch The matcher to use
      */
-    public HeaderMatcher(final String msg, final String hdr,
-        final Matcher<String> mtch) {
-        this.message = msg;
+    public HeaderMatcher(final String hdr, final Matcher<String> mtch) {
         this.name = hdr;
         this.matcher = mtch;
     }
@@ -75,10 +70,14 @@ public final class HeaderMatcher implements AssertionPolicy {
      * {@inheritDoc}
      */
     @Override
-    public void assertThat(final TestResponse rsp) {
+    public void assertThat(final TestResponse response) {
         MatcherAssert.assertThat(
-            this.message,
-            rsp.getHeaders().getFirst(this.name),
+            Logger.format(
+                "HTTP header '%s' has to match:\n%s",
+                this.name,
+                response
+            ),
+            response.getHeaders().getFirst(this.name),
             this.matcher
         );
     }

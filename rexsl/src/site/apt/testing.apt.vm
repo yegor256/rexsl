@@ -44,17 +44,20 @@ Introduction to ReXSL Testing
   "Growing Object-Oriented Software, Guided by Tests",
   by Steve Freeman and Nat Pryce, Addison-Wesley Professional, October 2009
   ({{{http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627}in amazon.com}}).
-  We created three supplementary classes that help you to test
+
+  We created two supplementary classes that help you to test
   your JAXB Model:
-  {{{./rexsl-test/apidocs/com/rexsl/test/JaxbConverter.html}JaxbConverter}},
-  {{{./rexsl-test/apidocs/com/rexsl/test/XhtmlConverter.html}XhtmlConverter}},
-  {{{./rexsl-test/apidocs/com/rexsl/test/XhtmlMatchers.html}XhtmlMatchers}},
+  {{{./rexsl-test/apidocs/com/rexsl/test/JaxbConverter.html}JaxbConverter}} and
+  {{{./rexsl-test/apidocs/com/rexsl/test/XhtmlMatchers.html}XhtmlMatchers}}
   (read their JavaDocs for more details).
 
-  Interesting part is integration and catapult testing. To be continued...
+  Interesting part is integration and catapult testing.
+
+  To be continued...
 
   Most important integration testing
-  {{{./rexsl-maven-plugin/apidocs/com/rexsl/maven/checks/DefaultChecksProvider.html}"checks"}}.
+  "{{{./rexsl-maven-plugin/apidocs/com/rexsl/maven/checks/DefaultChecksProvider.html}checks}}".
 
-  Some new checks will appear in the next versions of ReXSL Maven plugin.
+  Some new checks will appear in the next versions of
+  {{{./rexsl-maven-plugin/index.html}Maven plugin}}.
 

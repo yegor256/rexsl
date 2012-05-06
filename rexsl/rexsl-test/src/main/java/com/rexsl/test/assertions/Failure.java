@@ -29,11 +29,14 @@
  */
 package com.rexsl.test.assertions;
 
+import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
 
 /**
  * Always fail.
+ *
+ * <p>This class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -58,8 +61,10 @@ public final class Failure implements AssertionPolicy {
      * {@inheritDoc}
      */
     @Override
-    public void assertThat(final TestResponse rsp) {
-        throw new AssertionError(this.reason);
+    public void assertThat(final TestResponse response) {
+        throw new AssertionError(
+            Logger.format("%s:\n%s", this.reason, response)
+        );
     }
 
     /**

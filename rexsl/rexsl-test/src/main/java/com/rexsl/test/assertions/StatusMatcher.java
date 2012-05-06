@@ -29,6 +29,7 @@
  */
 package com.rexsl.test.assertions;
 
+import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
 import org.hamcrest.Matcher;
@@ -37,16 +38,13 @@ import org.hamcrest.MatcherAssert;
 /**
  * Matches HTTP status against required value.
  *
+ * <p>This class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.4
  */
 public final class StatusMatcher implements AssertionPolicy {
-
-    /**
-     * The message to show.
-     */
-    private final transient String message;
 
     /**
      * The matcher to use.
@@ -55,11 +53,9 @@ public final class StatusMatcher implements AssertionPolicy {
 
     /**
      * Public ctor.
-     * @param msg The message to show
      * @param mtch The matcher to use
      */
-    public StatusMatcher(final String msg, final Matcher<Integer> mtch) {
-        this.message = msg;
+    public StatusMatcher(final Matcher<Integer> mtch) {
         this.matcher = mtch;
     }
 
@@ -67,10 +63,13 @@ public final class StatusMatcher implements AssertionPolicy {
      * {@inheritDoc}
      */
     @Override
-    public void assertThat(final TestResponse rsp) {
+    public void assertThat(final TestResponse response) {
         MatcherAssert.assertThat(
-            this.message,
-            rsp.getStatus(),
+            Logger.format(
+                "HTTP status code has to match:\n%s",
+                response
+            ),
+            response.getStatus(),
             this.matcher
         );
     }

@@ -108,3 +108,6 @@ ReXSL core module
   {{{./apidocs/com/rexsl/log/CloudAppender.html}<<<CloudAppender>>>}} is
   a log4j appender for logging your events directly to some cloud platform.
 
+  {{{./apidocs/com/rexsl/misc/CookieBuilder.html}<<<CookieBuilder>>>}} is
+  a convenient builder of JAX-RS <<<javax.ws.rs.NewCookie>>> class instance.
+

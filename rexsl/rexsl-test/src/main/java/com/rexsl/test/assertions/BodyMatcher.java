@@ -29,6 +29,7 @@
  */
 package com.rexsl.test.assertions;
 
+import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
 import org.hamcrest.Matcher;
@@ -37,16 +38,13 @@ import org.hamcrest.MatcherAssert;
 /**
  * Matches HTTP body against matcher.
  *
+ * <p>This class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.4
  */
 public final class BodyMatcher implements AssertionPolicy {
-
-    /**
-     * The message to show.
-     */
-    private final transient String message;
 
     /**
      * The matcher to use.
@@ -55,11 +53,9 @@ public final class BodyMatcher implements AssertionPolicy {
 
     /**
      * Public ctor.
-     * @param msg The message to show
      * @param mtch The matcher to use
      */
-    public BodyMatcher(final String msg, final Matcher<String> mtch) {
-        this.message = msg;
+    public BodyMatcher(final Matcher<String> mtch) {
         this.matcher = mtch;
     }
 
@@ -67,10 +63,13 @@ public final class BodyMatcher implements AssertionPolicy {
      * {@inheritDoc}
      */
     @Override
-    public void assertThat(final TestResponse rsp) {
+    public void assertThat(final TestResponse response) {
         MatcherAssert.assertThat(
-            this.message,
-            rsp.getBody(),
+            Logger.format(
+                "HTTP response content has to match:\n%s",
+                response
+            ),
+            response.getBody(),
             this.matcher
         );
     }

@@ -40,7 +40,7 @@ ReXSL, Quick Start Guide
 
   Let's create a new project on top of ReXSL, in 5 minutes.
   Start with a new Maven project with the following directory structure
-  (you can {{{http://svn.rexsl.com/rexsl/trunk/rexsl/rexsl-maven-plugin/src/it/all-correct}checkout}}
+  (you can {{{svn://svn.rexsl.com/rexsl/trunk/rexsl/rexsl-maven-plugin/src/it/all-correct}checkout}}
   a simple project):
 
 +--
@@ -115,7 +115,7 @@ ReXSL, Quick Start Guide
     <dependency>
       <!-- Unit testing framework from http://www.junit.org/ -->
       <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <artifactId>junit-dep</artifactId>
       <version>4.10</version>
       <scope>test</scope>
     </dependency>
@@ -254,13 +254,12 @@ public class HomeTest {
   Maven goal and validated by <<<src/test/rexsl/xhtml/index.groovy>>>:
 
 +--
-import com.rexsl.test.XhtmlConverter
 import com.rexsl.test.XhtmlMatchers
 import org.hamcrest.Matchers
 import org.junit.Assert
 Assert.assertThat(rexsl.document, Matchers.containsString('say hello'))
 Assert.assertThat(
-    XhtmlConverter.the(rexsl.document),
+    rexsl.document,
     XhtmlMatchers.hasXPath("//xhtml:div[contains(.,'say hello')]")
 )
 +--
