@@ -52,6 +52,7 @@
                     <xsl:call-template name="content" />
                 </div>
                 <div id="marker">${marker}</div>
+                <div id="version">${project.version}</div>
             </body>
         </html>
     </xsl:template>
