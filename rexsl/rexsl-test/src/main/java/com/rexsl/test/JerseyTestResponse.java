@@ -114,6 +114,18 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
+    public String toString() {
+        return Logger.format(
+            "HTTP request:\n%s\nHTTP response:\n%s",
+            this.request,
+            new ClientResponseDecor(this.response(), this.getBody())
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TestClient rel(final String query) {
         final List<String> links = this.xpath(query);
         MatcherAssert.assertThat(
@@ -305,15 +317,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public void fail(final String reason) {
-        this.assertThat(
-            new Failure(
-                Logger.format(
-                    "%s:\n%s",
-                    reason,
-                    new ClientResponseDecor(this.response(), this.getBody())
-                )
-            )
-        );
+        this.assertThat(new Failure(reason));
     }
 
     /**
@@ -321,18 +325,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertStatus(final int status) {
-        this.assertThat(
-            new StatusMatcher(
-                Logger.format(
-                    "HTTP code has to be equal to #%d in:\n%s\nRequest:\n%s",
-                    status,
-                    new ClientResponseDecor(this.response(), this.getBody()),
-                    this.request
-                ),
-                Matchers.equalTo(status)
-            )
-        );
-        return this;
+        return this.assertStatus(Matchers.equalTo(status));
     }
 
     /**
@@ -340,16 +333,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertStatus(final Matcher<Integer> matcher) {
-        this.assertThat(
-            new StatusMatcher(
-                Logger.format(
-                    "HTTP status code has to match:\n%s\nRequest:\n%s",
-                    new ClientResponseDecor(this.response(), this.getBody()),
-                    this.request
-                ),
-                matcher
-            )
-        );
+        this.assertThat(new StatusMatcher(matcher));
         return this;
     }
 
@@ -358,18 +342,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertHeader(final String name, final Matcher matcher) {
-        this.assertThat(
-            new HeaderMatcher(
-                Logger.format(
-                    "HTTP header '%s' has to match:\n%s\nRequest:\n%s",
-                    name,
-                    new ClientResponseDecor(this.response(), this.getBody()),
-                    this.request
-                ),
-                name,
-                matcher
-            )
-        );
+        this.assertThat(new HeaderMatcher(name, matcher));
         return this;
     }
 
@@ -378,16 +351,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertBody(final Matcher<String> matcher) {
-        this.assertThat(
-            new BodyMatcher(
-                Logger.format(
-                    "HTTP response content has to match:\n%s\nRequest:\n%s",
-                    new ClientResponseDecor(this.response(), this.getBody()),
-                    this.request
-                ),
-                matcher
-            )
-        );
+        this.assertThat(new BodyMatcher(matcher));
         return this;
     }
 
@@ -396,18 +360,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertXPath(final String xpath) {
-        this.assertThat(
-            new XpathMatcher(
-                Logger.format(
-                    "XPath '%s' has to exist in:\n%s\nRequest:\n%s",
-                    StringEscapeUtils.escapeJava(xpath),
-                    new ClientResponseDecor(this.response(), this.getBody()),
-                    this.request
-                ),
-                this.getXml(),
-                xpath
-            )
-        );
+        this.assertThat(new XpathMatcher(this.getXml(), xpath));
         return this;
     }
 
@@ -470,6 +423,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertJson(final String element) {
+        Logger.warn(this, "method #assertJson() is not implemented yet");
         return this;
     }
 

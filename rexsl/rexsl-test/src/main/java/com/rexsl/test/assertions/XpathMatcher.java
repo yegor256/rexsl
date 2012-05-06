@@ -29,24 +29,24 @@
  */
 package com.rexsl.test.assertions;
 
+import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
 import com.rexsl.test.XmlDocument;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 
 /**
  * Matches HTTP header against required value.
+ *
+ * <p>This class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.4
  */
 public final class XpathMatcher implements AssertionPolicy {
-
-    /**
-     * The message to show.
-     */
-    private final transient String message;
 
     /**
      * The source.
@@ -60,13 +60,10 @@ public final class XpathMatcher implements AssertionPolicy {
 
     /**
      * Public ctor.
-     * @param msg The message to show
      * @param src The source
      * @param path The XPath to find there
      */
-    public XpathMatcher(final String msg, final XmlDocument src,
-        final String path) {
-        this.message = msg;
+    public XpathMatcher(final XmlDocument src, final String path) {
         this.xml = src;
         this.xpath = path;
     }
@@ -75,10 +72,15 @@ public final class XpathMatcher implements AssertionPolicy {
      * {@inheritDoc}
      */
     @Override
-    public void assertThat(final TestResponse rsp) {
+    public void assertThat(final TestResponse response) {
         MatcherAssert.assertThat(
-            this.message,
-            !this.xml.nodes(this.xpath).isEmpty()
+            Logger.format(
+                "XPath '%s' has to exist in:\n%s",
+                StringEscapeUtils.escapeJava(this.xpath),
+                response
+            ),
+            this.xml.nodes(this.xpath),
+            Matchers.not(Matchers.<XmlDocument>empty())
         );
     }
 

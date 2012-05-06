@@ -69,6 +69,16 @@ final class ClientResponseDecor implements Formattable {
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final Formatter fmt = new Formatter();
+        this.formatTo(fmt, 0, 0, 0);
+        return fmt.toString();
+    }
+
+    /**
+     * {@inheritDoc}
      * @checkstyle ParameterNumber (4 lines)
      */
     @Override
