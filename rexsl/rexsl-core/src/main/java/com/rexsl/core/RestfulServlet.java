@@ -184,7 +184,7 @@ public final class RestfulServlet extends HttpServlet {
 
     /**
      * Get jersey servlet, before serialization.
-     * @param servlet The servlet to set
+     * @return The servlet
      */
     public ServletContainer getJersey() {
         return this.jersey;
