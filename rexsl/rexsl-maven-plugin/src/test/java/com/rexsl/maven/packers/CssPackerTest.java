@@ -31,6 +31,7 @@ package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
+import com.rexsl.maven.FilterMocker;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
@@ -56,7 +57,7 @@ public final class CssPackerTest {
                 "\u002F* test */ a: { color: red; }"
         ).mock();
         final File dest = new File(env.webdir(), "css/foo.css");
-        new CssPacker().pack(env, false);
+        new CssPacker().pack(env, new FilterMocker().mock());
         MatcherAssert.assertThat("file is created", dest.exists());
         MatcherAssert.assertThat(
             FileUtils.readFileToString(dest),

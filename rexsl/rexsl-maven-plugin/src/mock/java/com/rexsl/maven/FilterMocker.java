@@ -27,45 +27,54 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.packers;
+package com.rexsl.maven;
 
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.maven.FilterMocker;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.Reader;
 import org.apache.commons.io.FileUtils;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.apache.commons.lang.CharEncoding;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
- * Test case for {@link JsPacker}.
+ * Mocker of {@link Filter}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class JsPackerTest {
+public final class FilterMocker {
 
     /**
-     * JsPacker can pack Javascript files.
-     * @throws Exception If something goes wrong inside
+     * The mock.
      */
-    @Test
-    public void packsJavascriptFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withTextFile(
-                "src/main/webapp/js/simple.js",
-                // @checkstyle LineLength (1 line)
-                "function sum(num) {var i, sum = 0; for (i = 1; i <= num; i++) {sum += i;}}"
-        ).mock();
-        final File dest = new File(env.webdir(), "js/simple.js");
-        new JsPacker().pack(env, new FilterMocker().mock());
-        MatcherAssert.assertThat("packed file created", dest.exists());
-        MatcherAssert.assertThat(
-            FileUtils.readFileToString(dest),
-            Matchers.equalTo(
-                "function sum(a){var b,c=0;for(b=1;b<=a;b++){c+=b}};"
-            )
-        );
+    private final transient Filter filter = Mockito.mock(Filter.class);
+
+    /**
+     * Mock it.
+     * @return Mocked filter
+     */
+    public Filter mock() {
+        try {
+            Mockito.doAnswer(
+                new Answer<Reader>() {
+                    public Reader answer(final InvocationOnMock invocation)
+                        throws IOException {
+                        return new InputStreamReader(
+                            new FileInputStream(
+                                File.class.cast(invocation.getArguments()[0])
+                            ),
+                            CharEncoding.UTF_8
+                        );
+                    }
+                }
+            ).when(this.filter).filter(Mockito.any(File.class));
+        } catch (IOException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        return this.filter;
     }
 
 }

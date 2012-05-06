@@ -31,6 +31,7 @@ package com.rexsl.maven.packers;
 
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.Filter;
 import com.rexsl.maven.Packer;
 import com.rexsl.maven.utils.FileFinder;
 import java.io.File;
@@ -53,7 +54,7 @@ abstract class AbstractPacker implements Packer {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public final void pack(final Environment env, final boolean filtering) {
+    public final void pack(final Environment env, final Filter filter) {
         final File srcdir = new File(
             env.basedir(),
             Logger.format("src/main/webapp/%s", this.extension())
@@ -63,17 +64,7 @@ abstract class AbstractPacker implements Packer {
             for (File src : new FileFinder(srcdir, this.extension()).random()) {
                 final File dest = new File(destdir, src.getName());
                 try {
-                    if (filtering) {
-                        this.pack(this.filtered(src), dest);
-                    } else {
-                        this.pack(
-                            new InputStreamReader(
-                                new FileInputStream(src),
-                                CharEncoding.UTF_8
-                            ),
-                            dest
-                        );
-                    }
+                    this.pack(filter.filter(src), dest);
                 } catch (IOException ex) {
                     throw new IllegalArgumentException(ex);
                 }
@@ -108,15 +99,6 @@ abstract class AbstractPacker implements Packer {
             Logger.info(this, "#ddir(): %s directory created", dir);
         }
         return dir;
-    }
-
-    /**
-     * Open file and filter it on fly.
-     * @param file The file to open
-     * @return The input stream with filtered content
-     */
-    private Reader filtered(final File file) {
-        return null;
     }
 
 }

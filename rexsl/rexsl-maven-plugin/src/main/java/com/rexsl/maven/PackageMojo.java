@@ -31,7 +31,18 @@ package com.rexsl.maven;
 
 import com.jcabi.log.Logger;
 import com.rexsl.maven.packers.PackersProvider;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Package resources.
@@ -104,16 +115,72 @@ public final class PackageMojo extends AbstractRexslMojo {
      */
     @Override
     protected void run() {
+        Filter filter;
+        if (this.filtering) {
+            filter = new Filter() {
+                @Override
+                public Reader filter(final File file) throws IOException {
+                    return new InputStreamReader(
+                        new FileInputStream(file),
+                        CharEncoding.UTF_8
+                    );
+                }
+            };
+        } else {
+            filter = new PackageMojo.PropsFilter();
+        }
         final long start = System.nanoTime();
         final Set<Packer> packers = new PackersProvider().all();
         for (Packer packer : packers) {
-            packer.pack(this.env(), this.filtering);
+            packer.pack(this.env(), filter);
         }
         Logger.info(
             this,
             "Packaging finished in %[nano]s",
             System.nanoTime() - start
         );
+    }
+
+    /**
+     * Filtering using project properties.
+     * @todo #342 Would be better to implement this filtering with custom
+     *  Reader. Current implementation loads the entire file into memory,
+     *  which may be a problem if the file is too big.
+     */
+    private final class PropsFilter implements Filter {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Reader filter(final File file) throws IOException {
+            final String origin = FileUtils.readFileToString(file);
+            final StringBuffer text = new StringBuffer();
+            final Matcher matcher = Pattern.compile("\\$\\{([\\w\\.\\-]+)\\}")
+                .matcher(origin);
+            final Properties props = PackageMojo.this.project().getProperties();
+            while (matcher.find()) {
+                final String name = matcher.group(1);
+                final Object replacer = props.get(name);
+                if (props.containsKey(name)) {
+                    matcher.appendReplacement(text, replacer.toString());
+                    Logger.info(
+                        this,
+                        "'%s' replaced with '%s' in %s",
+                        matcher.group(),
+                        replacer,
+                        file
+                    );
+                } else {
+                    Logger.warn(
+                        this,
+                        "Property '%s' not found in project",
+                        name
+                    );
+                }
+            }
+            matcher.appendTail(text);
+            return new StringReader(text.toString());
+        }
     }
 
 }

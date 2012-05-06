@@ -31,6 +31,7 @@ package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
+import com.rexsl.maven.FilterMocker;
 import com.rexsl.test.XhtmlMatchers;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
@@ -57,7 +58,7 @@ public final class XslPackerTest {
             .withFile("src/main/webapp/xsl/layout.xsl")
             .mock();
         final File dest = new File(env.webdir(), "xsl/layout.xsl");
-        new XslPacker().pack(env, false);
+        new XslPacker().pack(env, new FilterMocker().mock());
         MatcherAssert.assertThat("file created", dest.exists());
         MatcherAssert.assertThat(
             FileUtils.readFileToString(dest),

@@ -27,45 +27,26 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.packers;
+package com.rexsl.maven;
 
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.maven.FilterMocker;
 import java.io.File;
-import org.apache.commons.io.FileUtils;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.Test;
+import java.io.IOException;
+import java.io.Reader;
 
 /**
- * Test case for {@link JsPacker}.
+ * Filter to use.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-public final class JsPackerTest {
+public interface Filter {
 
     /**
-     * JsPacker can pack Javascript files.
-     * @throws Exception If something goes wrong inside
+     * Filter resource before packaging.
+     * @param file Incoming file
+     * @return The reader
+     * @throws IOException If some I/O exception
      */
-    @Test
-    public void packsJavascriptFile() throws Exception {
-        final Environment env = new EnvironmentMocker()
-            .withTextFile(
-                "src/main/webapp/js/simple.js",
-                // @checkstyle LineLength (1 line)
-                "function sum(num) {var i, sum = 0; for (i = 1; i <= num; i++) {sum += i;}}"
-        ).mock();
-        final File dest = new File(env.webdir(), "js/simple.js");
-        new JsPacker().pack(env, new FilterMocker().mock());
-        MatcherAssert.assertThat("packed file created", dest.exists());
-        MatcherAssert.assertThat(
-            FileUtils.readFileToString(dest),
-            Matchers.equalTo(
-                "function sum(a){var b,c=0;for(b=1;b<=a;b++){c+=b}};"
-            )
-        );
-    }
+    Reader filter(File file) throws IOException;
 
 }
