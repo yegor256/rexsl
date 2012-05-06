@@ -27,61 +27,53 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven.packers;
+package com.rexsl.maven;
 
-import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.Writer;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
- * Packager of JS files.
- *
- * <p>All comments, spaces, and unnecessary language
- * constructs are removed.
- *
- * <p>Since this class is NOT public its documentation is not available online.
- * All details of this check should be explained in the JavaDoc of
- * {@link PackersProvider}.
- *
- * <p>The class is immutable and thread-safe.
- *
+ * Mocker of {@link Filter}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-final class JsPacker extends AbstractPacker {
+public final class FilterMocker {
 
     /**
-     * {@inheritDoc}
+     * The mock.
      */
-    @Override
-    protected String extension() {
-        return "js";
-    }
+    private final transient Filter filter = Mockito.mock(Filter.class);
+
     /**
-     * {@inheritDoc}
+     * Mock it.
+     * @return Mocked filter
      */
-    @Override
-    protected void pack(final Reader input, final File dest)
-        throws IOException {
+    public Filter mock() {
         try {
-            final Writer output = new OutputStreamWriter(
-                new FileOutputStream(dest),
-                CharEncoding.UTF_8
-            );
-            try {
-                new JavaScriptCompressor(input, new YuiReporter())
-                    .compress(output, -1, true, false, false, false);
-            } finally {
-                IOUtils.closeQuietly(output);
-            }
-        } finally {
-            IOUtils.closeQuietly(input);
+            Mockito.doAnswer(
+                new Answer<Reader>() {
+                    public Reader answer(final InvocationOnMock invocation)
+                        throws IOException {
+                        return new InputStreamReader(
+                            new FileInputStream(
+                                File.class.cast(invocation.getArguments()[0])
+                            ),
+                            CharEncoding.UTF_8
+                        );
+                    }
+                }
+            ).when(this.filter).filter(Mockito.any(File.class));
+        } catch (IOException ex) {
+            throw new IllegalArgumentException(ex);
         }
+        return this.filter;
     }
+
 }

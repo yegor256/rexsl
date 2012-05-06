@@ -40,7 +40,8 @@ public interface Packer {
     /**
      * Package files inside the destination folder.
      * @param env The environment
+     * @param filter Filter to use
      */
-    void pack(final Environment env);
+    void pack(Environment env, Filter filter);
 
 }

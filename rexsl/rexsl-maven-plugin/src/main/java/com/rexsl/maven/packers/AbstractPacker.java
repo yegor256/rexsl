@@ -31,10 +31,12 @@ package com.rexsl.maven.packers;
 
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.Filter;
 import com.rexsl.maven.Packer;
 import com.rexsl.maven.utils.FileFinder;
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 
 /**
  * Abstract packer.
@@ -49,7 +51,7 @@ abstract class AbstractPacker implements Packer {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public final void pack(final Environment env) {
+    public final void pack(final Environment env, final Filter filter) {
         final File srcdir = new File(
             env.basedir(),
             Logger.format("src/main/webapp/%s", this.extension())
@@ -59,7 +61,7 @@ abstract class AbstractPacker implements Packer {
             for (File src : new FileFinder(srcdir, this.extension()).random()) {
                 final File dest = new File(destdir, src.getName());
                 try {
-                    this.pack(src, dest);
+                    this.pack(filter.filter(src), dest);
                 } catch (IOException ex) {
                     throw new IllegalArgumentException(ex);
                 }
@@ -81,7 +83,7 @@ abstract class AbstractPacker implements Packer {
      * @param dest Destination file
      * @throws IOException If some IO problem inside
      */
-    protected abstract void pack(File src, File dest) throws IOException;
+    protected abstract void pack(Reader src, File dest) throws IOException;
 
     /**
      * Prepare and return destination dir.

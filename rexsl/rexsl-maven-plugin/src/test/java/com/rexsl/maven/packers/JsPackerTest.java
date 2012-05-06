@@ -31,6 +31,7 @@ package com.rexsl.maven.packers;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
+import com.rexsl.maven.FilterMocker;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
@@ -57,7 +58,7 @@ public final class JsPackerTest {
                 "function sum(num) {var i, sum = 0; for (i = 1; i <= num; i++) {sum += i;}}"
         ).mock();
         final File dest = new File(env.webdir(), "js/simple.js");
-        new JsPacker().pack(env);
+        new JsPacker().pack(env, new FilterMocker().mock());
         MatcherAssert.assertThat("packed file created", dest.exists());
         MatcherAssert.assertThat(
             FileUtils.readFileToString(dest),

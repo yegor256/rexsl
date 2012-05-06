@@ -31,7 +31,18 @@ package com.rexsl.maven;
 
 import com.jcabi.log.Logger;
 import com.rexsl.maven.packers.PackersProvider;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Package resources.
@@ -82,20 +93,106 @@ import java.util.Set;
 public final class PackageMojo extends AbstractRexslMojo {
 
     /**
+     * Static resources (CSS, XSL, JS, etc.) should be filtered before
+     * packaging.
+     *
+     * <p>At the moment only properties defined in {@code pom/properties}
+     * section are supported.
+     *
+     * @parameter expression="${rexsl.filtering}"
+     * @since 0.3.7
+     * @see <a href="http://trac.rexsl.com/rexsl/ticket/342">Introduced in ticket #342</a>
+     */
+    private transient boolean filtering;
+
+    /**
+     * Set filtering.
+     * @param fltr Shall we filter before packaging?
+     */
+    public void setFiltering(final boolean fltr) {
+        this.filtering = fltr;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     protected void run() {
+        Filter filter;
+        if (this.filtering) {
+            filter = new Filter() {
+                @Override
+                public Reader filter(final File file) throws IOException {
+                    return new InputStreamReader(
+                        new FileInputStream(file),
+                        CharEncoding.UTF_8
+                    );
+                }
+            };
+        } else {
+            filter = new PackageMojo.PropsFilter();
+        }
         final long start = System.nanoTime();
         final Set<Packer> packers = new PackersProvider().all();
         for (Packer packer : packers) {
-            packer.pack(this.env());
+            packer.pack(this.env(), filter);
         }
         Logger.info(
             this,
             "Packaging finished in %[nano]s",
             System.nanoTime() - start
         );
+    }
+
+    /**
+     * Filtering using project properties.
+     * @todo #342 Would be better to implement this filtering with custom
+     *  Reader. Current implementation loads the entire file into memory,
+     *  which may be a problem if the file is too big.
+     * @todo #342 Only properties from PROPERTIES section in pom.xml are
+     *  supported. I don't know how to get access to all other project props.
+     */
+    private final class PropsFilter implements Filter {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Reader filter(final File file) throws IOException {
+            final String origin = FileUtils.readFileToString(file);
+            final StringBuffer text = new StringBuffer();
+            final Matcher matcher = Pattern.compile("\\$\\{([\\w\\.\\-]+)\\}")
+                .matcher(origin);
+            final Properties props = PackageMojo.this.project().getProperties();
+            Logger.debug(
+                this,
+                "#filter(..): all properties available %[list]s",
+                props.keySet()
+            );
+            while (matcher.find()) {
+                final String name = matcher.group(1);
+                String replacer;
+                if (props.containsKey(name)) {
+                    replacer = props.get(name).toString();
+                    Logger.info(
+                        this,
+                        "'%s' replaced with '%s' in %s",
+                        matcher.group(),
+                        replacer,
+                        file
+                    );
+                } else {
+                    replacer = matcher.group();
+                    Logger.warn(
+                        this,
+                        "'%s' can't be replaced, not found in project",
+                        matcher.group()
+                    );
+                }
+                matcher.appendReplacement(text, replacer);
+            }
+            matcher.appendTail(text);
+            return new StringReader(text.toString());
+        }
     }
 
 }
