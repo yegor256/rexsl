@@ -184,11 +184,15 @@ public final class PackageMojo extends AbstractRexslMojo {
                     replacer = matcher.group();
                     Logger.warn(
                         this,
-                        "'%s' can't be replaced, not found in project",
-                        matcher.group()
+                        "'%s' can't be replaced in %s (not found in pom.xml)",
+                        matcher.group(),
+                        file
                     );
                 }
-                matcher.appendReplacement(text, replacer);
+                matcher.appendReplacement(
+                    text,
+                    Matcher.quoteReplacement(replacer)
+                );
             }
             matcher.appendTail(text);
             return new StringReader(text.toString());

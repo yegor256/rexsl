@@ -18,6 +18,7 @@
                 <div id="content">
                     <xsl:call-template name="content" />
                 </div>
+                <div>${project.version}</div>
             </body>
         </html>
     </xsl:template>
