@@ -35,11 +35,8 @@ import com.rexsl.maven.Filter;
 import com.rexsl.maven.Packer;
 import com.rexsl.maven.utils.FileFinder;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
-import org.apache.commons.lang.CharEncoding;
 
 /**
  * Abstract packer.

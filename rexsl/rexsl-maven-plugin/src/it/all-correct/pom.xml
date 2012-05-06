@@ -54,6 +54,7 @@
          It's definitely a defect and should be fixed.
         -->
         <catapult.context>/</catapult.context>
+        <marker>ABC</marker>
     </properties>
 
     <dependencies>

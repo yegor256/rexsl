@@ -33,8 +33,8 @@ import com.jcabi.log.Logger;
 import com.rexsl.maven.packers.PackersProvider;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Properties;
@@ -96,6 +96,9 @@ public final class PackageMojo extends AbstractRexslMojo {
      * Static resources (CSS, XSL, JS, etc.) should be filtered before
      * packaging.
      *
+     * <p>At the moment only properties defined in {@code pom/properties}
+     * section are supported.
+     *
      * @parameter expression="${rexsl.filtering}"
      * @since 0.3.7
      * @see <a href="http://trac.rexsl.com/rexsl/ticket/342">Introduced in ticket #342</a>
@@ -146,6 +149,8 @@ public final class PackageMojo extends AbstractRexslMojo {
      * @todo #342 Would be better to implement this filtering with custom
      *  Reader. Current implementation loads the entire file into memory,
      *  which may be a problem if the file is too big.
+     * @todo #342 Only properties from PROPERTIES section in pom.xml are
+     *  supported. I don't know how to get access to all other project props.
      */
     private final class PropsFilter implements Filter {
         /**
@@ -158,11 +163,16 @@ public final class PackageMojo extends AbstractRexslMojo {
             final Matcher matcher = Pattern.compile("\\$\\{([\\w\\.\\-]+)\\}")
                 .matcher(origin);
             final Properties props = PackageMojo.this.project().getProperties();
+            Logger.debug(
+                this,
+                "#filter(..): all properties available %[list]s",
+                props.keySet()
+            );
             while (matcher.find()) {
                 final String name = matcher.group(1);
-                final Object replacer = props.get(name);
+                String replacer;
                 if (props.containsKey(name)) {
-                    matcher.appendReplacement(text, replacer.toString());
+                    replacer = props.get(name).toString();
                     Logger.info(
                         this,
                         "'%s' replaced with '%s' in %s",
@@ -171,12 +181,14 @@ public final class PackageMojo extends AbstractRexslMojo {
                         file
                     );
                 } else {
+                    replacer = matcher.group();
                     Logger.warn(
                         this,
-                        "Property '%s' not found in project",
-                        name
+                        "'%s' can't be replaced, not found in project",
+                        matcher.group()
                     );
                 }
+                matcher.appendReplacement(text, replacer);
             }
             matcher.appendTail(text);
             return new StringReader(text.toString());

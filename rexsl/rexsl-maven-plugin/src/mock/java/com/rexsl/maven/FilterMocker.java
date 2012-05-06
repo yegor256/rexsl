@@ -31,10 +31,9 @@ package com.rexsl.maven;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;

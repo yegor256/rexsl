@@ -50,9 +50,10 @@ assert css.exists()
 assert !css.text.contains('/**')
 
 def xsl = new File(basedir, 'target/all-correct-1.0/xsl/layout.xsl')
-MatcherAssert.assertThat(xsl,
+MatcherAssert.assertThat(
+    xsl.text,
     Matchers.allOf(
         Matchers.not(XhtmlMatchers.hasXPath('//comment()')),
-        XhtmlMatchers.hasXPath('//xhtml:div[.="1.0"]')
+        XhtmlMatchers.hasXPath('//xhtml:div[@id="marker" and .="ABC"]')
     )
 )
