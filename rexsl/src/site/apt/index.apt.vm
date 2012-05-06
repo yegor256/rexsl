@@ -80,7 +80,7 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
   {{{http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol}HTTP 1.1}},
   {{{http://en.wikipedia.org/wiki/Test-driven_development}TDD}}.
   If any of these technologies are new for you - ReXSL won't work. However, we strongly
-  recommend to learn them :)
+  recommend to learn them.
 
   These are the reasons why you should consider ReXSL over other Java web front
   frameworks like
