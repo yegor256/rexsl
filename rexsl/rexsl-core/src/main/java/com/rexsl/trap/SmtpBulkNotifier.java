@@ -58,6 +58,7 @@ import javax.mail.internet.MimeMultipart;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.6
+ * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @SuppressWarnings("PMD.DoNotUseThreads")
 public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
