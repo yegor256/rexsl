@@ -30,6 +30,7 @@
 package com.rexsl.log;
 
 import com.jcabi.log.Logger;
+import com.jcabi.log.VerboseThreads;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -126,14 +127,16 @@ public final class CloudAppender extends AppenderSkeleton {
             );
         }
         super.activateOptions();
-        this.future = Executors.newSingleThreadExecutor().submit(
-            new Runnable() {
-                @Override
-                public void run() {
-                    CloudAppender.this.background();
+        this.future = Executors
+            .newSingleThreadExecutor(new VerboseThreads(this))
+            .submit(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        CloudAppender.this.background();
+                    }
                 }
-            }
-        );
+            );
     }
 
     /**

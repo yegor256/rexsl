@@ -30,6 +30,7 @@
 package com.rexsl.trap;
 
 import com.jcabi.log.Logger;
+import com.jcabi.log.VerboseThreads;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
@@ -90,7 +91,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
         super(props);
         final long interval = this.interval();
         this.future = Executors
-            .newSingleThreadScheduledExecutor()
+            .newSingleThreadScheduledExecutor(new VerboseThreads(this))
             .scheduleAtFixedRate(
                 new Runnable() {
                     @Override
