@@ -30,6 +30,7 @@
 package com.rexsl.trap;
 
 import com.jcabi.log.Logger;
+import com.jcabi.log.VerboseThreads;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
@@ -57,6 +58,7 @@ import javax.mail.internet.MimeMultipart;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.6
+ * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @SuppressWarnings("PMD.DoNotUseThreads")
 public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
@@ -90,7 +92,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
         super(props);
         final long interval = this.interval();
         this.future = Executors
-            .newSingleThreadScheduledExecutor()
+            .newSingleThreadScheduledExecutor(new VerboseThreads(this))
             .scheduleAtFixedRate(
                 new Runnable() {
                     @Override
