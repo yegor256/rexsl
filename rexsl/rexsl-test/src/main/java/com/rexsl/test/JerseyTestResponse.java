@@ -49,6 +49,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.w3c.dom.Node;
 
 /**
  * Implementation of {@link TestResponse}.
@@ -177,6 +178,14 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public int getStatus() {
         return this.response().getStatus();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node node() {
+        return this.getXml().node();
     }
 
     /**

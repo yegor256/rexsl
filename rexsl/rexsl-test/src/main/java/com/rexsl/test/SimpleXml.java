@@ -68,7 +68,7 @@ public final class SimpleXml implements XmlDocument {
     /**
      * Cached document.
      */
-    private final transient Node node;
+    private final transient Node dom;
 
     /**
      * Public ctor, from XML as a text.
@@ -140,12 +140,30 @@ public final class SimpleXml implements XmlDocument {
 
     /**
      * Private ctor.
-     * @param dom The source
+     * @param node The source
      * @param ctx Namespace context
      */
-    private SimpleXml(final Node dom, final XPathContext ctx) {
-        this.node = dom;
+    private SimpleXml(final Node node, final XPathContext ctx) {
+        this.dom = node;
         this.context = ctx;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.3.8
+     */
+    @Override
+    public String toString() {
+        return new DomPrinter(this.dom).toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.3.8
+     */
+    @Override
+    public Node node() {
+        return this.dom;
     }
 
     /**
@@ -165,7 +183,7 @@ public final class SimpleXml implements XmlDocument {
             );
             items.add(nodes.item(idx).getNodeValue());
         }
-        return new ListWrapper<String>(items, this.node, query);
+        return new ListWrapper<String>(items, this.dom, query);
     }
 
     /**
@@ -173,7 +191,7 @@ public final class SimpleXml implements XmlDocument {
      */
     @Override
     public SimpleXml registerNs(final String prefix, final Object uri) {
-        return new SimpleXml(this.node, this.context.add(prefix, uri));
+        return new SimpleXml(this.dom, this.context.add(prefix, uri));
     }
 
     /**
@@ -188,7 +206,7 @@ public final class SimpleXml implements XmlDocument {
         for (int idx = 0; idx < nodes.getLength(); ++idx) {
             items.add(new SimpleXml(nodes.item(idx), this.context));
         }
-        return new ListWrapper<XmlDocument>(items, this.node, query);
+        return new ListWrapper<XmlDocument>(items, this.dom, query);
     }
 
     /**
@@ -196,7 +214,7 @@ public final class SimpleXml implements XmlDocument {
      */
     @Override
     public XmlDocument merge(final NamespaceContext ctx) {
-        return new SimpleXml(this.node, this.context.merge(ctx));
+        return new SimpleXml(this.dom, this.context.merge(ctx));
     }
 
     /**
@@ -211,7 +229,7 @@ public final class SimpleXml implements XmlDocument {
             xpath.setNamespaceContext(this.context);
             nodes = (NodeList) xpath.evaluate(
                 query,
-                this.node,
+                this.dom,
                 XPathConstants.NODESET
             );
         } catch (javax.xml.xpath.XPathExpressionException ex) {
