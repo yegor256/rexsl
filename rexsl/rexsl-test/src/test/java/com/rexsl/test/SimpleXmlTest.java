@@ -136,6 +136,19 @@ public final class SimpleXmlTest {
     }
 
     /**
+     * SimpleXml can convert itself back to XML.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void convertsItselfToXml() throws Exception {
+        final XmlDocument doc = new SimpleXml("<hello><a/></hello>");
+        MatcherAssert.assertThat(
+            doc,
+            Matchers.hasToString(XhtmlMatchers.hasXPath("/hello/a"))
+        );
+    }
+
+    /**
      * SimpleXml can throw custom exception when XPath not found.
      * @throws Exception If something goes wrong inside
      */

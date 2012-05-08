@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import java.util.List;
 import javax.xml.namespace.NamespaceContext;
+import org.w3c.dom.Node;
 
 /**
  * XML document.
@@ -45,7 +46,12 @@ import javax.xml.namespace.NamespaceContext;
  * }
  * </pre>
  *
- * <p>Implementation of this interface shall be immutable and thread-safe.
+ * <p>You can always get DOM node out of this abstraction using {@link #node()}
+ * method.
+ *
+ * <p>{@link #toString()} must produce a full XML.
+ *
+ * <p>Implementation of this interface must be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -127,5 +133,12 @@ public interface XmlDocument {
      * @return A new XML document, with a merged context on board
      */
     XmlDocument merge(NamespaceContext context);
+
+    /**
+     * Retrieve DOM node, represented by this wrapper.
+     * @return DOM node
+     * @since 0.3.8
+     */
+    Node node();
 
 }
