@@ -115,10 +115,7 @@ public final class GroovyExecutor {
             gse.run(file.getName(), this.binding);
         // @checkstyle IllegalCatch (1 line)
         } catch (Throwable ex) {
-            throw new GroovyException(
-                Logger.format("Exception: %[exception]s", ex),
-                ex
-            );
+            throw new GroovyException("%[exception]s", ex);
         }
     }
 
