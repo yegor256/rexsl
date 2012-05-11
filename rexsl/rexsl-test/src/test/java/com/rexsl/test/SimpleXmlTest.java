@@ -38,6 +38,7 @@ import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.w3c.dom.Node;
 
 /**
  * Test case for {@link SimpleXml}.
@@ -145,6 +146,23 @@ public final class SimpleXmlTest {
         MatcherAssert.assertThat(
             doc,
             Matchers.hasToString(XhtmlMatchers.hasXPath("/hello/a"))
+        );
+    }
+
+    /**
+     * SimpleXml can retrieve DOM node.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void retrievesDomNode() throws Exception {
+        final XmlDocument doc = new SimpleXml("<root><dd>works?</dd></root>");
+        MatcherAssert.assertThat(
+            doc.nodes("/root/dd").get(0).node().getNodeName(),
+            Matchers.equalTo("dd")
+        );
+        MatcherAssert.assertThat(
+            doc.nodes("//dd").get(0).node().getNodeType(),
+            Matchers.equalTo(Node.ELEMENT_NODE)
         );
     }
 
