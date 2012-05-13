@@ -29,8 +29,8 @@
  */
 package com.rexsl.maven;
 
+import com.jcabi.aether.Aether;
 import com.jcabi.log.Logger;
-import com.rexsl.maven.aether.DepsResolver;
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Properties;
@@ -40,6 +40,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
+import org.sonatype.aether.util.artifact.JavaScopes;
 
 /**
  * Environment proxy, between Maven plugin and checks.
@@ -180,12 +181,12 @@ public final class MavenEnvironment implements Environment {
      */
     private Set<Artifact> artifacts(final boolean tonly) {
         final Set<Artifact> artifacts = new LinkedHashSet<Artifact>();
-        final DepsResolver resolver =
-            new DepsResolver(this.project, this.localRepo);
+        final Aether aether = new Aether(this.project, this.localRepo);
         Logger.debug(this, "Full tree of artifacts in classpath:");
         for (RootArtifact root : this.roots(tonly)) {
             Logger.debug(this, "  %s", root);
-            for (Artifact dep : resolver.deps(root.artifact())) {
+            for (Artifact dep
+                : aether.resolve(root.artifact(), JavaScopes.RUNTIME)) {
                 boolean found = false;
                 for (Artifact exists : artifacts) {
                     if (dep.getArtifactId().equals(exists.getArtifactId())
