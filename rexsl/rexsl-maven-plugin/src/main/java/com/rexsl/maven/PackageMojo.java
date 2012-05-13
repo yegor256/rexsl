@@ -139,7 +139,7 @@ public final class PackageMojo extends AbstractRexslMojo {
         }
         Logger.info(
             this,
-            "Packaging finished in %[nano]s",
+            "Packaging finished in %[ms]s",
             System.currentTimeMillis() - start
         );
     }

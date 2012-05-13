@@ -149,7 +149,7 @@ final class ContextResourceResolver implements URIResolver {
         }
         Logger.debug(
             this,
-            "#fetch('%s'): retrieved %d bytes of type '%s' in %[nano]s",
+            "#fetch('%s'): retrieved %d bytes of type '%s' in %[ms]s",
             uri,
             conn.getContentLength(),
             conn.getContentType(),

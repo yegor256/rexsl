@@ -227,7 +227,7 @@ public final class XsltFilter implements Filter {
         final String output = writer.toString();
         Logger.debug(
             this,
-            "#tranform(%d chars): produced %d chars in %[nano]s",
+            "#tranform(%d chars): produced %d chars in %[ns]s",
             xml.length(),
             output.length(),
             System.currentTimeMillis() - start

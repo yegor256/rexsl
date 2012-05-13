@@ -324,7 +324,7 @@ public final class Manifests {
             Manifests.attributes.putAll(attrs);
             Logger.info(
                 Manifests.class,
-                "#append(%s): %d attribs loaded from %s in %[nano]s: %[list]s",
+                "#append(%s): %d attribs loaded from %s in %[ms]s: %[list]s",
                 ctx.getClass().getName(),
                 attrs.size(),
                 main,
@@ -350,7 +350,7 @@ public final class Manifests {
         Manifests.attributes.putAll(attrs);
         Logger.info(
             Manifests.class,
-            "#append('%s'): %d attributes loaded in %[nano]s: %[list]s",
+            "#append('%s'): %d attributes loaded in %[ms]s: %[list]s",
             file,
             attrs.size(),
             System.currentTimeMillis() - start,
@@ -389,7 +389,7 @@ public final class Manifests {
         }
         Logger.info(
             Manifests.class,
-            "#load(): %d attribs loaded from %d URL(s) in %[nano]s: %[list]s",
+            "#load(): %d attribs loaded from %d URL(s) in %[ms]s: %[list]s",
             attrs.size(),
             count,
             System.currentTimeMillis() - start,

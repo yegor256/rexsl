@@ -148,7 +148,7 @@ public final class CheckMojo extends AbstractRexslMojo {
         }
         Logger.info(
             this,
-            "All ReXSL checks passed in %[nano]s",
+            "All ReXSL checks passed in %[ms]s",
             System.currentTimeMillis() - start
         );
     }
@@ -164,7 +164,7 @@ public final class CheckMojo extends AbstractRexslMojo {
         if (!chck.validate(this.env())) {
             throw new MojoFailureException(
                 Logger.format(
-                    "%s check failed in %[nano]s",
+                    "%s check failed in %[ms]s",
                     chck.getClass().getName(),
                     System.currentTimeMillis() - start
                 )
@@ -172,7 +172,7 @@ public final class CheckMojo extends AbstractRexslMojo {
         }
         Logger.info(
             this,
-            "%[type]s completed in %[nano]s",
+            "%[type]s completed in %[ms]s",
             chck,
             System.currentTimeMillis() - start
         );

@@ -209,7 +209,7 @@ final class JerseyTestClient implements TestClient {
         );
         Logger.info(
             this,
-            "#%s('%s'): \"%s\" completed in %[nano]s [%d %s]: %s",
+            "#%s('%s'): \"%s\" completed in %[ms]s [%d %s]: %s",
             name,
             this.home.getPath(),
             desc,
