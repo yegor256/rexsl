@@ -110,7 +110,17 @@
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-aether</artifactId>
-            <version since="13 May 2012">0.1.6</version>
+            <version since="13 May 2012">0.1.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>nekohtml</groupId>
+                    <artifactId>nekohtml</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>nekohtml</groupId>
+                    <artifactId>xercesMinimal</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.sonatype.aether</groupId>
