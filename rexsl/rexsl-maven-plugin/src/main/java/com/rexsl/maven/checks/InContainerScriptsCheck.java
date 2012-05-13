@@ -36,6 +36,7 @@ import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.GroovyExecutor;
+import com.rexsl.maven.utils.LoggingManager;
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -118,10 +119,15 @@ final class InContainerScriptsCheck implements Check {
             if (!name.matches(this.test)) {
                 continue;
             }
-            Logger.info(this, "Testing '%s'...", script);
-            if (!this.one(env, script)) {
-                success = false;
-                failed.add(script.getName());
+            LoggingManager.enter(name);
+            try {
+                Logger.info(this, "Testing '%s'...", script);
+                if (!this.one(env, script)) {
+                    success = false;
+                    failed.add(script.getName());
+                }
+            } finally {
+                LoggingManager.leave();
             }
         }
         if (!failed.isEmpty()) {

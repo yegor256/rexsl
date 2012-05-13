@@ -31,6 +31,7 @@ package com.rexsl.maven;
 
 import com.jcabi.log.Logger;
 import com.rexsl.maven.checks.DefaultChecksProvider;
+import com.rexsl.maven.utils.LoggingManager;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -135,7 +136,12 @@ public final class CheckMojo extends AbstractRexslMojo {
         final Set<Check> checks = this.provider.all();
         try {
             for (Check chck : checks) {
-                this.single(chck);
+                LoggingManager.enter(chck.getClass().getSimpleName());
+                try {
+                    this.single(chck);
+                } finally {
+                    LoggingManager.leave();
+                }
             }
         } finally {
             this.revert(before);

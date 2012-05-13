@@ -33,6 +33,7 @@ import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.FileFinder;
+import com.rexsl.maven.utils.LoggingManager;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +44,7 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.IOUtil;
 
 /**
@@ -84,15 +86,22 @@ final class JSUnitTestsCheck implements Check {
         if (dir.exists()) {
             final Collection<File> files = new FileFinder(dir, "js").random();
             for (File file : files) {
+                final String name =
+                    FilenameUtils.removeExtension(file.getName());
+                LoggingManager.enter(name);
                 try {
-                    success &= this.one(env.basedir(), file);
-                } catch (InternalCheckException ex) {
-                    Logger.warn(
-                        this,
-                        "Failed:\n%[exception]s",
-                        ex
-                    );
-                    success = false;
+                    try {
+                        success &= this.one(env.basedir(), file);
+                    } catch (InternalCheckException ex) {
+                        Logger.warn(
+                            this,
+                            "Failed:\n%[exception]s",
+                            ex
+                        );
+                        success = false;
+                    }
+                } finally {
+                    LoggingManager.leave();
                 }
             }
         } else {

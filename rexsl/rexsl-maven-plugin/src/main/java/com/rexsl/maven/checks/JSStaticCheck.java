@@ -33,9 +33,11 @@ import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.FileFinder;
+import com.rexsl.maven.utils.LoggingManager;
 import java.io.File;
 import java.util.Collection;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Validates Java script files against style sheet rules.
@@ -67,15 +69,22 @@ final class JSStaticCheck implements Check {
         if (dir.exists()) {
             final Collection<File> files = new FileFinder(dir, "js").random();
             for (File file : files) {
+                final String name =
+                    FilenameUtils.removeExtension(file.getName());
+                LoggingManager.enter(name);
                 try {
-                    success &= this.one(file);
-                } catch (InternalCheckException ex) {
-                    Logger.warn(
-                        this,
-                        "Failed:\n%[exception]s",
-                        ex
-                    );
-                    success = false;
+                    try {
+                        success &= this.one(file);
+                    } catch (InternalCheckException ex) {
+                        Logger.warn(
+                            this,
+                            "Failed:\n%[exception]s",
+                            ex
+                        );
+                        success = false;
+                    }
+                } finally {
+                    LoggingManager.leave();
                 }
             }
         } else {
