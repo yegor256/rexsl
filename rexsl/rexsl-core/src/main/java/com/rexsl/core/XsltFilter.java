@@ -178,7 +178,7 @@ public final class XsltFilter implements Filter {
      * @checkstyle RedundantThrows (2 lines)
      */
     private String transform(final String xml) throws ServletException {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         final StringWriter writer = new StringWriter();
         try {
             final Source stylesheet = this.tfactory.getAssociatedStylesheet(
@@ -230,7 +230,7 @@ public final class XsltFilter implements Filter {
             "#tranform(%d chars): produced %d chars in %[nano]s",
             xml.length(),
             output.length(),
-            System.nanoTime() - start
+            System.currentTimeMillis() - start
         );
         return output;
     }

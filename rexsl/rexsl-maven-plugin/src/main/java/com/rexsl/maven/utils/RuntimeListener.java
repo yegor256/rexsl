@@ -49,7 +49,7 @@ public final class RuntimeListener implements ServletContextListener {
     @Override
     @SuppressWarnings("PMD.UseProperClassLoader")
     public void contextInitialized(final ServletContextEvent event) {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         final Environment env = new RuntimeEnvironment(
             event.getServletContext()
         );
@@ -76,7 +76,7 @@ public final class RuntimeListener implements ServletContextListener {
                 "#contextInitialized(%s): initialized with %d script(s) in %[nano]s",
                 event.getClass().getName(),
                 counter,
-                System.nanoTime() - start
+                System.currentTimeMillis() - start
             );
         } else {
             Logger.info(

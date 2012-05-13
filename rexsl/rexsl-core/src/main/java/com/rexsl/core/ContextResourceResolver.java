@@ -133,7 +133,7 @@ final class ContextResourceResolver implements URIResolver {
      * @throws IOException If some problem happens
      */
     private InputStream fetch(final URI uri) throws IOException {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         final HttpURLConnection conn =
             (HttpURLConnection) uri.toURL().openConnection();
         conn.connect();
@@ -153,7 +153,7 @@ final class ContextResourceResolver implements URIResolver {
             uri,
             conn.getContentLength(),
             conn.getContentType(),
-            System.nanoTime() - start
+            System.currentTimeMillis() - start
         );
         return conn.getInputStream();
     }

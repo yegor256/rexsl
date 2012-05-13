@@ -306,7 +306,7 @@ public final class Manifests {
      * @throws IOException If some I/O problem inside
      */
     public static void append(final ServletContext ctx) throws IOException {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         URL main;
         try {
             main = ctx.getResource("/META-INF/MANIFEST.MF");
@@ -328,7 +328,7 @@ public final class Manifests {
                 ctx.getClass().getName(),
                 attrs.size(),
                 main,
-                System.nanoTime() - start,
+                System.currentTimeMillis() - start,
                 new TreeSet<String>(attrs.keySet())
             );
         }
@@ -340,7 +340,7 @@ public final class Manifests {
      * @throws IOException If some I/O problem inside
      */
     public static void append(final File file) throws IOException {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         Map<String, String> attrs;
         try {
             attrs = Manifests.loadOneFile(file.toURI().toURL());
@@ -353,7 +353,7 @@ public final class Manifests {
             "#append('%s'): %d attributes loaded in %[nano]s: %[list]s",
             file,
             attrs.size(),
-            System.nanoTime() - start,
+            System.currentTimeMillis() - start,
             new TreeSet<String>(attrs.keySet())
         );
     }
@@ -368,7 +368,7 @@ public final class Manifests {
      * @return All found attributes
      */
     private static Map<String, String> load() {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         Manifests.failures = new ConcurrentHashMap<URI, String>();
         final Map<String, String> attrs =
             new ConcurrentHashMap<String, String>();
@@ -392,7 +392,7 @@ public final class Manifests {
             "#load(): %d attribs loaded from %d URL(s) in %[nano]s: %[list]s",
             attrs.size(),
             count,
-            System.nanoTime() - start,
+            System.currentTimeMillis() - start,
             new TreeSet<String>(attrs.keySet())
         );
         return attrs;

@@ -193,7 +193,7 @@ final class JerseyTestClient implements TestClient {
         for (Header header : this.headers) {
             builder.header(header.getKey(), header.getValue());
         }
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
             resp = builder.get(ClientResponse.class);
@@ -213,7 +213,7 @@ final class JerseyTestClient implements TestClient {
             name,
             this.home.getPath(),
             desc,
-            System.nanoTime() - start,
+            System.currentTimeMillis() - start,
             resp.getStatus(),
             resp.getClientResponseStatus(),
             this.home
