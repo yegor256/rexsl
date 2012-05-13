@@ -36,6 +36,7 @@ import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.GroovyExecutor;
+import com.rexsl.maven.utils.LoggingManager;
 import com.rexsl.w3c.Defect;
 import com.rexsl.w3c.ValidationResponse;
 import com.rexsl.w3c.Validator;
@@ -117,21 +118,17 @@ final class XhtmlOutputCheck implements Check {
             final Collection<File> files = new FileFinder(dir, "xml").random();
             try {
                 for (File xml : files) {
-                    if (!FilenameUtils.removeExtension(xml.getName())
-                        .matches(this.test)
+                    final String name =
+                        FilenameUtils.removeExtension(xml.getName());
+                    if (!name.matches(this.test)
                     ) {
                         continue;
                     }
+                    LoggingManager.enter(name);
                     try {
-                        Logger.info(this, "Testing %s through...", xml);
-                        this.one(env, xml);
-                    } catch (InternalCheckException ex) {
-                        Logger.warn(
-                            this,
-                            "Failed:\n%[exception]s",
-                            ex
-                        );
-                        success = false;
+                        success = this.process(env, xml);
+                    } finally {
+                        LoggingManager.leave();
                     }
                 }
             } finally {
@@ -144,6 +141,29 @@ final class XhtmlOutputCheck implements Check {
                 "%s directory is absent, no XHTML tests",
                 this.XML_DIR
             );
+        }
+        return success;
+    }
+
+    /**
+     * Process one XML document.
+     * @param env Environment to work with
+     * @param file Check this particular XML document
+     * @return True if validation succeeds
+     * @todo #343 Simplify whole class. Get rid of control by exception throwing
+     */
+    private boolean process(final Environment env, final File file) {
+        boolean success = true;
+        try {
+            Logger.info(this, "Testing %s through...", file);
+            this.one(env, file);
+        } catch (InternalCheckException ex) {
+            Logger.warn(
+                this,
+                "Failed:\n%[exception]s",
+                ex
+            );
+            success = false;
         }
         return success;
     }

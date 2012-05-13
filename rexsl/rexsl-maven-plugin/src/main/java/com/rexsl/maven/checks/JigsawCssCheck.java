@@ -33,6 +33,7 @@ import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.FileFinder;
+import com.rexsl.maven.utils.LoggingManager;
 import com.rexsl.w3c.Defect;
 import com.rexsl.w3c.ValidationResponse;
 import com.rexsl.w3c.Validator;
@@ -42,6 +43,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -94,15 +96,22 @@ final class JigsawCssCheck implements Check {
         if (dir.exists()) {
             final Collection<File> files = new FileFinder(dir, "css").random();
             for (File css : files) {
+                final String name =
+                    FilenameUtils.removeExtension(css.getName());
+                LoggingManager.enter(name);
                 try {
-                    this.one(css);
-                } catch (InternalCheckException ex) {
-                    Logger.warn(
-                        this,
-                        "Failed:\n%[exception]s",
-                        ex
-                    );
-                    success = false;
+                    try {
+                        this.one(css);
+                    } catch (InternalCheckException ex) {
+                        Logger.warn(
+                            this,
+                            "Failed:\n%[exception]s",
+                            ex
+                        );
+                        success = false;
+                    }
+                } finally {
+                    LoggingManager.leave();
                 }
             }
         } else {
