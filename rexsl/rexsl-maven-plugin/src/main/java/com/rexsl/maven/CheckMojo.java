@@ -129,7 +129,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      */
     @Override
     protected void run() throws MojoFailureException {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         final Properties before = this.inject();
         this.provider.setTest(this.test);
         this.provider.setCheck(this.check);
@@ -148,8 +148,8 @@ public final class CheckMojo extends AbstractRexslMojo {
         }
         Logger.info(
             this,
-            "All ReXSL checks passed in %[nano]s",
-            System.nanoTime() - start
+            "All ReXSL checks passed in %[ms]s",
+            System.currentTimeMillis() - start
         );
     }
 
@@ -160,21 +160,21 @@ public final class CheckMojo extends AbstractRexslMojo {
      */
     private void single(final Check chck) throws MojoFailureException {
         Logger.info(this, "%[type]s running...", chck);
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         if (!chck.validate(this.env())) {
             throw new MojoFailureException(
                 Logger.format(
-                    "%s check failed in %[nano]s",
+                    "%s check failed in %[ms]s",
                     chck.getClass().getName(),
-                    System.nanoTime() - start
+                    System.currentTimeMillis() - start
                 )
             );
         }
         Logger.info(
             this,
-            "%[type]s completed in %[nano]s",
+            "%[type]s completed in %[ms]s",
             chck,
-            System.nanoTime() - start
+            System.currentTimeMillis() - start
         );
     }
 

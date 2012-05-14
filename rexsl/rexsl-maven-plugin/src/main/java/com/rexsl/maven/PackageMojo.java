@@ -132,15 +132,15 @@ public final class PackageMojo extends AbstractRexslMojo {
         } else {
             filter = new PackageMojo.PropsFilter();
         }
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         final Set<Packer> packers = new PackersProvider().all();
         for (Packer packer : packers) {
             packer.pack(this.env(), filter);
         }
         Logger.info(
             this,
-            "Packaging finished in %[nano]s",
-            System.nanoTime() - start
+            "Packaging finished in %[ms]s",
+            System.currentTimeMillis() - start
         );
     }
 

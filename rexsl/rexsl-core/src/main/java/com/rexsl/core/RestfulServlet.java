@@ -207,17 +207,20 @@ public final class RestfulServlet extends HttpServlet {
     protected void service(final HttpServletRequest request,
         final HttpServletResponse response)
         throws ServletException, IOException {
-        final long start = System.nanoTime();
+        final long start = System.currentTimeMillis();
         this.jersey.service(request, response);
-        final long nano = System.nanoTime() - start;
+        final long duration = System.currentTimeMillis() - start;
         Logger.debug(
             this,
-            "#service(%s): by Jersey in %[nano]s",
+            "#service(%s): by Jersey in %[ms]s",
             request.getRequestURI(),
-            nano
+            duration
         );
-        // @checkstyle MagicNumber (1 line)
-        response.addHeader("Rexsl-Millis", Long.toString(nano / (1000 * 1000)));
+        // @checkstyle MagicNumber (3 line)
+        response.addHeader(
+            "Rexsl-Millis",
+            Long.toString(duration / (1000 * 1000))
+        );
     }
 
     /**
