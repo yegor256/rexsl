@@ -32,7 +32,6 @@ package com.rexsl.maven.checks;
 import com.rexsl.test.ContainerMocker;
 import com.rexsl.test.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

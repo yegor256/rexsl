@@ -103,7 +103,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         if (ctx == null) {
             throw new IllegalArgumentException("ServletContext can't be NULL");
         }
-        final String name = ctx.getInitParameter("com.rexsl.core.XSD_FOLDER");
+        final String name = ctx.getInitParameter(XslResolver.XSD_FOLDER);
         if (name != null) {
             this.xsdFolder = new File(name);
             Logger.debug(

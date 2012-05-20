@@ -40,6 +40,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Resolver of resources.
@@ -70,7 +71,13 @@ final class RuntimeResolver implements URIResolver {
         throws TransformerException {
         URL url;
         try {
-            url = new URL(String.format("%s%s", this.home, href));
+            url = new URL(
+                String.format(
+                    "%s%s",
+                    this.home,
+                    StringUtils.stripStart(href, "/ ")
+                )
+            );
         } catch (java.net.MalformedURLException ex) {
             throw new TransformerException(ex);
         }

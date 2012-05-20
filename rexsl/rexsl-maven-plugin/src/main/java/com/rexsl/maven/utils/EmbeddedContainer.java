@@ -144,15 +144,15 @@ public final class EmbeddedContainer {
         final ConcurrentMap<String, String> params =
             new ConcurrentHashMap<String, String>();
         params.put(
-            RuntimeEnvironment.BASEDIR,
+            RuntimeEnvironment.BASEDIR_PARAM,
             env.basedir().getAbsolutePath()
         );
         params.put(
-            RuntimeEnvironment.WEBDIR,
+            RuntimeEnvironment.WEBDIR_PARAM,
             env.webdir().getAbsolutePath()
         );
         params.put(
-            RuntimeEnvironment.PORT,
+            RuntimeEnvironment.PORT_PARAM,
             String.valueOf(env.port())
         );
         params.put(

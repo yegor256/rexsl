@@ -299,9 +299,6 @@ public final class Manifests {
      * @see <a href="http://trac.fazend.com/rexsl/ticket/107">Introduced in ticket #107</a>
      */
     public static void revert(final byte[] snapshot) {
-        if (snapshot == null) {
-            throw new IllegalArgumentException("snapshot can't be NULL");
-        }
         synchronized (Manifests.INJECTED) {
             Manifests.INJECTED.clear();
             Manifests.INJECTED.putAll(
@@ -329,9 +326,6 @@ public final class Manifests {
      * @throws IOException If some I/O problem inside
      */
     public static void append(final ServletContext ctx) throws IOException {
-        if (ctx == null) {
-            throw new IllegalArgumentException("ServletContext can't be NULL");
-        }
         final long start = System.currentTimeMillis();
         URL main;
         try {
@@ -366,9 +360,6 @@ public final class Manifests {
      * @throws IOException If some I/O problem inside
      */
     public static void append(final File file) throws IOException {
-        if (file == null) {
-            throw new IllegalArgumentException("file can't be NULL");
-        }
         final long start = System.currentTimeMillis();
         Map<String, String> attrs;
         try {
