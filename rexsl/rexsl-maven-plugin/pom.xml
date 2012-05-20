@@ -92,6 +92,19 @@
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-test</artifactId>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
+            <classifier>mock</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.grizzly</groupId>
+            <artifactId>grizzly-servlet-webserver</artifactId>
+            <version>1.9.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.rexsl</groupId>
             <artifactId>rexsl-w3c</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
         </dependency>

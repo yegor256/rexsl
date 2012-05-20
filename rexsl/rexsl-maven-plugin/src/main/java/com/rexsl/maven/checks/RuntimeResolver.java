@@ -30,13 +30,16 @@
 package com.rexsl.maven.checks;
 
 import com.jcabi.log.Logger;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Resolver of resources.
@@ -44,7 +47,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-class RuntimeResolver implements URIResolver {
+final class RuntimeResolver implements URIResolver {
 
     /**
      * Home page of the site.
@@ -56,7 +59,7 @@ class RuntimeResolver implements URIResolver {
      * @param uri The home page of the site
      */
     public RuntimeResolver(final URI uri) {
-        this.home = uri;
+        this.home = UriBuilder.fromUri(uri).path("/").build();
     }
 
     /**
@@ -67,32 +70,13 @@ class RuntimeResolver implements URIResolver {
         throws TransformerException {
         URL url;
         try {
-            url = new URL(this.home.toString() + href);
+            url = new URL(String.format("%s%s", this.home, href));
         } catch (java.net.MalformedURLException ex) {
             throw new TransformerException(ex);
         }
-        HttpURLConnection conn;
-        int code;
-        try {
-            conn = (HttpURLConnection) url.openConnection();
-            conn.connect();
-            code = conn.getResponseCode();
-        } catch (java.io.IOException ex) {
-            throw new TransformerException(ex);
-        }
-        if (code != HttpURLConnection.HTTP_OK) {
-            throw new TransformerException(
-                Logger.format(
-                    "URL %s returned %d code (instead of %d)",
-                    url,
-                    code,
-                    HttpURLConnection.HTTP_OK
-                )
-            );
-        }
         Source src;
         try {
-            src = new StreamSource(conn.getInputStream());
+            src = this.fetch(url);
         } catch (java.io.IOException ex) {
             throw new TransformerException(ex);
         }
@@ -104,6 +88,39 @@ class RuntimeResolver implements URIResolver {
             base,
             url
         );
+        return src;
+    }
+
+    /**
+     * Fetch source from URL.
+     * @param url The URL to load from
+     * @return The source
+     * @throws IOException If some IO problem inside
+     */
+    private Source fetch(final URL url) throws IOException {
+        final HttpURLConnection conn = HttpURLConnection.class.cast(
+            url.openConnection()
+        );
+        Source src;
+        try {
+            conn.connect();
+            final int code = conn.getResponseCode();
+            if (code != HttpURLConnection.HTTP_OK) {
+                throw new IOException(
+                    Logger.format(
+                        "URL %s returned %d code (instead of %d)",
+                        url,
+                        code,
+                        HttpURLConnection.HTTP_OK
+                    )
+                );
+            }
+            src = new StreamSource(
+                IOUtils.toInputStream(IOUtils.toString(conn.getInputStream()))
+            );
+        } finally {
+            conn.disconnect();
+        }
         return src;
     }
 
