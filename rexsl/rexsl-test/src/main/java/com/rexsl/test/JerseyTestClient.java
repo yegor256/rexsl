@@ -112,7 +112,7 @@ final class JerseyTestClient implements TestClient {
             boolean exists = false;
             for (Header header : this.headers) {
                 if (header.getKey().equals(name)
-                    && header.getValue().toString().equals(value.toString())) {
+                    && header.getValue().equals(value.toString())) {
                     exists = true;
                     break;
                 }
