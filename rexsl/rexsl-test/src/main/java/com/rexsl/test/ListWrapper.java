@@ -160,7 +160,7 @@ final class ListWrapper<T> implements List<T> {
      */
     @Override
     public boolean equals(final Object element) {
-        return this.original.equals(element);
+        return element == this || this.original.equals(element);
     }
 
     /**

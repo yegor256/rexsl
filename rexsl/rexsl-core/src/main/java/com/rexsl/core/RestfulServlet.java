@@ -122,8 +122,8 @@ public final class RestfulServlet extends HttpServlet {
      */
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof RestfulServlet
-            && this.hashCode() == obj.hashCode();
+        return obj == this || (obj instanceof RestfulServlet
+            && this.hashCode() == obj.hashCode());
     }
 
     /**
