@@ -51,6 +51,11 @@ import org.sonatype.aether.util.artifact.JavaScopes;
 public final class MavenEnvironment implements Environment {
 
     /**
+     * Property name, with webappDirectory inside.
+     */
+    public static final String WEBAPP_DIR = "webappDirectory";
+
+    /**
      * The project, from Maven plugin.
      */
     private final transient MavenProject project;
@@ -131,7 +136,8 @@ public final class MavenEnvironment implements Environment {
      */
     @Override
     public File webdir() {
-        final String dir = this.properties.getProperty("webappDirectory");
+        final String dir = this.properties
+            .getProperty(MavenEnvironment.WEBAPP_DIR);
         if (dir == null) {
             throw new IllegalStateException("webappDirectory property not set");
         }
