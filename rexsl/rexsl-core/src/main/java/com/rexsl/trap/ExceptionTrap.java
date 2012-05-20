@@ -97,6 +97,11 @@ import org.apache.commons.lang.CharEncoding;
 public final class ExceptionTrap extends HttpServlet {
 
     /**
+     * Serialization marker.
+     */
+    private static final long serialVersionUID = 0x75298A7876D21470L;
+
+    /**
      * List of notifiers ready to notify.
      */
     private transient List<Notifier> notifiers;

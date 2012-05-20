@@ -45,6 +45,11 @@ import org.w3c.dom.Node;
 public final class NodeNotFoundException extends IndexOutOfBoundsException {
 
     /**
+     * Serialization marker.
+     */
+    private static final long serialVersionUID = 0x7526FA78EEDAC470L;
+
+    /**
      * Public ctor.
      * @param message Error message
      * @param node The XML with error
