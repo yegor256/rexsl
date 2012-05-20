@@ -32,7 +32,6 @@ package com.rexsl.page;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -40,6 +39,7 @@ import org.junit.Test;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("unchecked")
 public final class BasePageTest {
 
     /**
@@ -48,20 +48,21 @@ public final class BasePageTest {
      */
     @Test
     public void convertsToXml() throws Exception {
-        final BasePage page = new BasePage()
-            .init(new ResourceMocker().mock())
-            .append(new JaxbBundle("title", "hello, world!"))
-            .link(new Link("test", "/foo"));
+        final BasePage<BasePage, Resource> page =
+            new BasePage<BasePage, Resource>()
+                .init(new ResourceMocker().mock())
+                .append(new JaxbBundle("title", "hello, world!"))
+                .link(new Link("test", "/foo"));
         MatcherAssert.assertThat(
             JaxbConverter.the(page),
-            Matchers.allOf(
-                XhtmlMatchers.hasXPath("/page/@date"),
-                XhtmlMatchers.hasXPath("/page/@ip"),
-                XhtmlMatchers.hasXPath("/page/millis"),
-                XhtmlMatchers.hasXPath("/page/title[. = 'hello, world!']"),
-                XhtmlMatchers.hasXPath("/page/links/link[@rel = 'home']"),
-                XhtmlMatchers.hasXPath("/page/links/link[@rel = 'self']"),
-                XhtmlMatchers.hasXPath("/page/links/link[@rel = 'test']")
+            XhtmlMatchers.hasXPaths(
+                "/page/@date",
+                "/page/@ip",
+                "/page/millis",
+                "/page/title[. = 'hello, world!']",
+                "/page/links/link[@rel = 'home']",
+                "/page/links/link[@rel = 'self']",
+                "/page/links/link[@rel = 'test']"
             )
         );
     }

@@ -167,7 +167,7 @@ public final class PageBuilder {
     public <T> T build(final Class<T> base) {
         T page;
         try {
-            page = (T) this.createOrFind(base).newInstance();
+            page = base.cast(this.createOrFind(base).newInstance());
         } catch (InstantiationException ex) {
             throw new IllegalStateException(ex);
         } catch (IllegalAccessException ex) {
@@ -196,7 +196,7 @@ public final class PageBuilder {
                 base.getName(),
                 this.xsl.getPath().replaceAll("[^a-zA-Z0-9]", "")
             );
-            Class cls;
+            Class<?> cls;
             if (ClassPool.getDefault().getOrNull(name) == null) {
                 cls = this.construct(name, base);
             } else {
