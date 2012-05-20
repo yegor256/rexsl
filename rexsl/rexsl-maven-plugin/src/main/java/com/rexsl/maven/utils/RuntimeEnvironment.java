@@ -48,6 +48,23 @@ import javax.servlet.ServletContext;
 final class RuntimeEnvironment implements Environment {
 
     /**
+     * Basedir of the project (name of {@link ServletContext} init parameter).
+     */
+    public static final String BASEDIR = "com.rexsl.maven.utils.BASEDIR";
+
+    /**
+     * Webdir of the webapp inside the container (name of
+     * {@link ServletContext} init parameter).
+     */
+    public static final String WEBDIR = "com.rexsl.maven.utils.WEBDIR";
+
+    /**
+     * Port number of the webapp inside the container (name of
+     * {@link ServletContext} init parameter).
+     */
+    public static final String PORT = "com.rexsl.maven.utils.PORT";
+
+    /**
      * Servlet context.
      */
     private final transient ServletContext context;
@@ -66,7 +83,7 @@ final class RuntimeEnvironment implements Environment {
     @Override
     public File basedir() {
         return new File(
-            this.context.getInitParameter("com.rexsl.maven.utils.BASEDIR")
+            this.context.getInitParameter(RuntimeEnvironment.BASEDIR)
         );
     }
 
@@ -76,7 +93,7 @@ final class RuntimeEnvironment implements Environment {
     @Override
     public File webdir() {
         return new File(
-            this.context.getInitParameter("com.rexsl.maven.utils.WEBDIR")
+            this.context.getInitParameter(RuntimeEnvironment.WEBDIR)
         );
     }
 
@@ -108,7 +125,7 @@ final class RuntimeEnvironment implements Environment {
     @Override
     public int port() {
         return Integer.parseInt(
-            this.context.getInitParameter("com.rexsl.maven.utils.PORT")
+            this.context.getInitParameter(RuntimeEnvironment.PORT)
         );
     }
 

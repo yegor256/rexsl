@@ -67,6 +67,12 @@ import org.apache.commons.lang.StringEscapeUtils;
 public final class XslResolver implements ContextResolver<Marshaller> {
 
     /**
+     * Folder name of the location of XSD files
+     * (name of {@link ServletContext} init parameter).
+     */
+    public static final String XSD_FOLDER = "com.rexsl.core.XSD_FOLDER";
+
+    /**
      * Folder with XSD files.
      * @see #setServletContext(ServletContext)
      */

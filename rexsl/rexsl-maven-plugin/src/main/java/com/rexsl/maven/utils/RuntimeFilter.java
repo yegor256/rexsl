@@ -55,6 +55,12 @@ import org.apache.commons.lang.StringUtils;
 public final class RuntimeFilter implements Filter {
 
     /**
+     * Where static files are kept, list of folders
+     * (name of {@link ServletContext} init parameter).
+     */
+    public static final String FOLDERS = "com.rexsl.maven.utils.FOLDERS";
+
+    /**
      * Folders where we read files in runtime.
      */
     private final transient List<File> folders = new ArrayList<File>();
@@ -100,7 +106,7 @@ public final class RuntimeFilter implements Filter {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void init(final FilterConfig config) {
         final String param = config.getServletContext()
-            .getInitParameter("com.rexsl.maven.utils.RUNTIME_FOLDERS");
+            .getInitParameter(RuntimeFilter.FOLDERS);
         for (String name : StringUtils.split(param, ";")) {
             this.folders.add(new File(name));
             Logger.debug(
