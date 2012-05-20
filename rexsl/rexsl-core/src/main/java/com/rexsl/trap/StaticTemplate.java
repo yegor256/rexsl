@@ -105,9 +105,9 @@ public final class StaticTemplate implements Template {
      */
     private static String load(final URI uri) {
         String txt;
+        final InputStream stream = StaticTemplate.class
+            .getResourceAsStream(uri.toString());
         try {
-            final InputStream stream = StaticTemplate.class
-                .getResourceAsStream(uri.toString());
             if (stream == null) {
                 txt = Logger.format(
                     "%s\nresource '%s' not found",
@@ -124,6 +124,8 @@ public final class StaticTemplate implements Template {
                 uri,
                 ex
             );
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
         if (!txt.contains(StaticTemplate.MARKER)) {
             txt = Logger.format("%s\n%s", StaticTemplate.MARKER, txt);

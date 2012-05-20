@@ -30,6 +30,7 @@
 package com.rexsl.maven.utils;
 
 import com.jcabi.log.Logger;
+import com.rexsl.core.XslResolver;
 import com.rexsl.maven.Environment;
 import java.io.File;
 import java.security.Permission;
@@ -143,23 +144,23 @@ public final class EmbeddedContainer {
         final ConcurrentMap<String, String> params =
             new ConcurrentHashMap<String, String>();
         params.put(
-            "com.rexsl.maven.utils.BASEDIR",
+            RuntimeEnvironment.BASEDIR_PARAM,
             env.basedir().getAbsolutePath()
         );
         params.put(
-            "com.rexsl.maven.utils.WEBDIR",
+            RuntimeEnvironment.WEBDIR_PARAM,
             env.webdir().getAbsolutePath()
         );
         params.put(
-            "com.rexsl.maven.utils.PORT",
+            RuntimeEnvironment.PORT_PARAM,
             String.valueOf(env.port())
         );
         params.put(
-            "com.rexsl.maven.utils.RUNTIME_FOLDERS",
+            RuntimeFilter.FOLDERS,
             StringUtils.join(folders, ";")
         );
         params.put(
-            "com.rexsl.core.XSD_FOLDER",
+            XslResolver.XSD_FOLDER,
             new File(env.basedir(), "src/test/rexsl/xsd").getPath()
         );
         return params;

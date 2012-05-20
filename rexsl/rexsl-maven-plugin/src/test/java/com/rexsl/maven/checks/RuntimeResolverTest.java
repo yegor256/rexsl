@@ -29,74 +29,43 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.maven.Environment;
-import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.test.RestTester;
-import java.net.HttpURLConnection;
-import java.net.URI;
+import com.rexsl.test.ContainerMocker;
+import com.rexsl.test.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
-import org.junit.Assume;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Test case for {@link WebXmlCheck}.
- * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
+ * Test case for {@link RuntimeResolver}.
+ * @author Yegor Bugayenko (yegor@qulice.com)
  * @version $Id$
  */
-public final class WebXmlCheckTest {
+public final class RuntimeResolverTest {
 
     /**
-     * Location of web.xml.
+     * Forward SLF4J to Maven Log.
+     * @throws Exception If something is wrong inside
      */
-    private static final String FILE = "src/main/webapp/WEB-INF/web.xml";
-
-    /**
-     * WebXmlCheck can validate correct web.xml file.
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void validatesCorrectWebXmlFile() throws Exception {
-        Assume.assumeTrue(WebXmlCheckTest.online());
-        final Environment env = new EnvironmentMocker()
-            .withFile(WebXmlCheckTest.FILE, "valid-web.xml")
-            .mock();
-        MatcherAssert.assertThat(
-            "valid web.xml passes with problems",
-            new WebXmlCheck().validate(env)
-        );
-    }
-
-    /**
-     * WebXmlCheck can validate incorrect web.xml file.
-     * @throws Exception If something goes wrong
-     */
-    @Test
-    public void validatesIncorrectWebXmlFile() throws Exception {
-        Assume.assumeTrue(WebXmlCheckTest.online());
-        final Environment env = new EnvironmentMocker()
-            .withFile(WebXmlCheckTest.FILE, "invalid-web.xml")
-            .mock();
-        MatcherAssert.assertThat(
-            "invalid web.xml is caught",
-            !new WebXmlCheck().validate(env)
-        );
-    }
-
-    /**
-     * Are we onine?
-     * @return TRUE if we're online
-     */
-    private static boolean online() {
+    @BeforeClass
+    public static void startLogging() throws Exception {
         new com.rexsl.maven.LogMocker().mock();
-        boolean online;
-        try {
-            online = RestTester.start(
-                URI.create("http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd")
-            ).get("validate it").getStatus() == HttpURLConnection.HTTP_OK;
-        } catch (AssertionError ex) {
-            online = false;
-        }
-        return online;
+    }
+
+    /**
+     * RuntimeResolver can resolve source by URL.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void resolvesSourceByUrl() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .returnBody("<doc><test/></doc>")
+            .mock();
+        final RuntimeResolver resolver = new RuntimeResolver(container.home());
+        MatcherAssert.assertThat(
+            resolver.resolve("/", ""),
+            XhtmlMatchers.hasXPath("/doc/test")
+        );
+        container.stop();
     }
 
 }

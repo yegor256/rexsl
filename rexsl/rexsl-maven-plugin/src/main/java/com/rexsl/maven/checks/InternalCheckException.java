@@ -40,6 +40,11 @@ import com.jcabi.log.Logger;
 final class InternalCheckException extends Exception {
 
     /**
+     * Serialization marker.
+     */
+    private static final long serialVersionUID = 0x7526FA7CDED21470L;
+
+    /**
      * Default ctor.
      */
     public InternalCheckException() {

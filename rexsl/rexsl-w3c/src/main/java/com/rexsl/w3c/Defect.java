@@ -105,8 +105,8 @@ public final class Defect {
      */
     @Override
     public boolean equals(final Object defect) {
-        return defect instanceof Defect
-            && this.hashCode() == defect.hashCode();
+        return defect == this || (defect instanceof Defect
+            && this.hashCode() == defect.hashCode());
     }
 
     /**

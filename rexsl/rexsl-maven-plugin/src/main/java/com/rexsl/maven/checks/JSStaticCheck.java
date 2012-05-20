@@ -74,7 +74,7 @@ final class JSStaticCheck implements Check {
                 LoggingManager.enter(name);
                 try {
                     try {
-                        success &= this.one(file);
+                        success &= this.isValid(file);
                     } catch (InternalCheckException ex) {
                         Logger.warn(
                             this,
@@ -98,7 +98,7 @@ final class JSStaticCheck implements Check {
     }
 
     /**
-     * Check one script.
+     * Check one JavaScrip file for validity.
      *
      * <pre>
      * final JSLint lint = new JSLintBuilder().fromDefault();
@@ -118,15 +118,16 @@ final class JSStaticCheck implements Check {
      * @throws InternalCheckException If some failure inside
      * @return Is script valid?
      * @todo #112! Move the code above to this method when yui finish migration
-     *  to Rhino 1.7R3
+     *  to Rhino 1.7R3. At the momemnt the implementaiton is just a stub - it
+     *  validates that the file exists and that's it.
      */
-    private boolean one(final File file) throws InternalCheckException {
-        final String jScript;
+    private boolean isValid(final File file) throws InternalCheckException {
+        final String jscript;
         try {
-            jScript = FileUtils.readFileToString(file);
+            jscript = FileUtils.readFileToString(file);
         } catch (java.io.IOException ex) {
             throw new InternalCheckException(ex);
         }
-        return jScript != null;
+        return jscript != null;
     }
 }

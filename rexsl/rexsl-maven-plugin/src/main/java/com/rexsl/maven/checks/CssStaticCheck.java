@@ -98,13 +98,20 @@ final class CssStaticCheck implements Check {
 
     /**
      * Validate the report from CSSLint.
+     *
+     * <p>CSSLint report is a plain text document, where every line is a
+     * message about one defect. In this method we split this plain text
+     * document into lines and send them one by one to the log. If there are
+     * no lines in the document we return {@code true}, which means that
+     * there are no errors and the CSS document is valid.
+     *
      * @param report The report (one problem per line)
      * @return True if it's valid (no errors)
      */
     private boolean isValid(final String report) {
-        final String[] lines = report.split("\n|\r\n");
+        final String[] lines = report.split("\n");
         for (String line : lines) {
-            Logger.warn(this, "%s", line);
+            Logger.warn(this, "%s", line.trim());
         }
         return lines.length == 0;
     }

@@ -205,14 +205,23 @@ public final class PageBuilder {
                 } catch (ClassNotFoundException ex) {
                     throw new IllegalStateException(ex);
                 }
-                if (!((Stylesheet) cls.getAnnotation(Stylesheet.class))
-                    .value().equals(this.xsl.toString())) {
+                final Stylesheet sheet = Stylesheet.class.cast(
+                    cls.getAnnotation(Stylesheet.class)
+                );
+                if (sheet == null) {
+                    throw new IllegalStateException(
+                        String.format(
+                            "Class %s doesn't have Stylesheet annotation",
+                            cls.getName()
+                        )
+                    );
+                }
+                if (!sheet.value().equals(this.xsl.toString())) {
                     throw new IllegalStateException(
                         String.format(
                             "Class %s has '%s' stylesheet while %s expected",
                             cls.getName(),
-                            ((Stylesheet) cls.getAnnotation(Stylesheet.class))
-                                .value(),
+                            sheet.value(),
                             this.xsl.toString()
                         )
                     );

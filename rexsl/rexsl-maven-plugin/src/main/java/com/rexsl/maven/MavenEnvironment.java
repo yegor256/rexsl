@@ -51,6 +51,12 @@ import org.sonatype.aether.util.artifact.JavaScopes;
 public final class MavenEnvironment implements Environment {
 
     /**
+     * Property name, with webappDirectory inside.
+     * @since 0.3.8
+     */
+    public static final String WEBAPP_DIR = "webappDirectory";
+
+    /**
      * The project, from Maven plugin.
      */
     private final transient MavenProject project;
@@ -131,7 +137,8 @@ public final class MavenEnvironment implements Environment {
      */
     @Override
     public File webdir() {
-        final String dir = this.properties.getProperty("webappDirectory");
+        final String dir = this.properties
+            .getProperty(MavenEnvironment.WEBAPP_DIR);
         if (dir == null) {
             throw new IllegalStateException("webappDirectory property not set");
         }
@@ -174,9 +181,18 @@ public final class MavenEnvironment implements Environment {
     }
 
     /**
-     * List of artifacts, which should be available in classpath.
-     * @param tonly Are interested in artifacts in "test" scope only?
-     * @return The list of artifacts
+     * Set of unique artifacts, which should be available in classpath.
+     *
+     * <p>This method gets a full list of artifacts of the project,
+     * including their transitive dependencies. The parameter of the method
+     * determines whether we need "test" only artifacts, or all of them without
+     * exceptions.
+     *
+     * <p>To get the list of transitive dependencies we're using
+     * <a href="http://www.jcabi.com/jcabi-aether">jcabi-aether</a> toolkit.
+     *
+     * @param tonly We need artifacts in "test" scope only?
+     * @return The set of artifacts
      * @see #classloader()
      */
     private Set<Artifact> artifacts(final boolean tonly) {
@@ -233,10 +249,17 @@ public final class MavenEnvironment implements Environment {
     }
 
     /**
-     * List of root artifacts.
+     * Set of unique root artifacts.
+     *
+     * <p>The method is getting a list of artifacts from Maven Project, without
+     * their transitive dependencies (that's why they are called "root"
+     * artifacts). The argument of this method determines whether we're
+     * interested in artifacts in "test" scope only ({@code TRUE}) or we
+     * would like to get a full list of artifacts ({@code FALSE}).
+     *
      * @param tonly Are interested in artifacts in "test" scope only?
-     * @return The list of root artifacts
-     * @see #artifacts()
+     * @return The set of root artifacts
+     * @see #artifacts(boolean)
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private Set<RootArtifact> roots(final boolean tonly) {

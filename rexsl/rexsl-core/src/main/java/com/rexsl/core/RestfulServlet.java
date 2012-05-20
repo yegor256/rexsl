@@ -89,7 +89,14 @@ import org.apache.commons.lang.StringUtils;
 public final class RestfulServlet extends HttpServlet {
 
     /**
-     * Name of servlet param.
+     * Name of servlet init param.
+     *
+     * <p>This parameter should be used in servlet initialization section of
+     * {@code web.xml} in order to tell the servlet in which packages your
+     * JAX-RS annotated resources are located. The value of the parameter
+     * should contain a comma-separated list of Java package names.
+     *
+     * @see RestfulServlet
      * @since 0.3.7
      */
     public static final String PACKAGES = "com.rexsl.PACKAGES";
@@ -122,8 +129,8 @@ public final class RestfulServlet extends HttpServlet {
      */
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof RestfulServlet
-            && this.hashCode() == obj.hashCode();
+        return obj == this || (obj instanceof RestfulServlet
+            && this.hashCode() == obj.hashCode());
     }
 
     /**
@@ -216,10 +223,9 @@ public final class RestfulServlet extends HttpServlet {
             request.getRequestURI(),
             duration
         );
-        // @checkstyle MagicNumber (3 line)
         response.addHeader(
             "Rexsl-Millis",
-            Long.toString(duration / (1000 * 1000))
+            Long.toString(duration)
         );
     }
 

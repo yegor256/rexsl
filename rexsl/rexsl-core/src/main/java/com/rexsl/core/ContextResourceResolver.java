@@ -42,6 +42,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
 /**
@@ -134,28 +135,37 @@ final class ContextResourceResolver implements URIResolver {
      */
     private InputStream fetch(final URI uri) throws IOException {
         final long start = System.currentTimeMillis();
-        final HttpURLConnection conn =
-            (HttpURLConnection) uri.toURL().openConnection();
-        conn.connect();
-        final int code = conn.getResponseCode();
-        if (code != HttpURLConnection.HTTP_OK) {
-            throw new IOException(
-                Logger.format(
-                    "Invalid HTTP response code %d at '%s'",
-                    code,
-                    uri
-                )
-            );
-        }
-        Logger.debug(
-            this,
-            "#fetch('%s'): retrieved %d bytes of type '%s' in %[ms]s",
-            uri,
-            conn.getContentLength(),
-            conn.getContentType(),
-            System.currentTimeMillis() - start
+        final HttpURLConnection conn = HttpURLConnection.class.cast(
+            uri.toURL().openConnection()
         );
-        return conn.getInputStream();
+        InputStream stream;
+        try {
+            conn.connect();
+            final int code = conn.getResponseCode();
+            if (code != HttpURLConnection.HTTP_OK) {
+                throw new IOException(
+                    Logger.format(
+                        "Invalid HTTP response code %d at '%s'",
+                        code,
+                        uri
+                    )
+                );
+            }
+            Logger.debug(
+                this,
+                "#fetch('%s'): retrieved %d bytes of type '%s' in %[ms]s",
+                uri,
+                conn.getContentLength(),
+                conn.getContentType(),
+                System.currentTimeMillis() - start
+            );
+            stream = IOUtils.toInputStream(
+                IOUtils.toString(conn.getInputStream())
+            );
+        } finally {
+            conn.disconnect();
+        }
+        return stream;
     }
 
 }

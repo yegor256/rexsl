@@ -142,8 +142,8 @@ final class XslPacker extends AbstractPacker {
         final XPathExpression expr = xpath.compile("//comment()");
         final Object result = expr.evaluate(document, XPathConstants.NODESET);
         final NodeList nodes = (NodeList) result;
-        for (int index = 0; index < nodes.getLength(); index = index + 1) {
-            final Node node = nodes.item(index);
+        for (int idx = 0; idx < nodes.getLength(); ++idx) {
+            final Node node = nodes.item(idx);
             final Node parent = node.getParentNode();
             if (null == parent) {
                 throw new IllegalStateException(

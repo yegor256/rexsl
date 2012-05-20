@@ -91,8 +91,8 @@ final class ProductVersion implements Comparable<ProductVersion> {
      */
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof ProductVersion
-            && ((ProductVersion) obj).normalized.equals(this.normalized);
+        return obj == this || (obj instanceof ProductVersion
+            && ((ProductVersion) obj).normalized.equals(this.normalized));
     }
 
 }

@@ -93,8 +93,16 @@ import org.apache.commons.lang.CharEncoding;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.6
+ * @todo #262 This class should be serializable, but it's not. It doesn't
+ *  restore its state after deserialization. We should create a test for it
+ *  and then fix the defect.
  */
 public final class ExceptionTrap extends HttpServlet {
+
+    /**
+     * Serialization marker.
+     */
+    private static final long serialVersionUID = 0x75298A7876D21470L;
 
     /**
      * List of notifiers ready to notify.

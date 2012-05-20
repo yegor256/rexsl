@@ -182,6 +182,11 @@ public final class Manifests {
                 "Manifests haven't been loaded yet by request from XsltFilter"
             );
         }
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException(
+                "attribute name can't be NULL or empty"
+            );
+        }
         if (!Manifests.exists(name)) {
             final StringBuilder bldr = new StringBuilder(
                 Logger.format(
@@ -220,6 +225,16 @@ public final class Manifests {
      * @param value The value of the attribute being injected
      */
     public static void inject(final String name, final String value) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException(
+                "injected attribute name can't be NULL or empty"
+            );
+        }
+        if (name == null) {
+            throw new IllegalArgumentException(
+                "injected attribute value can't be NULL"
+            );
+        }
         if (Manifests.INJECTED.containsKey(name)) {
             Logger.info(
                 Manifests.class,
@@ -249,6 +264,11 @@ public final class Manifests {
      * @return Returns {@code TRUE} if it exists, {@code FALSE} otherwise
      */
     public static boolean exists(final String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException(
+                "attribute name can't be NULL or empty, even in exists()"
+            );
+        }
         return Manifests.attributes.containsKey(name)
             || Manifests.INJECTED.containsKey(name);
     }

@@ -40,6 +40,11 @@ import com.jcabi.log.Logger;
 public final class GroovyException extends Exception {
 
     /**
+     * Serialization marker.
+     */
+    private static final long serialVersionUID = 0x7526FA78EEAA1470L;
+
+    /**
      * Default public no-agrument ctor.
      */
     public GroovyException() {

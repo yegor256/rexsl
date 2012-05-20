@@ -42,6 +42,11 @@ import java.util.AbstractMap;
 final class Header extends AbstractMap.SimpleEntry<String, String> {
 
     /**
+     * Serialization marker.
+     */
+    private static final long serialVersionUID = 0x7526FA78EEA2147AL;
+
+    /**
      * Public ctor.
      * @param key The name of it
      * @param value The value

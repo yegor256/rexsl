@@ -73,6 +73,9 @@ public abstract class AbstractHttpFeeder implements Feeder {
      * @return The URL
      */
     protected final URL getUrl() {
+        if (this.url == null) {
+            throw new IllegalStateException("URL is not configured");
+        }
         return this.url;
     }
 
@@ -86,7 +89,7 @@ public abstract class AbstractHttpFeeder implements Feeder {
      */
     protected final void post(final String text) throws IOException {
         final HttpURLConnection conn =
-            (HttpURLConnection) this.url.openConnection();
+            (HttpURLConnection) this.getUrl().openConnection();
         try {
             conn.setConnectTimeout((int) TimeUnit.MINUTES.toMillis(1L));
             conn.setReadTimeout((int) TimeUnit.MINUTES.toMillis(1L));

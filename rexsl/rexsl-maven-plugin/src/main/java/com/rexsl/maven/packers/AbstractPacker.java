@@ -56,7 +56,7 @@ abstract class AbstractPacker implements Packer {
             env.basedir(),
             Logger.format("src/main/webapp/%s", this.extension())
         );
-        final File destdir = this.ddir(env);
+        final File destdir = this.dir(env);
         if (srcdir.exists()) {
             for (File src : new FileFinder(srcdir, this.extension()).random()) {
                 final File dest = new File(destdir, src.getName());
@@ -86,14 +86,15 @@ abstract class AbstractPacker implements Packer {
     protected abstract void pack(Reader src, File dest) throws IOException;
 
     /**
-     * Prepare and return destination dir.
+     * Prepare and return destination dir (creates such a directory if it's
+     * absent and report this operation to the log).
      * @param env The environment
      * @return The directory ready to save files
      */
-    private File ddir(final Environment env) {
+    private File dir(final Environment env) {
         final File dir = new File(env.webdir(), this.extension());
         if (dir.mkdirs()) {
-            Logger.info(this, "#ddir(): %s directory created", dir);
+            Logger.info(this, "#dir(): %s directory created", dir);
         }
         return dir;
     }

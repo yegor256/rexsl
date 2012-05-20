@@ -82,7 +82,6 @@ final class BinaryFilesCheck implements Check {
                     ext
                 );
                 valid = false;
-                break;
             }
         }
         return valid;

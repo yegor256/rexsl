@@ -160,7 +160,10 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
             throw new IllegalStateException("project packaging is not WAR");
         }
         final Properties properties = new Properties();
-        properties.setProperty("webappDirectory", this.webappDirectory);
+        properties.setProperty(
+            MavenEnvironment.WEBAPP_DIR,
+            this.webappDirectory
+        );
         this.environment = new MavenEnvironment(this.project(), properties);
         if (this.session != null) {
             this.environment.setLocalRepository(

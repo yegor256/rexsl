@@ -38,6 +38,32 @@ import org.w3c.dom.Node;
 /**
  * Wrapper of {@link List}.
  *
+ * <p>This wrapper is our internal implementation of a {@link List}. The only
+ * purpose of this wrapper is to throw our own custom exception when the client
+ * is trying to access an element that is absent in the list. Such a custom
+ * exception ({@link NodeNotFoundException}) includes detailed information about
+ * the original document. Thus, such an incorrect list-access operation will
+ * lead to an exception that contains all the details inside (not just a simple
+ * error message). For example:
+ *
+ * <pre>String name = RestTester.start(uri)
+ *   .get("load XML document")
+ *   .xpath("/document/name/text()")
+ *   .get(0)</pre>
+ *
+ * <p>This snippet is trying to get a text value from XML element, and there
+ * is no guarantee that such an element exists in the document. In order to give
+ * a detailed report to the user of the problem (including a full content of
+ * the XML document) we're returning {@link ListWrapper} from
+ * {@link JerseyTestResponse#xpath(String)}. The only method that we implement
+ * for this purpose is {@link #get(int)}.
+ *
+ * <p>{@link ListWrapper} is an unmodifiable list, that's why
+ * the majority of inherited method are not implemented and
+ * thow runtime exceptions if being called.
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.7
@@ -134,11 +160,14 @@ final class ListWrapper<T> implements List<T> {
      */
     @Override
     public boolean equals(final Object element) {
-        return this.original.equals(element);
+        return element == this || this.original.equals(element);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * <p>The method throws {@link NodeNotFoundException} if such an element
+     * doesn't exist in the list.
      */
     @Override
     public T get(final int index) {
@@ -262,6 +291,13 @@ final class ListWrapper<T> implements List<T> {
 
     /**
      * {@inheritDoc}
+     *
+     * <p>The method throws {@link NodeNotFoundException} when either
+     * {@code start} or {@code end} is bigger than the size of the list. In all
+     * other cases of illegal method call (start is less than zero, end is
+     * less than zero, or start is bigger than end) a standard
+     * {@link IndexOutOfBoundException} is thrown (by the incapsulated
+     * implementation of {@Link List}).
      */
     @Override
     public List<T> subList(final int start, final int end) {

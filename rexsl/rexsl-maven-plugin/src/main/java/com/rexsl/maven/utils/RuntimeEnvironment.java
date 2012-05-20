@@ -37,12 +37,32 @@ import javax.servlet.ServletContext;
 /**
  * Runtime environment, for {@link RuntimeListener}.
  *
+ * <p>This class is an adapter between servlet context and
+ * {@link RuntimeListener}, which is interested in context parameters.
+ *
  * <p>{@link ServletContext} is filled with values in {@link EmbeddedContainer}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 final class RuntimeEnvironment implements Environment {
+
+    /**
+     * Basedir of the project (name of {@link ServletContext} init parameter).
+     */
+    public static final String BASEDIR_PARAM = "com.rexsl.maven.utils.BASEDIR";
+
+    /**
+     * Webdir of the webapp inside the container (name of
+     * {@link ServletContext} init parameter).
+     */
+    public static final String WEBDIR_PARAM = "com.rexsl.maven.utils.WEBDIR";
+
+    /**
+     * Port number of the webapp inside the container (name of
+     * {@link ServletContext} init parameter).
+     */
+    public static final String PORT_PARAM = "com.rexsl.maven.utils.PORT";
 
     /**
      * Servlet context.
@@ -63,7 +83,7 @@ final class RuntimeEnvironment implements Environment {
     @Override
     public File basedir() {
         return new File(
-            this.context.getInitParameter("com.rexsl.maven.utils.BASEDIR")
+            this.context.getInitParameter(RuntimeEnvironment.BASEDIR_PARAM)
         );
     }
 
@@ -73,24 +93,30 @@ final class RuntimeEnvironment implements Environment {
     @Override
     public File webdir() {
         return new File(
-            this.context.getInitParameter("com.rexsl.maven.utils.WEBDIR")
+            this.context.getInitParameter(RuntimeEnvironment.WEBDIR_PARAM)
         );
     }
 
     /**
      * {@inheritDoc}
+     *
+     * <p>The method always thows an exception because this method should
+     * never be called.
      */
     @Override
     public Set<File> classpath(final boolean test) {
-        throw new IllegalStateException("#classpath");
+        throw new UnsupportedOperationException("#classpath()");
     }
 
     /**
      * {@inheritDoc}
+     *
+     * <p>The method always thows an exception because this method should
+     * never be called.
      */
     @Override
     public boolean useRuntimeFiltering() {
-        throw new IllegalStateException("#useRuntimeFiltering");
+        throw new UnsupportedOperationException("#useRuntimeFiltering()");
     }
 
     /**
@@ -99,7 +125,7 @@ final class RuntimeEnvironment implements Environment {
     @Override
     public int port() {
         return Integer.parseInt(
-            this.context.getInitParameter("com.rexsl.maven.utils.PORT")
+            this.context.getInitParameter(RuntimeEnvironment.PORT_PARAM)
         );
     }
 

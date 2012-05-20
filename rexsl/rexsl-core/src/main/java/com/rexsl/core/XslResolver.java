@@ -67,6 +67,12 @@ import org.apache.commons.lang.StringEscapeUtils;
 public final class XslResolver implements ContextResolver<Marshaller> {
 
     /**
+     * Folder name of the location of XSD files
+     * (name of {@link ServletContext} init parameter).
+     */
+    public static final String XSD_FOLDER = "com.rexsl.core.XSD_FOLDER";
+
+    /**
      * Folder with XSD files.
      * @see #setServletContext(ServletContext)
      */
@@ -97,7 +103,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         if (ctx == null) {
             throw new IllegalArgumentException("ServletContext can't be NULL");
         }
-        final String name = ctx.getInitParameter("com.rexsl.core.XSD_FOLDER");
+        final String name = ctx.getInitParameter(XslResolver.XSD_FOLDER);
         if (name != null) {
             this.xsdFolder = new File(name);
             Logger.debug(
