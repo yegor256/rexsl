@@ -262,6 +262,13 @@ final class ListWrapper<T> implements List<T> {
 
     /**
      * {@inheritDoc}
+     *
+     * <p>The method throws {@link NodeNotFoundException} when either
+     * {@code start} or {@code end} is bigger than the size of the list. In all
+     * other cases of illegal method call (start is less than zero, end is
+     * less than zero, or start is bigger than end) a standard
+     * {@link IndexOutOfBoundException} is thrown (by the incapsulated
+     * implementation of {@Link List}).
      */
     @Override
     public List<T> subList(final int start, final int end) {
