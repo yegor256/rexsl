@@ -30,6 +30,7 @@
 package com.rexsl.misc;
 
 import java.net.URI;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import javax.ws.rs.core.NewCookie;
@@ -168,10 +169,9 @@ public final class CookieBuilder {
      * @return This object
      */
     public CookieBuilder days(final int days) {
-        this.expires = new Date(
-            // @checkstyle MagicNumber (1 line)
-            new Date().getTime() + days * 24 * 60 * 60 * 1000L
-        );
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, days);
+        this.expires = cal.getTime();
         return this;
     }
 
