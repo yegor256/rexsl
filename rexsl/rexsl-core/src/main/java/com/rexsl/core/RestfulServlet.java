@@ -216,10 +216,9 @@ public final class RestfulServlet extends HttpServlet {
             request.getRequestURI(),
             duration
         );
-        // @checkstyle MagicNumber (3 line)
         response.addHeader(
             "Rexsl-Millis",
-            Long.toString(duration / (1000 * 1000))
+            Long.toString(duration)
         );
     }
 
