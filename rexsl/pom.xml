@@ -703,6 +703,7 @@
                         <compilerArguments>
                             <Xlint/>
                             <Werror/>
+                            <Xlint:-path/>
                         </compilerArguments>
                         <fork>true</fork>
                         <testExcludes>

@@ -298,6 +298,7 @@ public final class Manifests {
      * @param snapshot The snapshot taken by {@link #snapshot()}
      * @see <a href="http://trac.fazend.com/rexsl/ticket/107">Introduced in ticket #107</a>
      */
+    @SuppressWarnings("unchecked")
     public static void revert(final byte[] snapshot) {
         synchronized (Manifests.INJECTED) {
             Manifests.INJECTED.clear();
@@ -371,8 +372,7 @@ public final class Manifests {
         Logger.info(
             Manifests.class,
             "#append('%s'): %d attributes loaded in %[ms]s: %[list]s",
-            file,
-            attrs.size(),
+            file, attrs.size(),
             System.currentTimeMillis() - start,
             new TreeSet<String>(attrs.keySet())
         );
@@ -401,8 +401,7 @@ public final class Manifests {
                 Logger.error(
                     Manifests.class,
                     "#load(): '%s' failed %[exception]s",
-                    uri,
-                    ex
+                    uri, ex
                 );
             }
             ++count;
@@ -410,8 +409,7 @@ public final class Manifests {
         Logger.info(
             Manifests.class,
             "#load(): %d attribs loaded from %d URL(s) in %[ms]s: %[list]s",
-            attrs.size(),
-            count,
+            attrs.size(), count,
             System.currentTimeMillis() - start,
             new TreeSet<String>(attrs.keySet())
         );
@@ -479,17 +477,14 @@ public final class Manifests {
             Logger.trace(
                 Manifests.class,
                 "#loadOneFile('%s'): %d attributes loaded (%[list]s)",
-                url,
-                props.size(),
-                new TreeSet<String>(props.keySet())
+                url, props.size(), new TreeSet<String>(props.keySet())
             );
         // @checkstyle IllegalCatch (1 line)
         } catch (RuntimeException ex) {
             Logger.error(
                 Manifests.class,
                 "#getMainAttributes(): '%s' failed %[exception]s",
-                url,
-                ex
+                url, ex
             );
         } finally {
             IOUtils.closeQuietly(stream);
