@@ -37,6 +37,9 @@ import javax.servlet.ServletContext;
 /**
  * Runtime environment, for {@link RuntimeListener}.
  *
+ * <p>This class is an adapter between servlet context and
+ * {@link RuntimeListener}, which is interested in context parameters.
+ *
  * <p>{@link ServletContext} is filled with values in {@link EmbeddedContainer}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -79,18 +82,24 @@ final class RuntimeEnvironment implements Environment {
 
     /**
      * {@inheritDoc}
+     *
+     * <p>The method always thows an exception because this method should
+     * never be called.
      */
     @Override
     public Set<File> classpath(final boolean test) {
-        throw new IllegalStateException("#classpath");
+        throw new UnsupportedOperationException("#classpath()");
     }
 
     /**
      * {@inheritDoc}
+     *
+     * <p>The method always thows an exception because this method should
+     * never be called.
      */
     @Override
     public boolean useRuntimeFiltering() {
-        throw new IllegalStateException("#useRuntimeFiltering");
+        throw new UnsupportedOperationException("#useRuntimeFiltering()");
     }
 
     /**
