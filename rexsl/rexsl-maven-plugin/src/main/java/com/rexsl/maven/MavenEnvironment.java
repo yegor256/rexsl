@@ -52,6 +52,7 @@ public final class MavenEnvironment implements Environment {
 
     /**
      * Property name, with webappDirectory inside.
+     * @since 0.3.8
      */
     public static final String WEBAPP_DIR = "webappDirectory";
 

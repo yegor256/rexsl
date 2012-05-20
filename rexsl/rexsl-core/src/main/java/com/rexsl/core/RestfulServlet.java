@@ -89,7 +89,14 @@ import org.apache.commons.lang.StringUtils;
 public final class RestfulServlet extends HttpServlet {
 
     /**
-     * Name of servlet param.
+     * Name of servlet init param.
+     *
+     * <p>This parameter should be used in servlet initialization section of
+     * {@code web.xml} in order to tell the servlet in which packages your
+     * JAX-RS annotated resources are located. The value of the parameter
+     * should contain a comma-separated list of Java package names.
+     *
+     * @see RestfulServlet
      * @since 0.3.7
      */
     public static final String PACKAGES = "com.rexsl.PACKAGES";
