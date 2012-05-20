@@ -122,7 +122,7 @@ final class InContainerScriptsCheck implements Check {
             LoggingManager.enter(name);
             try {
                 Logger.info(this, "Testing '%s'...", script);
-                if (!this.one(env, script)) {
+                if (!this.isValid(env, script)) {
                     success = false;
                     failed.add(script.getName());
                 }
@@ -141,12 +141,13 @@ final class InContainerScriptsCheck implements Check {
     }
 
     /**
-     * Check one script.
+     * Runs and validates a single Groovy script.
      * @param env The environment
      * @param script Check this particular Groovy script
      * @return TRUE if this script is valid (no errors)
+     * @see #run(File,Environment)
      */
-    private boolean one(final Environment env, final File script) {
+    private boolean isValid(final Environment env, final File script) {
         Logger.debug(this, "Running %s", script);
         final GroovyExecutor exec = new GroovyExecutor(
             env,
