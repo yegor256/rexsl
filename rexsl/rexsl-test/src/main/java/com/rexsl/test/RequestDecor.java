@@ -51,7 +51,7 @@ final class RequestDecor implements Formattable {
     /**
      * End of line.
      */
-    public static final String EOL = "\n";
+    public static final String EOL = System.getProperty("line.separator");
 
     /**
      * Indentation.
