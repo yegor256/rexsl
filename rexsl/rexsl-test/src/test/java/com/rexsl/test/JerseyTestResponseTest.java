@@ -157,6 +157,7 @@ public final class JerseyTestResponseTest {
      */
     @Test
     @Ignore
+    @SuppressWarnings("unchecked")
     public void findsDataInJsonFormat() throws Exception {
         final String data =
             "{\"data\":[{id:\"12\",name:\"John\"},{id:\"13\",name:\"Dan\"}]}";
