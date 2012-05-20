@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import com.rexsl.w3c.Validator;
@@ -58,9 +59,10 @@ public final class XhtmlOutputCheckTest {
             .withFile("src/test/rexsl/xhtml/index.groovy")
             .mock();
         final Validator validator = new ValidatorMocker().mock();
+        final Check check = new XhtmlOutputCheck(validator);
         MatcherAssert.assertThat(
             "all tests passed fine",
-            new XhtmlOutputCheck(".+", validator).validate(env)
+            check.validate(env)
         );
     }
 
@@ -77,9 +79,10 @@ public final class XhtmlOutputCheckTest {
             .withFile("src/test/rexsl/xml/index.xml")
             .mock();
         final Validator validator = new ValidatorMocker().mock();
+        final Check check = new XhtmlOutputCheck(validator);
         MatcherAssert.assertThat(
             "missed layout file situation is detected",
-            !new XhtmlOutputCheck(".*", validator).validate(env)
+            !check.validate(env)
         );
     }
 
@@ -99,9 +102,10 @@ public final class XhtmlOutputCheckTest {
             .withFile("src/test/rexsl/xhtml/invalid-index.groovy")
             .mock();
         final Validator validator = new ValidatorMocker().mock();
+        final Check check = new XhtmlOutputCheck(validator);
         MatcherAssert.assertThat(
             "non-valid XHTML situation is detected",
-            !new XhtmlOutputCheck(null, validator).validate(env)
+            !check.validate(env)
         );
     }
 
@@ -120,9 +124,11 @@ public final class XhtmlOutputCheckTest {
             .withFile("src/test/rexsl/xhtml/skippedInvalid.groovy", "")
             .mock();
         final Validator validator = new ValidatorMocker().mock();
+        final Check check = new XhtmlOutputCheck(validator);
+        check.setScope("index");
         MatcherAssert.assertThat(
             "all tests pass fine",
-            new XhtmlOutputCheck("index", validator).validate(env)
+            check.validate(env)
         );
     }
 }

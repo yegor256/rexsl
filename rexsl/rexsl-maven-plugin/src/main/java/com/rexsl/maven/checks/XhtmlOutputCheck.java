@@ -74,31 +74,38 @@ final class XhtmlOutputCheck implements Check {
     private static final String GROOVY_DIR = "src/test/rexsl/xhtml";
 
     /**
-     * Scope of tests to execute.
-     */
-    private final transient String test;
-
-    /**
      * Validator.
      */
     private final transient Validator validator;
 
     /**
-     * Default public ctor.
-     * @param scope Execute only scripts matching scope.
+     * Scope of tests to execute.
      */
-    public XhtmlOutputCheck(final String scope) {
-        this(scope, new ValidatorBuilder().html());
+    private transient String test = ".*";
+
+    /**
+     * Default public ctor.
+     */
+    public XhtmlOutputCheck() {
+        this(new ValidatorBuilder().html());
     }
 
     /**
      * Full ctor, for tests mostly.
-     * @param scope Execute only scripts matching scope.
      * @param val HTML validator
      */
-    public XhtmlOutputCheck(final String scope, final Validator val) {
-        this.test = scope;
+    public XhtmlOutputCheck(final Validator val) {
         this.validator = val;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setScope(final String scope) {
+        synchronized (this.test) {
+            this.test = scope;
+        }
     }
 
     /**
@@ -120,8 +127,7 @@ final class XhtmlOutputCheck implements Check {
                 for (File xml : files) {
                     final String name =
                         FilenameUtils.removeExtension(xml.getName());
-                    if (!name.matches(this.test)
-                    ) {
+                    if (!name.matches(this.test)) {
                         continue;
                     }
                     LoggingManager.enter(name);

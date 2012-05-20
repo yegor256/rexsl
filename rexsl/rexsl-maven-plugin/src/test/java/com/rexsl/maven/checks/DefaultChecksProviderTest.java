@@ -60,8 +60,10 @@ public final class DefaultChecksProviderTest {
     @Test
     public void retrievesSetOfChecks() throws Exception {
         final Set<Check> checks = new DefaultChecksProvider().all();
-        MatcherAssert.assertThat(checks, Matchers.notNullValue());
-        MatcherAssert.assertThat(checks.size(), Matchers.greaterThan(0));
+        MatcherAssert.assertThat(
+            checks,
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
     }
 
     /**
@@ -74,11 +76,12 @@ public final class DefaultChecksProviderTest {
         final String sCheck = "JigsawCssCheck";
         checksProvider.setCheck(sCheck);
         final Set<Check> checks = checksProvider.all();
-        MatcherAssert.assertThat(checks, Matchers.notNullValue());
-        MatcherAssert.assertThat(checks.size(), Matchers.is(1));
         MatcherAssert.assertThat(
-            checks.iterator().next().getClass().getSimpleName(),
-            Matchers.is(sCheck)
+            checks,
+            Matchers.allOf(
+                Matchers.iterableWithSize(1),
+                Matchers.hasItem(Matchers.instanceOf(JigsawCssCheck.class))
+            )
         );
     }
 
@@ -88,9 +91,9 @@ public final class DefaultChecksProviderTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void setCheck() throws Exception {
-        final ChecksProvider checksProvider = new DefaultChecksProvider();
-        final String sCheck = "abcd";
-        checksProvider.setCheck(sCheck);
+        final ChecksProvider provider = new DefaultChecksProvider();
+        provider.setCheck("foo");
+        provider.all();
     }
 
 }

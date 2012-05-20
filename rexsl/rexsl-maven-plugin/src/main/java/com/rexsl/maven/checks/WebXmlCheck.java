@@ -36,6 +36,7 @@ import com.rexsl.test.RestTester;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.xml.sax.ErrorHandler;
@@ -48,7 +49,7 @@ import org.xml.sax.SAXParseException;
  * All details of this check should be explained in the JavaDoc of
  * {@link DefaultChecksProvider}.
  *
- * <p>The class is immutable and thread-safe.
+ * <p>The class is thread-safe.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
@@ -59,7 +60,15 @@ final class WebXmlCheck implements Check {
     /**
      * Total numbers of errors.
      */
-    private transient int errors;
+    private final transient AtomicInteger errors = new AtomicInteger();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setScope(final String scope) {
+        // nothing to scope here
+    }
 
     /**
      * {@inheritDoc}
@@ -101,7 +110,7 @@ final class WebXmlCheck implements Check {
         } catch (javax.xml.parsers.ParserConfigurationException ex) {
             throw new IllegalStateException(ex);
         }
-        this.errors = 0;
+        this.errors.set(0);
         builder.setErrorHandler(
             new ErrorHandler() {
                 @Override
@@ -125,7 +134,7 @@ final class WebXmlCheck implements Check {
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
-        return this.errors == 0;
+        return this.errors.get() == 0;
     }
 
     /**
@@ -142,7 +151,7 @@ final class WebXmlCheck implements Check {
             level,
             excn.getMessage()
         );
-        ++this.errors;
+        this.errors.incrementAndGet();
     }
 
     /**

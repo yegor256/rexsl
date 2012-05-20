@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import org.hamcrest.MatcherAssert;
@@ -56,7 +57,7 @@ public final class InContainerScriptsCheckTest {
             .mock();
         MatcherAssert.assertThat(
             "all validations pass",
-            new InContainerScriptsCheck(".*").validate(env)
+            new InContainerScriptsCheck().validate(env)
         );
     }
 
@@ -73,9 +74,11 @@ public final class InContainerScriptsCheckTest {
             .withFile("src/test/rexsl/scripts/HomePage.groovy")
             .withFile("src/test/rexsl/scripts/Skip.groovy", "")
             .mock();
+        final Check check = new InContainerScriptsCheck();
+        check.setScope("HomePage");
         MatcherAssert.assertThat(
             "all validations pass",
-            new InContainerScriptsCheck("HomePage").validate(env)
+            check.validate(env)
         );
     }
 }

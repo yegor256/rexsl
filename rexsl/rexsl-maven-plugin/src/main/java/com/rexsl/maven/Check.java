@@ -38,6 +38,12 @@ package com.rexsl.maven;
 public interface Check {
 
     /**
+     * Set scope.
+     * @param scope Scope specification
+     */
+    void setScope(final String scope);
+
+    /**
      * Perform all validations and return whether everything is fine or not.
      * @param env Envirorment
      * @return Everything is fine?

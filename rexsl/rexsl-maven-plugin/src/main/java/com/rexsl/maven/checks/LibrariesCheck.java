@@ -59,6 +59,14 @@ final class LibrariesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    public void setScope(final String scope) {
+        // nothing to scope here
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public boolean validate(final Environment env) {
         final File dir = new File(env.webdir(), "WEB-INF/lib");

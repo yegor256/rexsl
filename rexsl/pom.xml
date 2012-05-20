@@ -705,7 +705,6 @@
                             <Werror/>
                             <Xlint:-path/>
                         </compilerArguments>
-                        <fork>true</fork>
                         <testExcludes>
                             <exclude>**/package-info.java</exclude>
                         </testExcludes>

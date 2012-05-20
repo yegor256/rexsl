@@ -63,7 +63,8 @@ final class RexslFilesCheck implements Check {
      */
     @SuppressWarnings({
         "PMD.UseConcurrentHashMap",
-        "PMD.AvoidDuplicateLiterals"
+        "PMD.AvoidDuplicateLiterals",
+        "unchecked"
     })
     private static final Map<String, String> DIR_EXTENSIONS = ArrayUtils.toMap(
         new String[][]{
@@ -75,6 +76,14 @@ final class RexslFilesCheck implements Check {
             {"xsd", "xsd"},
         }
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setScope(final String scope) {
+        // nothing to scope here
+    }
 
     /**
      * {@inheritDoc}
