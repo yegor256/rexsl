@@ -47,7 +47,8 @@ public class BasePageMocker {
     /**
      * Collection of elements.
      */
-    private final transient Collection elements = new LinkedList();
+    private final transient Collection<Object> elements =
+        new LinkedList<Object>();
 
     /**
      * Add new element.

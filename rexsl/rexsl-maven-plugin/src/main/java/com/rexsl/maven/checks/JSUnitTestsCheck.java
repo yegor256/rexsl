@@ -80,6 +80,14 @@ final class JSUnitTestsCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    public void setScope(final String scope) {
+        // nothing to scope here
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), this.JS_TESTS_DIR);
         boolean success = true;

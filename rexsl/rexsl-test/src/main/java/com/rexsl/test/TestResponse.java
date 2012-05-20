@@ -179,7 +179,7 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * @param matcher The matcher to use
      * @return This object
      */
-    TestResponse assertHeader(String name, Matcher matcher);
+    TestResponse assertHeader(String name, Matcher<String> matcher);
 
     /**
      * Verifies HTTP response body XHTML/XML content against XPath query,

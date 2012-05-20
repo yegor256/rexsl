@@ -62,6 +62,14 @@ final class CssStaticCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    public void setScope(final String scope) {
+        // nothing to scope here
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean validate(final Environment env) {
         final File csslint = new File(
             this.getClass().getResource("/CssLint.class").getFile()

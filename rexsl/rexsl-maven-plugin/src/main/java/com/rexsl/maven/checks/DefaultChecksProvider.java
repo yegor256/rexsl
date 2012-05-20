@@ -32,6 +32,9 @@ package com.rexsl.maven.checks;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.ChecksProvider;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -137,6 +140,8 @@ import java.util.Set;
  * against its XSD schema and fails the build if any incosistencies are
  * detected. Validation may take some time (15-45 seconds).
  *
+ * <p>The class is thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (100 lines)
@@ -144,32 +149,57 @@ import java.util.Set;
 public final class DefaultChecksProvider implements ChecksProvider {
 
     /**
-     * Test scope.
+     * All known checks.
      */
-    private transient String test;
+    private static final Collection<String> NAMES =
+        Collections.unmodifiableList(
+            Arrays.asList(
+                "com.rexsl.maven.checks.BinaryFilesCheck",
+                "com.rexsl.maven.checks.JigsawCssCheck",
+                "com.rexsl.maven.checks.JSStaticCheck",
+                "com.rexsl.maven.checks.FilesStructureCheck",
+                "com.rexsl.maven.checks.RexslFilesCheck",
+                "com.rexsl.maven.checks.LibrariesCheck",
+                "com.rexsl.maven.checks.XhtmlOutputCheck",
+                "com.rexsl.maven.checks.InContainerScriptsCheck",
+                "com.rexsl.maven.checks.JSUnitTestsCheck",
+                "com.rexsl.maven.checks.WebXmlCheck"
+            )
+        );
 
     /**
-     * Check to perform.
+     * Checks to retrieve (comma-separated list of full or short class names).
      */
-    private transient Class<? extends Check> check;
+    private final transient Set<String> checks = new LinkedHashSet<String>(
+        DefaultChecksProvider.NAMES
+    );
+
+    /**
+     * Test scope.
+     */
+    private transient String test = "";
 
     /**
      * {@inheritDoc}
      */
     @Override
     public Set<Check> all() {
-        final Set<Check> checks = new LinkedHashSet<Check>();
-        this.addCheck(checks, new BinaryFilesCheck());
-        this.addCheck(checks, new JigsawCssCheck());
-        this.addCheck(checks, new JSStaticCheck());
-        this.addCheck(checks, new FilesStructureCheck());
-        this.addCheck(checks, new RexslFilesCheck());
-        this.addCheck(checks, new LibrariesCheck());
-        this.addCheck(checks, new XhtmlOutputCheck(this.test));
-        this.addCheck(checks, new InContainerScriptsCheck(this.test));
-        this.addCheck(checks, new JSUnitTestsCheck());
-        this.addCheck(checks, new WebXmlCheck());
-        return checks;
+        final Set<Check> all = new LinkedHashSet<Check>();
+        for (String name : this.checks) {
+            try {
+                all.add(DefaultChecksProvider.build(name));
+            } catch (InvalidCheckException ex) {
+                Logger.info(this, "Can't find %s, available checks:", name);
+                for (String check : DefaultChecksProvider.NAMES) {
+                    Logger.info(this, "  %s", check);
+                }
+                throw new IllegalArgumentException(
+                    String.format("Check %s can't be built", name),
+                    ex
+                );
+            }
+        }
+        return Collections.unmodifiableSet(all);
     }
 
     /**
@@ -177,46 +207,73 @@ public final class DefaultChecksProvider implements ChecksProvider {
      */
     @Override
     public void setTest(final String scope) {
-        this.test = scope;
+        if (scope == null) {
+            throw new IllegalArgumentException("'test' can't be NULL");
+        }
+        synchronized (this.test) {
+            this.test = scope;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setCheck(final String chck) {
-        if (chck != null) {
-            try {
-                this.check = (Class<? extends Check>) Class.forName(
-                    String.format("com.rexsl.maven.checks.%s", chck)
-                );
-            } catch (ClassNotFoundException cnfe) {
-                Logger.info(this, "Available checks:");
-                for (Check item : this.all()) {
-                    Logger.info(this, item.getClass().getSimpleName());
-                }
-                throw new IllegalArgumentException(
-                    "Selected check not found",
-                    cnfe
-                );
-            }
+    public void setCheck(final String scope) {
+        if (scope == null) {
+            throw new IllegalArgumentException("'check' can't be NULL");
+        }
+        synchronized (this.test) {
+            this.checks.clear();
+            this.checks.addAll(
+                Arrays.asList(scope.split("\\s*,\\s*"))
+            );
         }
     }
 
     /**
-     * Adds a Check object to the Check set.
-     *
-     * <p>If the check variable is not {@code NULL} it will only add
-     * the check if it pertains to that class.
-     *
-     * @param checks The set of checks.
-     * @param chck The check to be added.
+     * Thrown when class can't be built.
      */
-    private void addCheck(final Set<Check> checks, final Check chck) {
-        if (this.check == null) {
-            checks.add(chck);
-        } else if (chck.getClass().equals(this.check)) {
-            checks.add(chck);
+    private static final class InvalidCheckException extends Exception {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = 0x7526FA7CDAA2147AL;
+        /**
+         * Public ctor.
+         * @param cause Cause of the problem
+         */
+        public InvalidCheckException(final Throwable cause) {
+            super(cause);
+        }
+    }
+
+    /**
+     * Build check from its name.
+     * @param name Full name of the class or a short one
+     * @return The check
+     * @throws DefaultChecksProvider.InvalidCheckException If failed
+     */
+    private static Check build(final String name)
+        throws DefaultChecksProvider.InvalidCheckException {
+        String cname;
+        if (name.contains(".")) {
+            cname = name;
+        } else {
+            cname = String.format(
+                "%s.%s",
+                DefaultChecksProvider.class.getPackage().getName(),
+                name
+            );
+        }
+        try {
+            return Check.class.cast(Class.forName(cname).newInstance());
+        } catch (ClassNotFoundException ex) {
+            throw new DefaultChecksProvider.InvalidCheckException(ex);
+        } catch (InstantiationException ex) {
+            throw new DefaultChecksProvider.InvalidCheckException(ex);
+        } catch (IllegalAccessException ex) {
+            throw new DefaultChecksProvider.InvalidCheckException(ex);
         }
     }
 

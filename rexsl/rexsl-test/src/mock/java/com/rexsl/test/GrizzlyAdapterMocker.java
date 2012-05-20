@@ -35,7 +35,9 @@ import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.Collections;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -329,6 +331,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      * @return The text
      * @param input Incoming stream of data
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private String asText(final GrizzlyRequest request, final String input) {
         final StringBuilder builder = new StringBuilder();
         builder.append(request.getMethod())
@@ -337,15 +340,19 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
             .append("  ")
             .append(request.getProtocol())
             .append("\n");
-        for (Object name : Collections.list(request.getHeaderNames())) {
+        final Enumeration names = request.getHeaderNames();
+        while (names.hasMoreElements()) {
+            final String name = names.nextElement().toString();
+            final Collection<String> values = new LinkedList<String>();
+            final Enumeration hdrs = request.getHeaders(name);
+            while (hdrs.hasMoreElements()) {
+                values.add(hdrs.nextElement().toString());
+            }
             builder.append(
                 Logger.format(
                     "%s: [%s]\n",
-                    (String) name,
-                    StringUtils.join(
-                        Collections.list(request.getHeaders((String) name)),
-                        "], ["
-                    )
+                    name,
+                    StringUtils.join(values, "], [")
                 )
             );
         }

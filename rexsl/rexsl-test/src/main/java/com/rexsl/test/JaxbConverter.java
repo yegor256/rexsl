@@ -106,7 +106,9 @@ public final class JaxbConverter {
      * @param object The object to convert
      * @param deps Dependencies that we should take into account
      * @return DOM source/document
+     * @todo #316 This "unchecked" warning should be removed somehow
      */
+    @SuppressWarnings("unchecked")
     public static Source the(final Object object, final Class... deps) {
         final Class[] classes = new Class[deps.length + 1];
         classes[0] = object.getClass();
@@ -164,8 +166,9 @@ public final class JaxbConverter {
      * @see XmlElement#namespace()
      */
     private static QName qname(final Object obj) {
-        final XmlType type = (XmlType) obj.getClass()
-            .getAnnotation(XmlType.class);
+        final XmlType type = XmlType.class.cast(
+            obj.getClass().getAnnotation(XmlType.class)
+        );
         if (type == null) {
             throw new AssertionError(
                 Logger.format(

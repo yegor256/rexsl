@@ -59,6 +59,14 @@ final class BinaryFilesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    public void setScope(final String scope) {
+        // nothing to scope here
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), "src/main/webapp");
         final Collection<File> files = FileUtils.listFiles(

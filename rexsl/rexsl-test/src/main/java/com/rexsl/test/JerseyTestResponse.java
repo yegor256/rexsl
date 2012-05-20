@@ -350,7 +350,8 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertHeader(final String name, final Matcher matcher) {
+    public TestResponse assertHeader(final String name,
+        final Matcher<String> matcher) {
         this.assertThat(new HeaderMatcher(name, matcher));
         return this;
     }

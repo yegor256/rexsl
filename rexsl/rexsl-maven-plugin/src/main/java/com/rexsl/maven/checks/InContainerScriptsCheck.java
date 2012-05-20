@@ -50,7 +50,7 @@ import org.apache.commons.lang.StringUtils;
  * All details of this check should be explained in the JavaDoc of
  * {@link DefaultChecksProvider}.
  *
- * <p>The class is immutable and thread-safe.
+ * <p>The class is thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -60,15 +60,18 @@ final class InContainerScriptsCheck implements Check {
     /**
      * Scope of tests to execute.
      */
-    private final transient String test;
+    private transient String test = ".*";
 
     /**
-     * Ctor.
-     * @param scope Execute only scripts matching scope.
+     * {@inheritDoc}
      */
-    public InContainerScriptsCheck(final String scope) {
-        this.test = scope;
+    @Override
+    public void setScope(final String scope) {
+        synchronized (this.test) {
+            this.test = scope;
+        }
     }
+
     /**
      * {@inheritDoc}
      */

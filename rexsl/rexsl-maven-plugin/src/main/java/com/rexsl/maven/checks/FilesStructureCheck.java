@@ -49,23 +49,35 @@ import java.io.File;
 final class FilesStructureCheck implements Check {
 
     /**
+     * Paths to check.
+     */
+    private static final String[] PATHS = new String[] {
+        "src/main/webapp/",
+        "src/main/webapp/robots.txt",
+        "src/main/webapp/xsl/",
+        "src/main/webapp/WEB-INF/web.xml",
+        "src/test/rexsl/xml/",
+        "src/test/rexsl/xhtml/",
+        "src/test/rexsl/scripts/",
+        "src/test/rexsl/xsd/",
+    };
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setScope(final String scope) {
+        // nothing to scope here
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public boolean validate(final Environment env) {
-        final String[] names = {
-            "src/main/webapp/",
-            "src/main/webapp/robots.txt",
-            "src/main/webapp/xsl/",
-            "src/main/webapp/WEB-INF/web.xml",
-            "src/test/rexsl/xml/",
-            "src/test/rexsl/xhtml/",
-            "src/test/rexsl/scripts/",
-            "src/test/rexsl/xsd/",
-        };
         boolean success = true;
-        for (String name : names) {
+        for (String name : FilesStructureCheck.PATHS) {
             final File file = new File(env.basedir(), name);
             if (!file.exists()) {
                 Logger.warn(

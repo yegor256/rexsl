@@ -132,7 +132,9 @@ public final class CheckMojo extends AbstractRexslMojo {
         final long start = System.currentTimeMillis();
         final Properties before = this.inject();
         this.provider.setTest(this.test);
-        this.provider.setCheck(this.check);
+        if (this.check != null) {
+            this.provider.setCheck(this.check);
+        }
         final Set<Check> checks = this.provider.all();
         try {
             for (Check chck : checks) {

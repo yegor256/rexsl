@@ -112,6 +112,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
+@SuppressWarnings("unchecked")
 public class BasePage<T extends BasePage, R extends Resource> {
 
     /**

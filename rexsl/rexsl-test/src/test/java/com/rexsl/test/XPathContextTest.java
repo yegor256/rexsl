@@ -83,13 +83,14 @@ public final class XPathContextTest {
      * @throws Exception If something goes wrong inside
      */
     @Test
+    @SuppressWarnings("unchecked")
     public void findsPrefixesByNamespace() throws Exception {
         final String namespace = "simple-short-namespace";
         final NamespaceContext ctx = new XPathContext(namespace, namespace);
         MatcherAssert.assertThat(
             IteratorUtils.toList(ctx.getPrefixes(namespace)),
             Matchers.allOf(
-                (Matcher) Matchers.hasSize(2),
+                (Matcher) Matchers.iterableWithSize(2),
                 Matchers.hasItem("ns1"),
                 Matchers.hasItem("ns2")
             )

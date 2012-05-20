@@ -50,6 +50,7 @@ public final class BindingBuilderTest {
      * @throws Exception If something goes wrong
      */
     @Test
+    @SuppressWarnings("unchecked")
     public void buildsBindingWithProperties() throws Exception {
         final Environment env = new EnvironmentMocker().mock();
         final BindingBuilder builder = new BindingBuilder(env);

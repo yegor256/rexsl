@@ -374,6 +374,31 @@
         </pluginManagement>
         <plugins>
             <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/HelpMojo.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>compile-helpmojo</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/HelpMojo.java</include>
+                            </includes>
+                            <compilerArgument>-Xlint:-unchecked</compilerArgument>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version since="4 Oct 2011">2.9</version>
                 <executions>

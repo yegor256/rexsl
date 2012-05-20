@@ -191,9 +191,11 @@ public final class ExceptionTrap extends HttpServlet {
                 final Properties props = this.props(uri);
                 try {
                     list.add(
-                        (T) Class.forName(uri.getPath())
-                            .getConstructor(Properties.class)
-                            .newInstance(props)
+                        type.cast(
+                            Class.forName(uri.getPath())
+                                .getConstructor(Properties.class)
+                                .newInstance(props)
+                        )
                     );
                 } catch (ClassNotFoundException ex) {
                     throw new ServletException(ex);

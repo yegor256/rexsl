@@ -103,7 +103,7 @@ public final class XhtmlMatchers {
      */
     public static <T> Matcher<T> hasXPath(final String query,
         final NamespaceContext ctx) {
-        return new XPathMatcher(query, ctx);
+        return new XPathMatcher<T>(query, ctx);
     }
 
     /**

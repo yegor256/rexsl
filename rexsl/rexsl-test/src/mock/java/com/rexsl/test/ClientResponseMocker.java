@@ -33,7 +33,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import org.mockito.Mockito;
 
@@ -53,7 +52,8 @@ public final class ClientResponseMocker {
     /**
      * Headers.
      */
-    private final transient MultivaluedMap headers = new MultivaluedMapImpl();
+    private final transient MultivaluedMap<String, String> headers =
+        new MultivaluedMapImpl();
 
     /**
      * Public ctor.
@@ -83,9 +83,9 @@ public final class ClientResponseMocker {
     public ClientResponseMocker withHeader(final String name,
         final String value) {
         if (!this.headers.containsKey(name)) {
-            this.headers.put(name, new ArrayList<String>());
+            this.headers.put(name, new ArrayList<String>(0));
         }
-        ((List) this.headers.get(name)).add(value);
+        this.headers.get(name).add(value);
         return this;
     }
 
@@ -96,7 +96,7 @@ public final class ClientResponseMocker {
      */
     public ClientResponseMocker withEntity(final String entity) {
         Mockito.doReturn(entity).when(this.response)
-            .getEntity(Mockito.any(Class.class));
+            .getEntity((Class<?>) Mockito.anyObject());
         Mockito.doReturn(true).when(this.response).hasEntity();
         return this;
     }
