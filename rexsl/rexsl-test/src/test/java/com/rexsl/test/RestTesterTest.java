@@ -220,7 +220,9 @@ public final class RestTesterTest {
             .assertStatus(HttpURLConnection.HTTP_OK)
             .assertHeader(
                 HttpHeaders.CONTENT_TYPE,
-                Matchers.containsString(MediaType.TEXT_PLAIN)
+                Matchers.<String>everyItem(
+                    Matchers.containsString(MediaType.TEXT_PLAIN)
+                )
             );
     }
 

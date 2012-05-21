@@ -49,7 +49,7 @@ import org.w3c.dom.Node;
  * <p>You can always get DOM node out of this abstraction using {@link #node()}
  * method.
  *
- * <p>{@link #toString()} must produce a full XML.
+ * <p>{@code toString()} must produce a full XML.
  *
  * <p>Implementation of this interface must be immutable and thread-safe.
  *

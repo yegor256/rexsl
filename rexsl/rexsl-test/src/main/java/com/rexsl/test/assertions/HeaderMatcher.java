@@ -54,14 +54,15 @@ public final class HeaderMatcher implements AssertionPolicy {
     /**
      * The matcher to use.
      */
-    private final transient Matcher<String> matcher;
+    private final transient Matcher<Iterable<String>> matcher;
 
     /**
      * Public ctor.
      * @param hdr The name of the header to match
      * @param mtch The matcher to use
      */
-    public HeaderMatcher(final String hdr, final Matcher<String> mtch) {
+    public HeaderMatcher(final String hdr,
+        final Matcher<Iterable<String>> mtch) {
         this.name = hdr;
         this.matcher = mtch;
     }
@@ -77,7 +78,7 @@ public final class HeaderMatcher implements AssertionPolicy {
                 this.name,
                 response
             ),
-            response.getHeaders().getFirst(this.name),
+            response.getHeaders().get(this.name),
             this.matcher
         );
     }
