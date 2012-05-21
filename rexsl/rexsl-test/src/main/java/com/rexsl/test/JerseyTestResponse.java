@@ -351,7 +351,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertHeader(final String name,
-        final Matcher<String> matcher) {
+        final Matcher<Iterable<String>> matcher) {
         this.assertThat(new HeaderMatcher(name, matcher));
         return this;
     }
