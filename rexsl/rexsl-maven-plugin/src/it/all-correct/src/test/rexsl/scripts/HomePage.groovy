@@ -52,7 +52,10 @@ RestTester.start(rexsl.home)
     .header(HttpHeaders.USER_AGENT, 'FireFox')
     .get('home page')
     .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertHeader(HttpHeaders.CONTENT_TYPE, Matchers.startsWith(MediaType.TEXT_HTML))
+    .assertHeader(
+        HttpHeaders.CONTENT_TYPE,
+        Matchers.everyItem(Matchers.startsWith(MediaType.TEXT_HTML))
+    )
     .assertXPath('//xhtml:div')
 
 RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-addr'))
