@@ -175,6 +175,11 @@ public interface TestResponse extends XmlDocument, JsonDocument {
     /**
      * Verifies HTTP header against provided matcher, and throws
      * {@link AssertionError} in case of mismatch.
+     *
+     * <p>The iterator for the matcher will always be a real object an never
+     * {@code NULL}, even if such a header is absent in the response. If the
+     * header is absent the iterable will be empty.
+     *
      * @param name Name of the header to match
      * @param matcher The matcher to use
      * @return This object

@@ -32,6 +32,8 @@ package com.rexsl.test.assertions;
 import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
+import java.util.ArrayList;
+import java.util.List;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 
@@ -72,13 +74,17 @@ public final class HeaderMatcher implements AssertionPolicy {
      */
     @Override
     public void assertThat(final TestResponse response) {
+        List<String> headers = response.getHeaders().get(this.name);
+        if (headers == null) {
+            headers = new ArrayList<String>(0);
+        }
         MatcherAssert.assertThat(
             Logger.format(
                 "HTTP header '%s' has to match:\n%s",
                 this.name,
                 response
             ),
-            response.getHeaders().get(this.name),
+            headers,
             this.matcher
         );
     }
