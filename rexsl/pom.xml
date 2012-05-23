@@ -257,7 +257,7 @@
                             <dependency>
                                 <groupId>com.jcabi</groupId>
                                 <artifactId>jcabi-assembly</artifactId>
-                                <version since="3 May 2012">0.1.1</version>
+                                <version since="23 May 2012">0.1.9</version>
                             </dependency>
                         </dependencies>
                         <executions>
