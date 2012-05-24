@@ -385,6 +385,12 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>default-testCompile</id>
+                        <configuration>
+                            <compilerArgument>-nowarn</compilerArgument>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>compile-helpmojo</id>
                         <goals>
                             <goal>compile</goal>
