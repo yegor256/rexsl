@@ -209,6 +209,12 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.sonatype.sisu</groupId>
+            <artifactId>sisu-guava</artifactId>
+            <version since="24 May 2012">0.9.9</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-container-default</artifactId>
             <version since="24 May 2012">1.5.5</version>
