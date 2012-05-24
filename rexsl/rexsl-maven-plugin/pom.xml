@@ -393,8 +393,7 @@
                             <includes>
                                 <include>**/HelpMojo.java</include>
                             </includes>
-                            <compilerArgument>-Xlint:-unchecked</compilerArgument>
-                            <compilerArgument>-Xlint:-rawtypes</compilerArgument>
+                            <compilerArgument>-Xlint:-unchecked,-rawtypes</compilerArgument>
                         </configuration>
                     </execution>
                 </executions>
