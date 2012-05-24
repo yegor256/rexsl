@@ -205,13 +205,13 @@
         <dependency>
             <groupId>org.sonatype.sisu</groupId>
             <artifactId>sisu-inject-plexus</artifactId>
-            <version since="15 Sep 2011">2.1.1</version>
+            <version since="24 May 2012">2.3.0</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-container-default</artifactId>
-            <version since="15 Sep 2011">1.0-beta-3.0.5</version>
+            <version since="24 May 2012">1.5.5</version>
             <scope>runtime</scope>
             <exclusions>
                 <exclusion>
@@ -301,7 +301,7 @@
             <!-- XML APIs -->
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>1.3.04</version>
+            <version since="24 May 2012">1.3.04</version>
         </dependency>
         <dependency>
             <!-- Groovy engine. -->
@@ -311,15 +311,9 @@
         </dependency>
         <dependency>
             <!-- Forward all calls to SLF4J to Maven log. -->
-            <groupId>com.rempl.plugins</groupId>
-            <artifactId>rempl-maven-plugin</artifactId>
-            <version since="19 Sep 2011">1.1.3</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-maven-slf4j</artifactId>
+            <version since="24 May 2012">0.1.9</version>
         </dependency>
         <dependency>
             <!-- Forward all LOG4J calls to SLF4J -->
