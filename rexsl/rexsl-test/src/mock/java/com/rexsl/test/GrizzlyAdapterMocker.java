@@ -108,7 +108,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings({ "PMD.AvoidCatchingGenericException", "rawtype" })
+    @SuppressWarnings({ "PMD.AvoidCatchingGenericException", "rawtypes" })
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
         String input = null;
