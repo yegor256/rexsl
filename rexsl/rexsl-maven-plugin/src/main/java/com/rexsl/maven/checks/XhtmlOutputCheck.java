@@ -113,7 +113,7 @@ final class XhtmlOutputCheck implements Check {
      */
     @Override
     public boolean validate(final Environment env) {
-        final File dir = new File(env.basedir(), this.XML_DIR);
+        final File dir = new File(env.basedir(), XhtmlOutputCheck.XML_DIR);
         boolean success = true;
         if (dir.exists()) {
             Logger.info(
@@ -145,7 +145,7 @@ final class XhtmlOutputCheck implements Check {
             Logger.info(
                 this,
                 "%s directory is absent, no XHTML tests",
-                this.XML_DIR
+                XhtmlOutputCheck.XML_DIR
             );
         }
         return success;
@@ -182,11 +182,11 @@ final class XhtmlOutputCheck implements Check {
      */
     private void one(final Environment env, final File file)
         throws InternalCheckException {
-        final File root = new File(env.basedir(), this.GROOVY_DIR);
+        final File root = new File(env.basedir(), XhtmlOutputCheck.GROOVY_DIR);
         if (!root.exists()) {
             throw new InternalCheckException(
                 "%s directory is absent",
-                this.GROOVY_DIR
+                XhtmlOutputCheck.GROOVY_DIR
             );
         }
         final String basename = FilenameUtils.getBaseName(file.getPath());

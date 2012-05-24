@@ -89,7 +89,7 @@ final class JSUnitTestsCheck implements Check {
      */
     @Override
     public boolean validate(final Environment env) {
-        final File dir = new File(env.basedir(), this.JS_TESTS_DIR);
+        final File dir = new File(env.basedir(), JSUnitTestsCheck.JS_TESTS_DIR);
         boolean success = true;
         if (dir.exists()) {
             final Collection<File> files = new FileFinder(dir, "js").random();
@@ -116,7 +116,7 @@ final class JSUnitTestsCheck implements Check {
             Logger.info(
                 this,
                 "%s directory is absent, no JS unit tests",
-                this.JS_TESTS_DIR
+                JSUnitTestsCheck.JS_TESTS_DIR
             );
         }
         return success;
@@ -133,7 +133,9 @@ final class JSUnitTestsCheck implements Check {
         throws InternalCheckException {
         final Reader reader = new BufferedReader(
             new InputStreamReader(
-                this.getClass().getResourceAsStream(this.RHINO_WRAPPER)
+                this.getClass().getResourceAsStream(
+                    JSUnitTestsCheck.RHINO_WRAPPER
+                )
             )
         );
         final ScriptEngineManager factory = new ScriptEngineManager();
@@ -142,7 +144,9 @@ final class JSUnitTestsCheck implements Check {
             engine.put(
                 "rhinoUnitUtil",
                 IOUtil.toString(
-                    this.getClass().getResourceAsStream(this.RHINO_UNIT)
+                    this.getClass().getResourceAsStream(
+                        JSUnitTestsCheck.RHINO_UNIT
+                    )
                 )
             );
             engine.put("base", base.getAbsolutePath());

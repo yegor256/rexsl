@@ -72,7 +72,7 @@ final class JSStaticCheck implements Check {
      */
     @Override
     public boolean validate(final Environment env) {
-        final File dir = new File(env.basedir(), this.JS_DIR);
+        final File dir = new File(env.basedir(), JSStaticCheck.JS_DIR);
         boolean success = true;
         if (dir.exists()) {
             final Collection<File> files = new FileFinder(dir, "js").random();
@@ -99,7 +99,7 @@ final class JSStaticCheck implements Check {
             Logger.info(
                 this,
                 "%s directory is absent, no JS tests",
-                this.JS_DIR
+                JSStaticCheck.JS_DIR
             );
         }
         return success;
