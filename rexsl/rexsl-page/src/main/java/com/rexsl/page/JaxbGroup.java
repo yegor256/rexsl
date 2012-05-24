@@ -102,7 +102,7 @@ public final class JaxbGroup {
     /**
      * Collection of elements.
      */
-    private final transient Collection group;
+    private final transient Collection<?> group;
 
     /**
      * Public ctor, for JAXB (always throws a runtime exception).
@@ -118,7 +118,7 @@ public final class JaxbGroup {
      * Protected ctor, for on-fly instantiating (you're not supposed to use it).
      * @param grp Group of elements
      */
-    protected JaxbGroup(final Collection grp) {
+    protected JaxbGroup(final Collection<?> grp) {
         this.group = grp;
     }
 
@@ -128,7 +128,7 @@ public final class JaxbGroup {
      * @param name Name of parent XML element
      * @return JAXB-annotated object, just created
      */
-    public static Object build(final Collection grp, final String name) {
+    public static Object build(final Collection<?> grp, final String name) {
         synchronized (JaxbGroup.READY) {
             final String mnemo = JaxbGroup.mnemo(grp.isEmpty(), name);
             if (!JaxbGroup.READY.containsKey(mnemo)) {
@@ -159,7 +159,7 @@ public final class JaxbGroup {
      */
     @XmlAnyElement(lax = true)
     @XmlMixed
-    public Collection getGroup() {
+    public Collection<?> getGroup() {
         return this.group;
     }
 
@@ -185,7 +185,7 @@ public final class JaxbGroup {
      * @param name Name of root element
      * @return Class just created
      */
-    private static Class construct(final Collection<Class> types,
+    private static Class<?> construct(final Collection<Class<?>> types,
         final String name) {
         final ClassPool pool = ClassPool.getDefault();
         try {
@@ -202,7 +202,7 @@ public final class JaxbGroup {
             if (!types.isEmpty()) {
                 attribute.addAnnotation(JaxbGroup.xmlSeeAlso(file, types));
             }
-            final Class cls = ctc.toClass();
+            final Class<?> cls = ctc.toClass();
             ctc.defrost();
             Logger.debug(
                 JaxbGroup.class,
@@ -223,8 +223,8 @@ public final class JaxbGroup {
      * @param group The collection
      * @return List of types used there
      */
-    private static Collection<Class> types(final Collection group) {
-        final Collection<Class> types = new HashSet<Class>();
+    private static Collection<Class<?>> types(final Collection<?> group) {
+        final Collection<Class<?>> types = new HashSet<Class<?>>();
         for (Object element : group) {
             types.add(element.getClass());
         }
@@ -239,10 +239,9 @@ public final class JaxbGroup {
      */
     private static Annotation xmlRootElement(final ClassFile file,
         final String name) {
-        final AnnotationsAttribute attribute =
-            (AnnotationsAttribute) file.getAttribute(
-                AnnotationsAttribute.visibleTag
-            );
+        final AnnotationsAttribute attribute = AnnotationsAttribute.class.cast(
+            file.getAttribute(AnnotationsAttribute.visibleTag)
+        );
         final Annotation annotation = attribute.getAnnotation(
             XmlRootElement.class.getName()
         );
@@ -266,7 +265,7 @@ public final class JaxbGroup {
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private static Annotation xmlSeeAlso(final ClassFile file,
-        final Collection<Class> types) {
+        final Collection<Class<?>> types) {
         final Annotation annotation = new Annotation(
             XmlSeeAlso.class.getName(),
             file.getConstPool()
@@ -276,7 +275,7 @@ public final class JaxbGroup {
         );
         final ClassMemberValue[] values = new ClassMemberValue[types.size()];
         int pos = 0;
-        for (Class type : types) {
+        for (Class<?> type : types) {
             values[pos] = new ClassMemberValue(
                 type.getName(),
                 file.getConstPool()
