@@ -388,7 +388,9 @@
                         <!-- http://stackoverflow.com/questions/10738609 -->
                         <id>default-testCompile</id>
                         <configuration>
-                            <compilerArgument>-nowarn</compilerArgument>
+                            <compilerArguments>
+                                <nowarn/>
+                            </compilerArguments>
                         </configuration>
                     </execution>
                     <execution>
