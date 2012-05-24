@@ -385,6 +385,7 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <!-- http://stackoverflow.com/questions/10738609 -->
                         <id>default-testCompile</id>
                         <configuration>
                             <compilerArgument>-nowarn</compilerArgument>
