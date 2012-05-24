@@ -30,10 +30,12 @@
 package com.rexsl.log;
 
 import com.jcabi.log.Logger;
+import com.jcabi.log.VerboseRunnable;
 import com.jcabi.log.VerboseThreads;
 import java.io.IOException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -52,6 +54,12 @@ import java.util.concurrent.TimeUnit;
 public final class BulkHttpFeeder extends AbstractHttpFeeder {
 
     /**
+     * The service to run the future.
+     */
+    private final transient ScheduledExecutorService service =
+        Executors.newSingleThreadScheduledExecutor(new VerboseThreads(this));
+
+    /**
      * Period in seconds.
      * @checkstyle MagicNumber (2 lines)
      */
@@ -66,7 +74,7 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
     /**
      * The future we're running in.
      */
-    private transient Future future;
+    private transient ScheduledFuture future;
 
     /**
      * Set option {@code period}.
@@ -89,9 +97,10 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
      */
     @Override
     public void close() throws IOException {
-        if (!this.future.cancel(true)) {
+        if (this.future != null && !this.future.cancel(true)) {
             throw new IOException("Failed to close scheduled future");
         }
+        this.service.shutdown();
     }
 
     /**
@@ -99,9 +108,8 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
      */
     @Override
     public void activateOptions() {
-        this.future = Executors
-            .newSingleThreadScheduledExecutor(new VerboseThreads(this))
-            .scheduleAtFixedRate(
+        this.future = this.service.scheduleAtFixedRate(
+            new VerboseRunnable(
                 new Runnable() {
                     @Override
                     public void run() {
@@ -112,10 +120,12 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
                         }
                     }
                 },
-                1L,
-                this.period,
-                TimeUnit.SECONDS
-            );
+                true
+            ),
+            1L,
+            this.period,
+            TimeUnit.SECONDS
+        );
     }
 
     /**

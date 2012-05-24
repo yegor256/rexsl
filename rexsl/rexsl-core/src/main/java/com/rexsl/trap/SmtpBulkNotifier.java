@@ -30,6 +30,7 @@
 package com.rexsl.trap;
 
 import com.jcabi.log.Logger;
+import com.jcabi.log.VerboseRunnable;
 import com.jcabi.log.VerboseThreads;
 import java.io.IOException;
 import java.util.Date;
@@ -38,6 +39,7 @@ import java.util.Properties;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.mail.BodyPart;
@@ -74,6 +76,12 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
     private static final long MIN_INTERVAL = 5L;
 
     /**
+     * The service to run the future.
+     */
+    private final transient ScheduledExecutorService service =
+        Executors.newSingleThreadScheduledExecutor(new VerboseThreads(this));
+
+    /**
      * Running thread.
      */
     private final transient ScheduledFuture future;
@@ -91,19 +99,20 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
     public SmtpBulkNotifier(final Properties props) {
         super(props);
         final long interval = this.interval();
-        this.future = Executors
-            .newSingleThreadScheduledExecutor(new VerboseThreads(this))
-            .scheduleAtFixedRate(
+        this.future = this.service.scheduleAtFixedRate(
+            new VerboseRunnable(
                 new Runnable() {
                     @Override
                     public void run() {
-                        SmtpBulkNotifier.this.background();
+                        SmtpBulkNotifier.this.flush();
                     }
                 },
-                0L,
-                interval,
-                TimeUnit.MINUTES
-            );
+                true
+            ),
+            0L,
+            interval,
+            TimeUnit.MINUTES
+        );
         Logger.info(
             this,
             "#SmtpBulkNotifier(): started with %dmin interval",
@@ -124,16 +133,17 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
      */
     @Override
     public void close() throws IOException {
-        this.background();
+        this.flush();
         if (!this.future.cancel(true)) {
             throw new IOException("Failed to close scheduled future");
         }
+        this.service.shutdown();
     }
 
     /**
      * Run this on background and send emails.
      */
-    private void background() {
+    private void flush() {
         synchronized (this.defects) {
             if (!this.defects.isEmpty()) {
                 try {

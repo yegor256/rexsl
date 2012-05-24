@@ -149,7 +149,8 @@ public final class CloudAppender extends AppenderSkeleton {
                     public void run() {
                         CloudAppender.this.flush();
                     }
-                }
+                },
+                true
             ),
             1L,
             1L,

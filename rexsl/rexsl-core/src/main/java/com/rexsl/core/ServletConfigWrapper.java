@@ -106,11 +106,11 @@ final class ServletConfigWrapper implements FilterConfig {
     public Enumeration<String> getInitParameterNames() {
         final Set<String> names = new HashSet<String>();
         for (Object name : this.properties.keySet()) {
-            names.add((String) name);
+            names.add(name.toString());
         }
-        final Enumeration encapsulated = this.config.getInitParameterNames();
+        final Enumeration<?> encapsulated = this.config.getInitParameterNames();
         while (encapsulated.hasMoreElements()) {
-            names.add((String) encapsulated.nextElement());
+            names.add(encapsulated.nextElement().toString());
         }
         return Collections.enumeration(names);
     }
