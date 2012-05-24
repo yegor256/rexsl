@@ -189,7 +189,7 @@ public final class PageBuilder {
      * @param base Parent class, which will be inherited
      * @return The class just created or found
      */
-    private Class createOrFind(final Class<?> base) {
+    private Class<?> createOrFind(final Class<?> base) {
         synchronized (PageBuilder.class) {
             final String name = String.format(
                 "%s$%s",
