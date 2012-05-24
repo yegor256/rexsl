@@ -379,15 +379,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <!-- http://stackoverflow.com/questions/10738609 -->
-                        <id>default-testCompile</id>
-                        <configuration>
-                            <compilerArguments>
-                                <nowarn/>
-                            </compilerArguments>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>compile-helpmojo</id>
                         <goals>
                             <goal>compile</goal>
