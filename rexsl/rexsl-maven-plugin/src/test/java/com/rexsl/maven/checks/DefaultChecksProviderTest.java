@@ -79,8 +79,10 @@ public final class DefaultChecksProviderTest {
         MatcherAssert.assertThat(
             checks,
             Matchers.allOf(
-                Matchers.<Object>iterableWithSize(1),
-                Matchers.everyItem(Matchers.instanceOf(JigsawCssCheck.class))
+                Matchers.<Check>iterableWithSize(1),
+                Matchers.<Check>everyItem(
+                    Matchers.<Check>instanceOf(JigsawCssCheck.class)
+                )
             )
         );
     }
