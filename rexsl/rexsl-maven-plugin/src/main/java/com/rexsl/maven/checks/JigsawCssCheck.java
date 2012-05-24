@@ -57,7 +57,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: JigsawCssCheck.java 204 2011-10-26 21:15:28Z guard $
+ * @version $Id$
  */
 final class JigsawCssCheck implements Check {
 

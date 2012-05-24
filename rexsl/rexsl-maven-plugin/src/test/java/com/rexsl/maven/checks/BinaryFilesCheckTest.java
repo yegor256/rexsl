@@ -37,7 +37,7 @@ import org.junit.Test;
 /**
  * Test case for {@link BinaryFilesCheck}.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id: BinaryFilesCheckTest.java 570 2011-12-25 16:32:21Z guard $
+ * @version $Id$
  */
 public final class BinaryFilesCheckTest {
 

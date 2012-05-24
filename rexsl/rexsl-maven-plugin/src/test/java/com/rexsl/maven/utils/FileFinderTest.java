@@ -40,7 +40,7 @@ import org.junit.Test;
 /**
  * FileFinder test.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id: FileFinderTest.java 570 2011-12-25 16:32:21Z guard $
+ * @version $Id$
  */
 public final class FileFinderTest {
 

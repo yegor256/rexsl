@@ -51,7 +51,7 @@ import org.apache.commons.io.filefilter.NotFileFilter;
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: BinaryFilesCheck.java 204 2011-10-26 21:15:28Z guard $
+ * @version $Id$
  */
 final class BinaryFilesCheck implements Check {
 
