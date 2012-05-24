@@ -81,7 +81,7 @@ public final class ValidatorBuilder {
      * @return The validator
      */
     public Validator html() {
-        return this.HTML_VALIDATOR;
+        return ValidatorBuilder.HTML_VALIDATOR;
     }
 
     /**
@@ -89,7 +89,7 @@ public final class ValidatorBuilder {
      * @return The validator
      */
     public Validator css() {
-        return this.CSS_VALIDATOR;
+        return ValidatorBuilder.CSS_VALIDATOR;
     }
 
 }
