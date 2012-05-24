@@ -45,11 +45,6 @@ import org.junit.Test;
 public final class HttpFeederTest {
 
     /**
-     * Some big enough value to exceed max open connections threshold.
-     */
-    public static final int MESSAGES_TO_SEND = 1500;
-
-    /**
      * HttpFeeder can send messages to HTTP via POST.
      * @throws Exception If there is some problem inside
      */
@@ -88,7 +83,8 @@ public final class HttpFeederTest {
         feeder.setUrl(container.home().toString());
         feeder.activateOptions();
         try {
-            for (int count = 0; count < this.MESSAGES_TO_SEND; ++count) {
+            // @checkstyle MagicNumber (1 line)
+            for (int count = 0; count < 1500; ++count) {
                 feeder.feed("some text\nmultiline");
             }
         } catch (IOException ex) {

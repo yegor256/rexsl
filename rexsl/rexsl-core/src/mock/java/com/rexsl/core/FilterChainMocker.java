@@ -65,7 +65,7 @@ public final class FilterChainMocker {
     public FilterChainMocker withOutput(final String text) {
         try {
             Mockito.doAnswer(
-                new Answer() {
+                new Answer<Object>() {
                     public Object answer(final InvocationOnMock invocation)
                         throws java.io.IOException {
                         final HttpServletResponse response =
@@ -96,7 +96,7 @@ public final class FilterChainMocker {
     public FilterChainMocker withOutput(final byte[] data) {
         try {
             Mockito.doAnswer(
-                new Answer() {
+                new Answer<Object>() {
                     public Object answer(final InvocationOnMock invocation)
                         throws java.io.IOException {
                         final HttpServletResponse response =

@@ -88,7 +88,7 @@ public final class CloudAppenderTest {
         final Feeder feeder = Mockito.mock(Feeder.class);
         final StringBuilder builder = new StringBuilder();
         Mockito.doAnswer(
-            new Answer() {
+            new Answer<Object>() {
                 public Object answer(final InvocationOnMock invocation) {
                     final String text = (String) invocation.getArguments()[0];
                     builder.append(text);

@@ -59,7 +59,7 @@ public final class ServletOutputStreamMocker {
     public ServletOutputStreamMocker() {
         try {
             Mockito.doAnswer(
-                new Answer() {
+                new Answer<Object>() {
                     public Object answer(final InvocationOnMock invocation)
                         throws java.io.IOException {
                         final int data = (Integer) invocation.getArguments()[0];
@@ -70,7 +70,7 @@ public final class ServletOutputStreamMocker {
                 }
             ).when(this.stream).write(Mockito.anyInt());
             Mockito.doAnswer(
-                new Answer() {
+                new Answer<Object>() {
                     public Object answer(final InvocationOnMock invocation)
                         throws java.io.IOException {
                         final byte[] data =
@@ -83,7 +83,7 @@ public final class ServletOutputStreamMocker {
                 }
             ).when(this.stream).write((byte[]) Mockito.any());
             Mockito.doAnswer(
-                new Answer() {
+                new Answer<Object>() {
                     public Object answer(final InvocationOnMock invocation)
                         throws java.io.IOException {
                         final byte[] data =
@@ -106,7 +106,7 @@ public final class ServletOutputStreamMocker {
             throw new IllegalStateException(ex);
         }
         Mockito.doAnswer(
-            new Answer() {
+            new Answer<Object>() {
                 public Object answer(final InvocationOnMock invocation) {
                     return ServletOutputStreamMocker.this.buffer.toString();
                 }

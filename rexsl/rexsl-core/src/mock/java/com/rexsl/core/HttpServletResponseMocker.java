@@ -66,7 +66,7 @@ public final class HttpServletResponseMocker {
             throw new IllegalStateException(ex);
         }
         Mockito.doAnswer(
-            new Answer() {
+            new Answer<Object>() {
                 public Object answer(final InvocationOnMock invocation) {
                     return HttpServletResponseMocker.this.stream.toString();
                 }
@@ -81,7 +81,7 @@ public final class HttpServletResponseMocker {
      */
     public HttpServletResponseMocker expectStatus(final int status) {
         Mockito.doAnswer(
-            new Answer() {
+            new Answer<Object>() {
                 public Object answer(final InvocationOnMock invocation) {
                     final int actual = (Integer) invocation.getArguments()[0];
                     MatcherAssert.assertThat(actual, Matchers.equalTo(status));
