@@ -108,7 +108,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    @SuppressWarnings({ "PMD.AvoidCatchingGenericException", "rawtypes" })
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
         String input = null;
@@ -340,11 +340,11 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
             .append("  ")
             .append(request.getProtocol())
             .append("\n");
-        final Enumeration names = request.getHeaderNames();
+        final Enumeration<?> names = request.getHeaderNames();
         while (names.hasMoreElements()) {
             final String name = names.nextElement().toString();
             final Collection<String> values = new LinkedList<String>();
-            final Enumeration hdrs = request.getHeaders(name);
+            final Enumeration<?> hdrs = request.getHeaders(name);
             while (hdrs.hasMoreElements()) {
                 values.add(hdrs.nextElement().toString());
             }

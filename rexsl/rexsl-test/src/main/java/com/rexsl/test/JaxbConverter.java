@@ -110,7 +110,7 @@ public final class JaxbConverter {
      */
     @SuppressWarnings("unchecked")
     public static Source the(final Object object, final Class... deps) {
-        final Class[] classes = new Class[deps.length + 1];
+        final Class<?>[] classes = new Class<?>[deps.length + 1];
         classes[0] = object.getClass();
         System.arraycopy(deps, 0, classes, 1, deps.length);
         JAXBContext ctx;
@@ -122,9 +122,9 @@ public final class JaxbConverter {
         final JAXBIntrospector intro = ctx.createJAXBIntrospector();
         Object subject = object;
         if (intro.getElementName(object) == null) {
-            subject = new JAXBElement(
+            subject = new JAXBElement<Object>(
                 JaxbConverter.qname(object),
-                object.getClass(),
+                (Class<Object>) object.getClass(),
                 object
             );
         }

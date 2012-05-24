@@ -88,7 +88,7 @@ public final class CloudAppenderTest {
         final Feeder feeder = Mockito.mock(Feeder.class);
         final StringBuilder builder = new StringBuilder();
         Mockito.doAnswer(
-            new Answer() {
+            new Answer<Object>() {
                 public Object answer(final InvocationOnMock invocation) {
                     final String text = (String) invocation.getArguments()[0];
                     builder.append(text);
@@ -134,6 +134,8 @@ public final class CloudAppenderTest {
     public void outputMessageWhenQueueIsFull() throws Exception {
         final CloudAppender appender = new CloudAppender();
         appender.setLayout(new SimpleLayout());
+        appender.setFeeder(new ConsoleFeeder());
+        appender.activateOptions();
         final Field messagesField =
             CloudAppender.class.getDeclaredField("messages");
         messagesField.setAccessible(true);

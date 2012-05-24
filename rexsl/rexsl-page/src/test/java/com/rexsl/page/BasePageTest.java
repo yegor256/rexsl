@@ -31,6 +31,7 @@ package com.rexsl.page;
 
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
@@ -39,7 +40,7 @@ import org.junit.Test;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 public final class BasePageTest {
 
     /**
@@ -48,11 +49,10 @@ public final class BasePageTest {
      */
     @Test
     public void convertsToXml() throws Exception {
-        final BasePage<BasePage, Resource> page =
-            new BasePage<BasePage, Resource>()
-                .init(new ResourceMocker().mock())
-                .append(new JaxbBundle("title", "hello, world!"))
-                .link(new Link("test", "/foo"));
+        final BasePageTest.FooPage page = new BasePageTest.FooPage()
+            .init(new ResourceMocker().mock())
+            .append(new JaxbBundle("title", "hello, world!"))
+            .link(new Link("test", "/foo"));
         MatcherAssert.assertThat(
             JaxbConverter.the(page),
             XhtmlMatchers.hasXPaths(
@@ -65,6 +65,14 @@ public final class BasePageTest {
                 "/page/links/link[@rel = 'test']"
             )
         );
+    }
+
+    /**
+     * Base page for tests.
+     */
+    @XmlRootElement(name = "page")
+    private static final class FooPage
+        extends BasePage<BasePageTest.FooPage, Resource> {
     }
 
 }

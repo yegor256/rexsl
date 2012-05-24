@@ -66,7 +66,7 @@ final class RexslFilesCheck implements Check {
         "PMD.AvoidDuplicateLiterals",
         "unchecked"
     })
-    private static final Map<String, String> DIR_EXTENSIONS = ArrayUtils.toMap(
+    private static final Map<String, String> EXTS = ArrayUtils.toMap(
         new String[][]{
             {"xml", "xml"},
             {"xhtml", "groovy"},
@@ -94,7 +94,7 @@ final class RexslFilesCheck implements Check {
         boolean valid = true;
         if (dir.exists()) {
             for (File folder : dir.listFiles()) {
-                if (!this.DIR_EXTENSIONS.containsKey(folder.getName())) {
+                if (!RexslFilesCheck.EXTS.containsKey(folder.getName())) {
                     continue;
                 }
                 valid &= this.validate(folder);
@@ -114,7 +114,7 @@ final class RexslFilesCheck implements Check {
         boolean valid = true;
         for (File file : this.getFiles(folder)) {
             final String ext = FilenameUtils.getExtension(file.getPath());
-            final String regex = this.DIR_EXTENSIONS.get(folder.getName());
+            final String regex = RexslFilesCheck.EXTS.get(folder.getName());
             if (!ext.matches(regex)) {
                 Logger.warn(
                     this,

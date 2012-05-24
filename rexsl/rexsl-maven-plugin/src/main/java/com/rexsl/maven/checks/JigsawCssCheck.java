@@ -57,7 +57,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: JigsawCssCheck.java 204 2011-10-26 21:15:28Z guard $
+ * @version $Id$
  */
 final class JigsawCssCheck implements Check {
 
@@ -99,7 +99,7 @@ final class JigsawCssCheck implements Check {
      */
     @Override
     public boolean validate(final Environment env) {
-        final File dir = new File(env.basedir(), this.CSS_DIR);
+        final File dir = new File(env.basedir(), JigsawCssCheck.CSS_DIR);
         boolean success = true;
         if (dir.exists()) {
             final Collection<File> files = new FileFinder(dir, "css").random();
@@ -126,7 +126,7 @@ final class JigsawCssCheck implements Check {
             Logger.info(
                 this,
                 "%s directory is absent, no CSS tests",
-                this.CSS_DIR
+                JigsawCssCheck.CSS_DIR
             );
         }
         return success;

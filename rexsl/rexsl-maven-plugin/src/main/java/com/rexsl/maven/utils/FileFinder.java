@@ -45,7 +45,7 @@ import org.apache.commons.io.FileUtils;
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: FileFinder.java 464 2011-12-12 09:30:18Z guard $
+ * @version $Id$
  */
 public final class FileFinder {
 

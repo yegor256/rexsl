@@ -68,7 +68,7 @@ public final class HttpServletRequestMocker {
         Mockito.doReturn(new StringBuffer("http://localhost/"))
             .when(this.request).getRequestURL();
         Mockito.doAnswer(
-            new Answer() {
+            new Answer<Object>() {
                 public Object answer(final InvocationOnMock invocation) {
                     final String name = (String) invocation.getArguments()[0];
                     return HttpServletRequestMocker.this.headers.get(name);
@@ -76,7 +76,7 @@ public final class HttpServletRequestMocker {
             }
         ).when(this.request).getHeader(Mockito.anyString());
         Mockito.doAnswer(
-            new Answer() {
+            new Answer<Object>() {
                 public Object answer(final InvocationOnMock invocation) {
                     return Collections.enumeration(
                         HttpServletRequestMocker.this.headers.keySet()

@@ -40,7 +40,7 @@ import java.util.List;
  * <p>Implementation of this interface shall be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: JsonDocument.java 1327 2012-04-03 18:32:55Z diego $
+ * @version $Id$
  * @since 0.4
  */
 public interface JsonDocument {

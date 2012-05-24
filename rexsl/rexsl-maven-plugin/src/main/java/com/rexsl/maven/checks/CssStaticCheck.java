@@ -52,7 +52,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: CssStaticCheck.java 204 2011-10-26 21:15:28Z guard $
+ * @version $Id$
  * @see <a href="http://www.mozilla.org/rhino/jsc.html">Rhino JavaScript to Java compiler</a>
  * @see <a href="https://github.com/stubbornella/csslint/wiki/Command-line-interface">CSSLint Command Line Interface</a>
  */

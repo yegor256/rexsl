@@ -37,7 +37,7 @@ import org.mockito.Mockito;
 /**
  * Test case for {@link com.rexsl.core.ServletConfigWrapper}.
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
- * @version $Id: ServletConfigWrapperTest.java $
+ * @version $Id$
  */
 public final class ServletConfigWrapperTest {
 

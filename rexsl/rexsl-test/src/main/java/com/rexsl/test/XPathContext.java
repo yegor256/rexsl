@@ -171,9 +171,9 @@ final class XPathContext implements NamespaceContext {
             }
         }
         for (NamespaceContext ctx : this.contexts) {
-            final Iterator iterator = ctx.getPrefixes(namespace);
+            final Iterator<?> iterator = ctx.getPrefixes(namespace);
             while (iterator.hasNext()) {
-                prefixes.add(String.class.cast(iterator.next()));
+                prefixes.add(iterator.next().toString());
             }
         }
         if (namespace.equals(XMLConstants.XML_NS_URI)) {

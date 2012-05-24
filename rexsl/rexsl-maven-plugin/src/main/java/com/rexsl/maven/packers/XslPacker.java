@@ -97,10 +97,10 @@ final class XslPacker extends AbstractPacker {
     @Override
     protected void pack(final Reader input, final File dest)
         throws IOException {
-        this.DFACTORY.setNamespaceAware(true);
+        XslPacker.DFACTORY.setNamespaceAware(true);
         Document document;
         try {
-            document = this.DFACTORY
+            document = XslPacker.DFACTORY
                 .newDocumentBuilder()
                 .parse(new InputSource(input));
         } catch (javax.xml.parsers.ParserConfigurationException ex) {
@@ -114,7 +114,7 @@ final class XslPacker extends AbstractPacker {
             throw new IllegalStateException(ex);
         }
         try {
-            final Transformer transformer = this.TFACTORY.newTransformer();
+            final Transformer transformer = XslPacker.TFACTORY.newTransformer();
             transformer.setOutputProperty(
                 OutputKeys.OMIT_XML_DECLARATION,
                 "yes"
@@ -138,7 +138,7 @@ final class XslPacker extends AbstractPacker {
      */
     private void clear(final Document document)
         throws XPathExpressionException {
-        final XPath xpath = this.XPATHFACTORY.newXPath();
+        final XPath xpath = XslPacker.XPATHFACTORY.newXPath();
         final XPathExpression expr = xpath.compile("//comment()");
         final Object result = expr.evaluate(document, XPathConstants.NODESET);
         final NodeList nodes = (NodeList) result;

@@ -45,7 +45,7 @@ import org.mockito.Mockito;
 /**
  * Test case for {@link ExceptionTrap}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: ExceptionTrapTest.java 851 2011-12-29 21:07:58Z guard $
+ * @version $Id$
  */
 public final class ExceptionTrapTest {
 

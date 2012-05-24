@@ -76,7 +76,7 @@ class BaseValidator {
                 Logger.format(
                     "%s; boundary=%s",
                     MediaType.MULTIPART_FORM_DATA,
-                    this.BOUNDARY
+                    BaseValidator.BOUNDARY
                 )
             )
             .post("validating through W3C validator", entity);
@@ -95,7 +95,7 @@ class BaseValidator {
         try {
             final MultipartEntity entity = new MultipartEntity(
                 HttpMultipartMode.STRICT,
-                this.BOUNDARY,
+                BaseValidator.BOUNDARY,
                 Charset.forName(CharEncoding.UTF_8)
             );
             entity.addPart(

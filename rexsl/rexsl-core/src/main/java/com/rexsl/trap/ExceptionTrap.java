@@ -188,7 +188,7 @@ public final class ExceptionTrap extends HttpServlet {
                 final URI uri = URI.create(
                     value.replaceAll("[\\p{Cntrl}\\p{Space}]+", "")
                 );
-                final Properties props = this.props(uri);
+                final Properties props = ExceptionTrap.props(uri);
                 try {
                     list.add(
                         type.cast(
@@ -330,9 +330,9 @@ public final class ExceptionTrap extends HttpServlet {
      */
     private static String headers(final HttpServletRequest request) {
         final StringBuilder text = new StringBuilder();
-        final Enumeration headerNames = request.getHeaderNames();
+        final Enumeration<?> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
-            final String header = (String) headerNames.nextElement();
+            final String header = headerNames.nextElement().toString();
             text.append("  ")
                 .append(header)
                 .append(": ")

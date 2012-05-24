@@ -40,7 +40,7 @@ import org.junit.Test;
 /**
  * FileFinder test.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @version $Id: FileFinderTest.java 570 2011-12-25 16:32:21Z guard $
+ * @version $Id$
  */
 public final class FileFinderTest {
 
@@ -51,14 +51,14 @@ public final class FileFinderTest {
 
     /**
      * Checks alphabetical order.
-     * @throws Exception .
+     * @throws Exception If something goes wrong
      */
     @Test
     public void testOrdered() throws Exception {
         final Environment environment = new EnvironmentMocker()
-            .withTextFile("src/test/rexsl/setup/g.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/f.groovy", this.TEST)
-            .withTextFile("src/test/rexsl/setup/a.groovy", this.TEST)
+            .withTextFile("src/test/rexsl/setup/g.groovy", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/f.groovy", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/a.groovy", FileFinderTest.TEST)
             .mock();
         final File directory = environment.basedir();
         final FileFinder finder = new FileFinder(directory, "groovy");
@@ -82,15 +82,15 @@ public final class FileFinderTest {
     @Test
     public void testRandom() {
         final Environment environment = new EnvironmentMocker()
-            .withTextFile("src/test/rexsl/setup/k.xml", this.TEST)
-            .withTextFile("src/test/rexsl/setup/b.xml", this.TEST)
-            .withTextFile("src/test/rexsl/setup/c.xml", this.TEST)
-            .withTextFile("src/test/rexsl/setup/d.xml", this.TEST)
-            .withTextFile("src/test/rexsl/setup/e.xml", this.TEST)
-            .withTextFile("src/test/rexsl/setup/l.xml", this.TEST)
-            .withTextFile("src/test/rexsl/setup/m.xml", this.TEST)
-            .withTextFile("src/test/rexsl/setup/h.xml", this.TEST)
-            .withTextFile("src/test/rexsl/setup/i.xml", this.TEST)
+            .withTextFile("src/test/rexsl/setup/k.xml", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/b.xml", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/c.xml", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/d.xml", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/e.xml", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/l.xml", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/m.xml", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/h.xml", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/i.xml", FileFinderTest.TEST)
             .mock();
         final File directory = environment.basedir();
         final FileFinder finder = new FileFinder(directory, "xml");
@@ -111,9 +111,9 @@ public final class FileFinderTest {
     @Test
     public void testCertainType() throws Exception {
         final Environment environment = new EnvironmentMocker()
-            .withTextFile("src/test/rexsl/setup/n.css", this.TEST)
-            .withTextFile("src/test/rexsl/setup/o.xml", this.TEST)
-            .withTextFile("src/test/rexsl/setup/p.css", this.TEST)
+            .withTextFile("src/test/rexsl/setup/n.css", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/o.xml", FileFinderTest.TEST)
+            .withTextFile("src/test/rexsl/setup/p.css", FileFinderTest.TEST)
             .mock();
         final File directory = environment.basedir();
         final Collection<File> files =

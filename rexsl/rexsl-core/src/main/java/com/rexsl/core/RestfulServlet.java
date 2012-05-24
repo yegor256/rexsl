@@ -141,16 +141,16 @@ public final class RestfulServlet extends HttpServlet {
     public void init(final ServletConfig config) throws ServletException {
         final Set<String> packages = new HashSet<String>();
         packages.add(this.getClass().getPackage().getName());
-        final String param = config.getInitParameter(this.PACKAGES);
+        final String param = config.getInitParameter(RestfulServlet.PACKAGES);
         if (param == null) {
             throw new ServletException(
                 Logger.format(
                     "'%s' servlet parameter is mandatory",
-                    this.PACKAGES
+                    RestfulServlet.PACKAGES
                 )
             );
         }
-        for (String name : StringUtils.split(param, this.COMMA)) {
+        for (String name : StringUtils.split(param, RestfulServlet.COMMA)) {
             final String pkg = name.trim();
             final Pattern ptrn = Pattern.compile(
                 "^([a-z_]{1}[a-z0-9_]*(\\.[a-z_]{1}[a-z0-9_]*)*)$"
@@ -161,7 +161,7 @@ public final class RestfulServlet extends HttpServlet {
                     Logger.format(
                         // @checkstyle LineLength (1 line)
                         "'%s' servlet parameter contains non-valid data: %s",
-                        this.PACKAGES,
+                        RestfulServlet.PACKAGES,
                         pkg
                     )
                 );
@@ -177,7 +177,7 @@ public final class RestfulServlet extends HttpServlet {
         final Properties props = new Properties();
         props.setProperty(
             PackagesResourceConfig.PROPERTY_PACKAGES,
-            StringUtils.join(packages, this.COMMA)
+            StringUtils.join(packages, RestfulServlet.COMMA)
         );
         this.reconfigureJUL();
         final FilterConfig cfg = new ServletConfigWrapper(config, props);

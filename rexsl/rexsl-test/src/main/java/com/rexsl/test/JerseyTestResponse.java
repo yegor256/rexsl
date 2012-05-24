@@ -301,7 +301,7 @@ final class JerseyTestResponse implements TestResponse {
                     if (!assertion.isRetryNeeded(attempt)) {
                         throw ex;
                     }
-                    if (attempt >= this.MAX_ATTEMPTS) {
+                    if (attempt >= JerseyTestResponse.MAX_ATTEMPTS) {
                         this.fail(
                             Logger.format("failed after %d attempt(s)", attempt)
                         );

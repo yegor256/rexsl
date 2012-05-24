@@ -189,7 +189,7 @@ public final class PageBuilder {
      * @param base Parent class, which will be inherited
      * @return The class just created or found
      */
-    private Class createOrFind(final Class base) {
+    private Class<?> createOrFind(final Class<?> base) {
         synchronized (PageBuilder.class) {
             final String name = String.format(
                 "%s$%s",
@@ -205,9 +205,7 @@ public final class PageBuilder {
                 } catch (ClassNotFoundException ex) {
                     throw new IllegalStateException(ex);
                 }
-                final Stylesheet sheet = Stylesheet.class.cast(
-                    cls.getAnnotation(Stylesheet.class)
-                );
+                final Stylesheet sheet = cls.getAnnotation(Stylesheet.class);
                 if (sheet == null) {
                     throw new IllegalStateException(
                         String.format(
@@ -237,7 +235,7 @@ public final class PageBuilder {
      * @param base Parent class, which will be inherited
      * @return The class just created
      */
-    private Class construct(final String name, final Class base) {
+    private Class<?> construct(final String name, final Class<?> base) {
         final ClassPool pool = ClassPool.getDefault();
         try {
             final CtClass parent = pool.get(base.getName());
@@ -257,7 +255,7 @@ public final class PageBuilder {
                 attribute.addAnnotation(existing);
             }
             file.addAttribute(attribute);
-            final Class cls = ctc.toClass();
+            final Class<?> cls = ctc.toClass();
             Logger.debug(
                 this,
                 "#construct('%s', %s): class %s created",
@@ -286,8 +284,12 @@ public final class PageBuilder {
         final AttributeInfo originals =
             parent.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
         if (originals != null) {
-            final AnnotationsAttribute attrib = (AnnotationsAttribute) originals
-                .copy(dest.getClassFile().getConstPool(), new HashMap());
+            final AnnotationsAttribute attrib = AnnotationsAttribute.class.cast(
+                originals.copy(
+                    dest.getClassFile().getConstPool(),
+                    new HashMap<Object, Object>()
+                )
+            );
             final Annotation[] all = attrib.getAnnotations();
             final List<String> names = new ArrayList<String>();
             for (Annotation annotation : all) {
@@ -315,7 +317,7 @@ public final class PageBuilder {
      * @param file Class file
      * @return The annotation
      */
-    private Annotation make(final Class type, final String value,
+    private Annotation make(final Class<?> type, final String value,
         final ClassFile file) {
         final Annotation annotation = new Annotation(
             type.getName(),
