@@ -84,7 +84,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
     /**
      * Running thread.
      */
-    private final transient ScheduledFuture future;
+    private final transient ScheduledFuture<?> future;
 
     /**
      * List of reported defect.
@@ -214,23 +214,23 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
      */
     private long interval() {
         long interval = Long.parseLong(this.prop("interval"));
-        if (interval < this.MIN_INTERVAL) {
+        if (interval < SmtpBulkNotifier.MIN_INTERVAL) {
             Logger.warn(
                 this,
                 "#interval(): set to %d, while minimum allowed is %d",
                 interval,
-                this.MIN_INTERVAL
+                SmtpBulkNotifier.MIN_INTERVAL
             );
-            interval = this.MIN_INTERVAL;
+            interval = SmtpBulkNotifier.MIN_INTERVAL;
         }
-        if (interval > this.MAX_INTERVAL) {
+        if (interval > SmtpBulkNotifier.MAX_INTERVAL) {
             Logger.warn(
                 this,
                 "#interval(): set to %d, while maximum allowed is %d",
                 interval,
-                this.MAX_INTERVAL
+                SmtpBulkNotifier.MAX_INTERVAL
             );
-            interval = this.MAX_INTERVAL;
+            interval = SmtpBulkNotifier.MAX_INTERVAL;
         }
         return interval;
     }

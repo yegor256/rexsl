@@ -74,7 +74,7 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
     /**
      * The future we're running in.
      */
-    private transient ScheduledFuture future;
+    private transient ScheduledFuture<?> future;
 
     /**
      * Set option {@code period}.

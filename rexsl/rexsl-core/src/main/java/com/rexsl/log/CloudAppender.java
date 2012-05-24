@@ -104,7 +104,7 @@ public final class CloudAppender extends AppenderSkeleton {
     /**
      * The future we're running in.
      */
-    private transient ScheduledFuture future;
+    private transient ScheduledFuture<?> future;
 
     /**
      * Set feeder, option {@code feeder} in config.
