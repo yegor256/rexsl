@@ -59,7 +59,7 @@ public final class LogMocker {
      * Public ctor.
      */
     public LogMocker() {
-        final Answer rec = new Answer() {
+        final Answer<?> rec = new Answer<Object>() {
             public Object answer(final InvocationOnMock invocation) {
                 final String text = (String) invocation.getArguments()[0];
                 LogMocker.this.messages.add(text);
