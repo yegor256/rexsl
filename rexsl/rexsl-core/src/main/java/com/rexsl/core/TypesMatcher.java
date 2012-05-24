@@ -95,14 +95,14 @@ final class TypesMatcher {
     public boolean accepts(final String match) {
         boolean accepts = this.types.contains(match);
         if (!accepts) {
-            final String[] reqs = match.split(this.SEPARATOR, 2);
+            final String[] reqs = match.split(TypesMatcher.SEPARATOR, 2);
             for (String type : this.types) {
-                final String[] parts = type.split(this.SEPARATOR, 2);
-                if (!this.ASTERISK.equals(parts[0])
+                final String[] parts = type.split(TypesMatcher.SEPARATOR, 2);
+                if (!TypesMatcher.ASTERISK.equals(parts[0])
                     && !parts[0].equals(reqs[0])) {
                     continue;
                 }
-                if (!this.ASTERISK.equals(parts[1])
+                if (!TypesMatcher.ASTERISK.equals(parts[1])
                     && !parts[1].equals(reqs[1])) {
                     continue;
                 }

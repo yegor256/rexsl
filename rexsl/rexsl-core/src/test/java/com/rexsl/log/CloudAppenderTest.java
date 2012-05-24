@@ -134,6 +134,8 @@ public final class CloudAppenderTest {
     public void outputMessageWhenQueueIsFull() throws Exception {
         final CloudAppender appender = new CloudAppender();
         appender.setLayout(new SimpleLayout());
+        appender.setFeeder(new ConsoleFeeder());
+        appender.activateOptions();
         final Field messagesField =
             CloudAppender.class.getDeclaredField("messages");
         messagesField.setAccessible(true);

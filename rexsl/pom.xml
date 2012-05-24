@@ -587,7 +587,7 @@
                 <!-- Logging facility. -->
                 <groupId>com.jcabi</groupId>
                 <artifactId>jcabi-log</artifactId>
-                <version since="7 May 2012">0.1.2</version>
+                <version since="24 May 2012">0.1.9</version>
             </dependency>
             <dependency>
                 <!-- String manipulations -->

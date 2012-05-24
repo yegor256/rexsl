@@ -30,11 +30,14 @@
 package com.rexsl.log;
 
 import com.jcabi.log.Logger;
+import com.jcabi.log.VerboseRunnable;
 import com.jcabi.log.VerboseThreads;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -68,7 +71,7 @@ import org.apache.log4j.spi.LoggingEvent;
  * @version $Id$
  * @since 0.3.2
  */
-@SuppressWarnings("PMD.DoNotUseThreads")
+@SuppressWarnings({ "PMD.DoNotUseThreads", "PMD.SystemPrintln" })
 public final class CloudAppender extends AppenderSkeleton {
 
     /**
@@ -88,6 +91,12 @@ public final class CloudAppender extends AppenderSkeleton {
         new LinkedBlockingQueue<String>();
 
     /**
+     * The service to run the background process.
+     */
+    private final transient ScheduledExecutorService service =
+        Executors.newSingleThreadScheduledExecutor(new VerboseThreads(this));
+
+    /**
      * The feeder.
      */
     private transient Feeder feeder;
@@ -95,7 +104,7 @@ public final class CloudAppender extends AppenderSkeleton {
     /**
      * The future we're running in.
      */
-    private transient Future future;
+    private transient ScheduledFuture future;
 
     /**
      * Set feeder, option {@code feeder} in config.
@@ -127,16 +136,25 @@ public final class CloudAppender extends AppenderSkeleton {
             );
         }
         super.activateOptions();
-        this.future = Executors
-            .newSingleThreadExecutor(new VerboseThreads(this))
-            .submit(
+        System.out.println(
+            Logger.format(
+                "CloudAppender started to work with %s...",
+                this.feeder
+            )
+        );
+        this.future = this.service.scheduleWithFixedDelay(
+            new VerboseRunnable(
                 new Runnable() {
                     @Override
                     public void run() {
-                        CloudAppender.this.background();
+                        CloudAppender.this.flush();
                     }
                 }
-            );
+            ),
+            1L,
+            1L,
+            TimeUnit.SECONDS
+        );
     }
 
     /**
@@ -144,9 +162,16 @@ public final class CloudAppender extends AppenderSkeleton {
      */
     @Override
     public void close() {
-        if (this.future != null && !this.future.cancel(true)) {
-            throw new IllegalStateException("Failed to close future");
+        if (this.future != null) {
+            this.future.cancel(true);
         }
+        this.service.shutdown();
+        System.out.println(
+            Logger.format(
+                "CloudAppender finished to work with %s.",
+                this.feeder
+            )
+        );
     }
 
     /**
@@ -160,7 +185,7 @@ public final class CloudAppender extends AppenderSkeleton {
         final String[] exc = event.getThrowableStrRep();
         if (exc != null) {
             for (String text : exc) {
-                buf.append(text).append(this.EOL);
+                buf.append(text).append(CloudAppender.EOL);
             }
         }
         final boolean correctlyInserted = this.messages.offer(buf.toString());
@@ -183,42 +208,28 @@ public final class CloudAppender extends AppenderSkeleton {
 
     /**
      * Method to be executed by a thread in the background.
-     * Takes messages from the queue and feeds the feeder.
+     *
+     * <p>Takes messages from the queue and feeds the feeder.
      */
-    @SuppressWarnings("PMD.SystemPrintln")
-    private void background() {
-        System.out.println(
-            Logger.format(
-                "CloudAppender started to work with %s...",
-                this.feeder
-            )
-        );
-        while (true) {
-            String text;
-            try {
-                text = this.messages.take();
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-                break;
-            }
-            try {
-                this.feeder.feed(text);
-            } catch (java.io.IOException ex) {
-                System.out.println(
-                    Logger.format(
-                        "%sCloudAppender failed to report: %[exception]s",
-                        text,
-                        ex
-                    )
-                );
-            }
+    private void flush() {
+        String text;
+        try {
+            text = this.messages.take();
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(ex);
         }
-        System.out.println(
-            Logger.format(
-                "CloudAppender finished to work with %s.",
-                this.feeder
-            )
-        );
+        try {
+            this.feeder.feed(text);
+        } catch (java.io.IOException ex) {
+            System.out.println(
+                Logger.format(
+                    "%sCloudAppender failed to report: %[exception]s",
+                    text,
+                    ex
+                )
+            );
+        }
     }
 
 }

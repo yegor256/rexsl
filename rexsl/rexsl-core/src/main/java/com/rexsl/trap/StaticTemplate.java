@@ -90,7 +90,7 @@ public final class StaticTemplate implements Template {
     @Override
     public String render(final String defect) {
         return this.text.replace(
-            this.MARKER,
+            StaticTemplate.MARKER,
             StringEscapeUtils.escapeHtml(defect)
         );
     }

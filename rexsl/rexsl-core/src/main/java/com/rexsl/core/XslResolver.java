@@ -81,7 +81,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     /**
      * Classes to process.
      */
-    private final transient Set<Class> classes = new HashSet<Class>();
+    private final transient Set<Class<?>> classes = new HashSet<Class<?>>();
 
     /**
      * JAXB context.
@@ -166,13 +166,13 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * Add new class to context.
      * @param cls The class we should add
      */
-    public void add(final Class cls) {
+    public void add(final Class<?> cls) {
         synchronized (this.classes) {
             if (!this.classes.contains(cls)) {
                 try {
                     this.classes.add(cls);
                     this.context = JAXBContext.newInstance(
-                        this.classes.toArray(new Class[this.classes.size()])
+                        this.classes.toArray(new Class<?>[this.classes.size()])
                     );
                     Logger.info(
                         this,
@@ -194,7 +194,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @param cls The class we should process
      * @return The context
      */
-    private JAXBContext buildContext(final Class cls) {
+    private JAXBContext buildContext(final Class<?> cls) {
         this.add(cls);
         return this.context;
     }
@@ -249,7 +249,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      */
     private void addXsdValidatorToMarshaller(final Marshaller mrsh,
         final Class<?> type) {
-        final String name = this.schema(type);
+        final String name = XslResolver.schema(type);
         if (name.isEmpty()) {
             Logger.debug(
                 this,
