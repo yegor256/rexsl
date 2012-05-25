@@ -140,15 +140,13 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
      * Flush buffer through HTTP.
      *
      * @throws IOException If some IO problem inside
-     * @todo #296 This implemenation is not thread-safe. It's possible to
-     *  to get content from the buffer, and then some other thread will
-     *  add a line, and then we set length to zero. We will lose that line.
-     *  Synchronization should added into feed() and here.
      */
     private void flush() throws IOException {
-        final String text = this.buffer.toString();
-        this.buffer.setLength(0);
-        this.post(text);
+    	synchronized (buffer) {		
+            final String text = this.buffer.toString();
+            this.buffer.setLength(0);
+            this.post(text);
+		}
     }
 
 }
