@@ -142,11 +142,11 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
      * @throws IOException If some IO problem inside
      */
     private void flush() throws IOException {
-    	synchronized (buffer) {		
+        synchronized (this.buffer) {
             final String text = this.buffer.toString();
             this.buffer.setLength(0);
             this.post(text);
-		}
+        }
     }
 
 }
