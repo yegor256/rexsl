@@ -45,6 +45,7 @@ import org.apache.commons.io.IOUtils;
  * @author Flavius Ivasca (ivascaflavius@gmail.com)
  * @version $Id: SimpleGrizzlyAdapterMocker.java $
  */
+@SuppressWarnings("PMD.AvoidStringBufferField")
 public class SimpleGrizzlyAdapterMocker extends GrizzlyAdapter {
     /**
      * Buffer that stores concatenated data from requests.

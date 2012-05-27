@@ -45,6 +45,7 @@ import org.junit.Test;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.DoNotUseThreads")
 public final class BulkHttpFeederTest {
 
     /**
@@ -75,6 +76,7 @@ public final class BulkHttpFeederTest {
      * Test {@link BulkHttpFeeder} for thread safety.
      * @throws Exception If there is some problem inside
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     @Test
     public void testThreadSafety() throws Exception {
         final long period = 300L;
