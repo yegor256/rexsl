@@ -79,6 +79,15 @@ public final class ManifestsTest {
     }
 
     /**
+     * Manifests can throw an exception if attribute name is NULL.
+     * @throws Exception If something goes wrong
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsExceptionWhenAttributeNameIsNull() throws Exception {
+        Manifests.read(null);
+    }
+
+    /**
      * Manifests can throw an exception if an attribute is empty.
      * @throws Exception If something goes wrong
      */

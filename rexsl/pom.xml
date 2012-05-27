@@ -610,6 +610,12 @@
                 <version since="1 Mar 2012">3.2.1</version>
             </dependency>
             <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version since="27 May 2012">1.1.0.Alpha1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <!-- Forward all calls to SLF4J to LOG4J. -->
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
