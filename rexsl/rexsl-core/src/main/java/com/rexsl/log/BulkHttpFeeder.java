@@ -60,6 +60,11 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
         Executors.newSingleThreadScheduledExecutor(new VerboseThreads(this));
 
     /**
+     * Time Unit (seconds, minutes etc).
+     */
+    private transient TimeUnit timeUnit = TimeUnit.SECONDS;
+
+    /**
      * Period in seconds.
      * @checkstyle MagicNumber (2 lines)
      */
@@ -75,6 +80,14 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
      * The future we're running in.
      */
     private transient ScheduledFuture<?> future;
+
+    /**
+     * Set option {@code timeUnit}.
+     * @param unit Time unit
+     */
+    public void setUnit(final TimeUnit unit) {
+        this.timeUnit = unit;
+    }
 
     /**
      * Set option {@code period}.
@@ -124,7 +137,7 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
             ),
             1L,
             this.period,
-            TimeUnit.SECONDS
+            this.timeUnit
         );
     }
 

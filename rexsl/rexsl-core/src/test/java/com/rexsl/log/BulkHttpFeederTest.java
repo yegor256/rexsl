@@ -29,11 +29,15 @@
  */
 package com.rexsl.log;
 
+import com.jcabi.log.Logger;
 import com.rexsl.test.ContainerMocker;
 import com.rexsl.test.RestTester;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -67,4 +71,59 @@ public final class BulkHttpFeederTest {
         feeder.feed(message);
     }
 
+    /**
+     * Test {@link BulkHttpFeeder} for thread safety.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void testThreadSafety() throws Exception {
+        final long period = 300L;
+        final int numThreads = 20;
+        final int numTriesPerThread = 5;
+        final int feedPeriod = 100;
+        final int timeout = 2000;
+        final StringBuffer expectedResult = new StringBuffer();
+        final SimpleGrizzlyAdapterMocker adapter =
+        new SimpleGrizzlyAdapterMocker().mock();
+        final String postMessage = "foo";
+        final BulkHttpFeeder feeder = new BulkHttpFeeder();
+        feeder.setUrl(adapter.home().toString());
+        feeder.setPeriod(period);
+        feeder.setUnit(TimeUnit.MILLISECONDS);
+        feeder.activateOptions();
+        for (int val = 0; val < numThreads; val = val + 1) {
+            final Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int num = 0; num < numTriesPerThread;
+                        num = num + 1) {
+                        try {
+                            feeder.feed(postMessage);
+                            expectedResult.append(postMessage);
+                            Thread.sleep(feedPeriod);
+                        } catch (IOException exc) {
+                            BulkHttpFeederTest.this.logException(exc);
+                        } catch (InterruptedException exc) {
+                            BulkHttpFeederTest.this.logException(exc);
+                        }
+                    }
+                }
+            });
+            thread.start();
+        }
+        Thread.sleep(timeout);
+        final StringBuffer actualResult = adapter.getBuffer();
+        Assert.assertEquals(
+            expectedResult.toString(),
+            actualResult.toString()
+        );
+    }
+
+    /**
+     * Logs {@link Exception} to the logger.
+     * @param exc Exception to be logged
+     */
+    private void logException(final Exception exc) {
+        Logger.warn(this, "#testThreadSafety(): %[exception]s", exc);
+    }
 }
