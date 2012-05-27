@@ -33,6 +33,9 @@ import com.jcabi.log.Logger;
 import com.rexsl.test.ContainerMocker;
 import com.rexsl.test.RestTester;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -82,37 +85,25 @@ public final class BulkHttpFeederTest {
         final long period = 300L;
         final int numThreads = 20;
         final int numTriesPerThread = 5;
-        final int feedPeriod = 100;
         final int timeout = 2000;
         final StringBuffer expectedResult = new StringBuffer();
         final SimpleGrizzlyAdapterMocker adapter =
         new SimpleGrizzlyAdapterMocker().mock();
-        final String postMessage = "foo";
         final BulkHttpFeeder feeder = new BulkHttpFeeder();
         feeder.setUrl(adapter.home().toString());
         feeder.setPeriod(period);
         feeder.setUnit(TimeUnit.MILLISECONDS);
         feeder.activateOptions();
-        for (int val = 0; val < numThreads; val = val + 1) {
-            final Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (int num = 0; num < numTriesPerThread;
-                        num = num + 1) {
-                        try {
-                            feeder.feed(postMessage);
-                            expectedResult.append(postMessage);
-                            Thread.sleep(feedPeriod);
-                        } catch (IOException exc) {
-                            BulkHttpFeederTest.this.logException(exc);
-                        } catch (InterruptedException exc) {
-                            BulkHttpFeederTest.this.logException(exc);
-                        }
-                    }
-                }
-            });
-            thread.start();
+        final CountDownLatch latch = new CountDownLatch(numTriesPerThread);
+        final ExecutorService taskExecutor =
+            Executors.newFixedThreadPool(numThreads);
+        for (int num = 0; num < numThreads; num = num + 1) {
+            taskExecutor.execute(
+                new TestThread(latch, feeder, expectedResult)
+            );
         }
+        latch.await();
+        taskExecutor.shutdown();
         Thread.sleep(timeout);
         final StringBuffer actualResult = adapter.getBuffer();
         Assert.assertEquals(
@@ -122,10 +113,69 @@ public final class BulkHttpFeederTest {
     }
 
     /**
-     * Logs {@link Exception} to the logger.
-     * @param exc Exception to be logged
+     * Thread used for testing thread safety of {@link BulkHttpFeeder}.
+     * @author Flavius Ivasca (ivascaflavius@gmail.com)
      */
-    private void logException(final Exception exc) {
-        Logger.warn(this, "#testThreadSafety(): %[exception]s", exc);
+    @SuppressWarnings({ "PMD.CascadeIndentationCheck",
+        "PMD.AvoidStringBufferField" })
+    class TestThread implements Runnable {
+        /**
+         * Message to be sent through POST.
+         */
+        private static final String POST_MESSAGE = "foo";
+        /**
+         * Time interval in milis to wait between feeding.
+         */
+        private static final int FEED_PERIOD = 100;
+        /**
+         * Buffer to store all fed data.
+         */
+        private final transient StringBuffer buffer;
+        /**
+         * Countdown latch used for managing feed trials.
+         */
+        private final transient CountDownLatch latch;
+        /**
+         * HTTP feeder to which POST requests are sent.
+         */
+        private final transient BulkHttpFeeder feeder;
+        /**
+         * Creates a new {@link TestThread}.
+         * @param cdlatch Count down latch
+         * @param httpfeeder Bulk HTTP feeder
+         * @param data Buffer to hold fed data
+         */
+        TestThread(final CountDownLatch cdlatch,
+            final BulkHttpFeeder httpfeeder,
+            final StringBuffer data) {
+            this.latch = cdlatch;
+            this.feeder = httpfeeder;
+            this.buffer = data;
+            new Thread(this);
+        }
+        /**
+         * Logs {@link Exception} to the logger.
+         * @param exc Exception to be logged
+         */
+        private void logException(final Exception exc) {
+            Logger.warn(this, "#testThreadSafety(): %[exception]s", exc);
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+            try {
+                this.feeder.feed(this.POST_MESSAGE);
+                this.buffer.append(this.POST_MESSAGE);
+                Thread.sleep(this.FEED_PERIOD);
+            } catch (IOException exc) {
+                this.logException(exc);
+            } catch (InterruptedException exc) {
+                this.logException(exc);
+            } finally {
+                this.latch.countDown();
+            }
+        }
     }
 }
