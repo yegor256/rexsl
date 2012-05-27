@@ -67,11 +67,11 @@ final class WebappFilesCheck implements Check {
     })
     private static final Map<String, String> EXTS = ArrayUtils.toMap(
         new String[][]{
-            {"webapp", ".*html|robots.txt"},
-            {"WEB-INF", ".*xml"},
-            {"css", ".*css"},
-            {"js", ".*js"},
-            {"xsl", ".*xsl"},
+            {"webapp", ".*\\.html|robots.txt"},
+            {"WEB-INF", ".*\\.xml"},
+            {"css", ".*\\.css"},
+            {"js", ".*\\.js"},
+            {"xsl", ".*\\.xsl"},
         }
     );
 
