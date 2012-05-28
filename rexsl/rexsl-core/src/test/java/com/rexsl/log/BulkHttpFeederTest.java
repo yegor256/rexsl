@@ -30,17 +30,25 @@
 package com.rexsl.log;
 
 import com.jcabi.log.Logger;
+import com.jcabi.log.VerboseRunnable;
 import com.rexsl.test.ContainerMocker;
 import com.rexsl.test.RestTester;
+import com.sun.grizzly.http.embed.GrizzlyWebServer;
+import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
+import com.sun.grizzly.tcp.http11.GrizzlyRequest;
+import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.URI;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import org.apache.commons.io.IOUtils;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -48,7 +56,7 @@ import org.junit.Test;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
-@SuppressWarnings("PMD.DoNotUseThreads")
+@SuppressWarnings({ "PMD.DoNotUseThreads", "PMD.TestClassWithoutTestCases" })
 public final class BulkHttpFeederTest {
 
     /**
@@ -76,15 +84,12 @@ public final class BulkHttpFeederTest {
     }
 
     /**
-     * Test {@link BulkHttpFeeder} for thread safety.
+     * BulkHttpFeeder can handle multiple threads.
      * @throws Exception If there is some problem inside
      */
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     @Test
-    public void testThreadSafety() throws Exception {
+    public void feedMultipleMessagesToCloud() throws Exception {
         final long period = 300L;
-        final int numThreads = 20;
-        final int numTriesPerThread = 5;
         final int timeout = 2000;
         final StringBuffer expectedResult = new StringBuffer();
         final SimpleGrizzlyAdapterMocker adapter =
@@ -94,87 +99,143 @@ public final class BulkHttpFeederTest {
         feeder.setPeriod(period);
         feeder.setUnit(TimeUnit.MILLISECONDS);
         feeder.activateOptions();
-        final CountDownLatch latch = new CountDownLatch(numTriesPerThread);
+        this.runFeedThreads(expectedResult, feeder);
+        Thread.sleep(timeout);
+        final StringBuffer actualResult = adapter.getBuffer();
+        MatcherAssert.assertThat(
+            expectedResult.toString(),
+            Matchers.equalTo(actualResult.toString())
+        );
+    }
+    /**
+     * Runs threads that feed data to cloud.
+     * @param expected Buffer to keep track of fed data.
+     * @param feeder Feeder to feed data to.
+     * @throws InterruptedException If there is some problem inside.
+     */
+    private void runFeedThreads(final StringBuffer expected,
+        final BulkHttpFeeder feeder) throws InterruptedException {
+        final String message = "foo";
+        final int numThreads = 15;
+        final int numTries = 5;
+        final CountDownLatch latch = new CountDownLatch(numTries);
         final ExecutorService taskExecutor =
             Executors.newFixedThreadPool(numThreads);
+        final class FeedRunnable implements Runnable {
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void run() {
+                try {
+                    feeder.feed(message);
+                    expected.append(message);
+                } catch (IOException exc) {
+                    Logger.warn(
+                        this,
+                        "#testThreadSafety(): %[exception]s",
+                        exc
+                    );
+                } finally {
+                    latch.countDown();
+                }
+            }
+        }
+        final VerboseRunnable runnable = new VerboseRunnable(
+            new FeedRunnable(),
+            true
+        );
         for (int num = 0; num < numThreads; num = num + 1) {
             taskExecutor.execute(
-                new TestThread(latch, feeder, expectedResult)
+                runnable
             );
         }
         latch.await();
         taskExecutor.shutdown();
-        Thread.sleep(timeout);
-        final StringBuffer actualResult = adapter.getBuffer();
-        Assert.assertEquals(
-            expectedResult.toString(),
-            actualResult.toString()
-        );
     }
-
     /**
-     * Thread used for testing thread safety of {@link BulkHttpFeeder}.
+     * Simple Custom {@link GrizzlyAdapter}.
+     * It stores the request data into a buffer.
      * @author Flavius Ivasca (ivascaflavius@gmail.com)
      */
-    @SuppressWarnings({ "PMD.CascadeIndentationCheck",
-        "PMD.AvoidStringBufferField" })
-    class TestThread implements Runnable {
+    @SuppressWarnings("PMD.AvoidStringBufferField")
+    public class SimpleGrizzlyAdapterMocker extends GrizzlyAdapter {
         /**
-         * Message to be sent through POST.
+         * Stores concatenated data from requests.
          */
-        private static final String POST_MESSAGE = "foo";
+        private final transient StringBuffer buffer = new StringBuffer();
         /**
-         * Time interval in milis to wait between feeding.
+         * Port where it works.
          */
-        private static final int FEED_PERIOD = 100;
+        private transient int port;
         /**
-         * Buffer to store all fed data.
+         * Get option {@code buffer}.
+         * @return Buffer that holds concatenated data from requests
          */
-        private final transient StringBuffer buffer;
-        /**
-         * Countdown latch used for managing feed trials.
-         */
-        private final transient CountDownLatch latch;
-        /**
-         * HTTP feeder to which POST requests are sent.
-         */
-        private final transient BulkHttpFeeder feeder;
-        /**
-         * Creates a new {@link TestThread}.
-         * @param cdlatch Count down latch
-         * @param httpfeeder Bulk HTTP feeder
-         * @param data Buffer to hold fed data
-         */
-        TestThread(final CountDownLatch cdlatch,
-            final BulkHttpFeeder httpfeeder,
-            final StringBuffer data) {
-            this.latch = cdlatch;
-            this.feeder = httpfeeder;
-            this.buffer = data;
-            new Thread(this);
+        public final StringBuffer getBuffer() {
+            return this.buffer;
         }
         /**
-         * Logs {@link Exception} to the logger.
-         * @param exc Exception to be logged
+         * Get its home.
+         * @return URI of the started container
          */
-        private void logException(final Exception exc) {
-            Logger.warn(this, "#testThreadSafety(): %[exception]s", exc);
+        public final URI home() {
+            try {
+                return new URI(
+                    Logger.format("http://localhost:%d/", this.port)
+                );
+            } catch (java.net.URISyntaxException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
+        /**
+         * Mock it, and return this object.
+         * @return This object
+         */
+        public final SimpleGrizzlyAdapterMocker mock() {
+            this.port = this.reservePort();
+            final GrizzlyWebServer gws = new GrizzlyWebServer(this.port);
+            gws.addGrizzlyAdapter(this, new String[] {"/"});
+            try {
+                gws.start();
+            } catch (java.io.IOException ex) {
+                throw new IllegalStateException(ex);
+            }
+            return this;
+        }
+        /**
+         * Reserve port.
+         * @return Reserved TCP port
+         */
+        protected final int reservePort() {
+            int reserved;
+            try {
+                final ServerSocket socket = new ServerSocket(0);
+                try {
+                    reserved = socket.getLocalPort();
+                } finally {
+                    socket.close();
+                }
+            } catch (java.io.IOException ex) {
+                throw new IllegalStateException(ex);
+            }
+            return reserved;
         }
         /**
          * {@inheritDoc}
          */
         @Override
-        public void run() {
+        @SuppressWarnings({ "PMD.AvoidCatchingGenericException", "rawtypes" })
+        public final void service(final GrizzlyRequest request,
+            final GrizzlyResponse response) {
+            String input = null;
             try {
-                this.feeder.feed(this.POST_MESSAGE);
-                this.buffer.append(this.POST_MESSAGE);
-                Thread.sleep(this.FEED_PERIOD);
-            } catch (IOException exc) {
-                this.logException(exc);
-            } catch (InterruptedException exc) {
-                this.logException(exc);
-            } finally {
-                this.latch.countDown();
+                input = IOUtils.toString(request.getInputStream());
+            } catch (IOException ex) {
+                throw new IllegalStateException(ex);
+            }
+            if (input != null) {
+                this.buffer.append(input);
             }
         }
     }
