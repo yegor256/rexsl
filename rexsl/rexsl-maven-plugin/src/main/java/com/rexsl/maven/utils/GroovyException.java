@@ -30,6 +30,7 @@
 package com.rexsl.maven.utils;
 
 import com.jcabi.log.Logger;
+import javax.validation.constraints.NotNull;
 
 /**
  * Groovy-generated exception.
@@ -55,7 +56,7 @@ public final class GroovyException extends Exception {
      * Public ctor.
      * @param cause The cause
      */
-    public GroovyException(final Throwable cause) {
+    public GroovyException(@NotNull final Throwable cause) {
         super(cause);
     }
 
@@ -64,7 +65,7 @@ public final class GroovyException extends Exception {
      * @param cause The cause (formatting string for {@code String#format()})
      * @param args Agruments for {@code String#format()}
      */
-    public GroovyException(final String cause, final Object... args) {
+    public GroovyException(@NotNull final String cause, final Object... args) {
         super(GroovyException.toText(cause, args));
     }
 

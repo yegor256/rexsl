@@ -29,6 +29,8 @@
  */
 package com.rexsl.maven.utils;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Logging configuration aware.Manages logging to alternate appenders depending
  * on scope/subscope at runtime.
@@ -52,7 +54,7 @@ public final class LoggingManager {
      * output filename and apply changes
      * @param name Scope name.
      */
-    public static void enter(final String name) {
+    public static void enter(@NotNull final String name) {
         // intentionally empty
     }
 

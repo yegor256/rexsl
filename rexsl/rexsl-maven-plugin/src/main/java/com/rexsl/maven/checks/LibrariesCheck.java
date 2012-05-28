@@ -39,6 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -59,7 +60,7 @@ final class LibrariesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public void setScope(final String scope) {
+    public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
 
@@ -68,7 +69,7 @@ final class LibrariesCheck implements Check {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public boolean validate(final Environment env) {
+    public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.webdir(), "WEB-INF/lib");
         int errors = 0;
         final ConcurrentMap<String, File> classes =

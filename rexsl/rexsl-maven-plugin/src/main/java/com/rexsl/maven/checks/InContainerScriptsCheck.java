@@ -40,6 +40,7 @@ import com.rexsl.maven.utils.LoggingManager;
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -60,13 +61,14 @@ final class InContainerScriptsCheck implements Check {
     /**
      * Scope of tests to execute.
      */
+    @NotNull
     private transient String test = ".*";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setScope(final String scope) {
+    public void setScope(@NotNull final String scope) {
         synchronized (this.test) {
             this.test = scope;
         }
@@ -76,7 +78,7 @@ final class InContainerScriptsCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public boolean validate(final Environment env) {
+    public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.basedir(), "src/test/rexsl/scripts");
         boolean success = true;
         if (dir.exists()) {

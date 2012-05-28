@@ -37,6 +37,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 
 /**
  * Provider of checks.
@@ -206,10 +207,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
      * {@inheritDoc}
      */
     @Override
-    public void setTest(final String scope) {
-        if (scope == null) {
-            throw new IllegalArgumentException("'test' can't be NULL");
-        }
+    public void setTest(@NotNull final String scope) {
         synchronized (this.test) {
             this.test = scope;
         }
@@ -219,10 +217,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
      * {@inheritDoc}
      */
     @Override
-    public void setCheck(final String scope) {
-        if (scope == null) {
-            throw new IllegalArgumentException("'check' can't be NULL");
-        }
+    public void setCheck(@NotNull final String scope) {
         synchronized (this.test) {
             this.checks.clear();
             this.checks.addAll(

@@ -42,6 +42,7 @@ import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.ArrayMemberValue;
 import javassist.bytecode.annotation.ClassMemberValue;
 import javassist.bytecode.annotation.StringMemberValue;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -102,6 +103,7 @@ public final class JaxbGroup {
     /**
      * Collection of elements.
      */
+    @NotNull
     private final transient Collection<?> group;
 
     /**
@@ -128,7 +130,8 @@ public final class JaxbGroup {
      * @param name Name of parent XML element
      * @return JAXB-annotated object, just created
      */
-    public static Object build(final Collection<?> grp, final String name) {
+    public static Object build(@NotNull final Collection<?> grp,
+        @NotNull final String name) {
         synchronized (JaxbGroup.READY) {
             final String mnemo = JaxbGroup.mnemo(grp.isEmpty(), name);
             if (!JaxbGroup.READY.containsKey(mnemo)) {

@@ -29,6 +29,8 @@
  */
 package com.rexsl.test;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Policy of assertion, used by {@link TestResponse}.
  *
@@ -99,7 +101,7 @@ public interface AssertionPolicy {
      *
      * @param response The response to assert
      */
-    void assertThat(TestResponse response);
+    void assertThat(@NotNull TestResponse response);
 
     /**
      * Do we need to re-fetch the page and try again?

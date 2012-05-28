@@ -33,6 +33,7 @@ import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
+import javax.validation.constraints.NotNull;
 
 /**
  * Validate location of files/dirs.
@@ -66,7 +67,7 @@ final class FilesStructureCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public void setScope(final String scope) {
+    public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
 
@@ -75,7 +76,7 @@ final class FilesStructureCheck implements Check {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public boolean validate(final Environment env) {
+    public boolean validate(@NotNull final Environment env) {
         boolean success = true;
         for (String name : FilesStructureCheck.PATHS) {
             final File file = new File(env.basedir(), name);

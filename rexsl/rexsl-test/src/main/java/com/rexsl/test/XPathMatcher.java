@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
 import org.hamcrest.Description;
@@ -49,11 +50,13 @@ final class XPathMatcher<T> extends TypeSafeMatcher<T> {
     /**
      * The XPath to use.
      */
+    @NotNull
     private final transient String xpath;
 
     /**
      * The context to use.
      */
+    @NotNull
     private final transient NamespaceContext context;
 
     /**
@@ -61,7 +64,8 @@ final class XPathMatcher<T> extends TypeSafeMatcher<T> {
      * @param query The query
      * @param ctx The context
      */
-    public XPathMatcher(final String query, final NamespaceContext ctx) {
+    public XPathMatcher(@NotNull final String query,
+        @NotNull final NamespaceContext ctx) {
         super();
         this.xpath = query;
         this.context = ctx;
@@ -71,7 +75,7 @@ final class XPathMatcher<T> extends TypeSafeMatcher<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean matchesSafely(final T input) {
+    public boolean matchesSafely(@NotNull final T input) {
         Source source;
         if (input instanceof Source) {
             source = (Source) input;
@@ -90,7 +94,7 @@ final class XPathMatcher<T> extends TypeSafeMatcher<T> {
      * {@inheritDoc}
      */
     @Override
-    public void describeTo(final Description description) {
+    public void describeTo(@NotNull final Description description) {
         description.appendText("an XML document with XPath ")
             .appendText(this.xpath);
     }

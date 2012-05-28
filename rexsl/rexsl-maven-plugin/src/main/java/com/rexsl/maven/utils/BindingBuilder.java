@@ -35,6 +35,7 @@ import groovy.lang.Binding;
 import java.net.URI;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import javax.validation.constraints.NotNull;
 
 /**
  * Builder of binding for {@link GroovyExecutor}.
@@ -54,7 +55,7 @@ public final class BindingBuilder {
      * Public ctor.
      * @param env The environment
      */
-    public BindingBuilder(final Environment env) {
+    public BindingBuilder(@NotNull final Environment env) {
         URI home;
         try {
             home = new URI(Logger.format("http://localhost:%d/", env.port()));
@@ -83,7 +84,8 @@ public final class BindingBuilder {
      * @param value The value
      * @return This object
      */
-    public BindingBuilder add(final String name, final Object value) {
+    public BindingBuilder add(@NotNull final String name,
+        final Object value) {
         this.props.put(name, value);
         return this;
     }

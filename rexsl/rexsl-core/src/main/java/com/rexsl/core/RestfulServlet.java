@@ -45,6 +45,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -114,6 +115,7 @@ public final class RestfulServlet extends HttpServlet {
     /**
      * Jersey servlet.
      */
+    @NotNull
     private ServletContainer jersey = new ServletContainer();
 
     /**
@@ -135,10 +137,11 @@ public final class RestfulServlet extends HttpServlet {
 
     /**
      * {@inheritDoc}
-     * @checkstyle RedundantThrows (3 lines)
+     * @checkstyle RedundantThrows (4 lines)
      */
     @Override
-    public void init(final ServletConfig config) throws ServletException {
+    public void init(@NotNull final ServletConfig config)
+        throws ServletException {
         final Set<String> packages = new HashSet<String>();
         packages.add(this.getClass().getPackage().getName());
         final String param = config.getInitParameter(RestfulServlet.PACKAGES);
@@ -201,7 +204,7 @@ public final class RestfulServlet extends HttpServlet {
      * Set jersey servlet, after de-serialization.
      * @param servlet The servlet to set
      */
-    public void setJersey(final ServletContainer servlet) {
+    public void setJersey(@NotNull final ServletContainer servlet) {
         this.jersey = servlet;
     }
 

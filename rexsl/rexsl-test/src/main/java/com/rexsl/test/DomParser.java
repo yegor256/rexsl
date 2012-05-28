@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.jcabi.log.Logger;
+import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
@@ -64,10 +65,7 @@ final class DomParser {
      *  DocumentBuilderFactory. We can't guarantee a proper validation, but
      *  something better than current implementation should be introduced
      */
-    public DomParser(final String txt) {
-        if (txt == null) {
-            throw new IllegalArgumentException("NULL instead of XML");
-        }
+    public DomParser(@NotNull final String txt) {
         if (txt.isEmpty() || txt.charAt(0) != '<') {
             throw new IllegalArgumentException(
                 Logger.format("Doesn't look like XML: '%s'", txt)

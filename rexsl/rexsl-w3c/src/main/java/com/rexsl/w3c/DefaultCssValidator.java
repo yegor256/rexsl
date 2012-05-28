@@ -32,6 +32,7 @@ package com.rexsl.w3c;
 import com.rexsl.test.TestResponse;
 import java.net.URI;
 import java.util.regex.Pattern;
+import javax.validation.constraints.NotNull;
 
 /**
  * Default implementation of CSS validator.
@@ -58,7 +59,7 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
      * Public ctor.
      * @param entry Entry point to use
      */
-    public DefaultCssValidator(final URI entry) {
+    public DefaultCssValidator(@NotNull final URI entry) {
         super();
         this.uri = entry;
     }
@@ -68,7 +69,7 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
      */
     @Override
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    public ValidationResponse validate(final String css) {
+    public ValidationResponse validate(@NotNull final String css) {
         ValidationResponse response;
         final Pattern pattern = Pattern.compile(
             ".*^/\\* JIGSAW IGNORE: [^\\n]+\\*/$.*",

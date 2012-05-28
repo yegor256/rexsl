@@ -29,6 +29,8 @@
  */
 package com.rexsl.maven;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Single check to be executed by CheckMojo.
  *
@@ -41,13 +43,13 @@ public interface Check {
      * Set scope.
      * @param scope Scope specification
      */
-    void setScope(final String scope);
+    void setScope(@NotNull final String scope);
 
     /**
      * Perform all validations and return whether everything is fine or not.
      * @param env Envirorment
      * @return Everything is fine?
      */
-    boolean validate(final Environment env);
+    boolean validate(@NotNull final Environment env);
 
 }

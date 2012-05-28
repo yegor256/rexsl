@@ -34,6 +34,7 @@ import com.rexsl.maven.Environment;
 import java.io.File;
 import java.io.StringWriter;
 import java.net.URI;
+import javax.validation.constraints.NotNull;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -55,8 +56,8 @@ final class XhtmlTransformer {
      * @return XHTML as text
      * @throws InternalCheckException If some failure inside
      */
-    public String transform(final Environment env, final File file)
-        throws InternalCheckException {
+    public String transform(@NotNull final Environment env,
+        @NotNull final File file) throws InternalCheckException {
         final Source xml = new StreamSource(file);
         final TransformerFactory factory = TransformerFactory.newInstance();
         URI home;

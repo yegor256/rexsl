@@ -35,6 +35,7 @@ import java.util.Formattable;
 import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -61,11 +62,13 @@ final class RequestDecor implements Formattable {
     /**
      * The headers.
      */
+    @NotNull
     private final transient Collection<Header> headers;
 
     /**
      * The body.
      */
+    @NotNull
     private final transient String body;
 
     /**
@@ -73,7 +76,8 @@ final class RequestDecor implements Formattable {
      * @param hdrs The headers
      * @param text Body text
      */
-    public RequestDecor(final Collection<Header> hdrs, final String text) {
+    public RequestDecor(@NotNull final Collection<Header> hdrs,
+        @NotNull final String text) {
         this.headers = hdrs;
         this.body = text;
     }
@@ -83,7 +87,7 @@ final class RequestDecor implements Formattable {
      * @checkstyle ParameterNumber (4 lines)
      */
     @Override
-    public void formatTo(final Formatter formatter, final int flags,
+    public void formatTo(@NotNull final Formatter formatter, final int flags,
         final int width, final int precision) {
         final StringBuilder builder = new StringBuilder();
         for (Header header : this.headers) {

@@ -596,6 +596,13 @@
                 <version since="24 May 2012">1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <!-- this one is compliant with aspectj-maven-plugin -->
+                <version since="27 May 2012">1.6.11</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
                 <!-- String manipulations -->
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
@@ -619,13 +626,12 @@
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version since="27 May 2012">1.1.0.Alpha1</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <!-- JSR 303 reference implementation -->
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version since="19 Oct 2011">4.3.0.Final</version>
+                <groupId>org.apache.bval</groupId>
+                <artifactId>bval-jsr303</artifactId>
+                <version since="28 May 2012">0.4</version>
                 <scope>runtime</scope>
             </dependency>
             <dependency>
@@ -793,10 +799,11 @@
                 <configuration>
                     <complianceLevel>1.6</complianceLevel>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <showWeaveInfo>true</showWeaveInfo>
+                    <showWeaveInfo>false</showWeaveInfo>
                     <source>1.6</source>
                     <target>1.6</target>
-                    <verbose>true</verbose>
+                    <verbose>false</verbose>
+                    <Xlint>warning</Xlint>
                     <aspectLibraries>
                         <aspectLibrary>
                             <groupId>com.jcabi</groupId>
@@ -813,14 +820,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.aspectj</groupId>
-                        <artifactId>aspectjrt</artifactId>
-                        <version since="27 May 2012">1.6.12</version>
-                        <scope>runtime</scope>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

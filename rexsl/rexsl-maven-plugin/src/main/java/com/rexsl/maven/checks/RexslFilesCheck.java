@@ -35,6 +35,7 @@ import com.rexsl.maven.Environment;
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.AndFileFilter;
@@ -81,7 +82,7 @@ final class RexslFilesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public void setScope(final String scope) {
+    public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
 
@@ -89,7 +90,7 @@ final class RexslFilesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public boolean validate(final Environment env) {
+    public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.basedir(), "src/test/rexsl");
         boolean valid = true;
         if (dir.exists()) {

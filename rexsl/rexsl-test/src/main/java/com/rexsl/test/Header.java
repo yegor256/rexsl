@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import java.util.AbstractMap;
+import javax.validation.constraints.NotNull;
 
 /**
  * HTTP header.
@@ -51,7 +52,7 @@ final class Header extends AbstractMap.SimpleEntry<String, String> {
      * @param key The name of it
      * @param value The value
      */
-    public Header(final String key, final String value) {
+    public Header(@NotNull final String key, @NotNull final String value) {
         super(key, value);
     }
 

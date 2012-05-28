@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedMap;
 import org.hamcrest.Matcher;
@@ -93,7 +94,7 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * @param query The path of the link, as XPath query
      * @return New client ready to fetch content from this new page
      */
-    TestClient rel(String query);
+    TestClient rel(@NotNull String query);
 
     /**
      * Get status of the response as a positive integer number.
@@ -118,7 +119,7 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * @param name Name of the cookie to get
      * @return The cookie
      */
-    Cookie cookie(String name);
+    Cookie cookie(@NotNull String name);
 
     /**
      * Get body as a string, assuming it's {@code UTF-8}.
@@ -130,14 +131,14 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * {@inheritDoc}
      */
     @Override
-    TestResponse registerNs(String prefix, Object uri);
+    TestResponse registerNs(@NotNull String prefix, @NotNull Object uri);
 
     /**
      * Fail and report a problem (throws {@link AssertionError} with the
      * message provided).
      * @param reason Reason of failure
      */
-    void fail(String reason);
+    void fail(@NotNull String reason);
 
     /**
      * Assert something ({@link AssertionError} will be thrown if assertion
@@ -146,7 +147,7 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * @return This object
      * @since 0.3.4
      */
-    TestResponse assertThat(AssertionPolicy assertion);
+    TestResponse assertThat(@NotNull AssertionPolicy assertion);
 
     /**
      * Verifies HTTP response status code against the provided absolute value,
@@ -162,7 +163,7 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * @param matcher Matcher to validate status code
      * @return This object
      */
-    TestResponse assertStatus(Matcher<Integer> matcher);
+    TestResponse assertStatus(@NotNull Matcher<Integer> matcher);
 
     /**
      * Verifies HTTP response body content against provided matcher,
@@ -170,7 +171,7 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * @param matcher The matcher to use
      * @return This object
      */
-    TestResponse assertBody(Matcher<String> matcher);
+    TestResponse assertBody(@NotNull Matcher<String> matcher);
 
     /**
      * Verifies HTTP header against provided matcher, and throws
@@ -184,7 +185,8 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * @param matcher The matcher to use
      * @return This object
      */
-    TestResponse assertHeader(String name, Matcher<Iterable<String>> matcher);
+    TestResponse assertHeader(@NotNull String name,
+        @NotNull Matcher<Iterable<String>> matcher);
 
     /**
      * Verifies HTTP response body XHTML/XML content against XPath query,
@@ -192,7 +194,7 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * @param xpath Query to use
      * @return This object
      */
-    TestResponse assertXPath(String xpath);
+    TestResponse assertXPath(@NotNull String xpath);
 
     /**
      * Verifies the Json data against the element identifier argument,
@@ -200,6 +202,6 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * @param element Element in the Json data of this object
      * @return This object
      */
-    TestResponse assertJson(String element);
+    TestResponse assertJson(@NotNull String element);
 
 }

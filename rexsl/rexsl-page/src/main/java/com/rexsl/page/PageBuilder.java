@@ -45,6 +45,7 @@ import javassist.bytecode.AttributeInfo;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.StringMemberValue;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.lang.StringUtils;
 
@@ -129,11 +130,13 @@ public final class PageBuilder {
     /**
      * Stylesheet to use.
      */
+    @NotNull
     private transient URI xsl = UriBuilder.fromUri("/xsl/none.xsl").build();
 
     /**
      * Schema to use.
      */
+    @NotNull
     private transient String xsd = "";
 
     /**
@@ -141,7 +144,7 @@ public final class PageBuilder {
      * @param uri The URI of the stylesheet
      * @return This object
      */
-    public PageBuilder stylesheet(final String uri) {
+    public PageBuilder stylesheet(@NotNull final String uri) {
         this.xsl = UriBuilder.fromUri(uri)
             .replaceQuery("")
             .build();
@@ -153,7 +156,7 @@ public final class PageBuilder {
      * @param name Name of schema
      * @return This object
      */
-    public PageBuilder schema(final String name) {
+    public PageBuilder schema(@NotNull final String name) {
         this.xsd = name;
         return this;
     }
@@ -164,7 +167,7 @@ public final class PageBuilder {
      * @return The instance of the class just created
      * @param <T> The type of result expected
      */
-    public <T> T build(final Class<T> base) {
+    public <T> T build(@NotNull final Class<T> base) {
         T page;
         try {
             page = base.cast(this.createOrFind(base).newInstance());

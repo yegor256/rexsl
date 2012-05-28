@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import java.net.URI;
+import javax.validation.constraints.NotNull;
 
 /**
  * A universal class for in-container testing of your web application.
@@ -53,14 +54,14 @@ public interface TestClient {
      * @param value Value of the header to set
      * @return This object
      */
-    TestClient header(String name, Object value);
+    TestClient header(@NotNull String name, @NotNull Object value);
 
     /**
      * Execute {@code GET} request.
      * @param description Short description of the operation
      * @return This object
      */
-    TestResponse get(String description);
+    TestResponse get(@NotNull String description);
 
     /**
      * Execute {@code POST} request.
@@ -68,7 +69,7 @@ public interface TestClient {
      * @param body Request entity as a string
      * @return This object
      */
-    TestResponse post(String description, Object body);
+    TestResponse post(@NotNull String description, @NotNull Object body);
 
     /**
      * Execute {@code PUT} request.
@@ -76,6 +77,6 @@ public interface TestClient {
      * @param body Request entity as a string
      * @return This object
      */
-    TestResponse put(String description, Object body);
+    TestResponse put(@NotNull String description, @NotNull Object body);
 
 }

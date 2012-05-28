@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.servlet.DispatcherType;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -58,13 +59,14 @@ public final class EmbeddedContainer {
     /**
      * The server just started.
      */
+    @NotNull
     private final transient Server server;
 
     /**
      * Private ctor.
      * @param srv The server just started
      */
-    private EmbeddedContainer(final Server srv) {
+    private EmbeddedContainer(@NotNull final Server srv) {
         this.server = srv;
     }
 
@@ -80,7 +82,7 @@ public final class EmbeddedContainer {
      * @see <a href="http://docs.codehaus.org/display/JETTY/Classloading">Jetty Classloading</a>
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    public static EmbeddedContainer start(final Environment env) {
+    public static EmbeddedContainer start(@NotNull final Environment env) {
         if (!env.webdir().exists()) {
             throw new IllegalArgumentException(
                 Logger.format(

@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -113,6 +114,7 @@ public final class JaxbBundle {
     /**
      * Name of it.
      */
+    @NotNull
     private final transient String name;
 
     /**
@@ -145,7 +147,7 @@ public final class JaxbBundle {
      * Public ctor, with just a name of XML element an no content.
      * @param nam The name of it
      */
-    public JaxbBundle(final String nam) {
+    public JaxbBundle(@NotNull final String nam) {
         this.parent = null;
         this.name = nam;
         this.content = null;
@@ -156,7 +158,7 @@ public final class JaxbBundle {
      * @param nam The name of XML element
      * @param text Plain text content
      */
-    public JaxbBundle(final String nam, final Object text) {
+    public JaxbBundle(@NotNull final String nam, final Object text) {
         this.parent = null;
         this.name = nam;
         if (text == null) {
@@ -172,8 +174,8 @@ public final class JaxbBundle {
      * @param nam The name of it
      * @param text The content
      */
-    private JaxbBundle(final JaxbBundle prnt, final String nam,
-        final Object text) {
+    private JaxbBundle(@NotNull final JaxbBundle prnt,
+        @NotNull final String nam, final Object text) {
         this.parent = prnt;
         this.name = nam;
         if (text == null) {
@@ -189,7 +191,7 @@ public final class JaxbBundle {
      * @return The child bundle (use {@link #up()} on it in order to get back to
      *  this object)
      */
-    public JaxbBundle add(final String nam) {
+    public JaxbBundle add(@NotNull final String nam) {
         return this.add(nam, "");
     }
 
@@ -200,16 +202,8 @@ public final class JaxbBundle {
      * @return The child bundle (use {@link #up()} on it in order to get back to
      *  this object)
      */
-    public JaxbBundle add(final String nam, final Object txt) {
-        if (txt == null) {
-            throw new IllegalArgumentException(
-                String.format(
-                    "Can't add(%s, NULL) to '%s'",
-                    nam,
-                    this.name
-                )
-            );
-        }
+    public JaxbBundle add(@NotNull final String nam,
+        @NotNull final Object txt) {
         final JaxbBundle child = new JaxbBundle(this, nam, txt.toString());
         this.children.add(child);
         return child;
@@ -221,7 +215,8 @@ public final class JaxbBundle {
      * @param val The plain text value
      * @return This object
      */
-    public JaxbBundle attr(final String nam, final Object val) {
+    public JaxbBundle attr(@NotNull final String nam,
+        @NotNull final Object val) {
         this.attrs.put(nam, val.toString());
         return this;
     }

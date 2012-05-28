@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
@@ -67,7 +68,7 @@ final class CssPacker extends AbstractPacker {
      * {@inheritDoc}
      */
     @Override
-    protected void pack(final Reader input, final File dest)
+    protected void pack(@NotNull final Reader input, @NotNull final File dest)
         throws IOException {
         try {
             final Writer output = new OutputStreamWriter(

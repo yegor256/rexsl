@@ -45,7 +45,7 @@ public final class ServletConfigWrapperTest {
      * ServletConfigWrapper constructor can check if config is null.
      * @throws Exception If something goes wrong
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = javax.validation.ConstraintViolationException.class)
     public void throwsIfConfigNull() throws Exception {
         new ServletConfigWrapper(null, Mockito.mock(Properties.class));
     }
@@ -54,7 +54,7 @@ public final class ServletConfigWrapperTest {
      * ServletConfigWrapper constructor can check if properties param is null.
      * @throws Exception If something goes wrong
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = javax.validation.ConstraintViolationException.class)
     public void throwsIfPropertiesNull() throws Exception {
         new ServletConfigWrapper(Mockito.mock(ServletConfig.class), null);
     }

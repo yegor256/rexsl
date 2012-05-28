@@ -37,6 +37,7 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -50,11 +51,13 @@ public final class GroovyExecutor {
     /**
      * The classloader to use.
      */
+    @NotNull
     private final transient ClassLoader classloader;
 
     /**
      * Binding.
      */
+    @NotNull
     private final transient Binding binding;
 
     /**
@@ -62,7 +65,8 @@ public final class GroovyExecutor {
      * @param ldr The classloader
      * @param bnd The binding
      */
-    public GroovyExecutor(final ClassLoader ldr, final Binding bnd) {
+    public GroovyExecutor(@NotNull final ClassLoader ldr,
+        @NotNull final Binding bnd) {
         this.classloader = ldr;
         this.binding = bnd;
     }
@@ -77,7 +81,8 @@ public final class GroovyExecutor {
      * @param env The environment
      * @param bnd The binding
      */
-    public GroovyExecutor(final Environment env, final Binding bnd) {
+    public GroovyExecutor(@NotNull final Environment env,
+        @NotNull final Binding bnd) {
         this.classloader = new URLClassLoader(
             GroovyExecutor.fetch(env),
             Thread.currentThread().getContextClassLoader()
@@ -91,7 +96,7 @@ public final class GroovyExecutor {
      * @throws GroovyException If some failure inside
      */
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    public void execute(final File file) throws GroovyException {
+    public void execute(@NotNull final File file) throws GroovyException {
         final String basename = FilenameUtils.getBaseName(file.getPath());
         if (!basename.matches("[a-zA-Z]\\w*")) {
             throw new GroovyException(

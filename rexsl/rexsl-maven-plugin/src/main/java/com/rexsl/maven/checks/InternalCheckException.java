@@ -30,6 +30,7 @@
 package com.rexsl.maven.checks;
 
 import com.jcabi.log.Logger;
+import javax.validation.constraints.NotNull;
 
 /**
  * Internal exception.
@@ -55,7 +56,7 @@ final class InternalCheckException extends Exception {
      * Ctor.
      * @param cause The cause
      */
-    public InternalCheckException(final Throwable cause) {
+    public InternalCheckException(@NotNull final Throwable cause) {
         super(cause);
     }
 
@@ -64,7 +65,8 @@ final class InternalCheckException extends Exception {
      * @param cause The cause
      * @param args Agruments for Logger.format()
      */
-    public InternalCheckException(final String cause, final Object... args) {
+    public InternalCheckException(@NotNull final String cause,
+        final Object... args) {
         super(InternalCheckException.toText(cause, args));
     }
 

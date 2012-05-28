@@ -38,6 +38,7 @@ import java.util.Set;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import javax.validation.constraints.NotNull;
 
 /**
  * Adapter between {@link ServletConfig} and {@link FilterConfig}.
@@ -63,20 +64,10 @@ final class ServletConfigWrapper implements FilterConfig {
      * @param cfg Servlet config
      * @param props Properties to add to existing params
      */
-    public ServletConfigWrapper(final ServletConfig cfg,
-        final Properties props) {
+    public ServletConfigWrapper(@NotNull final ServletConfig cfg,
+        @NotNull final Properties props) {
         this.config = cfg;
         this.properties = props;
-        if (cfg == null) {
-            throw new IllegalArgumentException(
-                "ServletConfig parameter is null"
-            );
-        }
-        if (props == null) {
-            throw new IllegalArgumentException(
-                "Properties parameter is null"
-            );
-        }
     }
 
     /**
@@ -91,7 +82,7 @@ final class ServletConfigWrapper implements FilterConfig {
      * {@inheritDoc}
      */
     @Override
-    public String getInitParameter(final String name) {
+    public String getInitParameter(@NotNull final String name) {
         String value = this.properties.getProperty(name);
         if (value == null) {
             value = this.config.getInitParameter(name);

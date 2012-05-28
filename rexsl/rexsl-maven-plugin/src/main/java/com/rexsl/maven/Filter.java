@@ -32,6 +32,7 @@ package com.rexsl.maven;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import javax.validation.constraints.NotNull;
 
 /**
  * Filter to use.
@@ -47,6 +48,6 @@ public interface Filter {
      * @return The reader
      * @throws IOException If some I/O exception
      */
-    Reader filter(File file) throws IOException;
+    Reader filter(@NotNull File file) throws IOException;
 
 }

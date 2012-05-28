@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import com.jcabi.log.Logger;
 import java.io.StringWriter;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBIntrospector;
@@ -109,7 +110,8 @@ public final class JaxbConverter {
      * @todo #316 This "unchecked" warning should be removed somehow
      */
     @SuppressWarnings("unchecked")
-    public static Source the(final Object object, final Class... deps) {
+    public static Source the(@NotNull final Object object,
+        final Class... deps) {
         final Class<?>[] classes = new Class<?>[deps.length + 1];
         classes[0] = object.getClass();
         System.arraycopy(deps, 0, classes, 1, deps.length);

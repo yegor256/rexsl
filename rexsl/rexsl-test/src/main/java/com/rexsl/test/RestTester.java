@@ -35,6 +35,7 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import java.net.URI;
 import java.util.Map;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 
 /**
@@ -115,7 +116,7 @@ public final class RestTester {
      * @return The client ready to process the request
      */
     @SuppressWarnings("PMD.UseConcurrentHashMap")
-    public static TestClient start(final URI uri) {
+    public static TestClient start(@NotNull final URI uri) {
         if (!uri.isAbsolute()) {
             throw new IllegalArgumentException(
                 Logger.format(
@@ -141,7 +142,7 @@ public final class RestTester {
      * @param builder Home URI builder
      * @return The client ready to process the request
      */
-    public static TestClient start(final UriBuilder builder) {
+    public static TestClient start(@NotNull final UriBuilder builder) {
         return RestTester.start(builder.build());
     }
 

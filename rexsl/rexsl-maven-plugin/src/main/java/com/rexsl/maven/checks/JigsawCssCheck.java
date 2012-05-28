@@ -42,6 +42,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -69,6 +70,7 @@ final class JigsawCssCheck implements Check {
     /**
      * Validator.
      */
+    @NotNull
     private final transient Validator validator;
 
     /**
@@ -82,7 +84,7 @@ final class JigsawCssCheck implements Check {
      * Public ctor, with custom validator.
      * @param val The validator to use
      */
-    public JigsawCssCheck(final Validator val) {
+    public JigsawCssCheck(@NotNull final Validator val) {
         this.validator = val;
     }
 
@@ -90,7 +92,7 @@ final class JigsawCssCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public void setScope(final String scope) {
+    public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
 
@@ -98,7 +100,7 @@ final class JigsawCssCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public boolean validate(final Environment env) {
+    public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.basedir(), JigsawCssCheck.CSS_DIR);
         boolean success = true;
         if (dir.exists()) {

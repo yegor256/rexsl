@@ -37,6 +37,7 @@ import com.rexsl.maven.utils.FileFinder;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import javax.validation.constraints.NotNull;
 
 /**
  * Abstract packer.
@@ -51,7 +52,8 @@ abstract class AbstractPacker implements Packer {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public final void pack(final Environment env, final Filter filter) {
+    public final void pack(@NotNull final Environment env,
+        @NotNull final Filter filter) {
         final File srcdir = new File(
             env.basedir(),
             Logger.format("src/main/webapp/%s", this.extension())

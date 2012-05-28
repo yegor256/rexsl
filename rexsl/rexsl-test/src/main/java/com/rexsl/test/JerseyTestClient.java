@@ -36,6 +36,7 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.CharEncoding;
@@ -69,7 +70,7 @@ final class JerseyTestClient implements TestClient {
      * Public ctor.
      * @param res The resource to work with
      */
-    public JerseyTestClient(final WebResource res) {
+    public JerseyTestClient(@NotNull final WebResource res) {
         this.resource = res;
         this.home = res.getURI();
         final String info = this.home.getUserInfo();
@@ -107,7 +108,8 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
-    public TestClient header(final String name, final Object value) {
+    public TestClient header(@NotNull final String name,
+        @NotNull final Object value) {
         synchronized (this.headers) {
             boolean exists = false;
             for (Header header : this.headers) {
@@ -131,7 +133,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse get(final String desc) {
+    public TestResponse get(@NotNull final String desc) {
         return new JerseyTestResponse(
             new JerseyFetcher() {
                 @Override
@@ -148,7 +150,8 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse post(final String desc, final Object body) {
+    public TestResponse post(@NotNull final String desc,
+        @NotNull final Object body) {
         final String content = body.toString();
         return new JerseyTestResponse(
             new JerseyFetcher() {
@@ -166,7 +169,8 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse put(final String desc, final Object body) {
+    public TestResponse put(@NotNull final String desc,
+        @NotNull final Object body) {
         final String content = body.toString();
         return new JerseyTestResponse(
             new JerseyFetcher() {

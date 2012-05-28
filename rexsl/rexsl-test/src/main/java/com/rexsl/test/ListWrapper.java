@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import javax.validation.constraints.NotNull;
 import org.w3c.dom.Node;
 
 /**
@@ -92,7 +93,8 @@ final class ListWrapper<T> implements List<T> {
      * @param node The XML
      * @param addr Address
      */
-    public ListWrapper(final List<T> list, final Node node, final String addr) {
+    public ListWrapper(@NotNull final List<T> list, @NotNull final Node node,
+        @NotNull final String addr) {
         this.original = list;
         this.dom = node;
         this.xpath = addr;
@@ -102,7 +104,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean add(final T element) {
+    public boolean add(@NotNull final T element) {
         throw new UnsupportedOperationException("#add(T)");
     }
 
@@ -110,7 +112,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public void add(final int index, final T element) {
+    public void add(final int index, @NotNull final T element) {
         throw new UnsupportedOperationException("#add(int, T)");
     }
 
@@ -118,7 +120,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean addAll(final Collection<? extends T> elements) {
+    public boolean addAll(@NotNull final Collection<? extends T> elements) {
         throw new UnsupportedOperationException("#addAll(Collection)");
     }
 
@@ -127,7 +129,7 @@ final class ListWrapper<T> implements List<T> {
      */
     @Override
     public boolean addAll(final int index,
-        final Collection<? extends T> elements) {
+        @NotNull final Collection<? extends T> elements) {
         throw new UnsupportedOperationException("#add(int, Collection)");
     }
 
@@ -143,7 +145,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean contains(final Object element) {
+    public boolean contains(@NotNull final Object element) {
         return this.original.contains(element);
     }
 
@@ -151,7 +153,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean containsAll(final Collection<?> elements) {
+    public boolean containsAll(@NotNull final Collection<?> elements) {
         return this.original.containsAll(elements);
     }
 
@@ -159,7 +161,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final Object element) {
+    public boolean equals(@NotNull final Object element) {
         return element == this || this.original.equals(element);
     }
 
@@ -197,7 +199,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public int indexOf(final Object element) {
+    public int indexOf(@NotNull final Object element) {
         return this.original.indexOf(element);
     }
 
@@ -221,7 +223,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public int lastIndexOf(final Object element) {
+    public int lastIndexOf(@NotNull final Object element) {
         return this.original.lastIndexOf(element);
     }
 
@@ -253,7 +255,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean remove(final Object element) {
+    public boolean remove(@NotNull final Object element) {
         throw new UnsupportedOperationException("#remove(Object)");
     }
 
@@ -261,7 +263,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean removeAll(final Collection<?> elements) {
+    public boolean removeAll(@NotNull final Collection<?> elements) {
         throw new UnsupportedOperationException("#removeAll(Collection)");
     }
 
@@ -269,7 +271,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean retainAll(final Collection<?> elements) {
+    public boolean retainAll(@NotNull final Collection<?> elements) {
         throw new UnsupportedOperationException("#retainAll(Collection)");
     }
 
@@ -277,7 +279,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public T set(final int index, final T element) {
+    public T set(final int index, @NotNull final T element) {
         throw new UnsupportedOperationException("#set(int, T)");
     }
 
@@ -338,7 +340,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
-    public <E> E[] toArray(final E[] array) {
+    public <E> E[] toArray(@NotNull final E[] array) {
         return this.original.toArray(array);
     }
 

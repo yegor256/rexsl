@@ -34,6 +34,7 @@ import com.rexsl.core.XslResolver;
 import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -137,7 +138,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param res The resource
      * @return This object
      */
-    public final T init(final R res) {
+    public final T init(@NotNull final R res) {
         synchronized (this.links) {
             this.resource = res;
         }
@@ -151,7 +152,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param element The element to append
      * @return This object
      */
-    public final T append(final Object element) {
+    public final T append(@NotNull final Object element) {
         this.elements.add(element);
         if (!(element instanceof org.w3c.dom.Element)) {
             final XslResolver resolver = (XslResolver) this.home()
@@ -170,7 +171,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param bundle The element
      * @return This object
      */
-    public final T append(final JaxbBundle bundle) {
+    public final T append(@NotNull final JaxbBundle bundle) {
         this.append(bundle.element());
         return (T) this;
     }
@@ -191,7 +192,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param link The link to add
      * @return This object
      */
-    public final T link(final Link link) {
+    public final T link(@NotNull final Link link) {
         link.attachTo(this.home());
         this.links.add(link);
         return (T) this;

@@ -88,6 +88,15 @@ public final class ManifestsTest {
     }
 
     /**
+     * Manifests can throw an exception if trying to inject NULL.
+     * @throws Exception If something goes wrong
+     */
+    @Test(expected = javax.validation.ConstraintViolationException.class)
+    public void throwsExceptionWhenInjectingNull() throws Exception {
+        Manifests.inject("attr-foo", null);
+    }
+
+    /**
      * Manifests can throw an exception if an attribute is empty.
      * @throws Exception If something goes wrong
      */

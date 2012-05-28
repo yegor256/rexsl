@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
 import org.w3c.dom.Node;
 
@@ -82,7 +83,7 @@ public interface XmlDocument {
      * @return The list of string values (texts)
      * @see NodeNotFoundException
      */
-    List<String> xpath(String query);
+    List<String> xpath(@NotNull String query);
 
     /**
      * Retrieve DOM nodes from the XML response.
@@ -94,7 +95,7 @@ public interface XmlDocument {
      * @return Collection of DOM nodes
      * @see NodeNotFoundException
      */
-    List<XmlDocument> nodes(String query);
+    List<XmlDocument> nodes(@NotNull String query);
 
     /**
      * Register additional namespace prefix for XPath.
@@ -120,7 +121,7 @@ public interface XmlDocument {
      * @param uri Namespace URI
      * @return A new XML document, with this additional namespace registered
      */
-    XmlDocument registerNs(String prefix, Object uri);
+    XmlDocument registerNs(@NotNull String prefix, @NotNull Object uri);
 
     /**
      * Append this namespace context to the existing one.
@@ -132,7 +133,7 @@ public interface XmlDocument {
      * @param context The context to append
      * @return A new XML document, with a merged context on board
      */
-    XmlDocument merge(NamespaceContext context);
+    XmlDocument merge(@NotNull NamespaceContext context);
 
     /**
      * Retrieve DOM node, represented by this wrapper.

@@ -31,6 +31,7 @@ package com.rexsl.page;
 
 import com.jcabi.log.Logger;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriInfo;
@@ -74,21 +75,25 @@ public class BaseResource implements Resource {
     /**
      * List of known JAX-RS providers, injected by JAX-RS implementation.
      */
+    @NotNull
     private transient Providers iproviders;
 
     /**
      * URI info, injected by JAX-RS implementation.
      */
+    @NotNull
     private transient UriInfo iuriInfo;
 
     /**
      * Http headers, injected by JAX-RS implementation.
      */
+    @NotNull
     private transient HttpHeaders ihttpHeaders;
 
     /**
      * HTTP servlet request, injected by JAX-RS implementation.
      */
+    @NotNull
     private transient HttpServletRequest ihttpRequest;
 
     /**
@@ -169,7 +174,7 @@ public class BaseResource implements Resource {
      * @param info The info to inject
      */
     @Context
-    public final void setUriInfo(final UriInfo info) {
+    public final void setUriInfo(@NotNull final UriInfo info) {
         this.iuriInfo = info;
         Logger.debug(
             this,
@@ -184,7 +189,7 @@ public class BaseResource implements Resource {
      * @param prov List of providers
      */
     @Context
-    public final void setProviders(final Providers prov) {
+    public final void setProviders(@NotNull final Providers prov) {
         this.iproviders = prov;
         Logger.debug(
             this,
@@ -199,7 +204,7 @@ public class BaseResource implements Resource {
      * @param hdrs List of headers
      */
     @Context
-    public final void setHttpHeaders(final HttpHeaders hdrs) {
+    public final void setHttpHeaders(@NotNull final HttpHeaders hdrs) {
         this.ihttpHeaders = hdrs;
         Logger.debug(
             this,
@@ -214,7 +219,8 @@ public class BaseResource implements Resource {
      * @param request The request
      */
     @Context
-    public final void setHttpServletRequest(final HttpServletRequest request) {
+    public final void setHttpServletRequest(
+        @NotNull final HttpServletRequest request) {
         this.ihttpRequest = request;
         Logger.debug(
             this,
