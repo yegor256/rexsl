@@ -30,6 +30,7 @@
 package com.rexsl.trap;
 
 import com.jcabi.log.Logger;
+import javax.validation.constraints.NotNull;
 
 /**
  * Template with no behavior, just to alert the user that there is a problem
@@ -50,7 +51,7 @@ final class AlertTemplate implements Template {
      * Public ctor.
      * @param msg The message to show
      */
-    public AlertTemplate(final String msg) {
+    public AlertTemplate(@NotNull final String msg) {
         this.message = msg;
     }
 
@@ -58,7 +59,7 @@ final class AlertTemplate implements Template {
      * {@inheritDoc}
      */
     @Override
-    public String render(final String defect) {
+    public String render(@NotNull final String defect) {
         Logger.warn(this, "#render(..): %s", this.message);
         return Logger.format(
             "<html><body><pre>%s\n\n%s</pre></body></html>",

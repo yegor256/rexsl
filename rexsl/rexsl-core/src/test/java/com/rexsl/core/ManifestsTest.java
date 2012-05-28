@@ -82,7 +82,7 @@ public final class ManifestsTest {
      * Manifests can throw an exception if attribute name is NULL.
      * @throws Exception If something goes wrong
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = javax.validation.ConstraintViolationException.class)
     public void throwsExceptionWhenAttributeNameIsNull() throws Exception {
         Manifests.read(null);
     }

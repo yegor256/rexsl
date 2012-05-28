@@ -33,6 +33,7 @@ import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
 
@@ -93,7 +94,7 @@ public final class CookieBuilder {
      * Public ctor.
      * @param uri The URI
      */
-    public CookieBuilder(final URI uri) {
+    public CookieBuilder(@NotNull final URI uri) {
         this.domain = uri.getHost();
         this.url = uri.getPath();
     }
@@ -102,7 +103,7 @@ public final class CookieBuilder {
      * Public ctor.
      * @param builder The URI builder
      */
-    public CookieBuilder(final UriBuilder builder) {
+    public CookieBuilder(@NotNull final UriBuilder builder) {
         this(builder.build());
     }
 
@@ -112,7 +113,7 @@ public final class CookieBuilder {
      * @return This object
      * @see <a href="http://tools.ietf.org/html/rfc2616#section-2.2">RFC2616</a>
      */
-    public CookieBuilder name(final String txt) {
+    public CookieBuilder name(@NotNull final String txt) {
         if (!txt.matches("[\\x20-\\x7E]+")) {
             throw new IllegalArgumentException(
                 String.format("illegal cookie name: '%s'", txt)
@@ -127,7 +128,7 @@ public final class CookieBuilder {
      * @param txt The value
      * @return This object
      */
-    public CookieBuilder value(final String txt) {
+    public CookieBuilder value(@NotNull final String txt) {
         // @checkstyle LineLength (1 line)
         if (!txt.matches("[\\x21\\x23-\\x2B\\x2D-\\x3A\\x3C-\\x5B\\x5D-\\x7E]*")) {
             throw new IllegalArgumentException(
@@ -143,7 +144,7 @@ public final class CookieBuilder {
      * @param txt The path
      * @return This object
      */
-    public CookieBuilder path(final String txt) {
+    public CookieBuilder path(@NotNull final String txt) {
         if (!txt.matches("/[\\x20-\\x3A\\x3C-\\x7E]*")) {
             throw new IllegalArgumentException(
                 String.format("illegal cookie path: '%s'", txt)

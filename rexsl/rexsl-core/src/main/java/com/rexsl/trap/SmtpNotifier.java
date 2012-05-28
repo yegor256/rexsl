@@ -32,6 +32,7 @@ package com.rexsl.trap;
 import java.io.IOException;
 import java.util.Properties;
 import javax.mail.Message;
+import javax.validation.constraints.NotNull;
 
 /**
  * Notifier by SMTP.
@@ -88,7 +89,7 @@ public final class SmtpNotifier extends AbstractSmtpNotifier {
      * Public ctor.
      * @param props The properties
      */
-    public SmtpNotifier(final Properties props) {
+    public SmtpNotifier(@NotNull final Properties props) {
         super(props);
     }
 
@@ -96,7 +97,7 @@ public final class SmtpNotifier extends AbstractSmtpNotifier {
      * {@inheritDoc}
      */
     @Override
-    public void notify(final String defect) throws IOException {
+    public void notify(@NotNull final String defect) throws IOException {
         final Message message = this.message();
         try {
             message.setText(defect.replace("\n", AbstractSmtpNotifier.CRLF));

@@ -33,6 +33,7 @@ import com.jcabi.log.Logger;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Properties;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -80,7 +81,7 @@ public final class StaticTemplate implements Template {
      * Public ctor.
      * @param props The properties
      */
-    public StaticTemplate(final Properties props) {
+    public StaticTemplate(@NotNull final Properties props) {
         this.text = StaticTemplate.load(URI.create(props.getProperty("uri")));
     }
 
@@ -88,7 +89,7 @@ public final class StaticTemplate implements Template {
      * {@inheritDoc}
      */
     @Override
-    public String render(final String defect) {
+    public String render(@NotNull final String defect) {
         return this.text.replace(
             StaticTemplate.MARKER,
             StringEscapeUtils.escapeHtml(defect)

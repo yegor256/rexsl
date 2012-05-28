@@ -590,6 +590,12 @@
                 <version since="24 May 2012">0.1.9</version>
             </dependency>
             <dependency>
+                <!-- Aspects -->
+                <groupId>com.jcabi</groupId>
+                <artifactId>jcabi-aspects</artifactId>
+                <version since="24 May 2012">1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
                 <!-- String manipulations -->
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
@@ -614,6 +620,13 @@
                 <artifactId>validation-api</artifactId>
                 <version since="27 May 2012">1.1.0.Alpha1</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <!-- JSR 303 reference implementation -->
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version since="19 Oct 2011">4.3.0.Final</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <!-- Forward all calls to SLF4J to LOG4J. -->
@@ -772,6 +785,42 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version since="27 May 2012">1.4</version>
+                <configuration>
+                    <complianceLevel>1.6</complianceLevel>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <verbose>true</verbose>
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>com.jcabi</groupId>
+                            <artifactId>jcabi-aspects</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>weave-classes</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjrt</artifactId>
+                        <version since="27 May 2012">1.6.12</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

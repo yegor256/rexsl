@@ -47,6 +47,7 @@ import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
+import javax.validation.constraints.NotNull;
 
 /**
  * Notifier by SMTP, with pre-packaging into bulks.
@@ -96,7 +97,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
      * Public ctor.
      * @param props The properties
      */
-    public SmtpBulkNotifier(final Properties props) {
+    public SmtpBulkNotifier(@NotNull final Properties props) {
         super(props);
         final long interval = this.interval();
         this.future = this.service.scheduleAtFixedRate(
@@ -124,7 +125,7 @@ public final class SmtpBulkNotifier extends AbstractSmtpNotifier {
      * {@inheritDoc}
      */
     @Override
-    public void notify(final String defect) throws IOException {
+    public void notify(@NotNull final String defect) throws IOException {
         this.defects.add(new Defect(defect));
     }
 
