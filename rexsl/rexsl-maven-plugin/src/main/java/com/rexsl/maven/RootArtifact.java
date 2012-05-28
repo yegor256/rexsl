@@ -31,6 +31,7 @@ package com.rexsl.maven;
 
 import com.jcabi.log.Logger;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.apache.maven.model.Exclusion;
 import org.sonatype.aether.artifact.Artifact;
 
@@ -45,11 +46,13 @@ final class RootArtifact {
     /**
      * The artifact.
      */
+    @NotNull
     private final transient Artifact art;
 
     /**
      * Exclusions.
      */
+    @NotNull
     private final transient List<Exclusion> exclusions;
 
     /**
@@ -57,7 +60,8 @@ final class RootArtifact {
      * @param artifact The artifact
      * @param excl Exclusions
      */
-    public RootArtifact(final Artifact artifact, final List<Exclusion> excl) {
+    public RootArtifact(@NotNull final Artifact artifact,
+        @NotNull final List<Exclusion> excl) {
         this.art = artifact;
         this.exclusions = excl;
     }
@@ -89,7 +93,7 @@ final class RootArtifact {
      * @param artifact The artifact to check
      * @return TRUE if it should be excluded
      */
-    public boolean excluded(final Artifact artifact) {
+    public boolean excluded(@NotNull final Artifact artifact) {
         boolean excluded = false;
         for (Exclusion exclusion : this.exclusions) {
             if (exclusion.getArtifactId().equals(artifact.getArtifactId())

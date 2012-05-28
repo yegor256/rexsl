@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -66,7 +67,7 @@ public final class XhtmlMatchers {
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @param <T> Type of XML content provided
      */
-    public static <T> Matcher<T> hasXPath(final String query) {
+    public static <T> Matcher<T> hasXPath(@NotNull final String query) {
         return XhtmlMatchers.hasXPath(query, new XPathContext());
     }
 
@@ -89,7 +90,7 @@ public final class XhtmlMatchers {
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @param <T> Type of XML content provided
      */
-    public static <T> Matcher<T> hasXPath(final String query,
+    public static <T> Matcher<T> hasXPath(@NotNull final String query,
         final Object... namespaces) {
         return XhtmlMatchers.hasXPath(query, new XPathContext(namespaces));
     }
@@ -101,8 +102,8 @@ public final class XhtmlMatchers {
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @param <T> Type of XML content provided
      */
-    public static <T> Matcher<T> hasXPath(final String query,
-        final NamespaceContext ctx) {
+    public static <T> Matcher<T> hasXPath(@NotNull final String query,
+        @NotNull final NamespaceContext ctx) {
         return new XPathMatcher<T>(query, ctx);
     }
 

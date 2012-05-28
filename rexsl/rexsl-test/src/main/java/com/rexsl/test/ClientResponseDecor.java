@@ -34,6 +34,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import java.util.Formattable;
 import java.util.Formatter;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MultivaluedMap;
 import org.apache.commons.lang.StringUtils;
 
@@ -62,7 +63,8 @@ final class ClientResponseDecor implements Formattable {
      * @param resp The response
      * @param text Body text
      */
-    public ClientResponseDecor(final ClientResponse resp, final String text) {
+    public ClientResponseDecor(@NotNull final ClientResponse resp,
+        @NotNull final String text) {
         this.response = resp;
         this.body = text;
     }
@@ -82,7 +84,7 @@ final class ClientResponseDecor implements Formattable {
      * @checkstyle ParameterNumber (4 lines)
      */
     @Override
-    public void formatTo(final Formatter formatter, final int flags,
+    public void formatTo(@NotNull final Formatter formatter, final int flags,
         final int width, final int precision) {
         final StringBuilder builder = new StringBuilder();
         for (MultivaluedMap.Entry<String, List<String>> header

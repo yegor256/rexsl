@@ -32,6 +32,9 @@ package com.rexsl.page;
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -122,11 +125,13 @@ public final class Link {
     /**
      * Name of {@code rel} attribute.
      */
+    @NotNull
     private final transient String rel;
 
     /**
      * The type of resource there.
      */
+    @NotNull
     private final transient String type;
 
     /**
@@ -138,6 +143,7 @@ public final class Link {
     /**
      * Content of {@code href} attribute, with URI.
      */
+    @NotNull
     private transient String href;
 
     /**
@@ -155,7 +161,7 @@ public final class Link {
      * @param rname The "rel" of it
      * @param link The href
      */
-    public Link(final String rname, final String link) {
+    public Link(@NotNull final String rname, @NotNull final String link) {
         this(rname, UriBuilder.fromPath(link).build());
     }
 
@@ -164,7 +170,7 @@ public final class Link {
      * @param rname The "rel" of it
      * @param uri The href
      */
-    public Link(final String rname, final URI uri) {
+    public Link(@NotNull final String rname, @NotNull final URI uri) {
         this(rname, uri, MediaType.TEXT_XML);
     }
 
@@ -173,7 +179,8 @@ public final class Link {
      * @param rname The "rel" of it
      * @param builder URI builder
      */
-    public Link(final String rname, final UriBuilder builder) {
+    public Link(@NotNull final String rname,
+        @NotNull final UriBuilder builder) {
         this(rname, builder.build(), MediaType.TEXT_XML);
     }
 
@@ -183,22 +190,9 @@ public final class Link {
      * @param uri The href
      * @param tpe Media type of destination
      */
-    public Link(final String rname, final URI uri, final String tpe) {
-        if (rname == null) {
-            throw new IllegalArgumentException("REL attribute can't be NULL");
-        }
-        if (uri == null) {
-            throw new IllegalArgumentException("HREF attribute can't be NULL");
-        }
-        if (tpe == null) {
-            throw new IllegalArgumentException("TYPE attribute can't be NULL");
-        }
-        if (rname.isEmpty()) {
-            throw new IllegalArgumentException("REL attribute can't be empty");
-        }
-        if (tpe.isEmpty()) {
-            throw new IllegalArgumentException("TYPE attribute can't be empty");
-        }
+    public Link(@NotNull @Pattern(regexp = ".+") final String rname,
+        @NotNull final URI uri,
+        @NotNull @Pattern(regexp = ".*") final String tpe) {
         this.rel = rname;
         this.href = uri.toString();
         this.type = tpe;
@@ -246,7 +240,7 @@ public final class Link {
      * @param element The sub-element to add
      * @return This object
      */
-    public Link with(final Object element) {
+    public Link with(@NotNull final Object element) {
         this.elements.add(element);
         return this;
     }
@@ -256,7 +250,7 @@ public final class Link {
      * @param bundle The bundle to add
      * @return This object
      */
-    public Link with(final JaxbBundle bundle) {
+    public Link with(@NotNull final JaxbBundle bundle) {
         this.with(bundle.element());
         return this;
     }
@@ -265,7 +259,7 @@ public final class Link {
      * Set HREF attribute of the link.
      * @param uri The value of it
      */
-    public void setHref(final String uri) {
+    public void setHref(@NotNull final String uri) {
         synchronized (this.elements) {
             this.href = uri;
         }
@@ -276,7 +270,7 @@ public final class Link {
      * absolute, using the URI information of the resource.
      * @param res The resource to attach to
      */
-    public void attachTo(final Resource res) {
+    public void attachTo(@NotNull @Valid final Resource res) {
         synchronized (this.elements) {
             if (this.href.charAt(0) == '.') {
                 this.href = res.uriInfo().getRequestUriBuilder()

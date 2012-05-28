@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.jcabi.log.Logger;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Node;
 
@@ -55,8 +56,8 @@ public final class NodeNotFoundException extends IndexOutOfBoundsException {
      * @param node The XML with error
      * @param xpath The address
      */
-    public NodeNotFoundException(final String message, final Node node,
-        final String xpath) {
+    public NodeNotFoundException(@NotNull final String message,
+        @NotNull final Node node, @NotNull final String xpath) {
         super(
             Logger.format(
                 "XPath '%s' not found in '%s': %s",

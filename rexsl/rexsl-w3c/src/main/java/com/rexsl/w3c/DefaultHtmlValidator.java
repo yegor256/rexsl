@@ -31,6 +31,7 @@ package com.rexsl.w3c;
 
 import com.rexsl.test.TestResponse;
 import java.net.URI;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -58,7 +59,7 @@ final class DefaultHtmlValidator extends BaseValidator implements Validator {
      * Public ctor.
      * @param entry Entry point to use
      */
-    public DefaultHtmlValidator(final URI entry) {
+    public DefaultHtmlValidator(@NotNull final URI entry) {
         super();
         this.uri = entry;
     }
@@ -68,7 +69,7 @@ final class DefaultHtmlValidator extends BaseValidator implements Validator {
      */
     @Override
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    public ValidationResponse validate(final String html) {
+    public ValidationResponse validate(@NotNull final String html) {
         DefaultValidationResponse response;
         try {
             final TestResponse soap = this

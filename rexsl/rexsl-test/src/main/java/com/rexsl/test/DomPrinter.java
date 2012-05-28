@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import java.io.StringWriter;
+import javax.validation.constraints.NotNull;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -63,7 +64,7 @@ final class DomPrinter {
      * Public ctor.
      * @param elm The node
      */
-    public DomPrinter(final Node elm) {
+    public DomPrinter(@NotNull final Node elm) {
         this.node = elm;
     }
 

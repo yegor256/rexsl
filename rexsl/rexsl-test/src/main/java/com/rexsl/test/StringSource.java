@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import java.io.StringWriter;
 import java.util.Locale;
+import javax.validation.constraints.NotNull;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -59,13 +60,14 @@ final class StringSource extends DOMSource {
     /**
      * The XML itself.
      */
+    @NotNull
     private final transient String xml;
 
     /**
      * Public ctor.
      * @param text The content of the document
      */
-    public StringSource(final String text) {
+    public StringSource(@NotNull final String text) {
         super();
         this.xml = text;
         super.setNode(new DomParser(text).document());
@@ -75,7 +77,7 @@ final class StringSource extends DOMSource {
      * Public ctor.
      * @param node The node
      */
-    public StringSource(final Node node) {
+    public StringSource(@NotNull final Node node) {
         super();
         final StringWriter writer = new StringWriter();
         try {

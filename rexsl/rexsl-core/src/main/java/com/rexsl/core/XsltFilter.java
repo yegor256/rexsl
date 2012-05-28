@@ -42,6 +42,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MediaType;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -90,7 +91,7 @@ public final class XsltFilter implements Filter {
      * {@inheritDoc}
      */
     @Override
-    public void init(final FilterConfig config) {
+    public void init(@NotNull final FilterConfig config) {
         final ServletContext context = config.getServletContext();
         this.tfactory = TransformerFactory.newInstance();
         this.tfactory.setURIResolver(new ContextResourceResolver(context));

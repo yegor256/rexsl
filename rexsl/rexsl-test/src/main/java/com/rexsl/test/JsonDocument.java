@@ -31,6 +31,7 @@
 package com.rexsl.test;
 
 import java.util.List;
+import javax.validation.constraints.NotNull;
 
 /**
  * Json document.
@@ -55,13 +56,13 @@ public interface JsonDocument {
      * @param query The Json query
      * @return The list of string values (texts)
      */
-    List<String> json(String query);
+    List<String> json(@NotNull String query);
 
     /**
      * Retrieve nodes from the Json response.
      * @param query The Json query
      * @return Collection of responses
      */
-    List<JsonDocument> nodesJson(String query);
+    List<JsonDocument> nodesJson(@NotNull String query);
 
 }

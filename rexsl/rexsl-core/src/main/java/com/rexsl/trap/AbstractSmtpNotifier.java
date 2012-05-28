@@ -39,6 +39,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.validation.constraints.NotNull;
 
 /**
  * Abstract notifier by SMTP.
@@ -70,7 +71,7 @@ abstract class AbstractSmtpNotifier implements Notifier {
      * Public ctor.
      * @param props The properties
      */
-    public AbstractSmtpNotifier(final Properties props) {
+    public AbstractSmtpNotifier(@NotNull final Properties props) {
         this.session = Session.getInstance(props);
         this.properties = props;
     }

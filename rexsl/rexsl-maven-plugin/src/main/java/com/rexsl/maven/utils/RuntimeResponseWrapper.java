@@ -37,6 +37,7 @@ import java.io.PrintWriter;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.validation.constraints.NotNull;
 
 /**
  * Runtime wrapper that redirects all the writes
@@ -75,7 +76,7 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      * @param response Servlet response being wrapped.
      * @see RuntimeFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
      */
-    public RuntimeResponseWrapper(final HttpServletResponse response) {
+    public RuntimeResponseWrapper(@NotNull final HttpServletResponse response) {
         super(response);
         this.writer = new PrintWriter(
             new OutputStreamWriter(this.stream)
@@ -102,7 +103,7 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      * {@inheritDoc}
      */
     @Override
-    public void sendError(final int stc, final String msg) {
+    public void sendError(final int stc, @NotNull final String msg) {
         Logger.debug(
             this,
             "#sendError(%d, %s): swallowed",

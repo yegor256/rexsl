@@ -44,6 +44,7 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -80,7 +81,7 @@ final class JSUnitTestsCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public void setScope(final String scope) {
+    public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
 
@@ -88,7 +89,7 @@ final class JSUnitTestsCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public boolean validate(final Environment env) {
+    public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.basedir(), JSUnitTestsCheck.JS_TESTS_DIR);
         boolean success = true;
         if (dir.exists()) {

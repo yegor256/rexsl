@@ -59,7 +59,8 @@ import java.lang.annotation.Target;
  *
  * <p>Because of {@code Produces(MediaType.APPLICATION_XML)} annotation JAX-RS
  * knows that the object returned has to be converted to XML (it's done by
- * {@link javax.xml.bind.Marshaller} instantiated by {@link XslResolver}).
+ * {@link javax.xml.bind.Marshaller} instantiated by
+ * {@link com.rexsl.core.XslResolver}).
  * Let's say, this is the object:
  *
  * <pre>

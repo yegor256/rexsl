@@ -36,6 +36,7 @@ import java.io.PrintWriter;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.CharEncoding;
 
 /**
@@ -64,7 +65,8 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
      * @param response Servlet response being wrapped.
      * @see XsltFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
      */
-    public ByteArrayResponseWrapper(final HttpServletResponse response) {
+    public ByteArrayResponseWrapper(
+        @NotNull final HttpServletResponse response) {
         super(response);
         try {
             this.writer = new PrintWriter(

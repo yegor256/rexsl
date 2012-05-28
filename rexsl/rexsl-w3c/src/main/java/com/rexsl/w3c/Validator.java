@@ -29,6 +29,8 @@
  */
 package com.rexsl.w3c;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Validator of CSS pages through W3C validation API.
  *
@@ -84,9 +86,9 @@ public interface Validator {
      * happened with the HTTP connection to the W3C server. It will return
      * an invalid response, but will never throw.
      *
-     * @param css The CSS stylesheet
+     * @param content The HTML/CSS content to validate
      * @return The response
      */
-    ValidationResponse validate(String css);
+    ValidationResponse validate(@NotNull String content);
 
 }

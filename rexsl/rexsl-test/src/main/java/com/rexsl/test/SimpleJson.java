@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 
 /**
  * Implementation of {@link JsonDocument}.
@@ -47,13 +48,14 @@ public final class SimpleJson implements JsonDocument {
      * Cached document.
      */
     @SuppressWarnings({"PMD.SingularField", "PMD.UnusedPrivateField" })
+    @NotNull
     private final transient String text;
 
     /**
      * Public ctor.
      * @param txt Body
      */
-    public SimpleJson(final String txt) {
+    public SimpleJson(@NotNull final String txt) {
         this.text = txt;
     }
 
@@ -61,7 +63,7 @@ public final class SimpleJson implements JsonDocument {
      * {@inheritDoc}
      */
     @Override
-    public List<String> json(final String query) {
+    public List<String> json(@NotNull final String query) {
         return new ArrayList<String>();
     }
 
@@ -70,7 +72,7 @@ public final class SimpleJson implements JsonDocument {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public List<JsonDocument> nodesJson(final String query) {
+    public List<JsonDocument> nodesJson(@NotNull final String query) {
         return new ArrayList<JsonDocument>();
     }
 

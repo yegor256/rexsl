@@ -39,6 +39,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import java.net.HttpCookie;
 import java.util.Collections;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
@@ -105,8 +106,8 @@ final class JerseyTestResponse implements TestResponse {
      * @param ftch Response fetcher
      * @param rqst Decorated request, for logging purposes
      */
-    public JerseyTestResponse(final JerseyFetcher ftch,
-        final RequestDecor rqst) {
+    public JerseyTestResponse(@NotNull final JerseyFetcher ftch,
+        @NotNull final RequestDecor rqst) {
         this.fetcher = ftch;
         this.request = rqst;
     }
@@ -127,7 +128,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestClient rel(final String query) {
+    public TestClient rel(@NotNull final String query) {
         final List<String> links = this.xpath(query);
         MatcherAssert.assertThat(
             Logger.format(
@@ -192,7 +193,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public List<String> xpath(final String query) {
+    public List<String> xpath(@NotNull final String query) {
         return this.getXml().xpath(query);
     }
 
@@ -221,7 +222,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public Cookie cookie(final String name) {
+    public Cookie cookie(@NotNull final String name) {
         final MultivaluedMap<String, String> headers = this.getHeaders();
         MatcherAssert.assertThat(
             "cookies should be set in HTTP header",
@@ -258,7 +259,8 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse registerNs(final String prefix, final Object uri) {
+    public TestResponse registerNs(@NotNull final String prefix,
+        @NotNull final Object uri) {
         synchronized (this.fetcher) {
             this.xml = this.getXml().registerNs(prefix, uri);
         }
@@ -269,7 +271,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse merge(final NamespaceContext ctx) {
+    public TestResponse merge(@NotNull final NamespaceContext ctx) {
         synchronized (this.fetcher) {
             this.xml = this.getXml().merge(ctx);
         }
@@ -280,7 +282,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public List<XmlDocument> nodes(final String query) {
+    public List<XmlDocument> nodes(@NotNull final String query) {
         return Collections.unmodifiableList(this.getXml().nodes(query));
     }
 
@@ -289,7 +291,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     @SuppressWarnings("PMD.NullAssignment")
-    public TestResponse assertThat(final AssertionPolicy assertion) {
+    public TestResponse assertThat(@NotNull final AssertionPolicy assertion) {
         synchronized (this.fetcher) {
             int attempt = 0;
             while (true) {
@@ -325,7 +327,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public void fail(final String reason) {
+    public void fail(@NotNull final String reason) {
         this.assertThat(new Failure(reason));
     }
 
@@ -341,7 +343,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertStatus(final Matcher<Integer> matcher) {
+    public TestResponse assertStatus(@NotNull final Matcher<Integer> matcher) {
         this.assertThat(new StatusMatcher(matcher));
         return this;
     }
@@ -350,8 +352,8 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertHeader(final String name,
-        final Matcher<Iterable<String>> matcher) {
+    public TestResponse assertHeader(@NotNull final String name,
+        @NotNull final Matcher<Iterable<String>> matcher) {
         this.assertThat(new HeaderMatcher(name, matcher));
         return this;
     }
@@ -360,7 +362,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertBody(final Matcher<String> matcher) {
+    public TestResponse assertBody(@NotNull final Matcher<String> matcher) {
         this.assertThat(new BodyMatcher(matcher));
         return this;
     }
@@ -369,7 +371,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertXPath(final String xpath) {
+    public TestResponse assertXPath(@NotNull final String xpath) {
         this.assertThat(new XpathMatcher(this.getXml(), xpath));
         return this;
     }
@@ -432,7 +434,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public TestResponse assertJson(final String element) {
+    public TestResponse assertJson(@NotNull final String element) {
         Logger.warn(this, "method #assertJson() is not implemented yet");
         return this;
     }
@@ -441,7 +443,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public List<String> json(final String query) {
+    public List<String> json(@NotNull final String query) {
         return this.getJson().json(query);
     }
 
@@ -449,7 +451,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    public List<JsonDocument> nodesJson(final String query) {
+    public List<JsonDocument> nodesJson(@NotNull final String query) {
         return Collections.unmodifiableList(this.getJson().nodesJson(query));
     }
 

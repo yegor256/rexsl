@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -59,7 +60,7 @@ final class RuntimeResolver implements URIResolver {
      * Public ctor.
      * @param uri The home page of the site
      */
-    public RuntimeResolver(final URI uri) {
+    public RuntimeResolver(@NotNull final URI uri) {
         this.home = UriBuilder.fromUri(uri).path("/").build();
     }
 
@@ -67,7 +68,7 @@ final class RuntimeResolver implements URIResolver {
      * {@inheritDoc}
      */
     @Override
-    public Source resolve(final String href, final String base)
+    public Source resolve(@NotNull final String href, final String base)
         throws TransformerException {
         URL url;
         try {

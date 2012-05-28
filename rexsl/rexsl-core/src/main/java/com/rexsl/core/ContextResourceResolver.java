@@ -37,6 +37,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import javax.servlet.ServletContext;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -63,7 +64,7 @@ final class ContextResourceResolver implements URIResolver {
      * Constructor.
      * @param ctx Servlet Context.
      */
-    public ContextResourceResolver(final ServletContext ctx) {
+    public ContextResourceResolver(@NotNull final ServletContext ctx) {
         this.context = ctx;
     }
 
@@ -71,7 +72,7 @@ final class ContextResourceResolver implements URIResolver {
      * {@inheritDoc}
      */
     @Override
-    public Source resolve(final String href, final String base)
+    public Source resolve(@NotNull final String href, final String base)
         throws TransformerException {
         InputStream stream = null;
         if (href.charAt(0) == '/') {

@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.validation.constraints.NotNull;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
@@ -118,10 +119,7 @@ final class XPathContext implements NamespaceContext {
      * {@inheritDoc}
      */
     @Override
-    public String getNamespaceURI(final String prefix) {
-        if (prefix == null) {
-            throw new IllegalArgumentException("prefix can't be NULL");
-        }
+    public String getNamespaceURI(@NotNull final String prefix) {
         String namespace = this.map.get(prefix);
         if (namespace == null) {
             for (NamespaceContext ctx : this.contexts) {
@@ -147,7 +145,7 @@ final class XPathContext implements NamespaceContext {
      * {@inheritDoc}
      */
     @Override
-    public String getPrefix(final String namespace) {
+    public String getPrefix(@NotNull final String namespace) {
         final Iterator<String> prefixes = this.getPrefixes(namespace);
         String prefix = null;
         if (prefixes.hasNext()) {
@@ -160,10 +158,7 @@ final class XPathContext implements NamespaceContext {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<String> getPrefixes(final String namespace) {
-        if (namespace == null) {
-            throw new IllegalArgumentException("namespace can't be NULL");
-        }
+    public Iterator<String> getPrefixes(@NotNull final String namespace) {
         final List<String> prefixes = new LinkedList<String>();
         for (ConcurrentMap.Entry<String, String> entry : this.map.entrySet()) {
             if (entry.getValue().equals(namespace)) {
@@ -191,7 +186,8 @@ final class XPathContext implements NamespaceContext {
      * @param namespace The namespace
      * @return New context
      */
-    public XPathContext add(final String prefix, final Object namespace) {
+    public XPathContext add(@NotNull final String prefix,
+        @NotNull final Object namespace) {
         return new XPathContext(this.map, prefix, namespace);
     }
 
@@ -200,7 +196,7 @@ final class XPathContext implements NamespaceContext {
      * @param context The context to merge into this one
      * @return New context
      */
-    public XPathContext merge(final NamespaceContext context) {
+    public XPathContext merge(@NotNull final NamespaceContext context) {
         final XPathContext ctx = new XPathContext();
         ctx.map.putAll(this.map);
         ctx.contexts.addAll(this.contexts);

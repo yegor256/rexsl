@@ -33,6 +33,7 @@ import com.rexsl.maven.Environment;
 import java.io.File;
 import java.util.Set;
 import javax.servlet.ServletContext;
+import javax.validation.constraints.NotNull;
 
 /**
  * Runtime environment, for {@link RuntimeListener}.
@@ -67,13 +68,14 @@ final class RuntimeEnvironment implements Environment {
     /**
      * Servlet context.
      */
+    @NotNull
     private final transient ServletContext context;
 
     /**
      * Public ctor.
      * @param ctx Context
      */
-    public RuntimeEnvironment(final ServletContext ctx) {
+    public RuntimeEnvironment(@NotNull final ServletContext ctx) {
         this.context = ctx;
     }
 

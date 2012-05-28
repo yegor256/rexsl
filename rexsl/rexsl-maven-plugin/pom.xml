@@ -65,14 +65,20 @@
         </dependency>
         -->
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <scope>compile</scope>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <scope>compile</scope>
+            <groupId>org.apache.bval</groupId>
+            <artifactId>bval-jsr303</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-aspects</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
@@ -101,12 +107,6 @@
             <artifactId>rexsl-test</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
             <classifier>mock</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.grizzly</groupId>
-            <artifactId>grizzly-servlet-webserver</artifactId>
-            <version>1.9.10</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -268,6 +268,16 @@
             <artifactId>junit-dep</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
@@ -360,6 +370,18 @@
             <groupId>rhino</groupId>
             <artifactId>js</artifactId>
             <version since="4 Dec 2011">1.6R7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.grizzly</groupId>
+            <artifactId>grizzly-servlet-webserver</artifactId>
+            <version since="10 Nov 2011">1.9.10</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>javax.servlet</artifactId>
+                    <groupId>servlet-api</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

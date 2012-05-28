@@ -175,12 +175,11 @@ public final class XslResolverTest {
     }
 
     /**
-     * XslResolver checks passed servlet context.
+     * XslResolver can throw when servlet context is null.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = javax.validation.ConstraintViolationException.class)
     public void setServletContext() {
-        final XslResolver resolver = new XslResolver();
-        resolver.setServletContext(null);
+        new XslResolver().setServletContext(null);
     }
 
     /**

@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -52,11 +53,13 @@ public final class FileFinder {
     /**
      * File extension.
      */
+    @NotNull
     private final transient String extension;
 
     /**
      * Directory.
      */
+    @NotNull
     private final transient File directory;
 
     /**
@@ -64,7 +67,7 @@ public final class FileFinder {
      * @param dir Directory, containing files
      * @param ext File extension to search for
      */
-    public FileFinder(final File dir, final String ext) {
+    public FileFinder(@NotNull final File dir, @NotNull final String ext) {
         this.directory = dir;
         this.extension = ext;
     }

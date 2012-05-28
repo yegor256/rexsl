@@ -29,6 +29,7 @@
  */
 package com.rexsl.trap;
 
+import com.jcabi.aspects.LogExceptions;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.net.URI;
@@ -145,19 +146,13 @@ public final class ExceptionTrap extends HttpServlet {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
+    @LogExceptions
     public void service(final HttpServletRequest request,
         final HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         final StringBuilder text = this.text(request);
         for (Notifier notifier : this.notifiers) {
-            try {
-                notifier.notify(text.toString());
-            // @checkstyle IllegalCatch (1 line)
-            } catch (Throwable ex) {
-                text.append(Logger.format("%[exception]s\n", ex));
-                Logger.error(this, "#service(): %[exception]s", ex);
-            }
+            notifier.notify(text.toString());
         }
         try {
             response.getWriter().print(this.template.render(text.toString()));

@@ -30,6 +30,8 @@
 package com.rexsl.test;
 
 import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
 import org.w3c.dom.Node;
 
@@ -59,7 +61,8 @@ final class LazyXml implements XmlDocument {
      * @param src Source of content
      * @param ctx Namespace context
      */
-    public LazyXml(final TestResponse src, final XPathContext ctx) {
+    public LazyXml(@NotNull @Valid final TestResponse src,
+        @NotNull final XPathContext ctx) {
         this.response = src;
         this.context = ctx;
     }
@@ -68,7 +71,8 @@ final class LazyXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
-    public LazyXml registerNs(final String prefix, final Object uri) {
+    public LazyXml registerNs(@NotNull final String prefix,
+        @NotNull final Object uri) {
         return new LazyXml(this.response, this.context.add(prefix, uri));
     }
 
@@ -76,7 +80,7 @@ final class LazyXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
-    public List<String> xpath(final String query) {
+    public List<String> xpath(@NotNull final String query) {
         return new SimpleXml(this.response.getBody())
             .merge(this.context)
             .xpath(query);
@@ -94,7 +98,7 @@ final class LazyXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
-    public List<XmlDocument> nodes(final String query) {
+    public List<XmlDocument> nodes(@NotNull final String query) {
         return new SimpleXml(this.response.getBody())
             .merge(this.context)
             .nodes(query);
@@ -104,7 +108,7 @@ final class LazyXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
-    public XmlDocument merge(final NamespaceContext ctx) {
+    public XmlDocument merge(@NotNull final NamespaceContext ctx) {
         return new LazyXml(this.response, this.context.merge(ctx));
     }
 

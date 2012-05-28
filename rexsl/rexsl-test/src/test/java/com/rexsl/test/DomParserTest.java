@@ -86,7 +86,7 @@ public final class DomParserTest {
      * DomParser throws exception when it is NULL.
      * @throws Exception If something goes wrong inside
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = javax.validation.ConstraintViolationException.class)
     public void throwsWhenNull() throws Exception {
         new DomParser(null);
     }

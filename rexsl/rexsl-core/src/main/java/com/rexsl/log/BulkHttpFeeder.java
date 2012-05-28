@@ -37,6 +37,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import javax.validation.constraints.NotNull;
 
 /**
  * Bulk feeder through HTTP POST request.
@@ -132,7 +133,7 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
      * {@inheritDoc}
      */
     @Override
-    public void feed(final String text) throws IOException {
+    public void feed(@NotNull final String text) throws IOException {
         this.buffer.append(text);
     }
 

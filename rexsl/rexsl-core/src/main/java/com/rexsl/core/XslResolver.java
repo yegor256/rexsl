@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -99,10 +100,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @param ctx The context
      */
     @Context
-    public void setServletContext(final ServletContext ctx) {
-        if (ctx == null) {
-            throw new IllegalArgumentException("ServletContext can't be NULL");
-        }
+    public void setServletContext(@NotNull final ServletContext ctx) {
         final String name = ctx.getInitParameter(XslResolver.XSD_FOLDER);
         if (name != null) {
             this.xsdFolder = new File(name);
@@ -125,7 +123,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @param req The request
      */
     @Context
-    public void setHttpServletRequest(final HttpServletRequest req) {
+    public void setHttpServletRequest(@NotNull final HttpServletRequest req) {
         this.request = req;
     }
 
@@ -137,7 +135,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @see <a href="http://jaxb.java.net/guide/Performance_and_thread_safety.html">JAXBContext is thread-safe</a>
      */
     @Override
-    public Marshaller getContext(final Class<?> type) {
+    public Marshaller getContext(@NotNull final Class<?> type) {
         Marshaller mrsh;
         try {
             mrsh = this.buildContext(type).createMarshaller();
@@ -166,7 +164,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * Add new class to context.
      * @param cls The class we should add
      */
-    public void add(final Class<?> cls) {
+    public void add(@NotNull final Class<?> cls) {
         synchronized (this.classes) {
             if (!this.classes.contains(cls)) {
                 try {

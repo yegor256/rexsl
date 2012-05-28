@@ -32,6 +32,7 @@ package com.rexsl.maven.packers;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -95,7 +96,7 @@ final class XslPacker extends AbstractPacker {
      * {@inheritDoc}
      */
     @Override
-    protected void pack(final Reader input, final File dest)
+    protected void pack(@NotNull final Reader input, @NotNull final File dest)
         throws IOException {
         XslPacker.DFACTORY.setNamespaceAware(true);
         Document document;

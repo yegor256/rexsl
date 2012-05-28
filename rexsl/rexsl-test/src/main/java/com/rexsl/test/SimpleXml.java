@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerFactory;
@@ -63,11 +64,13 @@ public final class SimpleXml implements XmlDocument {
     /**
      * Namespace context to use.
      */
+    @NotNull
     private final transient XPathContext context;
 
     /**
      * Cached document.
      */
+    @NotNull
     private final transient Node dom;
 
     /**
@@ -90,7 +93,7 @@ public final class SimpleXml implements XmlDocument {
      *
      * @param text Body
      */
-    public SimpleXml(final String text) {
+    public SimpleXml(@NotNull final String text) {
         this(
             new DomParser(text).document().getDocumentElement(),
             new XPathContext()
@@ -106,7 +109,7 @@ public final class SimpleXml implements XmlDocument {
      *
      * @param source DOM source
      */
-    public SimpleXml(final Source source) {
+    public SimpleXml(@NotNull final Source source) {
         this(SimpleXml.transform(source), new XPathContext());
     }
 
@@ -120,7 +123,7 @@ public final class SimpleXml implements XmlDocument {
      * @param file XML file
      * @throws IOException In case of I/O problem
      */
-    public SimpleXml(final File file) throws IOException {
+    public SimpleXml(@NotNull final File file) throws IOException {
         this(FileUtils.readFileToString(file, CharEncoding.UTF_8));
     }
 
@@ -134,7 +137,7 @@ public final class SimpleXml implements XmlDocument {
      * @param stream The input stream
      * @throws IOException In case of I/O problem
      */
-    public SimpleXml(final InputStream stream) throws IOException {
+    public SimpleXml(@NotNull final InputStream stream) throws IOException {
         this(IOUtils.toString(stream, CharEncoding.UTF_8));
     }
 
@@ -170,7 +173,7 @@ public final class SimpleXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
-    public List<String> xpath(final String query) {
+    public List<String> xpath(@NotNull final String query) {
         final NodeList nodes = this.nodelist(query);
         final List<String> items = new ArrayList<String>(nodes.getLength());
         for (int idx = 0; idx < nodes.getLength(); ++idx) {
@@ -190,7 +193,8 @@ public final class SimpleXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
-    public SimpleXml registerNs(final String prefix, final Object uri) {
+    public SimpleXml registerNs(@NotNull final String prefix,
+        @NotNull final Object uri) {
         return new SimpleXml(this.dom, this.context.add(prefix, uri));
     }
 
@@ -199,7 +203,7 @@ public final class SimpleXml implements XmlDocument {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public List<XmlDocument> nodes(final String query) {
+    public List<XmlDocument> nodes(@NotNull final String query) {
         final NodeList nodes = this.nodelist(query);
         final List<XmlDocument> items =
             new ArrayList<XmlDocument>(nodes.getLength());
@@ -213,7 +217,7 @@ public final class SimpleXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
-    public XmlDocument merge(final NamespaceContext ctx) {
+    public XmlDocument merge(@NotNull final NamespaceContext ctx) {
         return new SimpleXml(this.dom, this.context.merge(ctx));
     }
 

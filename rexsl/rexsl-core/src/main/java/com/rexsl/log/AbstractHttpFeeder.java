@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import org.apache.commons.io.IOUtils;
@@ -63,7 +64,7 @@ public abstract class AbstractHttpFeeder implements Feeder {
      * @throws java.net.MalformedURLException If format of the URL is
      *  not correct
      */
-    public final void setUrl(final String addr)
+    public final void setUrl(@NotNull final String addr)
         throws java.net.MalformedURLException {
         this.url = new URL(addr);
     }
@@ -87,7 +88,7 @@ public abstract class AbstractHttpFeeder implements Feeder {
      *  will mean that rexsl-test module will become a transitive dependency
      *  of rexsl-core, which is not a good idea..
      */
-    protected final void post(final String text) throws IOException {
+    protected final void post(@NotNull final String text) throws IOException {
         final HttpURLConnection conn =
             (HttpURLConnection) this.getUrl().openConnection();
         try {

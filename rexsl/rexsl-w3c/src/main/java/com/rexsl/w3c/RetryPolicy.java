@@ -34,6 +34,7 @@ import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
 import java.net.HttpURLConnection;
 import java.util.concurrent.TimeUnit;
+import javax.validation.constraints.NotNull;
 
 /**
  * Retry policy of assertion.
@@ -65,7 +66,7 @@ final class RetryPolicy implements AssertionPolicy {
      * {@inheritDoc}
      */
     @Override
-    public void assertThat(final TestResponse response) {
+    public void assertThat(@NotNull final TestResponse response) {
         if (response.getStatus() != HttpURLConnection.HTTP_OK) {
             throw new AssertionError("invalid HTTP status");
         }

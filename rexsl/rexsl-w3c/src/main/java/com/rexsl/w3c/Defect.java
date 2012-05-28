@@ -30,6 +30,7 @@
 package com.rexsl.w3c;
 
 import com.jcabi.log.Logger;
+import javax.validation.constraints.NotNull;
 
 /**
  * Validation defect (error or warning) produced by {@link ValidationResponse}.
@@ -55,21 +56,25 @@ public final class Defect {
     /**
      * Source line.
      */
+    @NotNull
     private final transient String isource;
 
     /**
      * Explanation.
      */
+    @NotNull
     private final transient String iexplanation;
 
     /**
      * Message id.
      */
+    @NotNull
     private final transient String imessageId;
 
     /**
      * The message.
      */
+    @NotNull
     private final transient String imessage;
 
     /**
@@ -82,8 +87,9 @@ public final class Defect {
      * @param message Message text
      * @checkstyle ParameterNumber (5 lines)
      */
-    Defect(final int line, final int column, final String source,
-        final String explanation, final String mid, final String message) {
+    Defect(final int line, final int column, @NotNull final String source,
+        @NotNull final String explanation, @NotNull final String mid,
+        @NotNull final String message) {
         this.iline = line;
         this.icolumn = column;
         this.isource = source.trim();

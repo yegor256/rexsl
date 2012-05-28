@@ -590,6 +590,19 @@
                 <version since="24 May 2012">0.1.9</version>
             </dependency>
             <dependency>
+                <!-- Aspects -->
+                <groupId>com.jcabi</groupId>
+                <artifactId>jcabi-aspects</artifactId>
+                <version since="24 May 2012">1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <!-- this one is compliant with aspectj-maven-plugin -->
+                <version since="27 May 2012">1.6.11</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
                 <!-- String manipulations -->
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
@@ -608,6 +621,18 @@
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
                 <version since="1 Mar 2012">3.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version since="27 May 2012">1.1.0.Alpha1</version>
+            </dependency>
+            <dependency>
+                <!-- JSR 303 reference implementation -->
+                <groupId>org.apache.bval</groupId>
+                <artifactId>bval-jsr303</artifactId>
+                <version since="28 May 2012">0.4</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <!-- Forward all calls to SLF4J to LOG4J. -->
@@ -764,6 +789,35 @@
                                 <file>layers.tex</file>
                             </sources>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version since="27 May 2012">1.4</version>
+                <configuration>
+                    <complianceLevel>1.6</complianceLevel>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <showWeaveInfo>false</showWeaveInfo>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <verbose>false</verbose>
+                    <Xlint>warning</Xlint>
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>com.jcabi</groupId>
+                            <artifactId>jcabi-aspects</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>weave-classes</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

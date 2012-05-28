@@ -45,6 +45,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -76,6 +77,7 @@ final class XhtmlOutputCheck implements Check {
     /**
      * Validator.
      */
+    @NotNull
     private final transient Validator validator;
 
     /**
@@ -94,7 +96,7 @@ final class XhtmlOutputCheck implements Check {
      * Full ctor, for tests mostly.
      * @param val HTML validator
      */
-    public XhtmlOutputCheck(final Validator val) {
+    public XhtmlOutputCheck(@NotNull final Validator val) {
         this.validator = val;
     }
 
@@ -102,7 +104,7 @@ final class XhtmlOutputCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public void setScope(final String scope) {
+    public void setScope(@NotNull final String scope) {
         synchronized (this.test) {
             this.test = scope;
         }
@@ -112,7 +114,7 @@ final class XhtmlOutputCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public boolean validate(final Environment env) {
+    public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.basedir(), XhtmlOutputCheck.XML_DIR);
         boolean success = true;
         if (dir.exists()) {

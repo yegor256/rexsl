@@ -47,6 +47,8 @@ import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SerializationUtils;
 
@@ -176,15 +178,13 @@ public final class Manifests {
      * @param name Name of the attribute
      * @return The value of the attribute retrieved
      */
-    public static String read(final String name) {
+    public static String read(
+        @NotNull(message = "attribute name can't be NULL")
+        @Pattern(regexp = ".+", message = "attribute name can't be empty")
+        final String name) {
         if (Manifests.attributes == null) {
             throw new IllegalArgumentException(
                 "Manifests haven't been loaded yet by request from XsltFilter"
-            );
-        }
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException(
-                "attribute name can't be NULL or empty"
             );
         }
         if (!Manifests.exists(name)) {
@@ -224,17 +224,11 @@ public final class Manifests {
      * @param name Name of the attribute
      * @param value The value of the attribute being injected
      */
-    public static void inject(final String name, final String value) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException(
-                "injected attribute name can't be NULL or empty"
-            );
-        }
-        if (name == null) {
-            throw new IllegalArgumentException(
-                "injected attribute value can't be NULL"
-            );
-        }
+    public static void inject(
+        @NotNull(message = "injected name can't be NULL")
+        @Pattern(regexp = ".+", message = "name of attribute can't be empty")
+        final String name,
+        @NotNull(message = "inected value can't be NULL") final String value) {
         if (Manifests.INJECTED.containsKey(name)) {
             Logger.info(
                 Manifests.class,
@@ -263,12 +257,10 @@ public final class Manifests {
      * @param name Name of the attribute to check
      * @return Returns {@code TRUE} if it exists, {@code FALSE} otherwise
      */
-    public static boolean exists(final String name) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException(
-                "attribute name can't be NULL or empty, even in exists()"
-            );
-        }
+    public static boolean exists(
+        @NotNull(message = "name of attribute can't be NULL")
+        @Pattern(regexp = ".+", message = "name of attribute can't be empty")
+        final String name) {
         return Manifests.attributes.containsKey(name)
             || Manifests.INJECTED.containsKey(name);
     }
@@ -299,7 +291,7 @@ public final class Manifests {
      * @see <a href="http://trac.fazend.com/rexsl/ticket/107">Introduced in ticket #107</a>
      */
     @SuppressWarnings("unchecked")
-    public static void revert(final byte[] snapshot) {
+    public static void revert(@NotNull final byte[] snapshot) {
         synchronized (Manifests.INJECTED) {
             Manifests.INJECTED.clear();
             Manifests.INJECTED.putAll(
@@ -326,7 +318,8 @@ public final class Manifests {
      * @see #Manifests()
      * @throws IOException If some I/O problem inside
      */
-    public static void append(final ServletContext ctx) throws IOException {
+    public static void append(@NotNull final ServletContext ctx)
+        throws IOException {
         final long start = System.currentTimeMillis();
         URL main;
         try {
@@ -360,7 +353,7 @@ public final class Manifests {
      * @param file The file to load attributes from
      * @throws IOException If some I/O problem inside
      */
-    public static void append(final File file) throws IOException {
+    public static void append(@NotNull final File file) throws IOException {
         final long start = System.currentTimeMillis();
         Map<String, String> attrs;
         try {

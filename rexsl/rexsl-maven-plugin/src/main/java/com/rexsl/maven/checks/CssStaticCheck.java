@@ -33,6 +33,7 @@ import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -62,7 +63,7 @@ final class CssStaticCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public void setScope(final String scope) {
+    public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
 
@@ -70,7 +71,7 @@ final class CssStaticCheck implements Check {
      * {@inheritDoc}
      */
     @Override
-    public boolean validate(final Environment env) {
+    public boolean validate(@NotNull final Environment env) {
         final File csslint = new File(
             this.getClass().getResource("/CssLint.class").getFile()
         );

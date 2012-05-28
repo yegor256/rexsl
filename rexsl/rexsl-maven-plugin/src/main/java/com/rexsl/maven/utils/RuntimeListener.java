@@ -34,6 +34,7 @@ import com.rexsl.maven.Environment;
 import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.validation.constraints.NotNull;
 
 /**
  * To be executed before all other code.
@@ -48,7 +49,7 @@ public final class RuntimeListener implements ServletContextListener {
      */
     @Override
     @SuppressWarnings("PMD.UseProperClassLoader")
-    public void contextInitialized(final ServletContextEvent event) {
+    public void contextInitialized(@NotNull final ServletContextEvent event) {
         final long start = System.currentTimeMillis();
         final Environment env = new RuntimeEnvironment(
             event.getServletContext()
@@ -91,7 +92,7 @@ public final class RuntimeListener implements ServletContextListener {
      * {@inheritDoc}
      */
     @Override
-    public void contextDestroyed(final ServletContextEvent event) {
+    public void contextDestroyed(@NotNull final ServletContextEvent event) {
         Logger.debug(this, "#contextDestroyed(): destroyed");
     }
 
