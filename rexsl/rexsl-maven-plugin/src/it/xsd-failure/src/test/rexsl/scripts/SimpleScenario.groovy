@@ -35,5 +35,5 @@ import javax.ws.rs.core.MediaType
 RestTester.start(rexsl.home)
     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
     .header(HttpHeaders.USER_AGENT, 'Safari')
-    .get()
+    .get('load it')
     .assertStatus(HttpURLConnection.HTTP_OK)
