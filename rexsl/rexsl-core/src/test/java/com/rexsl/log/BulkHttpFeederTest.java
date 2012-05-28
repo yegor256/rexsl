@@ -181,30 +181,26 @@ public final class BulkHttpFeederTest {
         }
         /**
          * Get its home.
+         * @throws java.net.URISyntaxException If there is some problem inside.
          * @return URI of the started container
          */
-        public final URI home() {
-            try {
-                return new URI(
-                    Logger.format("http://localhost:%d/", this.port)
-                );
-            } catch (java.net.URISyntaxException ex) {
-                throw new IllegalStateException(ex);
-            }
+        public final URI home()
+            throws java.net.URISyntaxException {
+            return new URI(
+                Logger.format("http://localhost:%d/", this.port)
+            );
         }
         /**
          * Mock it, and return this object.
+         * @throws java.io.IOException If there is some problem inside.
          * @return This object
          */
-        public final GrizzlyAdapterMocker mock() {
+        public final GrizzlyAdapterMocker mock()
+            throws java.io.IOException {
             this.port = this.reservePort();
             final GrizzlyWebServer gws = new GrizzlyWebServer(this.port);
             gws.addGrizzlyAdapter(this, new String[] {"/"});
-            try {
-                gws.start();
-            } catch (java.io.IOException ex) {
-                throw new IllegalStateException(ex);
-            }
+            gws.start();
             return this;
         }
         /**
@@ -229,7 +225,6 @@ public final class BulkHttpFeederTest {
          * {@inheritDoc}
          */
         @Override
-        @SuppressWarnings({ "PMD.AvoidCatchingGenericException", "rawtypes" })
         public final void service(final GrizzlyRequest request,
             final GrizzlyResponse response) {
             try {
