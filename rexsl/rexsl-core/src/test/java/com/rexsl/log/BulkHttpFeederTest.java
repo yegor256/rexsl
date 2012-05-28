@@ -89,8 +89,8 @@ public final class BulkHttpFeederTest {
      */
     @Test
     public void feedsMultipleMessagesToCloud() throws Exception {
-        final long period = 300L;
-        final int timeout = 2000;
+        final long period = 1L;
+        final int timeout = 200;
         final StringBuffer expectedResult = new StringBuffer();
         final GrizzlyAdapterMocker adapter =
         new GrizzlyAdapterMocker().mock();
@@ -116,18 +116,19 @@ public final class BulkHttpFeederTest {
     private void runFeedThreads(final StringBuffer expected,
         final BulkHttpFeeder feeder) throws InterruptedException {
         final String message = "foo";
-        final int numThreads = 15;
-        final int numTries = 5;
-        final CountDownLatch latch = new CountDownLatch(numTries);
+        final int numThreads = 20;
+        final CountDownLatch start = new CountDownLatch(1);
+        final CountDownLatch finish = new CountDownLatch(numThreads);
         final ExecutorService taskExecutor =
             Executors.newFixedThreadPool(numThreads);
-        final class FeedRunnable implements Runnable {
+        class FeedRunnable implements Runnable {
             /**
              * {@inheritDoc}
              */
             @Override
             public void run() {
                 try {
+                    start.await();
                     feeder.feed(message);
                     expected.append(message);
                 } catch (IOException exc) {
@@ -136,8 +137,10 @@ public final class BulkHttpFeederTest {
                         "#testThreadSafety(): %[exception]s",
                         exc
                     );
+                } catch (InterruptedException exc) {
+                    Thread.currentThread().interrupt();
                 } finally {
-                    latch.countDown();
+                    finish.countDown();
                 }
             }
         }
@@ -150,7 +153,8 @@ public final class BulkHttpFeederTest {
                 runnable
             );
         }
-        latch.await();
+        start.countDown();
+        finish.await();
         taskExecutor.shutdown();
     }
     /**
@@ -159,7 +163,7 @@ public final class BulkHttpFeederTest {
      * @author Flavius Ivasca (ivascaflavius@gmail.com)
      */
     @SuppressWarnings("PMD.AvoidStringBufferField")
-    public class GrizzlyAdapterMocker extends GrizzlyAdapter {
+    private class GrizzlyAdapterMocker extends GrizzlyAdapter {
         /**
          * Stores concatenated data from requests.
          */
@@ -228,14 +232,10 @@ public final class BulkHttpFeederTest {
         @SuppressWarnings({ "PMD.AvoidCatchingGenericException", "rawtypes" })
         public final void service(final GrizzlyRequest request,
             final GrizzlyResponse response) {
-            String input = null;
             try {
-                input = IOUtils.toString(request.getInputStream());
+                this.buffer.append(IOUtils.toString(request.getInputStream()));
             } catch (IOException ex) {
                 throw new IllegalStateException(ex);
-            }
-            if (input != null) {
-                this.buffer.append(input);
             }
         }
     }
