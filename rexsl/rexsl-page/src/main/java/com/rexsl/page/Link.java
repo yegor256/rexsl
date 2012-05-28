@@ -162,7 +162,7 @@ public final class Link {
      * @param link The href
      */
     public Link(@NotNull final String rname, @NotNull final String link) {
-        this(rname, UriBuilder.fromPath(link).build());
+        this(rname, URI.create(link));
     }
 
     /**
@@ -269,21 +269,24 @@ public final class Link {
      * Attach to this resource and make {@code HREF} attribute
      * absolute, using the URI information of the resource.
      * @param res The resource to attach to
+     * @checkstyle MultipleStringLiterals (15 lines)
      */
     public void attachTo(@NotNull @Valid final Resource res) {
         synchronized (this.elements) {
             if (this.href.charAt(0) == '.') {
-                this.href = res.uriInfo().getRequestUriBuilder()
-                    .clone()
-                    .path(this.href.substring(1))
-                    .build()
-                    .toString();
+                this.href = String.format(
+                    "%s%s",
+                    res.uriInfo().getRequestUriBuilder()
+                        .clone().path("/").build(),
+                    this.href.substring(1)
+                );
             } else if (this.href.charAt(0) == '/') {
-                this.href = res.uriInfo().getBaseUriBuilder()
-                    .clone()
-                    .path(this.href)
-                    .build()
-                    .toString();
+                this.href = String.format(
+                    "%s%s",
+                    res.uriInfo().getBaseUriBuilder()
+                        .clone().path("/").build(),
+                    this.href.substring(1)
+                );
             }
         }
     }
