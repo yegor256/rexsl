@@ -39,7 +39,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import java.net.HttpCookie;
 import java.util.Collections;
 import java.util.List;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
@@ -107,8 +106,8 @@ final class JerseyTestResponse implements TestResponse {
      * @param ftch Response fetcher
      * @param rqst Decorated request, for logging purposes
      */
-    public JerseyTestResponse(@NotNull @Valid final JerseyFetcher ftch,
-        @NotNull @Valid final RequestDecor rqst) {
+    public JerseyTestResponse(@NotNull final JerseyFetcher ftch,
+        @NotNull final RequestDecor rqst) {
         this.fetcher = ftch;
         this.request = rqst;
     }
