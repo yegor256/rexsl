@@ -58,12 +58,26 @@ public final class LinkTest {
         link.with(new JaxbBundle("label", "some label"));
         MatcherAssert.assertThat(
             JaxbConverter.the(link),
-            Matchers.allOf(
-                XhtmlMatchers.hasXPath("/link[@rel='foo']"),
-                XhtmlMatchers.hasXPath("/link[@href='http://bar']"),
-                XhtmlMatchers.hasXPath("/link[@type='text/xml']"),
-                XhtmlMatchers.hasXPath("/link[label='some label']")
+            XhtmlMatchers.hasXPaths(
+                "/link[@rel='foo']",
+                "/link[@href='http://bar']",
+                "/link[@type='text/xml']",
+                "/link[label='some label']"
             )
+        );
+    }
+
+    /**
+     * Link can be attached to resource.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void attachesToResource() throws Exception {
+        final Link link = new Link("bar", "/boom/test?a=x");
+        link.attachTo(new ResourceMocker().mock());
+        MatcherAssert.assertThat(
+            link.getHref(),
+            Matchers.endsWith("/test?a=x")
         );
     }
 
