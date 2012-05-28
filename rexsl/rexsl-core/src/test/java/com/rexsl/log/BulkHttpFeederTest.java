@@ -84,16 +84,16 @@ public final class BulkHttpFeederTest {
     }
 
     /**
-     * BulkHttpFeeder can handle multiple threads.
+     * BulkHttpFeeder can handle multiple feeding threads.
      * @throws Exception If there is some problem inside
      */
     @Test
-    public void feedMultipleMessagesToCloud() throws Exception {
+    public void feedsMultipleMessagesToCloud() throws Exception {
         final long period = 300L;
         final int timeout = 2000;
         final StringBuffer expectedResult = new StringBuffer();
-        final SimpleGrizzlyAdapterMocker adapter =
-        new SimpleGrizzlyAdapterMocker().mock();
+        final GrizzlyAdapterMocker adapter =
+        new GrizzlyAdapterMocker().mock();
         final BulkHttpFeeder feeder = new BulkHttpFeeder();
         feeder.setUrl(adapter.home().toString());
         feeder.setPeriod(period);
@@ -159,7 +159,7 @@ public final class BulkHttpFeederTest {
      * @author Flavius Ivasca (ivascaflavius@gmail.com)
      */
     @SuppressWarnings("PMD.AvoidStringBufferField")
-    public class SimpleGrizzlyAdapterMocker extends GrizzlyAdapter {
+    public class GrizzlyAdapterMocker extends GrizzlyAdapter {
         /**
          * Stores concatenated data from requests.
          */
@@ -192,7 +192,7 @@ public final class BulkHttpFeederTest {
          * Mock it, and return this object.
          * @return This object
          */
-        public final SimpleGrizzlyAdapterMocker mock() {
+        public final GrizzlyAdapterMocker mock() {
             this.port = this.reservePort();
             final GrizzlyWebServer gws = new GrizzlyWebServer(this.port);
             gws.addGrizzlyAdapter(this, new String[] {"/"});
