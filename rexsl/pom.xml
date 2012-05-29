@@ -628,6 +628,11 @@
                 <version since="27 May 2012">1.1.0.Alpha1</version>
             </dependency>
             <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version since="27 May 2012">4.3.0.Final</version>
+            </dependency>
+            <dependency>
                 <!-- JSR 303 reference implementation -->
                 <groupId>org.apache.bval</groupId>
                 <artifactId>bval-jsr303</artifactId>
