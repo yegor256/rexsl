@@ -61,6 +61,11 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
         Executors.newSingleThreadScheduledExecutor(new VerboseThreads(this));
 
     /**
+     * Time Unit (seconds, minutes etc).
+     */
+    private transient TimeUnit timeUnit = TimeUnit.SECONDS;
+
+    /**
      * Period in seconds.
      * @checkstyle MagicNumber (2 lines)
      */
@@ -76,6 +81,14 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
      * The future we're running in.
      */
     private transient ScheduledFuture<?> future;
+
+    /**
+     * Set option {@code timeUnit}.
+     * @param unit Time unit
+     */
+    public void setUnit(final TimeUnit unit) {
+        this.timeUnit = unit;
+    }
 
     /**
      * Set option {@code period}.
@@ -125,7 +138,7 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
             ),
             1L,
             this.period,
-            TimeUnit.SECONDS
+            this.timeUnit
         );
     }
 
@@ -141,15 +154,13 @@ public final class BulkHttpFeeder extends AbstractHttpFeeder {
      * Flush buffer through HTTP.
      *
      * @throws IOException If some IO problem inside
-     * @todo #296 This implemenation is not thread-safe. It's possible to
-     *  to get content from the buffer, and then some other thread will
-     *  add a line, and then we set length to zero. We will lose that line.
-     *  Synchronization should added into feed() and here.
      */
     private void flush() throws IOException {
-        final String text = this.buffer.toString();
-        this.buffer.setLength(0);
-        this.post(text);
+        synchronized (this.buffer) {
+            final String text = this.buffer.toString();
+            this.buffer.setLength(0);
+            this.post(text);
+        }
     }
 
 }
