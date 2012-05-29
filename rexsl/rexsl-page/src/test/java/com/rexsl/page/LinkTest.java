@@ -77,7 +77,19 @@ public final class LinkTest {
         link.attachTo(new ResourceMocker().mock());
         MatcherAssert.assertThat(
             link.getHref(),
-            Matchers.endsWith("/test?a=x")
+            Matchers.allOf(
+                Matchers.endsWith("/test?a=x"),
+                Matchers.not(Matchers.containsString("//tes"))
+            )
+        );
+        final Link second = new Link("bar2", "./boom/test?a=y");
+        second.attachTo(new ResourceMocker().mock());
+        MatcherAssert.assertThat(
+            second.getHref(),
+            Matchers.allOf(
+                Matchers.endsWith("/test?a=y"),
+                Matchers.not(Matchers.containsString("//test"))
+            )
         );
     }
 
