@@ -34,9 +34,12 @@ import com.rexsl.maven.Environment;
 import java.io.File;
 import java.io.StringWriter;
 import java.net.URI;
+import java.net.URISyntaxException;
 import javax.validation.constraints.NotNull;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -58,19 +61,51 @@ final class XhtmlTransformer {
      */
     public String transform(@NotNull final Environment env,
         @NotNull final File file) throws InternalCheckException {
+        final TransformerFactory factory = this.factory(env);
+        final Source xsl = this.xsl(file, factory);
+        final StringWriter writer = this.transformer(file, factory, xsl);
+        return writer.toString();
+    }
+    /**
+     * Constructs writer that contains XHTML code from XML document.
+     * @param file XML document.
+     * @param factory Transformer factory
+     * @param xsl XSL Source
+     * @return Writer that contains XHTML code from XML document
+     * @throws InternalCheckException If some failure inside
+     */
+    private StringWriter transformer(final File file,
+        final TransformerFactory factory, final Source xsl)
+        throws InternalCheckException {
         final Source xml = new StreamSource(file);
-        final TransformerFactory factory = TransformerFactory.newInstance();
-        URI home;
+        Transformer transformer;
         try {
-            home = new URI(Logger.format("http://localhost:%d", env.port()));
-        } catch (java.net.URISyntaxException ex) {
-            throw new IllegalArgumentException(ex);
+            transformer = factory.newTransformer(xsl);
+        } catch (TransformerConfigurationException ex) {
+            throw new InternalCheckException(ex);
         }
-        factory.setURIResolver(new RuntimeResolver(home));
+        final StringWriter writer = new StringWriter();
+        try {
+            transformer.transform(xml, new StreamResult(writer));
+        } catch (TransformerException ex) {
+            throw new InternalCheckException(ex);
+        }
+        return writer;
+    }
+    /**
+     * Creates XSL {@link Source} based on XML doc and transformer factory.
+     * @param file XML document
+     * @param factory Transformer factory
+     * @return XSL source
+     * @throws InternalCheckException If some failure inside
+     */
+    private Source xsl(final File file, final TransformerFactory factory)
+        throws InternalCheckException {
+        final Source xml = new StreamSource(file);
         Source xsl;
         try {
             xsl = factory.getAssociatedStylesheet(xml, null, null, null);
-        } catch (javax.xml.transform.TransformerConfigurationException ex) {
+        } catch (TransformerConfigurationException ex) {
             throw new InternalCheckException(ex);
         }
         if (xsl == null) {
@@ -79,19 +114,22 @@ final class XhtmlTransformer {
                 file
             );
         }
-        Transformer transformer;
-        try {
-            transformer = factory.newTransformer(xsl);
-        } catch (javax.xml.transform.TransformerConfigurationException ex) {
-            throw new InternalCheckException(ex);
-        }
-        final StringWriter writer = new StringWriter();
-        try {
-            transformer.transform(xml, new StreamResult(writer));
-        } catch (javax.xml.transform.TransformerException ex) {
-            throw new InternalCheckException(ex);
-        }
-        return writer.toString();
+        return xsl;
     }
-
+    /**
+     * Creates a {@link TransformerFactory} based on the provided environment.
+     * @param env Environment
+     * @return Transformer factory
+     */
+    private TransformerFactory factory(final Environment env) {
+        final TransformerFactory factory = TransformerFactory.newInstance();
+        URI home;
+        try {
+            home = new URI(Logger.format("http://localhost:%d", env.port()));
+        } catch (URISyntaxException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        factory.setURIResolver(new RuntimeResolver(home));
+        return factory;
+    }
 }
