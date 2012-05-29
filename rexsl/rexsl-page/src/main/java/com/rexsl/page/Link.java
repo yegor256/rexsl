@@ -43,7 +43,6 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * HATEOAS link.
@@ -145,7 +144,7 @@ public final class Link {
      * Content of {@code href} attribute, with URI.
      */
     @NotNull
-    private transient String href;
+    private transient URI href;
 
     /**
      * Public ctor for JAXB (always throws a runtime exception).
@@ -195,7 +194,7 @@ public final class Link {
         @NotNull final URI uri,
         @NotNull @Pattern(regexp = ".*") final String tpe) {
         this.rel = rname;
-        this.href = uri.toString();
+        this.href = uri;
         this.type = tpe;
     }
 
@@ -213,7 +212,7 @@ public final class Link {
      * @return The url
      */
     @XmlAttribute
-    public String getHref() {
+    public URI getHref() {
         return this.href;
     }
 
@@ -260,35 +259,77 @@ public final class Link {
      * Set HREF attribute of the link.
      * @param uri The value of it
      */
-    public void setHref(@NotNull final String uri) {
+    public void setHref(@NotNull final URI uri) {
         synchronized (this.elements) {
             this.href = uri;
         }
     }
 
     /**
+     * Set HREF attribute of the link.
+     * @param uri The value of it
+     */
+    public void setHref(@NotNull final String uri) {
+        this.setHref(URI.create(uri));
+    }
+
+    /**
      * Attach to this resource and make {@code HREF} attribute
      * absolute, using the URI information of the resource.
      * @param res The resource to attach to
-     * @checkstyle MultipleStringLiterals (15 lines)
      */
     public void attachTo(@NotNull @Valid final Resource res) {
         synchronized (this.elements) {
-            if (this.href.charAt(0) == '.') {
-                this.href = String.format(
-                    "%s%s",
-                    res.uriInfo().getRequestUriBuilder()
-                        .clone().path("/").build(),
-                    StringUtils.removeStart(this.href.substring(1), "/")
-                );
-            } else if (this.href.charAt(0) == '/') {
-                this.href = String.format(
-                    "%s%s",
-                    res.uriInfo().getBaseUriBuilder()
-                        .clone().path("/").build(),
-                    this.href.substring(1)
-                );
+            if (!this.href.isAbsolute()) {
+                if (this.href.getPath().charAt(0) == '.') {
+                    this.href = Link.combine(
+                        res.uriInfo().getRequestUri(),
+                        this.href.getPath().substring(1),
+                        this.href.getQuery()
+                    );
+                } else if (this.href.getPath().charAt(0) == '/') {
+                    this.href = Link.combine(
+                        res.uriInfo().getBaseUri(),
+                        this.href.getPath(),
+                        this.href.getQuery()
+                    );
+                }
             }
+        }
+    }
+
+    /**
+     * Combine base URI and new path (with optional query).
+     * @param base Base URI
+     * @param path The path to attach
+     * @param params Query params to attach
+     * @return New URI
+     */
+    private static URI combine(final URI base, final String path,
+        final String params) {
+        final URI rel = URI.create(path);
+        final StringBuilder query = new StringBuilder();
+        if (base.getQuery() != null) {
+            query.append(base.getQuery());
+        }
+        if (params != null && !params.isEmpty()) {
+            if (query.length() > 0) {
+                query.append('&');
+            }
+            query.append(params);
+        }
+        try {
+            return new URI(
+                base.getScheme(),
+                base.getUserInfo(),
+                base.getHost(),
+                base.getPort(),
+                UriBuilder.fromUri(base).path(rel.getPath()).build().getPath(),
+                query.toString(),
+                base.getFragment()
+            );
+        } catch (java.net.URISyntaxException ex) {
+            throw new IllegalArgumentException(ex);
         }
     }
 

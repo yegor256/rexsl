@@ -31,6 +31,7 @@ package com.rexsl.page;
 
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
+import java.net.URI;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import org.hamcrest.MatcherAssert;
@@ -76,7 +77,7 @@ public final class LinkTest {
         final Link link = new Link("bar", "/boom/test?a=x");
         link.attachTo(new ResourceMocker().mock());
         MatcherAssert.assertThat(
-            link.getHref(),
+            link.getHref().toString(),
             Matchers.allOf(
                 Matchers.endsWith("/test?a=x"),
                 Matchers.not(Matchers.containsString("//tes"))
@@ -85,11 +86,31 @@ public final class LinkTest {
         final Link second = new Link("bar2", "./boom/test?a=y");
         second.attachTo(new ResourceMocker().mock());
         MatcherAssert.assertThat(
-            second.getHref(),
+            second.getHref().toString(),
             Matchers.allOf(
                 Matchers.endsWith("/test?a=y"),
                 Matchers.not(Matchers.containsString("//test"))
             )
+        );
+    }
+
+    /**
+     * Link can properly understand complex URIs.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void attachesToResourceWithComplexUri() throws Exception {
+        final Link link = new Link("boom", "./path/test?a=x");
+        link.attachTo(
+            new ResourceMocker().withUriInfo(
+                new UriInfoMocker()
+                    .withRequestUri(new URI("http://example.com/a?foo=1"))
+                    .mock()
+            ).mock()
+        );
+        MatcherAssert.assertThat(
+            link.getHref().toString(),
+            Matchers.equalTo("http://example.com/a/path/test?foo=1&a=x")
         );
     }
 
