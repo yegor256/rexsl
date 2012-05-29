@@ -78,15 +78,12 @@ final class XhtmlTransformer {
         final TransformerFactory factory, final Source xsl)
         throws InternalCheckException {
         final Source xml = new StreamSource(file);
-        Transformer transformer;
-        try {
-            transformer = factory.newTransformer(xsl);
-        } catch (TransformerConfigurationException ex) {
-            throw new InternalCheckException(ex);
-        }
         final StringWriter writer = new StringWriter();
         try {
+            final Transformer transformer = factory.newTransformer(xsl);
             transformer.transform(xml, new StreamResult(writer));
+        } catch (TransformerConfigurationException ex) {
+            throw new InternalCheckException(ex);
         } catch (TransformerException ex) {
             throw new InternalCheckException(ex);
         }
@@ -123,13 +120,14 @@ final class XhtmlTransformer {
      */
     private TransformerFactory factory(final Environment env) {
         final TransformerFactory factory = TransformerFactory.newInstance();
-        URI home;
         try {
-            home = new URI(Logger.format("http://localhost:%d", env.port()));
+            final URI home = new URI(
+                Logger.format("http://localhost:%d", env.port())
+            );
+            factory.setURIResolver(new RuntimeResolver(home));
         } catch (URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }
-        factory.setURIResolver(new RuntimeResolver(home));
         return factory;
     }
 }
