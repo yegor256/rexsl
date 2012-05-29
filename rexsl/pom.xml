@@ -631,6 +631,7 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version since="27 May 2012">4.3.0.Final</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <!-- JSR 303 reference implementation -->
