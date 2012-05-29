@@ -79,7 +79,7 @@ public final class LinkTest {
             link.getHref(),
             Matchers.allOf(
                 Matchers.endsWith("/test?a=x"),
-                Matchers.not(Matchers.containsString("//t"))
+                Matchers.not(Matchers.containsString("//tes"))
             )
         );
         final Link second = new Link("bar2", "./boom/test?a=y");
@@ -88,7 +88,7 @@ public final class LinkTest {
             second.getHref(),
             Matchers.allOf(
                 Matchers.endsWith("/test?a=y"),
-                Matchers.not(Matchers.containsString("//"))
+                Matchers.not(Matchers.containsString("//test"))
             )
         );
     }

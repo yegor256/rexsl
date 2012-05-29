@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * HATEOAS link.
@@ -278,7 +279,7 @@ public final class Link {
                     "%s%s",
                     res.uriInfo().getRequestUriBuilder()
                         .clone().path("/").build(),
-                    this.href.substring(1)
+                    StringUtils.removeStart(this.href.substring(1), "/")
                 );
             } else if (this.href.charAt(0) == '/') {
                 this.href = String.format(
