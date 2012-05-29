@@ -633,6 +633,18 @@
                 <artifactId>bval-jsr303</artifactId>
                 <version since="28 May 2012">0.4</version>
                 <scope>runtime</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-beanutils</groupId>
+                        <artifactId>commons-beanutils-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version since="28 May 2012">1.8.3</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <!-- Forward all calls to SLF4J to LOG4J. -->
