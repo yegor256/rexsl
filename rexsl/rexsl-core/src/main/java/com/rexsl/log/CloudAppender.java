@@ -38,7 +38,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import javax.validation.constraints.NotNull;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -111,7 +110,7 @@ public final class CloudAppender extends AppenderSkeleton {
      * Set feeder, option {@code feeder} in config.
      * @param fdr The feeder to use
      */
-    public void setFeeder(@NotNull final Feeder fdr) {
+    public void setFeeder(final Feeder fdr) {
         if (this.feeder != null) {
             throw new IllegalStateException("call #setFeeder() only once");
         }
