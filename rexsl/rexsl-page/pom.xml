@@ -98,6 +98,12 @@
             <artifactId>jaxb-api</artifactId>
             <version since="2 Sep 2011">2.0</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jsr173_api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <!-- JAXB 2.0 implementation, required in runtime. -->

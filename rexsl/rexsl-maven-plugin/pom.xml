@@ -398,6 +398,13 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version since="26 Oct 2011">1.6</version>
                 </plugin>
+                <plugin>
+                    <groupId>com.ning.maven.plugins</groupId>
+                    <artifactId>maven-duplicate-finder-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
