@@ -52,7 +52,7 @@ import org.apache.commons.lang.ArrayUtils;
  * <p>The class is immutable and thread-safe.
  *
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
- * @version $Id: WebappFilesCheck.java 1732 2012-05-24 20:36:50Z guard $
+ * @version $Id$
  */
 final class WebappFilesCheck implements Check {
 
