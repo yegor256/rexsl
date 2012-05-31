@@ -37,7 +37,7 @@ import org.junit.Test;
 /**
  * Test case for {@link com.rexsl.maven.checks.WebappFilesCheckTest}.
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
- * @version $Id: WebappFilesCheckTest.java 1732 2012-05-24 20:36:50Z guard $
+ * @version $Id$
  */
 public final class WebappFilesCheckTest {
 
