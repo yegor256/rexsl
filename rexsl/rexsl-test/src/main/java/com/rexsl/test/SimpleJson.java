@@ -29,9 +29,15 @@
  */
 package com.rexsl.test;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 import javax.validation.constraints.NotNull;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.MissingNode;
 
 /**
  * Implementation of {@link JsonDocument}.
@@ -45,18 +51,31 @@ import javax.validation.constraints.NotNull;
 public final class SimpleJson implements JsonDocument {
 
     /**
-     * Cached document.
+     * Underlying json node.
      */
-    @SuppressWarnings({"PMD.SingularField", "PMD.UnusedPrivateField" })
     @NotNull
-    private final transient String text;
+    private final transient JsonNode node;
 
     /**
      * Public ctor.
      * @param txt Body
      */
     public SimpleJson(@NotNull final String txt) {
-        this.text = txt;
+        final ObjectMapper mapper = new ObjectMapper();
+        try {
+            this.node = mapper.readValue(txt, JsonNode.class);
+        } catch (IOException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    /**
+     * Public ctor.
+     *
+     * @param root JsonNode
+     */
+    public SimpleJson(final JsonNode root) {
+        this.node = root;
     }
 
     /**
@@ -64,7 +83,14 @@ public final class SimpleJson implements JsonDocument {
      */
     @Override
     public List<String> json(@NotNull final String query) {
-        return new ArrayList<String>();
+        final List<String> result = new LinkedList<String>();
+        for (JsonNode doc : this.getNodes(query)) {
+            if (doc.isMissingNode() || doc.size() > 0) {
+                continue;
+            }
+            result.add(this.unquote(doc.getTextValue()));
+        }
+        return result;
     }
 
     /**
@@ -73,7 +99,78 @@ public final class SimpleJson implements JsonDocument {
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public List<JsonDocument> nodesJson(@NotNull final String query) {
-        return new ArrayList<JsonDocument>();
+        final List<JsonDocument> result = new LinkedList<JsonDocument>();
+        for (JsonNode item : this.getNodes(query)) {
+            result.add(new SimpleJson(item));
+        }
+        return result;
     }
 
+    /**
+     * Unquotates given string. For some reason jackson stores
+     * text values quoted, so there is a need in unquoting them
+     * @param str To unqoute
+     * @return Unquoted string
+     */
+    private static String unquote(final String str) {
+        final String quote = "\"";
+        String result = str;
+        if (str != null && str.startsWith(quote) && str.endsWith(quote)) {
+            result = str.substring(1, str.length() - 1);
+        }
+        return result;
+    }
+
+    /**
+     * Finds nodes by query.
+     * @param query Path
+     * @return List of nodes
+     */
+    private List<JsonNode> getNodes(final String query) {
+        final JsonNode terminalNode =
+            this.getTerminalNode(this.node, new StringTokenizer(query, "."));
+        final List<JsonNode> result = new LinkedList<JsonNode>();
+        if (terminalNode.size() > 0) {
+            for (final Iterator<JsonNode> iterator = terminalNode.iterator();
+                iterator.hasNext();) {
+                result.add(iterator.next());
+            }
+        } else {
+            result.add(terminalNode);
+        }
+        return result;
+    }
+
+    /**
+     * Finds subnode matchig qury for given node.
+     * @param start To search in
+     * @param tokenizer Path
+     * @return Node matching qury
+     */
+    private JsonNode getTerminalNode(
+        final JsonNode start,
+        final StringTokenizer tokenizer) {
+        final StringTokenizer indexTokenizer = new StringTokenizer(
+            tokenizer.nextToken(),
+            "[]"
+        );
+        final String name = indexTokenizer.nextToken();
+        JsonNode stepNode = start.findPath(name);
+        if (indexTokenizer.hasMoreTokens()) {
+            try {
+                final int index = Integer.parseInt(indexTokenizer.nextToken());
+                if (index < 0 || index >= stepNode.size()) {
+                    stepNode = MissingNode.getInstance();
+                } else {
+                    stepNode = stepNode.get(index);
+                }
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException(ex);
+            }
+        }
+        if (tokenizer.hasMoreTokens()) {
+            stepNode = this.getTerminalNode(stepNode, tokenizer);
+        }
+        return stepNode;
+    }
 }
