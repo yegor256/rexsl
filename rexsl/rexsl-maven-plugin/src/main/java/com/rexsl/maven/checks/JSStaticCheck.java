@@ -81,19 +81,13 @@ final class JSStaticCheck implements Check {
                 final String name =
                     FilenameUtils.removeExtension(file.getName());
                 LoggingManager.enter(name);
-                try {
-                    try {
-                        success &= this.isValid(file);
-                    } catch (InternalCheckException ex) {
-                        Logger.warn(
-                            this,
-                            "Failed:\n%[exception]s",
-                            ex
-                        );
-                        success = false;
-                    }
-                } finally {
-                    LoggingManager.leave();
+                success &= this.isValid(file);
+                LoggingManager.leave();
+                if (!success) {
+                    Logger.warn(
+                        this,
+                        "Validation Failed!"
+                    );
                 }
             }
         } else {
@@ -124,19 +118,23 @@ final class JSStaticCheck implements Check {
      * </pre>
      *
      * @param file Script file to check
-     * @throws InternalCheckException If some failure inside
      * @return Is script valid?
      * @todo #112! Move the code above to this method when yui finish migration
      *  to Rhino 1.7R3. At the momemnt the implementaiton is just a stub - it
      *  validates that the file exists and that's it.
      */
-    private boolean isValid(final File file) throws InternalCheckException {
-        final String jscript;
+    @SuppressWarnings("PMD.OnlyOneReturn")
+    private boolean isValid(final File file) {
         try {
-            jscript = FileUtils.readFileToString(file);
+            FileUtils.readFileToString(file);
         } catch (java.io.IOException ex) {
-            throw new InternalCheckException(ex);
+            Logger.error(
+                this,
+                "Failed:\n%[exception]s",
+                ex
+            );
+            return false;
         }
-        return jscript != null;
+        return true;
     }
 }

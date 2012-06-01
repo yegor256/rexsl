@@ -109,19 +109,13 @@ final class JigsawCssCheck implements Check {
                 final String name =
                     FilenameUtils.removeExtension(css.getName());
                 LoggingManager.enter(name);
-                try {
-                    try {
-                        this.one(css);
-                    } catch (InternalCheckException ex) {
-                        Logger.warn(
-                            this,
-                            "Failed:\n%[exception]s",
-                            ex
-                        );
-                        success = false;
-                    }
-                } finally {
-                    LoggingManager.leave();
+                success &= this.one(css);
+                LoggingManager.leave();
+                if (!success) {
+                    Logger.warn(
+                        this,
+                        "Validation Failed!"
+                    );
                 }
             }
         } else {
@@ -137,14 +131,21 @@ final class JigsawCssCheck implements Check {
     /**
      * Check one CSS page.
      * @param file Check this particular CSS document
-     * @throws InternalCheckException If some failure inside
+     * @return Is CSS valid?
      */
-    private void one(final File file) throws InternalCheckException {
+    @SuppressWarnings("PMD.OnlyOneReturn")
+    private boolean one(final File file) {
+        boolean valid = true;
         String page;
         try {
             page = FileUtils.readFileToString(file);
         } catch (java.io.IOException ex) {
-            throw new InternalCheckException(ex);
+            Logger.error(
+                this,
+                "Failed:\n%[exception]s",
+                ex
+            );
+            return false;
         }
         final ValidationResponse response = this.validator.validate(page);
         final Set<Defect> defects = new HashSet<Defect>();
@@ -166,12 +167,15 @@ final class JigsawCssCheck implements Check {
                 file,
                 StringEscapeUtils.escapeJava(page).replace("\\n", "\n")
             );
-            throw new InternalCheckException(
+            Logger.error(
+                this,
                 "CSS validation failed with %d errors and %d warnings",
                 response.errors().size(),
                 response.warnings().size()
             );
+            valid = false;
         }
+        return valid;
     }
 
 }
