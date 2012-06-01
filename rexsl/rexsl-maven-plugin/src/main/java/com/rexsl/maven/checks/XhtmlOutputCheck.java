@@ -162,7 +162,6 @@ final class XhtmlOutputCheck implements Check {
      * @param file Check this particular XML document
      * @return Is the XML document valid?
      */
-    @SuppressWarnings("PMD.OnlyOneReturn")
     private boolean one(final Environment env, final File file) {
         boolean valid = true;
         final File root = new File(env.basedir(), XhtmlOutputCheck.GROOVY_DIR);
@@ -171,20 +170,20 @@ final class XhtmlOutputCheck implements Check {
                 "%s directory is absent",
                 XhtmlOutputCheck.GROOVY_DIR
             );
-            return false;
-        }
-        final String basename = FilenameUtils.getBaseName(file.getPath());
-        final String script = Logger.format("%s.groovy", basename);
-        final File groovy = new File(root, script);
-        if (!groovy.exists()) {
-            Logger.error(
-                "Groovy script '%s' is absent for '%s' XML page",
-                groovy.toString(),
-                file.toString()
-            );
             valid = false;
         }
         if (valid) {
+            final String basename = FilenameUtils.getBaseName(file.getPath());
+            final String script = Logger.format("%s.groovy", basename);
+            final File groovy = new File(root, script);
+            if (!groovy.exists()) {
+                Logger.error(
+                    "Groovy script '%s' is absent for '%s' XML page",
+                    groovy.toString(),
+                    file.toString()
+                );
+                valid = false;
+            }
             try {
                 final String xhtml =
                     new XhtmlTransformer().transform(env, file);

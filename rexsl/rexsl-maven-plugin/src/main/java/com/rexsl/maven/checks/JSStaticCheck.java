@@ -123,8 +123,8 @@ final class JSStaticCheck implements Check {
      *  to Rhino 1.7R3. At the momemnt the implementaiton is just a stub - it
      *  validates that the file exists and that's it.
      */
-    @SuppressWarnings("PMD.OnlyOneReturn")
     private boolean isValid(final File file) {
+        boolean valid = true;
         try {
             FileUtils.readFileToString(file);
         } catch (java.io.IOException ex) {
@@ -133,8 +133,8 @@ final class JSStaticCheck implements Check {
                 "Failed:\n%[exception]s",
                 ex
             );
-            return false;
+            valid = false;
         }
-        return true;
+        return valid;
     }
 }

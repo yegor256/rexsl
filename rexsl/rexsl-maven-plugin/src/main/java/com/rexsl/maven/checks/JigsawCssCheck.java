@@ -133,10 +133,9 @@ final class JigsawCssCheck implements Check {
      * @param file Check this particular CSS document
      * @return Is CSS valid?
      */
-    @SuppressWarnings("PMD.OnlyOneReturn")
     private boolean one(final File file) {
         boolean valid = true;
-        String page;
+        String page = null;
         try {
             page = FileUtils.readFileToString(file);
         } catch (java.io.IOException ex) {
@@ -145,35 +144,37 @@ final class JigsawCssCheck implements Check {
                 "Failed:\n%[exception]s",
                 ex
             );
-            return false;
-        }
-        final ValidationResponse response = this.validator.validate(page);
-        final Set<Defect> defects = new HashSet<Defect>();
-        defects.addAll(response.errors());
-        defects.addAll(response.warnings());
-        for (Defect defect : defects) {
-            Logger.error(
-                this,
-                "[%d] %s: %s",
-                defect.line(),
-                defect.message(),
-                defect.source()
-            );
-        }
-        if (!response.valid()) {
-            Logger.error(
-                this,
-                "%s contains invalid CSS (see errors above):\n%s",
-                file,
-                StringEscapeUtils.escapeJava(page).replace("\\n", "\n")
-            );
-            Logger.error(
-                this,
-                "CSS validation failed with %d errors and %d warnings",
-                response.errors().size(),
-                response.warnings().size()
-            );
             valid = false;
+        }
+        if (valid) {
+            final ValidationResponse response = this.validator.validate(page);
+            final Set<Defect> defects = new HashSet<Defect>();
+            defects.addAll(response.errors());
+            defects.addAll(response.warnings());
+            for (Defect defect : defects) {
+                Logger.error(
+                    this,
+                    "[%d] %s: %s",
+                    defect.line(),
+                    defect.message(),
+                    defect.source()
+                );
+            }
+            if (!response.valid() && valid) {
+                Logger.error(
+                    this,
+                    "%s contains invalid CSS (see errors above):\n%s",
+                    file,
+                    StringEscapeUtils.escapeJava(page).replace("\\n", "\n")
+                );
+                Logger.error(
+                    this,
+                    "CSS validation failed with %d errors and %d warnings",
+                    response.errors().size(),
+                    response.warnings().size()
+                );
+                valid = false;
+            }
         }
         return valid;
     }
