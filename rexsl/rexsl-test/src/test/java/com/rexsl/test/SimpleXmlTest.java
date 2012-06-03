@@ -160,7 +160,7 @@ public final class SimpleXmlTest {
         );
         MatcherAssert.assertThat(
             doc.nodes("/root/simple").get(0).node().getNodeName(),
-            Matchers.equalTo("hello")
+            Matchers.equalTo("simple")
         );
         MatcherAssert.assertThat(
             doc.nodes("//simple").get(0).node().getNodeType(),
