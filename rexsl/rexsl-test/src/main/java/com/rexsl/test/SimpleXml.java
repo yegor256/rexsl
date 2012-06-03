@@ -32,6 +32,7 @@ package com.rexsl.test;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
@@ -125,6 +126,20 @@ public final class SimpleXml implements XmlDocument {
      */
     public SimpleXml(@NotNull final File file) throws IOException {
         this(FileUtils.readFileToString(file, CharEncoding.UTF_8));
+    }
+
+    /**
+     * Public ctor, from XML in the URL.
+     *
+     * <p>The object is created with a default implementation of
+     * {@link javax.xml.namespace.NamespaceContext}, which already defines a
+     * number of namespaces, see {@link SimpleXml#SimpleXml(String)}.
+     *
+     * @param url The URL to load from
+     * @throws IOException In case of I/O problem
+     */
+    public SimpleXml(@NotNull final URL url) throws IOException {
+        this(IOUtils.toString(url, CharEncoding.UTF_8));
     }
 
     /**
