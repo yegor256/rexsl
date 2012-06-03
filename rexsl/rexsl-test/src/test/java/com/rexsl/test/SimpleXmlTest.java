@@ -155,13 +155,15 @@ public final class SimpleXmlTest {
      */
     @Test
     public void retrievesDomNode() throws Exception {
-        final XmlDocument doc = new SimpleXml("<root><dd>works?</dd></root>");
-        MatcherAssert.assertThat(
-            doc.nodes("/root/dd").get(0).node().getNodeName(),
-            Matchers.equalTo("dd")
+        final XmlDocument doc = new SimpleXml(
+            this.getClass().getResource("simple.xml")
         );
         MatcherAssert.assertThat(
-            doc.nodes("//dd").get(0).node().getNodeType(),
+            doc.nodes("/root/simple").get(0).node().getNodeName(),
+            Matchers.equalTo("hello")
+        );
+        MatcherAssert.assertThat(
+            doc.nodes("//simple").get(0).node().getNodeType(),
             Matchers.equalTo(Node.ELEMENT_NODE)
         );
     }
