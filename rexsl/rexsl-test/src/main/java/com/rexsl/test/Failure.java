@@ -27,16 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test.assertions;
+package com.rexsl.test;
 
 import com.jcabi.log.Logger;
-import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.TestResponse;
-import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 
 /**
- * Matches HTTP body against matcher.
+ * Always fail.
  *
  * <p>This class is immutable and thread-safe.
  *
@@ -44,19 +40,19 @@ import org.hamcrest.MatcherAssert;
  * @version $Id$
  * @since 0.3.4
  */
-public final class BodyMatcher implements AssertionPolicy {
+public final class Failure implements AssertionPolicy {
 
     /**
-     * The matcher to use.
+     * The reason of failure.
      */
-    private final transient Matcher<String> matcher;
+    private final transient String reason;
 
     /**
      * Public ctor.
-     * @param mtch The matcher to use
+     * @param txt The reason of failure
      */
-    public BodyMatcher(final Matcher<String> mtch) {
-        this.matcher = mtch;
+    public Failure(final String txt) {
+        this.reason = txt;
     }
 
     /**
@@ -64,13 +60,8 @@ public final class BodyMatcher implements AssertionPolicy {
      */
     @Override
     public void assertThat(final TestResponse response) {
-        MatcherAssert.assertThat(
-            Logger.format(
-                "HTTP response content has to match:\n%s",
-                response
-            ),
-            response.getBody(),
-            this.matcher
+        throw new AssertionError(
+            Logger.format("%s:\n%s", this.reason, response)
         );
     }
 

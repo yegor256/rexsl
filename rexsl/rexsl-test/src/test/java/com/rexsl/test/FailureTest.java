@@ -27,10 +27,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test.assertions;
+package com.rexsl.test;
 
-import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.TestResponseMocker;
 import org.junit.Test;
 
 /**
