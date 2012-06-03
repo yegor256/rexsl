@@ -377,6 +377,7 @@
                                     <version since="2 Sep 2011">2.8</version>
                                     <configuration>
                                         <failOnError>true</failOnError>
+                                        <serialwarn>true</serialwarn>
                                         <windowtitle>
                                             ${project.name} ${project.version} API
                                         </windowtitle>
@@ -410,6 +411,7 @@
                                             </reports>
                                             <configuration>
                                                 <sourcepath>src/main/java</sourcepath>
+                                                <reportOutputDirectory>${project.reporting.outputDirectory}/apidocs-${project.version}</reportOutputDirectory>
                                             </configuration>
                                         </reportSet>
                                         <reportSet>
@@ -419,6 +421,7 @@
                                             </reports>
                                             <configuration>
                                                 <sourcepath>src/mock/java</sourcepath>
+                                                <reportOutputDirectory>${project.reporting.outputDirectory}/testapidocs-${project.version}</reportOutputDirectory>
                                             </configuration>
                                         </reportSet>
                                     </reportSets>
