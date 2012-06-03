@@ -172,9 +172,20 @@ public final class SimpleXmlTest {
      * SimpleXml can throw custom exception when XPath not found.
      * @throws Exception If something goes wrong inside
      */
-    @Test(expected = NodeNotFoundException.class)
+    @Test
     public void throwsCustomExceptionWhenXpathNotFound() throws Exception {
-        new SimpleXml("<root/>").xpath("/absent-node/text()").get(0);
+        try {
+            new SimpleXml("<root/>").xpath("/absent-node/text()").get(0);
+            MatcherAssert.assertThat("exception expected here", false);
+        } catch (IndexOutOfBoundsException ex) {
+            MatcherAssert.assertThat(
+                ex.getMessage(),
+                Matchers.allOf(
+                    Matchers.containsString("/absent-node/text("),
+                    Matchers.containsString("<root/")
+                )
+            );
+        }
     }
 
 }

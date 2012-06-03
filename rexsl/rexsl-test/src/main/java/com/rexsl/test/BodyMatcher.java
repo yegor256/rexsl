@@ -42,7 +42,7 @@ import org.hamcrest.MatcherAssert;
  * @version $Id$
  * @since 0.3.4
  */
-public final class BodyMatcher implements AssertionPolicy {
+final class BodyMatcher implements AssertionPolicy {
 
     /**
      * The matcher to use.
