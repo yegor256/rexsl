@@ -98,19 +98,13 @@ final class JSUnitTestsCheck implements Check {
                 final String name =
                     FilenameUtils.removeExtension(file.getName());
                 LoggingManager.enter(name);
-                try {
-                    try {
-                        success &= this.one(env.basedir(), file);
-                    } catch (InternalCheckException ex) {
-                        Logger.warn(
-                            this,
-                            "Failed:\n%[exception]s",
-                            ex
-                        );
-                        success = false;
-                    }
-                } finally {
-                    LoggingManager.leave();
+                success &= this.one(env.basedir(), file);
+                LoggingManager.leave();
+                if (!success) {
+                    Logger.warn(
+                        this,
+                        "Validation Failed!"
+                    );
                 }
             }
         } else {
@@ -127,11 +121,10 @@ final class JSUnitTestsCheck implements Check {
      * Check one script.
      * @param base Folder to check
      * @param file JS Unit test file to check
-     * @throws InternalCheckException If some failure inside
      * @return Is js unit test succeeded?
      */
-    private boolean one(final File base, final File file)
-        throws InternalCheckException {
+    private boolean one(final File base, final File file) {
+        boolean valid;
         final Reader reader = new BufferedReader(
             new InputStreamReader(
                 this.getClass().getResourceAsStream(
@@ -164,13 +157,29 @@ final class JSUnitTestsCheck implements Check {
             for (String msg : res.toString().split("\n")) {
                 Logger.error(this, msg);
             }
-            return res.toString().isEmpty();
+            valid = res.toString().isEmpty();
         } catch (NoSuchMethodException ex) {
-            throw new InternalCheckException(ex);
+            this.logException(ex);
+            valid = false;
         } catch (ScriptException ex) {
-            throw new InternalCheckException(ex);
+            this.logException(ex);
+            valid = false;
         } catch (IOException ex) {
-            throw new InternalCheckException(ex);
+            this.logException(ex);
+            valid = false;
         }
+        return valid;
+    }
+
+    /**
+     * Logs exception to the logger.
+     * @param exc Exception to log.
+     */
+    private void logException(final Exception exc) {
+        Logger.error(
+            this,
+            "Failed:\n%[exception]s",
+            exc
+        );
     }
 }

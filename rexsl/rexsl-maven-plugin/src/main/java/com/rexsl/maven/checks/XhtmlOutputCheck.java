@@ -133,10 +133,13 @@ final class XhtmlOutputCheck implements Check {
                         continue;
                     }
                     LoggingManager.enter(name);
-                    try {
-                        success = this.process(env, xml);
-                    } finally {
-                        LoggingManager.leave();
+                    success &= this.one(env, xml);
+                    LoggingManager.leave();
+                    if (!success) {
+                        Logger.warn(
+                            this,
+                            "Validation Failed!"
+                        );
                     }
                 }
             } finally {
@@ -154,64 +157,51 @@ final class XhtmlOutputCheck implements Check {
     }
 
     /**
-     * Process one XML document.
-     * @param env Environment to work with
-     * @param file Check this particular XML document
-     * @return True if validation succeeds
-     * @todo #343 Simplify whole class. Get rid of control by exception throwing
-     */
-    private boolean process(final Environment env, final File file) {
-        boolean success = true;
-        try {
-            Logger.info(this, "Testing %s through...", file);
-            this.one(env, file);
-        } catch (InternalCheckException ex) {
-            Logger.warn(
-                this,
-                "Failed:\n%[exception]s",
-                ex
-            );
-            success = false;
-        }
-        return success;
-    }
-
-    /**
      * Check one XML document.
      * @param env Environment to work with
      * @param file Check this particular XML document
-     * @throws InternalCheckException If some failure inside
+     * @return Is the XML document valid?
      */
-    private void one(final Environment env, final File file)
-        throws InternalCheckException {
+    private boolean one(final Environment env, final File file) {
+        boolean valid = true;
         final File root = new File(env.basedir(), XhtmlOutputCheck.GROOVY_DIR);
         if (!root.exists()) {
-            throw new InternalCheckException(
+            Logger.error(
                 "%s directory is absent",
                 XhtmlOutputCheck.GROOVY_DIR
             );
+            valid = false;
         }
-        final String basename = FilenameUtils.getBaseName(file.getPath());
-        final String script = Logger.format("%s.groovy", basename);
-        final File groovy = new File(root, script);
-        if (!groovy.exists()) {
-            throw new InternalCheckException(
-                "Groovy script '%s' is absent for '%s' XML page",
-                groovy,
-                file
-            );
+        if (valid) {
+            final String basename = FilenameUtils.getBaseName(file.getPath());
+            final String script = Logger.format("%s.groovy", basename);
+            final File groovy = new File(root, script);
+            if (!groovy.exists()) {
+                Logger.error(
+                    "Groovy script '%s' is absent for '%s' XML page",
+                    groovy.toString(),
+                    file.toString()
+                );
+                valid = false;
+            }
+            try {
+                final String xhtml =
+                    new XhtmlTransformer().transform(env, file);
+                this.validate(file, xhtml);
+                final GroovyExecutor exec = new GroovyExecutor(
+                    env,
+                    new BindingBuilder(env).add("document", xhtml).build()
+                );
+                exec.execute(groovy);
+            } catch (com.rexsl.maven.utils.GroovyException ex) {
+                this.logException(ex);
+                valid = false;
+            } catch (InternalCheckException ex) {
+                this.logException(ex);
+                valid = false;
+            }
         }
-        final String xhtml = new XhtmlTransformer().transform(env, file);
-        this.validate(file, xhtml);
-        final GroovyExecutor exec = new GroovyExecutor(
-            env,
-            new BindingBuilder(env).add("document", xhtml).build()
-        );
-        try {
-            exec.execute(groovy);
-        } catch (com.rexsl.maven.utils.GroovyException ex) {
-            throw new InternalCheckException(ex);
-        }
+        return valid;
     }
 
     /**
@@ -250,4 +240,15 @@ final class XhtmlOutputCheck implements Check {
         }
     }
 
+    /**
+     * Logs exception to the logger.
+     * @param exc Exception to log.
+     */
+    private void logException(final Exception exc) {
+        Logger.error(
+            this,
+            "Failed:\n%[exception]s",
+            exc
+        );
+    }
 }
