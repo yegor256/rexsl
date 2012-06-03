@@ -27,14 +27,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test.assertions;
+package com.rexsl.test;
 
 import com.jcabi.log.Logger;
-import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.TestResponse;
+import java.util.ArrayList;
+import java.util.List;
+import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 
 /**
- * Always fail.
+ * Matches HTTP header against required value.
  *
  * <p>This class is immutable and thread-safe.
  *
@@ -42,19 +44,27 @@ import com.rexsl.test.TestResponse;
  * @version $Id$
  * @since 0.3.4
  */
-public final class Failure implements AssertionPolicy {
+public final class HeaderMatcher implements AssertionPolicy {
 
     /**
-     * The reason of failure.
+     * Header's name.
      */
-    private final transient String reason;
+    private final transient String name;
+
+    /**
+     * The matcher to use.
+     */
+    private final transient Matcher<Iterable<String>> matcher;
 
     /**
      * Public ctor.
-     * @param txt The reason of failure
+     * @param hdr The name of the header to match
+     * @param mtch The matcher to use
      */
-    public Failure(final String txt) {
-        this.reason = txt;
+    public HeaderMatcher(final String hdr,
+        final Matcher<Iterable<String>> mtch) {
+        this.name = hdr;
+        this.matcher = mtch;
     }
 
     /**
@@ -62,8 +72,18 @@ public final class Failure implements AssertionPolicy {
      */
     @Override
     public void assertThat(final TestResponse response) {
-        throw new AssertionError(
-            Logger.format("%s:\n%s", this.reason, response)
+        List<String> headers = response.getHeaders().get(this.name);
+        if (headers == null) {
+            headers = new ArrayList<String>(0);
+        }
+        MatcherAssert.assertThat(
+            Logger.format(
+                "HTTP header '%s' has to match:\n%s",
+                this.name,
+                response
+            ),
+            headers,
+            this.matcher
         );
     }
 

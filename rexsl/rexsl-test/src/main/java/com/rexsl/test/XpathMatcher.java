@@ -27,11 +27,66 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.test;
+
+import com.jcabi.log.Logger;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 
 /**
- * Built-in assertions for TestResponse, tests.
+ * Matches HTTP header against required value.
+ *
+ * <p>This class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @since 0.3.4
  */
-package com.rexsl.test.assertions;
+public final class XpathMatcher implements AssertionPolicy {
+
+    /**
+     * The source.
+     */
+    private final transient XmlDocument xml;
+
+    /**
+     * The matcher to use.
+     */
+    private final transient String xpath;
+
+    /**
+     * Public ctor.
+     * @param src The source
+     * @param path The XPath to find there
+     */
+    public XpathMatcher(final XmlDocument src, final String path) {
+        this.xml = src;
+        this.xpath = path;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void assertThat(final TestResponse response) {
+        MatcherAssert.assertThat(
+            Logger.format(
+                "XPath '%s' has to exist in:\n%s",
+                StringEscapeUtils.escapeJava(this.xpath),
+                response
+            ),
+            this.xml.nodes(this.xpath),
+            Matchers.not(Matchers.<XmlDocument>empty())
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isRetryNeeded(final int attempt) {
+        return false;
+    }
+
+}

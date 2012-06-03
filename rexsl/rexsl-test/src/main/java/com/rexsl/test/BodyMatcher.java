@@ -27,16 +27,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test.assertions;
+package com.rexsl.test;
 
 import com.jcabi.log.Logger;
-import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.TestResponse;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 
 /**
- * Matches HTTP status against required value.
+ * Matches HTTP body against matcher.
  *
  * <p>This class is immutable and thread-safe.
  *
@@ -44,18 +42,18 @@ import org.hamcrest.MatcherAssert;
  * @version $Id$
  * @since 0.3.4
  */
-public final class StatusMatcher implements AssertionPolicy {
+public final class BodyMatcher implements AssertionPolicy {
 
     /**
      * The matcher to use.
      */
-    private final transient Matcher<Integer> matcher;
+    private final transient Matcher<String> matcher;
 
     /**
      * Public ctor.
      * @param mtch The matcher to use
      */
-    public StatusMatcher(final Matcher<Integer> mtch) {
+    public BodyMatcher(final Matcher<String> mtch) {
         this.matcher = mtch;
     }
 
@@ -66,10 +64,10 @@ public final class StatusMatcher implements AssertionPolicy {
     public void assertThat(final TestResponse response) {
         MatcherAssert.assertThat(
             Logger.format(
-                "HTTP status code has to match:\n%s",
+                "HTTP response content has to match:\n%s",
                 response
             ),
-            response.getStatus(),
+            response.getBody(),
             this.matcher
         );
     }
