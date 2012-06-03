@@ -44,7 +44,7 @@ import org.hamcrest.MatcherAssert;
  * @version $Id$
  * @since 0.3.4
  */
-public final class HeaderMatcher implements AssertionPolicy {
+final class HeaderMatcher implements AssertionPolicy {
 
     /**
      * Header's name.
@@ -78,7 +78,7 @@ public final class HeaderMatcher implements AssertionPolicy {
         }
         MatcherAssert.assertThat(
             Logger.format(
-                "HTTP header '%s' has to match:\n%s",
+                "HTTP header '%[text]s' has to match:\n%s",
                 this.name,
                 response
             ),

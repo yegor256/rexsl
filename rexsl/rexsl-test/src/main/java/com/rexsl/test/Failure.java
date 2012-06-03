@@ -40,7 +40,7 @@ import com.jcabi.log.Logger;
  * @version $Id$
  * @since 0.3.4
  */
-public final class Failure implements AssertionPolicy {
+final class Failure implements AssertionPolicy {
 
     /**
      * The reason of failure.

@@ -43,7 +43,7 @@ import org.hamcrest.Matchers;
  * @version $Id$
  * @since 0.3.4
  */
-public final class XpathMatcher implements AssertionPolicy {
+final class XpathMatcher implements AssertionPolicy {
 
     /**
      * The source.

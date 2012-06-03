@@ -29,11 +29,13 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.log.Logger;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import javax.validation.constraints.NotNull;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Node;
 
 /**
@@ -42,7 +44,8 @@ import org.w3c.dom.Node;
  * <p>This wrapper is our internal implementation of a {@link List}. The only
  * purpose of this wrapper is to throw our own custom exception when the client
  * is trying to access an element that is absent in the list. Such a custom
- * exception ({@link NodeNotFoundException}) includes detailed information about
+ * exception ({@link ListWrapper.NodeNotFoundException})
+ * includes detailed information about
  * the original document. Thus, such an incorrect list-access operation will
  * lead to an exception that contains all the details inside (not just a simple
  * error message). For example:
@@ -98,6 +101,35 @@ final class ListWrapper<T> implements List<T> {
         this.original = list;
         this.dom = node;
         this.xpath = addr;
+    }
+
+    /**
+     * Node not found in XmlDocument.
+     */
+    private static final class NodeNotFoundException
+        extends IndexOutOfBoundsException {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = 0x7526FA78EEDAC470L;
+        /**
+         * Public ctor.
+         * @param message Error message
+         * @param node The XML with error
+         * @param xpath The address
+         */
+        public NodeNotFoundException(@NotNull final String message,
+            @NotNull final Node node, @NotNull final String xpath) {
+            super(
+                Logger.format(
+                    "XPath '%s' not found in '%s': %s",
+                    StringEscapeUtils.escapeJava(xpath),
+                    // @checkstyle LineLength (1 line)
+                    StringEscapeUtils.escapeJava(new DomPrinter(node).toString()),
+                    message
+            )
+            );
+        }
     }
 
     /**
@@ -168,13 +200,13 @@ final class ListWrapper<T> implements List<T> {
     /**
      * {@inheritDoc}
      *
-     * <p>The method throws {@link NodeNotFoundException} if such an element
-     * doesn't exist in the list.
+     * <p>The method throws {@link ListWrapper.NodeNotFoundException}
+     * if such an element doesn't exist in the list.
      */
     @Override
     public T get(final int index) {
         if (index >= this.size()) {
-            throw new NodeNotFoundException(
+            throw new ListWrapper.NodeNotFoundException(
                 String.format(
                     "Index (%d) is out of bounds (size=%d)",
                     index,
@@ -294,7 +326,8 @@ final class ListWrapper<T> implements List<T> {
     /**
      * {@inheritDoc}
      *
-     * <p>The method throws {@link NodeNotFoundException} when either
+     * <p>The method throws {@link ListWrapper.NodeNotFoundException}
+     * when either
      * {@code start} or {@code end} is bigger than the size of the list. In all
      * other cases of illegal method call (start is less than zero, end is
      * less than zero, or start is bigger than end) a standard
@@ -304,7 +337,7 @@ final class ListWrapper<T> implements List<T> {
     @Override
     public List<T> subList(final int start, final int end) {
         if (start >= this.size()) {
-            throw new NodeNotFoundException(
+            throw new ListWrapper.NodeNotFoundException(
                 String.format(
                     "Start of subList (%d) is out of bounds (size=%d)",
                     start,
@@ -315,7 +348,7 @@ final class ListWrapper<T> implements List<T> {
             );
         }
         if (end >= this.size()) {
-            throw new NodeNotFoundException(
+            throw new ListWrapper.NodeNotFoundException(
                 String.format(
                     "End of subList (%d) is out of bounds (size=%d)",
                     end,
