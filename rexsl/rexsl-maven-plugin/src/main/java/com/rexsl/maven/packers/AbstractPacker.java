@@ -97,6 +97,8 @@ abstract class AbstractPacker implements Packer {
         final File dir = new File(env.webdir(), this.extension());
         if (dir.mkdirs()) {
             Logger.info(this, "#dir(): %s directory created", dir);
+        } else {
+            Logger.info(this, "#dir(): %s directory already exists", dir);
         }
         return dir;
     }
