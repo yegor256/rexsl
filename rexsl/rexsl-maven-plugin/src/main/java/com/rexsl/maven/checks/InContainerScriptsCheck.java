@@ -92,8 +92,9 @@ final class InContainerScriptsCheck implements Check {
             }
             Logger.info(
                 this,
-                "Starting embedded servlet container in '%s'...",
-                env.webdir()
+                "Testing in embedded servlet container at '%s' (test=%s)...",
+                env.webdir(),
+                this.test
             );
             final EmbeddedContainer container = EmbeddedContainer.start(env);
             success = this.run(dir, env);
