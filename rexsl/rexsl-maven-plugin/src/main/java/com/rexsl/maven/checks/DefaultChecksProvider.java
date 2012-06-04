@@ -156,6 +156,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
         Collections.unmodifiableList(
             Arrays.asList(
                 "com.rexsl.maven.checks.BinaryFilesCheck",
+                "com.rexsl.maven.checks.WebappFilesCheck",
                 "com.rexsl.maven.checks.JigsawCssCheck",
                 "com.rexsl.maven.checks.JSStaticCheck",
                 "com.rexsl.maven.checks.FilesStructureCheck",
@@ -188,7 +189,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
         final Set<Check> all = new LinkedHashSet<Check>();
         for (String name : this.checks) {
             try {
-                all.add(DefaultChecksProvider.build(name));
+                all.add(this.build(name));
             } catch (InvalidCheckException ex) {
                 Logger.info(this, "Can't find %s, available checks:", name);
                 for (String check : DefaultChecksProvider.NAMES) {
@@ -249,7 +250,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
      * @return The check
      * @throws DefaultChecksProvider.InvalidCheckException If failed
      */
-    private static Check build(final String name)
+    private Check build(final String name)
         throws DefaultChecksProvider.InvalidCheckException {
         String cname;
         if (name.contains(".")) {
@@ -261,8 +262,9 @@ public final class DefaultChecksProvider implements ChecksProvider {
                 name
             );
         }
+        Check check;
         try {
-            return Check.class.cast(Class.forName(cname).newInstance());
+            check = Check.class.cast(Class.forName(cname).newInstance());
         } catch (ClassNotFoundException ex) {
             throw new DefaultChecksProvider.InvalidCheckException(ex);
         } catch (InstantiationException ex) {
@@ -270,6 +272,8 @@ public final class DefaultChecksProvider implements ChecksProvider {
         } catch (IllegalAccessException ex) {
             throw new DefaultChecksProvider.InvalidCheckException(ex);
         }
+        check.setScope(this.test);
+        return check;
     }
 
 }

@@ -92,8 +92,9 @@ final class InContainerScriptsCheck implements Check {
             }
             Logger.info(
                 this,
-                "Starting embedded servlet container in '%s'...",
-                env.webdir()
+                "Testing in embedded servlet container at '%s' (test=%s)...",
+                env.webdir(),
+                this.test
             );
             final EmbeddedContainer container = EmbeddedContainer.start(env);
             success = this.run(dir, env);
@@ -121,7 +122,8 @@ final class InContainerScriptsCheck implements Check {
         final Set<String> failed = new LinkedHashSet<String>();
         for (File script : finder.random()) {
             final String name = FilenameUtils.removeExtension(script.getName());
-            if (!name.matches(this.test)) {
+            if (!name.matches(this.test) && !name.contains(this.test)) {
+                Logger.info(this, "Ignored '%s'", script);
                 continue;
             }
             LoggingManager.enter(name);

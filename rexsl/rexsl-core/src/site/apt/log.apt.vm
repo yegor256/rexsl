@@ -60,3 +60,14 @@ log4j.appender.LOGGLY.layout.ConversionPattern=[%5p] %t %c: %m%n
   interface and add an instance of the class to the
   appender.
 
+  You need this dependency in classpath:
+
++--
+<dependency>
+  <groupId>com.rexsl</groupId>
+  <artifactId>rexsl-core</artifactId>
+  <version>${releasedVersion}</version>
+</dependency>
++--
+
+
