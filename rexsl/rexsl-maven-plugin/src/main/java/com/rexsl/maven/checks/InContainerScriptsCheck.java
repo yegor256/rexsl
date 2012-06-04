@@ -121,7 +121,8 @@ final class InContainerScriptsCheck implements Check {
         final Set<String> failed = new LinkedHashSet<String>();
         for (File script : finder.random()) {
             final String name = FilenameUtils.removeExtension(script.getName());
-            if (!name.matches(this.test)) {
+            if (!name.matches(this.test) && !name.contains(this.test)) {
+                Logger.info(this, "Ignored '%s'", script);
                 continue;
             }
             LoggingManager.enter(name);
