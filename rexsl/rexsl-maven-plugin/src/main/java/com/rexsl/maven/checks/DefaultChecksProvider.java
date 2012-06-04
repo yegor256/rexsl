@@ -156,6 +156,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
         Collections.unmodifiableList(
             Arrays.asList(
                 "com.rexsl.maven.checks.BinaryFilesCheck",
+                "com.rexsl.maven.checks.WebappFilesCheck",
                 "com.rexsl.maven.checks.JigsawCssCheck",
                 "com.rexsl.maven.checks.JSStaticCheck",
                 "com.rexsl.maven.checks.FilesStructureCheck",
@@ -164,8 +165,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
                 "com.rexsl.maven.checks.XhtmlOutputCheck",
                 "com.rexsl.maven.checks.InContainerScriptsCheck",
                 "com.rexsl.maven.checks.JSUnitTestsCheck",
-                "com.rexsl.maven.checks.WebXmlCheck",
-                "com.rexsl.maven.checks.WebappFilesCheck"
+                "com.rexsl.maven.checks.WebXmlCheck"
             )
         );
 
