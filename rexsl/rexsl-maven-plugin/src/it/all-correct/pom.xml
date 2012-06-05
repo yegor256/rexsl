@@ -94,7 +94,7 @@
             <!-- Logging facility -->
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-log</artifactId>
-            <version since="1 May 2012">0.1</version>
+            <version since="1 Jun 2012">0.1.9</version>
         </dependency>
         <dependency>
             <!--
