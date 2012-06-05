@@ -72,6 +72,7 @@ final class WebappFilesCheck implements Check {
             {"css", ".*\\.css"},
             {"js", ".*\\.js"},
             {"xsl", ".*\\.xsl"},
+            {"xml", ".*\\.xml"},
         }
     );
 
