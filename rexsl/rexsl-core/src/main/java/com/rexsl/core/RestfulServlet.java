@@ -230,12 +230,12 @@ public final class RestfulServlet extends HttpServlet {
         final HttpServletResponse response)
         throws ServletException, IOException {
         final long start = System.currentTimeMillis();
-        final Future<Void> future = this.executor.submit(
-            new Callable<Void>() {
+        final Future<Boolean> future = this.executor.submit(
+            new Callable<Boolean>() {
                 @Override
-                public Void call() throws Exception {
+                public Boolean call() throws Exception {
                     RestfulServlet.this.jersey.service(request, response);
-                    return null;
+                    return true;
                 }
             }
         );
