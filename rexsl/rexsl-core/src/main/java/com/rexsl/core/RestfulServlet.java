@@ -30,12 +30,18 @@
 package com.rexsl.core;
 
 import com.jcabi.log.Logger;
+import com.jcabi.log.VerboseThreads;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Handler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -111,6 +117,12 @@ public final class RestfulServlet extends HttpServlet {
      * Comma, a separator between package names.
      */
     private static final String COMMA = ",";
+
+    /**
+     * Service executor.
+     */
+    private final transient ExecutorService executor =
+        Executors.newCachedThreadPool(new VerboseThreads());
 
     /**
      * Jersey servlet.
@@ -218,7 +230,27 @@ public final class RestfulServlet extends HttpServlet {
         final HttpServletResponse response)
         throws ServletException, IOException {
         final long start = System.currentTimeMillis();
-        this.jersey.service(request, response);
+        final Future<Void> future = this.executor.submit(
+            new Callable<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    RestfulServlet.this.jersey.service(request, response);
+                    return null;
+                }
+            }
+        );
+        try {
+            // @checkstyle MagicNumber (1 line)
+            future.get(5, TimeUnit.SECONDS);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new ServletException(ex);
+        } catch (java.util.concurrent.ExecutionException ex) {
+            throw new ServletException(ex);
+        } catch (java.util.concurrent.TimeoutException ex) {
+            future.cancel(true);
+            throw new ServletException(ex);
+        }
         final long duration = System.currentTimeMillis() - start;
         Logger.debug(
             this,
