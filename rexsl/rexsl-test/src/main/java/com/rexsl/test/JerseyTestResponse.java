@@ -367,7 +367,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestResponse assertXPath(@NotNull final String xpath) {
-        this.assertThat(new XpathMatcher(this.getXml(), xpath));
+        this.assertThat(new XpathAssertionMatcher(this.getXml(), xpath));
         return this;
     }
 

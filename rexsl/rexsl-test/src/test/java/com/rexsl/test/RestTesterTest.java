@@ -334,7 +334,10 @@ public final class RestTesterTest {
                     @Override
                     public void assertThat(final TestResponse response) {
                         try {
-                            response.getStatus();
+                            MatcherAssert.assertThat(
+                                response.getStatus(),
+                                Matchers.equalTo(HttpURLConnection.HTTP_OK)
+                            );
                             throw new IllegalStateException();
                         } catch (AssertionError ex) {
                             assert ex != null;
