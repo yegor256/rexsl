@@ -34,6 +34,7 @@ import java.io.StringWriter;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.JAXBIntrospector;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlType;
@@ -107,11 +108,13 @@ public final class JaxbConverter {
      * @param object The object to convert
      * @param deps Dependencies that we should take into account
      * @return DOM source/document
+     * @throws JAXBException If an exception occurs inside
      * @todo #316 This "unchecked" warning should be removed somehow
      */
     @SuppressWarnings("unchecked")
     public static Source the(@NotNull final Object object,
-        final Class... deps) {
+        final Class... deps)
+        throws JAXBException {
         final Class<?>[] classes = new Class<?>[deps.length + 1];
         classes[0] = object.getClass();
         System.arraycopy(deps, 0, classes, 1, deps.length);
@@ -145,19 +148,12 @@ public final class JaxbConverter {
      * Create marshaller.
      * @param ctx The context
      * @return Marshaller
+     * @throws JAXBException If an exception occurs inside
      */
-    private static Marshaller marshaller(final JAXBContext ctx) {
-        Marshaller mrsh;
-        try {
-            mrsh = ctx.createMarshaller();
-        } catch (javax.xml.bind.JAXBException ex) {
-            throw new IllegalStateException(ex);
-        }
-        try {
-            mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        } catch (javax.xml.bind.PropertyException ex) {
-            throw new IllegalStateException(ex);
-        }
+    private static Marshaller marshaller(final JAXBContext ctx)
+        throws JAXBException {
+        final Marshaller mrsh = ctx.createMarshaller();
+        mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         return mrsh;
     }
 
