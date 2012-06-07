@@ -43,7 +43,7 @@ import org.hamcrest.Matchers;
  * @version $Id$
  * @since 0.3.4
  */
-final class XpathMatcher implements AssertionPolicy {
+final class XpathAssertionMatcher implements AssertionPolicy {
 
     /**
      * The source.
@@ -60,7 +60,7 @@ final class XpathMatcher implements AssertionPolicy {
      * @param src The source
      * @param path The XPath to find there
      */
-    public XpathMatcher(final XmlDocument src, final String path) {
+    public XpathAssertionMatcher(final XmlDocument src, final String path) {
         this.xml = src;
         this.xpath = path;
     }
