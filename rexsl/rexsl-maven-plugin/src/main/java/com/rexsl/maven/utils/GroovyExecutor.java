@@ -104,6 +104,21 @@ public final class GroovyExecutor {
                 basename
             );
         }
+        final GroovyScriptEngine gse = this.gse(file);
+        try {
+            gse.run(file.getName(), this.binding);
+        // @checkstyle IllegalCatch (1 line)
+        } catch (Throwable ex) {
+            throw new GroovyException("%[exception]s", ex);
+        }
+    }
+
+    /**
+     * Creates a new instance of the {@link GroovyScriptEngine}.
+     * @param file The groovy file with the script to run
+     * @return New instance of {@link GroovyScriptEngine}
+     */
+    private GroovyScriptEngine gse(final File file) {
         GroovyScriptEngine gse;
         try {
             gse = new GroovyScriptEngine(
@@ -116,12 +131,7 @@ public final class GroovyExecutor {
                 ex
             );
         }
-        try {
-            gse.run(file.getName(), this.binding);
-        // @checkstyle IllegalCatch (1 line)
-        } catch (Throwable ex) {
-            throw new GroovyException("%[exception]s", ex);
-        }
+        return gse;
     }
 
     /**
