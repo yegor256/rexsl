@@ -47,6 +47,26 @@
 
     <dependencies>
         <dependency>
+            <!-- Embedded Jetty Java Servlet Container -->
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version since="11 Oct 2011">8.0.2.v20111006</version>
+        </dependency>
+        <dependency>
+            <!-- Embedded Jetty Java Servlet Container -->
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version since="11 Oct 2011">8.0.2.v20111006</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-log</artifactId>
         </dependency>
@@ -62,6 +82,15 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.ning.maven.plugins</groupId>
+                <artifactId>maven-duplicate-finder-plugin</artifactId>
+                <configuration>
+                    <ignoredResources>
+                        <ignoredResource>about.html</ignoredResource>
+                    </ignoredResources>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>

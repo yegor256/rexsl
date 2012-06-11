@@ -29,8 +29,13 @@
  */
 package com.rexsl.standalone;
 
+import com.jcabi.log.Logger;
+import javax.validation.constraints.NotNull;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
+
 /**
- * Main entrance to the standalone application.
+ * Servlet container.
  *
  * <p>The class is thread-safe.
  *
@@ -38,32 +43,49 @@ package com.rexsl.standalone;
  * @version $Id$
  * @since 0.3.8
  */
-public final class RexslMain {
+final class Container {
 
     /**
-     * Default port to bind to.
+     * The port to use.
      */
-    private static final int PORT = 8080;
+    private final transient int port;
 
     /**
-     * Utility class.
+     * Public ctor.
+     * @param prt The port to use
      */
-    private RexslMain() {
-        // intentionally empty
+    public Container(@NotNull final int prt) {
+        this.port = prt;
     }
 
     /**
-     * Main entrance to the application.
-     * @param args Optional arguments
+     * Start it.
      * @throws Exception If some problem inside
      */
-    public static void main(final String... args) throws Exception {
-        int port = RexslMain.PORT;
-        if (args.length > 0) {
-            port = Integer.valueOf(args[0]);
+    public void start() throws Exception {
+        final String war = RexslMain.class.getProtectionDomain()
+            .getCodeSource()
+            .getLocation()
+            .toExternalForm();
+        Logger.info(this, "#start(): starting %s...", war);
+        final long start = System.currentTimeMillis();
+        final Server server = new Server(this.port);
+        final WebAppContext ctx = new WebAppContext();
+        ctx.setContextPath("/");
+        ctx.setDescriptor(String.format("%s/WEB-INF/web.xml", war));
+        ctx.setServer(server);
+        ctx.setWar(war);
+        server.setHandler(ctx);
+        server.start();
+        try {
+            server.join();
+        } finally {
+            Logger.info(
+                this,
+                "#start(..): finished after %[ms]s",
+                System.currentTimeMillis() - start
+            );
         }
-        final Container container = new Container(port);
-        container.start();
     }
 
 }
