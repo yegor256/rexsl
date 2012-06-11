@@ -1,0 +1,84 @@
+ ------
+ Runnable JAR
+ ------
+ Yegor Bugayenko
+ ------
+ 2012-06-11
+ ------
+
+~~
+~~ Copyright (c) 2011-2012, ReXSL.com
+~~ All rights reserved.
+~~
+~~ Redistribution and use in source and binary forms, with or without
+~~ modification, are permitted provided that the following conditions
+~~ are met: 1) Redistributions of source code must retain the above
+~~ copyright notice, this list of conditions and the following
+~~ disclaimer. 2) Redistributions in binary form must reproduce the above
+~~ copyright notice, this list of conditions and the following
+~~ disclaimer in the documentation and/or other materials provided
+~~ with the distribution. 3) Neither the name of the ReXSL.com nor
+~~ the names of its contributors may be used to endorse or promote
+~~ products derived from this software without specific prior written
+~~ permission.
+~~
+~~ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+~~ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+~~ NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+~~ FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+~~ THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+~~ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+~~ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+~~ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+~~ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+~~ STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+~~ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+~~ OF THE POSSIBILITY OF SUCH DAMAGE.
+~~
+
+Making Runnable JAR
+
+  To make a runnable JAR with ReXSL inside add this dependency to your
+  project:
+
++--
+<dependency>
+  <groupId>com.rexsl</groupId>
+  <artifactId>rexsl-standalone</artifactId>
+  <version>${releasedVersion}</version>
+  <classifier>bin</classifier>
+  <scope>runtime</scope>
+</dependency>
++--
+
+  Then, configure <<<maven-war-plugin>>>:
+
++--
+<plugin>
+  <artifactId>maven-war-plugin</artifactId>
+  <configuration>
+    <archive>
+      <manifest>
+        <mainClass>com.rexsl.standalone.RexslMain</mainClass>
+      </manifest>
+    </archive>
+    <overlays>
+      <overlay>
+        <groupId>com.rexsl</groupId>
+        <artifactId>rexsl-standalone</artifactId>
+        <classifier>bin</classifier>
+        <type>jar</type>
+      </overlay>
+    </overlays>
+  </configuration>
+</plugin>
++--
+
+  Now, package the entire project and run the WAR created:
+
++--
+$ mvn clean package
+$ java -jar target/example-1.0-SNAPSHOT.war 8080
++--
+
+  Should start a container at <<<http://localhost:8080/>>>.
