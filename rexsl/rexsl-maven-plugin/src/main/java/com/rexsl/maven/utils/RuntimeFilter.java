@@ -56,7 +56,7 @@ public final class RuntimeFilter implements Filter {
 
     /**
      * Where static files are kept, list of folders
-     * (name of {@link ServletContext} init parameter).
+     * (name of {@link javax.servlet.ServletContext} init parameter).
      */
     public static final String FOLDERS = "com.rexsl.maven.utils.FOLDERS";
 
