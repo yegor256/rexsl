@@ -469,8 +469,10 @@
                          because I don't know how to stop its execution. It starts
                          Jetty and stays waiting. There should be some way of
                          canceling it somehow...
+                         http://jira.codehaus.org/browse/MINVOKER-132
                         -->
                         <!-- <pomInclude>run-all-correct/pom.xml</pomInclude> -->
+                        <!-- <pomInclude>standalone-jar/pom.xml</pomInclude> -->
                         <pomInclude>all-correct/pom.xml</pomInclude>
                         <pomInclude>structure-failure/pom.xml</pomInclude>
                         <pomInclude>script-failure/pom.xml</pomInclude>

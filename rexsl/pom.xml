@@ -53,6 +53,7 @@
         <module>rexsl-core</module>
         <module>rexsl-page</module>
         <module>rexsl-maven-plugin</module>
+        <module>rexsl-standalone</module>
     </modules>
 
     <description>
