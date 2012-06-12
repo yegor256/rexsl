@@ -75,6 +75,14 @@ public final class CheckMojo extends AbstractRexslMojo {
     private transient Map<String, String> systemPropertyVariables;
 
     /**
+     * Skip all tests.
+     *
+     * @parameter expression="${skipTests}" default-value="false"
+     * @since 0.3.8
+     */
+    private transient boolean skipTests;
+
+    /**
      * Regular expression that determines tests ({@code groovy},
      * {@code xml}, etc.) to be executed during test.
      *
@@ -138,6 +146,14 @@ public final class CheckMojo extends AbstractRexslMojo {
         final Set<Check> checks = this.provider.all();
         try {
             for (Check chck : checks) {
+                if (this.skipTests) {
+                    Logger.warn(
+                        this,
+                        "%[type]s skipped because of skipTests",
+                        chck
+                    );
+                    continue;
+                }
                 LoggingManager.enter(chck.getClass().getSimpleName());
                 try {
                     this.single(chck);
