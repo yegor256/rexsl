@@ -30,7 +30,6 @@
 package com.rexsl.standalone;
 
 import com.jcabi.log.Logger;
-import javax.validation.constraints.NotNull;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -54,7 +53,7 @@ final class Container {
      * Public ctor.
      * @param prt The port to use
      */
-    public Container(@NotNull final int prt) {
+    public Container(final int prt) {
         this.port = prt;
     }
 
