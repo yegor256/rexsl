@@ -95,20 +95,39 @@ final class ContextResourceResolver implements URIResolver {
                 );
             }
         }
-        Source source;
+        final Source source = this.source(stream);
+        IOUtils.closeQuietly(stream);
+        source.setSystemId(href);
+        return source;
+    }
+    /**
+     * Creates a source based on the provided stream.
+     * @param stream The stream to take data from.
+     * @return The source created from the stream.
+     * @throws TransformerException If a problem happens inside.
+     */
+    private Source source(final InputStream stream)
+        throws TransformerException {
+        final Source source;
         try {
             source = new StreamSource(
                 new BufferedReader(
-                    new InputStreamReader(stream, CharEncoding.UTF_8)
+                    new InputStreamReader(
+                        IOUtils.toInputStream(
+                            IOUtils.toString(stream, CharEncoding.UTF_8),
+                            CharEncoding.UTF_8
+                        ),
+                        CharEncoding.UTF_8
+                    )
                 )
             );
         } catch (java.io.UnsupportedEncodingException ex) {
             throw new TransformerException(ex);
+        } catch (IOException ex) {
+            throw new TransformerException(ex);
         }
-        source.setSystemId(href);
         return source;
     }
-
     /**
      * Load stream from local address.
      * @param path The path to resource to load from
