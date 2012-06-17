@@ -34,7 +34,6 @@ import java.util.Locale;
 import javax.validation.constraints.NotNull;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -50,12 +49,6 @@ import org.w3c.dom.Node;
  * @version $Id$
  */
 final class StringSource extends DOMSource {
-
-    /**
-     * Transformer factory.
-     */
-    private static final TransformerFactory TFACTORY =
-        TransformerFactory.newInstance();
 
     /**
      * The XML itself.
@@ -81,7 +74,8 @@ final class StringSource extends DOMSource {
         super();
         final StringWriter writer = new StringWriter();
         try {
-            final Transformer transformer = this.getTransformer();
+            final Transformer transformer =
+                TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(
                 OutputKeys.OMIT_XML_DECLARATION,
                 "yes"
@@ -91,22 +85,10 @@ final class StringSource extends DOMSource {
                 new StreamResult(writer)
             );
         } catch (TransformerException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalStateException(ex);
         }
         this.xml = writer.toString();
         super.setNode(node);
-    }
-
-    /**
-     * Thread safe construct Transfomer.
-     * @return Transformer, never null
-     * @throws TransformerConfigurationException Transfomer problem
-     */
-    private Transformer getTransformer()
-        throws TransformerConfigurationException {
-        synchronized (StringSource.TFACTORY) {
-            return StringSource.TFACTORY.newTransformer();
-        }
     }
 
     /**
@@ -131,5 +113,4 @@ final class StringSource extends DOMSource {
         }
         return buf.toString();
     }
-
 }

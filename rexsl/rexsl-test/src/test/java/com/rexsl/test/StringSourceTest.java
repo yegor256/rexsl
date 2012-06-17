@@ -36,6 +36,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.w3c.dom.Node;
 
 /**
@@ -98,5 +99,28 @@ public final class StringSourceTest {
         MatcherAssert.assertThat(
             actual, Matchers.containsString("comment")
         );
+    }
+
+    /**
+     * Check transformation failure.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testTransformationFailure() {
+        final String propertyName = "javax.xml.transform.TransformerFactory";
+        final String defaultFactory =
+            System.getProperty(propertyName);
+        System.setProperty(
+            propertyName,
+            TransformerFactoryMock.class.getCanonicalName()
+        );
+        try {
+            new StringSource(Mockito.mock(Node.class));
+        } finally {
+            if (defaultFactory == null) {
+                System.clearProperty(propertyName);
+            } else {
+                System.setProperty(propertyName, defaultFactory);
+            }
+        }
     }
 }
