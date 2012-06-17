@@ -181,6 +181,12 @@ public final class DefaultChecksProvider implements ChecksProvider {
     private transient String test = "";
 
     /**
+     * Mutex for synchronization.
+     */
+    @SuppressWarnings("PMD.FinalFieldCouldBeStatic")
+    private final transient Object mutex = "_mutex_";
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -208,7 +214,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
      */
     @Override
     public void setTest(@NotNull final String scope) {
-        synchronized (this.test) {
+        synchronized (this.mutex) {
             this.test = scope;
         }
     }
@@ -218,7 +224,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
      */
     @Override
     public void setCheck(@NotNull final String scope) {
-        synchronized (this.test) {
+        synchronized (this.mutex) {
             this.checks.clear();
             this.checks.addAll(
                 Arrays.asList(scope.split("\\s*,\\s*"))
