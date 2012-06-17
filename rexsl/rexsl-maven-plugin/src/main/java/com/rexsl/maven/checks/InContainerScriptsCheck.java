@@ -65,11 +65,16 @@ final class InContainerScriptsCheck implements Check {
     private transient String test = ".*";
 
     /**
+     * Mutex for synchronization.
+     */
+    @SuppressWarnings("PMD.FinalFieldCouldBeStatic")
+    private final transient Object mutex = "_mutex_";
+    /**
      * {@inheritDoc}
      */
     @Override
     public void setScope(@NotNull final String scope) {
-        synchronized (this.test) {
+        synchronized (this.mutex) {
             this.test = scope;
         }
     }
