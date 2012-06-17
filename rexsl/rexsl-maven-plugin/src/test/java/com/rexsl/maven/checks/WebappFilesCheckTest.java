@@ -45,12 +45,8 @@ public final class WebappFilesCheckTest {
      * WebappFilesCheckTest can validate certain file types
      * under {@code src/main/webapp} folder and it's subfolders.
      * @throws Exception If something goes wrong
-     * @todo #525 The test is ignored since it doesn't work. The class needs
-     *  refactoring in order to understand multi-level directory structure
-     *  inside the webapp directory.
      */
     @Test
-    @org.junit.Ignore
     public void validatesFileTypes() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withTextFile("src/main/webapp/valid.html", "")

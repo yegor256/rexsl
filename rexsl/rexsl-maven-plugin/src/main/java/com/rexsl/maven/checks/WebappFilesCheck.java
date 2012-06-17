@@ -92,7 +92,7 @@ final class WebappFilesCheck implements Check {
         final File dir = new File(env.basedir(), "src/main/webapp");
         boolean valid;
         if (dir.exists()) {
-            valid = this.validate(dir);
+            valid = this.validate(env.basedir(), dir);
         } else {
             valid = false;
             Logger.warn(this, "Directory '%s' is absent", dir);
@@ -102,23 +102,32 @@ final class WebappFilesCheck implements Check {
 
     /**
      * Validate one dir.
+     * @param basedir The {@link Environment} base directory
      * @param dir The dir
      * @return TRUE if valid
      */
-    private boolean validate(final File dir) {
+    private boolean validate(final File basedir, final File dir) {
         boolean valid = true;
         for (File file : this.getFiles(dir)) {
-            final String folder = file.getParentFile().getName();
-            if (!WebappFilesCheck.EXTS.containsKey(folder)) {
+            boolean found = false;
+            File current = file.getParentFile();
+            while (!current.equals(basedir) && !found) {
+                if (WebappFilesCheck.EXTS.containsKey(current.getName())) {
+                    found = true;
+                } else {
+                    current = current.getParentFile();
+                }
+            }
+            if (!found) {
                 Logger.warn(
                     this,
                     "Invalid folder in webapp hierarchy: %s",
-                    folder
+                    file.getParentFile().getName()
                 );
                 valid = false;
                 break;
             }
-            final String regex = WebappFilesCheck.EXTS.get(folder);
+            final String regex = WebappFilesCheck.EXTS.get(current.getName());
             final String name = file.getName();
             if (!name.matches(regex)) {
                 Logger.warn(
