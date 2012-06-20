@@ -220,12 +220,24 @@ public final class RestfulServlet extends HttpServlet {
         final long start = System.currentTimeMillis();
         this.jersey.service(request, response);
         final long duration = System.currentTimeMillis() - start;
-        Logger.debug(
-            this,
-            "#service(%s): by Jersey in %[ms]s",
-            request.getRequestURI(),
-            duration
-        );
+        // @checkstyle MagicNumber (1 line)
+        if (duration < 1000) {
+            Logger.debug(
+                this,
+                "#service(%s): by Jersey in %[ms]s",
+                request.getRequestURI(),
+                duration
+            );
+        } else {
+            Logger.warn(
+                this,
+                "#service(%s %s): %[ms]s is too slow (IP=%s)",
+                request.getMethod(),
+                request.getRequestURI(),
+                duration,
+                request.getRemoteAddr()
+            );
+        }
         response.addHeader(
             "Rexsl-Millis",
             Long.toString(duration)
