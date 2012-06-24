@@ -104,6 +104,21 @@ public final class RestTester {
     public static final String PUT = "PUT";
 
     /**
+     * HEAD method name.
+     */
+    public static final String HEAD = "HEAD";
+
+    /**
+     * DELETE method name.
+     */
+    public static final String DELETE = "DELETE";
+
+    /**
+     * OPTIONS method name.
+     */
+    public static final String OPTIONS = "OPTIONS";
+
+    /**
      * It's a utility class.
      */
     private RestTester() {
