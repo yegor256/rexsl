@@ -98,7 +98,36 @@ import org.w3c.dom.Element;
  * of XML data.
  *
  * <p>The class is mutable and thread-safe.
- *
+ * @todo #430 A new design would be required for this class. <br/>
+ *  <b>The problems</b>:
+ *  <ul>
+ *  <li>this.content and this.parent are used as flags, not only as data
+ *  storage variables.
+ *  <li>there are three different "types" combined in
+ *  one class: root element (parent == null), node element (content ==
+ *  null), and leaf element.
+ *  </ul>
+ *  <br/>
+ *  <b>The solution</b>: A new hierarchy of classes: <br/>
+ *  <code>
+ *  interface TreeNode<br/>
+ *  <br/>
+ *  abstract AbstractNode implements TreeNode<br/>
+ *  +name: String<br/>
+ *  +attributes: ConcurrentMap<String, String><br/>
+ *  <br/>
+ *  abstract SubNode extends AbstractNode<br/>
+ *  +parent: TreeNode<br/>
+ *  <br/>
+ *  InnerNode extends SubNode<br/>
+ *  +children: List<TreeNode><br/>
+ *  <br/>
+ *  LeafNode extends SubNode<br/>
+ *  +content: String<br/>
+ *  <br/>
+ *  DeadNode implements TreeNode<br/>
+ *  // this is the node we set as parent in root node<br/>
+ *  </code> <br/>
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.7
@@ -162,7 +191,7 @@ public final class JaxbBundle {
         this.parent = null;
         this.name = nam;
         if (text == null) {
-            this.content = (String) text;
+            this.content = null;
         } else {
             this.content = text.toString();
         }
@@ -179,7 +208,7 @@ public final class JaxbBundle {
         this.parent = prnt;
         this.name = nam;
         if (text == null) {
-            this.content = (String) text;
+            this.content = null;
         } else {
             this.content = text.toString();
         }
