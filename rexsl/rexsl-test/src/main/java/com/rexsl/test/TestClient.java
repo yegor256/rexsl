@@ -79,4 +79,25 @@ public interface TestClient {
      */
     TestResponse put(@NotNull String description, @NotNull Object body);
 
+    /**
+     * Execute {@code DELETE} request.
+     * @param description Short description of the operation
+     * @return This object
+     */
+    TestResponse delete(@NotNull String description);
+
+    /**
+     * Execute {@code HEAD} request.
+     * @param description Short description of the operation
+     * @return This object
+     */
+    TestResponse head(@NotNull String description);
+
+    /**
+     * Execute {@code OPTIONS} request.
+     * @param description Short description of the operation
+     * @param body Request entity as a string
+     * @return This object
+     */
+    TestResponse options(@NotNull String description, @NotNull Object body);
 }
