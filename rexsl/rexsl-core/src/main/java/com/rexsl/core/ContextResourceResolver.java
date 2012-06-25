@@ -82,8 +82,7 @@ final class ContextResourceResolver implements URIResolver {
             stream = this.local(href);
         }
         if (stream == null) {
-            URI uri;
-            uri = UriBuilder.fromUri(href).build();
+            URI uri = UriBuilder.fromUri(href).build();
             if (base != null && !base.isEmpty()) {
                 try {
                     uri = new URL(new URL(base), href).toURI();
