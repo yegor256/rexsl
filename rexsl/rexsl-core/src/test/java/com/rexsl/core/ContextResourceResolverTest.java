@@ -70,6 +70,22 @@ public final class ContextResourceResolverTest {
     }
 
     /**
+     * ContextResourceResolver can resolve resource by HREF and blank base.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void resolvesResourceByHrefAndBlankBase() throws Exception {
+        final String href = "/test2.xml?1234";
+        final ServletContext ctx = new ServletContextMocker()
+            .withResource("/test2.xml", "<r>\u0444</r>")
+            .mock();
+        final URIResolver resolver = new ContextResourceResolver(ctx);
+        final Source src = resolver.resolve(href, "");
+        MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(href));
+        MatcherAssert.assertThat(src, XhtmlMatchers.hasXPath("/r[.='\u0444']"));
+    }
+
+    /**
      * ContextResourceResolver can resolve when a resource is an Absolute URI.
      * @throws Exception If something goes wrong
      */
