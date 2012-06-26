@@ -49,6 +49,7 @@ import org.apache.commons.lang.CharEncoding;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 final class JerseyTestClient implements TestClient {
 
     /**
@@ -185,6 +186,59 @@ final class JerseyTestClient implements TestClient {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse delete(@NotNull final String desc) {
+        return new JerseyTestResponse(
+            new JerseyFetcher() {
+                @Override
+                public ClientResponse fetch() {
+                    return JerseyTestClient.this
+                        .method(RestTester.DELETE, "", desc);
+                }
+            },
+            new RequestDecor(this.headers, "")
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse head(@NotNull final String desc) {
+        return new JerseyTestResponse(
+            new JerseyFetcher() {
+                @Override
+                public ClientResponse fetch() {
+                    return JerseyTestClient.this
+                        .method(RestTester.HEAD, "", desc);
+                }
+            },
+            new RequestDecor(this.headers, "")
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TestResponse options(@NotNull final String desc,
+        @NotNull final Object body) {
+        final String content = body.toString();
+        return new JerseyTestResponse(
+            new JerseyFetcher() {
+                @Override
+                public ClientResponse fetch() {
+                    return JerseyTestClient.this
+                        .method(RestTester.OPTIONS, content, desc);
+                }
+            },
+            new RequestDecor(this.headers, content)
+        );
+    }
+
+    /**
      * Run this method.
      * @param name The name of HTTP method
      * @param body Body of HTTP request
@@ -201,6 +255,10 @@ final class JerseyTestClient implements TestClient {
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
             resp = builder.get(ClientResponse.class);
+        } else if (RestTester.HEAD.equals(name)) {
+            resp = builder.head();
+        } else if (RestTester.DELETE.equals(name)) {
+            resp = builder.delete(ClientResponse.class);
         } else {
             resp = builder.method(name, ClientResponse.class, body);
         }
