@@ -225,7 +225,12 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.8.3</version>
         </dependency>
-
+        <dependency>
+            <groupId>net.sourceforge.reb4j</groupId>
+            <artifactId>net.sourceforge.reb4j</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
 </project>

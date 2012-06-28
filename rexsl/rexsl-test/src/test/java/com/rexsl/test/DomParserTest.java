@@ -42,7 +42,7 @@ import org.junit.Test;
 public final class DomParserTest {
 
     /**
-     * DomParser can parse XML text propertly.
+     * DomParser can parse XML text properly.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -91,4 +91,32 @@ public final class DomParserTest {
         new DomParser(null);
     }
 
+    /**
+     * DomParser throws exception when input txt is not well-formed XML.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsWhenInvalidElement() throws Exception {
+        new DomParser("<123/>");
+    }
+
+    /**
+     * DomParser allows XML documents with prolog.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void allowsProlog() throws Exception {
+        new DomParser("<?xml version=\"1.0\"?><a/>");
+    }
+
+    /**
+     * DomParser allows XML documents with prolog.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void allowsStartCharacter() throws Exception {
+        new DomParser("<:a/>");
+        new DomParser("<_a/>");
+        new DomParser("<\u00c0a/>");
+    }
 }

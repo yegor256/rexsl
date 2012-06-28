@@ -30,8 +30,10 @@
 package com.rexsl.test;
 
 import com.jcabi.log.Logger;
+import java.util.regex.Pattern;
 import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilderFactory;
+import net.sourceforge.reb4j.Regex;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.w3c.dom.Document;
@@ -47,6 +49,11 @@ import org.w3c.dom.Document;
 final class DomParser {
 
     /**
+     * Pattern to detect if passed txt looks like xml.
+     */
+    private static final Pattern PATTERN = DomParser.buildPattern();
+
+    /**
      * The XML as a text.
      */
     private final transient String xml;
@@ -58,15 +65,14 @@ final class DomParser {
      * passed is not in XML format. It doesn't perform a strict validation
      * and is not guaranteed that an exception will be thrown whenever
      * the parameter is not XML.
-     *
      * @param txt The XML in text
-     * @todo #391 Would be great to improve the validation. We should check the
-     *  incoming text for XML compliance before it's checked in
-     *  DocumentBuilderFactory. We can't guarantee a proper validation, but
-     *  something better than current implementation should be introduced
      */
     public DomParser(@NotNull final String txt) {
-        if (txt.isEmpty() || txt.charAt(0) != '<') {
+        if (txt == null) {
+            throw new IllegalArgumentException("NULL instead of XML");
+        }
+        if (txt.isEmpty()
+            || !this.PATTERN.matcher(txt.replaceAll("\\n", "")).matches()) {
             throw new IllegalArgumentException(
                 Logger.format("Doesn't look like XML: '%s'", txt)
             );
@@ -102,4 +108,31 @@ final class DomParser {
         return doc;
     }
 
+    /**
+     * Pattern initialization method.
+     * @return The pattern
+     */
+    private static Pattern buildPattern() {
+        // @checkstyle LineLength (2 line)DPT
+        final String startCharacter =
+            "[:_a-zA-Z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD]";
+        final String character = "[-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]";
+        final Regex prolog = Regex.fromPattern(
+            Pattern.compile("(<\\?xml.*\\?>\\s*)")
+        );
+        final Regex doctype = Regex.fromPattern(
+            Pattern.compile("(<!DOCTYPE.*>)")
+        );
+        final Regex element = Regex
+            .fromPattern(Pattern.compile(startCharacter)).atLeastOnce()
+            .then(Regex.fromPattern(Pattern.compile(character)).star());
+        return Regex.sequence(
+            prolog.optional(),
+            doctype.optional(),
+            Regex.literal("<"),
+            element.then(Regex.fromPattern(Pattern.compile(".")).star()),
+            element.or(Regex.literal("/")),
+            Regex.literal(">")
+        ).toPattern();
+    }
 }
