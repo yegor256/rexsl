@@ -74,6 +74,20 @@ public final class DomParserTest {
     }
 
     /**
+     * DomParser can parse XML text properly.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void parsesIncomingXmlDocumentComment() throws Exception {
+        final String xml = "<?xml version='1.0'?><!-- test --><root/>";
+        final DomParser parser = new DomParser(xml);
+        MatcherAssert.assertThat(
+            parser.document(),
+            XhtmlMatchers.hasXPath("/root")
+        );
+    }
+
+    /**
      * DomParser throws exception when it is not an XML at all.
      * @throws Exception If something goes wrong inside
      */
