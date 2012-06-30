@@ -72,7 +72,7 @@ final class DomParser {
             throw new IllegalArgumentException("NULL instead of XML");
         }
         if (txt.isEmpty()
-            || !this.PATTERN.matcher(txt.replaceAll("\\n", "")).matches()) {
+            || !this.PATTERN.matcher(txt.replaceAll("\\s", "")).matches()) {
             throw new IllegalArgumentException(
                 Logger.format("Doesn't look like XML: '%s'", txt)
             );
@@ -123,12 +123,16 @@ final class DomParser {
         final Regex doctype = Regex.fromPattern(
             Pattern.compile("(<!DOCTYPE.*>)")
         );
+        final Regex comment = Regex.fromPattern(
+            Pattern.compile("(<!--.*-->)")
+        );
         final Regex element = Regex
             .fromPattern(Pattern.compile(startCharacter)).atLeastOnce()
             .then(Regex.fromPattern(Pattern.compile(character)).star());
         return Regex.sequence(
             prolog.optional(),
             doctype.optional(),
+            comment.optional(),
             Regex.literal("<"),
             element.then(Regex.fromPattern(Pattern.compile(".")).star()),
             element.or(Regex.literal("/")),
