@@ -144,11 +144,9 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      */
     @Override
     public Marshaller getContext(@NotNull final Class<?> type) {
-        Marshaller mrsh;
         synchronized (this.marshallers) {
-            if (this.marshallers.containsKey(type)) {
-                mrsh = this.marshallers.get(type);
-            } else {
+            Marshaller mrsh;
+            if (!this.marshallers.containsKey(type)) {
                 try {
                     mrsh = this.buildContext(type).createMarshaller();
                     mrsh.setProperty(
@@ -175,8 +173,8 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                     this.addXsdValidatorToMarshaller(mrsh, type);
                 }
             }
+            return this.marshallers.get(type);
         }
-        return mrsh;
     }
 
     /**
