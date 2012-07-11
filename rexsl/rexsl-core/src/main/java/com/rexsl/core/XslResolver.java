@@ -142,12 +142,11 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      *
      * @see <a href="http://jaxb.java.net/guide/Performance_and_thread_safety.html">JAXBContext is thread-safe</a>
      */
+    @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
     @Override
-    public Marshaller getContext(@NotNull final Class<?> type) {
+    public synchronized Marshaller getContext(@NotNull final Class<?> type) {
         Marshaller mrsh;
-        if (this.marshallers.containsKey(type)) {
-            mrsh = this.marshallers.get(type);
-        } else {
+        if (!this.marshallers.containsKey(type)) {
             try {
                 mrsh = this.buildContext(type).createMarshaller();
                 mrsh.setProperty(
@@ -173,7 +172,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 this.addXsdValidatorToMarshaller(mrsh, type);
             }
         }
-        return mrsh;
+        return this.marshallers.get(type);
     }
 
     /**
