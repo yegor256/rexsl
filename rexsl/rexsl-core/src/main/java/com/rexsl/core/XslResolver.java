@@ -142,37 +142,41 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      *
      * @see <a href="http://jaxb.java.net/guide/Performance_and_thread_safety.html">JAXBContext is thread-safe</a>
      */
-    @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
     @Override
-    public synchronized Marshaller getContext(@NotNull final Class<?> type) {
+    public Marshaller getContext(@NotNull final Class<?> type) {
         Marshaller mrsh;
-        if (!this.marshallers.containsKey(type)) {
-            try {
-                mrsh = this.buildContext(type).createMarshaller();
-                mrsh.setProperty(
-                    Marshaller.JAXB_FORMATTED_OUTPUT,
-                    Boolean.TRUE
-                );
-                final String header = Logger.format(
-                    "\n<?xml-stylesheet type='text/xsl' href='%s'?>",
-                    StringEscapeUtils.escapeXml(this.stylesheet(type))
-                );
-                mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
-                this.marshallers.put(type, mrsh);
-            } catch (javax.xml.bind.JAXBException ex) {
-                throw new IllegalStateException(ex);
-            }
-            if (this.xsdFolder == null) {
-                Logger.debug(
-                    this,
-                    "#getContext(%s): marshaller created (no XSD validator)",
-                    type.getName()
-                );
+        synchronized (this.marshallers) {
+            if (this.marshallers.containsKey(type)) {
+                mrsh = this.marshallers.get(type);
             } else {
-                this.addXsdValidatorToMarshaller(mrsh, type);
+                try {
+                    mrsh = this.buildContext(type).createMarshaller();
+                    mrsh.setProperty(
+                        Marshaller.JAXB_FORMATTED_OUTPUT,
+                        Boolean.TRUE
+                    );
+                    final String header = Logger.format(
+                        "\n<?xml-stylesheet type='text/xsl' href='%s'?>",
+                        StringEscapeUtils.escapeXml(this.stylesheet(type))
+                    );
+                    mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
+                    this.marshallers.put(type, mrsh);
+                } catch (javax.xml.bind.JAXBException ex) {
+                    throw new IllegalStateException(ex);
+                }
+                if (this.xsdFolder == null) {
+                    Logger.debug(
+                        this,
+                        // @checkstyle LineLength (1 line)
+                        "#getContext(%s): marshaller created (no XSD validator)",
+                        type.getName()
+                    );
+                } else {
+                    this.addXsdValidatorToMarshaller(mrsh, type);
+                }
             }
         }
-        return this.marshallers.get(type);
+        return mrsh;
     }
 
     /**
