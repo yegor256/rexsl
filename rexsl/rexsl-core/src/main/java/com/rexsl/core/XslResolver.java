@@ -38,6 +38,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
@@ -95,6 +97,12 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     private transient HttpServletRequest request;
 
     /**
+     * Map of marshallers.
+     */
+    private final transient ConcurrentMap<Class<?>, Marshaller> marshallers =
+        new ConcurrentHashMap<Class<?>, Marshaller>();
+
+    /**
      * Set servlet context from container, to be called by JAX-RS framework
      * because of {@link Context} annotation.
      * @param ctx The context
@@ -137,25 +145,33 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     @Override
     public Marshaller getContext(@NotNull final Class<?> type) {
         Marshaller mrsh;
-        try {
-            mrsh = this.buildContext(type).createMarshaller();
-            mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            final String header = Logger.format(
-                "\n<?xml-stylesheet type='text/xsl' href='%s'?>",
-                StringEscapeUtils.escapeXml(this.stylesheet(type))
-            );
-            mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
-        } catch (javax.xml.bind.JAXBException ex) {
-            throw new IllegalStateException(ex);
-        }
-        if (this.xsdFolder == null) {
-            Logger.debug(
-                this,
-                "#getContext(%s): marshaller created (no XSD validator)",
-                type.getName()
-            );
+        if (this.marshallers.containsKey(type)) {
+            mrsh = this.marshallers.get(type);
         } else {
-            this.addXsdValidatorToMarshaller(mrsh, type);
+            try {
+                mrsh = this.buildContext(type).createMarshaller();
+                mrsh.setProperty(
+                    Marshaller.JAXB_FORMATTED_OUTPUT,
+                    Boolean.TRUE
+                );
+                final String header = Logger.format(
+                    "\n<?xml-stylesheet type='text/xsl' href='%s'?>",
+                    StringEscapeUtils.escapeXml(this.stylesheet(type))
+                );
+                mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
+                this.marshallers.put(type, mrsh);
+            } catch (javax.xml.bind.JAXBException ex) {
+                throw new IllegalStateException(ex);
+            }
+            if (this.xsdFolder == null) {
+                Logger.debug(
+                    this,
+                    "#getContext(%s): marshaller created (no XSD validator)",
+                    type.getName()
+                );
+            } else {
+                this.addXsdValidatorToMarshaller(mrsh, type);
+            }
         }
         return mrsh;
     }
@@ -172,6 +188,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                     this.context = JAXBContext.newInstance(
                         this.classes.toArray(new Class<?>[this.classes.size()])
                     );
+                    this.marshallers.clear();
                     Logger.info(
                         this,
                         // @checkstyle LineLength (1 line)
