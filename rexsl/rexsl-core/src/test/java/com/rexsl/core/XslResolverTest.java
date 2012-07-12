@@ -43,7 +43,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -69,13 +68,14 @@ public final class XslResolverTest {
     /**
      * XslResolvers can avoid duplicated creation of marshaller.
      * @throws Exception If something goes wrong
-     * @todo #3 This test is not working at the moment, but it should. We have
-     *  to confirm that Marshaller is created only once per class.
      */
-    @Ignore
     @Test
     public void avoidsDuplicatedMarshallerCreation() throws Exception {
-        // not implemented yet
+        final ContextResolver<Marshaller> resolver = new XslResolver();
+        final Marshaller mra = resolver.getContext(XslResolverTest.Page.class);
+        final Marshaller mrb = resolver.getContext(XslResolverTest.Page.class);
+        MatcherAssert.assertThat(mra, Matchers.equalTo(mrb));
+        MatcherAssert.assertThat(mra, Matchers.sameInstance(mrb));
     }
 
     /**
