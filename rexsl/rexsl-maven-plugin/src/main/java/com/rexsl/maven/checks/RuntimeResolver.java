@@ -71,14 +71,16 @@ final class RuntimeResolver implements URIResolver {
     public Source resolve(@NotNull final String href, final String base)
         throws TransformerException {
         URL url;
+        final String format = String.format(
+            "%s%s",
+            this.home,
+            StringUtils.stripStart(href, "/ ")
+        );
         try {
-            url = new URL(
-                String.format(
-                    "%s%s",
-                    this.home,
-                    StringUtils.stripStart(href, "/ ")
-                )
-            );
+            url = new URL(format);
+            if (base != null && !base.isEmpty()) {
+                url = new URL(new URL(base), format);
+            }
         } catch (java.net.MalformedURLException ex) {
             throw new TransformerException(ex);
         }
