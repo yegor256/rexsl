@@ -66,16 +66,17 @@ public final class XslResolverTest {
     }
 
     /**
-     * XslResolvers can avoid duplicated creation of marshaller.
+     * XslResolver avoids reusal of marshallers in order to keep thread safety.
      * @throws Exception If something goes wrong
      */
     @Test
-    public void avoidsDuplicatedMarshallerCreation() throws Exception {
+    public void avoidsReusalOfMarshallers() throws Exception {
         final ContextResolver<Marshaller> resolver = new XslResolver();
         final Marshaller mra = resolver.getContext(XslResolverTest.Page.class);
         final Marshaller mrb = resolver.getContext(XslResolverTest.Page.class);
-        MatcherAssert.assertThat(mra, Matchers.equalTo(mrb));
-        MatcherAssert.assertThat(mra, Matchers.sameInstance(mrb));
+        MatcherAssert.assertThat(mra, Matchers.not(Matchers.equalTo(mrb)));
+        // @checkstyle LineLength (1 line)
+        MatcherAssert.assertThat(mra, Matchers.not(Matchers.sameInstance(mrb)));
     }
 
     /**
