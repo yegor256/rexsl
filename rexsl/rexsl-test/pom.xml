@@ -228,7 +228,7 @@
         <dependency>
             <groupId>net.sourceforge.reb4j</groupId>
             <artifactId>net.sourceforge.reb4j</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.0</version>
             <type>jar</type>
         </dependency>
     </dependencies>

@@ -38,6 +38,9 @@
 
 ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
 
+  <<0.3.8 released>>! See
+  {{{https://groups.google.com/forum/?fromgroups#!topic/rexsl/qTttmac8xyM}release notes}}.
+
   <<Announcement>>:
   We need contributors (Java newbies are welcome).
   Find a defect in our source code, submit it to {{{http://trac.rexsl.com/rexsl/newticket}Trac}}, let us review it.
