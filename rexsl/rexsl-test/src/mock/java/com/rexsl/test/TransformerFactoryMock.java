@@ -45,7 +45,7 @@ import org.mockito.Mockito;
  * IllegalStateException.
  *
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
- * @version $Id: TransformerFactoryMock.java $
+ * @version $Id$
  * @checkstyle FinalParametersCheck (500 lines)
  * @checkstyle DesignForExtensionCheck (500 lines)
  * @checkstyle ParameterNameCheck (500 lines)

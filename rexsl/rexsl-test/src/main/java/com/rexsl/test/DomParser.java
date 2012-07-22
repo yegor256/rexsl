@@ -68,9 +68,6 @@ final class DomParser {
      * @param txt The XML in text
      */
     public DomParser(@NotNull final String txt) {
-        if (txt == null) {
-            throw new IllegalArgumentException("NULL instead of XML");
-        }
         if (txt.isEmpty()
             || !this.PATTERN.matcher(txt.replaceAll("\\s", "")).matches()) {
             throw new IllegalArgumentException(

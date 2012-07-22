@@ -48,7 +48,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
 /**
- * All uncaught exceptions will be catched here.
+ * All uncaught exceptions will be caught here.
  *
  * <p>Configure it in your {@code WEB-INF/web.xml} like this:
  *
