@@ -768,6 +768,7 @@
                         <optimize>true</optimize>
                         <showWarnings>true</showWarnings>
                         <showDeprecation>true</showDeprecation>
+                        <!-- @see http://jira.codehaus.org/browse/MCOMPILER-178 -->
                         <compilerArguments>
                             <Xlint/>
                             <Werror/>
