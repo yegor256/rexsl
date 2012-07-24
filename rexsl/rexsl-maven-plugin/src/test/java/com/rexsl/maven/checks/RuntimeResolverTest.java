@@ -32,7 +32,6 @@ package com.rexsl.maven.checks;
 import com.rexsl.test.ContainerMocker;
 import com.rexsl.test.RestTester;
 import com.rexsl.test.XhtmlMatchers;
-import java.net.URI;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
@@ -81,12 +80,16 @@ public final class RuntimeResolverTest {
         final ContainerMocker container = new ContainerMocker()
             .expectMethod(Matchers.equalTo(RestTester.GET))
             .expectRequestUri(Matchers.equalTo(css))
+            .returnBody("<test/>")
+            .mock();
+        final ContainerMocker reserve = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectRequestUri(Matchers.equalTo(css))
             .returnBody("<doc/>")
             .mock();
-        final URI home = container.home();
-        final RuntimeResolver resolver = new RuntimeResolver(home);
+        final RuntimeResolver resolver = new RuntimeResolver(container.home());
         MatcherAssert.assertThat(
-            resolver.resolve(css, home.toString()),
+            resolver.resolve(css, reserve.home().toString()),
             XhtmlMatchers.hasXPath("/doc")
         );
         container.stop();

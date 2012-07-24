@@ -79,7 +79,12 @@ final class RuntimeResolver implements URIResolver {
         try {
             url = new URL(format);
             if (base != null && !base.isEmpty()) {
-                url = new URL(new URL(base), format);
+                if (base.startsWith("http")
+                    || base.startsWith("https")) {
+                    url = new URL(new URL(base), href);
+                } else {
+                    url = new URL(new URL(base), format);
+                }
             }
         } catch (java.net.MalformedURLException ex) {
             throw new TransformerException(ex);
