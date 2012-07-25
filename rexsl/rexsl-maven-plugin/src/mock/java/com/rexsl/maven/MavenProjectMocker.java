@@ -29,6 +29,8 @@
  */
 package com.rexsl.maven;
 
+import java.io.File;
+import java.util.Properties;
 import org.apache.maven.project.MavenProject;
 import org.mockito.Mockito;
 
@@ -59,6 +61,26 @@ public final class MavenProjectMocker {
      */
     public MavenProjectMocker withPackaging(final String pkg) {
         Mockito.doReturn(pkg).when(this.project).getPackaging();
+        return this;
+    }
+
+    /**
+     * With this basedir.
+     * @param basedir The name
+     * @return This object
+     */
+    public MavenProjectMocker withBasedir(final File basedir) {
+        Mockito.doReturn(basedir).when(this.project).getBasedir();
+        return this;
+    }
+
+    /**
+     * With these properties.
+     * @param props The properties
+     * @return This object
+     */
+    public MavenProjectMocker withProperties(final Properties props) {
+        Mockito.doReturn(props).when(this.project).getProperties();
         return this;
     }
 

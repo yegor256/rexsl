@@ -146,9 +146,6 @@ public final class PackageMojo extends AbstractRexslMojo {
 
     /**
      * Filtering using project properties.
-     * @todo #342 Would be better to implement this filtering with custom
-     *  Reader. Current implementation loads the entire file into memory,
-     *  which may be a problem if the file is too big.
      * @todo #342 Only properties from PROPERTIES section in pom.xml are
      *  supported. I don't know how to get access to all other project props.
      */

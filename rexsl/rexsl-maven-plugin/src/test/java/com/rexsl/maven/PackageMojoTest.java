@@ -29,8 +29,13 @@
  */
 package com.rexsl.maven;
 
+import java.io.File;
+import java.util.Properties;
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -71,4 +76,65 @@ public final class PackageMojoTest {
         mojo.execute();
     }
 
+    /**
+     * PackageMojo can filter meta commands.
+     * @todo #529 Would be better to implement filtering in method under test
+     *  with custom Reader. Current implementation loads the entire file
+     *  into memory, which may be a problem if the file is too big.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void canFilterMetaCommands() throws Exception {
+        final String input = " "
+            // @checkstyle LineLength (24 lines)
+            // @checkstyle StringLiteralsConcatenationCheck (23 lines)
+            + "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\""
+            + "    xmlns:xs=\"http://www.w3.org/2001/XMLSchema\""
+            + "    xmlns=\"http://www.w3.org/1999/xhtml\""
+            + "    xmlns:xhtml=\"http://www.w3.org/1999/xhtml\""
+            + "    version=\"2.0\" exclude-result-prefixes=\"xs xsl xhtml\">"
+            + "    <xsl:output method=\"xhtml\""
+            + "        doctype-system=\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\""
+            + "        doctype-public=\"-//W3C//DTD XHTML 1.0 Strict//EN\" />"
+            + "    <xsl:template match=\"/\">"
+            + "        <html xml:lang=\"en\">"
+            + "            <head>"
+            + "                <link href=\"/css/screen.css\" rel=\"stylesheet\" type=\"text/css\"/>"
+            + "                <title>hello!</title>"
+            + "            </head>"
+            + "            <body>"
+            + "                <div id=\"content\">"
+            + "                    <xsl:call-template name=\"content\" />"
+            + "                </div>"
+            + "                <div>${project.version}</div>"
+            + "            </body>"
+            + "        </html>"
+            + "    </xsl:template>"
+            + "</xsl:stylesheet>";
+        final String version = "1.0-SNAPSHOT";
+        final Environment env = new EnvironmentMocker()
+            .withTextFile("src/main/webapp/xsl/test.xsl", input)
+            .mock();
+        final PackageMojo mojo = new PackageMojo();
+        mojo.setWebappDirectory(env.webdir().getAbsolutePath());
+        final Properties props = new Properties();
+        props.put("project.version", version);
+        final MavenProject project = new MavenProjectMocker()
+            .withBasedir(env.basedir())
+            .withProperties(props)
+            .mock();
+        final Log log = Mockito.mock(Log.class);
+        mojo.setLog(log);
+        mojo.setProject(project);
+        mojo.execute();
+        final File output = new File(
+            project.getBasedir(),
+            "target/webdir/xsl/test.xsl"
+        );
+        final String actual = FileUtils.readFileToString(output);
+        MatcherAssert.assertThat(
+            actual.contains(version),
+            Matchers.equalTo(true)
+        );
+    }
 }
