@@ -30,8 +30,10 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.test.ContainerMocker;
+import com.rexsl.test.RestTester;
 import com.rexsl.test.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -64,6 +66,31 @@ public final class RuntimeResolverTest {
         MatcherAssert.assertThat(
             resolver.resolve("/", ""),
             XhtmlMatchers.hasXPath("/doc/test")
+        );
+        container.stop();
+    }
+
+    /**
+     * RuntimeResolver can resolve source by URL with base.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void resolvesSourceByUrlWithBase() throws Exception {
+        final String css = "/css/test.css";
+        final ContainerMocker container = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectRequestUri(Matchers.equalTo(css))
+            .returnBody("<test/>")
+            .mock();
+        final ContainerMocker reserve = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectRequestUri(Matchers.equalTo(css))
+            .returnBody("<doc/>")
+            .mock();
+        final RuntimeResolver resolver = new RuntimeResolver(container.home());
+        MatcherAssert.assertThat(
+            resolver.resolve(css, reserve.home().toString()),
+            XhtmlMatchers.hasXPath("/doc")
         );
         container.stop();
     }
