@@ -528,6 +528,7 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>copy-child-resources</id>
                         <phase>pre-integration-test</phase>
                         <configuration>
                             <target>
@@ -570,6 +571,7 @@
                         <version since="26 Oct 2011">1.6</version>
                         <executions>
                             <execution>
+                                <id>download-csslint</id>
                                 <phase>generate-sources</phase>
                                 <configuration>
                                     <target>

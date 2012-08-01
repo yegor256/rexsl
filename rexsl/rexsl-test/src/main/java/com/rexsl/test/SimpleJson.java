@@ -88,7 +88,7 @@ public final class SimpleJson implements JsonDocument {
             if (doc.isMissingNode() || doc.size() > 0) {
                 continue;
             }
-            result.add(this.unquote(doc.getTextValue()));
+            result.add(SimpleJson.unquote(doc.getTextValue()));
         }
         return result;
     }
