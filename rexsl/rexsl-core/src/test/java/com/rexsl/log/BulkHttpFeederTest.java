@@ -225,6 +225,7 @@ public final class BulkHttpFeederTest {
          * {@inheritDoc}
          */
         @Override
+        @SuppressWarnings("rawtypes")
         public final void service(final GrizzlyRequest request,
             final GrizzlyResponse response) {
             try {

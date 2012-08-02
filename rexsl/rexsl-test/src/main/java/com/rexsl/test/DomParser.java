@@ -68,8 +68,10 @@ final class DomParser {
      * @param txt The XML in text
      */
     public DomParser(@NotNull final String txt) {
-        if (txt.isEmpty()
-            || !this.PATTERN.matcher(txt.replaceAll("\\s", "")).matches()) {
+        if (txt.isEmpty()) {
+            throw new IllegalArgumentException("Empty document, not an XML");
+        }
+        if (!DomParser.PATTERN.matcher(txt.replaceAll("\\s", "")).matches()) {
             throw new IllegalArgumentException(
                 Logger.format("Doesn't look like XML: '%s'", txt)
             );
