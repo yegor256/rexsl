@@ -44,6 +44,7 @@ import org.mockito.Mockito;
  * Test case for {@link JerseyTestResponse}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class JerseyTestResponseTest {
@@ -332,7 +333,10 @@ public final class JerseyTestResponseTest {
     public void transfersCookiesOnFollow() throws Exception {
         final ContainerMocker container = new ContainerMocker()
             .expectMethod(Matchers.equalTo(RestTester.GET))
-            .expectHeader(HttpHeaders.COOKIE, Matchers.equalTo("alpha=boom"))
+            .expectHeader(
+                HttpHeaders.COOKIE,
+                Matchers.containsString("alpha=boom")
+            )
             .mock();
         final ClientResponse resp = new ClientResponseMocker()
             .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom; path=/")

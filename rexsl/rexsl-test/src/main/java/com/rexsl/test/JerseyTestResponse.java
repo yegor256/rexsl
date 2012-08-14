@@ -39,6 +39,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.namespace.NamespaceContext;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -454,9 +455,18 @@ final class JerseyTestResponse implements TestResponse {
     /**
      * Follow the URI provided.
      * @param uri The URI to follow
+     * @return New client
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private TestClient follow(final URI uri) {
-        return RestTester.start(uri);
+        final TestClient client = RestTester.start(uri);
+        for (NewCookie cookie : this.response().getCookies()) {
+            client.header(
+                HttpHeaders.COOKIE,
+                new Cookie(cookie.getName(), cookie.getValue()).toString()
+            );
+        }
+        return client;
     }
 
 }
