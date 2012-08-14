@@ -389,6 +389,11 @@ public final class Manifests {
         for (URI uri : Manifests.uris()) {
             try {
                 attrs.putAll(Manifests.loadOneFile(uri.toURL()));
+                Logger.info(
+                    Manifests.class,
+                    "#load(): '%s' done",
+                    uri
+                );
             } catch (IOException ex) {
                 Manifests.failures.put(uri, ex.getMessage());
                 Logger.error(
