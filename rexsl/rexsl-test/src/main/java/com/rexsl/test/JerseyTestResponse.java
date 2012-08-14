@@ -32,12 +32,14 @@ package com.rexsl.test;
 import com.jcabi.log.Logger;
 import com.sun.jersey.api.client.ClientResponse;
 import java.net.HttpCookie;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.namespace.NamespaceContext;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -135,7 +137,7 @@ final class JerseyTestResponse implements TestResponse {
             links,
             Matchers.hasSize(1)
         );
-        return RestTester.start(UriBuilder.fromUri(links.get(0)).build());
+        return this.follow(UriBuilder.fromUri(links.get(0)).build());
     }
 
     /**
@@ -143,7 +145,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestClient follow() {
-        return RestTester.start(this.response().getLocation());
+        return this.follow(this.response().getLocation());
     }
 
     /**
@@ -448,6 +450,23 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public List<JsonDocument> nodesJson(@NotNull final String query) {
         return Collections.unmodifiableList(this.getJson().nodesJson(query));
+    }
+
+    /**
+     * Follow the URI provided.
+     * @param uri The URI to follow
+     * @return New client
+     */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    private TestClient follow(final URI uri) {
+        final TestClient client = RestTester.start(uri);
+        for (NewCookie cookie : this.response().getCookies()) {
+            client.header(
+                HttpHeaders.COOKIE,
+                new Cookie(cookie.getName(), cookie.getValue()).toString()
+            );
+        }
+        return client;
     }
 
 }

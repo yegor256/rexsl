@@ -44,6 +44,7 @@ import org.mockito.Mockito;
  * Test case for {@link JerseyTestResponse}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class JerseyTestResponseTest {
@@ -322,6 +323,30 @@ public final class JerseyTestResponseTest {
                 Matchers.hasProperty("path", Matchers.equalTo("/"))
             )
         );
+    }
+
+    /**
+     * TestResponse can transfer cookies.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void transfersCookiesOnFollow() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectHeader(
+                HttpHeaders.COOKIE,
+                Matchers.containsString("alpha=boom")
+            )
+            .mock();
+        final ClientResponse resp = new ClientResponseMocker()
+            .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom; path=/")
+            .withHeader(HttpHeaders.LOCATION, container.home().toString())
+            .mock();
+        final TestResponse response =
+            new JerseyTestResponse(this.fetcher(resp), this.decor);
+        response.follow()
+            .get("GET with cookies")
+            .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
     /**

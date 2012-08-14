@@ -32,9 +32,16 @@ package com.rexsl.test;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.NewCookie;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * Mocker of {@link ClientResponse}.
@@ -59,6 +66,30 @@ public final class ClientResponseMocker {
      * Public ctor.
      */
     public ClientResponseMocker() {
+        Mockito.doAnswer(
+            new Answer<URI>() {
+                public URI answer(final InvocationOnMock invocation) {
+                    return URI.create(
+                        ClientResponseMocker.this.headers
+                            .getFirst(HttpHeaders.LOCATION)
+                    );
+                }
+            }
+        ).when(this.response).getLocation();
+        Mockito.doAnswer(
+            new Answer<List<NewCookie>>() {
+                public List<NewCookie> answer(
+                    final InvocationOnMock invocation) {
+                    final List<NewCookie> cookies = new LinkedList<NewCookie>();
+                    for (String txt
+                        : ClientResponseMocker.this.headers
+                        .get(HttpHeaders.SET_COOKIE)) {
+                        cookies.add(NewCookie.valueOf(txt));
+                    }
+                    return cookies;
+                }
+            }
+        ).when(this.response).getCookies();
         Mockito.doReturn(this.headers).when(this.response).getHeaders();
         this.withStatus(HttpURLConnection.HTTP_OK);
         this.withEntity("");
