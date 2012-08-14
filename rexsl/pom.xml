@@ -740,6 +740,14 @@
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version since="2 Dec 2010">2.1</version>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <ReXSL-Version>${project.version}</ReXSL-Version>
+                                <ReXSL-Build>${build.number}</ReXSL-Build>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
@@ -808,6 +816,29 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <!--
+                This plugin will collect current build number
+                from Subversion and save it into Maven property "build.number".
+                -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version since="5 Aug 2012">1.1</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                        <configuration>
+                            <buildNumberPropertyName>build.number</buildNumberPropertyName>
+                            <doCheck>false</doCheck>
+                            <doUpdate>false</doUpdate>
+                            <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>com.texry</groupId>
                 <artifactId>texry-maven-plugin</artifactId>

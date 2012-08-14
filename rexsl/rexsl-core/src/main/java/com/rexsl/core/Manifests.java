@@ -467,7 +467,7 @@ public final class Manifests {
                 final String value = attrs.getValue((Name) key);
                 props.put(key.toString(), value);
             }
-            Logger.trace(
+            Logger.debug(
                 Manifests.class,
                 "#loadOneFile('%s'): %d attributes loaded (%[list]s)",
                 url, props.size(), new TreeSet<String>(props.keySet())
