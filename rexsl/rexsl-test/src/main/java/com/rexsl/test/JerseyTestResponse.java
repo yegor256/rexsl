@@ -32,6 +32,7 @@ package com.rexsl.test;
 import com.jcabi.log.Logger;
 import com.sun.jersey.api.client.ClientResponse;
 import java.net.HttpCookie;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import javax.validation.constraints.NotNull;
@@ -135,7 +136,7 @@ final class JerseyTestResponse implements TestResponse {
             links,
             Matchers.hasSize(1)
         );
-        return RestTester.start(UriBuilder.fromUri(links.get(0)).build());
+        return this.follow(UriBuilder.fromUri(links.get(0)).build());
     }
 
     /**
@@ -143,7 +144,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestClient follow() {
-        return RestTester.start(this.response().getLocation());
+        return this.follow(this.response().getLocation());
     }
 
     /**
@@ -448,6 +449,14 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public List<JsonDocument> nodesJson(@NotNull final String query) {
         return Collections.unmodifiableList(this.getJson().nodesJson(query));
+    }
+
+    /**
+     * Follow the URI provided.
+     * @param uri The URI to follow
+     */
+    private TestClient follow(final URI uri) {
+        return RestTester.start(uri);
     }
 
 }
