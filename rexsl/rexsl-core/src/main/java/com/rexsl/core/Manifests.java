@@ -389,11 +389,6 @@ public final class Manifests {
         for (URI uri : Manifests.uris()) {
             try {
                 attrs.putAll(Manifests.loadOneFile(uri.toURL()));
-                Logger.info(
-                    Manifests.class,
-                    "#load(): '%s' done",
-                    uri
-                );
             } catch (IOException ex) {
                 Manifests.failures.put(uri, ex.getMessage());
                 Logger.error(
@@ -472,7 +467,7 @@ public final class Manifests {
                 final String value = attrs.getValue((Name) key);
                 props.put(key.toString(), value);
             }
-            Logger.trace(
+            Logger.debug(
                 Manifests.class,
                 "#loadOneFile('%s'): %d attributes loaded (%[list]s)",
                 url, props.size(), new TreeSet<String>(props.keySet())
