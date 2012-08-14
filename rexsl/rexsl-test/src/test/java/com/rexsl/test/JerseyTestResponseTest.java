@@ -325,6 +325,27 @@ public final class JerseyTestResponseTest {
     }
 
     /**
+     * TestResponse can transfer cookies.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void transfersCookiesOnFollow() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectHeader(HttpHeaders.COOKIE, Matchers.equalTo("alpha=boom"))
+            .mock();
+        final ClientResponse resp = new ClientResponseMocker()
+            .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom; path=/")
+            .withHeader(HttpHeaders.LOCATION, container.home().toString())
+            .mock();
+        final TestResponse response =
+            new JerseyTestResponse(this.fetcher(resp), this.decor);
+        response.follow()
+            .get("GET with cookies")
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
      * Create fetcher with response on board.
      * @param resp The response to return
      * @return The fetcher

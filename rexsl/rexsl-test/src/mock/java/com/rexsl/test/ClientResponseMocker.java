@@ -32,9 +32,13 @@ package com.rexsl.test;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.util.ArrayList;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * Mocker of {@link ClientResponse}.
@@ -59,6 +63,16 @@ public final class ClientResponseMocker {
      * Public ctor.
      */
     public ClientResponseMocker() {
+        Mockito.doAnswer(
+            new Answer<Object>() {
+                public URI answer(final InvocationOnMock invocation) {
+                    return URI.create(
+                        ClientResponseMocker.this.headers
+                            .getFirst(HttpHeaders.LOCATION)
+                    );
+                }
+            }
+        ).when(this.response).getLocation();
         Mockito.doReturn(this.headers).when(this.response).getHeaders();
         this.withStatus(HttpURLConnection.HTTP_OK);
         this.withEntity("");
