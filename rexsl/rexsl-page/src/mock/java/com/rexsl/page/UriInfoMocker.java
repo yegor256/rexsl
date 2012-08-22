@@ -50,8 +50,11 @@ public final class UriInfoMocker {
      * Public ctor.
      */
     public UriInfoMocker() {
+        this.withBaseUri(
+            UriBuilder.fromUri("http://localhost:99/").build()
+        );
         this.withRequestUri(
-            UriBuilder.fromUri("http://localhost:99/local").build()
+            UriBuilder.fromUri("http://localhost:99/local/foo").build()
         );
     }
 
@@ -63,12 +66,21 @@ public final class UriInfoMocker {
     public UriInfoMocker withRequestUri(final URI uri) {
         Mockito.doReturn(uri).when(this.info).getRequestUri();
         Mockito.doReturn(UriBuilder.fromUri(uri))
-            .when(this.info).getBaseUriBuilder();
-        Mockito.doReturn(UriBuilder.fromUri(uri))
             .when(this.info).getRequestUriBuilder();
         Mockito.doReturn(UriBuilder.fromUri(uri))
             .when(this.info).getAbsolutePathBuilder();
         Mockito.doReturn(uri).when(this.info).getAbsolutePath();
+        return this;
+    }
+
+    /**
+     * With this base URI.
+     * @param uri The URI
+     * @return This object
+     */
+    public UriInfoMocker withBaseUri(final URI uri) {
+        Mockito.doReturn(UriBuilder.fromUri(uri))
+            .when(this.info).getBaseUriBuilder();
         Mockito.doReturn(uri).when(this.info).getBaseUri();
         return this;
     }
