@@ -29,6 +29,11 @@
  */
 package com.rexsl.test;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -84,6 +89,16 @@ import javax.validation.constraints.NotNull;
  * @since 0.3.4
  */
 public interface AssertionPolicy {
+
+    /**
+     * Annotates a policy that should not produce a full exception trace
+     * in log if it fails.
+     */
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface Quiet {
+    }
 
     /**
      * Make an assertion and return nothing or throw {@link AssertionError}

@@ -305,12 +305,21 @@ final class JerseyTestResponse implements TestResponse {
                             Logger.format("failed after %d attempt(s)", attempt)
                         );
                     }
-                    Logger.warn(
-                        this,
-                        // @checkstyle LineLength (1 line)
-                        "#assertThat(%[type]s): attempt #%d failed, re-trying: %[exception]s",
-                        assertion, attempt, ex
-                    );
+                    if (assertion.getClass()
+                        .getAnnotation(AssertionPolicy.Quiet.class) == null) {
+                        Logger.warn(
+                            this,
+                            // @checkstyle LineLength (1 line)
+                            "#assertThat(%[type]s): attempt #%d failed, re-trying: %[exception]s",
+                            assertion, attempt, ex
+                        );
+                    } else {
+                        Logger.warn(
+                            this,
+                            "#assertThat(%[type]s): attempt #%d: %s",
+                            assertion, attempt, ex.getMessage()
+                        );
+                    }
                     this.iresponse = null;
                     this.body = null;
                     this.xml = null;
