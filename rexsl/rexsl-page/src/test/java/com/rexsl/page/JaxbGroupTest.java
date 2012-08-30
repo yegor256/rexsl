@@ -31,6 +31,7 @@ package com.rexsl.page;
 
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
+import java.util.ArrayList;
 import java.util.Arrays;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -57,11 +58,24 @@ public final class JaxbGroupTest {
         );
         MatcherAssert.assertThat(
             JaxbConverter.the(group),
-            Matchers.allOf(
-                XhtmlMatchers.hasXPath("/group[count(dummy) = 2]"),
-                XhtmlMatchers.hasXPath("/group/dummy[text='e1']"),
-                XhtmlMatchers.hasXPath("/group/dummy[text='e2']")
+            XhtmlMatchers.hasXPaths(
+                "/group[count(dummy) = 2]",
+                "/group/dummy[text='e1']",
+                "/group/dummy[text='e2']"
             )
+        );
+    }
+
+    /**
+     * JaxbGroup can be converted to XML text, when empty.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void convertsItselfToXmlWhenEmpty() throws Exception {
+        final Object group = JaxbGroup.build(new ArrayList<Long>(), "group-2");
+        MatcherAssert.assertThat(
+            JaxbConverter.the(group),
+            XhtmlMatchers.hasXPath("/group-2[count(*) = 0]")
         );
     }
 
