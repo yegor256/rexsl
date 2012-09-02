@@ -218,7 +218,10 @@ public final class RestTesterTest {
             .start(container.home())
             .get("asserts HTTP headers")
             .assertStatus(HttpURLConnection.HTTP_OK)
-            .assertHeader("absent-for-sure", Matchers.<String>emptyIterable())
+            .assertHeader(
+                "absent-for-sure",
+                Matchers.emptyIterableOf(String.class)
+            )
             .assertHeader(
                 HttpHeaders.CONTENT_TYPE,
                 Matchers.<String>everyItem(
