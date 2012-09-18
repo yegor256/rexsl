@@ -203,16 +203,7 @@ public final class MavenEnvironment implements Environment {
         Logger.debug(this, "Full tree of artifacts in classpath:");
         for (RootArtifact root : this.roots(tonly)) {
             Logger.debug(this, "  %s", root);
-            Collection<Artifact> deps;
-            try {
-                deps = aether.resolve(root.artifact(), JavaScopes.RUNTIME);
-            } catch (DependencyResolutionException ex) {
-                throw new IllegalStateException(
-                    String.format("Failed to resolve '%s'", root.artifact()),
-                    ex
-                );
-            }
-            for (Artifact dep : deps) {
+            for (Artifact dep : this.deps(aether, root)) {
                 boolean found = false;
                 for (Artifact exists : artifacts) {
                     if (dep.getArtifactId().equals(exists.getArtifactId())
@@ -293,6 +284,27 @@ public final class MavenEnvironment implements Environment {
             );
         }
         return roots;
+    }
+
+    /**
+     * Get all deps of a root artifact.
+     * @param aether The aether to use
+     * @param root The root
+     * @return The list of artifacts
+     * @see #artifacts(boolean)
+     */
+    private Collection<Artifact> deps(final Aether aether,
+        final RootArtifact root) {
+        Collection<Artifact> deps;
+        try {
+            deps = aether.resolve(root.artifact(), JavaScopes.RUNTIME);
+        } catch (DependencyResolutionException ex) {
+            throw new IllegalStateException(
+                String.format("Failed to resolve '%s'", root),
+                ex
+            );
+        }
+        return deps;
     }
 
 }
