@@ -32,6 +32,7 @@ package com.rexsl.maven;
 import com.jcabi.aether.Aether;
 import com.jcabi.log.Logger;
 import java.io.File;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -39,6 +40,7 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.sonatype.aether.artifact.Artifact;
+import org.sonatype.aether.resolution.DependencyResolutionException;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 import org.sonatype.aether.util.artifact.JavaScopes;
 
@@ -201,8 +203,7 @@ public final class MavenEnvironment implements Environment {
         Logger.debug(this, "Full tree of artifacts in classpath:");
         for (RootArtifact root : this.roots(tonly)) {
             Logger.debug(this, "  %s", root);
-            for (Artifact dep
-                : aether.resolve(root.artifact(), JavaScopes.RUNTIME)) {
+            for (Artifact dep : this.deps(aether, root)) {
                 boolean found = false;
                 for (Artifact exists : artifacts) {
                     if (dep.getArtifactId().equals(exists.getArtifactId())
@@ -283,6 +284,27 @@ public final class MavenEnvironment implements Environment {
             );
         }
         return roots;
+    }
+
+    /**
+     * Get all deps of a root artifact.
+     * @param aether The aether to use
+     * @param root The root
+     * @return The list of artifacts
+     * @see #artifacts(boolean)
+     */
+    private Collection<Artifact> deps(final Aether aether,
+        final RootArtifact root) {
+        Collection<Artifact> deps;
+        try {
+            deps = aether.resolve(root.artifact(), JavaScopes.RUNTIME);
+        } catch (DependencyResolutionException ex) {
+            throw new IllegalStateException(
+                String.format("Failed to resolve '%s'", root),
+                ex
+            );
+        }
+        return deps;
     }
 
 }
