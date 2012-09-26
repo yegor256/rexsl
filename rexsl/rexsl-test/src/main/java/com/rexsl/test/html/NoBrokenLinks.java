@@ -91,6 +91,7 @@ public final class NoBrokenLinks implements AssertionPolicy {
             }
         }
         MatcherAssert.assertThat(
+            String.format("%d broken links found", errors),
             errors,
             Matchers.equalTo(0)
         );
@@ -113,12 +114,14 @@ public final class NoBrokenLinks implements AssertionPolicy {
         boolean valid;
         try {
             RestTester.start(uri)
-                .get("checking page existence")
-                .assertStatus(HttpURLConnection.HTTP_OK);
+                .get("checking URI existence")
+                .assertStatus(
+                    Matchers.lessThan(HttpURLConnection.HTTP_BAD_REQUEST)
+                );
             valid = true;
         } catch (AssertionError ex) {
             valid = false;
-            Logger.debug(
+            Logger.warn(
                 NoBrokenLinks.class,
                 "#isValid('%s'): not valid: %s",
                 uri,
