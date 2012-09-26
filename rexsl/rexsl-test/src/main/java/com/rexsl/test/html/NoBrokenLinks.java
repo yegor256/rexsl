@@ -92,7 +92,7 @@ public final class NoBrokenLinks implements AssertionPolicy {
             }
         }
         MatcherAssert.assertThat(
-            String.format(
+            Logger.format(
                 "%d broken links found: %[list]s",
                 broken.size(),
                 broken
