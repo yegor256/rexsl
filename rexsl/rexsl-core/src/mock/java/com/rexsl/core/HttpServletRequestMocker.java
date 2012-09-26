@@ -88,6 +88,7 @@ public final class HttpServletRequestMocker {
         ).when(this.request).getHeaderNames();
         this.withMethod("GET");
         this.withRequestUri("/");
+        this.withBody("");
     }
 
     /**

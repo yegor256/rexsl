@@ -221,6 +221,7 @@ public final class ExceptionTrap extends HttpServlet {
         this.append(text, request, "exception_type");
         this.append(text, request, "request_uri");
         final ServletContext ctx = this.getServletContext();
+        text.append(ExceptionTrap.content(request));
         text.append(
             Logger.format(
                 "servlet context path: \"%s\"\n",
@@ -255,7 +256,7 @@ public final class ExceptionTrap extends HttpServlet {
         );
         text.append("headers:\n")
             .append(ExceptionTrap.headers(request))
-            .append(" \n");
+            .append('\n');
         text.append(
             Logger.format(
                 "exception: %[exception]s\n",
@@ -283,7 +284,7 @@ public final class ExceptionTrap extends HttpServlet {
             // @checkstyle MultipleStringLiterals (1 line)
             .append(": ")
             .append(attr.toString())
-            .append("\n");
+            .append('\n');
     }
 
     /**
@@ -332,8 +333,31 @@ public final class ExceptionTrap extends HttpServlet {
                 .append(header)
                 .append(": ")
                 .append(request.getHeader(header));
-            text.append("  \n");
+            text.append('\n');
         }
+        return text.toString();
+    }
+
+    /**
+     * Get content line from the request.
+     * @param request The HTTP request
+     * @return Line with content
+     */
+    private static String content(final HttpServletRequest request) {
+        final StringBuilder text = new StringBuilder();
+        text.append(
+            Logger.format(
+                "request (%s, %d bytes): ",
+                request.getContentType(),
+                request.getContentLength()
+            )
+        );
+        try {
+            text.append(IOUtils.toString(request.getReader()));
+        } catch (java.io.IOException ex) {
+            text.append(Logger.format("%[exception]s", ex));
+        }
+        text.append('\n');
         return text.toString();
     }
 
