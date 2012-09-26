@@ -31,7 +31,9 @@ package com.rexsl.test.html;
 
 import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
+import com.rexsl.test.RestTester;
 import com.rexsl.test.TestResponse;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Collection;
 import org.hamcrest.MatcherAssert;
@@ -67,7 +69,8 @@ public final class NoBrokenLinks implements AssertionPolicy {
     @Override
     public void assertThat(final TestResponse response) {
         final Collection<String> links = response.xpath(
-            "//head/link/@href | //body//a/@href | //body//img/@src"
+            // @checkstyle LineLength (1 line)
+            "//head/link/@href | //body//a/@href | //body//img/@src | //xhtml:img/@src | //xhtml:a/@href | //xhtml:link/@href"
         );
         Logger.debug(
             this,
@@ -77,7 +80,15 @@ public final class NoBrokenLinks implements AssertionPolicy {
         );
         int errors = 0;
         for (String link : links) {
-            // todo
+            URI uri;
+            if (link.charAt(0) == '/') {
+                uri = this.home.resolve(link);
+            } else {
+                uri = URI.create(link);
+            }
+            if (!NoBrokenLinks.isValid(uri)) {
+                ++errors;
+            }
         }
         MatcherAssert.assertThat(
             errors,
@@ -91,6 +102,30 @@ public final class NoBrokenLinks implements AssertionPolicy {
     @Override
     public boolean isRetryNeeded(final int attempt) {
         return false;
+    }
+
+    /**
+     * Check whether the URI is valid and returns code 200.
+     * @param uri The URI to check
+     * @return TRUE if it's valid
+     */
+    private static boolean isValid(final URI uri) {
+        boolean valid;
+        try {
+            RestTester.start(uri)
+                .get("checking page existence")
+                .assertStatus(HttpURLConnection.HTTP_OK);
+            valid = true;
+        } catch (AssertionError ex) {
+            valid = false;
+            Logger.debug(
+                NoBrokenLinks.class,
+                "#isValid('%s'): not valid: %s",
+                uri,
+                ex.getMessage()
+            );
+        }
+        return valid;
     }
 
 }

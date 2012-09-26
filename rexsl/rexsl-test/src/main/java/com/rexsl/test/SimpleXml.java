@@ -271,7 +271,7 @@ public final class SimpleXml implements XmlDocument {
 
     /**
      * Retrieve and return a nodelist for XPath query.
-     * 
+     *
      * <p>An {@link IllegalArgumentException} is thrown if the parameter
      * passed is not a valid XPath expression.
      *

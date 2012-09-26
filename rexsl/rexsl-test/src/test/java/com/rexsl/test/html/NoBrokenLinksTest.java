@@ -33,8 +33,6 @@ import com.rexsl.test.SimpleXml;
 import com.rexsl.test.TestResponse;
 import java.net.URI;
 import java.util.List;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
