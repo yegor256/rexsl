@@ -36,6 +36,7 @@ import com.rexsl.test.TestResponse;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Collection;
+import java.util.LinkedList;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 
@@ -78,7 +79,7 @@ public final class NoBrokenLinks implements AssertionPolicy {
             links.size(),
             links
         );
-        int errors = 0;
+        final Collection<URI> broken = new LinkedList<URI>();
         for (String link : links) {
             URI uri;
             if (link.charAt(0) == '/') {
@@ -87,13 +88,17 @@ public final class NoBrokenLinks implements AssertionPolicy {
                 uri = URI.create(link);
             }
             if (!NoBrokenLinks.isValid(uri)) {
-                ++errors;
+                broken.add(uri);
             }
         }
         MatcherAssert.assertThat(
-            String.format("%d broken links found", errors),
-            errors,
-            Matchers.equalTo(0)
+            String.format(
+                "%d broken links found: %[list]s",
+                broken.size(),
+                broken
+            ),
+            broken,
+            Matchers.empty()
         );
     }
 
