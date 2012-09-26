@@ -123,6 +123,10 @@ public final class JerseyTestResponseTest {
             response.xpath("//foo:b/text()").get(0),
             Matchers.equalTo("yes!")
         );
+        MatcherAssert.assertThat(
+            response.nodes("/foo:a/foo:b"),
+            Matchers.not(Matchers.empty())
+        );
     }
 
     /**
@@ -347,6 +351,39 @@ public final class JerseyTestResponseTest {
         response.follow()
             .get("GET with cookies")
             .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * TestResponse can preserve XML configuration.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void preservesXmlConfiguration() throws Exception {
+        final ClientResponse resp = new ClientResponseMocker()
+            .withEntity("<r xmlns='NS-1' />")
+            .mock();
+        new JerseyTestResponse(this.fetcher(resp), this.decor)
+            .registerNs("ns1", "NS-1")
+            .assertThat(
+                new AssertionPolicy() {
+                    private transient boolean first = true;
+                    @Override
+                    public void assertThat(final TestResponse response) {
+                        if (this.first) {
+                            this.first = false;
+                            throw new AssertionError();
+                        }
+                        MatcherAssert.assertThat(
+                            response.nodes("/ns1:r"),
+                            Matchers.not(Matchers.empty())
+                        );
+                    }
+                    @Override
+                    public boolean isRetryNeeded(final int attempt) {
+                        return true;
+                    }
+                }
+            );
     }
 
     /**
