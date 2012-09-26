@@ -289,7 +289,10 @@ public final class SimpleXml implements XmlDocument {
                 XPathConstants.NODESET
             );
         } catch (javax.xml.xpath.XPathExpressionException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IllegalArgumentException(
+                String.format("invalid XPath query '%s'", query),
+                ex
+            );
         }
         return nodes;
     }
