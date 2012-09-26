@@ -29,10 +29,16 @@
  */
 package com.rexsl.test.html;
 
-import com.rexsl.test.TestResponseMocker;
+import com.rexsl.test.SimpleXml;
+import com.rexsl.test.TestResponse;
+import java.net.URI;
+import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * Test case for {@link NoBrokenLinks}.
@@ -47,11 +53,26 @@ public final class NoBrokenLinksTest {
      */
     @Test(expected = AssertionError.class)
     public void findsBrokenLinksInHtml() throws Exception {
-        new NoBrokenLinks().assertThat(
-            new TestResponseMocker().withBody(
+        new NoBrokenLinks(new URI("http://www.google.com/")).assertThat(
+            NoBrokenLinksTest.response(
                 // @checkstyle LineLength (1 line)
-                "<html><head><link rel='stylesheet' href='http://www.rexsl.com/broken-link'></head></html>"
-            ).mock()
+                "<html><head><link rel='stylesheet' href='http://www.rexsl.com/broken-link'/></head></html>"
+            )
+        );
+    }
+
+    /**
+     * NoBrokenLinks can find broken links in HTML, with XML namespace.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void findsBrokenLinksInHtmlWithNamespace() throws Exception {
+        final URI home = new URI("http://www.rexsl.com/rexsl-test");
+        new NoBrokenLinks(home).assertThat(
+            NoBrokenLinksTest.response(
+                // @checkstyle LineLength (1 line)
+                "<html xmlns='http://www.w3.org/1999/xhtml'><head><link rel='stylesheet' href='/broken-link'/></head></html>"
+            )
         );
     }
 
@@ -61,11 +82,41 @@ public final class NoBrokenLinksTest {
      */
     @Test
     public void passesWithoutBrokenLinks() throws Exception {
-        new NoBrokenLinks().assertThat(
-            new TestResponseMocker().withBody(
-                "<html><body><a href='http://www.rexsl.com'></body></html>"
-            ).mock()
+        new NoBrokenLinks(new URI("http://www.rexsl.com/")).assertThat(
+            NoBrokenLinksTest.response(
+                // @checkstyle LineLength (1 line)
+                "<html xmlns='http://www.w3.org/1999/xhtml'><body><a href='/index.html'/></body></html>"
+            )
         );
+    }
+
+    /**
+     * NoBrokenLinks can throw for a broken HTML.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsWhenHtmlIsBroken() throws Exception {
+        new NoBrokenLinks(new URI("#")).assertThat(
+            NoBrokenLinksTest.response("not HTML at all")
+        );
+    }
+
+    /**
+     * Make test response with this body on board.
+     * @param body HTTP response body
+     * @return The response, mock
+     */
+    private static TestResponse response(final String body) {
+        final TestResponse response = Mockito.mock(TestResponse.class);
+        Mockito.doAnswer(
+            new Answer<List<String>>() {
+                public List<String> answer(final InvocationOnMock inv) {
+                    final String xpath = inv.getArguments()[0].toString();
+                    return new SimpleXml(body).xpath(xpath);
+                }
+            }
+        ).when(response).xpath(Mockito.anyString());
+        return response;
     }
 
 }

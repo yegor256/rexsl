@@ -65,6 +65,7 @@ final class DomParser {
      * passed is not in XML format. It doesn't perform a strict validation
      * and is not guaranteed that an exception will be thrown whenever
      * the parameter is not XML.
+     *
      * @param txt The XML in text
      */
     public DomParser(@NotNull final String txt) {

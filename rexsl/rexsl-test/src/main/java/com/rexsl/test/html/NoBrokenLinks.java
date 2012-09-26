@@ -29,8 +29,10 @@
  */
 package com.rexsl.test.html;
 
+import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
+import java.net.URI;
 import java.util.Collection;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -47,12 +49,31 @@ import org.hamcrest.Matchers;
 public final class NoBrokenLinks implements AssertionPolicy {
 
     /**
+     * Home page.
+     */
+    private final transient URI home;
+
+    /**
+     * Public ctor.
+     * @param uri Home page URI, for relative links
+     */
+    public NoBrokenLinks(final URI uri) {
+        this.home = uri;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void assertThat(final TestResponse response) {
         final Collection<String> links = response.xpath(
             "//head/link/@href | //body//a/@href | //body//img/@src"
+        );
+        Logger.debug(
+            this,
+            "#assertThat(): %d links found: %[list]s",
+            links.size(),
+            links
         );
         int errors = 0;
         for (String link : links) {

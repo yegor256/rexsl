@@ -78,6 +78,9 @@ public interface XmlDocument {
      * <p>The {@link List} returned will throw {@link IndexOutOfBoundsException}
      * if you try to access a node which wasn't found by this XPath query.
      *
+     * <p>An {@link IllegalArgumentException} is thrown if the parameter
+     * passed is not a valid XPath expression.
+     *
      * @param query The XPath query
      * @return The list of string values (texts)
      */
@@ -88,6 +91,9 @@ public interface XmlDocument {
      *
      * <p>The {@link List} returned will throw {@link IndexOutOfBoundsException}
      * if you try to access a node which wasn't found by this XPath query.
+     *
+     * <p>An {@link IllegalArgumentException} is thrown if the parameter
+     * passed is not a valid XPath expression.
      *
      * @param query The XPath query
      * @return Collection of DOM nodes
