@@ -93,6 +93,9 @@ public final class SimpleXml implements XmlDocument {
      * <p>In future versions we will add more namespaces (submit a ticket if
      * you need more of them defined here).
      *
+     * <p>An {@link IllegalArgumentException} is thrown if the parameter
+     * passed is not in XML format.
+     *
      * @param text Body
      */
     public SimpleXml(@NotNull final String text) {
@@ -109,6 +112,9 @@ public final class SimpleXml implements XmlDocument {
      * {@link javax.xml.namespace.NamespaceContext}, which already defines a
      * number of namespaces, see {@link SimpleXml#SimpleXml(String)}.
      *
+     * <p>An {@link IllegalArgumentException} is thrown if the parameter
+     * passed is not in XML format.
+     *
      * @param source DOM source
      */
     public SimpleXml(@NotNull final Source source) {
@@ -121,6 +127,9 @@ public final class SimpleXml implements XmlDocument {
      * <p>The object is created with a default implementation of
      * {@link javax.xml.namespace.NamespaceContext}, which already defines a
      * number of namespaces, see {@link SimpleXml#SimpleXml(String)}.
+     *
+     * <p>An {@link IllegalArgumentException} is thrown if the parameter
+     * passed is not in XML format.
      *
      * @param file XML file
      * @throws IOException In case of I/O problem
@@ -136,6 +145,9 @@ public final class SimpleXml implements XmlDocument {
      * {@link javax.xml.namespace.NamespaceContext}, which already defines a
      * number of namespaces, see {@link SimpleXml#SimpleXml(String)}.
      *
+     * <p>An {@link IllegalArgumentException} is thrown if the parameter
+     * passed is not in XML format.
+     *
      * @param url The URL to load from
      * @throws IOException In case of I/O problem
      */
@@ -150,6 +162,9 @@ public final class SimpleXml implements XmlDocument {
      * {@link javax.xml.namespace.NamespaceContext}, which already defines a
      * number of namespaces, see {@link SimpleXml#SimpleXml(String)}.
      *
+     * <p>An {@link IllegalArgumentException} is thrown if the parameter
+     * passed is not in XML format.
+     *
      * @param uri The URI to load from
      * @throws IOException In case of I/O problem
      */
@@ -163,6 +178,9 @@ public final class SimpleXml implements XmlDocument {
      * <p>The object is created with a default implementation of
      * {@link javax.xml.namespace.NamespaceContext}, which already defines a
      * number of namespaces, see {@link SimpleXml#SimpleXml(String)}.
+     *
+     * <p>An {@link IllegalArgumentException} is thrown if the parameter
+     * passed is not in XML format.
      *
      * @param stream The input stream
      * @throws IOException In case of I/O problem
@@ -253,6 +271,10 @@ public final class SimpleXml implements XmlDocument {
 
     /**
      * Retrieve and return a nodelist for XPath query.
+     *
+     * <p>An {@link IllegalArgumentException} is thrown if the parameter
+     * passed is not a valid XPath expression.
+     *
      * @param query XPath query
      * @return List of DOM nodes
      */
@@ -267,7 +289,10 @@ public final class SimpleXml implements XmlDocument {
                 XPathConstants.NODESET
             );
         } catch (javax.xml.xpath.XPathExpressionException ex) {
-            throw new AssertionError(ex);
+            throw new IllegalArgumentException(
+                String.format("invalid XPath query '%s'", query),
+                ex
+            );
         }
         return nodes;
     }

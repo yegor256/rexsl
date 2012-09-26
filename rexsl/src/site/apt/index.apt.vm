@@ -41,11 +41,6 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
   <<0.3.8 released>>! See
   {{{https://groups.google.com/forum/?fromgroups#!topic/rexsl/qTttmac8xyM}release notes}}.
 
-  <<Announcement>>:
-  We need contributors (Java newbies are welcome).
-  Find a defect in our source code, submit it to {{{http://trac.rexsl.com/rexsl/newticket}Trac}}, let us review it.
-  If it's valid and isn't a duplicate - we pay you <<$10.00>>.
-
   The idea is simple - to make a
   {{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}}
   XML API available in a browser-friendly
@@ -123,4 +118,4 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
   ticket to {{{http://trac.rexsl.com/rexsl}our Trac}} when something
   doesn't work or you need more features.
 
-  Currently deployed revision: <<<${buildNumber}>>>
+  Currently deployed revision: <<<${build.number}>>>

@@ -188,4 +188,13 @@ public final class SimpleXmlTest {
         }
     }
 
+    /**
+     * SimpleXml can throw when invalid XPath.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void throwsWhenXpathQueryIsBroken() throws Exception {
+        new SimpleXml("<root-99/>").xpath("invalid xpath query");
+    }
+
 }
