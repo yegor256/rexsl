@@ -30,7 +30,6 @@
 package com.rexsl.test;
 
 import com.jcabi.log.Logger;
-import com.sun.jersey.api.client.ClientResponse;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.util.Collections;
@@ -62,27 +61,14 @@ import org.w3c.dom.Node;
 final class JerseyTestResponse implements TestResponse {
 
     /**
-     * Fetcher of response.
+     * Fetcher of response (buffered).
      */
-    private final transient JerseyFetcher fetcher;
+    private final transient BufferedJerseyFetcher fetcher;
 
     /**
      * Decorated request.
      */
     private final transient RequestDecor request;
-
-    /**
-     * The response, should be initialized on demand in {@link #response()}.
-     * @see #response()
-     */
-    private transient ClientResponse iresponse;
-
-    /**
-     * The body of HTTP response, should be loaded on demand in
-     * {@link #getBody()}.
-     * @see #getBody()
-     */
-    private transient String body;
 
     /**
      * The XML document in the body, should be loaded on demand in
@@ -105,7 +91,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     public JerseyTestResponse(@NotNull final JerseyFetcher ftch,
         @NotNull final RequestDecor rqst) {
-        this.fetcher = ftch;
+        this.fetcher = new BufferedJerseyFetcher(ftch);
         this.request = rqst;
     }
 
@@ -117,7 +103,7 @@ final class JerseyTestResponse implements TestResponse {
         return Logger.format(
             "HTTP request:\n%s\nHTTP response:\n%s",
             this.request,
-            new ClientResponseDecor(this.response(), this.getBody())
+            new ClientResponseDecor(this.fetcher.fetch(), this.getBody())
         );
     }
 
@@ -131,7 +117,7 @@ final class JerseyTestResponse implements TestResponse {
             Logger.format(
                 "XPath '%s' not found in:\n%s\nHTTP request:\n%s",
                 StringEscapeUtils.escapeJava(query),
-                new ClientResponseDecor(this.response(), this.getBody()),
+                new ClientResponseDecor(this.fetcher.fetch(), this.getBody()),
                 this.request
             ),
             links,
@@ -145,7 +131,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public TestClient follow() {
-        return this.follow(this.response().getLocation());
+        return this.follow(this.fetcher.fetch().getLocation());
     }
 
     /**
@@ -153,21 +139,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public String getBody() {
-        synchronized (this.fetcher) {
-            if (this.body == null) {
-                if (this.response().hasEntity()) {
-                    this.body = this.response().getEntity(String.class);
-                } else {
-                    this.body = "";
-                }
-                Logger.debug(
-                    this,
-                    "#getBody(): HTTP response body:\n%s",
-                    new ClientResponseDecor(this.response(), this.body)
-                );
-            }
-            return this.body;
-        }
+        return this.fetcher.body();
     }
 
     /**
@@ -175,7 +147,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public int getStatus() {
-        return this.response().getStatus();
+        return this.fetcher.fetch().getStatus();
     }
 
     /**
@@ -201,8 +173,8 @@ final class JerseyTestResponse implements TestResponse {
     public String getStatusLine() {
         return Logger.format(
             "%d %s",
-            this.response().getStatus(),
-            this.response().getClientResponseStatus()
+            this.fetcher.fetch().getStatus(),
+            this.fetcher.fetch().getClientResponseStatus()
         );
     }
 
@@ -211,7 +183,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public MultivaluedMap<String, String> getHeaders() {
-        return this.response().getHeaders();
+        return this.fetcher.fetch().getHeaders();
     }
 
     /**
@@ -287,7 +259,6 @@ final class JerseyTestResponse implements TestResponse {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("PMD.NullAssignment")
     public TestResponse assertThat(@NotNull final AssertionPolicy assertion) {
         synchronized (this.fetcher) {
             int attempt = 0;
@@ -320,9 +291,7 @@ final class JerseyTestResponse implements TestResponse {
                             assertion, attempt, ex.getMessage()
                         );
                     }
-                    this.iresponse = null;
-                    this.body = null;
-                    this.xml = null;
+                    this.fetcher.reset();
                 }
             }
             return this;
@@ -380,30 +349,6 @@ final class JerseyTestResponse implements TestResponse {
     public TestResponse assertXPath(@NotNull final String xpath) {
         this.assertThat(new XpathAssertionMatcher(this.getXml(), xpath));
         return this;
-    }
-
-    /**
-     * Fetch and return {@link ClientResponse}.
-     *
-     * <p>Throws {@link AssertionError} if anything goes wrong inside. Never
-     * throws anything else.
-     *
-     * @return The response
-     */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    private ClientResponse response() {
-        synchronized (this.fetcher) {
-            if (this.iresponse == null) {
-                try {
-                    this.iresponse = this.fetcher.fetch();
-                // @checkstyle IllegalCatch (1 line)
-                } catch (RuntimeException ex) {
-                    Logger.warn(this, "Failed to fetch: %[exception]s", ex);
-                    throw new AssertionError(ex);
-                }
-            }
-            return this.iresponse;
-        }
     }
 
     /**
@@ -469,7 +414,7 @@ final class JerseyTestResponse implements TestResponse {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private TestClient follow(final URI uri) {
         final TestClient client = RestTester.start(uri);
-        for (NewCookie cookie : this.response().getCookies()) {
+        for (NewCookie cookie : this.fetcher.fetch().getCookies()) {
             client.header(
                 HttpHeaders.COOKIE,
                 new Cookie(cookie.getName(), cookie.getValue()).toString()
