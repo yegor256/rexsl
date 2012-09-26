@@ -76,15 +76,14 @@ public final class ExceptionTrapTest {
      * @throws Exception If there is some problem inside
      */
     @Test
-    public void showHeaders() throws Exception {
+    public void showsHeaders() throws Exception {
         final ServletConfig config = new ServletConfigMocker().mock();
         final HttpServlet servlet = new ExceptionTrap();
         servlet.init(config);
-        final HttpServletRequest request =
-            new HttpServletRequestMocker()
-                .withHeader("header1", "A")
-                .withHeader("header2", "B")
-                .mock();
+        final HttpServletRequest request = new HttpServletRequestMocker()
+            .withHeader("header1", "A")
+            .withHeader("header2", "B")
+            .mock();
         final HttpServletResponse response =
             Mockito.mock(HttpServletResponse.class);
         final StringWriter writer = new StringWriter();
@@ -96,6 +95,29 @@ public final class ExceptionTrapTest {
                 Matchers.containsString("header1: A"),
                 Matchers.containsString("header2: B")
             )
+        );
+    }
+
+    /**
+     * ExceptionTrap can show request content.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void showsRequestContent() throws Exception {
+        final ServletConfig config = new ServletConfigMocker().mock();
+        final HttpServlet servlet = new ExceptionTrap();
+        servlet.init(config);
+        final HttpServletRequest request = new HttpServletRequestMocker()
+            .withBody("hello, world!")
+            .mock();
+        final HttpServletResponse response =
+            Mockito.mock(HttpServletResponse.class);
+        final StringWriter writer = new StringWriter();
+        Mockito.doReturn(new PrintWriter(writer)).when(response).getWriter();
+        servlet.service(request, response);
+        MatcherAssert.assertThat(
+            writer.toString(),
+            Matchers.containsString("hello, world")
         );
     }
 

@@ -29,6 +29,8 @@
  */
 package com.rexsl.core;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
@@ -112,12 +114,29 @@ public final class HttpServletRequestMocker {
     }
 
     /**
-     * With this HTTP method.
+     * With this method.
      * @param name Name of method
      * @return This object
      */
     public HttpServletRequestMocker withMethod(final String name) {
         Mockito.doReturn(name).when(this.request).getMethod();
+        return this;
+    }
+
+    /**
+     * With this content as string.
+     * @param body Content
+     * @return This object
+     */
+    public HttpServletRequestMocker withBody(final String body) {
+        try {
+            Mockito.doReturn(
+                new BufferedReader(new StringReader(body))
+            ).when(this.request).getReader();
+        } catch (java.io.IOException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        Mockito.doReturn(-1).when(this.request).getContentLength();
         return this;
     }
 
