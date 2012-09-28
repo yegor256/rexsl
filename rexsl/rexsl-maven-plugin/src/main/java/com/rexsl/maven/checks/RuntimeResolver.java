@@ -77,8 +77,9 @@ final class RuntimeResolver implements URIResolver {
             StringUtils.stripStart(href, "/ ")
         );
         try {
-            url = new URL(format);
-            if (base != null && !base.isEmpty()) {
+            if (base == null || base.isEmpty()) {
+                url = new URL(format);
+            } else {
                 if (base.startsWith("http")
                     || base.startsWith("https")) {
                     url = new URL(new URL(base), href);
