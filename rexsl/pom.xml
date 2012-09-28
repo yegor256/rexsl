@@ -113,8 +113,8 @@
     </issueManagement>
 
     <ciManagement>
-        <system>hudson</system>
-        <url>http://hudson.rexsl.com:8081/hudson/job/rexsl/</url>
+        <system>jenkins</system>
+        <url>http://ci.rexsl.com:8080/job/rexsl/</url>
     </ciManagement>
 
     <scm>
@@ -176,12 +176,6 @@
             <!-- we need this repo because of SNAPSHOT status of the project -->
             <id>sonatype.snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
     </repositories>
 
@@ -194,12 +188,6 @@
             <!-- we need this repo because of SNAPSHOT status of the project -->
             <id>sonatype.snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </pluginRepository>
     </pluginRepositories>
 

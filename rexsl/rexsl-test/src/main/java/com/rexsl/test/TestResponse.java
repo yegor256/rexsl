@@ -42,7 +42,7 @@ import org.hamcrest.Matcher;
  *
  * <pre>
  * TestResponse resp = RestTester.start(new URI("http://www.google.com"))
- *   .get("load from page of Google");
+ *   .get("load front page of Google");
  * if (resp.getStatus() == 200) {
  *   // everything is fine
  * } else if (resp.getStatus() == 404) {
