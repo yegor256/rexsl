@@ -99,29 +99,6 @@ public final class ExceptionTrapTest {
     }
 
     /**
-     * ExceptionTrap can show request content.
-     * @throws Exception If there is some problem inside
-     */
-    @Test
-    public void showsRequestContent() throws Exception {
-        final ServletConfig config = new ServletConfigMocker().mock();
-        final HttpServlet servlet = new ExceptionTrap();
-        servlet.init(config);
-        final HttpServletRequest request = new HttpServletRequestMocker()
-            .withBody("hello, world!")
-            .mock();
-        final HttpServletResponse response =
-            Mockito.mock(HttpServletResponse.class);
-        final StringWriter writer = new StringWriter();
-        Mockito.doReturn(new PrintWriter(writer)).when(response).getWriter();
-        servlet.service(request, response);
-        MatcherAssert.assertThat(
-            writer.toString(),
-            Matchers.containsString("hello, world")
-        );
-    }
-
-    /**
      * ExceptionTrap can use a custom notifier.
      * @throws Exception If there is some problem inside
      */
