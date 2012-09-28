@@ -31,6 +31,7 @@ package com.rexsl.misc;
 
 import java.net.HttpCookie;
 import java.net.URI;
+import org.hamcrest.CustomMatcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -110,6 +111,29 @@ public final class CookieBuilderTest {
                 Matchers.hasProperty("domain", Matchers.equalTo("localhost")),
                 Matchers.hasProperty("path", Matchers.equalTo("/a"))
             )
+        );
+    }
+
+    /**
+     * CookieBuilder can build a cookie cleaning request.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void buildsCookieDeletionRequest() throws Exception {
+        final String cookie = new CookieBuilder(new URI("http://localhost/f"))
+            .name("some-other-cookie-name")
+            .build()
+            .toString();
+        MatcherAssert.assertThat(
+            HttpCookie.parse(cookie).get(0),
+            new CustomMatcher<HttpCookie>("expired cookie") {
+                @Override
+                public boolean matches(final Object obj) {
+                    final HttpCookie cookie = HttpCookie.class.cast(obj);
+                    return cookie.hasExpired()
+                        && "deleted".equals(cookie.getValue());
+                }
+            }
         );
     }
 
