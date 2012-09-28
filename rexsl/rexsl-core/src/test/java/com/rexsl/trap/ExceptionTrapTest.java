@@ -122,6 +122,30 @@ public final class ExceptionTrapTest {
     }
 
     /**
+     * ExceptionTrap can show request content when it's broken.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void showsRequestContentWhenBroken() throws Exception {
+        final ServletConfig config = new ServletConfigMocker().mock();
+        final HttpServlet servlet = new ExceptionTrap();
+        servlet.init(config);
+        final HttpServletRequest request = new HttpServletRequestMocker()
+            .mock();
+        final String msg = "some exception message";
+        Mockito.doThrow(new java.io.IOException(msg)).when(request).getReader();
+        final HttpServletResponse response =
+            Mockito.mock(HttpServletResponse.class);
+        final StringWriter writer = new StringWriter();
+        Mockito.doReturn(new PrintWriter(writer)).when(response).getWriter();
+        servlet.service(request, response);
+        MatcherAssert.assertThat(
+            writer.toString(),
+            Matchers.containsString(msg)
+        );
+    }
+
+    /**
      * ExceptionTrap can use a custom notifier.
      * @throws Exception If there is some problem inside
      */
