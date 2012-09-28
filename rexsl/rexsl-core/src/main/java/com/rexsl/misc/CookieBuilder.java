@@ -42,15 +42,21 @@ import javax.ws.rs.core.UriBuilder;
  *
  * <p>It is a convenient cookie builder for JAX-RS responses, for example:
  *
- * <pre>
- * Response.ok().cookie(
+ * <pre>Response.ok().cookie(
  *   new CookieBuilder(this.uriInfo().getBaseUri())
  *     .name("my-cookie")
  *     .value("some value of the cookie")
  *     .temporary()
  *     .build()
- * );
- * </pre>
+ * );</pre>
+ *
+ * <p>When you want to instruct the client to delete the cookie:
+ *
+ * <pre>Response.ok().cookie(
+ *   new CookieBuilder(this.uriInfo().getBaseUri())
+ *     .name("my-cookie")
+ *     .build()
+ * );</pre>
  *
  * <p>It is much more convenient than {@code new NewCookie(..)} from JAX-RS.
  *
@@ -77,8 +83,13 @@ public final class CookieBuilder {
 
     /**
      * Value.
+     *
+     * <p>By default it has to contain some rubbish, in order to replace
+     * the value cached/stored by a client.
+     *
+     * @see http://trac.fazend.com/rexsl/ticket/581
      */
-    private transient String val = "";
+    private transient String val = "deleted";
 
     /**
      * Path.
@@ -87,6 +98,8 @@ public final class CookieBuilder {
 
     /**
      * When it should expire.
+     *
+     * <p>By default it is already expired.
      */
     private transient Date expires = new Date(0);
 
