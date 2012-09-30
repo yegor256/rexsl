@@ -134,7 +134,9 @@ public final class JaxbConverterTest {
             this.injected = obj;
         }
         /**
-         * Injected object.
+         * Injected object. This method is not used directly, but is used
+         * during JAXB converting of this object into XML, at
+         * {@link #convertsAnObjectThatHasOthersInjected()}.
          * @return The object
          */
         @XmlElement
@@ -142,7 +144,9 @@ public final class JaxbConverterTest {
             return this.injected;
         }
         /**
-         * Returns a simple string.
+         * Returns a simple string. This method is not called directly, but
+         * is used in {@link convertsJaxbObjectToXml()} for JAXB converting
+         * of the object to XML.
          * @return The text
          */
         @XmlElement(name = "name")

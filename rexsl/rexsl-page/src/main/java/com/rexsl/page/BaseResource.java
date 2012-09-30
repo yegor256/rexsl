@@ -75,25 +75,21 @@ public class BaseResource implements Resource {
     /**
      * List of known JAX-RS providers, injected by JAX-RS implementation.
      */
-    @NotNull
     private transient Providers iproviders;
 
     /**
      * URI info, injected by JAX-RS implementation.
      */
-    @NotNull
     private transient UriInfo iuriInfo;
 
     /**
      * Http headers, injected by JAX-RS implementation.
      */
-    @NotNull
     private transient HttpHeaders ihttpHeaders;
 
     /**
      * HTTP servlet request, injected by JAX-RS implementation.
      */
-    @NotNull
     private transient HttpServletRequest ihttpRequest;
 
     /**
