@@ -61,7 +61,7 @@ public final class WebXmlCheckTest {
             .withFile(WebXmlCheckTest.FILE, "valid-web.xml")
             .mock();
         MatcherAssert.assertThat(
-            "valid web.xml passes with problems",
+            "valid web.xml passes without problems",
             new WebXmlCheck().validate(env)
         );
     }
