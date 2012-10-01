@@ -164,6 +164,7 @@
         a new version to Maven Central
         -->
         <releasedVersion>0.3.8</releasedVersion>
+        <jcabi.version since="1 Oct 2012">1.0-SNAPSHOT</jcabi.version>
     </properties>
     <repositories>
         <!--
@@ -275,7 +276,7 @@
                             <dependency>
                                 <groupId>com.jcabi</groupId>
                                 <artifactId>jcabi-assembly</artifactId>
-                                <version since="23 May 2012">0.1.9</version>
+                                <version>${jcabi.version}</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -606,13 +607,13 @@
                 <!-- Logging facility. -->
                 <groupId>com.jcabi</groupId>
                 <artifactId>jcabi-log</artifactId>
-                <version since="1 Oct 2012">0.2.1</version>
+                <version>${jcabi.version}</version>
             </dependency>
             <dependency>
                 <!-- Aspects -->
                 <groupId>com.jcabi</groupId>
                 <artifactId>jcabi-aspects</artifactId>
-                <version since="1 Oct 2012">0.2.1</version>
+                <version>${jcabi.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.aspectj</groupId>
