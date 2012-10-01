@@ -134,7 +134,7 @@
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-aether</artifactId>
-            <version since="1 Oct 2012">0.2.1</version>
+            <version>${jcabi.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>nekohtml</groupId>
@@ -335,7 +335,7 @@
             <!-- Forward all calls to SLF4J to Maven log. -->
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-maven-slf4j</artifactId>
-            <version since="24 May 2012">0.1.9</version>
+            <version>${jcabi.version}</version>
         </dependency>
         <dependency>
             <!-- Forward all LOG4J calls to SLF4J -->
