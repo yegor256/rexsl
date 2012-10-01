@@ -194,7 +194,16 @@ public final class CookieBuilder {
      * @return The cookie string to be used in "Set-cookie" header.
      */
     public NewCookie build() {
-        return new NewCookie(this.cookie, this.val) {
+        return new NewCookie(
+            this.cookie,
+            this.val,
+            this.url,
+            this.domain,
+            "",
+            // @checkstyle MagicNumber (1 line)
+            (int) (this.expires.getTime() - new Date().getTime()) / 1000,
+            false
+        ) {
             @Override
             public String toString() {
                 return String.format(

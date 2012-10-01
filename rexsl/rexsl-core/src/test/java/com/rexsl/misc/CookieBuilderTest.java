@@ -107,7 +107,8 @@ public final class CookieBuilderTest {
                 @Override
                 public boolean matches(final Object obj) {
                     final NewCookie cookie = NewCookie.class.cast(obj);
-                    return cookie.getMaxAge() > 1
+                    // @checkstyle BooleanExpressionComplexity (5 lines)
+                    return cookie.getMaxAge() < 0
                         && "/6".equals(cookie.getPath())
                         && "google.com".equals(cookie.getDomain())
                         && name.equals(cookie.getName())
