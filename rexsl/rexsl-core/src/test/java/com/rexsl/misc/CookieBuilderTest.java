@@ -31,6 +31,7 @@ package com.rexsl.misc;
 
 import java.net.HttpCookie;
 import java.net.URI;
+import javax.ws.rs.core.NewCookie;
 import org.hamcrest.CustomMatcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -95,6 +96,33 @@ public final class CookieBuilderTest {
      */
     @Test
     public void buildsCorrectCookie() throws Exception {
+        final String name = "some-cookie-name-6";
+        final String value = "some-value-of-it-6";
+        MatcherAssert.assertThat(
+            new CookieBuilder(new URI("http://google.com/6"))
+                .name(name)
+                .value(value)
+                .build(),
+            new CustomMatcher<NewCookie>("valid cookie created") {
+                @Override
+                public boolean matches(final Object obj) {
+                    final NewCookie cookie = NewCookie.class.cast(obj);
+                    return cookie.getMaxAge() > 1
+                        && "/6".equals(cookie.getPath())
+                        && "google.com".equals(cookie.getDomain())
+                        && name.equals(cookie.getName())
+                        && value.equals(cookie.getValue());
+                }
+            }
+        );
+    }
+
+    /**
+     * CookieBuilder can build a valid cookie.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void buildsCorrectCookieString() throws Exception {
         final String name = "some-cookie-name";
         final String value = "some-value-of-it";
         final String cookie = new CookieBuilder(new URI("http://localhost/a"))
