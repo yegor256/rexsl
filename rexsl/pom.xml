@@ -127,23 +127,21 @@
         <downloadUrl>https://oss.sonatype.org/content/groups/public</downloadUrl>
         <repository>
             <uniqueVersion>false</uniqueVersion>
-            <id>sonatype.nexus</id>
-            <name>Sonatype OSS Repository (for releases)</name>
+            <id>oss.sonatype.org</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
             <uniqueVersion>false</uniqueVersion>
-            <id>sonatype.nexus</id>
-            <name>Sonatype OSS Repository (for snapshots)</name>
+            <id>oss.sonatype.org</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <site>
             <!--
-            Deploying the site to Amazon S3. "rexsl.s3" server details
+            Deploying the site to Amazon S3. "www.rexsl.com" server details
             are defined in "settings.xml" file, provided by continuous integration
             server during build cycle.
             -->
-            <id>rexsl.s3</id>
+            <id>www.rexsl.com</id>
             <name>ReXSL.com Project Site</name>
             <url>s3://www.rexsl.com/</url>
         </site>
@@ -174,7 +172,7 @@
         -->
         <repository>
             <!-- we need this repo because of SNAPSHOT status of the project -->
-            <id>sonatype.snapshots</id>
+            <id>oss.sonatype.org</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
@@ -186,7 +184,7 @@
         -->
         <pluginRepository>
             <!-- we need this repo because of SNAPSHOT status of the project -->
-            <id>sonatype.snapshots</id>
+            <id>oss.sonatype.org</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
@@ -694,13 +692,9 @@
         </testResources>
         <extensions>
             <extension>
-                <!--
-                Artifacts deployment to Amazon Web Services, S3.
-                @see http://blog.cyclopsgroup.org/2011/06/publish-maven-site-with-amazon-s3-and.html
-                -->
-                <groupId>org.cyclopsgroup</groupId>
-                <artifactId>awss3-maven-wagon</artifactId>
-                <version since="10 Jun 2011">0.1</version>
+                <groupId>org.kuali.maven.wagons</groupId>
+                <artifactId>maven-s3-wagon</artifactId>
+                <version since="20 Sep 2012">1.1.14</version>
             </extension>
         </extensions>
         <pluginManagement>
