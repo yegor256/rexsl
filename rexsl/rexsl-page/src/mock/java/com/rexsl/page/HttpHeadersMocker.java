@@ -83,6 +83,14 @@ public final class HttpHeadersMocker {
     public HttpHeaders mock() {
         final MultivaluedMap<String, String> map =
             Mockito.mock(MultivaluedMap.class);
+        Mockito.doAnswer(
+            new Answer<List<String>>() {
+                public List<String> answer(final InvocationOnMock inv) {
+                    final String name = inv.getArguments()[0].toString();
+                    return HttpHeadersMocker.this.headers.get(name);
+                }
+            }
+        ).when(this.hdrs).getRequestHeader(Mockito.anyString());
         Mockito.doReturn(map).when(this.hdrs).getRequestHeaders();
         Mockito.doAnswer(
             new Answer<String>() {
