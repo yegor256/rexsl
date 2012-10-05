@@ -99,21 +99,21 @@ final class XslPacker extends AbstractPacker {
     protected void pack(@NotNull final Reader input, @NotNull final File dest)
         throws IOException {
         XslPacker.DFACTORY.setNamespaceAware(true);
-        Document document;
-        try {
-            document = XslPacker.DFACTORY
-                .newDocumentBuilder()
-                .parse(new InputSource(input));
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
-            throw new IllegalStateException(ex);
-        } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalStateException(ex);
-        }
+        final Document document = this.parse(input);
         try {
             this.clear(document);
         } catch (XPathExpressionException ex) {
             throw new IllegalStateException(ex);
         }
+        this.transform(dest, document);
+    }
+
+    /**
+     * Transforms document to provided destination file.
+     * @param dest Destination file for transformed document.
+     * @param document Document to transform.
+     */
+    private void transform(final File dest, final Document document) {
         try {
             final Transformer transformer = XslPacker.TFACTORY.newTransformer();
             transformer.setOutputProperty(
@@ -129,6 +129,26 @@ final class XslPacker extends AbstractPacker {
         } catch (javax.xml.transform.TransformerException ex) {
             throw new IllegalStateException(ex);
         }
+    }
+
+    /**
+     * Parses reader and returns document.
+     * @param input Reader to parse.
+     * @return Resulting document.
+     * @throws IOException If a problem happens inside
+     */
+    private Document parse(final Reader input) throws IOException {
+        Document document;
+        try {
+            document = XslPacker.DFACTORY
+                .newDocumentBuilder()
+                .parse(new InputSource(input));
+        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            throw new IllegalStateException(ex);
+        } catch (org.xml.sax.SAXException ex) {
+            throw new IllegalStateException(ex);
+        }
+        return document;
     }
 
     /**
