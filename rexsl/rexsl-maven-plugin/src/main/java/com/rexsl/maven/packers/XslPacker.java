@@ -44,6 +44,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -98,14 +99,18 @@ final class XslPacker extends AbstractPacker {
     @Override
     protected void pack(@NotNull final Reader input, @NotNull final File dest)
         throws IOException {
-        XslPacker.DFACTORY.setNamespaceAware(true);
-        final Document document = this.parse(input);
         try {
-            this.clear(document);
-        } catch (XPathExpressionException ex) {
-            throw new IllegalStateException(ex);
+            XslPacker.DFACTORY.setNamespaceAware(true);
+            final Document document = this.parse(input);
+            try {
+                this.clear(document);
+            } catch (XPathExpressionException ex) {
+                throw new IllegalStateException(ex);
+            }
+            this.transform(dest, document);
+        } finally {
+            IOUtils.closeQuietly(input);
         }
-        this.transform(dest, document);
     }
 
     /**
