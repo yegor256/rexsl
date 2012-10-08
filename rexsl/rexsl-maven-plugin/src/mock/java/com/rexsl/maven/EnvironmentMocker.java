@@ -103,6 +103,8 @@ public final class EnvironmentMocker {
             return this.withTextFile(name, IOUtils.toString(stream));
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
     }
 
