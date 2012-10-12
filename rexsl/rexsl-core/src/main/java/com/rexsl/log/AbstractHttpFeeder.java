@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
@@ -100,10 +101,7 @@ public abstract class AbstractHttpFeeder implements Feeder {
             } catch (java.net.ProtocolException ex) {
                 throw new IOException(ex);
             }
-            conn.setRequestProperty(
-                HttpHeaders.CONTENT_TYPE,
-                MediaType.TEXT_PLAIN
-            );
+            setReqProp(conn);
             IOUtils.write(
                 text,
                 conn.getOutputStream(),
@@ -121,6 +119,27 @@ public abstract class AbstractHttpFeeder implements Feeder {
         } finally {
             conn.disconnect();
         }
+    }
+
+    /**
+     * Sets request property to the HttpURLConnection. 
+     * Can handle basic HTTP Authentication.
+     * @param conn HTTP URL Connection.
+     */
+    private void setReqProp(final HttpURLConnection conn) {
+        final URL url = this.getUrl();
+        String[] split = url.getAuthority().split("@");
+        if (split.length > 1) {
+            final String auth = split[0];
+            final String encAuth = Base64.encodeBase64String(auth.getBytes());
+            conn.setRequestProperty(
+                HttpHeaders.AUTHORIZATION,
+                "Basic " + encAuth);
+        }
+        conn.setRequestProperty(
+            HttpHeaders.CONTENT_TYPE,
+            MediaType.TEXT_PLAIN
+        );
     }
 
 }
