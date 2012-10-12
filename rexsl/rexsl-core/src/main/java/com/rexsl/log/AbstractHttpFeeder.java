@@ -33,6 +33,8 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
@@ -58,6 +60,12 @@ public abstract class AbstractHttpFeeder implements Feeder {
      * The URL to post to.
      */
     private transient URL url;
+
+    /**
+     * HTTP Request Properties.
+     */
+    private final transient ConcurrentMap<String, String> props =
+        new ConcurrentHashMap<String, String>();
 
     /**
      * Set option {@code url}.
@@ -101,7 +109,7 @@ public abstract class AbstractHttpFeeder implements Feeder {
             } catch (java.net.ProtocolException ex) {
                 throw new IOException(ex);
             }
-            setReqProp(conn);
+            this.setReqProps(conn);
             IOUtils.write(
                 text,
                 conn.getOutputStream(),
@@ -122,24 +130,30 @@ public abstract class AbstractHttpFeeder implements Feeder {
     }
 
     /**
-     * Sets request property to the HttpURLConnection. 
-     * Can handle basic HTTP Authentication.
+     * Sets the Request Properties for HttpURLConnection.
      * @param conn HTTP URL Connection.
      */
-    private void setReqProp(final HttpURLConnection conn) {
-        final URL url = this.getUrl();
-        String[] split = url.getAuthority().split("@");
-        if (split.length > 1) {
-            final String auth = split[0];
-            final String encAuth = Base64.encodeBase64String(auth.getBytes());
-            conn.setRequestProperty(
-                HttpHeaders.AUTHORIZATION,
-                "Basic " + encAuth);
+    private void setReqProps(final HttpURLConnection conn) {
+        this.props.clear();
+        this.checkBasicAuth();
+        this.props.put(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
+        for (String key : this.props.keySet()) {
+            conn.setRequestProperty(key, this.props.get(key));
         }
-        conn.setRequestProperty(
-            HttpHeaders.CONTENT_TYPE,
-            MediaType.TEXT_PLAIN
-        );
+    }
+
+    /**
+     * Can handle basic HTTP Authentication.
+     * If necessary sets the request property to the HttpURLConnection.
+     */
+    private void checkBasicAuth() {
+        final String auth = this.getUrl().getUserInfo();
+        if (auth != null) {
+            final StringBuffer authval = new StringBuffer();
+            final String encauth = Base64.encodeBase64String(auth.getBytes());
+            authval.append("Basic ").append(encauth);
+            this.props.put(HttpHeaders.AUTHORIZATION, authval.toString());
+        }
     }
 
 }
