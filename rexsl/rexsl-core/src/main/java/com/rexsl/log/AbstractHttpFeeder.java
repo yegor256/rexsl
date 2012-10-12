@@ -76,6 +76,15 @@ public abstract class AbstractHttpFeeder implements Feeder {
     public final void setUrl(@NotNull final String addr)
         throws java.net.MalformedURLException {
         this.url = new URL(addr);
+        this.props.clear();
+        this.props.put(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
+        final String auth = this.getUrl().getUserInfo();
+        if (auth != null) {
+            final StringBuffer authval = new StringBuffer();
+            final String encauth = Base64.encodeBase64String(auth.getBytes());
+            authval.append("Basic ").append(encauth);
+            this.props.put(HttpHeaders.AUTHORIZATION, authval.toString());
+        }
     }
 
     /**
@@ -98,8 +107,7 @@ public abstract class AbstractHttpFeeder implements Feeder {
      *  of rexsl-core, which is not a good idea..
      */
     protected final void post(@NotNull final String text) throws IOException {
-        final HttpURLConnection conn =
-            (HttpURLConnection) this.getUrl().openConnection();
+        final HttpURLConnection conn  = this.connect();
         try {
             conn.setConnectTimeout((int) TimeUnit.MINUTES.toMillis(1L));
             conn.setReadTimeout((int) TimeUnit.MINUTES.toMillis(1L));
@@ -109,7 +117,6 @@ public abstract class AbstractHttpFeeder implements Feeder {
             } catch (java.net.ProtocolException ex) {
                 throw new IOException(ex);
             }
-            this.setReqProps(conn);
             IOUtils.write(
                 text,
                 conn.getOutputStream(),
@@ -130,30 +137,16 @@ public abstract class AbstractHttpFeeder implements Feeder {
     }
 
     /**
-     * Sets the Request Properties for HttpURLConnection.
-     * @param conn HTTP URL Connection.
+     * Creates a new HttpURLConnection from the existing URL.
+     * @throws IOException If a problem happens inside.
+     * @return HttpURLConnection HTTP URL Connection.
      */
-    private void setReqProps(final HttpURLConnection conn) {
-        this.props.clear();
-        this.checkBasicAuth();
-        this.props.put(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
+    private HttpURLConnection connect() throws IOException {
+        final HttpURLConnection conn =
+            (HttpURLConnection) this.getUrl().openConnection();
         for (String key : this.props.keySet()) {
             conn.setRequestProperty(key, this.props.get(key));
         }
+        return conn;
     }
-
-    /**
-     * Can handle basic HTTP Authentication.
-     * If necessary sets the request property to the HttpURLConnection.
-     */
-    private void checkBasicAuth() {
-        final String auth = this.getUrl().getUserInfo();
-        if (auth != null) {
-            final StringBuffer authval = new StringBuffer();
-            final String encauth = Base64.encodeBase64String(auth.getBytes());
-            authval.append("Basic ").append(encauth);
-            this.props.put(HttpHeaders.AUTHORIZATION, authval.toString());
-        }
-    }
-
 }
