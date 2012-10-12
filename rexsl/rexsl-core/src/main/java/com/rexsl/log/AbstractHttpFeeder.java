@@ -33,10 +33,13 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
@@ -59,6 +62,12 @@ public abstract class AbstractHttpFeeder implements Feeder {
     private transient URL url;
 
     /**
+     * HTTP Request Properties.
+     */
+    private final transient ConcurrentMap<String, String> props =
+        new ConcurrentHashMap<String, String>();
+
+    /**
      * Set option {@code url}.
      * @param addr The URL
      * @throws java.net.MalformedURLException If format of the URL is
@@ -67,6 +76,17 @@ public abstract class AbstractHttpFeeder implements Feeder {
     public final void setUrl(@NotNull final String addr)
         throws java.net.MalformedURLException {
         this.url = new URL(addr);
+        if (!this.props.isEmpty()) {
+            throw new IllegalStateException("Request props map is not empty");
+        }
+        this.props.put(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
+        final String auth = this.getUrl().getUserInfo();
+        if (auth != null) {
+            final StringBuilder authval = new StringBuilder();
+            final String encauth = Base64.encodeBase64String(auth.getBytes());
+            authval.append("Basic ").append(encauth);
+            this.props.put(HttpHeaders.AUTHORIZATION, authval.toString());
+        }
     }
 
     /**
@@ -89,8 +109,7 @@ public abstract class AbstractHttpFeeder implements Feeder {
      *  of rexsl-core, which is not a good idea..
      */
     protected final void post(@NotNull final String text) throws IOException {
-        final HttpURLConnection conn =
-            (HttpURLConnection) this.getUrl().openConnection();
+        final HttpURLConnection conn  = this.connect();
         try {
             conn.setConnectTimeout((int) TimeUnit.MINUTES.toMillis(1L));
             conn.setReadTimeout((int) TimeUnit.MINUTES.toMillis(1L));
@@ -100,10 +119,6 @@ public abstract class AbstractHttpFeeder implements Feeder {
             } catch (java.net.ProtocolException ex) {
                 throw new IOException(ex);
             }
-            conn.setRequestProperty(
-                HttpHeaders.CONTENT_TYPE,
-                MediaType.TEXT_PLAIN
-            );
             IOUtils.write(
                 text,
                 conn.getOutputStream(),
@@ -123,4 +138,17 @@ public abstract class AbstractHttpFeeder implements Feeder {
         }
     }
 
+    /**
+     * Creates a new HttpURLConnection from the existing URL.
+     * @throws IOException If a problem happens inside.
+     * @return HttpURLConnection HTTP URL Connection.
+     */
+    private HttpURLConnection connect() throws IOException {
+        final HttpURLConnection conn =
+            (HttpURLConnection) this.getUrl().openConnection();
+        for (String key : this.props.keySet()) {
+            conn.setRequestProperty(key, this.props.get(key));
+        }
+        return conn;
+    }
 }
