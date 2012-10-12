@@ -32,8 +32,10 @@ package com.rexsl.log;
 import com.rexsl.test.ContainerMocker;
 import com.rexsl.test.RestTester;
 import java.io.IOException;
+import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -66,6 +68,31 @@ public final class HttpFeederTest {
     }
 
     /**
+     * HttpFeeder can handle Basic HTTP Authentication.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void basicHttpAuthTest() throws Exception {
+        final String message = "hello!";
+        final URI home = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.POST))
+            .expectHeader(
+                HttpHeaders.CONTENT_TYPE,
+                Matchers.equalTo(MediaType.TEXT_PLAIN)
+            )
+            .returnBody("success")
+            .mock()
+            .home();
+        final URI uri = UriBuilder.fromUri(home)
+            .userInfo("joe:secret")
+            .build();
+        final HttpFeeder feeder = new HttpFeeder();
+        feeder.setUrl(uri.toString());
+        feeder.activateOptions();
+        feeder.feed(message);
+    }
+
+    /**
      * HttpFeeder excessive test.
      * @throws Exception If there is some problem inside
      */
@@ -91,5 +118,4 @@ public final class HttpFeederTest {
             throw new Exception(ex);
         }
     }
-
 }

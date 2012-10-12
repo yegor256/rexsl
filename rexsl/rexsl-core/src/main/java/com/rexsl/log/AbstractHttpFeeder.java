@@ -76,11 +76,13 @@ public abstract class AbstractHttpFeeder implements Feeder {
     public final void setUrl(@NotNull final String addr)
         throws java.net.MalformedURLException {
         this.url = new URL(addr);
-        this.props.clear();
+        if (!this.props.isEmpty()) {
+            throw new IllegalStateException("Request props map is not empty");
+        }
         this.props.put(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
         final String auth = this.getUrl().getUserInfo();
         if (auth != null) {
-            final StringBuffer authval = new StringBuffer();
+            final StringBuilder authval = new StringBuilder();
             final String encauth = Base64.encodeBase64String(auth.getBytes());
             authval.append("Basic ").append(encauth);
             this.props.put(HttpHeaders.AUTHORIZATION, authval.toString());
