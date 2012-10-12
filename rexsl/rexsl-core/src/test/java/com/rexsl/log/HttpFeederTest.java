@@ -36,6 +36,7 @@ import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+import org.apache.commons.codec.binary.Base64;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -74,17 +75,21 @@ public final class HttpFeederTest {
     @Test
     public void basicHttpAuthTest() throws Exception {
         final String message = "hello!";
+        final String auth = "joe:secret";
+        final StringBuilder authval = new StringBuilder();
+        final String encauth = Base64.encodeBase64String(auth.getBytes());
+        authval.append("Basic ").append(encauth);
         final URI home = new ContainerMocker()
             .expectMethod(Matchers.equalTo(RestTester.POST))
             .expectHeader(
-                HttpHeaders.CONTENT_TYPE,
-                Matchers.equalTo(MediaType.TEXT_PLAIN)
+                HttpHeaders.AUTHORIZATION,
+                Matchers.equalTo(authval.toString())
             )
             .returnBody("success")
             .mock()
             .home();
         final URI uri = UriBuilder.fromUri(home)
-            .userInfo("joe:secret")
+            .userInfo(auth)
             .build();
         final HttpFeeder feeder = new HttpFeeder();
         feeder.setUrl(uri.toString());
