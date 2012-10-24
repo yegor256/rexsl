@@ -105,6 +105,13 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
 
   This article explains how to create a working web application
   using ReXSL in five minutes: {{{./start.html}Quick Start Guide}}.
+  {{{http://www.s3auth.com}s3auth.com}} is an open source web application
+  that is build using ReXSL framework: see its code in
+  {{{https://github.com/yegor256/s3auth}github}}. Other projects that use
+  ReXSL:
+  {{{http://p.expinia.com}expinia.com}},
+  {{{http://www.netbout.com}netbout.com}}
+  (email us to get into this list).
 
   ReXSL pays a lot of attention to unit and integration testing. Actually,
   80% of our code is for helping you to test your application. As soon as

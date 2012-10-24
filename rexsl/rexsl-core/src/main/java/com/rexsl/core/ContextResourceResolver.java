@@ -98,7 +98,10 @@ final class ContextResourceResolver implements URIResolver {
                 try {
                     stream = this.fetch(uri);
                 } catch (IOException ex) {
-                    throw new TransformerException(ex);
+                    throw new TransformerException(
+                        String.format("failed to fetch absolute URI '%s'", uri),
+                        ex
+                    );
                 }
             } else {
                 throw new TransformerException(
