@@ -39,6 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import javax.servlet.ServletContext;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
@@ -165,16 +166,30 @@ final class ContextResourceResolver implements URIResolver {
     }
 
     /**
-     * Load stream from URI.
+     * Load HTTP stream from URI.
      * @param uri The URI to load from
      * @return The stream opened
      * @throws IOException If some problem happens
      */
     private InputStream fetch(final URI uri) throws IOException {
+        final URLConnection conn = uri.toURL().openConnection();
+        InputStream stream;
+        if (conn instanceof HttpURLConnection) {
+            stream = this.http(HttpURLConnection.class.cast(conn));
+        } else {
+            stream = conn.getInputStream();
+        }
+        return stream;
+    }
+
+    /**
+     * Fetch stream from HTTP connection.
+     * @param conn The connection to fetch from
+     * @return The stream opened
+     * @throws IOException If some problem happens
+     */
+    private InputStream http(final HttpURLConnection conn) throws IOException {
         final long start = System.currentTimeMillis();
-        final HttpURLConnection conn = HttpURLConnection.class.cast(
-            uri.toURL().openConnection()
-        );
         InputStream stream;
         try {
             conn.connect();
@@ -184,14 +199,14 @@ final class ContextResourceResolver implements URIResolver {
                     Logger.format(
                         "Invalid HTTP response code %d at '%s'",
                         code,
-                        uri
+                        conn.getURL()
                     )
                 );
             }
             Logger.debug(
                 this,
                 "#fetch('%s'): retrieved %d bytes of type '%s' in %[ms]s",
-                uri,
+                conn.getURL(),
                 conn.getContentLength(),
                 conn.getContentType(),
                 System.currentTimeMillis() - start

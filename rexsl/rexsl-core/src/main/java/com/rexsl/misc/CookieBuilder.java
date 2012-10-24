@@ -132,7 +132,9 @@ public final class CookieBuilder {
                 String.format("illegal cookie name: '%s'", txt)
             );
         }
-        this.cookie = txt;
+        synchronized (this.domain) {
+            this.cookie = txt;
+        }
         return this;
     }
 
@@ -148,7 +150,9 @@ public final class CookieBuilder {
                 String.format("illegal cookie value: '%s'", txt)
             );
         }
-        this.val = txt;
+        synchronized (this.domain) {
+            this.val = txt;
+        }
         return this;
     }
 
@@ -163,7 +167,9 @@ public final class CookieBuilder {
                 String.format("illegal cookie path: '%s'", txt)
             );
         }
-        this.url = txt;
+        synchronized (this.domain) {
+            this.url = txt;
+        }
         return this;
     }
 
@@ -185,7 +191,9 @@ public final class CookieBuilder {
     public CookieBuilder days(final int days) {
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, days);
-        this.expires = cal.getTime();
+        synchronized (this.domain) {
+            this.expires = cal.getTime();
+        }
         return this;
     }
 
@@ -194,14 +202,21 @@ public final class CookieBuilder {
      * @return The cookie string to be used in "Set-cookie" header.
      */
     public NewCookie build() {
+        final long msec = this.expires.getTime() - new Date().getTime();
+        int age;
+        if (msec < 0) {
+            age = -1;
+        } else {
+            // @checkstyle MagicNumber (1 line)
+            age = (int) (msec / 1000);
+        }
         return new NewCookie(
             this.cookie,
             this.val,
             this.url,
             this.domain,
             "",
-            // @checkstyle MagicNumber (1 line)
-            (int) (this.expires.getTime() - new Date().getTime()) / 1000,
+            age,
             false
         ) {
             @Override
