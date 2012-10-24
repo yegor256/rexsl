@@ -30,16 +30,20 @@
 package com.rexsl.core;
 
 import com.rexsl.test.XhtmlMatchers;
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.servlet.ServletContext;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
 /**
@@ -52,6 +56,13 @@ import org.mockito.Mockito;
  *  feature is fixed in YMOCK let's use it here
  */
 public final class ContextResourceResolverTest {
+
+    /**
+     * Temporary folder.
+     * @checkstyle VisibilityModifier (3 lines)
+     */
+    @Rule
+    public transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
      * ContextResourceResolver can resolve resource by HREF.
@@ -164,6 +175,22 @@ public final class ContextResourceResolverTest {
             .mock();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         resolver.resolve(href, null);
+    }
+
+    /**
+     * ContextResourceResolver can resolve a file.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void resolvesUrlWithFile() throws Exception {
+        final File file = this.temp.newFile("file.xml");
+        FileUtils.writeStringToFile(file, "<data/>");
+        final String href = file.toURI().toString();
+        final ServletContext ctx = new ServletContextMocker().mock();
+        final URIResolver resolver = new ContextResourceResolver(ctx);
+        final Source src = resolver.resolve(href, null);
+        MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(href));
+        MatcherAssert.assertThat(src, XhtmlMatchers.hasXPath("/data"));
     }
 
     /**

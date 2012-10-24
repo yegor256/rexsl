@@ -31,7 +31,6 @@ package com.rexsl.misc;
 
 import java.net.HttpCookie;
 import java.net.URI;
-import javax.ws.rs.core.NewCookie;
 import org.hamcrest.CustomMatcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -103,42 +102,13 @@ public final class CookieBuilderTest {
                 .name(name)
                 .value(value)
                 .build(),
-            new CustomMatcher<NewCookie>("valid cookie created") {
-                @Override
-                public boolean matches(final Object obj) {
-                    final NewCookie cookie = NewCookie.class.cast(obj);
-                    // @checkstyle BooleanExpressionComplexity (5 lines)
-                    return cookie.getMaxAge() < 0
-                        && "/6".equals(cookie.getPath())
-                        && "google.com".equals(cookie.getDomain())
-                        && name.equals(cookie.getName())
-                        && value.equals(cookie.getValue());
-                }
-            }
-        );
-    }
-
-    /**
-     * CookieBuilder can build a valid cookie.
-     * @throws Exception If there is some problem inside
-     */
-    @Test
-    public void buildsCorrectCookieString() throws Exception {
-        final String name = "some-cookie-name";
-        final String value = "some-value-of-it";
-        final String cookie = new CookieBuilder(new URI("http://localhost/a"))
-            .name(name)
-            .value(value)
-            .build()
-            .toString();
-        MatcherAssert.assertThat(
-            HttpCookie.parse(cookie).get(0),
             Matchers.allOf(
                 Matchers.hasToString(Matchers.containsString(name)),
+                Matchers.hasProperty("maxAge", Matchers.lessThanOrEqualTo(0)),
+                Matchers.hasProperty("domain", Matchers.equalTo("google.com")),
+                Matchers.hasProperty("path", Matchers.equalTo("/6")),
                 Matchers.hasProperty("name", Matchers.equalTo(name)),
-                Matchers.hasProperty("value", Matchers.equalTo(value)),
-                Matchers.hasProperty("domain", Matchers.equalTo("localhost")),
-                Matchers.hasProperty("path", Matchers.equalTo("/a"))
+                Matchers.hasProperty("value", Matchers.equalTo(value))
             )
         );
     }
