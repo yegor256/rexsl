@@ -108,7 +108,8 @@ public final class CookieBuilder {
      * @param uri The URI
      */
     public CookieBuilder(@NotNull final URI uri) {
-        this.domain = uri.getHost();
+        // @checkstyle AvoidInlineConditionals (1 line)
+        this.domain = uri.getHost() == null ? "" : uri.getHost();
         this.url = uri.getPath();
     }
 
