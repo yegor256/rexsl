@@ -136,4 +136,17 @@ public final class CookieBuilderTest {
         );
     }
 
+    /**
+     * CookieBuilder can build cookie with broken URI.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void buildsCookieWithBrokenInputUri() throws Exception {
+        new CookieBuilder(new URI("#"))
+            .name("some-cookie-name-888")
+            .value("the-value")
+            .path("/999")
+            .build();
+    }
+
 }
