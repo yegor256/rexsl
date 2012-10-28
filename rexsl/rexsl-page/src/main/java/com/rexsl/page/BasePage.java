@@ -244,6 +244,15 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     }
 
     /**
+     * Get SSL or non-SSL flag.
+     * @return The flag
+     */
+    @XmlAttribute
+    public final boolean isSsl() {
+        return "https".equals(this.home().uriInfo().getBaseUri().getScheme());
+    }
+
+    /**
      * Get page generation time, in milliseconds.
      * @return Page generation time
      */

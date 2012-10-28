@@ -58,6 +58,7 @@ public final class BasePageTest {
             XhtmlMatchers.hasXPaths(
                 "/page/@date",
                 "/page/@ip",
+                "/page/@ssl",
                 "/page/millis",
                 "/page/title[. = 'hello, world!']",
                 "/page/links/link[@rel = 'home']",
