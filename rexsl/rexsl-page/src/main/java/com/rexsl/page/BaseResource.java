@@ -169,7 +169,13 @@ public class BaseResource implements Resource {
      */
     @Context
     public final void setUriInfo(@NotNull final UriInfo info) {
-        this.iuriInfo = info;
+        final Resource.XForwardedFor fwd =
+            this.getClass().getAnnotation(Resource.XForwardedFor.class);
+        if (fwd == null) {
+            this.iuriInfo = info;
+        } else {
+            this.iuriInfo = new ForwardedUriInfo(info, this.ihttpHeaders);
+        }
         Logger.debug(
             this,
             "#setUriInfo(%[type]s): injected",

@@ -29,67 +29,39 @@
  */
 package com.rexsl.page;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.HttpHeaders;
+import java.net.URI;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Providers;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * JAX-RS resource has to implement this interface, in order to be
- * injectable into {@link BasePage}.
- *
+ * Test case for {@link ForwardedUriInfo}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
- * @since 0.3.7
- * @see BasePage
+ * @version $Id: ForwardedUriInfoTest.java 2143 2012-10-28 15:44:26Z yegor@tpc2.com $
  */
-public interface Resource {
+public final class ForwardedUriInfoTest {
 
     /**
-     * This resource should understand {@code X-Forwarded-For}
-     * HTTP header and change its properties (mostly inside
-     * {@link UriInfo}) accordingly.
-     *
-     * @see <a href="http://en.wikipedia.org/wiki/X-Forwarded-For">X-Forwarded-For HTTP header</a>
-     * @since 0.4
+     * ForwardedUriInfo can forward request.
+     * @throws Exception If there is some problem inside
      */
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    public @interface XForwardedFor {
+    @Test
+    public void forwardsUriCorrectly() throws Exception {
+        final UriInfo info = new ForwardedUriInfo(
+            new UriInfoMocker()
+                .withRequestUri(new URI("http://localhost:80/abc/foo?test"))
+                .mock(),
+            new HttpHeadersMocker()
+                .withHeader("X-Forwarded-For", "example.com")
+                .withHeader("X-Forwarded-Proto", "443")
+                .mock()
+        );
+        MatcherAssert.assertThat(
+            info.getRequestUri().toString(),
+            Matchers.equalTo("https://example.com:443/abc/foo?test")
+        );
     }
-
-    /**
-     * When this resource creation was started by JAX-RS implementation.
-     * @return Time in milliseconds
-     */
-    long started();
-
-    /**
-     * Get URI Info.
-     * @return URI info
-     */
-    UriInfo uriInfo();
-
-    /**
-     * All registered JAX-RS providers.
-     * @return Providers
-     */
-    Providers providers();
-
-    /**
-     * All Http Headers.
-     * @return Headers
-     */
-    HttpHeaders httpHeaders();
-
-    /**
-     * Request just received.
-     * @return The request
-     */
-    HttpServletRequest httpServletRequest();
 
 }
