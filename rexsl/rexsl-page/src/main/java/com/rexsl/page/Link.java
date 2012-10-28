@@ -49,8 +49,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * <p>This is how it is supposed to be used, for example:
  *
- * <pre>
- * &#64;Path("/alpha")
+ * <pre> &#64;Path("/alpha")
  * public class MainRs {
  *   &#64;GET
  *   &#64;Produces(MediaTypes.APPLICATION_XML)
@@ -61,14 +60,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  *       .link(new Link("search", "./s"))
  *       .link(new Link("start", "/start"));
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>That is how an XML will look like (if the site is deployed to
  * {@code http://example.com/foo/}):
  *
- * <pre>
- * &lt;?xml version="1.0" ?&gt;
+ * <pre> &lt;?xml version="1.0" ?&gt;
  * &lt;?xml-stylesheet type='text/xsl' href='/xsl/front.xsl'?&gt;
  * &lt;page&gt;
  *   &lt;links&gt;
@@ -77,23 +74,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  *     &lt;link rel="start" href="http://example.com/foo/start"
  *       type="application/xml"/&gt;
  *   &lt;/links&gt;
- * &lt;/page&gt;
- * </pre>
+ * &lt;/page&gt;</pre>
  *
  * <p>Sometimes it's necessary to add more information to the link, besides the
  * the mandatory {@code rel}, {@code href}, and {@code type} attributes. That's
  * how you can specify more:
  *
- * <pre>
- * return new PageBuilder()
+ * <pre> return new PageBuilder()
  *   .build(BasePage.class)
- *   .link(new Link("search", "./s").with(new JaxbBundle("name", "John Doe")))
- * </pre>
+ *   .link(
+ *     new Link("search", "./s")
+ *       .with(new JaxbBundle("name", "John Doe"))
+ *   )</pre>
  *
  * <p>The result XML will look like:
  *
- * <pre>
- * &lt;?xml version="1.0" ?&gt;
+ * <pre>&lt;?xml version="1.0" ?&gt;
  * &lt;?xml-stylesheet type='text/xsl' href='/xsl/front.xsl'?&gt;
  * &lt;page&gt;
  *   &lt;links&gt;
@@ -102,8 +98,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *       &lt;name&gt;John Doe&lt;/name&gt;
  *     &lt;/link&gt;
  *   &lt;/links&gt;
- * &lt;/page&gt;
- * </pre>
+ * &lt;/page&gt;</pre>
  *
  * <p>URI provided as a second parameter of any constructor of this class
  * may be absolute or relative. It is relative if it starts with a slash

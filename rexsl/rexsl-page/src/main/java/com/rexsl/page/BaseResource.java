@@ -44,8 +44,7 @@ import javax.ws.rs.ext.Providers;
  * classes and construct pages with {@link PageBuilder},
  * on top of {@link BasePage}, for example:
  *
- * <pre>
- * &#64;Path("/")
+ * <pre> &#64;Path("/")
  * public class MainRs extends BaseResource {
  *   &#64;GET
  *   &#64;Produces(MediaTypes.APPLICATION_XML)
@@ -56,8 +55,7 @@ import javax.ws.rs.ext.Providers;
  *       .init(this)
  *       .append(new JaxbBundle("text", "Hello!"));
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$

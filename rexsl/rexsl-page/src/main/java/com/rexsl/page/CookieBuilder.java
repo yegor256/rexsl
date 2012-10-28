@@ -42,7 +42,7 @@ import javax.ws.rs.core.UriBuilder;
  *
  * <p>It is a convenient cookie builder for JAX-RS responses, for example:
  *
- * <pre>Response.ok().cookie(
+ * <pre> Response.ok().cookie(
  *   new CookieBuilder(this.uriInfo().getBaseUri())
  *     .name("my-cookie")
  *     .value("some value of the cookie")
@@ -52,7 +52,7 @@ import javax.ws.rs.core.UriBuilder;
  *
  * <p>When you want to instruct the client to delete the cookie:
  *
- * <pre>Response.ok().cookie(
+ * <pre> Response.ok().cookie(
  *   new CookieBuilder(this.uriInfo().getBaseUri())
  *     .name("my-cookie")
  *     .build()

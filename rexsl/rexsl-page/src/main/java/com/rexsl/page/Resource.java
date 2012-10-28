@@ -46,6 +46,18 @@ import javax.ws.rs.ext.Providers;
 public interface Resource {
 
     /**
+     * This resource should understand {@code X-Forwarded-For}
+     * HTTP header and change its properties (mostly inside
+     * {@link UriInfo}) accordingly.
+     *
+     * @see <a href="http://en.wikipedia.org/wiki/X-Forwarded-For">X-Forwarded-For HTTP header</a>
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface XForwardedFor {
+    }
+
+    /**
      * When this resource creation was started by JAX-RS implementation.
      * @return Time in milliseconds
      */
