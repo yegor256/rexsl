@@ -51,6 +51,7 @@ public interface Resource {
      * {@link UriInfo}) accordingly.
      *
      * @see <a href="http://en.wikipedia.org/wiki/X-Forwarded-For">X-Forwarded-For HTTP header</a>
+     * @since 0.4
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
