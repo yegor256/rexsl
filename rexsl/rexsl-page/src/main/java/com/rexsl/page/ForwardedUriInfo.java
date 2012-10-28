@@ -46,6 +46,7 @@ import javax.ws.rs.core.UriInfo;
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: BaseResource.java 2145 2012-10-28 16:07:02Z yegor@tpc2.com $
+ * @see <a href="http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10">IETF Forwarded HTTP Extension</a>
  */
 final class ForwardedUriInfo implements UriInfo {
 
@@ -60,14 +61,14 @@ final class ForwardedUriInfo implements UriInfo {
     private final transient HttpHeaders headers;
 
     /**
-     * Host to forward to or NULL is no forwarding requested.
+     * New host, or empty string if not required, or NULL if not yet sure.
      */
     private transient String host;
 
     /**
-     * Port to forward to or 0 is no forwarding requested.
+     * Scheme to set, or NULL if not necessary
      */
-    private transient int port;
+    private transient String scheme;
 
     /**
      * Public ctor.
@@ -223,7 +224,50 @@ final class ForwardedUriInfo implements UriInfo {
      * @return The same builder
      */
     private UriBuilder forward(final UriBuilder builder) {
+        if (this.host == null) {
+            this.interpret();
+        }
+        if (!this.host.isEmpty()) {
+            builder.host(this.host).scheme(this.scheme);
+        }
         return builder;
+    }
+
+    /**
+     * Interpret HTTP headers and save host/scheme pair into this object.
+     * @see <a href="http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10">IETF Forwarded HTTP Extension</a>
+     */
+    private void interpret() {
+        final MultivaluedMap<String, String> map =
+            this.headers.getRequestHeaders();
+        com.jcabi.log.Logger.info(this, "map: %[list]s", map.keySet());
+        final List<String> hosts = map.get("X-Forwarded-Host");
+        if (hosts != null && !hosts.isEmpty()) {
+            this.host = hosts.get(hosts.size() - 1);
+        }
+        final List<String> protos = map.get("X-Forwarded-Proto");
+        if (protos != null && !protos.isEmpty()) {
+            this.scheme = protos.get(protos.size() - 1);
+        }
+        final List<String> fwds = map.get("Forwarded");
+        if (fwds != null) {
+            for (String fwd : fwds) {
+                for (String sector : fwd.split("\\s*,\\s*")) {
+                    for (String pair : sector.split("\\s*;\\s*")) {
+                        final String[] parts = pair.split("=", 2);
+                        if (parts[0].equals("host")) {
+                            this.host = parts[1];
+                        }
+                        if (parts[0].equals("proto")) {
+                            this.scheme = parts[1];
+                        }
+                    }
+                }
+            }
+        }
+        if (this.host == null) {
+            this.host = "";
+        }
     }
 
 }

@@ -48,19 +48,39 @@ public final class ForwardedUriInfoTest {
      * @throws Exception If there is some problem inside
      */
     @Test
-    public void forwardsUriCorrectly() throws Exception {
+    public void forwardsUriCorrectlyWithXForwarder() throws Exception {
         final UriInfo info = new ForwardedUriInfo(
             new UriInfoMocker()
-                .withRequestUri(new URI("http://localhost:80/abc/foo?test"))
+                .withRequestUri(new URI("http://localhost/abc/foo?test"))
                 .mock(),
             new HttpHeadersMocker()
-                .withHeader("X-Forwarded-For", "example.com")
-                .withHeader("X-Forwarded-Proto", "443")
+                .withHeader("X-Forwarded-Host", "example.com")
+                .withHeader("X-Forwarded-Proto", "https")
                 .mock()
         );
         MatcherAssert.assertThat(
             info.getRequestUri().toString(),
-            Matchers.equalTo("https://example.com:443/abc/foo?test")
+            Matchers.equalTo("https://example.com/abc/foo?test")
+        );
+    }
+
+    /**
+     * ForwardedUriInfo can forward request with official header.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void forwardsUriCorrectlyWithOfficialForwarder() throws Exception {
+        final UriInfo info = new ForwardedUriInfo(
+            new UriInfoMocker()
+                .withRequestUri(new URI("http://localhost/a-a"))
+                .mock(),
+            new HttpHeadersMocker()
+                .withHeader("Forwarded", "host=a.com;for=proxy;proto=https")
+                .mock()
+        );
+        MatcherAssert.assertThat(
+            info.getRequestUri().toString(),
+            Matchers.equalTo("https://a.com/a-a")
         );
     }
 

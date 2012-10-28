@@ -55,11 +55,12 @@ public interface Resource {
      * {@link UriInfo}) accordingly.
      *
      * @see <a href="http://en.wikipedia.org/wiki/X-Forwarded-For">X-Forwarded-For HTTP header</a>
+     * @see <a href="http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10">IETF Forwarded HTTP Extension</a>
      * @since 0.4
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    public @interface XForwardedFor {
+    public @interface Forwarded {
     }
 
     /**

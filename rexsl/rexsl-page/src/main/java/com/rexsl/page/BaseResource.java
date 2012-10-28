@@ -57,6 +57,8 @@ import javax.ws.rs.ext.Providers;
  *   }
  * }</pre>
  *
+ * <p>The class is mutable and NOT thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.7
@@ -169,9 +171,7 @@ public class BaseResource implements Resource {
      */
     @Context
     public final void setUriInfo(@NotNull final UriInfo info) {
-        final Resource.XForwardedFor fwd =
-            this.getClass().getAnnotation(Resource.XForwardedFor.class);
-        if (fwd == null) {
+        if (this.getClass().getAnnotation(Resource.Forwarded.class) == null) {
             this.iuriInfo = info;
         } else {
             this.iuriInfo = new ForwardedUriInfo(info, this.ihttpHeaders);

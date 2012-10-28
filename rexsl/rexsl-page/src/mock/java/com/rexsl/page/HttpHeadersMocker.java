@@ -54,7 +54,7 @@ public final class HttpHeadersMocker {
     /**
      * The mock.
      */
-    private final transient HttpHeaders hdrs =
+    private final transient HttpHeaders subj =
         Mockito.mock(HttpHeaders.class);
 
     /**
@@ -83,6 +83,7 @@ public final class HttpHeadersMocker {
     public HttpHeaders mock() {
         final MultivaluedMap<String, String> map =
             Mockito.mock(MultivaluedMap.class);
+        Mockito.doReturn(map).when(this.subj).getRequestHeaders();
         Mockito.doAnswer(
             new Answer<List<String>>() {
                 public List<String> answer(final InvocationOnMock inv) {
@@ -90,8 +91,7 @@ public final class HttpHeadersMocker {
                     return HttpHeadersMocker.this.headers.get(name);
                 }
             }
-        ).when(this.hdrs).getRequestHeader(Mockito.anyString());
-        Mockito.doReturn(map).when(this.hdrs).getRequestHeaders();
+        ).when(this.subj).getRequestHeader(Mockito.anyString());
         Mockito.doAnswer(
             new Answer<String>() {
                 public String answer(final InvocationOnMock inv) {
@@ -137,7 +137,23 @@ public final class HttpHeadersMocker {
                 }
             }
         ).when(map).entrySet();
-        return this.hdrs;
+        Mockito.doAnswer(
+            new Answer<Set<String>>() {
+                public Set<String> answer(final InvocationOnMock inv) {
+                    return HttpHeadersMocker.this.headers.keySet();
+                }
+            }
+        ).when(map).keySet();
+        Mockito.doAnswer(
+            new Answer<List<String>>() {
+                public List<String> answer(final InvocationOnMock inv) {
+                    return HttpHeadersMocker.this.headers.get(
+                        inv.getArguments()[0].toString()
+                    );
+                }
+            }
+        ).when(map).get(Mockito.anyString());
+        return this.subj;
     }
 
 }

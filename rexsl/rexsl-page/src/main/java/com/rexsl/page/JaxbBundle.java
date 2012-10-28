@@ -92,6 +92,7 @@ import org.w3c.dom.Element;
  * of XML data.
  *
  * <p>The class is mutable and thread-safe.
+ *
  * @todo #430 A new design would be required for this class. <br/>
  *  <b>The problems</b>:
  *  <ul>
