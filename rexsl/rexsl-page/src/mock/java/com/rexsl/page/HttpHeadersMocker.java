@@ -29,15 +29,13 @@
  */
 package com.rexsl.page;
 
-import java.util.AbstractMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import org.mockito.Mockito;
@@ -54,14 +52,14 @@ public final class HttpHeadersMocker {
     /**
      * The mock.
      */
-    private final transient HttpHeaders hdrs =
+    private final transient HttpHeaders subj =
         Mockito.mock(HttpHeaders.class);
 
     /**
      * Multivalued map of headers.
      */
     private final transient ConcurrentMap<String, List<String>> headers =
-        new ConcurrentHashMap<String, List<String>>();
+        new ConcurrentSkipListMap<String, List<String>>();
 
     /**
      * With this header on board.
@@ -83,6 +81,7 @@ public final class HttpHeadersMocker {
     public HttpHeaders mock() {
         final MultivaluedMap<String, String> map =
             Mockito.mock(MultivaluedMap.class);
+        Mockito.doReturn(map).when(this.subj).getRequestHeaders();
         Mockito.doAnswer(
             new Answer<List<String>>() {
                 public List<String> answer(final InvocationOnMock inv) {
@@ -90,8 +89,7 @@ public final class HttpHeadersMocker {
                     return HttpHeadersMocker.this.headers.get(name);
                 }
             }
-        ).when(this.hdrs).getRequestHeader(Mockito.anyString());
-        Mockito.doReturn(map).when(this.hdrs).getRequestHeaders();
+        ).when(this.subj).getRequestHeader(Mockito.anyString());
         Mockito.doAnswer(
             new Answer<String>() {
                 public String answer(final InvocationOnMock inv) {
@@ -118,26 +116,30 @@ public final class HttpHeadersMocker {
             }
         ).when(map).containsKey(Mockito.anyString());
         Mockito.doAnswer(
-            new Answer<Set<Map.Entry<String, String>>>() {
-                public Set<Map.Entry<String, String>> answer(
+            new Answer<Set<Map.Entry<String, List<String>>>>() {
+                public Set<Map.Entry<String, List<String>>> answer(
                     final InvocationOnMock inv) {
-                    final Set<Map.Entry<String, String>> entries =
-                        new HashSet<Map.Entry<String, String>>();
-                    for (String key : HttpHeadersMocker.this.headers.keySet()) {
-                        for (String value
-                            : HttpHeadersMocker.this.headers.get(key)) {
-                            entries.add(
-                                new AbstractMap.SimpleEntry<String, String>(
-                                    key, value
-                                )
-                            );
-                        }
-                    }
-                    return entries;
+                    return HttpHeadersMocker.this.headers.entrySet();
                 }
             }
         ).when(map).entrySet();
-        return this.hdrs;
+        Mockito.doAnswer(
+            new Answer<Set<String>>() {
+                public Set<String> answer(final InvocationOnMock inv) {
+                    return HttpHeadersMocker.this.headers.keySet();
+                }
+            }
+        ).when(map).keySet();
+        Mockito.doAnswer(
+            new Answer<List<String>>() {
+                public List<String> answer(final InvocationOnMock inv) {
+                    return HttpHeadersMocker.this.headers.get(
+                        inv.getArguments()[0].toString()
+                    );
+                }
+            }
+        ).when(map).get(Mockito.anyString());
+        return this.subj;
     }
 
 }

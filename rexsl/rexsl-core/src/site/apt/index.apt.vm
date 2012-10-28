@@ -1,5 +1,5 @@
  ------
- Introduction to ReXSL
+ ReXSL core module
  ------
  Yegor Bugayenko
  ------
@@ -37,8 +37,6 @@
 ~~
 
 ReXSL core module
-
-  Read {{{./apidocs}JavaDoc}} of the module.
 
   There are two classes that you should use in your project (both
   of them are always mandatory):
@@ -90,6 +88,9 @@ ReXSL core module
 </dependency>
 +--
 
+  Also take a look at {{{../rexsl-page}rexsl-page}}, which
+  helps to build RESTful XML pages.
+
 * Supplementary Classes
 
   {{{./apidocs/com/rexsl/core/Manifests.html}<<<Manifests>>>}} is
@@ -107,7 +108,4 @@ ReXSL core module
 
   {{{./apidocs/com/rexsl/log/CloudAppender.html}<<<CloudAppender>>>}} is
   a log4j appender for logging your events directly to some cloud platform.
-
-  {{{./apidocs/com/rexsl/misc/CookieBuilder.html}<<<CookieBuilder>>>}} is
-  a convenient builder of JAX-RS <<<javax.ws.rs.NewCookie>>> class instance.
 

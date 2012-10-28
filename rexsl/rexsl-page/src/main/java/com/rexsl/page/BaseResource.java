@@ -44,8 +44,7 @@ import javax.ws.rs.ext.Providers;
  * classes and construct pages with {@link PageBuilder},
  * on top of {@link BasePage}, for example:
  *
- * <pre>
- * &#64;Path("/")
+ * <pre> &#64;Path("/")
  * public class MainRs extends BaseResource {
  *   &#64;GET
  *   &#64;Produces(MediaTypes.APPLICATION_XML)
@@ -56,8 +55,9 @@ import javax.ws.rs.ext.Providers;
  *       .init(this)
  *       .append(new JaxbBundle("text", "Hello!"));
  *   }
- * }
- * </pre>
+ * }</pre>
+ *
+ * <p>The class is mutable and NOT thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
@@ -171,7 +171,11 @@ public class BaseResource implements Resource {
      */
     @Context
     public final void setUriInfo(@NotNull final UriInfo info) {
-        this.iuriInfo = info;
+        if (this.getClass().getAnnotation(Resource.Forwarded.class) == null) {
+            this.iuriInfo = info;
+        } else {
+            this.iuriInfo = new ForwardedUriInfo(info, this.ihttpHeaders);
+        }
         Logger.debug(
             this,
             "#setUriInfo(%[type]s): injected",

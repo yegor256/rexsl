@@ -56,22 +56,19 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * <p>A convenient utility class that enables on-fly creation of JAXB annotated
  * collections of elements, for example:
  *
- * <pre>
- * &#64;XmlRootElement
+ * <pre> &#64;XmlRootElement
  * public class Page {
  *   &#64;XmlElement
  *   public Object getEmployees() {
  *     Collection&lt;Employee&gt; employees = this.retrieve();
  *     return JaxbGroup.build(employees, "employee");
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>It's even more convenient in combination with {@link JaxbBundle}, for
  * example:
  *
- * <pre>
- * &#64;XmlRootElement
+ * <pre> &#64;XmlRootElement
  * public class Page {
  *   &#64;XmlElement
  *   public Object getEmployee() {
@@ -81,8 +78,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  *       .up()
  *       .element();
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>The class is immutable and thread-safe.
  *

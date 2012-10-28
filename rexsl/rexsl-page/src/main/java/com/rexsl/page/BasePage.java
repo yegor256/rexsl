@@ -51,15 +51,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * <p>Use it as a base class for your own page, for example:
  *
- * <pre>
- * public class MyBasePage extends BasePage&lt;MyPage&gt; {
+ * <pre> public class MyBasePage extends BasePage&lt;MyPage&gt; {
  *   &#64;XmlAnyElement(lax = true)
  *   &#64;XmlElement
  *   public String getUser() {
  *     return "John Doe";
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>However, it is recommended to use {@link #append(Object)} and
  * {@link JaxbGroup}/{@link JaxbBundle} instead of defining own methods
@@ -68,8 +66,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * <p>Don't forget to call {@link #init(Resource)} right after the page is
  * built by {@link PageBuilder}, for example:
  *
- * <pre>
- * &#64;Path("/")
+ * <pre> &#64;Path("/")
  * public class MainRs extends BaseResource {
  *   &#64;GET
  *   &#64;Produces(MediaTypes.APPLICATION_XML)
@@ -79,8 +76,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *       .build(BasePage.class)
  *       .init(this);
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>JAX-RS resource classes should implement {@link Resource} or even
  * extend {@link BaseResource}, which is preferred.
@@ -89,13 +85,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * {@code links} and {@code millis} element. Thus, an empty page (if you don't
  * {@link #append(Object)} anything to it) will look like:
  *
- * <pre>
- * &lt;?xml version="1.0" ?&gt;
+ * <pre> &lt;?xml version="1.0" ?&gt;
  * &lt;page date="2012-04-15T07:07Z" ip="127.0.0.1"&gt;
  *   &lt;links /&gt;
  *   &lt;millis&gt;234&lt;/millis&gt;
- * &lt;/page&gt;
- * </pre>
+ * &lt;/page&gt;</pre>
  *
  * <p>This functionality is not changeable. If this is not what you need in
  * your page - just don't use this class and create your own. However, we
@@ -241,6 +235,15 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     @XmlAttribute
     public final Date getDate() {
         return new Date();
+    }
+
+    /**
+     * Get SSL or non-SSL flag.
+     * @return The flag
+     */
+    @XmlAttribute
+    public final boolean isSsl() {
+        return "https".equals(this.home().uriInfo().getBaseUri().getScheme());
     }
 
     /**

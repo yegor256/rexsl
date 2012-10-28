@@ -46,8 +46,7 @@ import org.w3c.dom.Element;
  * (<a href="http://en.wikipedia.org/wiki/Fluent_interface">fluent
  * interface</a>):
  *
- * <pre>
- * final org.w3c.dom.Element elm = new JaxbBundle("root")
+ * <pre> final org.w3c.dom.Element elm = new JaxbBundle("root")
  *   .add("employee")
  *     .attr("age", "28")
  *     .add("dept", "Software")
@@ -58,28 +57,24 @@ import org.w3c.dom.Element;
  *     .add("rank", "high")
  *   .up()
  *   .attr("time", new Date())
- *   .element();
- * </pre>
+ *   .element();</pre>
  *
  * <p>If you convert this {@code elm} to XML this is how it will look:
  *
- * <pre>
- * &lt;?xml version="1.0" ?&gt;
+ * <pre> &lt;?xml version="1.0" ?&gt;
  * &lt;root time="Sun Jul 20 16:17:00 EDT 1969"&gt;
  *   &lt;employee age="28"&gt;
  *     &lt;dept country="DE"&gt;Software&lt;/dept&gt;
  *     &lt;salary&gt;&amp;gt; &#x20AC; 50,000&lt;/salary&gt;
  *     &lt;rank&gt;high&lt;/rank&gt;
  *   &lt;/employee&gt;
- * &lt;/root&gt;
- * </pre>
+ * &lt;/root&gt;</pre>
  *
  * <p>Then, you can add this {@link Element} to your JAXB object, and return
  * it from a method annotated with {@link javax.xml.bind.annotation.XmlElement},
  * for example:
  *
- * <pre>
- * &#64;XmlRootElement
+ * <pre> &#64;XmlRootElement
  * public class Page {
  *   &#64;XmlElement
  *   public Object getEmployee() {
@@ -90,14 +85,14 @@ import org.w3c.dom.Element;
  *       .up()
  *       .element();
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>This mechanism, very often, is much more convenient and shorter than
  * a declaration of a new POJO every time you need to return a small piece
  * of XML data.
  *
  * <p>The class is mutable and thread-safe.
+ *
  * @todo #430 A new design would be required for this class. <br/>
  *  <b>The problems</b>:
  *  <ul>

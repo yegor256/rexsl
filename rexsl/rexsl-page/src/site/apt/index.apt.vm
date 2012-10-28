@@ -1,5 +1,5 @@
  ------
- Page modeling
+ RESTful XML Page Modeling with ReXSL-Page
  ------
  Yegor Bugayenko
  ------
@@ -36,7 +36,7 @@
 ~~ OF THE POSSIBILITY OF SUCH DAMAGE.
 ~~
 
-RESTful Page Modeling
+RESTful XML Page Modeling with ReXSL-Page
 
   With this module you can build REST XML response much faster
   (provided you defined <<<MyPage>>> class yourself already):
@@ -65,7 +65,9 @@ public class MainRs {
 </page>
 +--
 
-  Isn't it neat? :) Start reading from {{{./apidocs/com/rexsl/page/PageBuilder.html}<<<com.rexsl.page.PageBuilder>>>}}.
+  Isn't it neat? :)
+  Start reading from
+  {{{./apidocs/com/rexsl/page/PageBuilder.html}<<<com.rexsl.page.PageBuilder>>>}}.
 
   Include this dependency into your project (or download
   {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-page/${releasedVersion}/rexsl-page-${releasedVersion}.jar}rexsl-page-${releasedVersion}.jar}}

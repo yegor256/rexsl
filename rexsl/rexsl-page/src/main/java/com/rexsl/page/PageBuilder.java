@@ -56,8 +56,7 @@ import org.apache.commons.lang.StringUtils;
  * (they all will inherit it). The base class should be JAXB annotated, for
  * example:
  *
- * <pre>
- * &#64;XmlRootElement(name = "page")
+ * <pre> &#64;XmlRootElement(name = "page")
  * public class MyPage extends BasePage {
  *   public String title;
  *   public BasePage title(String text) {
@@ -67,15 +66,13 @@ import org.apache.commons.lang.StringUtils;
  *   public String getTitle() {
  *     return this.title;
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>Then, in JAX-RS resource you instantiate and extend this class with
  * application/request specific content (we think that suffix {@code Rs}
  * is a good notation for all JAX-RS resources):
  *
- * <pre>
- * &#64;Path("/")
+ * <pre> &#64;Path("/")
  * public class MainRs {
  *   &#64;GET
  *   &#64;Produces(MediaTypes.APPLICATION_XML)
@@ -86,19 +83,16 @@ import org.apache.commons.lang.StringUtils;
  *       .append(new JaxbBundle("score", 2))
  *       .title("Hello, world!");
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>That's it. The XML produced by JAX-RS and JAXB will look like:
  *
- * <pre>
- * &lt;?xml version="1.0" ?&gt;
+ * <pre> &lt;?xml version="1.0" ?&gt;
  * &lt;?xml-stylesheet type='text/xsl' href='/xsl/front.xsl'?&gt;
  * &lt;page&gt;
  *   &lt;score&gt;2&lt;/score&gt;
  *   &lt;title&gt;Hello, world!&lt;/title&gt;
- * &lt;/page&gt;
- * </pre>
+ * &lt;/page&gt;</pre>
  *
  * <p>We recommend to extend {@link BasePage}, since it already implements
  * a few most popular and necessary methods and properties.

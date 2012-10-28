@@ -29,51 +29,60 @@
  */
 package com.rexsl.page;
 
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.net.URI;
+import javax.ws.rs.core.UriInfo;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link BasePage}.
+ * Test case for {@link ForwardedUriInfo}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id$
+ * @version $Id: ForwardedUriInfoTest.java 2143 2012-10-28 15:44:26Z yegor@tpc2.com $
  */
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
-public final class BasePageTest {
+public final class ForwardedUriInfoTest {
 
     /**
-     * BasePage can be converted to XML.
+     * ForwardedUriInfo can forward request.
      * @throws Exception If there is some problem inside
      */
     @Test
-    public void convertsToXml() throws Exception {
-        final BasePageTest.FooPage page = new BasePageTest.FooPage()
-            .init(new ResourceMocker().mock())
-            .append(new JaxbBundle("title", "hello, world!"))
-            .link(new Link("test", "/foo"));
+    public void forwardsUriCorrectlyWithXForwarder() throws Exception {
+        final UriInfo info = new ForwardedUriInfo(
+            new UriInfoMocker()
+                .withRequestUri(new URI("http://localhost/abc/foo?test"))
+                .mock(),
+            new HttpHeadersMocker()
+                .withHeader("X-forwarded-Host", "example.com")
+                .withHeader("x-Forwarded-host", "proxy.example.com")
+                .withHeader("X-Forwarded-Proto", "https")
+                .mock()
+        );
         MatcherAssert.assertThat(
-            JaxbConverter.the(page),
-            XhtmlMatchers.hasXPaths(
-                "/page/@date",
-                "/page/@ip",
-                "/page/@ssl",
-                "/page/millis",
-                "/page/title[. = 'hello, world!']",
-                "/page/links/link[@rel = 'home']",
-                "/page/links/link[@rel = 'self']",
-                "/page/links/link[@rel = 'test']"
-            )
+            info.getRequestUri().toString(),
+            Matchers.equalTo("https://example.com/abc/foo?test")
         );
     }
 
     /**
-     * Base page for tests.
+     * ForwardedUriInfo can forward request with official header.
+     * @throws Exception If there is some problem inside
      */
-    @XmlRootElement(name = "page")
-    private static final class FooPage
-        extends BasePage<BasePageTest.FooPage, Resource> {
+    @Test
+    public void forwardsUriCorrectlyWithOfficialForwarder() throws Exception {
+        final UriInfo info = new ForwardedUriInfo(
+            new UriInfoMocker()
+                .withRequestUri(new URI("http://localhost/a-a"))
+                .mock(),
+            new HttpHeadersMocker()
+                .withHeader("Forwarded", "host=a.com;for=proxy;proto=https")
+                .withHeader("forwarded", "host=b.com;for=proxy;proto=http")
+                .mock()
+        );
+        MatcherAssert.assertThat(
+            info.getRequestUri().toString(),
+            Matchers.equalTo("https://a.com/a-a")
+        );
     }
 
 }

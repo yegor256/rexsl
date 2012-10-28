@@ -29,6 +29,10 @@
  */
 package com.rexsl.page;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriInfo;
@@ -44,6 +48,20 @@ import javax.ws.rs.ext.Providers;
  * @see BasePage
  */
 public interface Resource {
+
+    /**
+     * This resource should understand {@code X-Forwarded-For}
+     * HTTP header and change its properties (mostly inside
+     * {@link UriInfo}) accordingly.
+     *
+     * @see <a href="http://en.wikipedia.org/wiki/X-Forwarded-For">X-Forwarded-For HTTP header</a>
+     * @see <a href="http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10">IETF Forwarded HTTP Extension</a>
+     * @since 0.4
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface Forwarded {
+    }
 
     /**
      * When this resource creation was started by JAX-RS implementation.
