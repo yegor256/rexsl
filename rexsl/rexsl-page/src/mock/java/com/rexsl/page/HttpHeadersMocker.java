@@ -29,15 +29,13 @@
  */
 package com.rexsl.page;
 
-import java.util.AbstractMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import org.mockito.Mockito;
@@ -61,7 +59,7 @@ public final class HttpHeadersMocker {
      * Multivalued map of headers.
      */
     private final transient ConcurrentMap<String, List<String>> headers =
-        new ConcurrentHashMap<String, List<String>>();
+        new ConcurrentSkipListMap<String, List<String>>();
 
     /**
      * With this header on board.
@@ -118,22 +116,10 @@ public final class HttpHeadersMocker {
             }
         ).when(map).containsKey(Mockito.anyString());
         Mockito.doAnswer(
-            new Answer<Set<Map.Entry<String, String>>>() {
-                public Set<Map.Entry<String, String>> answer(
+            new Answer<Set<Map.Entry<String, List<String>>>>() {
+                public Set<Map.Entry<String, List<String>>> answer(
                     final InvocationOnMock inv) {
-                    final Set<Map.Entry<String, String>> entries =
-                        new HashSet<Map.Entry<String, String>>();
-                    for (String key : HttpHeadersMocker.this.headers.keySet()) {
-                        for (String value
-                            : HttpHeadersMocker.this.headers.get(key)) {
-                            entries.add(
-                                new AbstractMap.SimpleEntry<String, String>(
-                                    key, value
-                                )
-                            );
-                        }
-                    }
-                    return entries;
+                    return HttpHeadersMocker.this.headers.entrySet();
                 }
             }
         ).when(map).entrySet();

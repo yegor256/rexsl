@@ -33,7 +33,6 @@ import java.net.URI;
 import javax.ws.rs.core.UriInfo;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -54,7 +53,8 @@ public final class ForwardedUriInfoTest {
                 .withRequestUri(new URI("http://localhost/abc/foo?test"))
                 .mock(),
             new HttpHeadersMocker()
-                .withHeader("X-Forwarded-Host", "example.com")
+                .withHeader("X-forwarded-Host", "example.com")
+                .withHeader("x-Forwarded-host", "proxy.example.com")
                 .withHeader("X-Forwarded-Proto", "https")
                 .mock()
         );
@@ -76,6 +76,7 @@ public final class ForwardedUriInfoTest {
                 .mock(),
             new HttpHeadersMocker()
                 .withHeader("Forwarded", "host=a.com;for=proxy;proto=https")
+                .withHeader("forwarded", "host=b.com;for=proxy;proto=http")
                 .mock()
         );
         MatcherAssert.assertThat(

@@ -29,9 +29,10 @@
  */
 package com.rexsl.page;
 
-import com.jcabi.log.Logger;
 import java.net.URI;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.PathSegment;
@@ -61,12 +62,17 @@ final class ForwardedUriInfo implements UriInfo {
     private final transient HttpHeaders headers;
 
     /**
+     * TRUE if HTTP headers already where analyzed.
+     */
+    private transient boolean analyzed;
+
+    /**
      * New host, or empty string if not required, or NULL if not yet sure.
      */
     private transient String host;
 
     /**
-     * Scheme to set, or NULL if not necessary
+     * Scheme to set, or NULL if not necessary.
      */
     private transient String scheme;
 
@@ -224,49 +230,57 @@ final class ForwardedUriInfo implements UriInfo {
      * @return The same builder
      */
     private UriBuilder forward(final UriBuilder builder) {
-        if (this.host == null) {
-            this.interpret();
+        if (!this.analyzed) {
+            for (Map.Entry<String, List<String>> header
+                : this.headers.getRequestHeaders().entrySet()) {
+                for (String value : header.getValue()) {
+                    this.consume(header.getKey(), value);
+                }
+            }
+            this.analyzed = true;
         }
-        if (!this.host.isEmpty()) {
-            builder.host(this.host).scheme(this.scheme);
+        if (this.host != null) {
+            builder.host(this.host);
+        }
+        if (this.scheme != null) {
+            builder.scheme(this.scheme);
         }
         return builder;
     }
 
     /**
-     * Interpret HTTP headers and save host/scheme pair into this object.
+     * Interpret HTTP header and save host/scheme pair into this object.
+     * @param name HTTP header name
+     * @param value HTTP header value
      * @see <a href="http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10">IETF Forwarded HTTP Extension</a>
      */
-    private void interpret() {
-        final MultivaluedMap<String, String> map =
-            this.headers.getRequestHeaders();
-        com.jcabi.log.Logger.info(this, "map: %[list]s", map.keySet());
-        final List<String> hosts = map.get("X-Forwarded-Host");
-        if (hosts != null && !hosts.isEmpty()) {
-            this.host = hosts.get(hosts.size() - 1);
+    private void consume(final String name, final String value) {
+        if (this.host == null
+            && "x-forwarded-host".equals(name.toLowerCase(Locale.ENGLISH))) {
+            this.host = value;
+        } else if (this.scheme == null
+            && "x-forwarded-proto".equals(name.toLowerCase(Locale.ENGLISH))) {
+            this.scheme = value;
+        } else if ("forwarded".equals(name.toLowerCase(Locale.ENGLISH))) {
+            this.forwarded(value);
         }
-        final List<String> protos = map.get("X-Forwarded-Proto");
-        if (protos != null && !protos.isEmpty()) {
-            this.scheme = protos.get(protos.size() - 1);
-        }
-        final List<String> fwds = map.get("Forwarded");
-        if (fwds != null) {
-            for (String fwd : fwds) {
-                for (String sector : fwd.split("\\s*,\\s*")) {
-                    for (String pair : sector.split("\\s*;\\s*")) {
-                        final String[] parts = pair.split("=", 2);
-                        if (parts[0].equals("host")) {
-                            this.host = parts[1];
-                        }
-                        if (parts[0].equals("proto")) {
-                            this.scheme = parts[1];
-                        }
-                    }
+    }
+
+    /**
+     * Consume specifically "Forwarded" header.
+     * @param value HTTP header value
+     */
+    private void forwarded(final String value) {
+        for (String sector : value.split("\\s*,\\s*")) {
+            for (String opt : sector.split("\\s*;\\s*")) {
+                final String[] parts = opt.split("=", 2);
+                if (this.host == null && "host".equals(parts[0])) {
+                    this.host = parts[1];
+                }
+                if (this.scheme == null && "proto".equals(parts[0])) {
+                    this.scheme = parts[1];
                 }
             }
-        }
-        if (this.host == null) {
-            this.host = "";
         }
     }
 
