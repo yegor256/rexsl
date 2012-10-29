@@ -30,6 +30,7 @@
 package com.rexsl.page;
 
 import com.jcabi.log.Logger;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Context;
@@ -85,7 +86,8 @@ public class BaseResource implements Resource {
     /**
      * Http headers, injected by JAX-RS implementation.
      */
-    private transient HttpHeaders ihttpHeaders;
+    private final transient AtomicReference<HttpHeaders> ihttpHeaders =
+        new AtomicReference<HttpHeaders>();
 
     /**
      * HTTP servlet request, injected by JAX-RS implementation.
@@ -121,7 +123,7 @@ public class BaseResource implements Resource {
      */
     @Override
     public final HttpHeaders httpHeaders() {
-        if (this.ihttpHeaders == null) {
+        if (this.ihttpHeaders.get() == null) {
             throw new IllegalStateException(
                 Logger.format(
                     "%[type]s#httpHeaders was never injected by JAX-RS",
@@ -129,7 +131,7 @@ public class BaseResource implements Resource {
                 )
             );
         }
-        return this.ihttpHeaders;
+        return this.ihttpHeaders.get();
     }
 
     /**
@@ -205,7 +207,7 @@ public class BaseResource implements Resource {
      */
     @Context
     public final void setHttpHeaders(@NotNull final HttpHeaders hdrs) {
-        this.ihttpHeaders = hdrs;
+        this.ihttpHeaders.set(hdrs);
         Logger.debug(
             this,
             "#setHttpHeaders(%[type]s): injected",

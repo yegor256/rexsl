@@ -33,6 +33,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.PathSegment;
@@ -59,7 +60,7 @@ final class ForwardedUriInfo implements UriInfo {
     /**
      * Http headers, injected by JAX-RS implementation.
      */
-    private final transient HttpHeaders headers;
+    private final transient AtomicReference<HttpHeaders> headers;
 
     /**
      * TRUE if HTTP headers already where analyzed.
@@ -81,7 +82,8 @@ final class ForwardedUriInfo implements UriInfo {
      * @param inf The original UriInfo
      * @param hdrs HTTP headers
      */
-    public ForwardedUriInfo(final UriInfo inf, final HttpHeaders hdrs) {
+    public ForwardedUriInfo(final UriInfo inf,
+        final AtomicReference<HttpHeaders> hdrs) {
         if (inf == null) {
             throw new IllegalStateException(
                 "UriInfo is incorrectly injected into BaseResource"
@@ -236,13 +238,13 @@ final class ForwardedUriInfo implements UriInfo {
      */
     private UriBuilder forward(final UriBuilder builder) {
         if (!this.analyzed) {
-            if (this.headers == null) {
+            if (this.headers.get() == null) {
                 throw new IllegalStateException(
                     "HttpHeaders is not injected into BaseResource"
                 );
             }
             for (Map.Entry<String, List<String>> header
-                : this.headers.getRequestHeaders().entrySet()) {
+                : this.headers.get().getRequestHeaders().entrySet()) {
                 for (String value : header.getValue()) {
                     this.consume(header.getKey(), value);
                 }

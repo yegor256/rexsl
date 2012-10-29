@@ -30,6 +30,8 @@
 package com.rexsl.page;
 
 import java.net.URI;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriInfo;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -52,11 +54,13 @@ public final class ForwardedUriInfoTest {
             new UriInfoMocker()
                 .withRequestUri(new URI("http://localhost/abc/foo?test"))
                 .mock(),
-            new HttpHeadersMocker()
-                .withHeader("X-forwarded-Host", "example.com")
-                .withHeader("x-Forwarded-host", "proxy.example.com")
-                .withHeader("X-Forwarded-Proto", "https")
-                .mock()
+            new AtomicReference<HttpHeaders>(
+                new HttpHeadersMocker()
+                    .withHeader("X-forwarded-Host", "example.com")
+                    .withHeader("x-Forwarded-host", "proxy.example.com")
+                    .withHeader("X-Forwarded-Proto", "https")
+                    .mock()
+            )
         );
         MatcherAssert.assertThat(
             info.getRequestUri().toString(),
@@ -74,10 +78,12 @@ public final class ForwardedUriInfoTest {
             new UriInfoMocker()
                 .withRequestUri(new URI("http://localhost/a-a"))
                 .mock(),
-            new HttpHeadersMocker()
-                .withHeader("Forwarded", "host=a.com;for=proxy;proto=https")
-                .withHeader("forwarded", "host=b.com;for=proxy;proto=http")
-                .mock()
+            new AtomicReference<HttpHeaders>(
+                new HttpHeadersMocker()
+                    .withHeader("Forwarded", "host=a.com;for=proxy;proto=https")
+                    .withHeader("forwarded", "host=b.com;for=proxy;proto=http")
+                    .mock()
+            )
         );
         MatcherAssert.assertThat(
             info.getRequestUri().toString(),
@@ -91,7 +97,10 @@ public final class ForwardedUriInfoTest {
      */
     @Test(expected = IllegalStateException.class)
     public void throwsForNullUriInfo() throws Exception {
-        new ForwardedUriInfo(null, new HttpHeadersMocker().mock());
+        new ForwardedUriInfo(
+            null,
+            new AtomicReference<HttpHeaders>(new HttpHeadersMocker().mock())
+        );
     }
 
     /**
@@ -100,7 +109,10 @@ public final class ForwardedUriInfoTest {
      */
     @Test(expected = IllegalStateException.class)
     public void throwsForNullHttpHeaders() throws Exception {
-        new ForwardedUriInfo(new UriInfoMocker().mock(), null).getRequestUri();
+        new ForwardedUriInfo(
+            new UriInfoMocker().mock(),
+            new AtomicReference<HttpHeaders>()
+        ).getRequestUri();
     }
 
 }
