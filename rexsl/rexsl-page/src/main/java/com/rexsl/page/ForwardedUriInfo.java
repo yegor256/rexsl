@@ -29,6 +29,7 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.log.Logger;
 import java.net.URI;
 import java.util.List;
 import java.util.Locale;
@@ -249,6 +250,12 @@ final class ForwardedUriInfo implements UriInfo {
                     this.consume(header.getKey(), value);
                 }
             }
+            Logger.debug(
+                this,
+                "#forward(..): analyzed, host=%s, scheme=%s",
+                this.host,
+                this.scheme
+            );
             this.analyzed = true;
         }
         if (this.host != null) {
