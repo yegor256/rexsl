@@ -67,10 +67,11 @@ class BaseValidator {
      * @return The response
      */
     protected final TestResponse send(final URI uri, final String entity) {
+        final int len = entity.getBytes().length;
         return RestTester.start(uri)
             .header(HttpHeaders.USER_AGENT, "ReXSL-W3C")
             .header(HttpHeaders.ACCEPT, "application/soap+xml")
-            .header(HttpHeaders.CONTENT_LENGTH, entity.getBytes().length)
+            .header(HttpHeaders.CONTENT_LENGTH, len)
             .header(
                 HttpHeaders.CONTENT_TYPE,
                 Logger.format(
@@ -79,7 +80,13 @@ class BaseValidator {
                     BaseValidator.BOUNDARY
                 )
             )
-            .post("validating through W3C validator", entity);
+            .post(
+                String.format(
+                    "validating %d bytes through W3C validator",
+                    len
+                ),
+                entity
+            );
     }
 
     /**

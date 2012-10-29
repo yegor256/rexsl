@@ -108,6 +108,7 @@ public final class CookieBuilderTest {
                 Matchers.hasProperty("domain", Matchers.equalTo("google.com")),
                 Matchers.hasProperty("path", Matchers.equalTo("/6")),
                 Matchers.hasProperty("name", Matchers.equalTo(name)),
+                // @checkstyle MultipleStringLiterals (1 line)
                 Matchers.hasProperty("value", Matchers.equalTo(value))
             )
         );
@@ -125,14 +126,16 @@ public final class CookieBuilderTest {
             .toString();
         MatcherAssert.assertThat(
             HttpCookie.parse(cookie).get(0),
-            new CustomMatcher<HttpCookie>("expired cookie") {
-                @Override
-                public boolean matches(final Object obj) {
-                    final HttpCookie cookie = HttpCookie.class.cast(obj);
-                    return cookie.hasExpired()
-                        && "deleted".equals(cookie.getValue());
+            Matchers.allOf(
+                Matchers.hasProperty("value", Matchers.equalTo("")),
+                new CustomMatcher<HttpCookie>("expired cookie") {
+                    @Override
+                    public boolean matches(final Object obj) {
+                        final HttpCookie cookie = HttpCookie.class.cast(obj);
+                        return cookie.hasExpired();
+                    }
                 }
-            }
+            )
         );
     }
 
