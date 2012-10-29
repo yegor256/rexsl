@@ -40,7 +40,7 @@ import org.junit.Test;
 /**
  * Test case for {@link ForwardedUriInfo}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: ForwardedUriInfoTest.java 2143 2012-10-28 15:44:26Z yegor@tpc2.com $
+ * @version $Id$
  */
 public final class ForwardedUriInfoTest {
 

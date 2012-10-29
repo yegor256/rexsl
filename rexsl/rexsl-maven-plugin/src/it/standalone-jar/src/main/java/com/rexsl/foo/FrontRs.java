@@ -36,7 +36,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: FrontEnd.java 895 2012-02-26 20:56:46Z guard $
+ * @version $Id$
  */
 @Path("/")
 public class FrontRs {

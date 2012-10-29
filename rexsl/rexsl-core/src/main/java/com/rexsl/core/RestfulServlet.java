@@ -246,7 +246,7 @@ public final class RestfulServlet extends HttpServlet {
             "Rexsl-Version",
             String.format(
                 "%s r%s",
-                Manifests.read("ReXSL-Version")
+                Manifests.read("ReXSL-Version"),
                 Manifests.read("ReXSL-Build")
             )
         );

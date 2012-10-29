@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @version $Id: verify.groovy 25 2011-09-03 20:32:41Z guard $
+ * @version $Id$
  *
  * Validate that the build really validated XSL files.
  */

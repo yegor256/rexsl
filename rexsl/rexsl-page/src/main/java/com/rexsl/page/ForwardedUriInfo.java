@@ -47,7 +47,7 @@ import javax.ws.rs.core.UriInfo;
  * <p>The class is mutable and NOT thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: BaseResource.java 2145 2012-10-28 16:07:02Z yegor@tpc2.com $
+ * @version $Id$
  * @see <a href="http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10">IETF Forwarded HTTP Extension</a>
  */
 final class ForwardedUriInfo implements UriInfo {

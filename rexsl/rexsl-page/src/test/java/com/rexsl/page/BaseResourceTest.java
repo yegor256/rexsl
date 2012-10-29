@@ -37,7 +37,7 @@ import org.junit.Test;
 /**
  * Test case for {@link BaseResource}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: BaseResourceTest.java 2150 2012-10-28 18:58:14Z guard $
+ * @version $Id$
  */
 @SuppressWarnings("PMD.TestClassWithoutTestCases")
 public final class BaseResourceTest {
