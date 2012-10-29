@@ -45,7 +45,7 @@ import org.mockito.stubbing.Answer;
 /**
  * Builds an instance of {@link HttpHeaders}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: HttpHeadersMocker.java 2028 2012-08-22 11:59:49Z guard $
+ * @version $Id$
  */
 public final class HttpHeadersMocker {
 

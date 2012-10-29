@@ -39,7 +39,7 @@ import javax.validation.constraints.NotNull;
  * <p>Objects of this class are mutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: JerseyTestResponse.java 2033 2012-08-30 14:22:53Z guard $
+ * @version $Id$
  */
 final class BufferedJerseyFetcher implements JerseyFetcher {
 

@@ -41,7 +41,7 @@ import org.mockito.stubbing.Answer;
 /**
  * Test case for {@link NoBrokenLinks}.
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: NoBrokenLinksTest.java 1532 2012-04-25 06:25:41Z guard $
+ * @version $Id$
  */
 public final class NoBrokenLinksTest {
 
