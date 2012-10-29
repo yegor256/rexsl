@@ -29,6 +29,7 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.log.Logger;
 import java.net.URI;
 import java.util.List;
 import java.util.Locale;
@@ -47,7 +48,7 @@ import javax.ws.rs.core.UriInfo;
  * <p>The class is mutable and NOT thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: BaseResource.java 2145 2012-10-28 16:07:02Z yegor@tpc2.com $
+ * @version $Id$
  * @see <a href="http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10">IETF Forwarded HTTP Extension</a>
  */
 final class ForwardedUriInfo implements UriInfo {
@@ -249,6 +250,12 @@ final class ForwardedUriInfo implements UriInfo {
                     this.consume(header.getKey(), value);
                 }
             }
+            Logger.debug(
+                this,
+                "#forward(..): analyzed, host=%s, scheme=%s",
+                this.host,
+                this.scheme
+            );
             this.analyzed = true;
         }
         if (this.host != null) {

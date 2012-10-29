@@ -242,6 +242,14 @@ public final class RestfulServlet extends HttpServlet {
             "Rexsl-Millis",
             Long.toString(duration)
         );
+        response.addHeader(
+            "Rexsl-Version",
+            String.format(
+                "%s r%s",
+                Manifests.read("ReXSL-Version"),
+                Manifests.read("ReXSL-Build")
+            )
+        );
     }
 
     /**

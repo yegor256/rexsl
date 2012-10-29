@@ -28,7 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @version $Id: web.xml 895 2012-02-26 20:56:46Z guard $
+ * @version $Id$
  -->
 <web-app version="3.0" metadata-complete="false"
     xmlns="http://java.sun.com/xml/ns/javaee"

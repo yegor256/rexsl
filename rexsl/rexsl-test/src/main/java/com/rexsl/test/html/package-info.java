@@ -33,6 +33,6 @@
  * {@link com.rexsl.test.TestResponse}.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: package-info.java 1356 2012-04-04 08:09:36Z guard $
+ * @version $Id$
  */
 package com.rexsl.test.html;

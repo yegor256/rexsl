@@ -46,7 +46,7 @@ import org.hamcrest.Matchers;
  * <p>This class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: XpathAssertionMatcher.java 1874 2012-06-07 09:48:00Z guard $
+ * @version $Id$
  * @since 0.3.4
  */
 public final class NoBrokenLinks implements AssertionPolicy {

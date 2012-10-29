@@ -34,7 +34,7 @@ import javax.ws.rs.Path;
 
 /**
  * @author Yegor Bugayenko (yegor@rexsl.com)
- * @version $Id: FrontEnd.java 176 2011-10-25 18:09:33Z guard $
+ * @version $Id$
  */
 @Path("/")
 public class FrontEnd {
