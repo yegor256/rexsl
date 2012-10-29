@@ -82,14 +82,12 @@ public final class CookieBuilder {
     private transient String cookie = "unknown";
 
     /**
-     * Value.
+     * Value of cookie.
      *
      * <p>By default it has to contain some rubbish, in order to replace
      * the value cached/stored by a client.
-     *
-     * @see http://trac.fazend.com/rexsl/ticket/581
      */
-    private transient String val = "deleted";
+    private transient String val = "";
 
     /**
      * Path.
@@ -143,6 +141,7 @@ public final class CookieBuilder {
      * With value like this.
      * @param txt The value
      * @return This object
+     * @see <a href="http://tools.ietf.org/html/rfc2616#section-2.2">RFC2616</a>
      */
     public CookieBuilder value(@NotNull final String txt) {
         // @checkstyle LineLength (1 line)
@@ -161,6 +160,7 @@ public final class CookieBuilder {
      * Set path.
      * @param txt The path
      * @return This object
+     * @see <a href="http://tools.ietf.org/html/rfc2616#section-2.2">RFC2616</a>
      */
     public CookieBuilder path(@NotNull final String txt) {
         if (!txt.matches("/[\\x20-\\x3A\\x3C-\\x7E]*")) {
@@ -222,12 +222,16 @@ public final class CookieBuilder {
         ) {
             @Override
             public String toString() {
+                String text = this.getValue();
+                if (!text.isEmpty()) {
+                    text = String.format("\"%s\"", text);
+                }
                 return String.format(
                     Locale.ENGLISH,
                     // @checkstyle LineLength (1 line)
-                    "%s=\"%s\"; Domain=%s; Path=%s; Expires=%ta, %5$td-%5$tb-%5$tY %5$tT GMT",
+                    "%s=%s; Domain=%s; Path=%s; Expires=%ta, %5$td-%5$tb-%5$tY %5$tT GMT",
                     this.getName(),
-                    this.getValue(),
+                    text,
                     CookieBuilder.this.domain,
                     CookieBuilder.this.url,
                     CookieBuilder.this.expires
