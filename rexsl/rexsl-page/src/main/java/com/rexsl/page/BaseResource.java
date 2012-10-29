@@ -175,14 +175,20 @@ public class BaseResource implements Resource {
     public final void setUriInfo(@NotNull final UriInfo info) {
         if (this.getClass().getAnnotation(Resource.Forwarded.class) == null) {
             this.iuriInfo = info;
+            Logger.debug(
+                this,
+                "#setUriInfo(%[type]s): injected w/o forwarding into %[type]s",
+                info,
+                this
+            );
         } else {
             this.iuriInfo = new ForwardedUriInfo(info, this.ihttpHeaders);
+            Logger.debug(
+                this,
+                "#setUriInfo(%[type]s): injected w/forwarding",
+                info
+            );
         }
-        Logger.debug(
-            this,
-            "#setUriInfo(%[type]s): injected",
-            info
-        );
     }
 
     /**

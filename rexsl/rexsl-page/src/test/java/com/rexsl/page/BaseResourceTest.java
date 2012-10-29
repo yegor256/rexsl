@@ -70,6 +70,12 @@ public final class BaseResourceTest {
      * Base resource for tests.
      */
     @Resource.Forwarded
+    private static class CommonResource extends BaseResource {
+    }
+
+    /**
+     * Inherited resource for tests.
+     */
     private static final class FooResource extends BaseResource {
     }
 
