@@ -39,6 +39,7 @@ import org.junit.Test;
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id: BaseResourceTest.java 2150 2012-10-28 18:58:14Z guard $
  */
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 public final class BaseResourceTest {
 
     /**
@@ -63,7 +64,6 @@ public final class BaseResourceTest {
             res.uriInfo().getBaseUri().toString(),
             Matchers.equalTo("https://example.com/foo")
         );
-
     }
 
     /**
