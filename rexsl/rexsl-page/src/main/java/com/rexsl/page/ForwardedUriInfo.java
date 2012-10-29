@@ -82,6 +82,11 @@ final class ForwardedUriInfo implements UriInfo {
      * @param hdrs HTTP headers
      */
     public ForwardedUriInfo(final UriInfo inf, final HttpHeaders hdrs) {
+        if (inf == null) {
+            throw new IllegalStateException(
+                "UriInfo is incorrectly injected into BaseResource"
+            );
+        }
         this.info = inf;
         this.headers = hdrs;
     }
@@ -231,6 +236,11 @@ final class ForwardedUriInfo implements UriInfo {
      */
     private UriBuilder forward(final UriBuilder builder) {
         if (!this.analyzed) {
+            if (this.headers == null) {
+                throw new IllegalStateException(
+                    "HttpHeaders is not injected into BaseResource"
+                );
+            }
             for (Map.Entry<String, List<String>> header
                 : this.headers.getRequestHeaders().entrySet()) {
                 for (String value : header.getValue()) {
