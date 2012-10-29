@@ -173,20 +173,20 @@ public class BaseResource implements Resource {
      */
     @Context
     public final void setUriInfo(@NotNull final UriInfo info) {
-        if (this.getClass().getAnnotation(Resource.Forwarded.class) == null) {
+        if (this.needsForwarding()) {
+            this.iuriInfo = new ForwardedUriInfo(info, this.ihttpHeaders);
+            Logger.debug(
+                this,
+                "#setUriInfo(%[type]s): injected w/forwarding",
+                info
+            );
+        } else {
             this.iuriInfo = info;
             Logger.debug(
                 this,
                 "#setUriInfo(%[type]s): injected w/o forwarding into %[type]s",
                 info,
                 this
-            );
-        } else {
-            this.iuriInfo = new ForwardedUriInfo(info, this.ihttpHeaders);
-            Logger.debug(
-                this,
-                "#setUriInfo(%[type]s): injected w/forwarding",
-                info
             );
         }
     }
@@ -235,6 +235,23 @@ public class BaseResource implements Resource {
             "#setHttpServletRequest(%[type]s): injected",
             request
         );
+    }
+
+    /**
+     * This resource needs forwarding of {@link UriInfo}?
+     * @return TRUE if yes, it needs to use {@link ForwardedUriInfo}
+     */
+    private boolean needsForwarding() {
+        boolean needs = false;
+        Class<?> type = this.getClass();
+        while (!type.equals(Object.class)) {
+            if (type.isAnnotationPresent(Resource.Forwarded.class)) {
+                needs = true;
+                break;
+            }
+            type = type.getSuperclass();
+        }
+        return needs;
     }
 
 }

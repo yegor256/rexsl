@@ -76,7 +76,8 @@ public final class BaseResourceTest {
     /**
      * Inherited resource for tests.
      */
-    private static final class FooResource extends BaseResource {
+    private static final class FooResource
+        extends BaseResourceTest.CommonResource {
     }
 
 }
