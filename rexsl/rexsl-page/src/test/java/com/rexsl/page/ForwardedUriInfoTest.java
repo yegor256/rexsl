@@ -85,4 +85,22 @@ public final class ForwardedUriInfoTest {
         );
     }
 
+    /**
+     * ForwardedUriInfo can throw when initialized with null UriInfo.
+     * @throws Exception If there is some problem inside
+     */
+    @Test(expected = IllegalStateException.class)
+    public void throwsForNullUriInfo() throws Exception {
+        new ForwardedUriInfo(null, new HttpHeadersMocker().mock());
+    }
+
+    /**
+     * ForwardedUriInfo can throw when initialized with null HttpHeaders.
+     * @throws Exception If there is some problem inside
+     */
+    @Test(expected = IllegalStateException.class)
+    public void throwsForNullHttpHeaders() throws Exception {
+        new ForwardedUriInfo(new UriInfoMocker().mock(), null).getRequestUri();
+    }
+
 }

@@ -55,7 +55,7 @@ public final class ResourceMocker {
      * Public ctor.
      */
     public ResourceMocker() {
-        final URI home = URI.create("http://localhost:99/local");
+        final URI home = URI.create("http://localhost:9999/local");
         this.withUriInfo(new UriInfoMocker().withRequestUri(home).mock());
         final HttpServletRequest request =
             Mockito.mock(HttpServletRequest.class);
@@ -63,8 +63,7 @@ public final class ResourceMocker {
         Mockito.doReturn(home.getPath()).when(request).getRequestURI();
         Mockito.doReturn(home.getPath()).when(request).getContextPath();
         this.withServletRequest(request);
-        final HttpHeaders headers = Mockito.mock(HttpHeaders.class);
-        this.withHttpHeaders(headers);
+        this.withHttpHeaders(new HttpHeadersMocker().mock());
         final Providers providers = Mockito.mock(Providers.class);
         Mockito.doReturn(new XslResolver())
             .when(providers)
