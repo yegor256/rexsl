@@ -39,7 +39,7 @@
     <parent>
         <groupId>com.rexsl</groupId>
         <artifactId>rexsl</artifactId>
-        <version rexsl="yes">0.4</version>
+        <version rexsl="yes">1.0-SNAPSHOT</version>
     </parent>
     <artifactId>rexsl-core</artifactId>
     <packaging>jar</packaging>
@@ -49,13 +49,13 @@
         <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">0.4</version>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">0.4</version>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
             <classifier>mock</classifier>
             <scope>test</scope>
         </dependency>
