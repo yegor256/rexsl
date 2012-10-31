@@ -733,7 +733,7 @@
                         <archive>
                             <manifestEntries>
                                 <ReXSL-Version>${project.version}</ReXSL-Version>
-                                <ReXSL-Build>${build.number}</ReXSL-Build>
+                                <ReXSL-Build>${buildNumber}</ReXSL-Build>
                             </manifestEntries>
                         </archive>
                     </configuration>
@@ -820,7 +820,7 @@
                             <goal>create</goal>
                         </goals>
                         <configuration>
-                            <buildNumberPropertyName>build.number</buildNumberPropertyName>
+                            <buildNumberPropertyName>buildNumber</buildNumberPropertyName>
                             <doCheck>false</doCheck>
                             <doUpdate>false</doUpdate>
                             <getRevisionOnlyOnce>true</getRevisionOnlyOnce>

@@ -41,11 +41,11 @@ ReXSL Testing Facility
   The module contains a collection of usable tools for testing of
   ReXSL-powered application. Read more about:
 
-   * {{{./apidocs/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
+   * {{{./apidocs-${releasedVersion}/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
 
-   * {{{./apidocs/com/rexsl/test/JaxbConverter.html}<<<com.rexsl.test.JaxbConverter>>>}}
+   * {{{./apidocs-${releasedVersion}/com/rexsl/test/JaxbConverter.html}<<<com.rexsl.test.JaxbConverter>>>}}
 
-   * {{{./apidocs/com/rexsl/test/SimpleXml.html}<<<com.rexsl.test.SimpleXml>>>}}
+   * {{{./apidocs-${releasedVersion}/com/rexsl/test/SimpleXml.html}<<<com.rexsl.test.SimpleXml>>>}}
 
   Include this dependency into your project (or download
   {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${releasedVersion}/rexsl-test-${releasedVersion}.jar}rexsl-test-${releasedVersion}.jar}}
@@ -61,7 +61,7 @@ ReXSL Testing Facility
 +--
 
   This module also contains a very useful Mocking tool in
-  {{{./testapidocs/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}.
+  {{{./testapidocs-${releasedVersion}/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}.
   To use it you should include this dependencies into your project
   (or download
   {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${releasedVersion}/rexsl-test-${releasedVersion}-mock.jar}rexsl-test-${releasedVersion}-mock.jar}}

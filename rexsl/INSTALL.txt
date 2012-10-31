@@ -104,7 +104,7 @@ How to release new version to Maven Central:
 
     6. Delete local repo: "rm -rf ~/.m2/repository/com/rexsl"
 
-    7. Run "mvn -Dci -Prexsl clean deploy"
+    7. Run "mvn -Dci -Prexsl clean deploy site-deploy -Drempl.skip=true -Dtexry.skip=true"
 
         Make sure that you have this profile in ~/.m2/settings.xml:
 
@@ -122,7 +122,7 @@ How to release new version to Maven Central:
     9. Run "mvn nexus:staging-promote" (target ID is "releases")
 
     10. Copy your branch to tags:
-        
+
         svn cp ^/branches/ticketXX ^/tags/rexsl-X.X.X -m 'refs #xxx - version x.x.x released to Maven Central'
 
     11. Delete the branch or merge it back to trunk (if you did any changes). Don't

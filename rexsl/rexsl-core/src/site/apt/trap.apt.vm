@@ -38,7 +38,7 @@
 
 Exception Trap
 
-  Read {{{./apidocs/com/rexsl/trap/ExceptionTrap.html}ExceptionTrap}}
+  Read {{{./apidocs-${releasedVersion}/com/rexsl/trap/ExceptionTrap.html}ExceptionTrap}}
   javadoc.
 
   Configure it in your <<<WEB-INF/web.xml>>> like this:
@@ -68,5 +68,5 @@ Exception Trap
 
   Every exception will be caught by this servlet and delivered to all
   configured notifiers. Read
-  {{{./apidocs/com/rexsl/trap/ExceptionTrap.html}javadoc}}
+  {{{./apidocs-${releasedVersion}/com/rexsl/trap/ExceptionTrap.html}javadoc}}
   for more information.

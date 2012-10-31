@@ -40,8 +40,8 @@ ReXSL core module
 
   There are two classes that you should use in your project (both
   of them are always mandatory):
-  {{{./apidocs/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} and
-  {{{./apidocs/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}}. Use them
+  {{{./apidocs-${releasedVersion}/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} and
+  {{{./apidocs-${releasedVersion}/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}}. Use them
   in <<<WEB-INF/web.xml>>>:
 
 +--
@@ -69,11 +69,11 @@ ReXSL core module
 </servlet-mapping>
 +--
 
-  {{{./apidocs/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} is
+  {{{./apidocs-${releasedVersion}/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} is
   responsible for handling of JAX-RS requests and converting your JAXB annotated
   classes into XML documents.
 
-  {{{./apidocs/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}} is converting
+  {{{./apidocs-${releasedVersion}/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}} is converting
   XML output documents into XHTML when necessary.
 
   This dependency you add to <<<pom.xml>>> (or download
@@ -93,19 +93,19 @@ ReXSL core module
 
 * Supplementary Classes
 
-  {{{./apidocs/com/rexsl/core/Manifests.html}<<<Manifests>>>}} is
+  {{{./apidocs-${releasedVersion}/com/rexsl/core/Manifests.html}<<<Manifests>>>}} is
   a convenient accessor to <<<MANIFEST.MF>>> files of your web application.
 
-  {{{./apidocs/com/rexsl/core/annotations/Stylesheet.html}<<<Stylesheet>>>}} annotation
+  {{{./apidocs-${releasedVersion}/com/rexsl/core/annotations/Stylesheet.html}<<<Stylesheet>>>}} annotation
   enables re-configuration of XSL stylesheet name for a JAXB-annotated object.
 
-  {{{./apidocs/com/rexsl/core/annotations/Schema.html}<<<Schema>>>}} annotation
+  {{{./apidocs-${releasedVersion}/com/rexsl/core/annotations/Schema.html}<<<Schema>>>}} annotation
   lets you set the name of XML Schema of a JAXB-annotated object.
 
-  {{{./apidocs/com/rexsl/trap/ExceptionTrap.html}<<<ExceptionTrap>>>}} servlet
+  {{{./apidocs-${releasedVersion}/com/rexsl/trap/ExceptionTrap.html}<<<ExceptionTrap>>>}} servlet
   helps you to catch all uncaught exceptions and manage them gracefully, showing
   some information to your end-users and letting you know by email and/or log.
 
-  {{{./apidocs/com/rexsl/log/CloudAppender.html}<<<CloudAppender>>>}} is
+  {{{./apidocs-${releasedVersion}/com/rexsl/log/CloudAppender.html}<<<CloudAppender>>>}} is
   a log4j appender for logging your events directly to some cloud platform.
 
