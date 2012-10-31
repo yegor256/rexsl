@@ -38,7 +38,7 @@
 
 Log4j Cloud Appender
 
-  Read {{{./apidocs/com/rexsl/log/CloudAppender.html}CloudAppender}}
+  Read {{{./apidocs-${releasedVersion}/com/rexsl/log/CloudAppender.html}CloudAppender}}
   javadoc.
 
   Configure it in your <<<log4j.properties>>> like this (just an example,
@@ -56,7 +56,7 @@ log4j.appender.LOGGLY.layout.ConversionPattern=[%5p] %t %c: %m%n
 +--
 
   You can extend it with your own feeding mechanisms. Just implement
-  the {{{./apidocs/com/rexsl/log/Feeder.html}Feeder}}
+  the {{{./apidocs-${releasedVersion}/com/rexsl/log/Feeder.html}Feeder}}
   interface and add an instance of the class to the
   appender.
 

@@ -38,8 +38,8 @@
 
 ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
 
-  <<0.3.8 released>>! See
-  {{{https://groups.google.com/forum/?fromgroups#!topic/rexsl/qTttmac8xyM}release notes}}.
+  <<0.4 released>>! See
+  {{{https://groups.google.com/forum/?fromgroups=#!topic/rexsl/jWp8zVTkhqU}release notes}}.
 
   The idea is simple - to make a
   {{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}}
@@ -125,4 +125,4 @@ ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
   ticket to {{{http://trac.rexsl.com/rexsl}our Trac}} when something
   doesn't work or you need more features.
 
-  Currently deployed revision: <<<${build.number}>>>
+  Currently deployed revision: <<<${buildNumber}>>>
