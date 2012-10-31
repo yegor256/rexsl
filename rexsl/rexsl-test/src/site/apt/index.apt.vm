@@ -61,7 +61,7 @@ ReXSL Testing Facility
 +--
 
   This module also contains a very useful Mocking tool in
-  {{{./testapidocs/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}.
+  {{{./testapidocs-${releasedVersion}/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}.
   To use it you should include this dependencies into your project
   (or download
   {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${releasedVersion}/rexsl-test-${releasedVersion}-mock.jar}rexsl-test-${releasedVersion}-mock.jar}}
