@@ -31,6 +31,8 @@ package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
+import org.apache.commons.io.IOUtils;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -126,8 +129,26 @@ public final class ClientResponseMocker {
      * @return This object
      */
     public ClientResponseMocker withEntity(final String entity) {
+        return this.withEntity(IOUtils.toInputStream(entity));
+    }
+
+    /**
+     * Return this entity.
+     * @param entity The entity
+     * @return This object
+     */
+    public ClientResponseMocker withEntity(final byte[] entity) {
+        return this.withEntity(new ByteArrayInputStream(entity));
+    }
+
+    /**
+     * Return this entity.
+     * @param entity The entity
+     * @return This object
+     */
+    public ClientResponseMocker withEntity(final InputStream entity) {
         Mockito.doReturn(entity).when(this.response)
-            .getEntity((Class<?>) Mockito.anyObject());
+            .getEntityInputStream();
         Mockito.doReturn(true).when(this.response).hasEntity();
         return this;
     }

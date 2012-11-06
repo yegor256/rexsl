@@ -387,6 +387,19 @@ public final class JerseyTestResponseTest {
     }
 
     /**
+     * TestResponse can throw when entity is not a Unicode text.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void throwsWhenEntityIsNotAUnicodeString() throws Exception {
+        final ClientResponse resp = new ClientResponseMocker()
+            // @checkstyle MagicNumber (1 line)
+            .withEntity(new byte[]{(byte) 0xC0, (byte) 0xC0})
+            .mock();
+        new JerseyTestResponse(this.fetcher(resp), this.decor).getBody();
+    }
+
+    /**
      * Create fetcher with response on board.
      * @param resp The response to return
      * @return The fetcher

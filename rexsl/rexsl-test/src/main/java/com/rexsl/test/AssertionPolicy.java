@@ -56,8 +56,7 @@ import javax.validation.constraints.NotNull;
  * 4) use the first element in the found collection of texts. But, before
  * doing all this a {@code retryOnFailure} assertion policy will be used:
  *
- * <pre>
- * AssertionPolicy retryOnFailure = new AssertionPolicy() {
+ * <pre> AssertionPolicy retryOnFailure = new AssertionPolicy() {
  *   private boolean valid;
  *   &#64;Override
  *   public void assertThat(TestResponse response) {
@@ -70,8 +69,7 @@ import javax.validation.constraints.NotNull;
  *   public boolean isRetryNeeded(int attempt) {
  *     return !this.valid;
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>{@link AssertionPolicy#assertThat(TestResponse)} will be called right
  * after the document is retrieved from the server. Actually, it will be called

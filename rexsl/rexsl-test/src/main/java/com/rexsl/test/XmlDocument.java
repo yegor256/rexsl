@@ -39,13 +39,11 @@ import org.w3c.dom.Node;
  *
  * <p>Set of convenient XML manipulations:
  *
- * <pre>
- * XmlDocument xml = new SimpleXml(content);
+ * <pre> XmlDocument xml = new SimpleXml(content);
  * for (XmlDocument employee : xml.nodes("//Employee")) {
  *   String name = employee.xpath("name/text()").get(0);
  *   // ...
- * }
- * </pre>
+ * }</pre>
  *
  * <p>You can always get DOM node out of this abstraction using {@link #node()}
  * method.
