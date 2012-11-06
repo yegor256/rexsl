@@ -31,7 +31,10 @@ package com.rexsl.test;
 
 import com.jcabi.log.Logger;
 import com.sun.jersey.api.client.ClientResponse;
+import java.io.IOException;
 import javax.validation.constraints.NotNull;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 
 /**
  * Buffer in front {@link JerseyFetcher}.
@@ -83,12 +86,16 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
     /**
      * Get body of request.
      * @return The body as string
+     * @throws IOException If can't read it from response
      */
-    public String body() {
+    public String body() throws IOException {
         synchronized (this.fetcher) {
             if (this.entity == null) {
                 if (this.fetch().hasEntity()) {
-                    this.entity = this.fetch().getEntity(String.class);
+                    this.entity = IOUtils.toString(
+                        this.fetch().getEntityInputStream(),
+                        CharEncoding.UTF_8
+                    );
                 } else {
                     this.entity = "";
                 }

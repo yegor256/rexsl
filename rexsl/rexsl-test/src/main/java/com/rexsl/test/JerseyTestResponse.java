@@ -139,7 +139,11 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public String getBody() {
-        return this.fetcher.body();
+        try {
+            return this.fetcher.body();
+        } catch (java.io.IOException ex) {
+            throw new AssertionError(ex);
+        }
     }
 
     /**

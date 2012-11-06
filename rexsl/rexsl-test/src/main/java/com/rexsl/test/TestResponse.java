@@ -40,28 +40,24 @@ import org.hamcrest.Matcher;
  * <p>It is used as an output of {@link TestClient}, which is an output of
  * {@link RestTester}, for example:
  *
- * <pre>
- * TestResponse resp = RestTester.start(new URI("http://www.google.com"))
+ * <pre> TestResponse resp = RestTester.start(new URI("http://www.google.com"))
  *   .get("load front page of Google");
  * if (resp.getStatus() == 200) {
  *   // everything is fine
  * } else if (resp.getStatus() == 404) {
  *   // google.com not found, hm...
- * }
- * </pre>
+ * }</pre>
  *
  * <p>{@link TestResponse} extends {@link XmlDocument}, which is a abstract
  * of an XML document, which can be retrieved from itself. For example:
  *
- * <pre>
- * TestResponse resp = RestTester.start(new URI("http://example.com"))
+ * <pre> TestResponse resp = RestTester.start(new URI("http://example.com"))
  *   .get("load XML document");
  * Collection&lt;XmlDocument&gt; employees = resp.nodes("/Staff/Employee");
  * for (XmlDocument employee : employees) {
  *   String name = employee.xpath("name/text()").get(0);
  *   // ...
- * }
- * </pre>
+ * }</pre>
  *
  * <p>{@link TestResponse} also extends {@link JsonDocument}, which is an
  * abstract of a Json document, which can be retrieved from itself.
@@ -122,8 +118,17 @@ public interface TestResponse extends XmlDocument, JsonDocument {
     Cookie cookie(@NotNull String name);
 
     /**
-     * Get body as a string, assuming it's {@code UTF-8}.
-     * @return The body
+     * Get body as a string, assuming it's {@code UTF-8} (if there is something
+     * else that can't be translated into a UTF-8 string a runtime exception
+     * will be thrown).
+     *
+     * <p>The only encoding supported here is UTF-8. If the body of response
+     * contains any chars that can't be used and should be replaced with
+     * a "replacement character", a {@link AssertionError} will be thrown. If
+     * you need to use some other encodings use
+     * {@link java.net.HttpURLConnection} directly.
+     *
+     * @return The body, as a UTF-8 string
      */
     String getBody();
 

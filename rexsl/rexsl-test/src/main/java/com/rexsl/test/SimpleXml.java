@@ -82,13 +82,11 @@ public final class SimpleXml implements XmlDocument {
      * {@link javax.xml.namespace.NamespaceContext}, which already defines a
      * number of namespaces, for convenience, including:
      *
-     * <pre>
-     * xhtml: http://www.w3.org/1999/xhtml
+     * <pre> xhtml: http://www.w3.org/1999/xhtml
      * xs: http://www.w3.org/2001/XMLSchema
      * xsi: http://www.w3.org/2001/XMLSchema-instance
      * xsl: http://www.w3.org/1999/XSL/Transform
-     * svg: http://www.w3.org/2000/svg
-     * </pre>
+     * svg: http://www.w3.org/2000/svg</pre>
      *
      * <p>In future versions we will add more namespaces (submit a ticket if
      * you need more of them defined here).
