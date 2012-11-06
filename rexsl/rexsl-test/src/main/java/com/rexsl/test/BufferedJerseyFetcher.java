@@ -99,6 +99,9 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
                 } else {
                     this.entity = "";
                 }
+                if (this.entity.contains("\uFFFD")) {
+                    throw new IOException("broken Unicode text in entity");
+                }
                 Logger.debug(
                     this,
                     "#body(): HTTP response body:\n%s",
