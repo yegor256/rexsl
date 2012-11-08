@@ -329,12 +329,11 @@
                     </plugin>
                     <plugin>
                         <artifactId>maven-site-plugin</artifactId>
-                        <version since="2 Sep 2011">3.0-beta-3</version>
                         <configuration>
                             <reportPlugins>
                                 <plugin>
                                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                                    <version since="7 Nov 2010">2.2</version>
+                                    <version since="7 Nov 2012">2.6</version>
                                     <configuration>
                                         <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
                                         <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
@@ -362,7 +361,7 @@
                                     located at target/site/apidocs.
                                     -->
                                     <artifactId>maven-javadoc-plugin</artifactId>
-                                    <version since="2 Sep 2011">2.8</version>
+                                    <version since="7 Nov 2012">2.9</version>
                                     <configuration>
                                         <failOnError>true</failOnError>
                                         <serialwarn>true</serialwarn>
@@ -392,15 +391,6 @@
                                         </tags>
                                     </configuration>
                                     <reportSets>
-                                        <reportSet>
-                                            <id>default-html</id>
-                                            <reports>
-                                                <report>javadoc</report>
-                                            </reports>
-                                            <configuration>
-                                                <sourcepath>src/main/java</sourcepath>
-                                            </configuration>
-                                        </reportSet>
                                         <reportSet>
                                             <id>versioned-html</id>
                                             <reports>
@@ -780,7 +770,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version since="28 Dec 2010">3.0-beta-3</version>
+                    <version since="7 Nov 2012">3.2</version>
                     <configuration>
                         <reportPlugins>
                             <!--
