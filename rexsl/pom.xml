@@ -163,8 +163,8 @@
         This property has to be updated every time you release
         a new version to Maven Central
         -->
-        <releasedVersion>0.4</releasedVersion>
-        <jcabi.version since="30 Oct 2012">0.4.1</jcabi.version>
+        <releasedVersion>0.4.1</releasedVersion>
+        <jcabi.version since="11 Nov 2012">0.5.3</jcabi.version>
     </properties>
     <repositories>
         <!--
