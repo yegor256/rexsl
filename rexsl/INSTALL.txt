@@ -63,48 +63,49 @@ Continuous Integration Configuration
      </profiles>
      <servers>
       <server>
-       <id>rexsl.s3</id>
+       <id>www.rexsl.com</id>
        <username>....</username>
        <password>....</password>
       </server>
       <server>
-       <id>sonatype.nexus</id>
+       <id>oss.sonatype.org</id>
        <username>....</username>
        <password>....</password>
       </server>
      </servers>
     </settings>
 
-    At the moment the following two goals are defined in our CI
-    server:
+    At the moment the following goal is defined in our CI server:
 
     1) mvn clean deploy -e -Dci --settings ../../closures/settings.xml
 
 
 How to release new version to Maven Central:
 ---------------------------------
+    https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-8.ReleaseIt
+    http://www.sonatype.com/books/nexus-book/reference/staging-sect-managing-plugin.html
 
     1. Create a new ticket in Trac, explaining why you want to release
-       a new version (for example see ticket #4)
+       a new version (for example see ticket #607)
 
     2. Create new branch
+
+        svn cp ^/trunk ^/branches/ticket607 -m 'refs #607 - new branch' && svn sw ^/branches/tickt607
 
     3. Replace <version rexsl="yes">...</version> with the next
        version you want to use:
 
-        find . -name "*.xml" -exec sed -i "" 's|\(\<version rexsl\=\"yes\"\>\)1\.0\-SNAPSHOT\(\<\/version\>\)|\10.2.4\2|g' {} \;
+        find . -name "*.xml" -exec sed -i "" 's|\(\<version rexsl\=\"yes\"\>\)1\.0\-SNAPSHOT\(\<\/version\>\)|\10.4.1\2|g' {} \;
 
-    3a. Change "releasedVersion" in pom.xml to the next version
+    4. Change "releasedVersion" in pom.xml to the next version
 
     4. Commit your changes
 
-    5. Read these pages:
-        https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-8.ReleaseIt
-        http://www.sonatype.com/books/nexus-book/reference/staging-sect-managing-plugin.html
+        svn ci -m 'refs #607 - version up'
 
-    6. Delete local repo: "rm -rf ~/.m2/repository/com/rexsl"
+    7. Deploy to sonatype:
 
-    7. Run "mvn -Dci -Prexsl clean deploy site-deploy -Drempl.skip=true -Dtexry.skip=true"
+        mvn -Dci -Prexsl -Psonatype clean deploy
 
         Make sure that you have this profile in ~/.m2/settings.xml:
 
@@ -117,18 +118,19 @@ How to release new version to Maven Central:
             </properties>
           </profile>
 
-    8. Run "mvn nexus:staging-close"
+    8. Deploy site to Amazon S3
 
-    9. Run "mvn nexus:staging-promote" (target ID is "releases")
+        mvn -Dsite -Prexsl clean install site-deploy
 
-    10. Copy your branch to tags:
+    9. Copy your branch to tags:
 
-        svn cp ^/branches/ticketXX ^/tags/rexsl-X.X.X -m 'refs #xxx - version x.x.x released to Maven Central'
+        svn cp ^/branches/ticket607 ^/tags/rexsl-0.4.1 -m 'refs #607 - version 0.4.1 released to Maven Central'
 
-    11. Delete the branch or merge it back to trunk (if you did any changes). Don't
-        forget to revert back version number:
+    11. Set version back to SNAPSHOT:
 
-        find . -name "*.xml" -exec sed -i "" 's|\(\<version rexsl\=\"yes\"\>\)0\.2\.4\(\<\/version\>\)|\11.0-SNAPSHOT\2|g' {} \;
+        find . -name "*.xml" -exec sed -i "" 's|\(\<version rexsl\=\"yes\"\>\)0\.4\.1\(\<\/version\>\)|\11.0-SNAPSHOT\2|g' {} \;
+
+    12. Merge the branch back to TRUNK.
 
     12. Close the ticket as "fixed"
 
