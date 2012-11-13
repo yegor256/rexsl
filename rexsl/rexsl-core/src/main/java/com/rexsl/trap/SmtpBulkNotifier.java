@@ -58,7 +58,7 @@ import javax.validation.constraints.NotNull;
  * emails. This option may be critically important if you expect high volume
  * of exceptions and don't want to receive many individual emails.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.6
  * @checkstyle ClassDataAbstractionCoupling (500 lines)

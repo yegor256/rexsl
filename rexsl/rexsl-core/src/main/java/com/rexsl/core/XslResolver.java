@@ -58,7 +58,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  * <p>You don't need to use this class directly. It is made public only becuase
  * JAX-RS implementation should be able to discover it in classpath.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  * @since 0.2

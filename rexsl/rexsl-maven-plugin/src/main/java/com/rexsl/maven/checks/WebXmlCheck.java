@@ -53,7 +53,7 @@ import org.xml.sax.SAXParseException;
  * <p>The class is thread-safe.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class WebXmlCheck implements Check {

@@ -47,7 +47,7 @@ import javax.ws.rs.core.UriInfo;
  *
  * <p>The class is mutable and NOT thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10">IETF Forwarded HTTP Extension</a>
  */

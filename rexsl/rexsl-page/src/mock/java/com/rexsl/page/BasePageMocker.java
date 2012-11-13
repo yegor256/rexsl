@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Mocker of base page for {@link PageBuilder}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @XmlRootElement(name = "foo")

@@ -38,7 +38,7 @@ import org.sonatype.aether.artifact.Artifact;
 /**
  * One root artifact found in the project.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class RootArtifact {

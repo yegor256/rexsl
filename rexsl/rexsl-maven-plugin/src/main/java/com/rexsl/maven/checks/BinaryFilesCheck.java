@@ -51,7 +51,7 @@ import org.apache.commons.io.filefilter.NotFileFilter;
  * <p>The class is immutable and thread-safe.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class BinaryFilesCheck implements Check {

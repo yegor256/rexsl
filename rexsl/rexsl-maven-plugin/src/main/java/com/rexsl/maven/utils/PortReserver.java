@@ -35,7 +35,7 @@ import java.net.ServerSocket;
 /**
  * Reservers a new TPC port.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class PortReserver {

@@ -43,7 +43,7 @@ import org.apache.commons.io.FilenameUtils;
 /**
  * Groovy scripts executor.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class GroovyExecutor {

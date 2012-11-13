@@ -61,7 +61,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  * pre-formatting all <tt>"${text}"</tt> markers will be replaced with the
  * text provided to {@link #render(String)}.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.6
  */

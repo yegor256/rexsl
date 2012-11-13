@@ -32,7 +32,7 @@ package com.rexsl.maven;
 /**
  * Single packer to be executed by {@link PackageMojo}.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public interface Packer {

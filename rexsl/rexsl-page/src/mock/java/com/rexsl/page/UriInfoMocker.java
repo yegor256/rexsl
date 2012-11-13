@@ -36,7 +36,7 @@ import org.mockito.Mockito;
 
 /**
  * Builds an instance of {@link UriInfo}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class UriInfoMocker {

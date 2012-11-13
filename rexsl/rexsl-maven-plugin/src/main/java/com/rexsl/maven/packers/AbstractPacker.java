@@ -42,7 +42,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Abstract packer.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 abstract class AbstractPacker implements Packer {

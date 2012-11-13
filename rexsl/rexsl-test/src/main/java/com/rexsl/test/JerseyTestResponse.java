@@ -53,7 +53,7 @@ import org.w3c.dom.Node;
  *
  * <p>Objects of this class are mutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */

@@ -37,7 +37,7 @@ import javax.validation.constraints.NotNull;
  *
  * <p>Objects of this class are immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class Header extends AbstractMap.SimpleEntry<String, String> {

@@ -77,7 +77,7 @@ import javax.validation.constraints.NotNull;
  * <p>We recommend to use {@link SmtpBulkNotifier}, which caches messages in
  * a temporary buffer and sends them all together every X seconds/minutes.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.6
  * @see <a href="http://docs.oracle.com/javaee/6/api/javax/mail/package-summary.html">javax.mail</a>

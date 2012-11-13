@@ -47,7 +47,7 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * Transform XML to XHTML through XSL.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class XhtmlTransformer {

@@ -40,7 +40,7 @@ import org.apache.maven.plugin.MojoFailureException;
 /**
  * Test entire project against RESTful principles.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @goal check
  * @phase integration-test

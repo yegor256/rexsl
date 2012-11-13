@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 /**
  * Product version.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://tools.ietf.org/html/rfc2616#section-3.8">RFC-2616</a>
  */

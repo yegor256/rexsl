@@ -38,7 +38,7 @@ import javax.ws.rs.core.MediaType;
  * Makes a decision whether page should be transformed to HTML or returned
  * to the user as untouched XML (or anything else).
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class PageAnalyzer {

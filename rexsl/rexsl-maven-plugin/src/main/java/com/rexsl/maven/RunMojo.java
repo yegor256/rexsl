@@ -44,7 +44,7 @@ import org.apache.maven.plugin.MojoFailureException;
  * New versions of the files will be delivered. That's how you can interactively
  * test your XSL stylesheets.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @goal run
  * @threadSafe

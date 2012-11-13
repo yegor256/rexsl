@@ -50,7 +50,7 @@ import org.apache.http.entity.mime.content.StringBody;
 /**
  * Abstract implementation of (X)HTML validator.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 class BaseValidator {

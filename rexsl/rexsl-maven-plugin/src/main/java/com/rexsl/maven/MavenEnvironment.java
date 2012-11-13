@@ -47,7 +47,7 @@ import org.sonatype.aether.util.artifact.JavaScopes;
 /**
  * Environment proxy, between Maven plugin and checks.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class MavenEnvironment implements Environment {

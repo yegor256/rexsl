@@ -46,7 +46,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Resolver of resources.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class RuntimeResolver implements URIResolver {

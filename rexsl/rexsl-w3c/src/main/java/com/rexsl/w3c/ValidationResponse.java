@@ -41,7 +41,7 @@ import java.util.Set;
  *
  * <p>Implementation must be immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see ValidatorBuilder
  * @see Validator#validate(String)

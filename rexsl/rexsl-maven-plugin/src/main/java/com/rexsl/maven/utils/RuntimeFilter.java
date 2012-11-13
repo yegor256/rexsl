@@ -49,7 +49,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Filter used by embedded container in runtime.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class RuntimeFilter implements Filter {

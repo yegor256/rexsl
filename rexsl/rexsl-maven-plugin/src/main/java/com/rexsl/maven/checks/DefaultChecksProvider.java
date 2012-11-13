@@ -143,7 +143,7 @@ import javax.validation.constraints.NotNull;
  *
  * <p>The class is thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (100 lines)
  */

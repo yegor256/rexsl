@@ -38,7 +38,7 @@ import org.apache.log4j.spi.OptionHandler;
  *
  * <p>Implementation of this interface should be thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.2
  */

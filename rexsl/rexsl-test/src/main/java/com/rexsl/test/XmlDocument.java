@@ -52,7 +52,7 @@ import org.w3c.dom.Node;
  *
  * <p>Implementation of this interface must be immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.7
  * @see SimpleXml

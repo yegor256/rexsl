@@ -62,7 +62,7 @@ import javax.ws.rs.core.UriBuilder;
  *
  * <p>The class is mutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://tools.ietf.org/html/rfc6265">RFC6265</a>
  * @todo #381 Somehow we should specify PORT in the cookie. Without this param

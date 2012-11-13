@@ -72,7 +72,7 @@ import javax.validation.constraints.NotNull;
  *
  * <p>Objects of this interface should be immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API, CSS</a>
  * @see ValidatorBuilder
