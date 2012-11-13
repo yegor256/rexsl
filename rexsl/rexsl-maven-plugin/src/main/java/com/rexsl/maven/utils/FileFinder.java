@@ -45,7 +45,7 @@ import org.apache.commons.io.FileUtils;
  * Convenient finder of files by extension in a given directory.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class FileFinder {

@@ -36,7 +36,7 @@ import javax.xml.bind.ValidationEventHandler;
 /**
  * Handler of XSD events.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class XsdEventHandler implements ValidationEventHandler {

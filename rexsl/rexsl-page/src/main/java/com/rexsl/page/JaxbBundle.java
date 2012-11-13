@@ -123,7 +123,7 @@ import org.w3c.dom.Element;
  *  DeadNode implements TreeNode<br/>
  *  // this is the node we set as parent in root node<br/>
  *  </code> <br/>
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.7
  */

@@ -40,7 +40,7 @@ import org.mockito.Mockito;
 
 /**
  * Test case for {@link MavenEnvironment}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class MavenEnvironmentTest {

@@ -38,7 +38,7 @@ import org.mockito.Mockito;
 
 /**
  * Mocker of {@link ServletConfig}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class ServletConfigMocker {

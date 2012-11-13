@@ -43,7 +43,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Adapter between {@link ServletConfig} and {@link FilterConfig}.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see RestfulServlet
  */

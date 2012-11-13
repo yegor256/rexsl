@@ -37,7 +37,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * Implementation of (X)HTML validator.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */

@@ -50,7 +50,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 /**
  * Start/stop grizzly container.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (3 lines)
  */

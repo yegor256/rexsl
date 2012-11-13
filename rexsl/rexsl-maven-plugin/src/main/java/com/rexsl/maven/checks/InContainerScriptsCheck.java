@@ -53,7 +53,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * <p>The class is thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class InContainerScriptsCheck implements Check {

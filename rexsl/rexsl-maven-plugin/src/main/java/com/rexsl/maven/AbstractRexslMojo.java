@@ -52,7 +52,7 @@ import org.sonatype.aether.RepositorySystemSession;
  *
  * <p>The class is NOT thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://www.slf4j.org/manual.html">SLF4J manual</a>
  */

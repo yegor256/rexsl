@@ -35,7 +35,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Internal exception.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class InternalCheckException extends Exception {

@@ -84,7 +84,7 @@ import org.apache.commons.lang.CharEncoding;
  * &lt;/plugin&gt;
  * </pre>
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @goal package
  * @phase process-resources

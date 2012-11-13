@@ -128,7 +128,7 @@ import org.apache.commons.lang.SerializationUtils;
  * }
  * </pre>
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @author Prasath Premkumar (popprem@gmail.com)
  * @version $Id$
  * @see <a href="http://download.oracle.com/javase/1,5.0/docs/guide/jar/jar.html#JAR%20Manifest">JAR Manifest</a>

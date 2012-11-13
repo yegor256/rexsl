@@ -37,7 +37,7 @@ import javax.validation.constraints.NotNull;
  *
  * <p>Implementation of this interface shall be immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public interface TestClient {

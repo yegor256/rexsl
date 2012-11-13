@@ -39,7 +39,7 @@ import javax.validation.constraints.NotNull;
 /**
  * To be executed before all other code.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class RuntimeListener implements ServletContextListener {

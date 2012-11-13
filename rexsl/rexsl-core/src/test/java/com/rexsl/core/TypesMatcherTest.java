@@ -40,7 +40,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 /**
  * Test case for {@link TypesMatcher}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @RunWith(Parameterized.class)

@@ -42,7 +42,7 @@ import org.w3c.dom.Node;
 
 /**
  * Test case for {@link SimpleXml}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @SuppressWarnings("PMD.TooManyMethods")

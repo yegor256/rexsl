@@ -39,7 +39,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Retry policy of assertion.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class RetryPolicy implements AssertionPolicy {

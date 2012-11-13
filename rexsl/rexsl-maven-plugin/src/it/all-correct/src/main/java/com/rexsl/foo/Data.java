@@ -34,7 +34,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Holder of data.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class Data {

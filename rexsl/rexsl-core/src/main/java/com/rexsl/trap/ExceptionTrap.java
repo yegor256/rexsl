@@ -91,7 +91,7 @@ import org.apache.commons.lang.CharEncoding;
  * <p>Multiple values can be separated by commas. If you want to use comma
  * inside an URI replace it with {@code %2C}.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.6
  * @todo #262 This class should be serializable, but it's not. It doesn't

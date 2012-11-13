@@ -39,7 +39,7 @@ import javax.mail.URLName;
 /**
  * Dummy transport.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.6
  */
