@@ -56,8 +56,7 @@ import org.apache.commons.lang.StringUtils;
  * Should be used in {@code web.xml} (together with {@link XsltFilter})
  * like that:
  *
- * <pre>
- * &lt;servlet>
+ * <pre> &lt;servlet>
  *  &lt;servlet-name>RestfulServlet&lt;/servlet-name>
  *  &lt;servlet-class>com.rexsl.core.RestfulServlet&lt;/servlet-class>
  *  &lt;init-param>
@@ -68,8 +67,7 @@ import org.apache.commons.lang.StringUtils;
  * &lt;servlet-mapping>
  *  &lt;servlet-name>RestfulServlet&lt;/servlet-name>
  *  &lt;url-pattern>/*&lt;/url-pattern>
- * &lt;/servlet-mapping>
- * </pre>
+ * &lt;/servlet-mapping></pre>
  *
  * <p>{@code com.rexsl.PACKAGES} init parameter should contain comma-separated
  * list of packages where JAX-RS annotated resources are located and should be

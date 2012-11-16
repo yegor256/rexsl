@@ -62,8 +62,7 @@ import org.apache.commons.lang.SerializationUtils;
  * the date of WAR file packaging. First, you configure
  * {@code maven-war-plugin} to add this information to {@code MANIFEST.MF}:
  *
- * <pre>
- * &lt;plugin>
+ * <pre> &lt;plugin>
  *  &lt;artifactId>maven-war-plugin&lt;/artifactId>
  *  &lt;configuration>
  *   &lt;archive>
@@ -73,8 +72,7 @@ import org.apache.commons.lang.SerializationUtils;
  *    &lt;/manifestEntries>
  *   &lt;/archive>
  *  &lt;/configuration>
- * &lt;/plugin>
- * </pre>
+ * &lt;/plugin></pre>
  *
  * <p>{@code maven-war-plugin} will add these attributes to your
  * {@code MANIFEST.MF} file and the
@@ -82,8 +80,7 @@ import org.apache.commons.lang.SerializationUtils;
  * these attributes where it's necessary (in one of your JAXB annotated objects,
  * for example) and show to users:
  *
- * <pre>
- * import com.rexsl.core.Manifest;
+ * <pre> import com.rexsl.core.Manifest;
  * import java.text.SimpleDateFormat;
  * import java.util.Date;
  * import java.util.Locale;
@@ -101,23 +98,19 @@ import org.apache.commons.lang.SerializationUtils;
  *     Manifests.read("Foo-Date");
  *    );
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>In unit and integration tests you may need to inject some values
  * to {@code MANIFEST.MF} in runtime (for example, in your bootstrap Groovy
  * scripts):
  *
- * <pre>
- * import com.rexsl.core.Manifests
- * Manifests.inject("Foo-URL", "http://localhost/abc");
- * </pre>
+ * <pre> import com.rexsl.core.Manifests
+ * Manifests.inject("Foo-URL", "http://localhost/abc");</pre>
  *
  * <p>When it is necessary to isolate such injections between different unit
  * tests "snapshots" may help, for example (it's a method in a unit test):
  *
- * <pre>
- * &#64;Test
+ * <pre> &#64;Test
  * public void testSomeCode() {
  *   // save current state of all MANIFEST.MF attributes
  *   final byte[] snapshot = Manifests.snapshot();
@@ -125,8 +118,7 @@ import org.apache.commons.lang.SerializationUtils;
  *   Manifests.inject("Foo-URL", "http://localhost/abc");
  *   // restore back all attributes, as they were before the injection
  *   Manifests.revert(snapshot);
- * }
- * </pre>
+ * }</pre>
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @author Prasath Premkumar (popprem@gmail.com)
