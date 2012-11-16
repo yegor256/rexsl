@@ -1,5 +1,5 @@
  ------
- Log4j Cloud Appender
+ ExceptionTrap
  ------
  Yegor Bugayenko
  ------
@@ -38,7 +38,7 @@
 
 Exception Trap
 
-  Read {{{./apidocs-${releasedVersion}/com/rexsl/trap/ExceptionTrap.html}ExceptionTrap}}
+  Read {{{./apidocs-${releasedVersion}/com/rexsl/core/ExceptionTrap.html}ExceptionTrap}}
   javadoc.
 
   Configure it in your <<<WEB-INF/web.xml>>> like this:
@@ -46,14 +46,10 @@ Exception Trap
 +--
 <servlet>
   <servlet-name>ExceptionTrap</servlet-name>
-  <servlet-class>com.rexsl.trap.ExceptionTrap</servlet-class>
+  <servlet-class>com.rexsl.core.ExceptionTrap</servlet-class>
   <init-param>
-    <param-name>com.rexsl.trap.Template</param-name>
-  <param-value>com.rexsl.trap.StaticTemplate?uri=/com/foo/exception.html</param-value>
-  </init-param>
-  <init-param>
-    <param-name>com.rexsl.trap.Notifier</param-name>
-    <param-value>com.rexsl.trap.SmtpNotifier?...</param-value>
+    <param-name>template</param-name>
+    <param-value>/com/foo/exception.html</param-value>
   </init-param>
 </servlet>
 <servlet-mapping>
@@ -66,7 +62,7 @@ Exception Trap
 </error-page>
 +--
 
-  Every exception will be caught by this servlet and delivered to all
-  configured notifiers. Read
-  {{{./apidocs-${releasedVersion}/com/rexsl/trap/ExceptionTrap.html}javadoc}}
+  Every exception will be caught by this servlet and rendered
+  as "service not available" HTML pages. Read
+  {{{./apidocs-${releasedVersion}/com/rexsl/core/ExceptionTrap.html}javadoc}}
   for more information.

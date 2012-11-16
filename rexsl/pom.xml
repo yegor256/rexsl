@@ -126,12 +126,10 @@
     <distributionManagement>
         <downloadUrl>https://oss.sonatype.org/content/groups/public</downloadUrl>
         <repository>
-            <uniqueVersion>false</uniqueVersion>
             <id>oss.sonatype.org</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
-            <uniqueVersion>false</uniqueVersion>
             <id>oss.sonatype.org</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
@@ -204,7 +202,7 @@
                     <plugin>
                         <groupId>com.qulice</groupId>
                         <artifactId>qulice-maven-plugin</artifactId>
-                        <version since="29 Oct 2012">0.2</version>
+                        <version since="16 Nov 2012">0.2.1</version>
                         <configuration>
                             <license>file:${basedir}/LICENSE.txt</license>
                         </configuration>
@@ -259,7 +257,7 @@
                     </plugin>
                     <plugin>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version since="2 Sep 2011">2.8</version>
+                        <version since="16 Nov 2012">2.9</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
@@ -371,6 +369,8 @@
                                         <quiet>true</quiet>
                                         <links>
                                             <link>http://download.oracle.com/javaee/6/api/</link>
+                                            <link>http://hamcrest.org/JavaHamcrest/javadoc/1.3/</link>
+                                            <link>http://docs.mockito.googlecode.com/hg/latest/</link>
                                         </links>
                                         <detectLinks>true</detectLinks>
                                         <tags>

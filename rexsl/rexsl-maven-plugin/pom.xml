@@ -36,10 +36,7 @@
  * instructions from this page:
  * @link http://www.sonatype.com/books/nexus-book/reference/staging-sect-managing-plugin.html
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.rexsl</groupId>
@@ -49,7 +46,6 @@
     <artifactId>rexsl-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>rexsl-maven-plugin</name>
-
     <dependencies>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
@@ -390,7 +386,6 @@
             </exclusions>
         </dependency>
     </dependencies>
-
     <build>
         <pluginManagement>
             <plugins>
@@ -532,18 +527,10 @@
                         <phase>pre-integration-test</phase>
                         <configuration>
                             <target>
-                                <copy verbose="yes" overwrite="yes"
-                                    file="${basedir}/../pom.xml"
-                                    tofile="${project.build.directory}/local-repo/com/rexsl/rexsl/${project.version}/rexsl-${project.version}.pom"/>
-                                <copy verbose="yes" overwrite="yes"
-                                    file="${com.rexsl:rexsl-core:jar}"
-                                    tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-core/${project.version}/rexsl-core-${project.version}.jar"/>
-                                <copy verbose="yes" overwrite="yes"
-                                    file="${com.rexsl:rexsl-w3c:jar}"
-                                    tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-w3c/${project.version}/rexsl-w3c-${project.version}.jar"/>
-                                <copy verbose="yes" overwrite="yes"
-                                    file="${com.rexsl:rexsl-test:jar}"
-                                    tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-test/${project.version}/rexsl-test-${project.version}.jar"/>
+                                <copy verbose="yes" overwrite="yes" file="${basedir}/../pom.xml" tofile="${project.build.directory}/local-repo/com/rexsl/rexsl/${project.version}/rexsl-${project.version}.pom"/>
+                                <copy verbose="yes" overwrite="yes" file="${com.rexsl:rexsl-core:jar}" tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-core/${project.version}/rexsl-core-${project.version}.jar"/>
+                                <copy verbose="yes" overwrite="yes" file="${com.rexsl:rexsl-w3c:jar}" tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-w3c/${project.version}/rexsl-w3c-${project.version}.jar"/>
+                                <copy verbose="yes" overwrite="yes" file="${com.rexsl:rexsl-test:jar}" tofile="${project.build.directory}/local-repo/com/rexsl/rexsl-test/${project.version}/rexsl-test-${project.version}.jar"/>
                             </target>
                         </configuration>
                         <goals>
@@ -554,12 +541,13 @@
             </plugin>
         </plugins>
     </build>
-
     <profiles>
         <profile>
             <id>csslint</id>
             <activation>
-                <file><exists>pom.xml</exists></file>
+                <file>
+                    <exists>pom.xml</exists>
+                </file>
             </activation>
             <properties>
                 <csslint.js>${project.build.outputDirectory}/CssLint.js</csslint.js>
@@ -576,10 +564,7 @@
                                 <configuration>
                                     <target>
                                         <available file="${csslint.js}" property="present"/>
-                                        <get verbose="yes" usetimestamp="true" skipexisting="true"
-                                            ignoreerrors="true" maxtime="10"
-                                            src="https://raw.github.com/stubbornella/csslint/master/release/csslint-rhino.js"
-                                            dest="${csslint.js}"/>
+                                        <get verbose="yes" usetimestamp="true" skipexisting="true" ignoreerrors="true" maxtime="10" src="https://raw.github.com/stubbornella/csslint/master/release/csslint-rhino.js" dest="${csslint.js}"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -613,5 +598,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
