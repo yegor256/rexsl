@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.trap;
+package com.rexsl.core;
 
 import java.io.IOException;
 
@@ -38,7 +38,7 @@ import java.io.IOException;
  * @version $Id$
  * @since 0.3.6
  */
-public interface Template {
+interface Template {
 
     /**
      * Render this defect to HTML, in UTF-8.

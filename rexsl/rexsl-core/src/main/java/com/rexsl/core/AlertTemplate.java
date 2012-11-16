@@ -27,12 +27,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.core;
+
+import com.jcabi.log.Logger;
+import javax.validation.constraints.NotNull;
 
 /**
- * Exception trap, experimental implementation.
+ * Template with no behavior, just to alert the user that there is a problem
+ * with template configuration.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.6
  */
-package com.rexsl.trap;
+final class AlertTemplate implements Template {
+
+    /**
+     * The message to show.
+     */
+    private final transient String message;
+
+    /**
+     * Public ctor.
+     * @param msg The message to show
+     */
+    public AlertTemplate(@NotNull final String msg) {
+        this.message = msg;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String render(@NotNull final String defect) {
+        Logger.warn(this, "#render(..): %s", this.message);
+        return Logger.format(
+            "<html><body><pre>%s\n\n%s</pre></body></html>",
+            this.message,
+            defect
+        );
+    }
+
+}

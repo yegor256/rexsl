@@ -27,10 +27,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.trap;
+package com.rexsl.core;
 
-import com.rexsl.core.HttpServletRequestMocker;
-import com.rexsl.core.ServletConfigMocker;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.servlet.ServletConfig;

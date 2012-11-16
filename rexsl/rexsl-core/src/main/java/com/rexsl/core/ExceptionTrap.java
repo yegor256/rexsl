@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.trap;
+package com.rexsl.core;
 
 import com.jcabi.aspects.LogExceptions;
 import com.jcabi.log.Logger;
