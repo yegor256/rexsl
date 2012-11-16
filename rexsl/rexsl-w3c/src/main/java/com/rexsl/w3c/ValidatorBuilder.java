@@ -35,26 +35,20 @@ package com.rexsl.w3c;
  * <p>This is your entry point to the module. Start with creating a new
  * validator:
  *
- * <pre>
- * HtmlValidator validator = new ValidatorBuilder().html();
- * </pre>
+ * <pre> HtmlValidator validator = new ValidatorBuilder().html();</pre>
  *
  * <p>Now you can use it in order to validate your HTML document against
  * W3C rules:
  *
- * <pre>
- * ValidationResponse response = validator.validate(
+ * <pre> ValidationResponse response = validator.validate(
  *   "&lt;html&gt;&lt;body&gt;...&lt;/body&gt;&lt;/html&gt;"
- * );
- * </pre>
+ * );</pre>
  *
  * <p>The response contains all information provided by W3C server. You can
  * work with details from {@link ValidationResponse} or just output it to
  * console:
  *
- * <pre>
- * System.out.println(response.toString());
- * </pre>
+ * <pre> System.out.println(response.toString());</pre>
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
