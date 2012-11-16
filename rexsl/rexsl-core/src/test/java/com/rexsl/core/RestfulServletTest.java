@@ -43,7 +43,7 @@ import org.junit.Test;
 
 /**
  * Test case for {@link RestfulServlet}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class RestfulServletTest {

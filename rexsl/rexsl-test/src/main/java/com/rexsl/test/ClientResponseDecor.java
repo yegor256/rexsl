@@ -43,7 +43,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * <p>Objects of this class are immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class ClientResponseDecor implements Formattable {

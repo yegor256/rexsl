@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
  * method, using the value of {@code User-Agent} HTTP header. If such a header
  * doesn't exist in the request - {@code NULL} value will be used instead.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://tools.ietf.org/html/rfc2616#section-14.43">RFC-2616</a>
  */

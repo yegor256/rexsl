@@ -37,7 +37,7 @@ import org.mockito.stubbing.Answer;
 
 /**
  * Mocker of {@link ServletOutputStream}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class ServletOutputStreamMocker {

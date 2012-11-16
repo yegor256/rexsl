@@ -50,7 +50,7 @@ package com.rexsl.w3c;
  *
  * <pre> System.out.println(response.toString());</pre>
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see ValidationResponse
  * @see Validator

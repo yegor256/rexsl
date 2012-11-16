@@ -48,7 +48,7 @@ import org.mockito.Mockito;
 
 /**
  * Test case for {@link ContextResourceResolver}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  * @todo #336 The majority of tests here are disabled, because YMOCK doesn't

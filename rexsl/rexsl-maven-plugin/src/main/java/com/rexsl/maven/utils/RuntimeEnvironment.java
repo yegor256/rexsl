@@ -43,7 +43,7 @@ import javax.validation.constraints.NotNull;
  *
  * <p>{@link ServletContext} is filled with values in {@link EmbeddedContainer}.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class RuntimeEnvironment implements Environment {

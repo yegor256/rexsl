@@ -41,7 +41,7 @@ import org.mockito.Mockito;
 
 /**
  * Test case for {@link PackageMojo}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class PackageMojoTest {

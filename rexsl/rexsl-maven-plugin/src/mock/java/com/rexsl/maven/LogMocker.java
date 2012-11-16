@@ -40,7 +40,7 @@ import org.slf4j.impl.StaticLoggerBinder;
 
 /**
  * Mocker of Maven log.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class LogMocker {

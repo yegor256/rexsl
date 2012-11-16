@@ -43,8 +43,7 @@ import javax.ws.rs.core.UriBuilder;
  *
  * <p>For example (in your Groovy script):
  *
- * <pre>
- * import javax.ws.rs.core.HttpHeaders
+ * <pre> import javax.ws.rs.core.HttpHeaders
  * import javax.ws.rs.core.MediaType
  * import javax.ws.rs.core.UriBuilder
  * import org.hamcrest.Matchers
@@ -54,8 +53,7 @@ import javax.ws.rs.core.UriBuilder;
  *   .post('renaming somebody', 'name=John Doe')
  *   .assertStatus(HttpURLConnection.HTTP_OK)
  *   .assertBody(Matchers.containsString('xml'))
- *   .assertXPath('/data/user[.="John Doe"]')
- * </pre>
+ *   .assertXPath('/data/user[.="John Doe"]')</pre>
  *
  * <p>This example will make a {@code POST} request to the URI pre-built
  * by {@code UriBuilder}, providing headers and request body. Response will
@@ -64,26 +62,23 @@ import javax.ws.rs.core.UriBuilder;
  *
  * <p>Also you can use this class for data retrieval, for example:
  *
- * <pre>
- * String html = RestTester.start(new URI("http://www.rexsl.com"))
+ * <pre> String html = RestTester.start(new URI("http://www.rexsl.com"))
  *   .get('read home page of ReXSL.com')
  *   .assertStatus(HttpURLConnection.HTTP_OK)
- *   .getBody();
- * </pre>
+ *   .getBody();</pre>
  *
  * <p>Besides that, it can be used as a convenient manipulator of XML nodes:
  *
- * <pre>
- * List&lt;XmlDocument&gt; emps = RestTester.start(new URI("http://localhost"))
- *   .get('reading data of all employees')
- *   .assertStatus(HttpURLConnection.HTTP_OK)
- *   .nodes("//employees/employee");
+ * <pre> List&lt;XmlDocument&gt; emps =
+ *   RestTester.start(new URI("http://localhost"))
+ *     .get('reading data of all employees')
+ *     .assertStatus(HttpURLConnection.HTTP_OK)
+ *     .nodes("//employees/employee");
  * for (XmlDocument employee : emps) {
  *   String name = employee.xpath("name/text()").get(0);
- * }
- * </pre>
+ * }</pre>
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class RestTester {

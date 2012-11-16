@@ -40,7 +40,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @Path("/")

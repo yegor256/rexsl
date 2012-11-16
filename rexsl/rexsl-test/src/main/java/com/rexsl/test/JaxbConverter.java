@@ -47,8 +47,7 @@ import javax.xml.transform.Source;
  * <p>The object has to be annotated with JAXB annotations
  * in order to be convertable. Let's consider an example JAXB-annotated class:
  *
- * <pre>
- * import javax.xml.bind.annotation.XmlAccessType;
+ * <pre> import javax.xml.bind.annotation.XmlAccessType;
  * import javax.xml.bind.annotation.XmlAccessorType;
  * import javax.xml.bind.annotation.XmlElement;
  * import javax.xml.bind.annotation.XmlRootElement;
@@ -59,14 +58,12 @@ import javax.xml.transform.Source;
  *   public String getName() {
  *     return "John Doe";
  *   }
- * }
- * </pre>
+ * }</pre>
  *
  * <p>Now you want to test how it works with real data after convertion
  * to XML (in a unit test):
  *
- * <pre>
- * import com.rexsl.test.JaxbConverter;
+ * <pre> import com.rexsl.test.JaxbConverter;
  * import com.rexsl.test.XhtmlMatchers;
  * import org.junit.Assert;
  * import org.junit.Test;
@@ -79,10 +76,9 @@ import javax.xml.transform.Source;
  *       XhtmlMatchers.hasXPath("/employee/name[.='John Doe']")
  *     );
  *   }
- * }
- * </pre>
+ * }</pre>
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class JaxbConverter {

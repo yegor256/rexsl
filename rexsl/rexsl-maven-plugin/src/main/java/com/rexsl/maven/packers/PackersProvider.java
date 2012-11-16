@@ -56,7 +56,7 @@ import java.util.Set;
  * compressed as XML documents and all comments are removed. Then, they are
  * saved to {@code target/../xsl}.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class PackersProvider {

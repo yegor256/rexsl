@@ -52,7 +52,7 @@ import org.apache.commons.lang.StringUtils;
  * order to capture its output into string.
  *
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://www.mozilla.org/rhino/jsc.html">Rhino JavaScript to Java compiler</a>
  * @see <a href="https://github.com/stubbornella/csslint/wiki/Command-line-interface">CSSLint Command Line Interface</a>

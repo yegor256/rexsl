@@ -48,7 +48,7 @@ import org.mockito.Mockito;
 
 /**
  * Test case for {@link XslResolver}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */

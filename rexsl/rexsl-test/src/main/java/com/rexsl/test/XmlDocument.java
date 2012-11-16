@@ -39,13 +39,11 @@ import org.w3c.dom.Node;
  *
  * <p>Set of convenient XML manipulations:
  *
- * <pre>
- * XmlDocument xml = new SimpleXml(content);
+ * <pre> XmlDocument xml = new SimpleXml(content);
  * for (XmlDocument employee : xml.nodes("//Employee")) {
  *   String name = employee.xpath("name/text()").get(0);
  *   // ...
- * }
- * </pre>
+ * }</pre>
  *
  * <p>You can always get DOM node out of this abstraction using {@link #node()}
  * method.
@@ -54,7 +52,7 @@ import org.w3c.dom.Node;
  *
  * <p>Implementation of this interface must be immutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.7
  * @see SimpleXml

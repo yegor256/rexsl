@@ -110,7 +110,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * <p>The class is mutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @XmlRootElement(name = "link")

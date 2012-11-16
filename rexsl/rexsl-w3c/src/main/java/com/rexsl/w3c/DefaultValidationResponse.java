@@ -41,7 +41,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Default implementaiton of validation response.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 final class DefaultValidationResponse implements ValidationResponse {

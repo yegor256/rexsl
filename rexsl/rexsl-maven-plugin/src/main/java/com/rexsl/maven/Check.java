@@ -34,7 +34,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Single check to be executed by CheckMojo.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public interface Check {

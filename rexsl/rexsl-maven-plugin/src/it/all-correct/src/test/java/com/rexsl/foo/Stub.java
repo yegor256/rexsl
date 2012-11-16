@@ -34,7 +34,7 @@ import javax.ws.rs.Path;
 import org.apache.commons.io.IOUtils;
 
 /**
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @Path("/stub")

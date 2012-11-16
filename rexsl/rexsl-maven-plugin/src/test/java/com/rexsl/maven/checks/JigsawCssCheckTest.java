@@ -40,7 +40,7 @@ import org.junit.Test;
 /**
  * Test case for {@link JigsawCssCheck}.
  * @author Dmitry Bashkin (dmitry.bashkin@rexsl.com)
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class JigsawCssCheckTest {

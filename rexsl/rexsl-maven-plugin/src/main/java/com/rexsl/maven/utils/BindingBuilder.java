@@ -40,7 +40,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Builder of binding for {@link GroovyExecutor}.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class BindingBuilder {

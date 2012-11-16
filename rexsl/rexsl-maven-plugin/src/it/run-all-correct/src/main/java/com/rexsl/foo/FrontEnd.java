@@ -33,7 +33,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 /**
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @Path("/")

@@ -72,7 +72,7 @@ import org.apache.commons.lang.CharEncoding;
  *  &lt;dispatcher>ERROR&lt;/dispatcher>
  * &lt;/filter-mapping></pre>
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  * @since 0.2

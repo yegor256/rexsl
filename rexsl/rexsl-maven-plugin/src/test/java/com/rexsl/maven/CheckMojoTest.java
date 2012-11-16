@@ -45,7 +45,7 @@ import org.sonatype.aether.repository.LocalRepository;
 
 /**
  * Test case for {@link CheckMojo}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class CheckMojoTest {

@@ -53,7 +53,7 @@ import org.w3c.dom.Node;
  *
  * <p>Objects of this class are mutable and thread-safe.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
@@ -139,7 +139,11 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     public String getBody() {
-        return this.fetcher.body();
+        try {
+            return this.fetcher.body();
+        } catch (java.io.IOException ex) {
+            throw new AssertionError(ex);
+        }
     }
 
     /**

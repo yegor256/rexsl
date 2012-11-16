@@ -76,7 +76,7 @@ import org.apache.commons.lang.StringUtils;
  * contains incorrect data. We will consider a package is valid if and only if
  * it abides to the Java package naming conventions.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://www.rexsl.com">Introduction to ReXSL</a>
  * @see <a href="http://www.oracle.com/technetwork/java/javaee/servlet/index.html">Java Servlet Technology</a>
@@ -237,13 +237,13 @@ public final class RestfulServlet extends HttpServlet {
             );
         }
         response.addHeader(
-            "Rexsl-Millis",
+            "X-Rexsl-Millis",
             Long.toString(duration)
         );
         response.addHeader(
-            "Rexsl-Version",
+            "X-Rexsl-Version",
             String.format(
-                "%s r%s",
+                "%s/r%s",
                 Manifests.read("ReXSL-Version"),
                 Manifests.read("ReXSL-Build")
             )

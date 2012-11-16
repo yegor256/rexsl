@@ -35,7 +35,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Groovy-generated exception.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class GroovyException extends Exception {

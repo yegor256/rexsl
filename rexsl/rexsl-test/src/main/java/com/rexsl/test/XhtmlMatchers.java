@@ -41,14 +41,12 @@ import org.hamcrest.Matchers;
  *
  * <p>For example:
  *
- * <pre>
- * MatcherAssert.assertThat(
+ * <pre> MatcherAssert.assertThat(
  *   "&lt;root&gt;&lt;a&gt;hello&lt;/a&gt;&lt;/root&gt;",
  *   XhtmlMatchers.hasXPath("/root/a[.='hello']")
- * );
- * </pre>
+ * );</pre>
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.2.6
  */

@@ -108,7 +108,7 @@ import java.lang.annotation.Target;
  *  &lt;title>hello, world!&lt;/title>
  * &lt;/front></pre>
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://trac.fazend.com/rexsl/ticket/47">Feature was introduced in ticket #47</a>
  * @since 0.3

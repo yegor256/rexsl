@@ -163,8 +163,8 @@
         This property has to be updated every time you release
         a new version to Maven Central
         -->
-        <releasedVersion>0.4</releasedVersion>
-        <jcabi.version since="30 Oct 2012">0.4.1</jcabi.version>
+        <releasedVersion>0.4.1</releasedVersion>
+        <jcabi.version since="11 Nov 2012">0.5.3</jcabi.version>
     </properties>
     <repositories>
         <!--
@@ -329,7 +329,6 @@
                     </plugin>
                     <plugin>
                         <artifactId>maven-site-plugin</artifactId>
-                        <version since="2 Sep 2011">3.0-beta-3</version>
                         <configuration>
                             <reportPlugins>
                                 <plugin>
@@ -362,7 +361,7 @@
                                     located at target/site/apidocs.
                                     -->
                                     <artifactId>maven-javadoc-plugin</artifactId>
-                                    <version since="2 Sep 2011">2.8</version>
+                                    <version since="7 Nov 2012">2.9</version>
                                     <configuration>
                                         <failOnError>true</failOnError>
                                         <serialwarn>true</serialwarn>
@@ -424,7 +423,7 @@
                                     <artifactId>rempl-maven-plugin</artifactId>
                                     <version since="2 Sep 2011">1.1.3</version>
                                     <configuration>
-                                        <rom>src/rempl/rom.xml</rom>
+                                        <rom>${basedir}/src/rempl/rom.xml</rom>
                                     </configuration>
                                 </plugin>
                                 <plugin>
@@ -529,6 +528,48 @@
                                         <include>**/*Mocker*.class</include>
                                     </includes>
                                 </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <activation>
+                <property><name>sonatype</name></property>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-deploy-plugin</artifactId>
+                            <configuration>
+                                <skip>true</skip>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version since="29 Aug 2012">1.0.2</version>
+                        <configuration>
+                            <serverId>oss.sonatype.org</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <stagingRepositoryId>jcabi</stagingRepositoryId>
+                            <deployUrl>https://oss.sonatype.org/service/local/staging/deploy/maven2</deployUrl>
+                            <description>${project.version}</description>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>deploy-to-sonatype</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                    <goal>close</goal>
+                                    <goal>release</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
@@ -771,7 +812,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version since="16 Nov 2012">3.2</version>
+                    <version since="7 Nov 2012">3.2</version>
                     <configuration>
                         <reportPlugins>
                             <!--

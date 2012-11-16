@@ -35,7 +35,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 public final class HomeTest {

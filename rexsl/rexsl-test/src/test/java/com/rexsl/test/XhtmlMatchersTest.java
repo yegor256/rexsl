@@ -41,7 +41,7 @@ import org.w3c.dom.Element;
 
 /**
  * Test case for {@link XhtmlMatchers}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @SuppressWarnings("PMD.TooManyMethods")

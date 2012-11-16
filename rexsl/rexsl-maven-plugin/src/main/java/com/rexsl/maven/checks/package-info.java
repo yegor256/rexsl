@@ -31,7 +31,7 @@
 /**
  * Different checks.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 package com.rexsl.maven.checks;

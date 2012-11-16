@@ -34,7 +34,7 @@
  * <p>Read <a href="http://www.rexsl.com">Introduction to ReXSL</a> to get
  * better understanding of how it works.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://www.rexsl.com">Introduction to ReXSL</a>
  */

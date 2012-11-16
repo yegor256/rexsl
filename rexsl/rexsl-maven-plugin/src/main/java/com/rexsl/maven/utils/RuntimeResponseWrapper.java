@@ -43,7 +43,7 @@ import javax.validation.constraints.NotNull;
  * Runtime wrapper that redirects all the writes
  * to {@link ByteArrayOutputStream}.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  * @see RuntimeFilter#doFilter(ServletRequest,ServletResponse,FilterChain)

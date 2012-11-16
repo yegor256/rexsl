@@ -42,7 +42,7 @@ import org.mockito.Mockito;
 
 /**
  * Test case for {@link JerseyTestResponse}.
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
@@ -384,6 +384,19 @@ public final class JerseyTestResponseTest {
                     }
                 }
             );
+    }
+
+    /**
+     * TestResponse can throw when entity is not a Unicode text.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void throwsWhenEntityIsNotAUnicodeString() throws Exception {
+        final ClientResponse resp = new ClientResponseMocker()
+            // @checkstyle MagicNumber (1 line)
+            .withEntity(new byte[]{(byte) 0xC0, (byte) 0xC0})
+            .mock();
+        new JerseyTestResponse(this.fetcher(resp), this.decor).getBody();
     }
 
     /**

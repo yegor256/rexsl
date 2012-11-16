@@ -63,7 +63,7 @@ import org.hamcrest.Matchers;
  * and works until JVM is shut down. The only way to stop it is to call
  * {@link #stop()}.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see RestTester
  */
