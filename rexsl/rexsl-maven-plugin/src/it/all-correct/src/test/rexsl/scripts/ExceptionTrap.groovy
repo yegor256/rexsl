@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2012, ReXSL.com
+ * Copyright (c) 2011, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,12 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo.scripts
 
-/**
- * Exception trap, tests.
- *
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
- * @since 0.3.6
- */
-package com.rexsl.trap;
+import com.rexsl.test.RestTester
+import javax.ws.rs.core.UriBuilder
+
+RestTester.start(UriBuilder.fromUri(rexsl.home).path('/trap'))
+    .get('render exception trap')
+    .assertStatus(HttpURLConnection.HTTP_OK)
+    .assertXPath('//xhtml:pre[contains(.,"exception_type: NULL")]')

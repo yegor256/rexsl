@@ -61,8 +61,7 @@ import org.apache.commons.lang.CharEncoding;
  * Should be used in {@code web.xml} (together with {@link RestfulServlet})
  * like this:
  *
- * <pre>
- * &lt;filter>
+ * <pre> &lt;filter>
  *  &lt;filter-name>XsltFilter&lt;/filter-name>
  *  &lt;filter-class>com.rexsl.core.XsltFilter&lt;/filter-class>
  * &lt;/filter>
@@ -71,8 +70,7 @@ import org.apache.commons.lang.CharEncoding;
  *  &lt;servlet-name>RestfulServlet&lt;/servlet-name>
  *  &lt;dispatcher>REQUEST&lt;/dispatcher>
  *  &lt;dispatcher>ERROR&lt;/dispatcher>
- * &lt;/filter-mapping>
- * </pre>
+ * &lt;/filter-mapping></pre>
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)

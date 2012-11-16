@@ -27,10 +27,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.trap;
+package com.rexsl.core;
 
-import com.rexsl.core.HttpServletRequestMocker;
-import com.rexsl.core.ServletConfigMocker;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.servlet.ServletConfig;
@@ -44,7 +42,7 @@ import org.mockito.Mockito;
 
 /**
  * Test case for {@link ExceptionTrap}.
- * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  */
 public final class ExceptionTrapTest {
@@ -95,64 +93,6 @@ public final class ExceptionTrapTest {
                 Matchers.containsString("header1: A"),
                 Matchers.containsString("header2: B")
             )
-        );
-    }
-
-    /**
-     * ExceptionTrap can use a custom notifier.
-     * @throws Exception If there is some problem inside
-     */
-    @Test
-    public void usesCustomNotifierForExceptionReporting() throws Exception {
-        final ServletConfig config = new ServletConfigMocker().withParam(
-            Notifier.class.getName(),
-            String.format("%s ?\nalpha=\tfoo ", NotifierMocker.class.getName())
-        ).mock();
-        final HttpServlet servlet = new ExceptionTrap();
-        servlet.init(config);
-        final HttpServletRequest request =
-            new HttpServletRequestMocker().mock();
-        final HttpServletResponse response =
-            Mockito.mock(HttpServletResponse.class);
-        Mockito.doReturn(new PrintWriter(new StringWriter()))
-            .when(response).getWriter();
-        servlet.service(request, response);
-        MatcherAssert.assertThat(
-            NotifierMocker.poll().properties().getProperty("alpha"),
-            Matchers.equalTo("foo")
-        );
-    }
-
-    /**
-     * ExceptionTrap can use two notifiers.
-     * @throws Exception If there is some problem inside
-     */
-    @Test
-    public void usesTwoCustomNotifiers() throws Exception {
-        final ServletConfig config = new ServletConfigMocker().withParam(
-            Notifier.class.getName(),
-            String.format("%s, %1$s", NotifierMocker.class.getName())
-        ).mock();
-        final HttpServlet servlet = new ExceptionTrap();
-        servlet.init(config);
-        final HttpServletRequest request =
-            new HttpServletRequestMocker().mock();
-        final HttpServletResponse response =
-            Mockito.mock(HttpServletResponse.class);
-        Mockito.doReturn(new PrintWriter(new StringWriter()))
-            .when(response).getWriter();
-        servlet.service(request, response);
-        MatcherAssert.assertThat(
-            NotifierMocker.poll(),
-            Matchers.notNullValue()
-        );
-        MatcherAssert.assertThat(
-            NotifierMocker.poll(),
-            Matchers.notNullValue()
-        );
-        MatcherAssert.assertThat(
-            NotifierMocker.poll(),
-            Matchers.nullValue()
         );
     }
 

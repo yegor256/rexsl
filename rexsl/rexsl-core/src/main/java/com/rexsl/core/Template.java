@@ -27,25 +27,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.trap;
+package com.rexsl.core;
 
-import java.io.Closeable;
 import java.io.IOException;
 
 /**
- * Notifier.
+ * HTML building template.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
  * @since 0.3.6
  */
-public interface Notifier extends Closeable {
+interface Template {
 
     /**
-     * Notify about this defect.
-     * @param defect Plain text of the defect to notify about
+     * Render this defect to HTML, in UTF-8.
+     * @param defect Text of defect
+     * @return The HTML page to show to the end user
      * @throws IOException If some problem
      */
-    void notify(String defect) throws IOException;
+    String render(String defect) throws IOException;
 
 }

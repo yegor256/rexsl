@@ -27,46 +27,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.trap;
+package com.rexsl.core;
 
 import com.jcabi.aspects.LogExceptions;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
 
 /**
  * All uncaught exceptions will be caught here.
  *
  * <p>Configure it in your {@code WEB-INF/web.xml} like this:
  *
- * <pre>
- * &lt;servlet>
+ * <pre> &lt;servlet>
  *  &lt;servlet-name&gt;ExceptionTrap&lt;/servlet-name&gt;
  *  &lt;servlet-class&gt;com.rexsl.trap.ExceptionTrap&lt;/servlet-class&gt;
  *  &lt;init-param&gt;
- *   &lt;param-name&gt;com.rexsl.trap.Template&lt;/param-name&gt;
- *   &lt;param-value&gt;
- *    com.rexsl.trap.StaticTemplate?uri=com/example/Trap-Template.html
- *   &lt;/param-value&gt;
- *  &lt;/init-param&gt;
- *  &lt;init-param&gt;
- *   &lt;param-name&gt;com.rexsl.trap.Notifier&lt;/param-name&gt;
- *   &lt;param-value&gt;
- *    com.rexsl.trap.SmtpNotifier?to=me&#64;example.com&amp;...
- *   &lt;/param-value&gt;
+ *   &lt;param-name&gt;template&lt;/param-name&gt;
+ *   &lt;param-value&gt;com/example/Trap-Template.html&lt;/param-value&gt;
  *  &lt;/init-param&gt;
  * &lt;/servlet&gt;
  * &lt;servlet-mapping&gt;
@@ -76,24 +61,14 @@ import org.apache.commons.lang.CharEncoding;
  * &lt;error-page&gt;
  *  &lt;exception-type&gt;java.lang.Throwable&lt;/exception-type&gt;
  *  &lt;location&gt;/trap&lt;/location&gt;
- * &lt;/error-page&gt;
- * </pre>
+ * &lt;/error-page&gt;</pre>
  *
- * <p>Configuration of the trap behavior is done through {@code init-params},
- * which are named as interfaces with values as URIs. Every URI has a name
- * of implementation class and a list of query params, which will be send to
- * the class in {@link Properties}. See {@link SmtpNotifier} and
- * {@link SmtpBulkNotifier} for better examples.
+ * <p>The template of "service not available" web page is configured with
+ * the only one {@code init-params}.
  *
- * <p>Spaces and all control chars (new lines, tabs, etc) are automatically
- * removed from param values.
- *
- * <p>Multiple values can be separated by commas. If you want to use comma
- * inside an URI replace it with {@code %2C}.
- *
- * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @since 0.3.6
+ * @since 0.4.2
  * @todo #262 This class should be serializable, but it's not. It doesn't
  *  restore its state after deserialization. We should create a test for it
  *  and then fix the defect.
@@ -106,11 +81,6 @@ public final class ExceptionTrap extends HttpServlet {
     private static final long serialVersionUID = 0x75298A7876D21470L;
 
     /**
-     * List of notifiers ready to notify.
-     */
-    private transient List<Notifier> notifiers;
-
-    /**
      * The template.
      */
     private transient Template template;
@@ -121,14 +91,15 @@ public final class ExceptionTrap extends HttpServlet {
      */
     @Override
     public void init() throws ServletException {
-        this.notifiers = this.instantiate(Notifier.class);
-        final List<Template> templates = this.instantiate(Template.class);
-        if (templates.isEmpty()) {
+        final String param = this.getInitParameter("template");
+        if (param == null) {
             this.template = new AlertTemplate("HTML template not configured");
-        } else if (templates.size() > 1) {
-            this.template = new AlertTemplate("One HTML template expected");
         } else {
-            this.template = templates.get(0);
+            this.template = new StaticTemplate(
+                URI.create(
+                    param.replaceAll("[\\p{Cntrl}\\p{Space}]+", "")
+                )
+            );
         }
     }
 
@@ -137,9 +108,7 @@ public final class ExceptionTrap extends HttpServlet {
      */
     @Override
     public void destroy() {
-        for (Notifier notifier : this.notifiers) {
-            IOUtils.closeQuietly(notifier);
-        }
+        // nothing to do
     }
 
     /**
@@ -151,61 +120,12 @@ public final class ExceptionTrap extends HttpServlet {
         final HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         final StringBuilder text = this.text(request);
-        for (Notifier notifier : this.notifiers) {
-            notifier.notify(text.toString());
-        }
         try {
             response.getWriter().print(this.template.render(text.toString()));
         } finally {
             response.getWriter().close();
         }
         Logger.error(this, "#service():\n%s", text);
-    }
-
-    /**
-     * Instantiate class.
-     * @param type The interface to instantiate
-     * @return The object
-     * @throws ServletException If some defect inside
-     * @param <T> Expected type of response
-     * @checkstyle RedundantThrows (3 lines)
-     */
-    private <T> List<T> instantiate(final Class<T> type)
-        throws ServletException {
-        final String param = this.getInitParameter(type.getName());
-        List<T> list;
-        if (param == null) {
-            list = new ArrayList<T>();
-        } else {
-            final String[] values = param.split(",");
-            list = new ArrayList<T>(values.length);
-            for (String value : values) {
-                final URI uri = URI.create(
-                    value.replaceAll("[\\p{Cntrl}\\p{Space}]+", "")
-                );
-                final Properties props = ExceptionTrap.props(uri);
-                try {
-                    list.add(
-                        type.cast(
-                            Class.forName(uri.getPath())
-                                .getConstructor(Properties.class)
-                                .newInstance(props)
-                        )
-                    );
-                } catch (ClassNotFoundException ex) {
-                    throw new ServletException(ex);
-                } catch (NoSuchMethodException ex) {
-                    throw new ServletException(ex);
-                } catch (InstantiationException ex) {
-                    throw new ServletException(ex);
-                } catch (IllegalAccessException ex) {
-                    throw new ServletException(ex);
-                } catch (java.lang.reflect.InvocationTargetException ex) {
-                    throw new ServletException(ex);
-                }
-            }
-        }
-        return list;
     }
 
     /**
@@ -291,38 +211,6 @@ public final class ExceptionTrap extends HttpServlet {
             .append(": ")
             .append(attr.toString())
             .append('\n');
-    }
-
-    /**
-     * Retrieve parameters of URI.
-     * @param uri The URI
-     * @return Map of all query params
-     * @throws ServletException If some defect inside
-     * @checkstyle RedundantThrows (3 lines)
-     */
-    private static Properties props(final URI uri) throws ServletException {
-        final Properties props = new Properties();
-        final String[] parts = uri.toString().split("\\?");
-        if (parts.length > 1) {
-            final String query = parts[1];
-            for (String param : query.split("&")) {
-                try {
-                    final String[] pair = param.split("=", 2);
-                    final String key =
-                        URLDecoder.decode(pair[0], CharEncoding.UTF_8);
-                    String value;
-                    if (pair.length == 1) {
-                        value = Boolean.TRUE.toString();
-                    } else {
-                        value = URLDecoder.decode(pair[1], CharEncoding.UTF_8);
-                    }
-                    props.setProperty(key, value);
-                } catch (java.io.UnsupportedEncodingException ex) {
-                    throw new ServletException(ex);
-                }
-            }
-        }
-        return props;
     }
 
     /**

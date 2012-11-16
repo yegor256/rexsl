@@ -27,82 +27,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.log;
+package com.rexsl.core;
 
 import com.jcabi.log.Logger;
-import java.io.IOException;
+import javax.validation.constraints.NotNull;
 
 /**
- * Feeder through HTTP POST request.
+ * Template with no behavior, just to alert the user that there is a problem
+ * with template configuration.
  *
- * <p>The feeder can be configured to split all incoming texts to single lines
- * and post them
- * to the configured URL one by one. This mechanism may be required for
- * some cloud
- * logging platforms, for example for
- * <a href="http://www.loggly.com">loggly.com</a> (read their forum post about
- * <a href="http://forum.loggly.com/discussion/23">this problem</a>). You
- * enable splitting by {@code split} option set to {@code TRUE}.
- *
- * <p>The class is thread-safe.
- *
- * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
- * @since 0.3.2
+ * @since 0.3.6
  */
-public final class HttpFeeder extends AbstractHttpFeeder {
+final class AlertTemplate implements Template {
 
     /**
-     * Shall we split lines before POST-ing?
-     * @since 0.3.6
+     * The message to show.
      */
-    private transient boolean split;
+    private final transient String message;
 
     /**
-     * Set option {@code split}.
-     * @param yes Shall we split?
-     * @since 0.3.6
+     * Public ctor.
+     * @param msg The message to show
      */
-    public void setSplit(final boolean yes) {
-        this.split = yes;
+    public AlertTemplate(@NotNull final String msg) {
+        this.message = msg;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        return Logger.format("HTTP POST to \"%s\"", this.getUrl());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void close() {
-        // nothing to close here
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void activateOptions() {
-        // empty, nothing to do here
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void feed(final String text) throws IOException {
-        if (this.split) {
-            for (String line : text.split(CloudAppender.EOL)) {
-                this.post(Logger.format("%s%s", line, CloudAppender.EOL));
-            }
-        } else {
-            this.post(text);
-        }
+    public String render(@NotNull final String defect) {
+        Logger.warn(this, "#render(..): %s", this.message);
+        return Logger.format(
+            "<html><body><pre>%s\n\n%s</pre></body></html>",
+            this.message,
+            defect
+        );
     }
 
 }

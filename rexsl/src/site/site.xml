@@ -40,7 +40,7 @@
     <googleAnalyticsAccountId>UA-1963507-22</googleAnalyticsAccountId>
     <bannerLeft>
         <name>ReXSL</name>
-        <src>images/logo.png</src>
+        <src>http://www.rexsl.com/images/logo.png</src>
         <href>http://www.rexsl.com/</href>
     </bannerLeft>
     <body>
