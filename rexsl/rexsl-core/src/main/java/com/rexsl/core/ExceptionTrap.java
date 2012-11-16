@@ -51,7 +51,7 @@ import javax.servlet.http.HttpServletResponse;
  *  &lt;servlet-class&gt;com.rexsl.trap.ExceptionTrap&lt;/servlet-class&gt;
  *  &lt;init-param&gt;
  *   &lt;param-name&gt;template&lt;/param-name&gt;
- *   &lt;param-value&gt;com/example/Trap-Template.html&lt;/param-value&gt;
+ *   &lt;param-value&gt;/com/example/Trap-Template.html&lt;/param-value&gt;
  *  &lt;/init-param&gt;
  * &lt;/servlet&gt;
  * &lt;servlet-mapping&gt;
@@ -64,7 +64,10 @@ import javax.servlet.http.HttpServletResponse;
  * &lt;/error-page&gt;</pre>
  *
  * <p>The template of "service not available" web page is configured with
- * the only one {@code init-params}.
+ * the only one {@code init-params}. The template should be available in
+ * classpath as a plain text file (preferrably in HTML) and shall contain
+ * {@code &#36;&#123;text&#125;} text, which will be replaced with
+ * a full description of exception just thrown and caught.
  *
  * @author Yegor Bugayenko (yegor@rexsl.com)
  * @version $Id$
