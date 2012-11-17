@@ -76,13 +76,13 @@
             <!-- ReXSL test harness -->
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">0.4.2</version>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <!-- ReXSL runtime library -->
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
-            <version rexsl="yes">0.4.2</version>
+            <version rexsl="yes">1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <!-- for string processing -->
@@ -205,7 +205,7 @@
             <plugin>
                 <groupId>com.rexsl</groupId>
                 <artifactId>rexsl-maven-plugin</artifactId>
-                <version rexsl="yes">0.4.2</version>
+                <version rexsl="yes">1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <goals>
