@@ -535,9 +535,7 @@
             </build>
         </profile>
         <profile>
-            <activation>
-                <property><name>sonatype</name></property>
-            </activation>
+            <id>sonatype</id>
             <build>
                 <pluginManagement>
                     <plugins>

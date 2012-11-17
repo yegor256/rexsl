@@ -69,7 +69,7 @@ import javax.servlet.http.HttpServletResponse;
  * {@code &#36;&#123;text&#125;} text, which will be replaced with
  * a full description of exception just thrown and caught.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.4.2
  * @todo #262 This class should be serializable, but it's not. It doesn't
