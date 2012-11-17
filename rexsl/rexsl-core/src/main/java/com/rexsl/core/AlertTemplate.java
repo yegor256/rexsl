@@ -36,7 +36,7 @@ import javax.validation.constraints.NotNull;
  * Template with no behavior, just to alert the user that there is a problem
  * with template configuration.
  *
- * @author Yegor Bugayenko (yegor@rexsl.com)
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.6
  */

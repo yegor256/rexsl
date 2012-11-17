@@ -102,10 +102,7 @@ ReXSL core module
   {{{./apidocs-${releasedVersion}/com/rexsl/core/annotations/Schema.html}<<<Schema>>>}} annotation
   lets you set the name of XML Schema of a JAXB-annotated object.
 
-  {{{./apidocs-${releasedVersion}/com/rexsl/trap/ExceptionTrap.html}<<<ExceptionTrap>>>}} servlet
+  {{{./apidocs-${releasedVersion}/com/rexsl/core/ExceptionTrap.html}<<<ExceptionTrap>>>}} servlet
   helps you to catch all uncaught exceptions and manage them gracefully, showing
-  some information to your end-users and letting you know by email and/or log.
-
-  {{{./apidocs-${releasedVersion}/com/rexsl/log/CloudAppender.html}<<<CloudAppender>>>}} is
-  a log4j appender for logging your events directly to some cloud platform.
+  some information to your end-users.
 

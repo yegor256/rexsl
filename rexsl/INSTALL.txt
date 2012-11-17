@@ -129,6 +129,7 @@ How to release new version to Maven Central:
     11. Set version back to SNAPSHOT:
 
         find . -name "*.xml" -exec sed -i "" 's|\(\<version rexsl\=\"yes\"\>\)0\.4\.1\(\<\/version\>\)|\11.0-SNAPSHOT\2|g' {} \;
+        svn ci -m 'refs #607 - version back to SNAPSHOT'
 
     12. Merge the branch back to TRUNK.
 

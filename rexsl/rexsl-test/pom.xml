@@ -31,10 +31,7 @@
  *
  * @version $Id$
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.rexsl</groupId>
@@ -44,7 +41,6 @@
     <artifactId>rexsl-test</artifactId>
     <packaging>jar</packaging>
     <name>rexsl-test</name>
-
     <dependencies>
         <dependency>
             <!-- JAX-RS implementation, core library -->
@@ -219,7 +215,6 @@
             <artifactId>jackson-core-asl</artifactId>
             <version>1.9.4</version>
         </dependency>
-
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
@@ -232,5 +227,4 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-
 </project>

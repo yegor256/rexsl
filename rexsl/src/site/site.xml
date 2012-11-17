@@ -40,12 +40,12 @@
     <googleAnalyticsAccountId>UA-1963507-22</googleAnalyticsAccountId>
     <bannerLeft>
         <name>ReXSL</name>
-        <src>http://www.rexsl.com/images/logo.png</src>
+        <src>http://img.rexsl.com/logo.png</src>
         <href>http://www.rexsl.com/</href>
     </bannerLeft>
     <body>
         <head>
-            <link href="/images/favicon.gif" rel="shortcut icon"/>
+            <link href="http://img.rexsl.com/favicon.gif" rel="shortcut icon"/>
         </head>
         <breadcrumbs>
             <item name="rexsl.com" href="http://www.rexsl.com"/>
