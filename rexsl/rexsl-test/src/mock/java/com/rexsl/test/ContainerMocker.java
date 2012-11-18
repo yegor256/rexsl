@@ -44,8 +44,7 @@ import org.hamcrest.Matchers;
  * <p>A convenient tool to test your application classes against a web
  * service. For example:
  *
- * <pre>
- * URI home = new ContainerMocker()
+ * <pre> URI home = new ContainerMocker()
  *   .expectMethod("GET")
  *   .expectHeader("Accept", Matchers.startsWith("text/"))
  *   .returnBody("&lt;done/&gt;")
@@ -56,8 +55,7 @@ import org.hamcrest.Matchers;
  * RestTester.start(home)
  *   .header("Accept", "text/xml")
  *   .get("Load sample page")
- *   .assertStatus(200);
- * </pre>
+ *   .assertStatus(200);</pre>
  *
  * <p>Keep in mind that container automatically reserves a new free TCP port
  * and works until JVM is shut down. The only way to stop it is to call

@@ -1,1 +1,0 @@
-protocol=smtps; type=transport; class=com.rexsl.trap.TransportMocker;

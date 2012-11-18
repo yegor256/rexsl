@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.jcabi.log.Logger;
+import com.jcabi.manifests.Manifests;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import java.net.URI;
@@ -247,10 +248,7 @@ final class JerseyTestClient implements TestClient {
      */
     private ClientResponse method(final String name, final String body,
         final String desc) {
-        final WebResource.Builder builder = this.resource.getRequestBuilder();
-        for (Header header : this.headers) {
-            builder.header(header.getKey(), header.getValue());
-        }
+        final WebResource.Builder builder = this.builder();
         final long start = System.currentTimeMillis();
         ClientResponse resp;
         if (RestTester.GET.equals(name)) {
@@ -281,6 +279,33 @@ final class JerseyTestClient implements TestClient {
             this.home
         );
         return resp;
+    }
+
+    /**
+     * Create Jersey web resource builder.
+     * @return The builder
+     */
+    private WebResource.Builder builder() {
+        final WebResource.Builder builder = this.resource.getRequestBuilder();
+        boolean agent = false;
+        for (Header header : this.headers) {
+            builder.header(header.getKey(), header.getValue());
+            if (header.sameAs(HttpHeaders.USER_AGENT)) {
+                agent = true;
+            }
+        }
+        if (!agent) {
+            builder.header(
+                HttpHeaders.USER_AGENT,
+                String.format(
+                    "rexsl-%s/%s Java/%s",
+                    Manifests.read("ReXSL-Version"),
+                    Manifests.read("ReXSL-Build"),
+                    System.getProperty("java.version")
+                )
+            );
+        }
+        return builder;
     }
 
 }

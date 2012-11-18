@@ -39,8 +39,9 @@
 RESTful Java Client
 
   The module contains a collection of usable tools for testing of
-  ReXSL-powered application (or any other RESTful server). With a fluent
-  interface it works like this:
+  ReXSL-powered application (or any other RESTful server).
+  {{{./apidocs-${project.version}/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
+  is a RESTful Java client with a fluent interface:
 
 +--
 String body = RestTester.start("http://www.rexsl.com")
@@ -58,10 +59,7 @@ String body = RestTester.start("http://www.rexsl.com")
   tests will automatically validate your RESTful client
   against the contract (API) of the server.
 
-  Important classes in this module:
-
-   * {{{./apidocs-${project.version}/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
-     - RESTful Java client entry point
+  Other important classes in this module:
 
    * {{{./apidocs-${project.version}/com/rexsl/test/JaxbConverter.html}<<<com.rexsl.test.JaxbConverter>>>}}
      - convenient JAXB-to-XML converter

@@ -80,12 +80,10 @@ public class RuntimeExceptionStub {
   This is how we may test it from <<<WhatIfRuntimeException.groovy>>>:
 
 +--
-import com.rexsl.test.TestClient
-import org.junit.Assert
-import static org.hamcrest.Matchers.*
-def r = new TestClient(rexsl.home)
-    .get('/runtime-exception')
-Assert.assertThat(r.status, equalTo(500))
+import com.rexsl.test.RestTester
+RestTester.start(rexsl.home)
+  .get('/runtime-exception')
+  .assertStatus(500)
 +--
 
   The test should pass, and may be extended with additional validations. We
