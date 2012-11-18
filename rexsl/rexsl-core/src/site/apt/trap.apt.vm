@@ -38,7 +38,7 @@
 
 Exception Trap
 
-  Read {{{./apidocs-${releasedVersion}/com/rexsl/core/ExceptionTrap.html}ExceptionTrap}}
+  Read {{{./apidocs-${project.version}/com/rexsl/core/ExceptionTrap.html}ExceptionTrap}}
   javadoc.
 
   Configure it in your <<<WEB-INF/web.xml>>> like this:
@@ -64,5 +64,5 @@ Exception Trap
 
   Every exception will be caught by this servlet and rendered
   as "service not available" HTML pages. Read
-  {{{./apidocs-${releasedVersion}/com/rexsl/core/ExceptionTrap.html}javadoc}}
+  {{{./apidocs-${project.version}/com/rexsl/core/ExceptionTrap.html}javadoc}}
   for more information.

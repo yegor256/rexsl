@@ -95,14 +95,14 @@ ReXSL, Quick Start Guide
       <!-- ReXSL runtime library -->
       <groupId>com.rexsl</groupId>
       <artifactId>rexsl-core</artifactId>
-      <version>${releasedVersion}</version>
+      <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <!-- ReXSL test harness -->
       <groupId>com.rexsl</groupId>
       <artifactId>rexsl-test</artifactId>
-      <version>${releasedVersion}</version>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -126,7 +126,7 @@ ReXSL, Quick Start Guide
       <plugin>
         <groupId>com.rexsl</groupId>
         <artifactId>rexsl-maven-plugin</artifactId>
-        <version>${releasedVersion}</version>
+        <version>${project.version}</version>
         <executions>
           <execution>
             <goals>

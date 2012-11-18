@@ -157,11 +157,6 @@
         later in the file
         -->
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
-        <!--
-        This property has to be updated every time you release
-        a new version to Maven Central
-        -->
-        <releasedVersion>0.4.3</releasedVersion>
         <jcabi.version since="16 Nov 2012">0.5.5</jcabi.version>
     </properties>
     <repositories>

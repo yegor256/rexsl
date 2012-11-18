@@ -40,8 +40,8 @@ ReXSL core module
 
   There are two classes that you should use in your project (both
   of them are always mandatory):
-  {{{./apidocs-${releasedVersion}/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} and
-  {{{./apidocs-${releasedVersion}/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}}. Use them
+  {{{./apidocs-${project.version}/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} and
+  {{{./apidocs-${project.version}/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}}. Use them
   in <<<WEB-INF/web.xml>>>:
 
 +--
@@ -69,22 +69,22 @@ ReXSL core module
 </servlet-mapping>
 +--
 
-  {{{./apidocs-${releasedVersion}/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} is
+  {{{./apidocs-${project.version}/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} is
   responsible for handling of JAX-RS requests and converting your JAXB annotated
   classes into XML documents.
 
-  {{{./apidocs-${releasedVersion}/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}} is converting
+  {{{./apidocs-${project.version}/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}} is converting
   XML output documents into XHTML when necessary.
 
   This dependency you add to <<<pom.xml>>> (or download
-  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-core/${releasedVersion}/rexsl-core-${releasedVersion}.jar}rexsl-core-${releasedVersion}.jar}}
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-core/${project.version}/rexsl-core-${project.version}.jar}rexsl-core-${project.version}.jar}}
   and add it to classpath):
 
 +--
 <dependency>
   <groupId>com.rexsl</groupId>
   <artifactId>rexsl-core</artifactId>
-  <version>${releasedVersion}</version>
+  <version>${project.version}</version>
 </dependency>
 +--
 
@@ -93,16 +93,16 @@ ReXSL core module
 
 * Supplementary Classes
 
-  {{{./apidocs-${releasedVersion}/com/rexsl/core/Manifests.html}<<<Manifests>>>}} is
+  {{{./apidocs-${project.version}/com/rexsl/core/Manifests.html}<<<Manifests>>>}} is
   a convenient accessor to <<<MANIFEST.MF>>> files of your web application.
 
-  {{{./apidocs-${releasedVersion}/com/rexsl/core/annotations/Stylesheet.html}<<<Stylesheet>>>}} annotation
+  {{{./apidocs-${project.version}/com/rexsl/core/annotations/Stylesheet.html}<<<Stylesheet>>>}} annotation
   enables re-configuration of XSL stylesheet name for a JAXB-annotated object.
 
-  {{{./apidocs-${releasedVersion}/com/rexsl/core/annotations/Schema.html}<<<Schema>>>}} annotation
+  {{{./apidocs-${project.version}/com/rexsl/core/annotations/Schema.html}<<<Schema>>>}} annotation
   lets you set the name of XML Schema of a JAXB-annotated object.
 
-  {{{./apidocs-${releasedVersion}/com/rexsl/core/ExceptionTrap.html}<<<ExceptionTrap>>>}} servlet
+  {{{./apidocs-${project.version}/com/rexsl/core/ExceptionTrap.html}<<<ExceptionTrap>>>}} servlet
   helps you to catch all uncaught exceptions and manage them gracefully, showing
   some information to your end-users.
 

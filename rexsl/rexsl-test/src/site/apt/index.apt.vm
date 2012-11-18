@@ -41,37 +41,37 @@ ReXSL Testing Facility
   The module contains a collection of usable tools for testing of
   ReXSL-powered application. Read more about:
 
-   * {{{./apidocs-${releasedVersion}/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
+   * {{{./apidocs-${project.version}/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
 
-   * {{{./apidocs-${releasedVersion}/com/rexsl/test/JaxbConverter.html}<<<com.rexsl.test.JaxbConverter>>>}}
+   * {{{./apidocs-${project.version}/com/rexsl/test/JaxbConverter.html}<<<com.rexsl.test.JaxbConverter>>>}}
 
-   * {{{./apidocs-${releasedVersion}/com/rexsl/test/SimpleXml.html}<<<com.rexsl.test.SimpleXml>>>}}
+   * {{{./apidocs-${project.version}/com/rexsl/test/SimpleXml.html}<<<com.rexsl.test.SimpleXml>>>}}
 
   Include this dependency into your project (or download
-  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${releasedVersion}/rexsl-test-${releasedVersion}.jar}rexsl-test-${releasedVersion}.jar}}
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${project.version}/rexsl-test-${project.version}.jar}rexsl-test-${project.version}.jar}}
   and add to classpath):
 
 +--
 <dependency>
   <groupId>com.rexsl</groupId>
   <artifactId>rexsl-test</artifactId>
-  <version>${releasedVersion}</version>
+  <version>${project.version}</version>
   <scope>test</scope>
 </dependency>
 +--
 
   This module also contains a very useful Mocking tool in
-  {{{./testapidocs-${releasedVersion}/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}.
+  {{{./testapidocs-${project.version}/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}.
   To use it you should include this dependencies into your project
   (or download
-  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${releasedVersion}/rexsl-test-${releasedVersion}-mock.jar}rexsl-test-${releasedVersion}-mock.jar}}
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${project.version}/rexsl-test-${project.version}-mock.jar}rexsl-test-${project.version}-mock.jar}}
   and add to classpath):
 
 +--
 <dependency>
   <groupId>com.rexsl</groupId>
   <artifactId>rexsl-test</artifactId>
-  <version>${releasedVersion}</version>
+  <version>${project.version}</version>
   <classifier>mock</classifier>
   <scope>test</scope>
 </dependency>
