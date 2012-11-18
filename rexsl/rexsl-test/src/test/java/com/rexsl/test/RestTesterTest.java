@@ -76,6 +76,10 @@ public final class RestTesterTest {
     public void sendsHttpRequestWithHeaders() throws Exception {
         final ContainerMocker container = new ContainerMocker()
             .expectHeader(HttpHeaders.ACCEPT, Matchers.containsString("*"))
+            .expectHeader(
+                HttpHeaders.USER_AGENT,
+                Matchers.containsString("ReXSL")
+            )
             .expectMethod(Matchers.equalTo(RestTester.GET))
             .mock();
         RestTester

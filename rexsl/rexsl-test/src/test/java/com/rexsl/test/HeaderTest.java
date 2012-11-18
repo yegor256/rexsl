@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
@@ -28,17 +26,31 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ */
+package com.rexsl.test;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+
+/**
+ * Test case for {@link Header}.
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0     http://maven.apache.org/xsd/decoration-1.0.0.xsd" name="rexsl-test">
-    <body>
-        <menu ref="parent"/>
-        <menu name="Overview">
-            <item name="RESTful Client" href="index.html"/>
-            <item name="API ${project.version} (JavaDoc)" href="apidocs-${project.version}/index.html"/>
-            <item name="Mock API" href="testapidocs-${project.version}/index.html"/>
-        </menu>
-        <menu ref="reports"/>
-    </body>
-</project>
+ */
+public final class HeaderTest {
+
+    /**
+     * Header can normalize headers.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void normalizesHeaderKey() throws Exception {
+        final Header header = new Header("content-type", "text/plain");
+        MatcherAssert.assertThat(
+            header.getKey(),
+            Matchers.equalTo("Content-Type")
+        );
+    }
+
+}

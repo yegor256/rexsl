@@ -157,7 +157,7 @@
         later in the file
         -->
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
-        <jcabi.version since="16 Nov 2012">0.5.5</jcabi.version>
+        <jcabi.version since="18 Nov 2012">0.7</jcabi.version>
     </properties>
     <repositories>
         <!--
@@ -197,7 +197,7 @@
                     <plugin>
                         <groupId>com.qulice</groupId>
                         <artifactId>qulice-maven-plugin</artifactId>
-                        <version since="16 Nov 2012">0.2.1</version>
+                        <version since="18 Nov 2012">0.2.2</version>
                         <configuration>
                             <license>file:${basedir}/LICENSE.txt</license>
                         </configuration>
@@ -633,6 +633,12 @@
                 <!-- Logging facility. -->
                 <groupId>com.jcabi</groupId>
                 <artifactId>jcabi-log</artifactId>
+                <version>${jcabi.version}</version>
+            </dependency>
+            <dependency>
+                <!-- Reader of MANIFEST.MF files -->
+                <groupId>com.jcabi</groupId>
+                <artifactId>jcabi-manifests</artifactId>
                 <version>${jcabi.version}</version>
             </dependency>
             <dependency>

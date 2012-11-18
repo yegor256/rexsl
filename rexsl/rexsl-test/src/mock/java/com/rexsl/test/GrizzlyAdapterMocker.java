@@ -34,6 +34,7 @@ import com.sun.grizzly.tcp.http11.GrizzlyAdapter;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import com.sun.grizzly.tcp.http11.GrizzlyResponse;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -108,38 +109,28 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings({ "PMD.AvoidCatchingGenericException", "rawtypes" })
+    @SuppressWarnings({ "PMD.AvoidCatchingThrowable", "rawtypes" })
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
-        String input = null;
         try {
-            input = IOUtils.toString(request.getInputStream());
-        } catch (IOException ex) {
-            throw new IllegalStateException(ex);
-        }
-        this.assertMethod(request, input);
-        this.assertRequestUri(request);
-        this.assertParams(request, input);
-        this.assertBody(request, input);
-        this.assertHeaders(request, input);
-        for (ConcurrentMap.Entry<String, String> entry
-            : this.headers.entrySet()) {
-            response.addHeader(entry.getKey(), entry.getValue());
-        }
-        response.setStatus(this.status);
-        byte[] bytes;
-        try {
-            bytes = this.body.call();
-        // @checkstyle IllegalCatch (1 line)
-        } catch (Exception ex) {
-            throw new IllegalStateException(ex);
-        }
-        try {
+            final String input = IOUtils.toString(request.getInputStream());
+            this.assertMethod(request, input);
+            this.assertRequestUri(request);
+            this.assertParams(request, input);
+            this.assertBody(request, input);
+            this.assertHeaders(request, input);
+            for (ConcurrentMap.Entry<String, String> entry
+                : this.headers.entrySet()) {
+                response.addHeader(entry.getKey(), entry.getValue());
+            }
+            response.setStatus(this.status);
+            final byte[] bytes = this.body.call();
             response.getStream().write(bytes);
-        } catch (IOException ex) {
-            throw new IllegalStateException(ex);
+            response.setContentLength(bytes.length);
+        // @checkstyle IllegalCatch (1 line)
+        } catch (Throwable ex) {
+            GrizzlyAdapterMocker.fail(response, ex);
         }
-        response.setContentLength(bytes.length);
     }
 
     /**
@@ -358,6 +349,19 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         }
         builder.append(input);
         return builder.toString();
+    }
+
+    /**
+     * Notify this response about failure.
+     * @param response The response to notify
+     * @param failure The failure just happened
+     */
+    private static void fail(final GrizzlyResponse<?> response,
+        final Throwable failure) {
+        response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
+        final PrintStream stream = new PrintStream(response.getStream());
+        stream.print(Logger.format("%[exception]s", failure));
+        stream.close();
     }
 
 }

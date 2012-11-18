@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import java.util.AbstractMap;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * HTTP header.
@@ -53,7 +54,48 @@ final class Header extends AbstractMap.SimpleEntry<String, String> {
      * @param value The value
      */
     public Header(@NotNull final String key, @NotNull final String value) {
-        super(key, value);
+        super(Header.normalized(key), value);
+    }
+
+    /**
+     * This header has the same key?
+     * @param key The key to compare with
+     * @return TRUE if it's the same header
+     */
+    public boolean sameAs(@NotNull final String key) {
+        return this.getKey().equals(Header.normalized(key));
+    }
+
+    /**
+     * Normalize key.
+     * @param key The key to normalize
+     * @return Normalized key
+     */
+    private static String normalized(@NotNull
+        @Pattern(regexp = "[a-zA-Z0-9\\-]+") final String key) {
+        final char[] chars = key.toCharArray();
+        chars[0] = Header.upper(chars[0]);
+        for (int pos = 1; pos < chars.length; ++pos) {
+            if (chars[pos - 1] == '-') {
+                chars[pos] = Header.upper(chars[pos]);
+            }
+        }
+        return new String(chars);
+    }
+
+    /**
+     * Convert char to upper case, if required.
+     * @param chr The char to convert
+     * @return Upper-case char
+     */
+    private static char upper(final char chr) {
+        char upper;
+        if (chr >= 'a' && chr <= 'z') {
+            upper = (char) (chr - ('a' - 'A'));
+        } else {
+            upper = chr;
+        }
+        return upper;
     }
 
 }

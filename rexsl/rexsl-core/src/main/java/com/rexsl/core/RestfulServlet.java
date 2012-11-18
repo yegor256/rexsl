@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import com.jcabi.log.Logger;
+import com.jcabi.manifests.Manifests;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 import java.io.IOException;
