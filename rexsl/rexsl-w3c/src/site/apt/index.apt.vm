@@ -40,7 +40,7 @@
 
 W3C Validator in Java
 
-  It's simple (see {{{./apidocs-${releasedVersion}/}JavaDoc}} for more details):
+  It's simple (see {{{./apidocs-${project.version}/}JavaDoc}} for more details):
 
 +--
 String xhtml = "<html><body><p>Hello, world!</p></body></html>";
@@ -57,13 +57,13 @@ assert response.valid();
 +--
 
   This dependency you add to <<<pom.xml>>> (or download
-  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-w3c/${releasedVersion}/}rexsl-w3c.jar}}):
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-w3c/${project.version}/}rexsl-w3c.jar}}):
 
 +--
 <dependency>
   <groupId>com.rexsl</groupId>
   <artifactId>rexsl-w3c</artifactId>
-  <version>${releasedVersion}</version>
+  <version>${project.version}</version>
 </dependency>
 +--
 
