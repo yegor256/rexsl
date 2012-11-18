@@ -328,6 +328,7 @@
                     <plugin>
                         <artifactId>maven-site-plugin</artifactId>
                         <configuration>
+                            <generateSitemap>true</generateSitemap>
                             <reportPlugins>
                                 <plugin>
                                     <artifactId>maven-project-info-reports-plugin</artifactId>
