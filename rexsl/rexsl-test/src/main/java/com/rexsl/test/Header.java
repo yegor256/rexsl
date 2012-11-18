@@ -91,7 +91,7 @@ final class Header extends AbstractMap.SimpleEntry<String, String> {
     private static char upper(final char chr) {
         char upper;
         if (chr >= 'a' && chr <= 'z') {
-            upper = (char)(chr - ('a' - 'A'));
+            upper = (char) (chr - ('a' - 'A'));
         } else {
             upper = chr;
         }
