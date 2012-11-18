@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.manifests.Manifests;
 import com.rexsl.test.XhtmlMatchers;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

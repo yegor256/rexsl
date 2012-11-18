@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import com.jcabi.log.Logger;
+import com.jcabi.manifests.Manifests;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;

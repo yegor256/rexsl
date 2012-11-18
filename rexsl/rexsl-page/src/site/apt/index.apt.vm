@@ -1,5 +1,5 @@
  ------
- RESTful XML Page Modeling with ReXSL-Page
+ RESTful XML Page Modeler
  ------
  Yegor Bugayenko
  ------
@@ -36,10 +36,10 @@
 ~~ OF THE POSSIBILITY OF SUCH DAMAGE.
 ~~
 
-RESTful XML Page Modeling with ReXSL-Page
+RESTful XML Page Modeler
 
-  With this module you can build REST XML response much faster
-  (provided you defined <<<MyPage>>> class yourself already):
+  With this module you can build REST XML responses much faster
+  (provided you defined <<<MyPage>>> class already):
 
 +--
 @Path("/")
