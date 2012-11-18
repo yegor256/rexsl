@@ -298,7 +298,7 @@ final class JerseyTestClient implements TestClient {
             builder.header(
                 HttpHeaders.USER_AGENT,
                 String.format(
-                    "rexsl-%s/%s Java/%s",
+                    "ReXSL-%s/%s Java/%s",
                     Manifests.read("ReXSL-Version"),
                     Manifests.read("ReXSL-Build"),
                     System.getProperty("java.version")
