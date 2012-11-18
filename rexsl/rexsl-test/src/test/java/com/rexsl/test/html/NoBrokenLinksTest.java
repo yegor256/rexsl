@@ -83,7 +83,7 @@ public final class NoBrokenLinksTest {
         new NoBrokenLinks(new URI("http://www.rexsl.com/")).assertThat(
             NoBrokenLinksTest.response(
                 // @checkstyle LineLength (1 line)
-                "<html xmlns='http://www.w3.org/1999/xhtml'><body><a href='/index.html'/></body></html>"
+                "<html xmlns='http://www.w3.org/1999/xhtml'><body><a href='/index.html'/><a href='http://img.rexsl.com/logo.png'/></body></html>"
             )
         );
     }
