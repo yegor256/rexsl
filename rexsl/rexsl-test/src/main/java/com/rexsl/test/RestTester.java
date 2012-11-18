@@ -39,7 +39,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 
 /**
- * A static entry point for a test client.
+ * RESTful Java Client.
  *
  * <p>For example (in your Groovy script):
  *

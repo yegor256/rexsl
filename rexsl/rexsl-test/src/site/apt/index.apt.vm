@@ -1,5 +1,5 @@
  ------
- ReXSL Testing Facility
+ RESTful Java Client
  ------
  Yegor Bugayenko
  ------
@@ -36,16 +36,38 @@
 ~~ OF THE POSSIBILITY OF SUCH DAMAGE.
 ~~
 
-ReXSL Testing Facility
+RESTful Java Client
 
   The module contains a collection of usable tools for testing of
-  ReXSL-powered application. Read more about:
+  ReXSL-powered application (or any other RESTful server). With a fluent
+  interface it works like this:
+
++--
+String body = RestTester.start("http://www.rexsl.com")
+  .header(HttpHeaders.USER_AGENT, "Safari 4")
+  .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
+  .get("reading front page of ReXSL.com")
+  .assertStatus(HttpURLConnection.HTTP_OK)
+  .assertBody(Matchers.containsString("ReXSL"))
+  .assertXPath("//xhtml:body")
+  .getBody();
++--
+
+  The beauty of this RESTful Java client (comparing to others) is that it
+  retrieves data and makes test assertions at the same time. Your integration
+  tests will automatically validate your RESTful client
+  against the contract (API) of the server.
+
+  Important classes in this module:
 
    * {{{./apidocs-${project.version}/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
+     - RESTful Java client entry point
 
    * {{{./apidocs-${project.version}/com/rexsl/test/JaxbConverter.html}<<<com.rexsl.test.JaxbConverter>>>}}
+     - convenient JAXB-to-XML converter
 
    * {{{./apidocs-${project.version}/com/rexsl/test/SimpleXml.html}<<<com.rexsl.test.SimpleXml>>>}}
+     - simple object-oriented XML parser
 
   Include this dependency into your project (or download
   {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${project.version}/rexsl-test-${project.version}.jar}rexsl-test-${project.version}.jar}}
@@ -60,7 +82,7 @@ ReXSL Testing Facility
 </dependency>
 +--
 
-  This module also contains a very useful Mocking tool in
+  This RESTful Java client module also contains a very useful Mocking tool in
   {{{./testapidocs-${project.version}/com/rexsl/test/ContainerMocker.html}<<<com.rexsl.test.ContainerMocker>>>}}.
   To use it you should include this dependencies into your project
   (or download
