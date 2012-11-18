@@ -31,10 +31,10 @@ package com.rexsl.test.html;
 
 import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.RestTester;
 import com.rexsl.test.TestResponse;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedList;
 import org.hamcrest.MatcherAssert;
@@ -42,6 +42,15 @@ import org.hamcrest.Matchers;
 
 /**
  * Matches HTTP header against required value.
+ *
+ * <p>Use it in combination with {@link com.rexsl.test.RestTester},
+ * in order to detect possibly
+ * broken links in the HTML output, for example:
+ *
+ * <pre> RestTester.start(new URI("http://www.rexsl.com/"))
+ *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
+ *   .get("front page of ReXSL.com")
+ *   .assertThat(new NoBrokenLinks())</pre>
  *
  * <p>This class is immutable and thread-safe.
  *
@@ -116,24 +125,61 @@ public final class NoBrokenLinks implements AssertionPolicy {
      * @return TRUE if it's valid
      */
     private static boolean isValid(final URI uri) {
-        boolean valid;
+        boolean valid = false;
         try {
-            RestTester.start(uri)
-                .get("checking URI existence")
-                .assertStatus(
-                    Matchers.lessThan(HttpURLConnection.HTTP_BAD_REQUEST)
+            final int code = NoBrokenLinks.http(uri.toURL());
+            if (code < HttpURLConnection.HTTP_BAD_REQUEST) {
+                valid = true;
+            } else {
+                Logger.warn(
+                    NoBrokenLinks.class,
+                    "#isValid('%s'): not valid since responde code=%d",
+                    uri,
+                    code
                 );
-            valid = true;
-        } catch (AssertionError ex) {
-            valid = false;
+            }
+        } catch (java.net.MalformedURLException ex) {
             Logger.warn(
                 NoBrokenLinks.class,
-                "#isValid('%s'): not valid: %s",
+                "#isValid('%s'): invalid URL: %s",
                 uri,
                 ex.getMessage()
             );
         }
         return valid;
+    }
+
+    /**
+     * Get HTTP response code from this URL.
+     * @param url The URL to get
+     * @return HTTP respose code
+     */
+    private static int http(final URL url) {
+        int code = HttpURLConnection.HTTP_BAD_REQUEST;
+        HttpURLConnection conn;
+        try {
+            conn = HttpURLConnection.class.cast(url.openConnection());
+            try {
+                code = conn.getResponseCode();
+            } catch (java.io.IOException ex) {
+                Logger.warn(
+                    NoBrokenLinks.class,
+                    "#http('%s'): can't get response code: %s",
+                    url,
+                    ex.getMessage()
+                );
+            } finally {
+                conn.disconnect();
+            }
+        } catch (java.io.IOException ex) {
+            Logger.warn(
+                NoBrokenLinks.class,
+                "#http('%s'): can't open connection: %s",
+                url,
+                ex.getMessage()
+            );
+        }
+        return code;
     }
 
 }
