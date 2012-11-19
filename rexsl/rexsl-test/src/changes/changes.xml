@@ -30,7 +30,7 @@
  -->
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
-        <release version="0.4.4" date="19 Nov 2012" description="com.rexsl.core.Manifests moved to jcabi-manifests"/>
+        <release version="0.4.4" date="19 Nov 2012" description="com.rexsl.core.Manifests moved to jcabi-manifests">
             <action dev="yegor" issue="612" type="add">
                 Class com.rexsl.test.RestTester automatically adds
                 User-Agent HTTP header to all outbound HTTP requests,
@@ -38,7 +38,7 @@
                 header contains ReXSL version and JVM version.
             </action>
         </release>
-        <release version="0.4.3" date="18 Nov 2012" description="User-Agent header for all outbound RestTester calls"/>
+        <release version="0.4.3" date="18 Nov 2012" description="User-Agent header for all outbound RestTester calls">
             <action dev="yegor" issue="610" type="fix">
                 Class com.rexsl.test.html.NoBrokenLinks was making RESTful
                 requests to all URLs, which lead to problems with image
