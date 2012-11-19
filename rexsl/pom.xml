@@ -285,10 +285,12 @@
                     <plugin>
                         <artifactId>maven-doap-plugin</artifactId>
                         <version since="19 Nov 2012">1.1</version>
+                        <inherited>false</inherited>
                         <configuration>
                             <doapOptions>
                                 <shortdesc>RESTful Web Development Java Framework that combines JAXB, JAX-RS, and XSL</shortdesc>
                             </doapOptions>
+                            <doapFile>rexsl.rdf</doapFile>
                         </configuration>
                         <executions>
                             <execution>
@@ -333,7 +335,7 @@
                                     <configuration>
                                         <tracUser>${trac.user}</tracUser>
                                         <tracPassword>${trac.password}</tracPassword>
-                                        <query>status=closed&amp;desc=1&amp;order=id</query>
+                                        <query>component=${project.artifactId}&amp;status=closed&amp;desc=1&amp;order=id</query>
                                         <columnNames>Id, Priority, Component, Summary, Reporter, Resolution</columnNames>
                                     </configuration>
                                     <reportSets>
@@ -341,8 +343,13 @@
                                             <reports>
                                                 <report>trac-report</report>
                                             </reports>
+                                        </reportSet>
+                                        <reportSet>
+                                            <reports>
+                                                <report>changes-report</report>
+                                            </reports>
                                             <configuration>
-                                                <sourcepath>src/main/java</sourcepath>
+                                                <aggregated>true</aggregated>
                                                 <destDir>apidocs-${project.version}</destDir>
                                             </configuration>
                                         </reportSet>
