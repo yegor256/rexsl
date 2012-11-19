@@ -38,7 +38,7 @@
                 header contains ReXSL version and JVM version.
             </action>
         </release>
-        <release version="0.4.3" date="18 Nov 2012" description="User-Agent header for all outbound RestTester calls">
+        <release version="0.4.3" date="18 Nov 2012" description="mandatory User-Agent header for all outbound RestTester calls">
             <action dev="yegor" issue="610" type="fix">
                 Class com.rexsl.test.html.NoBrokenLinks was making RESTful
                 requests to all URLs, which lead to problems with image
