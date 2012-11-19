@@ -36,17 +36,13 @@
  * instructions from this page:
  * @link http://www.sonatype.com/books/nexus-book/reference/staging-sect-managing-plugin.html
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rexsl</groupId>
     <artifactId>rexsl</artifactId>
     <version rexsl="yes">0.4.4</version>
     <packaging>pom</packaging>
     <name>rexsl</name>
-
     <modules>
         <module>rexsl-w3c</module>
         <module>rexsl-test</module>
@@ -55,33 +51,25 @@
         <module>rexsl-maven-plugin</module>
         <module>rexsl-standalone</module>
     </modules>
-
-    <description>
-        <![CDATA[
+    <description><![CDATA[
         RESTful Java web framework on top of JAX-RS, JAXB, and XSL.
-        ]]>
-    </description>
+        ]]></description>
     <url>http://www.rexsl.com</url>
     <inceptionYear>2011</inceptionYear>
-
     <organization>
         <name>ReXSL.com</name>
         <url>http://www.rexsl.com</url>
     </organization>
-
     <licenses>
         <license>
             <name>BSD</name>
             <url>http://www.rexsl.com/LICENSE.txt</url>
             <distribution>repo</distribution>
-            <comments>
-                <![CDATA[
+            <comments><![CDATA[
                 This is free open source project, feel free to redistribute it
-                ]]>
-            </comments>
+                ]]></comments>
         </license>
     </licenses>
-
     <mailingLists>
         <mailingList>
             <name>ReXSL Discussions</name>
@@ -91,7 +79,6 @@
             <archive>http://groups.google.com/group/rexsl</archive>
         </mailingList>
     </mailingLists>
-
     <developers>
         <developer>
             <id>1</id>
@@ -106,23 +93,19 @@
             <timezone>-7</timezone>
         </developer>
     </developers>
-
     <issueManagement>
         <system>trac</system>
         <url>http://trac.rexsl.com/rexsl/</url>
     </issueManagement>
-
     <ciManagement>
         <system>jenkins</system>
         <url>http://ci.rexsl.com:8080/job/rexsl/</url>
     </ciManagement>
-
     <scm>
         <connection>scm:svn:svn://svn.rexsl.com/rexsl/trunk/rexsl</connection>
         <developerConnection>scm:svn:svn://svn.rexsl.com/rexsl/trunk/rexsl</developerConnection>
         <url>http://svn.rexsl.com/rexsl/trunk/rexsl</url>
     </scm>
-
     <distributionManagement>
         <downloadUrl>https://oss.sonatype.org/content/groups/public</downloadUrl>
         <repository>
@@ -144,11 +127,9 @@
             <url>s3://www.rexsl.com/</url>
         </site>
     </distributionManagement>
-
     <prerequisites>
         <maven>3.0</maven>
     </prerequisites>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--
@@ -170,7 +151,6 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
-
     <pluginRepositories>
         <!--
         intentionally empty
@@ -182,7 +162,6 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
-
     <profiles>
         <profile>
             <!--
@@ -190,7 +169,9 @@
             -->
             <id>ci</id>
             <activation>
-                <property><name>ci</name></property>
+                <property>
+                    <name>ci</name>
+                </property>
             </activation>
             <build>
                 <plugins>
@@ -295,7 +276,9 @@
             -->
             <id>site-in-production</id>
             <activation>
-                <property><name>site</name></property>
+                <property>
+                    <name>site</name>
+                </property>
             </activation>
             <build>
                 <plugins>
@@ -357,6 +340,23 @@
                                     <groupId>org.apache.maven.plugins</groupId>
                                     <artifactId>maven-changes-plugin</artifactId>
                                     <version since="19 Nov 2012">2.8</version>
+                                    <configuration>
+                                        <tracUser>${trac.user}</tracUser>
+                                        <tracPassword>${trac.password}</tracPassword>
+                                        <query>status=closed&amp;desc=1&amp;order=id</query>
+                                        <columnNames>Id, Priority, Component, Summary, Reporter, Resolution</columnNames>
+                                    </configuration>
+                                    <reportSets>
+                                        <reportSet>
+                                            <reports>
+                                                <report>trac-report</report>
+                                            </reports>
+                                            <configuration>
+                                                <sourcepath>src/main/java</sourcepath>
+                                                <destDir>apidocs-${project.version}</destDir>
+                                            </configuration>
+                                        </reportSet>
+                                    </reportSets>
                                 </plugin>
                                 <plugin>
                                     <!--
@@ -456,7 +456,9 @@
             -->
             <id>gpg</id>
             <activation>
-                <property><name>gpg.keyname</name></property>
+                <property>
+                    <name>gpg.keyname</name>
+                </property>
             </activation>
             <build>
                 <plugins>
@@ -488,7 +490,9 @@
             -->
             <id>mock</id>
             <activation>
-                <file><exists>${basedir}/src/mock</exists></file>
+                <file>
+                    <exists>${basedir}/src/mock</exists>
+                </file>
             </activation>
             <build>
                 <plugins>
@@ -581,7 +585,6 @@
             </build>
         </profile>
     </profiles>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -711,7 +714,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <build>
         <resources>
             <!--
@@ -919,12 +921,10 @@
             </plugin>
         </plugins>
     </build>
-
     <reporting>
         <!--
         Rudimentary section, for Maven 2.0 plugins mostly.
         -->
-        <excludeDefaults />
+        <excludeDefaults/>
     </reporting>
-
 </project>
