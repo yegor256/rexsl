@@ -349,6 +349,16 @@
                                     </reportSets>
                                 </plugin>
                                 <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-doap-plugin</artifactId>
+                                    <version since="19 Nov 2012">1.1</version>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-changes-plugin</artifactId>
+                                    <version since="19 Nov 2012">2.8</version>
+                                </plugin>
+                                <plugin>
                                     <!--
                                     API documentation builder. It will produce documentation
                                     which is then to be used in site:site. It will be
