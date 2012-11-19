@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <!--
- *
  * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  *
@@ -28,35 +27,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * @version $Id$
  -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0     http://maven.apache.org/xsd/decoration-1.0.0.xsd" name="rexsl">
-    <skin>
-        <groupId>com.jcabi</groupId>
-        <artifactId>jcabi-maven-skin</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </skin>
-    <googleAnalyticsAccountId>UA-1963507-22</googleAnalyticsAccountId>
-    <bannerLeft>
-        <name>ReXSL</name>
-        <src>http://img.rexsl.com/logo.png</src>
-        <href>http://www.rexsl.com/</href>
-    </bannerLeft>
+<document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
-        <head>
-            <link href="http://img.rexsl.com/favicon.gif" rel="shortcut icon"/>
-        </head>
-        <breadcrumbs>
-            <item name="rexsl.com" href="http://www.rexsl.com"/>
-        </breadcrumbs>
-        <menu name="Overview">
-            <item name="Introduction" href="index.html"/>
-            <item name="Quick Start" href="start.html"/>
-            <item name="Testing" href="testing.html"/>
-            <item name="Release History" href="changes-report.html"/>
-        </menu>
-        <menu ref="modules"/>
-        <menu ref="reports"/>
     </body>
-</project>
+</document>
