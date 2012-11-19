@@ -283,23 +283,19 @@
             <build>
                 <plugins>
                     <plugin>
-                        <!--
-                        This plugin will collect current build number
-                        from Subversion and save it into Maven property "buildNumber".
-                        -->
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>buildnumber-maven-plugin</artifactId>
-                        <version since="22 Mar 2012">1.0-beta-4</version>
+                        <artifactId>maven-doap-plugin</artifactId>
+                        <version since="19 Nov 2012">1.1</version>
+                        <configuration>
+                            <doapOptions>
+                                <shortdesc>RESTful Web Development Java Framework that combines JAXB, JAX-RS, and XSL</shortdesc>
+                            </doapOptions>
+                        </configuration>
                         <executions>
                             <execution>
                                 <phase>pre-site</phase>
                                 <goals>
-                                    <goal>create</goal>
+                                    <goal>generate</goal>
                                 </goals>
-                                <configuration>
-                                    <doCheck>false</doCheck>
-                                    <doUpdate>false</doUpdate>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -332,12 +328,6 @@
                                     </reportSets>
                                 </plugin>
                                 <plugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-doap-plugin</artifactId>
-                                    <version since="19 Nov 2012">1.1</version>
-                                </plugin>
-                                <plugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
                                     <artifactId>maven-changes-plugin</artifactId>
                                     <version since="19 Nov 2012">2.8</version>
                                     <configuration>
@@ -857,18 +847,18 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
                 <version since="5 Aug 2012">1.1</version>
+                <configuration>
+                    <buildNumberPropertyName>buildNumber</buildNumberPropertyName>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>create</goal>
                         </goals>
-                        <configuration>
-                            <buildNumberPropertyName>buildNumber</buildNumberPropertyName>
-                            <doCheck>false</doCheck>
-                            <doUpdate>false</doUpdate>
-                            <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
