@@ -142,7 +142,7 @@ public final class SimpleJson implements JsonDocument {
     }
 
     /**
-     * Finds subnode matchig qury for given node.
+     * Finds subnode matchig query for given node.
      * @param start To search in
      * @param tokenizer Path
      * @return Node matching qury

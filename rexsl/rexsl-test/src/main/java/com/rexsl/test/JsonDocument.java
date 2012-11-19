@@ -38,16 +38,21 @@ import javax.validation.constraints.NotNull;
  *
  * <p>Set of convenient Json manipulations:
  *
+ * <pre> JsonDocument doc = new SimpleJson("{a: {b: 'test'}}");
+ * assert doc.json("a.b").get(0).equals("test");</pre>
+ *
  * <p>Implementation of this interface shall be immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.4
+ * @see <a href="http://jackson.codehaus.org/">Jackson Processor</a>
  */
 public interface JsonDocument {
 
     /**
-     * Find and return text elements or attributes matched by json.
+     * Find and return text elements or attributes matched by
+     * <a href="http://jackson.codehaus.org/">Jackson</a> query (kind of).
      *
      * <p>The Json query should point to text elements or attributes in the
      * Json document. If any nodes of different types (elements, comments, etc.)
