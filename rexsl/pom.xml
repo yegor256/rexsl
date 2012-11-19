@@ -336,7 +336,7 @@
                                         <tracUser>${trac.user}</tracUser>
                                         <tracPassword>${trac.password}</tracPassword>
                                         <query>component=${project.artifactId}&amp;status=closed&amp;desc=1&amp;order=id</query>
-                                        <columnNames>Id, Priority, Component, Summary, Reporter, Resolution</columnNames>
+                                        <columnNames>Id, Priority, Summary, Reporter, Resolution</columnNames>
                                     </configuration>
                                     <reportSets>
                                         <reportSet>
