@@ -29,6 +29,8 @@
  */
 package com.rexsl.standalone;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Main entrance to the standalone application.
  *
@@ -57,7 +59,7 @@ public final class RexslMain {
      * @param args Optional arguments
      * @throws Exception If some problem inside
      */
-    public static void main(final String... args) throws Exception {
+    public static void main(@NotNull final String... args) throws Exception {
         int port = RexslMain.PORT;
         if (args.length > 0) {
             port = Integer.valueOf(args[0]);

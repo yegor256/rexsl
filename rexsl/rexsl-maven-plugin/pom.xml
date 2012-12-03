@@ -61,26 +61,10 @@
         </dependency>
         -->
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version since="29 May 2012">4.1.3.Final</version>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jcabi</groupId>
-            <artifactId>jcabi-aspects</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
@@ -266,10 +250,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
             <scope>compile</scope>
@@ -278,10 +258,6 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -355,13 +331,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- Javax Servlet API 3.0 -->
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version since="26 Oct 2011">6.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <!-- CSS and JS compressor -->
             <groupId>com.yahoo.platform.yui</groupId>
             <artifactId>yuicompressor</artifactId>
@@ -372,6 +341,15 @@
             <groupId>rhino</groupId>
             <artifactId>js</artifactId>
             <version since="4 Dec 2011">1.6R7</version>
+        </dependency>
+        <dependency>
+            <!--
+            Javax Servlet API.
+            -->
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version since="3 Dec 2012">3.0.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.grizzly</groupId>
@@ -387,21 +365,6 @@
         </dependency>
     </dependencies>
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version since="26 Oct 2011">1.6</version>
-                </plugin>
-                <plugin>
-                    <groupId>com.ning.maven.plugins</groupId>
-                    <artifactId>maven-duplicate-finder-plugin</artifactId>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -484,15 +447,8 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>install-invoker</id>
                         <goals>
                             <goal>install</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                    </execution>
-                    <execution>
-                        <id>run-invoker</id>
-                        <goals>
                             <goal>run</goal>
                         </goals>
                     </execution>
@@ -521,6 +477,7 @@
                 see the ticket #30 for more information.
                 -->
                 <artifactId>maven-antrun-plugin</artifactId>
+                <version since="26 Oct 2011">1.6</version>
                 <executions>
                     <execution>
                         <id>copy-child-resources</id>
