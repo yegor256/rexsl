@@ -47,12 +47,6 @@
     <packaging>maven-plugin</packaging>
     <name>rexsl-maven-plugin</name>
     <dependencies>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version since="11 Mar 2012">2.0.6</version>
-            <scope>compile</scope>
-        </dependency>
         <!--
         <dependency>
             <artifactId>jslint4java</artifactId>
@@ -61,26 +55,10 @@
         </dependency>
         -->
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version since="29 May 2012">4.1.3.Final</version>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jcabi</groupId>
-            <artifactId>jcabi-aspects</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
@@ -115,6 +93,12 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-w3c</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -155,42 +139,26 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version since="22 Aug 2011">3.0.3</version>
+            <version since="3 Dec 2012">3.0.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
-            <version since="22 Aug 2011">3.0.3</version>
+            <version since="3 Dec 2012">3.0.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version since="22 Aug 2011">3.0.3</version>
+            <version since="3 Dec 2012">3.0.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
-            <version since="22 Aug 2011">3.0.3</version>
+            <version since="3 Dec 2012">3.0.4</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
-            <version since="22 Aug 2011">3.0-alpha-2</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <!--
-                    This artifact is excluded from here because of a conflict
-                    with the same artifact (but newer) included by Checkstyle
-                    -->
-                    <groupId>com.google.code.google-collections</groupId>
-                    <artifactId>google-collect</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugin-testing</groupId>
@@ -206,25 +174,36 @@
         </dependency>
         <dependency>
             <groupId>org.sonatype.sisu</groupId>
-            <artifactId>sisu-inject-plexus</artifactId>
-            <version since="24 May 2012">2.3.0</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.sonatype.sisu</groupId>
             <artifactId>sisu-guava</artifactId>
             <version since="24 May 2012">0.9.9</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version since="2 Dec 2012">3.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-container-default</artifactId>
-            <version since="24 May 2012">1.5.5</version>
+            <version since="2 Dec 2012">1.5.5</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.sonatype.sisu</groupId>
+            <artifactId>sisu-inject-plexus</artifactId>
+            <version since="2 Dec 2012">2.3.2</version>
             <scope>runtime</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -260,14 +239,10 @@
             <scope>test</scope>
             <exclusions>
                 <exclusion>
-                    <artifactId>activation</artifactId>
                     <groupId>javax.activation</groupId>
+                    <artifactId>activation</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -278,10 +253,6 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -355,23 +326,25 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- Javax Servlet API 3.0 -->
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version since="26 Oct 2011">6.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <!-- CSS and JS compressor -->
             <groupId>com.yahoo.platform.yui</groupId>
             <artifactId>yuicompressor</artifactId>
-            <version since="4 Dec 2011">2.4.6</version>
+            <version since="3 Dec 2012">2.4.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>rhino</groupId>
+                    <artifactId>js</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <!-- Required for YUI compressor -->
-            <groupId>rhino</groupId>
-            <artifactId>js</artifactId>
-            <version since="4 Dec 2011">1.6R7</version>
+            <!--
+            Javax Servlet API.
+            -->
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version since="3 Dec 2012">3.0.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.grizzly</groupId>
@@ -387,21 +360,6 @@
         </dependency>
     </dependencies>
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version since="26 Oct 2011">1.6</version>
-                </plugin>
-                <plugin>
-                    <groupId>com.ning.maven.plugins</groupId>
-                    <artifactId>maven-duplicate-finder-plugin</artifactId>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -484,15 +442,8 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>install-invoker</id>
                         <goals>
                             <goal>install</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                    </execution>
-                    <execution>
-                        <id>run-invoker</id>
-                        <goals>
                             <goal>run</goal>
                         </goals>
                     </execution>
@@ -521,6 +472,7 @@
                 see the ticket #30 for more information.
                 -->
                 <artifactId>maven-antrun-plugin</artifactId>
+                <version since="26 Oct 2011">1.6</version>
                 <executions>
                     <execution>
                         <id>copy-child-resources</id>
@@ -542,6 +494,41 @@
         </plugins>
     </build>
     <profiles>
+        <profile>
+            <id>qulice</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.ning.maven.plugins</groupId>
+                        <artifactId>maven-duplicate-finder-plugin</artifactId>
+                        <configuration>
+                            <exceptions combine.children="append">
+                                <exception>
+                                    <conflictingDependencies>
+                                        <dependency>
+                                            <groupId>com.amazonaws</groupId>
+                                            <artifactId>aws-java-sdk</artifactId>
+                                            <version>1.3.8</version>
+                                        </dependency>
+                                        <dependency>
+                                            <groupId>org.kuali.maven.wagons</groupId>
+                                            <artifactId>maven-s3-wagon</artifactId>
+                                            <version>1.1.14</version>
+                                        </dependency>
+                                    </conflictingDependencies>
+                                    <resources>
+                                        <resource>mime.types</resource>
+                                    </resources>
+                                </exception>
+                            </exceptions>
+                            <ignoredResources combine.children="append">
+                                <ignoredResource>about.html</ignoredResource>
+                            </ignoredResources>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>csslint</id>
             <activation>

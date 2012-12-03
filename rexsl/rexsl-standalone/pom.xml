@@ -88,19 +88,14 @@
     </build>
     <profiles>
         <profile>
-            <id>ci</id>
-            <activation>
-                <property>
-                    <name>ci</name>
-                </property>
-            </activation>
+            <id>qulice</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>com.ning.maven.plugins</groupId>
                         <artifactId>maven-duplicate-finder-plugin</artifactId>
                         <configuration>
-                            <ignoredResources>
+                            <ignoredResources combine.children="append">
                                 <ignoredResource>about.html</ignoredResource>
                             </ignoredResources>
                         </configuration>

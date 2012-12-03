@@ -1,5 +1,5 @@
  ------
- ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
+ RESTful Java Web Framework on top of JAX-RS, XSL, and JAXB
  ------
  Yegor Bugayenko
  ------
@@ -36,10 +36,7 @@
 ~~ OF THE POSSIBILITY OF SUCH DAMAGE.
 ~~
 
-ReXSL, Java Framework on top of JAX-RS, XSL, and JAXB
-
-  <<0.4 released>>! See
-  {{{https://groups.google.com/forum/?fromgroups=#!topic/rexsl/jWp8zVTkhqU}release notes}}.
+RESTful Java Web Framework on top of JAX-RS, XSL, and JAXB
 
   The idea is simple - to make a
   {{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}}

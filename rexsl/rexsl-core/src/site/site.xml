@@ -39,6 +39,7 @@
             <item name="API ${project.version} (JavaDoc)" href="apidocs-${project.version}/index.html"/>
             <item name="Mock API" href="testapidocs-${project.version}/index.html"/>
             <item name="Exception Trap" href="trap.html"/>
+            <item name="Release History" href="changes-report.html"/>
         </menu>
         <menu ref="reports"/>
     </body>
