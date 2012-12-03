@@ -29,6 +29,7 @@
  */
 package com.rexsl.standalone;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -61,13 +62,13 @@ final class Container {
      * Start it.
      * @throws Exception If some problem inside
      */
+    @Loggable(Loggable.INFO)
     public void start() throws Exception {
         final String war = RexslMain.class.getProtectionDomain()
             .getCodeSource()
             .getLocation()
             .toExternalForm();
         Logger.info(this, "#start(): starting %s...", war);
-        final long start = System.currentTimeMillis();
         final Server server = new Server(this.port);
         final WebAppContext ctx = new WebAppContext();
         ctx.setContextPath("/");
@@ -76,15 +77,7 @@ final class Container {
         ctx.setWar(war);
         server.setHandler(ctx);
         server.start();
-        try {
-            server.join();
-        } finally {
-            Logger.info(
-                this,
-                "#start(..): finished after %[ms]s",
-                System.currentTimeMillis() - start
-            );
-        }
+        server.join();
     }
 
 }

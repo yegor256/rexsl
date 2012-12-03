@@ -111,6 +111,9 @@
         <developerConnection>scm:svn:svn://svn.rexsl.com/rexsl/trunk/rexsl</developerConnection>
         <url>http://svn.rexsl.com/rexsl/trunk/rexsl</url>
     </scm>
+    <properties>
+        <jcabi.version>0.7.2</jcabi.version>
+    </properties>
     <distributionManagement>
         <site>
             <!--
