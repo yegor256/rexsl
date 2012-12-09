@@ -45,6 +45,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Base page.
@@ -105,6 +106,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @see Resource
  * @see BaseResource
  */
+@XmlType(name = "com.rexsl.page.BasePage")
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings("unchecked")

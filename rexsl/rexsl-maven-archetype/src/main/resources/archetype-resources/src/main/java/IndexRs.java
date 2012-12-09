@@ -4,17 +4,11 @@
  */
 package ${package};
 
-import com.jcabi.aspects.Loggable;
-import com.rexsl.page.JaxbGroup;
-import com.rexsl.page.Link;
+import com.rexsl.page.JaxbBundle;
 import com.rexsl.page.PageBuilder;
 import java.io.IOException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -36,13 +30,12 @@ public final class IndexRs extends BaseRs {
      */
     @GET
     @Path("/")
-    @Loggable(Loggable.DEBUG)
     public Response index() throws IOException {
         return new PageBuilder()
             .stylesheet("/xsl/index.xsl")
             .build(BasePage.class)
             .init(this)
-            .append(new JaxbBundle("message", "hello, world!"))
+            .append(new JaxbBundle("message", "Hello, world!"))
             .render()
             .build();
     }

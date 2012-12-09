@@ -57,6 +57,79 @@
                     </delimiters>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-invoker-plugin</artifactId>
+                <version since="22 Mar 2011">1.5</version>
+                <configuration>
+                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>install</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <target>
+                                <echo file="${project.build.directory}/settings.xml"><![CDATA[
+                                    <settings>
+                                        <localRepository>${project.build.directory}/local-repo</localRepository>
+                                        <interactiveMode>false</interactiveMode>
+                                        <profiles>
+                                            <profile>
+                                                <activation>
+                                                    <activeByDefault>true</activeByDefault>
+                                                </activation>
+                                                <repositories>
+                                                    <repository>
+                                                        <id>local.central</id>
+                                                        <url>file://${settings.localRepository}</url>
+                                                    </repository>
+                                                </repositories>
+                                                <pluginRepositories>
+                                                    <pluginRepository>
+                                                        <id>local.central</id>
+                                                        <url>file://${settings.localRepository}</url>
+                                                    </pluginRepository>
+                                                </pluginRepositories>
+                                            </profile>
+                                        </profiles>
+                                    </settings>
+                                ]]></echo>
+                                <delete dir="${project.build.directory}/example-rest"/>
+                                <exec executable="mvn" dir="${project.build.directory}" failonerror="true">
+                                    <arg value="--settings=${project.build.directory}/settings.xml"/>
+                                    <arg value="archetype:generate"/>
+                                    <arg value="-DarchetypeRepository=local.repo"/>
+                                    <arg value="-DarchetypeGroupId=${project.groupId}"/>
+                                    <arg value="-DarchetypeArtifactId=${project.artifactId}"/>
+                                    <arg value="-DarchetypeVersion=${project.version}"/>
+                                    <arg value="-DgroupId=com.example"/>
+                                    <arg value="-DartifactId=example-rest"/>
+                                    <arg value="-Dpackage=com.example.rest"/>
+                                </exec>
+                                <exec executable="mvn" dir="${project.build.directory}/example-rest" failonerror="true">
+                                    <arg value="--settings=${project.build.directory}/settings.xml"/>
+                                    <arg value="--update-snapshots"/>
+                                    <arg value="clean"/>
+                                    <arg value="install"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

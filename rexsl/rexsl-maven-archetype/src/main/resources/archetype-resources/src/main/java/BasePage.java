@@ -4,11 +4,8 @@
  */
 package ${package};
 
-import com.jcabi.aspects.Loggable;
 import com.jcabi.manifests.Manifests;
-import com.rexsl.page.BasePage;
 import com.rexsl.page.JaxbBundle;
-import com.rexsl.page.Link;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -27,13 +24,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
-public class BasePage extends com.rexsl.page.BasePage<CommonPage, BaseRs> {
+public class BasePage extends com.rexsl.page.BasePage<BasePage, BaseRs> {
 
     /**
      * Render it.
      * @return JAX-RS response
      */
-    @Loggable(Loggable.DEBUG)
     public final Response.ResponseBuilder render() {
         final Response.ResponseBuilder builder = Response.ok();
         this.append(
