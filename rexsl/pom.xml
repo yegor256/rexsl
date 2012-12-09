@@ -55,6 +55,7 @@
         <module>rexsl-page</module>
         <module>rexsl-maven-plugin</module>
         <module>rexsl-standalone</module>
+        <module>rexsl-maven-archetype</module>
     </modules>
     <description><![CDATA[
         RESTful Java web framework on top of JAX-RS, JAXB, and XSL.

@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright (c) 2011-2012, ReXSL.com
+ * All rights reserved.
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+    <packaging>war</packaging>
+    <name>${artifactId}</name>
+    <properties>
+        <rexsl.version since="9 Dec 2012">@project.version@</rexsl.version>
+        <jcabi.version since="9 Dec 2012">0.7.2</jcabi.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-standalone</artifactId>
+            <version>${rexsl.version}</version>
+            <classifier>bin</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-core</artifactId>
+            <version>${rexsl.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-page</artifactId>
+            <version>${rexsl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-page</artifactId>
+            <version>${rexsl.version}</version>
+            <classifier>mock</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.rexsl</groupId>
+            <artifactId>rexsl-test</artifactId>
+            <version>${rexsl.version}</version>
+        </dependency>
+        <dependency>
+            <!-- JAX-RS API -->
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>jsr311-api</artifactId>
+            <version since="2 Sep 2011">1.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <!-- JAX-RS implementation -->
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-core</artifactId>
+            <version since="22 Aug 2012">1.12</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <!-- JAXB 2.0 API -->
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version since="2 Sep 2011">2.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jsr173_api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <!-- Wrapper aroung SLF4J -->
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-log</artifactId>
+            <version>${jcabi.version}</version>
+        </dependency>
+        <dependency>
+            <!-- Static reader of META-INF/MANIFEST.MF files -->
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-manifests</artifactId>
+            <version>${jcabi.version}</version>
+        </dependency>
+        <dependency>
+            <!-- Forward all calls to SLF4J to LOG4J. -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version since="19 Sep 2011">1.6.2</version>
+        </dependency>
+        <dependency>
+            <!-- Use LOG4J logging facility for all loggings. -->
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version since="19 Sep 2011">1.2.16</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit-dep</artifactId>
+            <version since="2 Dec 2012">4.10</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <!--
+            Assertions and matchers for unit tests.
+            @link http://code.google.com/p/hamcrest/wiki/Tutorial
+            -->
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version since="23 Dec 2011">1.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!--
+            Assertions and matchers for unit tests.
+            @link http://code.google.com/p/hamcrest/wiki/Tutorial
+            -->
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version since="23 Dec 2011">1.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Javax Servlet API 2.4. -->
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version since="26 Oct 2011">2.4</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version since="2 Dec 2010">2.1</version>
+                    <configuration>
+                        <warSourceExcludes>js/**, css/**, xsl/**</warSourceExcludes>
+                        <archive>
+                            <manifestEntries>
+                                <Example-Version>${project.version}</Example-Version>
+                                <Example-Revision>${buildNumber}</Example-Revision>
+                                <Example-Date>${maven.build.timestamp}</Example-Date>
+                            </manifestEntries>
+                            <manifest>
+                                <mainClass>com.rexsl.standalone.RexslMain</mainClass>
+                            </manifest>
+                        </archive>
+                        <overlays>
+                            <overlay>
+                                <groupId>com.rexsl</groupId>
+                                <artifactId>rexsl-standalone</artifactId>
+                                <classifier>bin</classifier>
+                                <type>jar</type>
+                            </overlay>
+                        </overlays>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.rexsl</groupId>
+                <artifactId>rexsl-maven-plugin</artifactId>
+                <version>@project.version@</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <log4j.configuration>file:${basedir}/src/test/resources/log4j.properties</log4j.configuration>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jcabi</groupId>
+                        <artifactId>jcabi-aspects</artifactId>
+                        <version>${jcabi.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>com.jcabi</groupId>
+                <artifactId>jcabi-heroku-maven-plugin</artifactId>
+                <version>${jcabi.version}</version>
+                <executions>
+                    <execution>
+                        <id>deploy-to-heroku</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                        <configuration>
+                            <name>${artifactId}</name>
+                            <artifacts>
+                                <artifact>${groupId}:${artifactId}:war::${project.version}</artifact>
+                            </artifacts>
+                            <procfile>web: java -Xmx256m -jar ./${artfactId}.war ${PORT}</procfile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
