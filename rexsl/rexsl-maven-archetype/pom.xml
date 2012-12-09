@@ -107,6 +107,7 @@
                                 <delete dir="${project.build.directory}/example-rest"/>
                                 <exec executable="mvn" dir="${project.build.directory}" failonerror="true">
                                     <arg value="--settings=${project.build.directory}/settings.xml"/>
+                                    <arg value="--update-snapshots"/>
                                     <arg value="archetype:generate"/>
                                     <arg value="-DarchetypeRepository=local.repo"/>
                                     <arg value="-DarchetypeGroupId=${project.groupId}"/>
