@@ -3,7 +3,6 @@
  * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  -->
-#set ($dir = $package.replaceAll(".", "/"))
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0" metadata-complete="true" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee         http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <display-name>${artifactId}</display-name>
     <description>${artifactId}</description>
@@ -28,7 +27,7 @@
         <servlet-class>com.rexsl.core.ExceptionTrap</servlet-class>
         <init-param>
             <param-name>template</param-name>
-            <param-value>/${dir}/exception.html.vm</param-value>
+            <param-value>/${package.replace(".", "/")}/exception.html.vm</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
