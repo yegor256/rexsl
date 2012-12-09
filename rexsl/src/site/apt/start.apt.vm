@@ -38,7 +38,19 @@
 
 ReXSL, Quick Start Guide
 
-  Let's create a new project on top of ReXSL, in 5 minutes.
+  For a super quick start use
+  {{{./rexsl-maven-archetype/index.html}rexsl-maven-archetype}}
+  and create your first project just like this:
+
++--
+mvn archetype:generate \
+  -DarchetypeGroupId=com.rexsl \
+  -DarchetypeArtifactId=rexsl-maven-archetype \
+  -DarchetypeVersion=${project.version}
++--
+
+  To get better understanding of key components let's spend 5 minutes
+  and create a project manually, step by step.
   Start with a new Maven project with the following directory structure
   (you can {{{svn://svn.rexsl.com/rexsl/trunk/rexsl/rexsl-maven-plugin/src/it/all-correct}checkout}}
   a simple project):

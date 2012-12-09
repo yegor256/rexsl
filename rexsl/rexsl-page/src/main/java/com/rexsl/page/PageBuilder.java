@@ -47,6 +47,7 @@ import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.StringMemberValue;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.bind.annotation.XmlType;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -233,6 +234,15 @@ public final class PageBuilder {
      * @return The class just created
      */
     private Class<?> construct(final String name, final Class<?> base) {
+        if (base.isAnnotationPresent(XmlType.class)) {
+            throw new IllegalStateException(
+                String.format(
+                    // @checkstyle LineLength (1 line)
+                    "Class %s can't be annotated with @XmlType, use @XmlRootElement instead",
+                    base.getName()
+                )
+            );
+        }
         final ClassPool pool = ClassPool.getDefault();
         try {
             final CtClass parent = pool.get(base.getName());
@@ -242,12 +252,10 @@ public final class PageBuilder {
                 file.getConstPool(),
                 AnnotationsAttribute.visibleTag
             );
-            attribute.addAnnotation(
-                this.make(Stylesheet.class, this.xsl.toString(), file)
-            );
-            attribute.addAnnotation(
-                this.make(Schema.class, this.xsd, file)
-            );
+            new PageBuilder.Annotations(file, attribute)
+                .append(XmlType.class, "name", name)
+                .append(Stylesheet.class, this.xsl.toString())
+                .append(Schema.class, this.xsd);
             for (Annotation existing : this.annotations(ctc, parent)) {
                 attribute.addAnnotation(existing);
             }
@@ -308,23 +316,56 @@ public final class PageBuilder {
     }
 
     /**
-     * Construct a new annotation.
-     * @param type Type of annotation
-     * @param value The value to set
-     * @param file Class file
-     * @return The annotation
+     * Annotations maker.
      */
-    private Annotation make(final Class<?> type, final String value,
-        final ClassFile file) {
-        final Annotation annotation = new Annotation(
-            type.getName(),
-            file.getConstPool()
-        );
-        annotation.addMemberValue(
-            "value",
-            new StringMemberValue(value, file.getConstPool())
-        );
-        return annotation;
+    private static final class Annotations {
+        /**
+         * File to work with.
+         */
+        private final transient ClassFile file;
+        /**
+         * Document me...
+         */
+        private final transient AnnotationsAttribute attribute;
+        /**
+         * Public ctor.
+         * @param fle Class file
+         * @param attr Attribute
+         */
+        public Annotations(final ClassFile fle,
+            final AnnotationsAttribute attr) {
+            this.file = fle;
+            this.attribute = attr;
+        }
+        /**
+         * Append one more annotation.
+         * @param type Type of annotation
+         * @param prop Name of property to set
+         * @param value Value to use for property
+         * @return This object
+         */
+        public Annotations append(final Class<?> type, final String prop,
+            final String value) {
+            final Annotation annotation = new Annotation(
+                type.getName(),
+                this.file.getConstPool()
+            );
+            annotation.addMemberValue(
+                prop,
+                new StringMemberValue(value, this.file.getConstPool())
+            );
+            this.attribute.addAnnotation(annotation);
+            return this;
+        }
+        /**
+         * Append one more annotation (with default "value" property).
+         * @param type Type of annotation
+         * @param value Value to use for property
+         * @return This object
+         */
+        public Annotations append(final Class<?> type, final String value) {
+            return this.append(type, "value", value);
+        }
     }
 
 }

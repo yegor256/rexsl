@@ -29,9 +29,13 @@
  */
 package com.rexsl.page;
 
+import com.rexsl.core.annotations.Stylesheet;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -71,6 +75,35 @@ public final class PageBuilderTest {
      * Sample dummy page.
      */
     public static class BarePage extends BasePageMocker {
+    }
+
+    /**
+     * PageBuilder can add correct annotations.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void addsCorrectAnnotations() throws Exception {
+        final String xsl = "/some/path/test.xsl";
+        final Object page = new PageBuilder()
+            .stylesheet(xsl)
+            .build(PageBuilderTest.BarPage.class);
+        MatcherAssert.assertThat(
+            page.getClass().getAnnotation(XmlType.class).name(),
+            Matchers.equalTo(
+                "com.rexsl.page.PageBuilderTest$BarPage$somepathtestxsl"
+            )
+        );
+        MatcherAssert.assertThat(
+            page.getClass().getAnnotation(Stylesheet.class).value(),
+            Matchers.equalTo(xsl)
+        );
+    }
+
+    /**
+     * Sample dummy page.
+     */
+    @XmlRootElement(name = "bar")
+    public static class BarPage {
     }
 
 }
