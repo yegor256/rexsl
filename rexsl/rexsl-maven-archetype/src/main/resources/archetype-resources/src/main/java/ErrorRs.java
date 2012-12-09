@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.0.1
  */
 @Path("/error")
 public final class ErrorRs extends BaseRs {

@@ -16,11 +16,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Base RESTful page.
  *
+ * <p>All other JAXB pages are inherited from this class, in runtime,
+ * by means of {@link com.rexsl.page.PageBuilder}.
+ *
  * <p>The class is mutable and NOT thread-safe.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.0.1
  */
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)

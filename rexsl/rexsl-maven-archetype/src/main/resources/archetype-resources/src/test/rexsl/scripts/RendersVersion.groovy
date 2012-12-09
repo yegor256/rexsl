@@ -2,7 +2,7 @@
  * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  */
-package ${package}.rexsl.scripts;
+package ${package}.rexsl.scripts
 
 import com.jcabi.manifests.Manifests
 import com.rexsl.test.RestTester

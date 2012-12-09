@@ -2,7 +2,7 @@
  * Copyright (c) 2011-2012, ReXSL.com
  * All rights reserved.
  */
-package ${package}.rexsl.xhtml;
+package ${package}.rexsl.xhtml
 
 import com.rexsl.test.XhtmlMatchers
 import org.hamcrest.MatcherAssert

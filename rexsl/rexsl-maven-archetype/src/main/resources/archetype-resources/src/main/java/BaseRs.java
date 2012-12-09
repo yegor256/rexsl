@@ -14,7 +14,6 @@ import com.rexsl.page.Resource;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.0.1
  */
 @Resource.Forwarded
 public class BaseRs extends BaseResource {
