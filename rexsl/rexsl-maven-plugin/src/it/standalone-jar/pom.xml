@@ -33,14 +33,16 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.jcabi</groupId>
+        <artifactId>parent</artifactId>
+        <version since="11 Dec 2012">0.7.3</version>
+    </parent>
     <groupId>com.rexsl.plugin</groupId>
     <artifactId>standalone-jar</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
     <name>standalone-jar</name>
-    <prerequisites>
-        <maven>3.0</maven>
-    </prerequisites>
     <dependencies>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -65,18 +67,6 @@
             <artifactId>rexsl-core</artifactId>
             <version rexsl="yes">1.0-SNAPSHOT</version>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
-            <version since="11 Jun 2012">4.10</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version since="6 Apr 2011">1.1</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -129,14 +119,6 @@
                             <type>jar</type>
                         </overlay>
                     </overlays>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version since="19 Oct 2011">2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
                 </configuration>
             </plugin>
             <plugin>
