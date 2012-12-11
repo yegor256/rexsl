@@ -60,7 +60,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
 
     /**
      * Maven project, to be injected by Maven itself.
-     * @parameter expression="${project}"
+     * @parameter property="project"
      * @required
      * @readonly
      */
@@ -75,21 +75,21 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
 
     /**
      * Shall we skip execution?
-     * @parameter expression="${rexsl.skip}" default-value="false"
+     * @parameter property="rexsl.skip" default-value="false"
      * @required
      */
     private transient boolean skip;
 
     /**
      * Webapp directory.
-     * @parameter expression="${rexsl.webappDirectory}" default-value="${project.build.directory}/${project.build.finalName}"
+     * @parameter property="rexsl.webappDirectory" default-value="${project.build.directory}/${project.build.finalName}"
      * @required
      */
     private transient String webappDirectory;
 
     /**
      * TPC port to bind to (by default a random port is used).
-     * @parameter expression="${rexsl.port}"
+     * @parameter property="rexsl.port"
      */
     private transient Integer port;
 

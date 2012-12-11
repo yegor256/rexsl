@@ -36,7 +36,7 @@
         <menu ref="parent"/>
         <menu name="Overview">
             <item name="Introduction" href="./index.html"/>
-            <item name="Release History" href="changes-report.html"/>
+            <item name="Release History" href="./changes-report.html"/>
         </menu>
         <menu ref="reports"/>
     </body>

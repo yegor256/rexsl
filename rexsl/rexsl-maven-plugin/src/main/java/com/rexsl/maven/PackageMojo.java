@@ -99,7 +99,7 @@ public final class PackageMojo extends AbstractRexslMojo {
      * <p>At the moment only properties defined in {@code pom/properties}
      * section are supported.
      *
-     * @parameter expression="${rexsl.filtering}"
+     * @parameter property="rexsl.filtering"
      * @since 0.3.7
      * @see <a href="http://trac.rexsl.com/rexsl/ticket/342">Introduced in ticket #342</a>
      */

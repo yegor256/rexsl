@@ -77,7 +77,7 @@ public final class CheckMojo extends AbstractRexslMojo {
     /**
      * Skip all tests.
      *
-     * @parameter expression="${skipTests}" default-value="false"
+     * @parameter property="skipTests" default-value="false"
      * @since 0.3.8
      */
     private transient boolean skipTests;
@@ -86,7 +86,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      * Regular expression that determines tests ({@code groovy},
      * {@code xml}, etc.) to be executed during test.
      *
-     * @parameter expression="${rexsl.test}" default-value=".*"
+     * @parameter property="rexsl.test" default-value=".*"
      * @since 0.3.6
      */
     private transient String test = ".*";
@@ -98,7 +98,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      * <p>Set it to some irrelevant value in order to see a full list of
      * available checks, for example: {@code mvn rexsl:check -Drexsl.check=foo}.
      *
-     * @parameter expression="${rexsl.check}"
+     * @parameter property="rexsl.check"
      * @since 0.3.6
      */
     private transient String check;

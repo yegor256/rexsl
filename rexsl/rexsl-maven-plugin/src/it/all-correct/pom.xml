@@ -31,21 +31,18 @@
  *
  * @version $Id$
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.jcabi</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <groupId>com.rexsl.plugin</groupId>
     <artifactId>all-correct</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
     <name>all-correct</name>
-
-    <prerequisites>
-        <maven>3.0</maven>
-    </prerequisites>
-
     <properties>
         <catapult.warName>${project.build.finalName}-catapult</catapult.warName>
         <!--
@@ -56,7 +53,24 @@
         <catapult.context>/</catapult.context>
         <marker>ABC</marker>
     </properties>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Forward all calls to SLF4J to LOG4J. -->
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version since="19 Sep 2011">1.6.2</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <!-- Use LOG4J logging facility for all loggings. -->
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version since="19 Sep 2011">1.2.16</version>
+                <scope>runtime</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <!-- JAX-RS API -->
@@ -85,16 +99,12 @@
             <version rexsl="yes">1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <!-- for string processing -->
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version since="19 Oct 2011">2.6</version>
         </dependency>
         <dependency>
-            <!-- Logging facility -->
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-log</artifactId>
-            <version since="1 May 2012">0.1</version>
         </dependency>
         <dependency>
             <!--
@@ -105,33 +115,6 @@
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
             <version since="18 Dec 2011">3.5.0</version>
-        </dependency>
-        <dependency>
-            <!-- Unit testing framework from http://www.junit.org/ -->
-            <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
-            <version since="23 Dec 2011">4.10</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <!-- Assertions and matchers for unit tests. -->
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version since="23 Dec 2011">1.2.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <!-- Assertions and matchers for unit tests. -->
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version since="23 Dec 2011">1.2.1</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <!-- Selenium web testing framework, see Selenium.groovy -->
@@ -151,41 +134,14 @@
             </exclusions>
         </dependency>
         <dependency>
-            <!-- Forward all calls to SLF4J to LOG4J. -->
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version since="19 Sep 2011">1.6.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <!-- Use LOG4J logging facility for all loggings. -->
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version since="19 Sep 2011">1.2.16</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <!-- for file/stream manipulations in tests -->
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version since="19 Oct 2011">2.1</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version since="19 Oct 2011">2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-war-plugin</artifactId>
-                <version since="2 Dec 2010">2.1</version>
                 <configuration>
                     <warSourceExcludes>js/**, css/**, xsl/**</warSourceExcludes>
                 </configuration>
@@ -278,5 +234,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

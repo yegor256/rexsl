@@ -31,21 +31,16 @@
  *
  * @version $Id$
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rexsl.plugin</groupId>
     <artifactId>standalone-jar</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
     <name>standalone-jar</name>
-
     <prerequisites>
         <maven>3.0</maven>
     </prerequisites>
-
     <dependencies>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -79,7 +74,7 @@
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
+            <artifactId>hamcrest-core</artifactId>
             <version since="6 Apr 2011">1.1</version>
             <scope>test</scope>
         </dependency>
@@ -102,7 +97,6 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -167,5 +161,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

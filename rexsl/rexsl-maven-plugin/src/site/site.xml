@@ -35,17 +35,17 @@
     <body>
         <menu ref="parent"/>
         <menu name="Overview">
-            <item name="Introduction" href="./index.html"/>
-            <item name="Usage" href="./usage.html"/>
-            <item name="Goals" href="./plugin-info.html"/>
-            <item name="FAQ" href="./faq.html"/>
+            <item name="Introduction" href="index.html"/>
+            <item name="Usage" href="usage.html"/>
+            <item name="Goals" href="plugin-info.html"/>
+            <item name="FAQ" href="faq.html"/>
             <item name="Release History" href="changes-report.html"/>
         </menu>
-        <menu name="Cookbook">
-            <item name="Setup scripts" href="./setup.html"/>
-            <item name="Test stubs" href="./stubs.html"/>
-            <item name="Bootstrap" href="./bootstrap.html"/>
-            <item name="Selenium" href="./selenium.html"/>
+        <menu name="Examples">
+            <item name="Setup scripts" href="example-setup.html"/>
+            <item name="Test stubs" href="example-stubs.html"/>
+            <item name="Bootstrap" href="example-bootstrap.html"/>
+            <item name="Selenium" href="example-selenium.html"/>
         </menu>
         <menu ref="reports"/>
     </body>
