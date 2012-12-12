@@ -22,7 +22,7 @@
                 </link>
                 <link rel="icon" type="image/gif">
                     <xsl:attribute name="href">
-                        <xsl:text>http://img.rexsl.com/logo.png</xsl:text>
+                        <xsl:text>http://img.rexsl.com/favicon.gif</xsl:text>
                     </xsl:attribute>
                 </link>
                 <xsl:call-template name="head"/>

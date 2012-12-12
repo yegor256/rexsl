@@ -37,7 +37,7 @@ def loader = (URLClassLoader) Matchers.classLoader
 loader.findResources('org/hamcrest/Matcher.class').each { url ->
     MatcherAssert.assertThat(
         url.toString(),
-        Matchers.containsString('hamcrest-core-1.2.1')
+        Matchers.containsString('hamcrest-core-1.3')
     )
 }
 loader.URLs.each { url ->

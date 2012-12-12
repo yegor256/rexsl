@@ -157,7 +157,7 @@ final class JigsawCssCheck implements Check {
                     "[%d] %s: %s",
                     defect.line(),
                     defect.message(),
-                    defect.source()
+                    defect.explanation()
                 );
             }
             if (!response.valid() && valid) {

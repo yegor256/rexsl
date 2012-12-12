@@ -56,6 +56,9 @@
             <item name="Testing" href="testing.html"/>
             <item name="Release History" href="changes-report.html"/>
         </menu>
+        <menu name="Examples">
+            <item name="Start from archetype" href="example-archetype.html"/>
+        </menu>
         <menu ref="modules"/>
         <menu ref="reports"/>
     </body>

@@ -41,7 +41,7 @@
     <parent>
         <groupId>com.jcabi</groupId>
         <artifactId>parent</artifactId>
-        <version>0.2</version>
+        <version since="11 Dec 2012">0.7.3</version>
     </parent>
     <groupId>com.rexsl</groupId>
     <artifactId>rexsl</artifactId>
@@ -112,9 +112,6 @@
         <developerConnection>scm:svn:svn://svn.rexsl.com/rexsl/trunk/rexsl</developerConnection>
         <url>http://svn.rexsl.com/rexsl/trunk/rexsl</url>
     </scm>
-    <properties>
-        <jcabi.version>0.7.2</jcabi.version>
-    </properties>
     <distributionManagement>
         <site>
             <!--
@@ -169,56 +166,11 @@
             </build>
         </profile>
     </profiles>
-    <dependencies>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jcabi</groupId>
-            <artifactId>jcabi-aspects</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-        </dependency>
-    </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <!-- Reader of MANIFEST.MF files -->
-                <groupId>com.jcabi</groupId>
-                <artifactId>jcabi-manifests</artifactId>
-                <version>${jcabi.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <build>
         <pluginManagement>
             <plugins>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version since="2 Dec 2010">2.1</version>
                     <configuration>
                         <archive>
                             <manifestEntries>
@@ -256,27 +208,6 @@
                                 <file>layers.tex</file>
                             </sources>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <configuration>
-                    <aspectLibraries>
-                        <aspectLibrary>
-                            <groupId>com.jcabi</groupId>
-                            <artifactId>jcabi-aspects</artifactId>
-                        </aspectLibrary>
-                    </aspectLibraries>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>weave-classes</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

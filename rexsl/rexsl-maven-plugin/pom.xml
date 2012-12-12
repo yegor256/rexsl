@@ -46,7 +46,46 @@
     <artifactId>rexsl-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>rexsl-maven-plugin</name>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-library</artifactId>
+                <version since="23 Dec 2011">1.3</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-core</artifactId>
+                <version since="23 Dec 2011">1.3</version>
+                <scope>compile</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
+        <dependency>
+            <!-- Forward all calls to SLF4J to Maven log. -->
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-maven-slf4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-aspects</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <!--
         <dependency>
             <artifactId>jslint4java</artifactId>
@@ -114,7 +153,6 @@
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-aether</artifactId>
-            <version>${jcabi.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>nekohtml</groupId>
@@ -245,16 +283,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
@@ -297,19 +325,6 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all-minimal</artifactId>
             <version since="3 Sep 2011">1.5.8</version>
-        </dependency>
-        <dependency>
-            <!-- Forward all calls to SLF4J to Maven log. -->
-            <groupId>com.jcabi</groupId>
-            <artifactId>jcabi-maven-slf4j</artifactId>
-            <version>${jcabi.version}</version>
-        </dependency>
-        <dependency>
-            <!-- Forward all LOG4J calls to SLF4J -->
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version since="19 Sep 2011">1.6.2</version>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <!-- implementation of Javax Servlet API 3.0, required for Jetty in runtime -->
@@ -394,7 +409,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version since="4 Oct 2011">2.9</version>
                 <executions>
                     <execution>
                         <id>generated-helpmojo</id>
@@ -406,58 +420,46 @@
             </plugin>
             <plugin>
                 <artifactId>maven-invoker-plugin</artifactId>
-                <version since="22 Mar 2011">1.5</version>
-                <configuration>
-                    <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-                    <debug>false</debug>
-                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-                    <noLog>false</noLog>
-                    <!--
-                    With this construct you can include some projects,
-                    which you're interested in.
-                    -->
-                    <pomIncludes>
-                        <!--
-                        @todo #26 This test is disabled (although it works fine)
-                         because I don't know how to stop its execution. It starts
-                         Jetty and stays waiting. There should be some way of
-                         canceling it somehow...
-                         http://jira.codehaus.org/browse/MINVOKER-132
-                        -->
-                        <!-- <pomInclude>run-all-correct/pom.xml</pomInclude> -->
-                        <!-- <pomInclude>standalone-jar/pom.xml</pomInclude> -->
-                        <pomInclude>all-correct/pom.xml</pomInclude>
-                        <pomInclude>structure-failure/pom.xml</pomInclude>
-                        <pomInclude>script-failure/pom.xml</pomInclude>
-                        <pomInclude>xhtml-failure/pom.xml</pomInclude>
-                        <pomInclude>xsd-failure/pom.xml</pomInclude>
-                    </pomIncludes>
-                    <postBuildHookScript>verify</postBuildHookScript>
-                    <preBuildHookScript>setup</preBuildHookScript>
-                    <projectsDirectory>src/it</projectsDirectory>
-                    <settingsFile>${basedir}/src/it/settings.xml</settingsFile>
-                    <showErrors>true</showErrors>
-                    <showVersion>false</showVersion>
-                    <streamLogs>true</streamLogs>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>install</goal>
                             <goal>run</goal>
                         </goals>
+                        <configuration>
+                            <!--
+                            With this construct you can include some projects,
+                            which you're interested in.
+                            -->
+                            <pomIncludes>
+                                <!--
+                                @todo #26 This test is disabled (although it works fine)
+                                 because I don't know how to stop its execution. It starts
+                                 Jetty and stays waiting. There should be some way of
+                                 canceling it somehow...
+                                 http://jira.codehaus.org/browse/MINVOKER-132
+                                -->
+                                <!-- <pomInclude>run-all-correct/pom.xml</pomInclude> -->
+                                <!-- <pomInclude>standalone-jar/pom.xml</pomInclude> -->
+                                <pomInclude>all-correct/pom.xml</pomInclude>
+                                <pomInclude>structure-failure/pom.xml</pomInclude>
+                                <pomInclude>script-failure/pom.xml</pomInclude>
+                                <pomInclude>xhtml-failure/pom.xml</pomInclude>
+                                <pomInclude>xsd-failure/pom.xml</pomInclude>
+                            </pomIncludes>
+                        </configuration>
                     </execution>
                 </executions>
                 <dependencies>
                     <dependency>
                         <groupId>org.hamcrest</groupId>
                         <artifactId>hamcrest-library</artifactId>
-                        <version since="6 May 2012">1.2.1</version>
+                        <version since="6 May 2012">1.3</version>
                     </dependency>
                     <dependency>
                         <groupId>org.hamcrest</groupId>
                         <artifactId>hamcrest-core</artifactId>
-                        <version since="6 May 2012">1.2.1</version>
+                        <version since="6 May 2012">1.3</version>
                     </dependency>
                     <dependency>
                         <groupId>com.rexsl</groupId>
@@ -472,7 +474,6 @@
                 see the ticket #30 for more information.
                 -->
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version since="26 Oct 2011">1.6</version>
                 <executions>
                     <execution>
                         <id>copy-child-resources</id>
@@ -533,7 +534,7 @@
             <id>csslint</id>
             <activation>
                 <file>
-                    <exists>pom.xml</exists>
+                    <exists>${basedir}/pom.xml</exists>
                 </file>
             </activation>
             <properties>
@@ -543,20 +544,19 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version since="26 Oct 2011">1.6</version>
                         <executions>
                             <execution>
                                 <id>download-csslint</id>
                                 <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
                                 <configuration>
                                     <target>
                                         <available file="${csslint.js}" property="present"/>
                                         <get verbose="yes" usetimestamp="true" skipexisting="true" ignoreerrors="true" maxtime="10" src="https://raw.github.com/stubbornella/csslint/master/release/csslint-rhino.js" dest="${csslint.js}"/>
                                     </target>
                                 </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
                             </execution>
                         </executions>
                     </plugin>
@@ -567,6 +567,9 @@
                         <executions>
                             <execution>
                                 <phase>process-sources</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
                                 <configuration>
                                     <mainClass>org.mozilla.javascript.tools.jsc.Main</mainClass>
                                     <arguments>
@@ -575,9 +578,6 @@
                                         <argument>${csslint.js}</argument>
                                     </arguments>
                                 </configuration>
-                                <goals>
-                                    <goal>java</goal>
-                                </goals>
                             </execution>
                         </executions>
                     </plugin>

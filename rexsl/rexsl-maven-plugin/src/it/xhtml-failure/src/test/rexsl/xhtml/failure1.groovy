@@ -30,9 +30,9 @@
 
 import com.rexsl.test.XhtmlMatchers
 import org.junit.Assert
-import org.junit.matchers.JUnitMatchers
+import org.hamcrest.Matchers
 
-Assert.assertThat(rexsl.document, JUnitMatchers.containsString('say hello'))
+Assert.assertThat(rexsl.document, Matchers.containsString('say hello'))
 Assert.assertThat(
     rexsl.document,
     XhtmlMatchers.hasXPath("//div[contains(.,'say hello')]")
