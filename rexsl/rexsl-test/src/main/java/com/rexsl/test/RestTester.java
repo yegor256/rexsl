@@ -33,6 +33,7 @@ import com.jcabi.log.Logger;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.core.util.FeaturesAndProperties;
 import java.net.URI;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
@@ -136,7 +137,8 @@ public final class RestTester {
             );
         }
         final ClientConfig config = new DefaultClientConfig();
-        final Map<String, Object> props = config.getProperties();
+        final Map<String, Object> props =
+            FeaturesAndProperties.class.cast(config).getProperties();
         props.put(ClientConfig.PROPERTY_FOLLOW_REDIRECTS, false);
         // @checkstyle MagicNumber (1 line)
         props.put(ClientConfig.PROPERTY_CONNECT_TIMEOUT, 5 * 1000);

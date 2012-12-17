@@ -36,64 +36,60 @@
     <parent>
         <groupId>com.rexsl</groupId>
         <artifactId>rexsl</artifactId>
-        <version rexsl="yes">1.0-SNAPSHOT</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>rexsl-w3c</artifactId>
     <packaging>jar</packaging>
     <name>rexsl-w3c</name>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-core</artifactId>
-                <version since="23 Dec 2011">1.3</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-library</artifactId>
-                <version since="23 Dec 2011">1.3</version>
-                <scope>compile</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <classifier>mock</classifier>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.grizzly</groupId>
             <artifactId>grizzly-servlet-webserver</artifactId>
-            <version since="15 Apr 2012">1.9.10</version>
+            <version>1.9.55</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- JAX-RS API -->
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
-            <version since="25 Nov 2011">1.1.1</version>
+            <version>1.1.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <!-- Jersey core lib -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
-            <version since="4 May 2012">1.12</version>
-            <scope>runtime</scope>
+            <version>${jersey.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
-            <version since="29 Jan 2012">4.1.2</version>
+            <version>4.2.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.2.2</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -116,6 +112,16 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

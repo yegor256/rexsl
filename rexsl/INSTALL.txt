@@ -92,18 +92,19 @@ How to release new version to Maven Central:
 
         svn cp ^/trunk ^/branches/ticket607 -m 'refs #607 - new branch' && svn sw ^/branches/tickt607
 
-    3. Replace <version rexsl="yes">...</version> with the next
-       version you want to use:
+    3. Set new version:
 
-        find . -name "*.xml" -exec sed -i "" 's|\(\<version rexsl\=\"yes\"\>\)1\.0\-SNAPSHOT\(\<\/version\>\)|\10.4.1\2|g' {} \;
+        mvn versions:set
 
-    4. Commit your changes
+    4. Update all changes/changes.xml files
+
+    5. Commit your changes
 
         svn ci -m 'refs #607 - version up'
 
-    7. Deploy to sonatype:
+    6. Deploy to sonatype:
 
-        mvn -Dci -Prexsl -Psonatype clean deploy
+        rm -rf ~/.m2/repository/com/rexsl && mvn -Prexsl -Pqulice -Psonatype clean deploy
 
         Make sure that you have this profile in ~/.m2/settings.xml:
 
@@ -116,21 +117,21 @@ How to release new version to Maven Central:
             </properties>
           </profile>
 
-    8. Deploy site to Amazon S3
+    7. Deploy site to Amazon S3
 
-        mvn -Dsite -Prexsl clean install site-deploy
+        rm -rf ~/.m2/repository/com/rexsl && mvn -Psite -Prexsl clean install site-deploy
 
-    9. Copy your branch to tags:
+    8. Copy your branch to tags:
 
         svn cp ^/branches/ticket607 ^/tags/rexsl-0.4.1 -m 'refs #607 - version 0.4.1 released to Maven Central'
 
-    11. Set version back to SNAPSHOT:
+    9. Set version back to SNAPSHOT:
 
-        find . -name "*.xml" -exec sed -i "" 's|\(\<version rexsl\=\"yes\"\>\)0\.4\.1\(\<\/version\>\)|\11.0-SNAPSHOT\2|g' {} \;
+        mvn versions:set
         svn ci -m 'refs #607 - version back to SNAPSHOT'
 
-    12. Merge the branch back to TRUNK.
+    10. Merge the branch back to TRUNK.
 
-    12. Close the ticket as "fixed"
+    11. Close the ticket as "fixed"
 
     That's it

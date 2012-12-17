@@ -30,12 +30,7 @@
  *
  * @version $Id$
  -->
-<web-app version="3.0" metadata-complete="false"
-    xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-        http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0" metadata-complete="false" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee         http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <filter>
         <filter-name>XsltFilter</filter-name>
         <filter-class>com.rexsl.core.XsltFilter</filter-class>
@@ -46,7 +41,6 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
-
     <servlet>
         <servlet-name>RestfulServlet</servlet-name>
         <servlet-class>com.rexsl.core.RestfulServlet</servlet-class>
@@ -59,5 +53,4 @@
         <servlet-name>RestfulServlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
-
 </web-app>
