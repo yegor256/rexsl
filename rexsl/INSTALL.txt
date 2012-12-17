@@ -94,15 +94,19 @@ How to release new version to Maven Central:
 
     3. Set new version:
 
-        mvn versions:set
+        cd rexsl && mvn versions:set && cd ..
 
-    4. Update all changes/changes.xml files
+    4. Update all versions:
 
-    5. Commit your changes
+        mvn versions:use-latest-versions
+
+    5. Update all changes/changes.xml files
+
+    6. Commit your changes
 
         svn ci -m 'refs #607 - version up'
 
-    6. Deploy to sonatype:
+    7. Deploy to sonatype:
 
         rm -rf ~/.m2/repository/com/rexsl && mvn -Prexsl -Pqulice -Psonatype clean deploy
 
@@ -117,21 +121,21 @@ How to release new version to Maven Central:
             </properties>
           </profile>
 
-    7. Deploy site to Amazon S3
+    8. Deploy site to Amazon S3
 
         rm -rf ~/.m2/repository/com/rexsl && mvn -Psite -Prexsl clean install site-deploy
 
-    8. Copy your branch to tags:
+    9. Copy your branch to tags:
 
         svn cp ^/branches/ticket607 ^/tags/rexsl-0.4.1 -m 'refs #607 - version 0.4.1 released to Maven Central'
 
-    9. Set version back to SNAPSHOT:
+    10. Set version back to SNAPSHOT:
 
-        mvn versions:set
+        cd rexsl && mvn versions:set && cd ..
         svn ci -m 'refs #607 - version back to SNAPSHOT'
 
-    10. Merge the branch back to TRUNK.
+    11. Merge the branch back to TRUNK.
 
-    11. Close the ticket as "fixed"
+    12. Close the ticket as "fixed"
 
     That's it
