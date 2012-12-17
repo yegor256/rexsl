@@ -94,7 +94,7 @@ How to release new version to Maven Central:
 
     3. Set new version:
 
-        mvn versions:set
+        cd rexsl && mvn versions:set && cd ..
 
     4. Update all versions:
 
@@ -131,7 +131,7 @@ How to release new version to Maven Central:
 
     10. Set version back to SNAPSHOT:
 
-        mvn versions:set
+        cd rexsl && mvn versions:set && cd ..
         svn ci -m 'refs #607 - version back to SNAPSHOT'
 
     11. Merge the branch back to TRUNK.
