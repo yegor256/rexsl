@@ -36,11 +36,11 @@
     <parent>
         <groupId>com.jcabi</groupId>
         <artifactId>parent</artifactId>
-        <version since="11 Dec 2012">0.7.3</version>
+        <version>0.7.5</version>
     </parent>
     <groupId>com.rexsl</groupId>
     <artifactId>rexsl-bundle</artifactId>
-    <version rexsl="yes">0.4.2</version>
+    <version>0.4.2</version>
     <packaging>pom</packaging>
     <name>rexsl-bundle</name>
     <modules>

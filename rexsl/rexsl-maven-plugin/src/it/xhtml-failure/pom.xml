@@ -36,7 +36,7 @@
     <parent>
         <groupId>com.jcabi</groupId>
         <artifactId>parent</artifactId>
-        <version since="11 Dec 2012">0.7.3</version>
+        <version>@jcabi.version@</version>
     </parent>
     <groupId>com.rexsl.plugin</groupId>
     <artifactId>xhtml-failure</artifactId>
@@ -58,19 +58,13 @@
         <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
-            <version rexsl="yes">1.0-SNAPSHOT</version>
+            <version>@project.version@</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
-            <version rexsl="yes">1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.xmlmatchers</groupId>
-            <artifactId>xml-matchers</artifactId>
-            <version>0.10</version>
+            <version>@project.version@</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -79,7 +73,7 @@
             <plugin>
                 <groupId>com.rexsl</groupId>
                 <artifactId>rexsl-maven-plugin</artifactId>
-                <version rexsl="yes">1.0-SNAPSHOT</version>
+                <version>@project.version@</version>
                 <executions>
                     <execution>
                         <goals>

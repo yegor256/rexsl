@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.jcabi</groupId>
         <artifactId>parent</artifactId>
-        <version>0.2</version>
+        <version>@jcabi.version@</version>
     </parent>
     <groupId>${groupId}</groupId>
     <artifactId>${artifactId}</artifactId>
@@ -16,7 +16,7 @@
     <packaging>war</packaging>
     <name>${artifactId}</name>
     <properties>
-        <rexsl.version since="9 Dec 2012">@project.version@</rexsl.version>
+        <rexsl.version>@project.version@</rexsl.version>
     </properties>
     <dependencies>
         <dependency>
@@ -53,21 +53,21 @@
             <!-- JAX-RS API -->
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
-            <version since="2 Sep 2011">1.1.1</version>
+            <version>1.1.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <!-- JAX-RS implementation -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
-            <version since="22 Aug 2012">1.12</version>
+            <version>@jersey.version@</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <!-- JAXB 2.0 API -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version since="2 Sep 2011">2.0</version>
+            <version>2.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.xml.bind</groupId>
@@ -98,26 +98,10 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-        </dependency>
-        <dependency>
             <!-- Javax Servlet API 2.4. -->
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
-            <version since="26 Oct 2011">2.4</version>
+            <version>2.4</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
