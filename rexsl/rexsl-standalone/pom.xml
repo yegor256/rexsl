@@ -46,13 +46,13 @@
             <!-- Embedded Jetty Java Servlet Container -->
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>9.0.0.M3</version>
+            <version>8.0.2.v20111006</version>
         </dependency>
         <dependency>
             <!-- Embedded Jetty Java Servlet Container -->
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.0.0.M3</version>
+            <version>8.0.2.v20111006</version>
         </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>
@@ -71,16 +71,14 @@
             <artifactId>aspectjrt</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
