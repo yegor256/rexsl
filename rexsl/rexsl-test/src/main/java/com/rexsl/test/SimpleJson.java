@@ -71,7 +71,6 @@ public final class SimpleJson implements JsonDocument {
 
     /**
      * Public ctor.
-     *
      * @param root JsonNode
      */
     public SimpleJson(final JsonNode root) {

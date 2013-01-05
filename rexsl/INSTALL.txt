@@ -90,7 +90,7 @@ How to release new version to Maven Central:
 
     2. Create new branch
 
-        svn cp ^/trunk ^/branches/ticket607 -m 'refs #607 - new branch' && svn sw ^/branches/tickt607
+        svn cp ^/trunk ^/branches/ticket607 -m 'refs #607 - new branch' && svn sw ^/branches/ticket607
 
     3. Set new version:
 
