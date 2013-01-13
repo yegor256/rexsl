@@ -41,5 +41,6 @@
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @link <a href="http://www.rexsl.com/rexsl-w3c">project site</a>
  */
 package com.rexsl.w3c;
