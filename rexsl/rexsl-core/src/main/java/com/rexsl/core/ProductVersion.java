@@ -96,7 +96,7 @@ final class ProductVersion implements Comparable<ProductVersion> {
             equals = true;
         } else if (obj instanceof ProductVersion) {
             final ProductVersion ver = ProductVersion.class.cast(obj);
-            equals = ver.normalized().equals(this.normalized);
+            equals = ver.normalized.equals(this.normalized);
         } else {
             equals = false;
         }

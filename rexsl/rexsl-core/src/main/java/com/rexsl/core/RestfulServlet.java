@@ -135,7 +135,7 @@ public final class RestfulServlet extends HttpServlet {
             equals = true;
         } else if (obj instanceof RestfulServlet) {
             final RestfulServlet servlet = RestfulServlet.class.cast(obj);
-            equals = serlvet.jersey.equals(this.jersey);
+            equals = servlet.jersey.equals(this.jersey);
         } else {
             equals = false;
         }
