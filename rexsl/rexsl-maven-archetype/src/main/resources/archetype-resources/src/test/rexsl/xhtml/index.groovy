@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2012, ReXSL.com
+ * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  */
 package ${package}.rexsl.xhtml
