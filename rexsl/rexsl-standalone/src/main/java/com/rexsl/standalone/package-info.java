@@ -31,6 +31,14 @@
 /**
  * Entry point.
  *
+ * <p>The only dependency you need is (check our latest version available
+ * at <a href="http://www.rexsl.com">www.rexsl.com</a>):
+ *
+ * <pre>&lt;depedency&gt;
+ *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+ *   &lt;artifactId&gt;rexsl-standalone&lt;/artifactId&gt;
+ * &lt;/dependency&gt;</pre>
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.8

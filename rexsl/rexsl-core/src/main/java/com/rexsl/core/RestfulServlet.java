@@ -130,8 +130,16 @@ public final class RestfulServlet extends HttpServlet {
      */
     @Override
     public boolean equals(final Object obj) {
-        return obj == this || (obj instanceof RestfulServlet
-            && this.hashCode() == obj.hashCode());
+        boolean equals;
+        if (this == obj) {
+            equals = true;
+        } else if (obj instanceof RestfulServlet) {
+            final RestfulServlet servlet = RestfulServlet.class.cast(obj);
+            equals = serlvet.jersey.equals(this.jersey);
+        } else {
+            equals = false;
+        }
+        return equals;
     }
 
     /**

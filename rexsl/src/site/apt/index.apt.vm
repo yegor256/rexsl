@@ -38,6 +38,8 @@
 
 RESTful Java Web Framework on top of JAX-RS, XSL, and JAXB
 
+  {{{./need-coders.html}We need coders passionate about quality}}.
+
   The idea is simple - to make a
   {{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}}
   XML API available in a browser-friendly
