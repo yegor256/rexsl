@@ -39,10 +39,10 @@
 We Need Coders Passionate About Quality
 
   ReXSL Java web framework is a RESTful integration of JAX-RS, JAXB and XSLT.
-  Using ReXSL you develop a RESTful, which becomes a HTML web-site in runtime
-  by means of XSLT.
+  Using ReXSL you develop a RESTful API that automatically, in runtime,
+  turns into an HTML web-site by means of XSLT.
 
-  We started to develop ReXSL in August 2011 and now it is being
+  We started to develop ReXSL in August 2011 and it is already being
   successfully used by a few open source
   (e.g. {{{http://www.s3auth.com}s3auth.com}})
   and commercial (e.g. {{{http://p.expinia.com}expinia.com}}) projects.
@@ -50,5 +50,5 @@ We Need Coders Passionate About Quality
   We need your help with coding, in order to release the first stable
   version (we're still in 0.x state). If you're passionate about
   quality of code and is interested to contribute or learn something new,
-  please email me: {{{mailto:yegor@tpc2.com}yegor@tpc2.com}}.
+  email me: {{{mailto:yegor@tpc2.com}yegor@tpc2.com}}.
 
