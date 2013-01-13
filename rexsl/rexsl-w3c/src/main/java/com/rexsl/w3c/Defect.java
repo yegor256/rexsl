@@ -110,7 +110,7 @@ public final class Defect {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final Object defect) {
+    public boolean equals(final Object obj) {
         boolean equals;
         if (this == obj) {
             equals = true;
