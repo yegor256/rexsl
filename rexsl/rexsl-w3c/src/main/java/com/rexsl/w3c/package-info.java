@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2012, ReXSL.com
+ * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,16 @@
 /**
  * W3C validators.
  *
+ * <p>The only dependency you need is (check our latest version available
+ * at <a href="http://www.rexsl.com">www.rexsl.com</a>):
+ *
+ * <pre>&lt;depedency&gt;
+ *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+ *   &lt;artifactId&gt;rexsl-w3c&lt;/artifactId&gt;
+ * &lt;/dependency&gt;</pre>
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @link <a href="http://www.rexsl.com/rexsl-w3c">project site</a>
  */
 package com.rexsl.w3c;

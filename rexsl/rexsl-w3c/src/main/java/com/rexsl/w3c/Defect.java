@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2012, ReXSL.com
+ * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -110,9 +110,22 @@ public final class Defect {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final Object defect) {
-        return defect == this || (defect instanceof Defect
-            && this.hashCode() == defect.hashCode());
+    public boolean equals(final Object obj) {
+        boolean equals;
+        if (this == obj) {
+            equals = true;
+        } else if (obj instanceof Defect) {
+            final Defect defect = Defect.class.cast(obj);
+            equals = defect.line() == this.line()
+                && defect.column() == this.column()
+                && defect.source().equals(this.source())
+                && defect.explanation().equals(this.explanation())
+                && defect.messageId().equals(this.messageId())
+                && defect.message().equals(this.message());
+        } else {
+            equals = false;
+        }
+        return equals;
     }
 
     /**

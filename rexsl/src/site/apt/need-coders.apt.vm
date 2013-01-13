@@ -1,9 +1,9 @@
  ------
- Introduction to ReXSL Testing
+ We Need Coders Passionate About Quality
  ------
  Yegor Bugayenko
  ------
- 2012-03-25
+ 2013-01-13
  ------
 
 ~~
@@ -36,28 +36,19 @@
 ~~ OF THE POSSIBILITY OF SUCH DAMAGE.
 ~~
 
-Introduction to ReXSL Testing
+We Need Coders Passionate About Quality
 
-  There are three types of tests you should use: unit tests, integration
-  tests and catapult tests (that's how we call them). You know what
-  unit tests are, right? If not, we recommend to read this book first:
-  "Growing Object-Oriented Software, Guided by Tests",
-  by Steve Freeman and Nat Pryce, Addison-Wesley Professional, October 2009
-  ({{{http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627}in amazon.com}}).
+  ReXSL Java web framework is a RESTful integration of JAX-RS, JAXB and XSLT.
+  Using ReXSL you develop a RESTful API that automatically, in runtime,
+  turns into an HTML web-site by means of XSLT.
 
-  We created two supplementary classes that help you to test
-  your JAXB Model:
-  {{{./rexsl-test/apidocs-${project.version}/com/rexsl/test/JaxbConverter.html}JaxbConverter}} and
-  {{{./rexsl-test/apidocs-${project.version}/com/rexsl/test/XhtmlMatchers.html}XhtmlMatchers}}
-  (read their JavaDocs for more details).
+  We started to develop ReXSL in August 2011 and it is already being
+  successfully used by a few open source
+  (e.g. {{{http://www.s3auth.com}s3auth.com}})
+  and commercial (e.g. {{{http://p.expinia.com}expinia.com}}) projects.
 
-  Interesting part is integration and catapult testing.
-
-  To be continued...
-
-  Most important integration testing
-  "{{{./rexsl-maven-plugin/apidocs-${project.version}/com/rexsl/maven/checks/DefaultChecksProvider.html}checks}}".
-
-  Some new checks will appear in the next versions of
-  {{{./rexsl-maven-plugin/index.html}Maven plugin}}.
+  We need your help with coding, in order to release the first stable
+  version (we're still in 0.x state). If you're passionate about
+  quality of code and is interested to contribute or learn something new,
+  email me: {{{mailto:yegor@tpc2.com}yegor@tpc2.com}}.
 

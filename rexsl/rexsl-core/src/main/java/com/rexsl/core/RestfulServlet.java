@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2012, ReXSL.com
+ * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -130,8 +130,16 @@ public final class RestfulServlet extends HttpServlet {
      */
     @Override
     public boolean equals(final Object obj) {
-        return obj == this || (obj instanceof RestfulServlet
-            && this.hashCode() == obj.hashCode());
+        boolean equals;
+        if (this == obj) {
+            equals = true;
+        } else if (obj instanceof RestfulServlet) {
+            final RestfulServlet servlet = RestfulServlet.class.cast(obj);
+            equals = servlet.jersey.equals(this.jersey);
+        } else {
+            equals = false;
+        }
+        return equals;
     }
 
     /**

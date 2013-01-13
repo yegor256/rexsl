@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2012, ReXSL.com
+ * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -91,8 +91,16 @@ final class ProductVersion implements Comparable<ProductVersion> {
      */
     @Override
     public boolean equals(final Object obj) {
-        return obj == this || (obj instanceof ProductVersion
-            && ((ProductVersion) obj).normalized.equals(this.normalized));
+        boolean equals;
+        if (this == obj) {
+            equals = true;
+        } else if (obj instanceof ProductVersion) {
+            final ProductVersion ver = ProductVersion.class.cast(obj);
+            equals = ver.normalized.equals(this.normalized);
+        } else {
+            equals = false;
+        }
+        return equals;
     }
 
 }

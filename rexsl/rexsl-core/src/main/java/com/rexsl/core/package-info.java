@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2012, ReXSL.com
+ * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,8 +34,17 @@
  * <p>Read <a href="http://www.rexsl.com">Introduction to ReXSL</a> to get
  * better understanding of how it works.
  *
+ * <p>The only dependency you need is (check our latest version available
+ * at <a href="http://www.rexsl.com">www.rexsl.com</a>):
+ *
+ * <pre>&lt;depedency&gt;
+ *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+ *   &lt;artifactId&gt;rexsl-core&lt;/artifactId&gt;
+ * &lt;/dependency&gt;</pre>
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://www.rexsl.com">Introduction to ReXSL</a>
+ * @link <a href="http://www.rexsl.com/rexsl-core">project site</a>
  */
 package com.rexsl.core;
