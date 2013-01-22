@@ -126,6 +126,7 @@
     </distributionManagement>
     <properties>
         <jersey.version>1.16</jersey.version>
+        <jetty.version>8.0.2.v20111006</jetty.version>
     </properties>
     <profiles>
         <profile>

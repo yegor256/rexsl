@@ -277,13 +277,13 @@
             <!-- Embedded Jetty Java Servlet Container -->
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>9.0.0.M3</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <!-- Embedded Jetty Java Servlet Container -->
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.0.0.M3</version>
+            <version>${jetty.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.eclipse.jetty.orbit</groupId>
