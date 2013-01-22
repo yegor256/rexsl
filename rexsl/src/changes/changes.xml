@@ -30,6 +30,7 @@
  -->
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.4.6" date="22 Jan 2013" description="Jetty version back to 8.0"/>
         <release version="0.4.5" date="17 Dec 2012" description="rexsl-maven-archetype created"/>
         <release version="0.4.4" date="19 Nov 2012" description="com.rexsl.core.Manifests moved to jcabi-manifests"/>
         <release version="0.4.3" date="18 Nov 2012" description="User-Agent header for all outbound RestTester calls"/>

@@ -121,7 +121,7 @@ How to release new version to Maven Central:
             </properties>
           </profile>
 
-    8. Deploy site to Amazon S3
+    8. Deploy site to Amazon S3 (in approx 4 hours):
 
         rm -rf ~/.m2/repository/com/rexsl && mvn -Psite -Prexsl clean install site-deploy
 

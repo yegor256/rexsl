@@ -46,13 +46,13 @@
             <!-- Embedded Jetty Java Servlet Container -->
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>8.0.2.v20111006</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <!-- Embedded Jetty Java Servlet Container -->
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>8.0.2.v20111006</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>
