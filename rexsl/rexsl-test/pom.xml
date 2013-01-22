@@ -220,7 +220,7 @@
         <dependency>
             <groupId>net.sourceforge.reb4j</groupId>
             <artifactId>net.sourceforge.reb4j</artifactId>
-            <version>2.0.0</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 </project>
