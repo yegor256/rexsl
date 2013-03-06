@@ -258,7 +258,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      */
     @XmlAttribute
     public final boolean isSsl() {
-        return "https".equals(this.home().uriInfo().getBaseUri().getScheme());
+        return this.home().securityContext().isSecure();
     }
 
     /**
