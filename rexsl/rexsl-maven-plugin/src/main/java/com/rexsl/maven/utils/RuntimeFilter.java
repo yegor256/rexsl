@@ -77,8 +77,8 @@ public final class RuntimeFilter implements Filter {
 
     /**
      * {@inheritDoc}
-     * @checkstyle ThrowsCount (6 lines)
-     * @checkstyle RedundantThrows (5 lines)
+     * @checkstyle ThrowsCount (8 lines)
+     * @checkstyle RedundantThrows (7 lines)
      */
     @Override
     @Loggable(Loggable.DEBUG)
