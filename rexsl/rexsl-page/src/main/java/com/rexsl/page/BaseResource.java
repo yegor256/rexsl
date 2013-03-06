@@ -250,7 +250,7 @@ public class BaseResource implements Resource {
     /**
      * Set Security Context. Should be called by JAX-RS implementation
      * because of {@code @Context} annotation.
-     * @param request The request
+     * @param context The security context
      * @since 0.4.7
      */
     @Context
