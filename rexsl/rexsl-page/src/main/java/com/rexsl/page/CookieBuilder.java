@@ -36,6 +36,7 @@ import java.util.Locale;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
+import lombok.ToString;
 
 /**
  * Cookie builder.
@@ -69,6 +70,7 @@ import javax.ws.rs.core.UriBuilder;
  *  the site doesn't work in localhost:9099 in Chrome. Works fine in Safari,
  *  but not in Chrome. see http://stackoverflow.com/questions/1612177
  */
+@ToString
 public final class CookieBuilder {
 
     /**

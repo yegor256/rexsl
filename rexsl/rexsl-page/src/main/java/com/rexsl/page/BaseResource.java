@@ -37,6 +37,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
+import lombok.ToString;
 
 /**
  * Base implementation of {@link Resource}.
@@ -66,6 +67,7 @@ import javax.ws.rs.ext.Providers;
  * @see BasePage
  * @see PageBuilder
  */
+@ToString
 public class BaseResource implements Resource {
 
     /**
@@ -106,6 +108,7 @@ public class BaseResource implements Resource {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public final Providers providers() {
         if (this.iproviders == null) {
             throw new IllegalStateException(
@@ -122,6 +125,7 @@ public class BaseResource implements Resource {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public final HttpHeaders httpHeaders() {
         if (this.ihttpHeaders.get() == null) {
             throw new IllegalStateException(
@@ -138,6 +142,7 @@ public class BaseResource implements Resource {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public final UriInfo uriInfo() {
         if (this.iuriInfo == null) {
             throw new IllegalStateException(
@@ -154,6 +159,7 @@ public class BaseResource implements Resource {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public final HttpServletRequest httpServletRequest() {
         if (this.ihttpRequest == null) {
             throw new IllegalStateException(

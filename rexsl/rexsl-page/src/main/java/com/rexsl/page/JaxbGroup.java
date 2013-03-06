@@ -49,6 +49,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import lombok.ToString;
 
 /**
  * JAXB group of elements.
@@ -88,6 +89,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
+@ToString
 public final class JaxbGroup {
 
     /**
@@ -126,6 +128,7 @@ public final class JaxbGroup {
      * @param name Name of parent XML element
      * @return JAXB-annotated object, just created
      */
+    @NotNull
     public static Object build(@NotNull final Collection<?> grp,
         @NotNull final String name) {
         synchronized (JaxbGroup.READY) {
@@ -158,6 +161,7 @@ public final class JaxbGroup {
      */
     @XmlAnyElement(lax = true)
     @XmlMixed
+    @NotNull
     public Collection<?> getGroup() {
         return this.group;
     }

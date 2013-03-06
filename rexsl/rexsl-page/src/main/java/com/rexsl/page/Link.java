@@ -43,6 +43,8 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * HATEOAS link.
@@ -115,6 +117,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "link")
 @XmlAccessorType(XmlAccessType.NONE)
+@ToString
+@EqualsAndHashCode(of = { "rel", "type", "elements", "href" })
 public final class Link {
 
     /**
@@ -198,6 +202,7 @@ public final class Link {
      * @return The name
      */
     @XmlAttribute
+    @NotNull
     public String getRel() {
         return this.rel;
     }
@@ -207,6 +212,7 @@ public final class Link {
      * @return The url
      */
     @XmlAttribute
+    @NotNull
     public URI getHref() {
         return this.href;
     }
@@ -216,6 +222,7 @@ public final class Link {
      * @return The type
      */
     @XmlAttribute
+    @NotNull
     public String getType() {
         return this.type;
     }
@@ -226,6 +233,7 @@ public final class Link {
      */
     @XmlAnyElement(lax = true)
     @XmlMixed
+    @NotNull
     public List<Object> getElements() {
         return this.elements;
     }
@@ -235,6 +243,7 @@ public final class Link {
      * @param element The sub-element to add
      * @return This object
      */
+    @NotNull
     public Link with(@NotNull final Object element) {
         this.elements.add(element);
         return this;
@@ -245,6 +254,7 @@ public final class Link {
      * @param bundle The bundle to add
      * @return This object
      */
+    @NotNull
     public Link with(@NotNull final JaxbBundle bundle) {
         this.with(bundle.element());
         return this;
