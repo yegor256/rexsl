@@ -29,9 +29,10 @@
  */
 package com.rexsl.core;
 
-import com.jcabi.log.Logger;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Media types matcher.
@@ -40,6 +41,8 @@ import java.util.Set;
  * @version $Id$
  * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">RFC2616 Sec.14</a>
  */
+@ToString
+@EqualsAndHashCode(of = "types")
 final class TypesMatcher {
 
     /**
@@ -68,14 +71,6 @@ final class TypesMatcher {
                 this.types.add(parts[0]);
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return Logger.format("%[list]s", this.types);
     }
 
     /**

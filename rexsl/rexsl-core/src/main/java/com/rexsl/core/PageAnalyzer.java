@@ -33,6 +33,8 @@ import com.jcabi.log.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Makes a decision whether page should be transformed to HTML or returned
@@ -41,6 +43,8 @@ import javax.ws.rs.core.MediaType;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode(of = { "page", "request" })
 final class PageAnalyzer {
 
     /**

@@ -32,6 +32,8 @@ package com.rexsl.core;
 import com.jcabi.log.Logger;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Handler of XSD events.
@@ -39,6 +41,8 @@ import javax.xml.bind.ValidationEventHandler;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class XsdEventHandler implements ValidationEventHandler {
 
     /**

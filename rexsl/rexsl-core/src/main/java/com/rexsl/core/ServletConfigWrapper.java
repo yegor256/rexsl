@@ -39,6 +39,8 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Adapter between {@link ServletConfig} and {@link FilterConfig}.
@@ -47,6 +49,8 @@ import javax.validation.constraints.NotNull;
  * @version $Id$
  * @see RestfulServlet
  */
+@ToString
+@EqualsAndHashCode(of = { "config", "properties" })
 final class ServletConfigWrapper implements FilterConfig {
 
     /**
@@ -74,6 +78,7 @@ final class ServletConfigWrapper implements FilterConfig {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public String getFilterName() {
         return Logger.format("%s-filter", this.config.getServletName());
     }
@@ -94,6 +99,7 @@ final class ServletConfigWrapper implements FilterConfig {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public Enumeration<String> getInitParameterNames() {
         final Set<String> names = new HashSet<String>();
         for (Object name : this.properties.keySet()) {
@@ -110,6 +116,7 @@ final class ServletConfigWrapper implements FilterConfig {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public ServletContext getServletContext() {
         return this.config.getServletContext();
     }

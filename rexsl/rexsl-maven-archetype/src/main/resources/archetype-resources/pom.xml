@@ -79,6 +79,7 @@
             <!-- Wrapper aroung SLF4J -->
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-log</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <!-- Static reader of META-INF/MANIFEST.MF files -->
@@ -176,7 +177,7 @@
                             <artifacts>
                                 <artifact>${groupId}:${artifactId}:war::${project.version}</artifact>
                             </artifacts>
-                            <procfile>web: java -Xmx256m -jar ./${artfactId}.war ${PORT}</procfile>
+                            <procfile>web: java -Xmx256m -jar ./${artifactId}.war ${PORT}</procfile>
                         </configuration>
                     </execution>
                 </executions>

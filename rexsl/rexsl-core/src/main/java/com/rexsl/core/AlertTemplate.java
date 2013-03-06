@@ -31,6 +31,8 @@ package com.rexsl.core;
 
 import com.jcabi.log.Logger;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Template with no behavior, just to alert the user that there is a problem
@@ -40,6 +42,8 @@ import javax.validation.constraints.NotNull;
  * @version $Id$
  * @since 0.3.6
  */
+@ToString
+@EqualsAndHashCode(of = "message")
 final class AlertTemplate implements Template {
 
     /**
@@ -59,6 +63,7 @@ final class AlertTemplate implements Template {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public String render(@NotNull final String defect) {
         Logger.warn(this, "#render(..): %s", this.message);
         return Logger.format(

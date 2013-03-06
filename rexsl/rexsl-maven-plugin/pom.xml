@@ -48,6 +48,10 @@
     <name>rexsl-maven-plugin</name>
     <dependencies>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
             <!--
             Javax Servlet API, version 3.0+.
             -->
@@ -396,33 +400,7 @@
         </dependency>
     </dependencies>
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>aspectj-maven-plugin</artifactId>
-                    <dependencies>
-                        <dependency>
-                            <groupId>javax.servlet</groupId>
-                            <artifactId>javax.servlet-api</artifactId>
-                            <version>3.1-b03</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>javax.servlet-api</artifactId>
-                        <version>3.1-b03</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <executions>
@@ -432,12 +410,6 @@
                             <excludes>
                                 <exclude>**/HelpMojo.java</exclude>
                             </excludes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>default-testCompile</id>
-                        <configuration>
-                            <compilerArgument>-Xlint:-processing</compilerArgument>
                         </configuration>
                     </execution>
                     <execution>

@@ -50,6 +50,8 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.validation.SchemaFactory;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -63,6 +65,8 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @version $Id$
  * @since 0.2
  */
+@ToString
+@EqualsAndHashCode(of = { "xsdFolder", "classes", "context" })
 @Provider
 @Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
 public final class XslResolver implements ContextResolver<Marshaller> {
@@ -135,6 +139,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * @see <a href="http://jaxb.java.net/guide/Performance_and_thread_safety.html">JAXBContext is thread-safe</a>
      */
     @Override
+    @NotNull
     public Marshaller getContext(@NotNull final Class<?> type) {
         Marshaller mrsh;
         try {

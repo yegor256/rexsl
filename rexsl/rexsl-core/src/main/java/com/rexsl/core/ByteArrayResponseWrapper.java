@@ -37,6 +37,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang.CharEncoding;
 
 /**
@@ -47,6 +49,8 @@ import org.apache.commons.lang.CharEncoding;
  * @version $Id$
  * @see XsltFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
  */
+@ToString
+@EqualsAndHashCode(callSuper = false, of = { "stream", "writer" })
 final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
 
     /**
@@ -81,6 +85,7 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
      * Get the underlying byte array.
      * @return Byte array that contains the response.
      */
+    @NotNull
     public byte[] getByteArray() {
         return this.stream.toByteArray();
     }
@@ -89,6 +94,7 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public PrintWriter getWriter() {
         return this.writer;
     }
@@ -97,6 +103,7 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public ServletOutputStream getOutputStream() throws IOException {
         return new ServletOutputStream() {
             /**

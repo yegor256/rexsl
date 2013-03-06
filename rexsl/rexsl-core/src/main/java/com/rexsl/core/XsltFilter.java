@@ -52,6 +52,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang.CharEncoding;
 
 /**
@@ -79,6 +81,8 @@ import org.apache.commons.lang.CharEncoding;
  * @since 0.2
  * @checkstyle ClassDataAbstractionCoupling (300 lines)
  */
+@ToString
+@EqualsAndHashCode(of = "tfactory")
 public final class XsltFilter implements Filter {
 
     /**
