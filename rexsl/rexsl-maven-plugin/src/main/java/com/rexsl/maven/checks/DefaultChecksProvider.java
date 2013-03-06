@@ -38,6 +38,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Provider of checks.
@@ -147,6 +149,8 @@ import javax.validation.constraints.NotNull;
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (100 lines)
  */
+@ToString
+@EqualsAndHashCode(of = "test")
 public final class DefaultChecksProvider implements ChecksProvider {
 
     /**

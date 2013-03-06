@@ -34,6 +34,8 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -57,6 +59,8 @@ import org.apache.commons.lang.StringUtils;
  * @see <a href="http://www.mozilla.org/rhino/jsc.html">Rhino JavaScript to Java compiler</a>
  * @see <a href="https://github.com/stubbornella/csslint/wiki/Command-line-interface">CSSLint Command Line Interface</a>
  */
+@ToString
+@EqualsAndHashCode
 final class CssStaticCheck implements Check {
 
     /**

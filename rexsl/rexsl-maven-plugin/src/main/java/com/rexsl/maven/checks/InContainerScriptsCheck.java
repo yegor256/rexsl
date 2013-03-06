@@ -41,6 +41,8 @@ import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -56,6 +58,8 @@ import org.apache.commons.lang.StringUtils;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode(of = "test")
 final class InContainerScriptsCheck implements Check {
 
     /**

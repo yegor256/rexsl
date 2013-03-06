@@ -43,6 +43,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -60,6 +62,8 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode(of = "validator")
 final class JigsawCssCheck implements Check {
 
     /**

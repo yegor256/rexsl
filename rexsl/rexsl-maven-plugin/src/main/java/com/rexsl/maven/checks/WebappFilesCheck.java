@@ -35,6 +35,8 @@ import com.rexsl.maven.Environment;
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
@@ -54,6 +56,8 @@ import org.apache.commons.lang.ArrayUtils;
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class WebappFilesCheck implements Check {
 
     /**

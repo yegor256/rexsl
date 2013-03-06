@@ -34,6 +34,8 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Validate location of files/dirs.
@@ -47,6 +49,8 @@ import javax.validation.constraints.NotNull;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class FilesStructureCheck implements Check {
 
     /**

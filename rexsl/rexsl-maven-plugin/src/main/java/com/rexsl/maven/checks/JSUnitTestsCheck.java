@@ -45,6 +45,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -60,6 +62,8 @@ import org.codehaus.plexus.util.IOUtil;
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class JSUnitTestsCheck implements Check {
 
     /**

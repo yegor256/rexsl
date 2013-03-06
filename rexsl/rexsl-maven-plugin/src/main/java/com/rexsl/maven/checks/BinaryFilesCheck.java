@@ -35,6 +35,8 @@ import com.rexsl.maven.Environment;
 import java.io.File;
 import java.util.Collection;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.AndFileFilter;
@@ -54,6 +56,8 @@ import org.apache.commons.io.filefilter.NotFileFilter;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class BinaryFilesCheck implements Check {
 
     /**

@@ -37,6 +37,8 @@ import com.rexsl.maven.utils.LoggingManager;
 import java.io.File;
 import java.util.Collection;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -53,6 +55,8 @@ import org.apache.commons.io.FilenameUtils;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class JSStaticCheck implements Check {
 
     /**

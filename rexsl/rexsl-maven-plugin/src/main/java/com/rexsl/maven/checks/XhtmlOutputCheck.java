@@ -46,6 +46,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -62,6 +64,8 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (2 lines)
  */
+@ToString
+@EqualsAndHashCode(of = "test")
 final class XhtmlOutputCheck implements Check {
 
     /**

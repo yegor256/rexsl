@@ -43,6 +43,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Transform XML to XHTML through XSL.
@@ -50,6 +52,8 @@ import javax.xml.transform.stream.StreamSource;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class XhtmlTransformer {
 
     /**
