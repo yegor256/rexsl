@@ -33,6 +33,8 @@ import com.rexsl.test.TestResponse;
 import java.net.URI;
 import java.util.regex.Pattern;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Default implementation of CSS validator.
@@ -41,6 +43,8 @@ import javax.validation.constraints.NotNull;
  * @version $Id$
  * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API</a>
  */
+@ToString
+@EqualsAndHashCode(callSuper = false, of = "uri")
 final class DefaultCssValidator extends BaseValidator implements Validator {
 
     /**
@@ -69,6 +73,7 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
      */
     @Override
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
+    @NotNull
     public ValidationResponse validate(@NotNull final String css) {
         ValidationResponse response;
         final Pattern pattern = Pattern.compile(

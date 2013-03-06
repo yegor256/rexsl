@@ -29,6 +29,10 @@
  */
 package com.rexsl.w3c;
 
+import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 /**
  * Builder of HTML and CSS validators.
  *
@@ -56,6 +60,8 @@ package com.rexsl.w3c;
  * @see Validator
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
+@ToString
+@EqualsAndHashCode
 public final class ValidatorBuilder {
 
     /**
@@ -74,6 +80,7 @@ public final class ValidatorBuilder {
      * Build HTML validator.
      * @return The validator
      */
+    @NotNull
     public Validator html() {
         return ValidatorBuilder.HTML_VALIDATOR;
     }
@@ -82,6 +89,7 @@ public final class ValidatorBuilder {
      * Build CSS validator.
      * @return The validator
      */
+    @NotNull
     public Validator css() {
         return ValidatorBuilder.CSS_VALIDATOR;
     }

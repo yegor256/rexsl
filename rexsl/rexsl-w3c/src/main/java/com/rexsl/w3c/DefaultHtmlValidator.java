@@ -33,6 +33,8 @@ import com.rexsl.test.TestResponse;
 import java.net.URI;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MediaType;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Implementation of (X)HTML validator.
@@ -41,6 +43,8 @@ import javax.ws.rs.core.MediaType;
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
+@ToString
+@EqualsAndHashCode(callSuper = false, of = "uri")
 final class DefaultHtmlValidator extends BaseValidator implements Validator {
 
     /**
@@ -68,6 +72,7 @@ final class DefaultHtmlValidator extends BaseValidator implements Validator {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public ValidationResponse validate(@NotNull final String html) {
         DefaultValidationResponse response;
