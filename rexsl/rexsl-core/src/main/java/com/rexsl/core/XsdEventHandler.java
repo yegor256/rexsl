@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Immutable;
 import com.jcabi.log.Logger;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
@@ -43,6 +44,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode
+@Immutable
 final class XsdEventHandler implements ValidationEventHandler {
 
     /**

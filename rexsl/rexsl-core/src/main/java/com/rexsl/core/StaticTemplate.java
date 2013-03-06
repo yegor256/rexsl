@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Immutable;
 import com.jcabi.log.Logger;
 import java.io.InputStream;
 import java.net.URI;
@@ -47,6 +48,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  */
 @ToString
 @EqualsAndHashCode(of = "text")
+@Immutable
 final class StaticTemplate implements Template {
 
     /**

@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Immutable;
 import com.jcabi.log.Logger;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -44,6 +45,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(of = "message")
+@Immutable
 final class AlertTemplate implements Template {
 
     /**
