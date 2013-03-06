@@ -35,6 +35,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
@@ -92,5 +93,12 @@ public interface Resource {
      * @return The request
      */
     HttpServletRequest httpServletRequest();
+
+    /**
+     * Security context.
+     * @return The context
+     * @since 0.4.7
+     */
+    SecurityContext securityContext();
 
 }
