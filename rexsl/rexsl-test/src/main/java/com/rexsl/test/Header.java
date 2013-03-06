@@ -32,6 +32,8 @@ package com.rexsl.test;
 import java.util.AbstractMap;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * HTTP header.
@@ -41,6 +43,8 @@ import javax.validation.constraints.Pattern;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode(callSuper = true)
 final class Header extends AbstractMap.SimpleEntry<String, String> {
 
     /**
@@ -71,6 +75,7 @@ final class Header extends AbstractMap.SimpleEntry<String, String> {
      * @param key The key to normalize
      * @return Normalized key
      */
+    @NotNull
     private static String normalized(@NotNull
         @Pattern(regexp = "[a-zA-Z0-9\\-]+") final String key) {
         final char[] chars = key.toCharArray();

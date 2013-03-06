@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
@@ -50,6 +52,8 @@ import org.hamcrest.Matchers;
  * @version $Id$
  * @since 0.2.6
  */
+@ToString
+@EqualsAndHashCode
 public final class XhtmlMatchers {
 
     /**
@@ -65,6 +69,7 @@ public final class XhtmlMatchers {
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @param <T> Type of XML content provided
      */
+    @NotNull
     public static <T> Matcher<T> hasXPath(@NotNull final String query) {
         return XhtmlMatchers.hasXPath(query, new XPathContext());
     }
@@ -88,6 +93,7 @@ public final class XhtmlMatchers {
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @param <T> Type of XML content provided
      */
+    @NotNull
     public static <T> Matcher<T> hasXPath(@NotNull final String query,
         final Object... namespaces) {
         return XhtmlMatchers.hasXPath(query, new XPathContext(namespaces));
@@ -100,6 +106,7 @@ public final class XhtmlMatchers {
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @param <T> Type of XML content provided
      */
+    @NotNull
     public static <T> Matcher<T> hasXPath(@NotNull final String query,
         @NotNull final NamespaceContext ctx) {
         return new XPathMatcher<T>(query, ctx);
@@ -111,6 +118,7 @@ public final class XhtmlMatchers {
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @param <T> Type of XML content provided
      */
+    @NotNull
     public static <T> Matcher<T> hasXPaths(final String...xpaths) {
         final List<Matcher<? super T>> list =
             new ArrayList<Matcher<? super T>>();

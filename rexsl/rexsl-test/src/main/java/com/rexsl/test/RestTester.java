@@ -38,6 +38,8 @@ import java.net.URI;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * RESTful Java Client.
@@ -82,6 +84,8 @@ import javax.ws.rs.core.UriBuilder;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 public final class RestTester {
 
     /**
@@ -127,6 +131,7 @@ public final class RestTester {
      * @return The client ready to process the request
      */
     @SuppressWarnings("PMD.UseConcurrentHashMap")
+    @NotNull
     public static TestClient start(@NotNull final URI uri) {
         if (!uri.isAbsolute()) {
             throw new IllegalArgumentException(
@@ -154,6 +159,7 @@ public final class RestTester {
      * @param builder Home URI builder
      * @return The client ready to process the request
      */
+    @NotNull
     public static TestClient start(@NotNull final UriBuilder builder) {
         return RestTester.start(builder.build());
     }

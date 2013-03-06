@@ -35,6 +35,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Node;
 
@@ -73,6 +75,8 @@ import org.w3c.dom.Node;
  * @since 0.3.7
  */
 @SuppressWarnings("PMD.TooManyMethods")
+@ToString
+@EqualsAndHashCode(of = { "original", "dom", "xpath" })
 final class ListWrapper<T> implements List<T> {
 
     /**
@@ -191,19 +195,12 @@ final class ListWrapper<T> implements List<T> {
 
     /**
      * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(@NotNull final Object element) {
-        return element == this || this.original.equals(element);
-    }
-
-    /**
-     * {@inheritDoc}
      *
      * <p>The method throws {@link ListWrapper.NodeNotFoundException}
      * if such an element doesn't exist in the list.
      */
     @Override
+    @NotNull
     public T get(final int index) {
         if (index >= this.size()) {
             throw new ListWrapper.NodeNotFoundException(
@@ -217,14 +214,6 @@ final class ListWrapper<T> implements List<T> {
             );
         }
         return this.original.get(index);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        return this.original.hashCode();
     }
 
     /**
@@ -247,6 +236,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public Iterator<T> iterator() {
         return this.original.iterator();
     }
@@ -263,6 +253,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public ListIterator<T> listIterator() {
         return this.original.listIterator();
     }
@@ -271,6 +262,7 @@ final class ListWrapper<T> implements List<T> {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public ListIterator<T> listIterator(final int index) {
         return this.original.listIterator(index);
     }
@@ -335,6 +327,7 @@ final class ListWrapper<T> implements List<T> {
      * implementation of {@Link List}).
      */
     @Override
+    @NotNull
     public List<T> subList(final int start, final int end) {
         if (start >= this.size()) {
             throw new ListWrapper.NodeNotFoundException(

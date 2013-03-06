@@ -37,6 +37,8 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedList;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 
@@ -58,6 +60,8 @@ import org.hamcrest.Matchers;
  * @version $Id$
  * @since 0.3.4
  */
+@ToString
+@EqualsAndHashCode(of = "home")
 public final class NoBrokenLinks implements AssertionPolicy {
 
     /**

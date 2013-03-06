@@ -40,6 +40,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * JAXB-empowered object to XML converting utility.
@@ -81,6 +83,8 @@ import javax.xml.transform.Source;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 public final class JaxbConverter {
 
     /**
@@ -109,7 +113,7 @@ public final class JaxbConverter {
      */
     @SuppressWarnings("unchecked")
     public static Source the(@NotNull final Object object,
-        final Class... deps)
+        @NotNull final Class... deps)
         throws JAXBException {
         final Class<?>[] classes = new Class<?>[deps.length + 1];
         classes[0] = object.getClass();

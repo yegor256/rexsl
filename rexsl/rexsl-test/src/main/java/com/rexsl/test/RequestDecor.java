@@ -36,6 +36,8 @@ import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -47,6 +49,8 @@ import org.apache.commons.lang.StringUtils;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode(of = { "headers", "body" })
 final class RequestDecor implements Formattable {
 
     /**
@@ -116,6 +120,7 @@ final class RequestDecor implements Formattable {
      * @param text The text
      * @return Indented text
      */
+    @NotNull
     public static String indent(final String text) {
         return StringUtils.join(
             RequestDecor.lines(text),

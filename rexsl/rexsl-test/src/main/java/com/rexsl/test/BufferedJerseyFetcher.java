@@ -33,6 +33,8 @@ import com.jcabi.log.Logger;
 import com.sun.jersey.api.client.ClientResponse;
 import java.io.IOException;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
@@ -44,6 +46,8 @@ import org.apache.commons.lang.CharEncoding;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString(of = "fetcher")
+@EqualsAndHashCode(of = { "fetcher", "rsp", "entity" })
 final class BufferedJerseyFetcher implements JerseyFetcher {
 
     /**
@@ -88,6 +92,7 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
      * @return The body as string
      * @throws IOException If can't read it from response
      */
+    @NotNull
     public String body() throws IOException {
         synchronized (this.fetcher) {
             if (this.entity == null) {
@@ -117,6 +122,7 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
      */
     @Override
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    @NotNull
     public ClientResponse fetch() {
         synchronized (this.fetcher) {
             if (this.rsp == null) {

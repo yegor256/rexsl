@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.CharEncoding;
 
@@ -51,6 +53,8 @@ import org.apache.commons.lang.CharEncoding;
  * @version $Id$
  */
 @SuppressWarnings("PMD.TooManyMethods")
+@ToString(of = { "home", "headers" })
+@EqualsAndHashCode(of = { "resource", "headers", "home" })
 final class JerseyTestClient implements TestClient {
 
     /**
@@ -102,6 +106,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public URI uri() {
         return this.home;
     }
@@ -110,6 +115,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public TestClient header(@NotNull final String name,
         @NotNull final Object value) {
         synchronized (this.headers) {
@@ -135,6 +141,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public TestResponse get(@NotNull final String desc) {
         return new JerseyTestResponse(
             new JerseyFetcher() {
@@ -152,6 +159,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public TestResponse post(@NotNull final String desc,
         @NotNull final Object body) {
         final String content = body.toString();
@@ -171,6 +179,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public TestResponse put(@NotNull final String desc,
         @NotNull final Object body) {
         final String content = body.toString();
@@ -190,6 +199,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public TestResponse delete(@NotNull final String desc) {
         return new JerseyTestResponse(
             new JerseyFetcher() {
@@ -207,6 +217,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public TestResponse head(@NotNull final String desc) {
         return new JerseyTestResponse(
             new JerseyFetcher() {
@@ -224,6 +235,7 @@ final class JerseyTestClient implements TestClient {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public TestResponse options(@NotNull final String desc,
         @NotNull final Object body) {
         final String content = body.toString();

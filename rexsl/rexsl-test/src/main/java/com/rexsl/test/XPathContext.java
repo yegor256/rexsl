@@ -40,6 +40,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.validation.constraints.NotNull;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Convenient internal implementation of {@link NamespaceContext}.
@@ -48,6 +50,8 @@ import javax.xml.namespace.NamespaceContext;
  * @version $Id$
  * @since 0.3.7
  */
+@ToString
+@EqualsAndHashCode(of = { "map", "contexts" })
 final class XPathContext implements NamespaceContext {
 
     /**
