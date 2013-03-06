@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.core.XslResolver;
 import com.rexsl.maven.Environment;
@@ -82,6 +83,7 @@ public final class EmbeddedContainer {
      * @see <a href="http://docs.codehaus.org/display/JETTY/Classloading">Jetty Classloading</a>
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    @Loggable(Loggable.DEBUG)
     public static EmbeddedContainer start(@NotNull final Environment env) {
         if (!env.webdir().exists()) {
             throw new IllegalArgumentException(
@@ -125,6 +127,7 @@ public final class EmbeddedContainer {
      * Stop this container.
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    @Loggable(Loggable.DEBUG)
     public void stop() {
         try {
             this.server.stop();

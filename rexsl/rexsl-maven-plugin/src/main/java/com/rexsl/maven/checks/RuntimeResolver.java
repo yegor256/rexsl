@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -72,6 +73,7 @@ final class RuntimeResolver implements URIResolver {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public Source resolve(@NotNull final String href, final String base)
         throws TransformerException {
         URL url;

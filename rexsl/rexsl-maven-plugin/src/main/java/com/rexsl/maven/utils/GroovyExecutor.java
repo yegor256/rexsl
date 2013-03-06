@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import groovy.lang.Binding;
@@ -96,6 +97,7 @@ public final class GroovyExecutor {
      * @throws GroovyException If some failure inside
      */
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
+    @Loggable(Loggable.DEBUG)
     public void execute(@NotNull final File file) throws GroovyException {
         final String basename = FilenameUtils.getBaseName(file.getPath());
         if (!basename.matches("[a-zA-Z]\\w*")) {

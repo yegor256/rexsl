@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.packers;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
@@ -47,6 +48,7 @@ final class YuiReporter implements ErrorReporter {
      * @checkstyle ParameterNumber (4 lines)
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void warning(final String message, final String source,
         final int line, final String lsource, final int offset) {
         this.error(message, source, line, lsource, offset);
@@ -57,6 +59,7 @@ final class YuiReporter implements ErrorReporter {
      * @checkstyle ParameterNumber (4 lines)
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void error(final String message, final String source,
         final int line, final String lsource, final int offset) {
         Logger.error(this, "%s[%d:%d]: %s", source, line, offset, message);
@@ -67,6 +70,7 @@ final class YuiReporter implements ErrorReporter {
      * @checkstyle ParameterNumber (4 lines)
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public EvaluatorException runtimeError(final String message,
         final String source, final int line, final String lsource,
         final int offset) {

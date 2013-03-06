@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.aspects.Loggable;
 import com.rexsl.maven.Environment;
 import java.io.File;
 import java.util.Set;
@@ -83,6 +84,7 @@ final class RuntimeEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public File basedir() {
         return new File(
             this.context.getInitParameter(RuntimeEnvironment.BASEDIR_PARAM)
@@ -93,6 +95,7 @@ final class RuntimeEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public File webdir() {
         return new File(
             this.context.getInitParameter(RuntimeEnvironment.WEBDIR_PARAM)
@@ -106,6 +109,7 @@ final class RuntimeEnvironment implements Environment {
      * never be called.
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public Set<File> classpath(final boolean test) {
         throw new UnsupportedOperationException("#classpath()");
     }
@@ -117,6 +121,7 @@ final class RuntimeEnvironment implements Environment {
      * never be called.
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public boolean useRuntimeFiltering() {
         throw new UnsupportedOperationException("#useRuntimeFiltering()");
     }
@@ -125,6 +130,7 @@ final class RuntimeEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public int port() {
         return Integer.parseInt(
             this.context.getInitParameter(RuntimeEnvironment.PORT_PARAM)

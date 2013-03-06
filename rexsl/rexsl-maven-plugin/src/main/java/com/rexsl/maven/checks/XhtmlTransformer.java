@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import java.io.File;
@@ -63,6 +64,7 @@ final class XhtmlTransformer {
      * @return XHTML as text
      * @throws InternalCheckException If some failure inside
      */
+    @Loggable(Loggable.DEBUG)
     public String transform(@NotNull final Environment env,
         @NotNull final File file) throws InternalCheckException {
         final TransformerFactory factory = this.factory(env);

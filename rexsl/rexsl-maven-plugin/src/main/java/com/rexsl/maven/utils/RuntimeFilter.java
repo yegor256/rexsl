@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.File;
 import java.io.IOException;
@@ -69,8 +70,9 @@ public final class RuntimeFilter implements Filter {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void destroy() {
-        Logger.info(this, "#destroy(): runtime filter destroyed");
+        // nothing to do
     }
 
     /**
@@ -79,6 +81,7 @@ public final class RuntimeFilter implements Filter {
      * @checkstyle RedundantThrows (5 lines)
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void doFilter(final ServletRequest request,
         final ServletResponse response, final FilterChain chain)
         throws java.io.IOException, javax.servlet.ServletException {
@@ -104,6 +107,7 @@ public final class RuntimeFilter implements Filter {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    @Loggable(Loggable.DEBUG)
     public void init(final FilterConfig config) {
         final String param = config.getServletContext()
             .getInitParameter(RuntimeFilter.FOLDERS);
@@ -116,11 +120,6 @@ public final class RuntimeFilter implements Filter {
                 name
             );
         }
-        Logger.debug(
-            this,
-            "#init(%s): runtime filter initialized",
-            config.getClass().getName()
-        );
     }
 
     /**

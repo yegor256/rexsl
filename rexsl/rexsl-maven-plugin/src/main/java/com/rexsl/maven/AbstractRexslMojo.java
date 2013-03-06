@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.utils.PortReserver;
 import java.util.Properties;
@@ -102,6 +103,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * Set Maven Project (used mostly for unit testing).
      * @param proj The project to set
      */
+    @Loggable(Loggable.DEBUG)
     public final void setProject(final MavenProject proj) {
         this.iproject = proj;
     }
@@ -110,6 +112,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * Set skip option.
      * @param skp Shall we skip execution?
      */
+    @Loggable(Loggable.DEBUG)
     public final void setSkip(final boolean skp) {
         this.skip = skp;
     }
@@ -118,6 +121,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * Set webapp directory.
      * @param dir The directory
      */
+    @Loggable(Loggable.DEBUG)
     public final void setWebappDirectory(final String dir) {
         this.webappDirectory = dir;
     }
@@ -126,6 +130,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * Set repository system session.
      * @param sess The session
      */
+    @Loggable(Loggable.DEBUG)
     public final void setSession(final RepositorySystemSession sess) {
         this.session = sess;
     }

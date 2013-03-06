@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.packers;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.Filter;
@@ -52,6 +53,7 @@ abstract class AbstractPacker implements Packer {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    @Loggable(Loggable.DEBUG)
     public final void pack(@NotNull final Environment env,
         @NotNull final Filter filter) {
         final File srcdir = new File(

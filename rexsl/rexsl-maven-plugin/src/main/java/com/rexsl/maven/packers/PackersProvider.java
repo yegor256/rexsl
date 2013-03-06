@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.packers;
 
+import com.jcabi.aspects.Loggable;
 import com.rexsl.maven.Packer;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -65,6 +66,7 @@ public final class PackersProvider {
      * Get full collection of packers.
      * @return List of packers
      */
+    @Loggable(Loggable.DEBUG)
     public Set<Packer> all() {
         final Set<Packer> packers = new LinkedHashSet<Packer>();
         packers.add(new CssPacker());

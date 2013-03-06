@@ -30,6 +30,7 @@
 package com.rexsl.maven;
 
 import com.jcabi.aether.Aether;
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.File;
 import java.util.Collection;
@@ -98,6 +99,7 @@ public final class MavenEnvironment implements Environment {
      * Set port number or set default.
      * @param prt The port number
      */
+    @Loggable(Loggable.DEBUG)
     public void setPort(final int prt) {
         this.iport = prt;
     }
@@ -106,6 +108,7 @@ public final class MavenEnvironment implements Environment {
      * Shall we do runtime filtering?
      * @param filtering Shall we?
      */
+    @Loggable(Loggable.DEBUG)
     public void setRuntimeFiltering(final boolean filtering) {
         this.runtimeFiltering = filtering;
     }
@@ -114,6 +117,7 @@ public final class MavenEnvironment implements Environment {
      * Set location of local repository.
      * @param dir The directory of the repository
      */
+    @Loggable(Loggable.DEBUG)
     public void setLocalRepository(final String dir) {
         this.localRepo = dir;
     }
@@ -122,6 +126,7 @@ public final class MavenEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public File basedir() {
         return this.project.getBasedir();
     }
@@ -130,6 +135,7 @@ public final class MavenEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public int port() {
         return this.iport;
     }
@@ -138,6 +144,7 @@ public final class MavenEnvironment implements Environment {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public File webdir() {
         final String dir = this.properties
             .getProperty(MavenEnvironment.WEBAPP_DIR);
@@ -152,6 +159,7 @@ public final class MavenEnvironment implements Environment {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    @Loggable(Loggable.DEBUG)
     public Set<File> classpath(final boolean tonly) {
         final Set<String> paths = new LinkedHashSet<String>();
         try {
@@ -165,11 +173,6 @@ public final class MavenEnvironment implements Environment {
         final Set<File> files = new LinkedHashSet<File>();
         for (String path : paths) {
             files.add(new File(path));
-            Logger.debug(
-                this,
-                "ReXSL classpath: %s",
-                path
-            );
         }
         return files;
     }

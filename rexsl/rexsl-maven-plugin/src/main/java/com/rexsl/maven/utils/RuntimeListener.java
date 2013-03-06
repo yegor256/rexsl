@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import java.io.File;
@@ -49,6 +50,7 @@ public final class RuntimeListener implements ServletContextListener {
      */
     @Override
     @SuppressWarnings("PMD.UseProperClassLoader")
+    @Loggable(Loggable.DEBUG)
     public void contextInitialized(@NotNull final ServletContextEvent event) {
         final long start = System.currentTimeMillis();
         final Environment env = new RuntimeEnvironment(
@@ -92,8 +94,9 @@ public final class RuntimeListener implements ServletContextListener {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void contextDestroyed(@NotNull final ServletContextEvent event) {
-        Logger.debug(this, "#contextDestroyed(): destroyed");
+        // nothing to do
     }
 
 }

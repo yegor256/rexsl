@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.aspects.Loggable;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -54,6 +55,7 @@ public final class LoggingManager {
      * output filename and apply changes
      * @param name Scope name.
      */
+    @Loggable(Loggable.DEBUG)
     public static void enter(@NotNull final String name) {
         // intentionally empty
     }
@@ -63,6 +65,7 @@ public final class LoggingManager {
      * If additional appender configured and the scope is entered, method
      * should pop the last scope, and restore previous appender filename
      */
+    @Loggable(Loggable.DEBUG)
     public static void leave() {
         // intentionally empty
     }

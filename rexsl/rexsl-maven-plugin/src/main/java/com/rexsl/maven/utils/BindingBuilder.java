@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import groovy.lang.Binding;
@@ -72,6 +73,7 @@ public final class BindingBuilder {
      * Build a new {@link Binding}.
      * @return The binding
      */
+    @Loggable(Loggable.DEBUG)
     public Binding build() {
         final Binding binding = new Binding();
         binding.setVariable("rexsl", this.props);
@@ -84,6 +86,7 @@ public final class BindingBuilder {
      * @param value The value
      * @return This object
      */
+    @Loggable(Loggable.DEBUG)
     public BindingBuilder add(@NotNull final String name,
         final Object value) {
         this.props.put(name, value);

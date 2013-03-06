@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
@@ -84,6 +85,7 @@ final class WebappFilesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void setScope(final String scope) {
         // nothing to scope here
     }
@@ -92,6 +94,7 @@ final class WebappFilesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), "src/main/webapp");
         boolean valid;
