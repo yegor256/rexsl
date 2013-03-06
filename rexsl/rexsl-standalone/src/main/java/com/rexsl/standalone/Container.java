@@ -31,6 +31,8 @@ package com.rexsl.standalone;
 
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -43,6 +45,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * @version $Id$
  * @since 0.3.8
  */
+@ToString
+@EqualsAndHashCode(of = "port")
 final class Container {
 
     /**

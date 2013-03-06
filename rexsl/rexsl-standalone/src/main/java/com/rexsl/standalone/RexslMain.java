@@ -30,6 +30,8 @@
 package com.rexsl.standalone;
 
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Main entrance to the standalone application.
@@ -40,6 +42,8 @@ import javax.validation.constraints.NotNull;
  * @version $Id$
  * @since 0.3.8
  */
+@ToString
+@EqualsAndHashCode
 public final class RexslMain {
 
     /**
