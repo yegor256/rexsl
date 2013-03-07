@@ -99,6 +99,12 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <!-- JSR-303 implementation by Hibernate -->
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <!-- Javax Servlet API 2.4. -->
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -175,9 +181,9 @@
                         <configuration>
                             <name>${artifactId}</name>
                             <artifacts>
-                                <artifact>${groupId}:${artifactId}:war::${project.version}</artifact>
+                                <artifact>${project.groupId}:${project.artifactId}:war::${project.version}</artifact>
                             </artifacts>
-                            <procfile>web: java -Xmx256m -jar ./${artifactId}.war ${PORT}</procfile>
+                            <procfile>web: java -Xmx256m -jar ./${project.artifactId}.war ${PORT}</procfile>
                         </configuration>
                     </execution>
                 </executions>
