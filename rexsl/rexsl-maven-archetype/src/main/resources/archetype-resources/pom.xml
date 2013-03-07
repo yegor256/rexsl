@@ -50,6 +50,12 @@
             <version>${rexsl.version}</version>
         </dependency>
         <dependency>
+            <!-- JSR-303 implementation by Hibernate -->
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <!-- JAX-RS API -->
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
@@ -96,12 +102,6 @@
             <!-- Use LOG4J logging facility for all loggings. -->
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <!-- JSR-303 implementation by Hibernate -->
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
