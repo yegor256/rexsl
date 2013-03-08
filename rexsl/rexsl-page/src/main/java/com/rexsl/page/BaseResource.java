@@ -29,14 +29,17 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
+import lombok.ToString;
 
 /**
  * Base implementation of {@link Resource}.
@@ -66,6 +69,7 @@ import javax.ws.rs.ext.Providers;
  * @see BasePage
  * @see PageBuilder
  */
+@ToString
 public class BaseResource implements Resource {
 
     /**
@@ -95,6 +99,12 @@ public class BaseResource implements Resource {
     private transient HttpServletRequest ihttpRequest;
 
     /**
+     * Security context.
+     * @since 0.4.7
+     */
+    private transient SecurityContext security;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -106,6 +116,7 @@ public class BaseResource implements Resource {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public final Providers providers() {
         if (this.iproviders == null) {
             throw new IllegalStateException(
@@ -122,6 +133,7 @@ public class BaseResource implements Resource {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public final HttpHeaders httpHeaders() {
         if (this.ihttpHeaders.get() == null) {
             throw new IllegalStateException(
@@ -138,6 +150,7 @@ public class BaseResource implements Resource {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public final UriInfo uriInfo() {
         if (this.iuriInfo == null) {
             throw new IllegalStateException(
@@ -154,6 +167,7 @@ public class BaseResource implements Resource {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public final HttpServletRequest httpServletRequest() {
         if (this.ihttpRequest == null) {
             throw new IllegalStateException(
@@ -167,74 +181,83 @@ public class BaseResource implements Resource {
     }
 
     /**
-     * Set URI Info. Should be called by JAX-RS implemenation
+     * {@inheritDoc}
+     * @since 0.4.7
+     */
+    @Override
+    @NotNull
+    public final SecurityContext securityContext() {
+        if (this.security == null) {
+            throw new IllegalStateException(
+                Logger.format(
+                    "%[type]s#securityContext was never injected by JAX-RS",
+                    this
+                )
+            );
+        }
+        return this.security;
+    }
+
+    /**
+     * Set URI Info. Should be called by JAX-RS implementation
      * because of {@code @Context} annotation.
      * @param info The info to inject
      */
     @Context
+    @Loggable(Loggable.DEBUG)
     public final void setUriInfo(@NotNull final UriInfo info) {
         if (this.needsForwarding()) {
             this.iuriInfo = new ForwardedUriInfo(info, this.ihttpHeaders);
-            Logger.debug(
-                this,
-                "#setUriInfo(%[type]s): injected w/forwarding",
-                info
-            );
         } else {
             this.iuriInfo = info;
-            Logger.debug(
-                this,
-                "#setUriInfo(%[type]s): injected w/o forwarding into %[type]s",
-                info,
-                this
-            );
         }
     }
 
     /**
-     * Set Providers. Should be called by JAX-RS implemenation
+     * Set Providers. Should be called by JAX-RS implementation
      * because of {@code @Context} annotation.
      * @param prov List of providers
      */
     @Context
+    @Loggable(Loggable.DEBUG)
     public final void setProviders(@NotNull final Providers prov) {
         this.iproviders = prov;
-        Logger.debug(
-            this,
-            "#setProviders(%[type]s): injected",
-            prov
-        );
     }
 
     /**
-     * Set HttpHeaders. Should be called by JAX-RS implemenation
+     * Set HttpHeaders. Should be called by JAX-RS implementation
      * because of {@code @Context} annotation.
      * @param hdrs List of headers
      */
     @Context
+    @Loggable(Loggable.DEBUG)
     public final void setHttpHeaders(@NotNull final HttpHeaders hdrs) {
         this.ihttpHeaders.set(hdrs);
-        Logger.debug(
-            this,
-            "#setHttpHeaders(%[type]s): injected",
-            hdrs
-        );
     }
 
     /**
-     * Set HttpServletRequest. Should be called by JAX-RS implemenation
+     * Set HttpServletRequest. Should be called by JAX-RS implementation
      * because of {@code @Context} annotation.
      * @param request The request
      */
     @Context
+    @Loggable(Loggable.DEBUG)
     public final void setHttpServletRequest(
         @NotNull final HttpServletRequest request) {
         this.ihttpRequest = request;
-        Logger.debug(
-            this,
-            "#setHttpServletRequest(%[type]s): injected",
-            request
-        );
+    }
+
+    /**
+     * Set Security Context. Should be called by JAX-RS implementation
+     * because of {@code @Context} annotation.
+     * @param context The security context
+     * @since 0.4.7
+     */
+    @Context
+    @Loggable(Loggable.DEBUG)
+    public final void setSecurityContext(
+        @NotNull final SecurityContext context) {
+        this.security = context;
     }
 
     /**

@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Immutable;
 import java.io.IOException;
 
 /**
@@ -38,6 +39,7 @@ import java.io.IOException;
  * @version $Id$
  * @since 0.3.6
  */
+@Immutable
 interface Template {
 
     /**

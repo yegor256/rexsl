@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import java.io.File;
@@ -43,6 +44,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Transform XML to XHTML through XSL.
@@ -50,6 +53,8 @@ import javax.xml.transform.stream.StreamSource;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class XhtmlTransformer {
 
     /**
@@ -59,6 +64,7 @@ final class XhtmlTransformer {
      * @return XHTML as text
      * @throws InternalCheckException If some failure inside
      */
+    @Loggable(Loggable.DEBUG)
     public String transform(@NotNull final Environment env,
         @NotNull final File file) throws InternalCheckException {
         final TransformerFactory factory = this.factory(env);

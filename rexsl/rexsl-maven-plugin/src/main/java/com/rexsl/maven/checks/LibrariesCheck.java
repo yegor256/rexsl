@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
@@ -40,6 +41,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -54,12 +57,15 @@ import org.apache.commons.io.FilenameUtils;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class LibrariesCheck implements Check {
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
@@ -69,6 +75,7 @@ final class LibrariesCheck implements Check {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.webdir(), "WEB-INF/lib");
         int errors = 0;

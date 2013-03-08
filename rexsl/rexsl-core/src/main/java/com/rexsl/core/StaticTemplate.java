@@ -29,10 +29,13 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Immutable;
 import com.jcabi.log.Logger;
 import java.io.InputStream;
 import java.net.URI;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -43,6 +46,9 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @version $Id$
  * @since 0.4.2
  */
+@ToString
+@EqualsAndHashCode(of = "text")
+@Immutable
 final class StaticTemplate implements Template {
 
     /**
@@ -67,6 +73,7 @@ final class StaticTemplate implements Template {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public String render(@NotNull final String defect) {
         return this.text.replace(
             StaticTemplate.MARKER,

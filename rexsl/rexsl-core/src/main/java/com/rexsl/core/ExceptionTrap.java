@@ -40,6 +40,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * All uncaught exceptions will be caught here.
@@ -76,6 +78,8 @@ import javax.servlet.http.HttpServletResponse;
  *  restore its state after deserialization. We should create a test for it
  *  and then fix the defect.
  */
+@ToString
+@EqualsAndHashCode(callSuper = false, of = "template")
 public final class ExceptionTrap extends HttpServlet {
 
     /**

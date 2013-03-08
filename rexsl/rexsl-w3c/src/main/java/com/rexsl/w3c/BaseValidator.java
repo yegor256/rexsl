@@ -40,6 +40,8 @@ import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -53,6 +55,8 @@ import org.apache.http.entity.mime.content.StringBody;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 class BaseValidator {
 
     /**

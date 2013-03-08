@@ -31,6 +31,7 @@ package com.rexsl.w3c;
 
 import com.jcabi.log.Logger;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 
 /**
  * Validation defect (error or warning) produced by {@link ValidationResponse}.
@@ -40,7 +41,9 @@ import javax.validation.constraints.NotNull;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
+ * @checkstyle LineLength (2 lines)
  */
+@EqualsAndHashCode(of = { "iline", "icolumn", "isource", "iexplanation", "imessageId", "imessage" })
 public final class Defect {
 
     /**
@@ -102,36 +105,6 @@ public final class Defect {
      * {@inheritDoc}
      */
     @Override
-    public int hashCode() {
-        return this.toString().hashCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(final Object obj) {
-        boolean equals;
-        if (this == obj) {
-            equals = true;
-        } else if (obj instanceof Defect) {
-            final Defect defect = Defect.class.cast(obj);
-            equals = defect.line() == this.line()
-                && defect.column() == this.column()
-                && defect.source().equals(this.source())
-                && defect.explanation().equals(this.explanation())
-                && defect.messageId().equals(this.messageId())
-                && defect.message().equals(this.message());
-        } else {
-            equals = false;
-        }
-        return equals;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String toString() {
         return Logger.format(
             "[%d:%d] \"%s\", \"%s\", \"%s\", \"%s\"",
@@ -164,6 +137,7 @@ public final class Defect {
      * Source line, as quoted by W3C validator.
      * @return Full text of the source line
      */
+    @NotNull
     public String source() {
         return this.isource;
     }
@@ -172,6 +146,7 @@ public final class Defect {
      * Explanation of the problem.
      * @return Text
      */
+    @NotNull
     public String explanation() {
         return this.iexplanation;
     }
@@ -180,6 +155,7 @@ public final class Defect {
      * Message ID, according to W3C API.
      * @return The ID
      */
+    @NotNull
     public String messageId() {
         return this.imessageId;
     }
@@ -188,6 +164,7 @@ public final class Defect {
      * Text of the message.
      * @return The message returned by W3C server
      */
+    @NotNull
     public String message() {
         return this.imessage;
     }

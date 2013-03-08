@@ -30,6 +30,8 @@
 package com.rexsl.test;
 
 import com.jcabi.log.Logger;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -43,6 +45,8 @@ import org.hamcrest.Matchers;
  * @version $Id$
  * @since 0.3.4
  */
+@ToString
+@EqualsAndHashCode(of = { "xml", "xpath" })
 final class XpathAssertionMatcher implements AssertionPolicy {
 
     /**

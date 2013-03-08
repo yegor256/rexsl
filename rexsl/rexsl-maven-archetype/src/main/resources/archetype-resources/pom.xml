@@ -50,6 +50,12 @@
             <version>${rexsl.version}</version>
         </dependency>
         <dependency>
+            <!-- JSR-303 implementation by Hibernate -->
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <!-- JAX-RS API -->
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
@@ -79,6 +85,7 @@
             <!-- Wrapper aroung SLF4J -->
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-log</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <!-- Static reader of META-INF/MANIFEST.MF files -->
@@ -174,9 +181,9 @@
                         <configuration>
                             <name>${artifactId}</name>
                             <artifacts>
-                                <artifact>${groupId}:${artifactId}:war::${project.version}</artifact>
+                                <artifact>${project.groupId}:${project.artifactId}:war::${project.version}</artifact>
                             </artifacts>
-                            <procfile>web: java -Xmx256m -jar ./${artfactId}.war ${PORT}</procfile>
+                            <procfile>web: java -Xmx256m -jar ./${project.artifactId}.war ${PORT}</procfile>
                         </configuration>
                     </execution>
                 </executions>

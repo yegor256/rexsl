@@ -29,9 +29,12 @@
  */
 package com.rexsl.core;
 
-import com.jcabi.log.Logger;
-import java.util.HashSet;
+import com.jcabi.aspects.Immutable;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.TreeSet;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Media types matcher.
@@ -40,6 +43,9 @@ import java.util.Set;
  * @version $Id$
  * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">RFC2616 Sec.14</a>
  */
+@ToString
+@EqualsAndHashCode(of = "types")
+@Immutable
 final class TypesMatcher {
 
     /**
@@ -55,27 +61,21 @@ final class TypesMatcher {
     /**
      * Media types.
      */
-    private final transient Set<String> types = new HashSet<String>();
+    private final transient String[] types;
 
     /**
      * Public ctor.
      * @param header The text of HTTP "Accept" header
      */
     public TypesMatcher(final String header) {
+        final Set<String> set = new TreeSet<String>();
         if (header != null) {
             for (String range : header.trim().split(",")) {
                 final String[] parts = range.trim().split(";", 2);
-                this.types.add(parts[0]);
+                set.add(parts[0]);
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return Logger.format("%[list]s", this.types);
+        this.types = set.toArray(new String[] {});
     }
 
     /**
@@ -84,7 +84,8 @@ final class TypesMatcher {
      * @return If this MIME type is the only one in the header
      */
     public boolean explicit(final String type) {
-        return this.types.contains(type) && this.types.size() == 1;
+        return Arrays.binarySearch(this.types, type) >= 0
+            && this.types.length == 1;
     }
 
     /**
@@ -93,7 +94,7 @@ final class TypesMatcher {
      * @return If the MIME type is accepted
      */
     public boolean accepts(final String match) {
-        boolean accepts = this.types.contains(match);
+        boolean accepts = Arrays.binarySearch(this.types, match) >= 0;
         if (!accepts) {
             final String[] reqs = match.split(TypesMatcher.SEPARATOR, 2);
             for (String type : this.types) {

@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -40,6 +41,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -49,6 +52,8 @@ import org.apache.commons.lang.StringUtils;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode(of = "home")
 final class RuntimeResolver implements URIResolver {
 
     /**
@@ -68,6 +73,7 @@ final class RuntimeResolver implements URIResolver {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public Source resolve(@NotNull final String href, final String base)
         throws TransformerException {
         URL url;

@@ -30,6 +30,8 @@
 package com.rexsl.test;
 
 import com.jcabi.log.Logger;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 
@@ -42,6 +44,8 @@ import org.hamcrest.MatcherAssert;
  * @version $Id$
  * @since 0.3.4
  */
+@ToString
+@EqualsAndHashCode(of = "matcher")
 final class StatusMatcher implements AssertionPolicy {
 
     /**

@@ -32,6 +32,9 @@ package com.rexsl.test;
 import com.jcabi.log.Logger;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 
@@ -44,6 +47,8 @@ import org.hamcrest.MatcherAssert;
  * @version $Id$
  * @since 0.3.4
  */
+@ToString
+@EqualsAndHashCode(of = { "name", "matcher" })
 final class HeaderMatcher implements AssertionPolicy {
 
     /**
@@ -61,8 +66,8 @@ final class HeaderMatcher implements AssertionPolicy {
      * @param hdr The name of the header to match
      * @param mtch The matcher to use
      */
-    public HeaderMatcher(final String hdr,
-        final Matcher<Iterable<String>> mtch) {
+    public HeaderMatcher(@NotNull final String hdr,
+        @NotNull final Matcher<Iterable<String>> mtch) {
         this.name = hdr;
         this.matcher = mtch;
     }
@@ -71,7 +76,7 @@ final class HeaderMatcher implements AssertionPolicy {
      * {@inheritDoc}
      */
     @Override
-    public void assertThat(final TestResponse response) {
+    public void assertThat(@NotNull final TestResponse response) {
         List<String> headers = response.getHeaders().get(this.name);
         if (headers == null) {
             headers = new ArrayList<String>(0);

@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
@@ -45,6 +46,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -60,6 +63,8 @@ import org.codehaus.plexus.util.IOUtil;
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class JSUnitTestsCheck implements Check {
 
     /**
@@ -81,6 +86,7 @@ final class JSUnitTestsCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
@@ -89,6 +95,7 @@ final class JSUnitTestsCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.basedir(), JSUnitTestsCheck.JS_TESTS_DIR);
         boolean success = true;

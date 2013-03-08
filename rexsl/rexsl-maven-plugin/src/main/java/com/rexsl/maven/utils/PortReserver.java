@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.net.ServerSocket;
 
@@ -44,6 +45,7 @@ public final class PortReserver {
      * Find and return the first available port.
      * @return The port number
      */
+    @Loggable(Loggable.DEBUG)
     public int port() {
         int port;
         try {

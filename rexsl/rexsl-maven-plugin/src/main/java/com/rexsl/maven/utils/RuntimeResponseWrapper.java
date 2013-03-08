@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -87,6 +88,7 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      * Get the underlying byte stream.
      * @return Byte stream that contains the response.
      */
+    @Loggable(Loggable.DEBUG)
     public ByteArrayOutputStream getByteStream() {
         return this.stream;
     }
@@ -95,6 +97,7 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public PrintWriter getWriter() {
         return this.writer;
     }
@@ -103,13 +106,8 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void sendError(final int stc, @NotNull final String msg) {
-        Logger.debug(
-            this,
-            "#sendError(%d, %s): swallowed",
-            stc,
-            msg
-        );
         this.status = stc;
         this.message = msg;
     }
@@ -119,11 +117,6 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      */
     @Override
     public void setStatus(final int stc) {
-        Logger.debug(
-            this,
-            "#setStatus(%d): swallowed",
-            stc
-        );
         this.status = stc;
     }
 
@@ -131,11 +124,9 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void flushBuffer() throws IOException {
-        Logger.debug(
-            this,
-            "#flushBuffer(): swallowed in order to avoid Non-Modified flushing"
-        );
+        // nothing to do
     }
 
     /**
@@ -143,6 +134,7 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      * @throws IOException If there is some problem
      */
     @SuppressWarnings("PMD.ConfusingTernary")
+    @Loggable(Loggable.DEBUG)
     public void passThrough() throws IOException {
         if (this.message != null) {
             Logger.debug(
@@ -166,6 +158,7 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public ServletOutputStream getOutputStream() throws IOException {
         return new ServletOutputStream() {
             /**

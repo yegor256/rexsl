@@ -30,6 +30,9 @@
 package com.rexsl.test;
 
 import com.jcabi.log.Logger;
+import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Always fail.
@@ -40,6 +43,8 @@ import com.jcabi.log.Logger;
  * @version $Id$
  * @since 0.3.4
  */
+@ToString
+@EqualsAndHashCode(of = "reason")
 final class Failure implements AssertionPolicy {
 
     /**
@@ -51,7 +56,7 @@ final class Failure implements AssertionPolicy {
      * Public ctor.
      * @param txt The reason of failure
      */
-    public Failure(final String txt) {
+    public Failure(@NotNull final String txt) {
         this.reason = txt;
     }
 
@@ -59,7 +64,7 @@ final class Failure implements AssertionPolicy {
      * {@inheritDoc}
      */
     @Override
-    public void assertThat(final TestResponse response) {
+    public void assertThat(@NotNull final TestResponse response) {
         throw new AssertionError(
             Logger.format("%s:\n%s", this.reason, response)
         );

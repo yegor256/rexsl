@@ -35,6 +35,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilderFactory;
+import lombok.ToString;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -128,6 +129,7 @@ import org.w3c.dom.Element;
  * @since 0.3.7
  */
 @SuppressWarnings("PMD.NullAssignment")
+@ToString
 public final class JaxbBundle {
 
     /**
@@ -215,6 +217,7 @@ public final class JaxbBundle {
      * @return The child bundle (use {@link #up()} on it in order to get back to
      *  this object)
      */
+    @NotNull
     public JaxbBundle add(@NotNull final String nam) {
         return this.add(nam, "");
     }
@@ -226,6 +229,7 @@ public final class JaxbBundle {
      * @return The child bundle (use {@link #up()} on it in order to get back to
      *  this object)
      */
+    @NotNull
     public JaxbBundle add(@NotNull final String nam,
         @NotNull final Object txt) {
         final JaxbBundle child = new JaxbBundle(this, nam, txt.toString());
@@ -239,6 +243,7 @@ public final class JaxbBundle {
      * @param val The plain text value
      * @return This object
      */
+    @NotNull
     public JaxbBundle attr(@NotNull final String nam,
         @NotNull final Object val) {
         this.attrs.put(nam, val.toString());
@@ -248,8 +253,9 @@ public final class JaxbBundle {
     /**
      * Return parent bundle.
      * @return The parent bundle
-     * @checkstyle MethodName (3 lines)
+     * @checkstyle MethodName (4 lines)
      */
+    @NotNull
     @SuppressWarnings("PMD.ShortMethodName")
     public JaxbBundle up() {
         return this.parent;
@@ -259,6 +265,7 @@ public final class JaxbBundle {
      * Convert this bundle into DOM/XML {@link Element}.
      * @return The element
      */
+    @NotNull
     public Element element() {
         if (this.parent != null) {
             throw new IllegalArgumentException(

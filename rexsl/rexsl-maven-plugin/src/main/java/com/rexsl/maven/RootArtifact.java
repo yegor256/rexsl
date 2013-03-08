@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.util.List;
 import javax.validation.constraints.NotNull;
@@ -84,6 +85,7 @@ final class RootArtifact {
      * Get artifact.
      * @return The artifact
      */
+    @Loggable(Loggable.DEBUG)
     public Artifact artifact() {
         return this.art;
     }
@@ -93,6 +95,7 @@ final class RootArtifact {
      * @param artifact The artifact to check
      * @return TRUE if it should be excluded
      */
+    @Loggable(Loggable.DEBUG)
     public boolean excluded(@NotNull final Artifact artifact) {
         boolean excluded = false;
         for (Exclusion exclusion : this.exclusions) {

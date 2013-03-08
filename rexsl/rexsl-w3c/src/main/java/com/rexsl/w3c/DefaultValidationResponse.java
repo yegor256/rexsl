@@ -37,6 +37,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 
 /**
  * Default implementaiton of validation response.
@@ -44,6 +45,9 @@ import javax.validation.constraints.NotNull;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@EqualsAndHashCode(
+    of = { "ivalid", "validator", "type", "encoding", "ierrors", "iwarnings" }
+)
 final class DefaultValidationResponse implements ValidationResponse {
 
     /**

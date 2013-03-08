@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.aspects.Loggable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -76,6 +77,7 @@ public final class FileFinder {
      * Returns {@link SortedSet} of files in an alphabetical order.
      * @return Set of files
      */
+    @Loggable(Loggable.DEBUG)
     public SortedSet<File> ordered() {
         return new TreeSet<File>(this.fetch());
     }
@@ -84,6 +86,7 @@ public final class FileFinder {
      * Returns {@link Set} of files in a random order.
      * @return Set of files
      */
+    @Loggable(Loggable.DEBUG)
     public Set<File> random() {
         final List<File> scripts = new ArrayList<File>(this.fetch());
         Collections.shuffle(scripts);

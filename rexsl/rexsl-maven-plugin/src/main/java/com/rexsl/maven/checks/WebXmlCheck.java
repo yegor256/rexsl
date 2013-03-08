@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
@@ -40,6 +41,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;
 
@@ -56,6 +59,8 @@ import org.xml.sax.SAXParseException;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class WebXmlCheck implements Check {
 
     /**
@@ -67,6 +72,7 @@ final class WebXmlCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
@@ -75,6 +81,7 @@ final class WebXmlCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {
         final File file = new File(
             env.basedir(),

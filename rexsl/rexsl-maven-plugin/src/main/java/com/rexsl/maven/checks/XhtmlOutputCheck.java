@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
@@ -46,6 +47,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -62,6 +65,8 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (2 lines)
  */
+@ToString
+@EqualsAndHashCode(of = "test")
 final class XhtmlOutputCheck implements Check {
 
     /**
@@ -110,6 +115,7 @@ final class XhtmlOutputCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void setScope(@NotNull final String scope) {
         synchronized (this.mutex) {
             this.test = scope;
@@ -120,6 +126,7 @@ final class XhtmlOutputCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.basedir(), XhtmlOutputCheck.XML_DIR);
         boolean success = true;

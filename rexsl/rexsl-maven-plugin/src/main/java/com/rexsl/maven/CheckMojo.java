@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.checks.DefaultChecksProvider;
 import com.rexsl.maven.utils.LoggingManager;
@@ -112,6 +113,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      * Set checks provider.
      * @param prov The provider to set
      */
+    @Loggable(Loggable.DEBUG)
     public void setChecksProvider(final ChecksProvider prov) {
         this.provider = prov;
     }
@@ -120,6 +122,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      * Set name of check to run.
      * @param chk Name of check (short class name)
      */
+    @Loggable(Loggable.DEBUG)
     public void setCheck(final String chk) {
         this.check = chk;
     }
@@ -128,6 +131,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      * Set name of test to run.
      * @param tst Name of test
      */
+    @Loggable(Loggable.DEBUG)
     public void setTest(final String tst) {
         this.test = tst;
     }

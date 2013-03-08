@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.ChecksProvider;
@@ -38,6 +39,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Provider of checks.
@@ -147,6 +150,8 @@ import javax.validation.constraints.NotNull;
  * @version $Id$
  * @checkstyle ClassDataAbstractionCoupling (100 lines)
  */
+@ToString
+@EqualsAndHashCode(of = "test")
 public final class DefaultChecksProvider implements ChecksProvider {
 
     /**
@@ -190,6 +195,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public Set<Check> all() {
         final Set<Check> all = new LinkedHashSet<Check>();
         for (String name : this.checks) {
@@ -213,6 +219,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void setTest(@NotNull final String scope) {
         synchronized (this.mutex) {
             this.test = scope;
@@ -223,6 +230,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void setCheck(@NotNull final String scope) {
         synchronized (this.mutex) {
             this.checks.clear();

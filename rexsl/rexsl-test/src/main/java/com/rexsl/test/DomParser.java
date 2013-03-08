@@ -33,6 +33,8 @@ import com.jcabi.log.Logger;
 import java.util.regex.Pattern;
 import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilderFactory;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import net.sourceforge.reb4j.Regex;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
@@ -46,6 +48,8 @@ import org.w3c.dom.Document;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode(of = "xml")
 final class DomParser {
 
     /**
@@ -84,6 +88,7 @@ final class DomParser {
      * Get document of body.
      * @return The document
      */
+    @NotNull
     public Document document() {
         Document doc;
         try {

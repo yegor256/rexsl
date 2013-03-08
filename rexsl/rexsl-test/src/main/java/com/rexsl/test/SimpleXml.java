@@ -44,6 +44,7 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
@@ -61,6 +62,7 @@ import org.w3c.dom.NodeList;
  * @version $Id$
  * @since 0.3.7
  */
+@EqualsAndHashCode(of = "dom")
 public final class SimpleXml implements XmlDocument {
 
     /**
@@ -211,6 +213,7 @@ public final class SimpleXml implements XmlDocument {
      * @since 0.3.8
      */
     @Override
+    @NotNull
     public Node node() {
         return this.dom;
     }
@@ -219,6 +222,7 @@ public final class SimpleXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public List<String> xpath(@NotNull final String query) {
         final NodeList nodes = this.nodelist(query);
         final List<String> items = new ArrayList<String>(nodes.getLength());
@@ -239,6 +243,7 @@ public final class SimpleXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public SimpleXml registerNs(@NotNull final String prefix,
         @NotNull final Object uri) {
         return new SimpleXml(this.dom, this.context.add(prefix, uri));
@@ -249,6 +254,7 @@ public final class SimpleXml implements XmlDocument {
      */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    @NotNull
     public List<XmlDocument> nodes(@NotNull final String query) {
         final NodeList nodes = this.nodelist(query);
         final List<XmlDocument> items =
@@ -263,6 +269,7 @@ public final class SimpleXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public XmlDocument merge(@NotNull final NamespaceContext ctx) {
         return new SimpleXml(this.dom, this.context.merge(ctx));
     }

@@ -29,12 +29,15 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
@@ -54,6 +57,8 @@ import org.apache.commons.lang.ArrayUtils;
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class WebappFilesCheck implements Check {
 
     /**
@@ -80,6 +85,7 @@ final class WebappFilesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void setScope(final String scope) {
         // nothing to scope here
     }
@@ -88,6 +94,7 @@ final class WebappFilesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), "src/main/webapp");
         boolean valid;

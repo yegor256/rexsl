@@ -30,9 +30,10 @@
 package com.rexsl.test;
 
 import java.util.List;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.w3c.dom.Node;
 
 /**
@@ -44,6 +45,8 @@ import org.w3c.dom.Node;
  * @version $Id$
  * @see <a href="http://trac.fazend.com/rexsl/ticket/324">introduced in ticket #324</a>
  */
+@ToString
+@EqualsAndHashCode(of = "response")
 final class LazyXml implements XmlDocument {
 
     /**
@@ -61,7 +64,7 @@ final class LazyXml implements XmlDocument {
      * @param src Source of content
      * @param ctx Namespace context
      */
-    public LazyXml(@NotNull @Valid final TestResponse src,
+    public LazyXml(@NotNull final TestResponse src,
         @NotNull final XPathContext ctx) {
         this.response = src;
         this.context = ctx;
@@ -71,6 +74,7 @@ final class LazyXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public LazyXml registerNs(@NotNull final String prefix,
         @NotNull final Object uri) {
         return new LazyXml(this.response, this.context.add(prefix, uri));
@@ -80,6 +84,7 @@ final class LazyXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public List<String> xpath(@NotNull final String query) {
         return new SimpleXml(this.response.getBody())
             .merge(this.context)
@@ -90,6 +95,7 @@ final class LazyXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public Node node() {
         return new SimpleXml(this.response.getBody()).node();
     }
@@ -98,6 +104,7 @@ final class LazyXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public List<XmlDocument> nodes(@NotNull final String query) {
         return new SimpleXml(this.response.getBody())
             .merge(this.context)
@@ -108,6 +115,7 @@ final class LazyXml implements XmlDocument {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public XmlDocument merge(@NotNull final NamespaceContext ctx) {
         return new LazyXml(this.response, this.context.merge(ctx));
     }

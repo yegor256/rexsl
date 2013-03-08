@@ -48,6 +48,7 @@ import javassist.bytecode.annotation.StringMemberValue;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlType;
+import lombok.ToString;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -107,6 +108,7 @@ import org.apache.commons.lang.StringUtils;
  * @see JaxbGroup
  * @see JaxbBundle
  */
+@ToString
 public final class PageBuilder {
 
     /**
@@ -139,6 +141,7 @@ public final class PageBuilder {
      * @param uri The URI of the stylesheet
      * @return This object
      */
+    @NotNull
     public PageBuilder stylesheet(@NotNull final String uri) {
         this.xsl = UriBuilder.fromUri(uri)
             .replaceQuery("")
@@ -151,6 +154,7 @@ public final class PageBuilder {
      * @param name Name of schema
      * @return This object
      */
+    @NotNull
     public PageBuilder schema(@NotNull final String name) {
         this.xsd = name;
         return this;
@@ -162,6 +166,7 @@ public final class PageBuilder {
      * @return The instance of the class just created
      * @param <T> The type of result expected
      */
+    @NotNull
     public <T> T build(@NotNull final Class<T> base) {
         T page;
         try {

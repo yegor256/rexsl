@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
@@ -36,6 +37,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.AndFileFilter;
@@ -56,6 +59,8 @@ import org.apache.commons.lang.ArrayUtils;
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class RexslFilesCheck implements Check {
 
     /**
@@ -82,6 +87,7 @@ final class RexslFilesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
@@ -90,6 +96,7 @@ final class RexslFilesCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.basedir(), "src/test/rexsl");
         boolean valid = true;

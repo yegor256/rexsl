@@ -34,6 +34,7 @@ import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 import javax.xml.bind.Marshaller;
@@ -71,6 +72,8 @@ public final class ResourceMocker {
                 Marshaller.class, MediaType.APPLICATION_XML_TYPE
             );
         this.withProviders(providers);
+        final SecurityContext security = Mockito.mock(SecurityContext.class);
+        this.withSecurityContext(security);
     }
 
     /**
@@ -110,6 +113,16 @@ public final class ResourceMocker {
      */
     public ResourceMocker withServletRequest(final HttpServletRequest req) {
         Mockito.doReturn(req).when(this.resource).httpServletRequest();
+        return this;
+    }
+
+    /**
+     * With this instance of {@link SecurityContext}.
+     * @param ctx The context
+     * @return This object
+     */
+    public ResourceMocker withSecurityContext(final SecurityContext ctx) {
+        Mockito.doReturn(ctx).when(this.resource).securityContext();
         return this;
     }
 

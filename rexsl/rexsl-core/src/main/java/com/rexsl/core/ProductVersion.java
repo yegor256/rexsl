@@ -29,8 +29,10 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Immutable;
 import com.jcabi.log.Logger;
 import java.util.regex.Pattern;
+import lombok.EqualsAndHashCode;
 
 /**
  * Product version.
@@ -39,6 +41,8 @@ import java.util.regex.Pattern;
  * @version $Id$
  * @see <a href="http://tools.ietf.org/html/rfc2616#section-3.8">RFC-2616</a>
  */
+@EqualsAndHashCode(of = "normalized")
+@Immutable
 final class ProductVersion implements Comparable<ProductVersion> {
 
     /**
@@ -76,31 +80,6 @@ final class ProductVersion implements Comparable<ProductVersion> {
     @Override
     public String toString() {
         return this.normalized.replace(" ", "");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        return this.normalized.hashCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(final Object obj) {
-        boolean equals;
-        if (this == obj) {
-            equals = true;
-        } else if (obj instanceof ProductVersion) {
-            final ProductVersion ver = ProductVersion.class.cast(obj);
-            equals = ver.normalized.equals(this.normalized);
-        } else {
-            equals = false;
-        }
-        return equals;
     }
 
 }

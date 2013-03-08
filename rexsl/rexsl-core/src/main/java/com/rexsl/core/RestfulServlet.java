@@ -47,6 +47,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -86,6 +88,8 @@ import org.apache.commons.lang.StringUtils;
  * @see <a href="http://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html">Naming a package</a>
  * @since 0.2
  */
+@ToString
+@EqualsAndHashCode(callSuper = false, of = "jersey")
 public final class RestfulServlet extends HttpServlet {
 
     /**
@@ -116,31 +120,6 @@ public final class RestfulServlet extends HttpServlet {
      */
     @NotNull
     private ServletContainer jersey = new ServletContainer();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        return this.jersey.hashCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(final Object obj) {
-        boolean equals;
-        if (this == obj) {
-            equals = true;
-        } else if (obj instanceof RestfulServlet) {
-            final RestfulServlet servlet = RestfulServlet.class.cast(obj);
-            equals = servlet.jersey.equals(this.jersey);
-        } else {
-            equals = false;
-        }
-        return equals;
-    }
 
     /**
      * {@inheritDoc}
@@ -203,6 +182,7 @@ public final class RestfulServlet extends HttpServlet {
      * Get jersey servlet, before serialization.
      * @return The servlet
      */
+    @NotNull
     public ServletContainer getJersey() {
         return this.jersey;
     }

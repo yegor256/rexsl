@@ -35,11 +35,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import lombok.ToString;
 
 /**
  * Custom implementation of {@link UriInfo} that is aware of
@@ -51,6 +53,7 @@ import javax.ws.rs.core.UriInfo;
  * @version $Id$
  * @see <a href="http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10">IETF Forwarded HTTP Extension</a>
  */
+@ToString
 final class ForwardedUriInfo implements UriInfo {
 
     /**
@@ -98,6 +101,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public URI getAbsolutePath() {
         return this.getAbsolutePathBuilder().build();
     }
@@ -106,6 +110,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public UriBuilder getAbsolutePathBuilder() {
         return this.forward(this.info.getAbsolutePathBuilder());
     }
@@ -114,6 +119,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public URI getBaseUri() {
         return this.getBaseUriBuilder().build();
     }
@@ -122,6 +128,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public UriBuilder getBaseUriBuilder() {
         return this.forward(this.info.getBaseUriBuilder());
     }
@@ -130,6 +137,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public URI getRequestUri() {
         return this.getRequestUriBuilder().build();
     }
@@ -138,6 +146,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public UriBuilder getRequestUriBuilder() {
         return this.forward(this.info.getRequestUriBuilder());
     }
@@ -146,6 +155,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public List<Object> getMatchedResources() {
         return this.info.getMatchedResources();
     }
@@ -154,6 +164,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public List<String> getMatchedURIs() {
         return this.info.getMatchedURIs();
     }
@@ -162,6 +173,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public List<String> getMatchedURIs(final boolean decode) {
         return this.info.getMatchedURIs(decode);
     }
@@ -170,6 +182,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public String getPath() {
         return this.info.getPath();
     }
@@ -178,6 +191,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public String getPath(final boolean decode) {
         return this.info.getPath(decode);
     }
@@ -186,6 +200,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public MultivaluedMap<String, String> getPathParameters() {
         return this.info.getPathParameters();
     }
@@ -194,6 +209,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public MultivaluedMap<String, String> getPathParameters(
         final boolean decode) {
         return this.info.getPathParameters(decode);
@@ -203,6 +219,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public List<PathSegment> getPathSegments() {
         return this.info.getPathSegments();
     }
@@ -211,6 +228,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public List<PathSegment> getPathSegments(final boolean decode) {
         return this.info.getPathSegments(decode);
     }
@@ -219,6 +237,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public MultivaluedMap<String, String> getQueryParameters() {
         return this.info.getQueryParameters();
     }
@@ -227,6 +246,7 @@ final class ForwardedUriInfo implements UriInfo {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public MultivaluedMap<String, String> getQueryParameters(
         final boolean decode) {
         return this.info.getQueryParameters(decode);

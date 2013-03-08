@@ -35,6 +35,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.MissingNode;
@@ -48,6 +50,8 @@ import org.codehaus.jackson.node.MissingNode;
  * @version $Id$
  * @since 0.4
  */
+@ToString
+@EqualsAndHashCode(of = "node")
 public final class SimpleJson implements JsonDocument {
 
     /**
@@ -81,6 +85,7 @@ public final class SimpleJson implements JsonDocument {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public List<String> json(@NotNull final String query) {
         final List<String> result = new LinkedList<String>();
         for (JsonNode doc : this.getNodes(query)) {
@@ -96,6 +101,7 @@ public final class SimpleJson implements JsonDocument {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public List<JsonDocument> nodesJson(@NotNull final String query) {
         final List<JsonDocument> result = new LinkedList<JsonDocument>();

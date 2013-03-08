@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.EqualsAndHashCode;
 
 /**
  * User-agent HTTP header wrapper.
@@ -45,6 +46,7 @@ import java.util.regex.Pattern;
  * @version $Id$
  * @see <a href="http://tools.ietf.org/html/rfc2616#section-14.43">RFC-2616</a>
  */
+@EqualsAndHashCode(of = "tokens")
 final class UserAgent {
 
     /**

@@ -35,6 +35,8 @@ import com.rexsl.test.TestResponse;
 import java.net.HttpURLConnection;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Retry policy of assertion.
@@ -42,6 +44,8 @@ import javax.validation.constraints.NotNull;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode(callSuper = false, of = { "xpath", "valid" })
 final class RetryPolicy implements AssertionPolicy {
 
     /**

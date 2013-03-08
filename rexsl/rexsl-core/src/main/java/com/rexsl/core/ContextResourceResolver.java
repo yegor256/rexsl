@@ -47,6 +47,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 
@@ -57,6 +59,8 @@ import org.apache.commons.lang.CharEncoding;
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode(of = "context")
 final class ContextResourceResolver implements URIResolver {
 
     /**
@@ -76,6 +80,7 @@ final class ContextResourceResolver implements URIResolver {
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     public Source resolve(@NotNull final String href, final String base)
         throws TransformerException {
         InputStream stream = null;

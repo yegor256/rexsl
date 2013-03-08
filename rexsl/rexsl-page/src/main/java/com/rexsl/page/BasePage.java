@@ -46,6 +46,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Base page.
@@ -110,6 +112,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
 @SuppressWarnings("unchecked")
+@ToString
+@EqualsAndHashCode(callSuper = false, of = "resource")
 public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
 
     /**
@@ -134,6 +138,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param res The resource
      * @return This object
      */
+    @NotNull
     public final T init(@NotNull final R res) {
         synchronized (this.links) {
             this.resource = res;
@@ -148,6 +153,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param element The element to append
      * @return This object
      */
+    @NotNull
     public final T append(@NotNull final Object element) {
         this.elements.add(element);
         if (!(element instanceof org.w3c.dom.Element)) {
@@ -167,6 +173,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param bundle The element
      * @return This object
      */
+    @NotNull
     public final T append(@NotNull final JaxbBundle bundle) {
         this.append(bundle.element());
         return (T) this;
@@ -176,6 +183,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * Get home.
      * @return The home resource
      */
+    @NotNull
     public final R home() {
         if (this.resource == null) {
             throw new IllegalStateException("call BasePage#init() first");
@@ -188,6 +196,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param link The link to add
      * @return This object
      */
+    @NotNull
     public final T link(@NotNull final Link link) {
         link.attachTo(this.home());
         this.links.add(link);
@@ -200,6 +209,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      */
     @XmlAnyElement(lax = true)
     @XmlMixed
+    @NotNull
     public final Collection<Object> getElements() {
         return this.elements;
     }
@@ -210,6 +220,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      */
     @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")
+    @NotNull
     public final Collection<Link> getLinks() {
         return this.links;
     }
@@ -219,6 +230,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @return The IP address
      */
     @XmlAttribute
+    @NotNull
     public final String getIp() {
         String addr;
         try {
@@ -235,6 +247,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @return The date
      */
     @XmlAttribute
+    @NotNull
     public final Date getDate() {
         return new Date();
     }
@@ -245,7 +258,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      */
     @XmlAttribute
     public final boolean isSsl() {
-        return "https".equals(this.home().uriInfo().getBaseUri().getScheme());
+        return this.home().securityContext().isSecure();
     }
 
     /**

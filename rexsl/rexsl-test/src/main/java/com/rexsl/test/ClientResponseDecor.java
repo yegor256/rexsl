@@ -36,6 +36,7 @@ import java.util.Formatter;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MultivaluedMap;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -46,6 +47,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@EqualsAndHashCode(of = { "response", "body" })
 final class ClientResponseDecor implements Formattable {
 
     /**

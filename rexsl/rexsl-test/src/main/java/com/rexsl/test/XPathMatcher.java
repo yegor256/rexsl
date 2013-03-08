@@ -32,6 +32,8 @@ package com.rexsl.test;
 import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.w3c.dom.Node;
@@ -45,6 +47,8 @@ import org.w3c.dom.Node;
  * @version $Id$
  * @since 0.3.7
  */
+@ToString
+@EqualsAndHashCode(callSuper = false, of = "xpath")
 final class XPathMatcher<T> extends TypeSafeMatcher<T> {
 
     /**

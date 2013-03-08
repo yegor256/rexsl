@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
@@ -37,6 +38,8 @@ import com.rexsl.maven.utils.LoggingManager;
 import java.io.File;
 import java.util.Collection;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -53,6 +56,8 @@ import org.apache.commons.io.FilenameUtils;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@ToString
+@EqualsAndHashCode
 final class JSStaticCheck implements Check {
 
     /**
@@ -64,6 +69,7 @@ final class JSStaticCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
@@ -72,6 +78,7 @@ final class JSStaticCheck implements Check {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {
         final File dir = new File(env.basedir(), JSStaticCheck.JS_DIR);
         boolean success = true;

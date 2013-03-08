@@ -38,6 +38,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import lombok.EqualsAndHashCode;
 import org.w3c.dom.Node;
 
 /**
@@ -48,6 +49,7 @@ import org.w3c.dom.Node;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@EqualsAndHashCode(callSuper = false, of = "xml")
 final class StringSource extends DOMSource {
 
     /**
