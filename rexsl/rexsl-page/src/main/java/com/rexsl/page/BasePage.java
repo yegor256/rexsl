@@ -31,11 +31,14 @@ package com.rexsl.page;
 
 import com.jcabi.log.Logger;
 import com.rexsl.core.XslResolver;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -143,9 +146,53 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
         synchronized (this.links) {
             this.resource = res;
         }
-        this.link(new Link("self", "./"));
-        this.link(new Link("home", "/"));
         return (T) this;
+    }
+
+    /**
+     * Render it.
+     * @return JAX-RS response
+     */
+    @NotNull
+    public final Response.ResponseBuilder render() {
+        final Response.ResponseBuilder builder = Response.ok();
+        if (this.resource.getClass().isAnnotationPresent(Inset.Default.class)) {
+            for (Class<? extends Inset> type : this.resource.getClass()
+                .getAnnotation(Inset.Default.class).value()) {
+                try {
+                    type.getConstructor(Resource.class)
+                        .newInstance(this.resource)
+                        .render(this, builder);
+                } catch (InstantiationException ex) {
+                    throw new IllegalStateException(ex);
+                } catch (IllegalAccessException ex) {
+                    throw new IllegalStateException(ex);
+                } catch (InvocationTargetException ex) {
+                    throw new IllegalStateException(ex);
+                } catch (NoSuchMethodException ex) {
+                    throw new IllegalStateException(ex);
+                } catch (SecurityException ex) {
+                    throw new IllegalStateException(ex);
+                }
+            }
+        }
+        for (Method method : this.resource.getClass().getMethods()) {
+            if (method.isAnnotationPresent(Inset.Runtime.class)) {
+                try {
+                    Inset.class.cast(
+                        method.invoke(this.resource, new Object[] {})
+                    ).render(this, builder);
+                } catch (IllegalAccessException ex) {
+                    throw new IllegalStateException(ex);
+                } catch (IllegalArgumentException ex) {
+                    throw new IllegalStateException(ex);
+                } catch (InvocationTargetException ex) {
+                    throw new IllegalStateException(ex);
+                }
+            }
+        }
+        builder.entity(this);
+        return builder;
     }
 
     /**
