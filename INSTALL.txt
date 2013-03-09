@@ -125,16 +125,16 @@ How to release new version to Maven Central:
 
         svn cp ^/branches/ticket607 ^/tags/rexsl-0.4.1 -m 'refs #607 - version 0.4.1 released to Maven Central'
 
-    9. Deploy site to Amazon S3 (in approx 4 hours):
+    9. Set version back to SNAPSHOT:
 
-        svn sw ^/tags/rexsl-0.4.1 && mvn -Psite -Prexsl clean install site-deploy
-
-    10. Set version back to SNAPSHOT:
-
-        cd rexsl && mvn versions:set && cd ..
+        mvn versions:set
         svn ci -m 'refs #607 - version back to SNAPSHOT'
 
-    11. Merge the branch back to TRUNK.
+    10. Merge the branch back to TRUNK.
+
+    11. Deploy site to Amazon S3 (in approx 4 hours):
+
+        svn sw ^/tags/rexsl-0.4.1 && mvn -Psite -Prexsl clean install site-deploy
 
     12. Close the ticket as "fixed"
 
