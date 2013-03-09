@@ -94,7 +94,7 @@ How to release new version to Maven Central:
 
     3. Set new version:
 
-        cd rexsl && mvn versions:set && cd ..
+        mvn versions:set
 
     4. Update all versions:
 
