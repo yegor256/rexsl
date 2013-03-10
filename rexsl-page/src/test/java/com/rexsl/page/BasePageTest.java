@@ -27,50 +27,53 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page.inset;
+package com.rexsl.page;
 
-import com.rexsl.page.BasePage;
-import com.rexsl.page.Inset;
-import com.rexsl.page.Resource;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.Response;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.rexsl.test.JaxbConverter;
+import com.rexsl.test.XhtmlMatchers;
+import javax.xml.bind.annotation.XmlRootElement;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
 
 /**
- * Page with a flash message (through cookie).
- *
- * <p>The class is mutable and thread-safe.
- *
+ * Test case for {@link BasePage}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.4.7
- * @see BasePage
  */
-@ToString
-@EqualsAndHashCode(of = "resource")
-public class FlashInset implements Inset {
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
+public final class BasePageTest {
 
     /**
-     * The resource.
+     * BasePage can be converted to XML.
+     * @throws Exception If there is some problem inside
      */
-    private transient Resource resource;
-
-    /**
-     * Public ctor.
-     * @param res The resource
-     */
-    public FlashInset(@NotNull final Resource res) {
-        this.resource = res;
+    @Test
+    public void convertsToXml() throws Exception {
+        final BasePageTest.FooPage page = new BasePageTest.FooPage()
+            .init(new ResourceMocker().mock())
+            .append(new JaxbBundle("title", "hello, world!"))
+            .link(new Link("test", "/foo"));
+        MatcherAssert.assertThat(
+            JaxbConverter.the(page),
+            XhtmlMatchers.hasXPaths(
+                "/page/@date",
+                "/page/@ip",
+                "/page/@ssl",
+                "/page/millis",
+                "/page/title[. = 'hello, world!']",
+                "/page/links/link[@rel = 'home']",
+                "/page/links/link[@rel = 'self']",
+                "/page/links/link[@rel = 'test']"
+            )
+        );
     }
 
     /**
-     * {@inheritDoc}
+     * Base page for tests.
      */
-    @Override
-    public final void render(@NotNull final BasePage<?, ?> page,
-        @NotNull final Response.ResponseBuilder builder) {
-        // builder.
+    @XmlRootElement(name = "page")
+    private static final class FooPage
+        extends BasePage<BasePageTest.FooPage, Resource> {
     }
 
 }
