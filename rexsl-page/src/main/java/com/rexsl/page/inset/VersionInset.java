@@ -29,9 +29,10 @@
  */
 package com.rexsl.page.inset;
 
+import com.jcabi.aspects.Immutable;
 import com.rexsl.page.BasePage;
 import com.rexsl.page.Inset;
-import com.rexsl.page.Resource;
+import com.rexsl.page.JaxbBundle;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 import lombok.EqualsAndHashCode;
@@ -45,37 +46,37 @@ import lombok.ToString;
  * @since 0.4.7
  * @see BasePage
  */
+@Immutable
 @ToString
-@EqualsAndHashCode(of = { "resource", "name" })
-public class FlashInset implements Inset {
+@EqualsAndHashCode(of = { "version", "revision", "date" })
+public class VersionInset implements Inset {
 
     /**
-     * The resource.
+     * Version.
      */
-    private final transient Resource resource;
+    private final transient String version;
 
     /**
-     * Name of flash cookie.
+     * Revision.
      */
-    private final transient String name;
+    private final transient String revision;
 
     /**
-     * Public ctor.
-     * @param res The resource
+     * Date of release.
      */
-    public FlashInset(@NotNull final Resource res) {
-        this(res, "X-Rexsl-Flash");
-    }
+    private final transient String date;
 
     /**
      * Public ctor.
-     * @param res The resource
-     * @param cookie Name of cookie
+     * @param ver Version of the product
+     * @param rev Unique revision number
+     * @param when Date of release
      */
-    public FlashInset(@NotNull final Resource res,
-        @NotNull final String cookie) {
-        this.resource = res;
-        this.name = cookie;
+    public VersionInset(@NotNull final String ver, @NotNull final String rev,
+        @NotNull final String when) {
+        this.version = ver;
+        this.revision = rev;
+        this.date = when;
     }
 
     /**
@@ -84,7 +85,15 @@ public class FlashInset implements Inset {
     @Override
     public final void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
-        // builder.
+        page.append(
+            new JaxbBundle("version")
+                .add("name", this.version)
+                .up()
+                .add("revision", this.revision)
+                .up()
+                .add("date", this.date)
+                .up()
+        );
     }
 
 }

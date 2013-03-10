@@ -29,11 +29,7 @@
  */
 package com.rexsl.page;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -42,21 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version $Id$
  */
 @XmlRootElement(name = "foo")
-public class BasePageMocker {
-
-    /**
-     * Collection of elements.
-     */
-    private final transient Collection<Object> elements =
-        new LinkedList<Object>();
-
-    /**
-     * Add new element.
-     * @param element The element to add
-     */
-    public final void add(final Object element) {
-        this.elements.add(element);
-    }
+public class BasePageMocker extends BasePage<BasePageMocker, Resource> {
 
     /**
      * Get message.
@@ -65,16 +47,6 @@ public class BasePageMocker {
     @XmlElement
     public final String getMessage() {
         return "hello, world!";
-    }
-
-    /**
-     * Get all elements.
-     * @return Full list of injected elements
-     */
-    @XmlAnyElement(lax = true)
-    @XmlMixed
-    public final Collection<Object> getElements() {
-        return this.elements;
     }
 
 }

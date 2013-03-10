@@ -85,8 +85,9 @@ public final class JaxbBundleTest {
                 .add("gamma", "works fine, isn't it?")
                 .up()
             .up();
-        final BasePageMocker page = new BasePageMocker();
-        page.add(bundle.element());
+        final BasePageMocker page = new BasePageMocker()
+            .init(new ResourceMocker().mock());
+        page.append(bundle.element());
         MatcherAssert.assertThat(
             JaxbConverter.the(page),
             XhtmlMatchers.hasXPath("/foo/alpha/beta-2/gamma[contains(.,'it')]")

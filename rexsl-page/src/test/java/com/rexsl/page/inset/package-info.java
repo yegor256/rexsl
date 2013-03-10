@@ -27,64 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page.inset;
-
-import com.rexsl.page.BasePage;
-import com.rexsl.page.Inset;
-import com.rexsl.page.Resource;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.Response;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
- * Page with a flash message (through cookie).
+ * Insets, tests.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.4.7
- * @see BasePage
  */
-@ToString
-@EqualsAndHashCode(of = { "resource", "name" })
-public class FlashInset implements Inset {
-
-    /**
-     * The resource.
-     */
-    private final transient Resource resource;
-
-    /**
-     * Name of flash cookie.
-     */
-    private final transient String name;
-
-    /**
-     * Public ctor.
-     * @param res The resource
-     */
-    public FlashInset(@NotNull final Resource res) {
-        this(res, "X-Rexsl-Flash");
-    }
-
-    /**
-     * Public ctor.
-     * @param res The resource
-     * @param cookie Name of cookie
-     */
-    public FlashInset(@NotNull final Resource res,
-        @NotNull final String cookie) {
-        this.resource = res;
-        this.name = cookie;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public final void render(@NotNull final BasePage<?, ?> page,
-        @NotNull final Response.ResponseBuilder builder) {
-        // builder.
-    }
-
-}
+package com.rexsl.page.inset;
