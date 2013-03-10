@@ -30,6 +30,7 @@
 package com.rexsl.page.inset;
 
 import com.jcabi.aspects.Immutable;
+import com.jcabi.aspects.Loggable;
 import com.rexsl.page.BasePage;
 import com.rexsl.page.Inset;
 import com.rexsl.page.JaxbBundle;
@@ -83,6 +84,7 @@ public class VersionInset implements Inset {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public final void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
         page.append(

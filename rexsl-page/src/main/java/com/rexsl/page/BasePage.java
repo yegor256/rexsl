@@ -34,6 +34,7 @@ import com.rexsl.core.XslResolver;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.validation.constraints.NotNull;
@@ -159,36 +160,12 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
         if (this.resource.getClass().isAnnotationPresent(Inset.Default.class)) {
             for (Class<? extends Inset> type : this.resource.getClass()
                 .getAnnotation(Inset.Default.class).value()) {
-                try {
-                    type.getConstructor(Resource.class)
-                        .newInstance(this.resource)
-                        .render(this, builder);
-                } catch (InstantiationException ex) {
-                    throw new IllegalStateException(ex);
-                } catch (IllegalAccessException ex) {
-                    throw new IllegalStateException(ex);
-                } catch (InvocationTargetException ex) {
-                    throw new IllegalStateException(ex);
-                } catch (NoSuchMethodException ex) {
-                    throw new IllegalStateException(ex);
-                } catch (SecurityException ex) {
-                    throw new IllegalStateException(ex);
-                }
+                this.inset(type).render(this, builder);
             }
         }
         for (Method method : this.resource.getClass().getMethods()) {
             if (method.isAnnotationPresent(Inset.Runtime.class)) {
-                try {
-                    Inset.class.cast(
-                        method.invoke(this.resource, new Object[] {})
-                    ).render(this, builder);
-                } catch (IllegalAccessException ex) {
-                    throw new IllegalStateException(ex);
-                } catch (IllegalArgumentException ex) {
-                    throw new IllegalStateException(ex);
-                } catch (InvocationTargetException ex) {
-                    throw new IllegalStateException(ex);
-                }
+                this.inset(method).render(this, builder);
             }
         }
         builder.entity(this);
@@ -258,7 +235,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     @XmlMixed
     @NotNull
     public final Collection<Object> getElements() {
-        return this.elements;
+        return Collections.unmodifiableCollection(this.elements);
     }
 
     /**
@@ -269,7 +246,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     @XmlElementWrapper(name = "links")
     @NotNull
     public final Collection<Link> getLinks() {
-        return this.links;
+        return Collections.unmodifiableCollection(this.links);
     }
 
     /**
@@ -315,6 +292,47 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     @XmlElement
     public final long getMillis() {
         return System.currentTimeMillis() - this.home().started();
+    }
+
+    /**
+     * Instantiate inset.
+     * @param type Type of inset
+     * @return Instance of it
+     */
+    private Inset inset(final Class<? extends Inset> type) {
+        try {
+            return type.getConstructor(Resource.class)
+                .newInstance(this.resource);
+        } catch (InstantiationException ex) {
+            throw new IllegalStateException(ex);
+        } catch (IllegalAccessException ex) {
+            throw new IllegalStateException(ex);
+        } catch (InvocationTargetException ex) {
+            throw new IllegalStateException(ex);
+        } catch (NoSuchMethodException ex) {
+            throw new IllegalStateException(ex);
+        } catch (SecurityException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    /**
+     * Instantiate inset from a method.
+     * @param method The method
+     * @return Instance of it
+     */
+    private Inset inset(final Method method) {
+        try {
+            return Inset.class.cast(
+                method.invoke(this.resource, new Object[] {})
+            );
+        } catch (IllegalAccessException ex) {
+            throw new IllegalStateException(ex);
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalStateException(ex);
+        } catch (InvocationTargetException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
 }

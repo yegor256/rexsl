@@ -29,6 +29,7 @@
  */
 package com.rexsl.page.inset;
 
+import com.jcabi.aspects.Loggable;
 import com.rexsl.page.BasePage;
 import com.rexsl.page.Inset;
 import com.rexsl.page.Link;
@@ -66,8 +67,10 @@ public class LinksInset implements Inset {
      * {@inheritDoc}
      */
     @Override
+    @Loggable(Loggable.DEBUG)
     public final void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
+        assert this.resource != null;
         page.link(new Link("self", "./"));
         page.link(new Link("home", "/"));
     }
