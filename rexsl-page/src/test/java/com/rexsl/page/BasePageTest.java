@@ -29,11 +29,14 @@
  */
 package com.rexsl.page;
 
+import com.rexsl.page.inset.LinksInset;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
+import javax.ws.rs.core.SecurityContext;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link BasePage}.
@@ -49,12 +52,15 @@ public final class BasePageTest {
      */
     @Test
     public void convertsToXml() throws Exception {
+        final BasePageTest.FooRs res = new BasePageTest.FooRs();
+        res.setUriInfo(new UriInfoMocker().mock());
+        res.setSecurityContext(Mockito.mock(SecurityContext.class));
         final BasePageTest.FooPage page = new BasePageTest.FooPage()
-            .init(new ResourceMocker().mock())
+            .init(res)
             .append(new JaxbBundle("title", "hello, world!"))
             .link(new Link("test", "/foo"));
         MatcherAssert.assertThat(
-            JaxbConverter.the(page),
+            JaxbConverter.the(page.render().build().getEntity()),
             XhtmlMatchers.hasXPaths(
                 "/page/@date",
                 "/page/@ip",
@@ -66,6 +72,13 @@ public final class BasePageTest {
                 "/page/links/link[@rel = 'test']"
             )
         );
+    }
+
+    /**
+     * Base resource for tests.
+     */
+    @Inset.Default(LinksInset.class)
+    private static final class FooRs extends BaseResource {
     }
 
     /**
