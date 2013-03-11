@@ -29,7 +29,6 @@
  */
 package com.rexsl.page.auth;
 
-import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.restfb.DefaultFacebookClient;
@@ -53,7 +52,6 @@ import lombok.ToString;
  * @version $Id$
  * @since 0.4.7
  */
-@Immutable
 @ToString
 @EqualsAndHashCode(of = { "appId", "appKey" })
 public final class Facebook implements Provider {

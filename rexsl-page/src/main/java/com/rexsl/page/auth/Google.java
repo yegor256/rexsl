@@ -29,7 +29,6 @@
  */
 package com.rexsl.page.auth;
 
-import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
@@ -56,7 +55,6 @@ import org.apache.commons.lang.CharEncoding;
  * @version $Id$
  * @since 0.4.7
  */
-@Immutable
 @ToString
 @EqualsAndHashCode(of = { "appId", "appKey" })
 public final class Google implements Provider {
