@@ -27,52 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page.inset;
-
-import com.jcabi.aspects.Loggable;
-import com.rexsl.page.BasePage;
-import com.rexsl.page.Inset;
-import com.rexsl.page.Link;
-import com.rexsl.page.Resource;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.Response;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
- * Most popular links.
+ * Authentication.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.4.7
  */
-@ToString
-@EqualsAndHashCode(of = "resource")
-public final class LinksInset implements Inset {
-
-    /**
-     * The resource.
-     */
-    private final transient Resource resource;
-
-    /**
-     * Public ctor.
-     * @param res The resource
-     */
-    public LinksInset(@NotNull final Resource res) {
-        this.resource = res;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Loggable(Loggable.DEBUG)
-    public void render(@NotNull final BasePage<?, ?> page,
-        @NotNull final Response.ResponseBuilder builder) {
-        assert this.resource != null;
-        page.link(new Link("self", "./"));
-        page.link(new Link("home", "/"));
-    }
-
-}
+package com.rexsl.page.auth;

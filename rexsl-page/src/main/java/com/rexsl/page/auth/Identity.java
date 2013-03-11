@@ -27,52 +27,57 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page.inset;
+package com.rexsl.page.auth;
 
-import com.jcabi.aspects.Loggable;
-import com.rexsl.page.BasePage;
-import com.rexsl.page.Inset;
-import com.rexsl.page.Link;
-import com.rexsl.page.Resource;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.Response;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.jcabi.aspects.Immutable;
+import com.jcabi.urn.URN;
+import java.net.URI;
 
 /**
- * Most popular links.
+ * Authentication inset.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.4.7
+ * @see BasePage
  */
-@ToString
-@EqualsAndHashCode(of = "resource")
-public final class LinksInset implements Inset {
+@Immutable
+public interface Identity {
 
     /**
-     * The resource.
+     * Anonymous.
      */
-    private final transient Resource resource;
+    Identity ANONYMOUS = new Identity() {
+        @Override
+        public URN urn() {
+            return URN.create("urn:rexsl:anonymous");
+        }
+        @Override
+        public String name() {
+            return "anonymous";
+        }
+        @Override
+        public URI photo() {
+            return URI.create("http://img.rexsl.com/anonymous.png");
+        }
+    };
 
     /**
-     * Public ctor.
-     * @param res The resource
+     * Unique URN.
+     * @return Unique name of it, e.g. "urn:facebook:1815696122110"
      */
-    public LinksInset(@NotNull final Resource res) {
-        this.resource = res;
-    }
+    URN urn();
 
     /**
-     * {@inheritDoc}
+     * Full name of the person to display, e.g. "John Doe".
+     * @return Full name
      */
-    @Override
-    @Loggable(Loggable.DEBUG)
-    public void render(@NotNull final BasePage<?, ?> page,
-        @NotNull final Response.ResponseBuilder builder) {
-        assert this.resource != null;
-        page.link(new Link("self", "./"));
-        page.link(new Link("home", "/"));
-    }
+    String name();
+
+    /**
+     * URI of his/her photo.
+     * @return URI of the image
+     */
+    URI photo();
 
 }

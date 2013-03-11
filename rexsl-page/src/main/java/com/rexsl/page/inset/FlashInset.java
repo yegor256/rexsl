@@ -49,7 +49,7 @@ import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.lang.CharEncoding;
 
 /**
- * Page with a flash message (through cookie).
+ * Flash message (through cookie).
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
@@ -58,7 +58,7 @@ import org.apache.commons.lang.CharEncoding;
  */
 @ToString
 @EqualsAndHashCode(of = "resource")
-public class FlashInset implements Inset {
+public final class FlashInset implements Inset {
 
     /**
      * Header name.
@@ -88,7 +88,7 @@ public class FlashInset implements Inset {
      */
     @Override
     @Loggable(Loggable.DEBUG)
-    public final void render(@NotNull final BasePage<?, ?> page,
+    public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
         if (this.resource.httpHeaders().getCookies()
             .containsKey(FlashInset.COOKIE)) {

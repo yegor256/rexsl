@@ -43,6 +43,16 @@
     <name>rexsl-page</name>
     <dependencies>
         <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-core</artifactId>
             <version>${project.version}</version>
@@ -51,11 +61,21 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-urn</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-urn</artifactId>
+            <version>${jcabi.version}</version>
+            <classifier>mock</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>
@@ -122,11 +142,17 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
         <dependency>
-            <!-- XML APIs. -->
+            <!--
+            Facebook Client
+            @see http://restfb.com/
+            -->
+            <groupId>com.restfb</groupId>
+            <artifactId>restfb</artifactId>
+            <version>1.6.11</version>
+        </dependency>
+        <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>2.0.2</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <!--

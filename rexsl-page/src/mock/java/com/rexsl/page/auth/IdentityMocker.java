@@ -27,52 +27,69 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page.inset;
+package com.rexsl.page.auth;
 
-import com.jcabi.aspects.Loggable;
-import com.rexsl.page.BasePage;
-import com.rexsl.page.Inset;
-import com.rexsl.page.Link;
-import com.rexsl.page.Resource;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.Response;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.jcabi.urn.URN;
+import java.net.URI;
+import org.mockito.Mockito;
 
 /**
- * Most popular links.
- *
+ * Builds an instance of {@link Identity}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.4.7
  */
-@ToString
-@EqualsAndHashCode(of = "resource")
-public final class LinksInset implements Inset {
+public final class IdentityMocker {
 
     /**
-     * The resource.
+     * The mock.
      */
-    private final transient Resource resource;
+    private final transient Identity identity = Mockito.mock(Identity.class);
 
     /**
      * Public ctor.
-     * @param res The resource
      */
-    public LinksInset(@NotNull final Resource res) {
-        this.resource = res;
+    public IdentityMocker() {
+        this.withName("Mocked Joe");
+        this.withURN(URN.create("urn:rexsl:mocked"));
+        this.withPhoto(Identity.ANONYMOUS.photo());
     }
 
     /**
-     * {@inheritDoc}
+     * With this name.
+     * @param name The name
+     * @return This object
      */
-    @Override
-    @Loggable(Loggable.DEBUG)
-    public void render(@NotNull final BasePage<?, ?> page,
-        @NotNull final Response.ResponseBuilder builder) {
-        assert this.resource != null;
-        page.link(new Link("self", "./"));
-        page.link(new Link("home", "/"));
+    public IdentityMocker withName(final String name) {
+        Mockito.doReturn(name).when(this.identity).name();
+        return this;
+    }
+
+    /**
+     * With this URN.
+     * @param urn The URN
+     * @return This object
+     */
+    public IdentityMocker withURN(final URN urn) {
+        Mockito.doReturn(urn).when(this.identity).urn();
+        return this;
+    }
+
+    /**
+     * With this photo.
+     * @param photo The photo
+     * @return This object
+     */
+    public IdentityMocker withPhoto(final URI photo) {
+        Mockito.doReturn(photo).when(this.identity).photo();
+        return this;
+    }
+
+    /**
+     * Build an instance of provided class.
+     * @return The identity just created
+     */
+    public Identity mock() {
+        return this.identity;
     }
 
 }

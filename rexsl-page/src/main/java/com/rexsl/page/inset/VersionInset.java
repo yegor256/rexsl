@@ -50,7 +50,7 @@ import lombok.ToString;
 @Immutable
 @ToString
 @EqualsAndHashCode(of = { "version", "revision", "date" })
-public class VersionInset implements Inset {
+public final class VersionInset implements Inset {
 
     /**
      * Version.
@@ -85,7 +85,7 @@ public class VersionInset implements Inset {
      */
     @Override
     @Loggable(Loggable.DEBUG)
-    public final void render(@NotNull final BasePage<?, ?> page,
+    public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
         page.append(
             new JaxbBundle("version")
