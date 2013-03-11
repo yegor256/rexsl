@@ -125,4 +125,16 @@ public final class AuthInsetTest {
         );
     }
 
+    /**
+     * AuthInset can encrypt identity.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void encryptsIdentityToText() throws Exception {
+        MatcherAssert.assertThat(
+            AuthInset.encrypt(new IdentityMocker().mock(), "", ""),
+            Matchers.startsWith("0087ASJE79P6AU3JDGT6QRR3DDIM800A9LNM6Q")
+        );
+    }
+
 }

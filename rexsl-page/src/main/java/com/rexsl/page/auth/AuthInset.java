@@ -102,6 +102,19 @@ public final class AuthInset implements Inset {
     }
 
     /**
+     * Encrypt identity into text.
+     * @param identity The identity to encrypt
+     * @param key Security key
+     * @param salt Security salt
+     * @return Encrypted text for cookie
+     */
+    @Loggable(Loggable.DEBUG)
+    public static String encrypt(@NotNull final Identity identity,
+        @NotNull final String key, @NotNull final String salt) {
+        return new Encrypted(identity, key, salt).toString();
+    }
+
+    /**
      * With this authentication provider.
      * @param prov Additional authentication provider
      * @return This object
