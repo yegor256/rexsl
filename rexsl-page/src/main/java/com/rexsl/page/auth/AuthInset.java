@@ -39,10 +39,13 @@ import com.rexsl.page.JaxbBundle;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -61,7 +64,7 @@ public final class AuthInset implements Inset {
     /**
      * Cookie name.
      */
-    private static final String COOKIE = "Rexsl-Auth";
+    private static final String AUTH_COOKIE = "Rexsl-Auth";
 
     /**
      * Logout Query param.
@@ -140,14 +143,19 @@ public final class AuthInset implements Inset {
                 throw new IllegalStateException(ex);
             }
             if (!identity.equals(Identity.ANONYMOUS)) {
-                break;
+                throw new WebApplicationException(
+                    Response.status(HttpURLConnection.HTTP_SEE_OTHER).location(
+                        this.resource.uriInfo().getRequestUriBuilder()
+                            .replaceQuery("")
+                            .build()
+                    ).cookie(this.cookie(identity)).build()
+                );
             }
         }
-        if (identity.equals(Identity.ANONYMOUS)
-            && this.resource.httpHeaders().getCookies()
-            .containsKey(AuthInset.COOKIE)) {
+        if (this.resource.httpHeaders().getCookies()
+            .containsKey(AuthInset.AUTH_COOKIE)) {
             final String cookie = this.resource.httpHeaders().getCookies()
-                .get(AuthInset.COOKIE).getValue();
+                .get(AuthInset.AUTH_COOKIE).getValue();
             try {
                 identity = Encrypted.parse(cookie, this.key, this.salt);
             } catch (Encrypted.DecryptionException ex) {
@@ -191,26 +199,40 @@ public final class AuthInset implements Inset {
                     "auth-logout",
                     this.resource.uriInfo().getRequestUriBuilder()
                         .clone()
-                        .queryParam(AuthInset.LOGOUT_FLAG)
+                        .queryParam(AuthInset.LOGOUT_FLAG, true)
                         .build()
                 )
             );
-            builder.cookie(
-                new CookieBuilder(this.resource.uriInfo().getBaseUri())
-                    .name(AuthInset.COOKIE)
-                    .value(new Encrypted(identity, this.key, this.salt))
-                    .temporary()
-                    .build()
-            );
+            builder.cookie(this.cookie(identity));
+            builder.header("X-Rexsl-Identity", identity.urn());
         }
         if (this.resource.uriInfo().getQueryParameters()
             .containsKey(AuthInset.LOGOUT_FLAG)) {
-            builder.cookie(
-                new CookieBuilder(this.resource.uriInfo().getBaseUri())
-                    .name(AuthInset.COOKIE)
-                    .build()
+            throw new WebApplicationException(
+                Response.status(HttpURLConnection.HTTP_SEE_OTHER).location(
+                    this.resource.uriInfo().getRequestUriBuilder()
+                        .replaceQuery("")
+                        .build()
+                ).cookie(
+                    new CookieBuilder(this.resource.uriInfo().getBaseUri())
+                        .name(AuthInset.AUTH_COOKIE)
+                        .build()
+                ).build()
             );
         }
+    }
+
+    /**
+     * Authentication cookie.
+     * @param identity The identity to wrap into the cookie
+     * @return The cookie
+     */
+    private NewCookie cookie(final Identity identity) {
+        return new CookieBuilder(this.resource.uriInfo().getBaseUri())
+            .name(AuthInset.AUTH_COOKIE)
+            .value(new Encrypted(identity, this.key, this.salt))
+            .temporary()
+            .build();
     }
 
 }

@@ -142,7 +142,7 @@ public final class Google implements Provider {
     private URI redirectUri() {
         return this.resource.uriInfo().getRequestUriBuilder()
             .clone()
-            .queryParam(Google.FLAG, true)
+            .queryParam(Google.FLAG, "")
             .build();
     }
 

@@ -98,7 +98,7 @@ public final class AuthInsetTest {
      * AuthInset can authenticate through provider.
      * @throws Exception If there is some problem inside
      */
-    @Test
+    @Test(expected = javax.ws.rs.WebApplicationException.class)
     public void authenticatesWithProvider() throws Exception {
         final Resource resource = new ResourceMocker().mock();
         final Inset inset = new AuthInset(resource, "", "").with(
@@ -115,14 +115,6 @@ public final class AuthInsetTest {
         );
         final BasePage<?, ?> page = new BasePageMocker().init(resource);
         inset.render(page, Response.ok());
-        MatcherAssert.assertThat(
-            JaxbConverter.the(page),
-            XhtmlMatchers.hasXPaths(
-                "/*/identity[name = 'Mocked Joe']",
-                "/*/identity[urn = 'urn:rexsl:mocked']",
-                "/*/identity[starts-with(photo, 'http://img.rexsl.com/')]"
-            )
-        );
     }
 
     /**
