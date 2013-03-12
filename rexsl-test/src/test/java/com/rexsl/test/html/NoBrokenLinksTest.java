@@ -65,7 +65,7 @@ public final class NoBrokenLinksTest {
      */
     @Test(expected = AssertionError.class)
     public void findsEmptyLinksInHtml() throws Exception {
-        new NoBrokenLinks(new URI("http://www.google.com/")).assertThat(
+        new NoBrokenLinks(new URI("http://www.facebook.com/")).assertThat(
             NoBrokenLinksTest.response(
                 "<html><head><link rel='stylesheet' href=''/></head></html>"
             )

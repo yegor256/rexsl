@@ -100,7 +100,7 @@ public final class NoBrokenLinks implements AssertionPolicy {
             } else {
                 uri = this.home.resolve(link);
             }
-            if (!NoBrokenLinks.isValid(uri)) {
+            if (!uri.isAbsolute() || !NoBrokenLinks.isValid(uri)) {
                 broken.add(uri);
             }
         }
