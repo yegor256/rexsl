@@ -66,7 +66,10 @@ public final class FacebookTest {
         final Provider provider = new Facebook(resource, "KEY", "SECRET");
         MatcherAssert.assertThat(
             provider.link().getHref().toString(),
-            Matchers.containsString("client_id=KEY")
+            Matchers.allOf(
+                Matchers.containsString("client_id=KEY"),
+                Matchers.containsString("rexsl-facebook")
+            )
         );
     }
 

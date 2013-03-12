@@ -153,7 +153,7 @@ public final class Facebook implements Provider {
     private URI redirectUri() {
         return this.resource.uriInfo().getRequestUriBuilder()
             .clone()
-            .queryParam(Facebook.FLAG)
+            .queryParam(Facebook.FLAG, true)
             .build();
     }
 
