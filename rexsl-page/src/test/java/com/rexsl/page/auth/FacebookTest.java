@@ -56,4 +56,18 @@ public final class FacebookTest {
         );
     }
 
+    /**
+     * Facebook can generate a HATEOAS link.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void generatesLink() throws Exception {
+        final Resource resource = new ResourceMocker().mock();
+        final Provider provider = new Facebook(resource, "KEY", "SECRET");
+        MatcherAssert.assertThat(
+            provider.link().getHref().toString(),
+            Matchers.containsString("client_id=KEY")
+        );
+    }
+
 }

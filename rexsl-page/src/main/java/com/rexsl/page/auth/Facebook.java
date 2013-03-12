@@ -142,7 +142,7 @@ public final class Facebook implements Provider {
                 // @checkstyle MultipleStringLiterals (2 lines)
                 .queryParam("client_id", "{client_id}")
                 .queryParam("redirect_uri", "{redirect_uri}")
-                .build(this.appKey, this.redirectUri())
+                .build(this.appId, this.redirectUri())
         );
     }
 
