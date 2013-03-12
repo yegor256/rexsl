@@ -95,10 +95,10 @@ public final class NoBrokenLinks implements AssertionPolicy {
         final Collection<URI> broken = new LinkedList<URI>();
         for (String link : links) {
             URI uri;
-            if (link.charAt(0) == '/') {
-                uri = this.home.resolve(link);
-            } else {
+            if (link.isEmpty() || link.charAt(0) != '/') {
                 uri = URI.create(link);
+            } else {
+                uri = this.home.resolve(link);
             }
             if (!NoBrokenLinks.isValid(uri)) {
                 broken.add(uri);

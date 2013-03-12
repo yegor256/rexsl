@@ -27,26 +27,75 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page;
+package com.rexsl.page.inset;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.jcabi.aspects.Immutable;
+import com.jcabi.aspects.Loggable;
+import com.rexsl.page.BasePage;
+import com.rexsl.page.Inset;
+import com.rexsl.page.JaxbBundle;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Response;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * Mocker of base page for {@link PageBuilder}.
+ * Page with a flash message (through cookie).
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.4.7
+ * @see BasePage
  */
-@XmlRootElement(name = "foo")
-public class BasePageMocker extends BasePage<BasePageMocker, Resource> {
+@Immutable
+@ToString
+@EqualsAndHashCode(of = { "version", "revision", "date" })
+public final class VersionInset implements Inset {
 
     /**
-     * Get message.
-     * @return The message
+     * Version.
      */
-    @XmlElement
-    public final String getMessage() {
-        return "hello, world!";
+    private final transient String version;
+
+    /**
+     * Revision.
+     */
+    private final transient String revision;
+
+    /**
+     * Date of release.
+     */
+    private final transient String date;
+
+    /**
+     * Public ctor.
+     * @param ver Version of the product
+     * @param rev Unique revision number
+     * @param when Date of release
+     */
+    public VersionInset(@NotNull final String ver, @NotNull final String rev,
+        @NotNull final String when) {
+        this.version = ver;
+        this.revision = rev;
+        this.date = when;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Loggable(Loggable.DEBUG)
+    public void render(@NotNull final BasePage<?, ?> page,
+        @NotNull final Response.ResponseBuilder builder) {
+        page.append(
+            new JaxbBundle("version")
+                .add("name", this.version)
+                .up()
+                .add("revision", this.revision)
+                .up()
+                .add("date", this.date)
+                .up()
+        );
     }
 
 }

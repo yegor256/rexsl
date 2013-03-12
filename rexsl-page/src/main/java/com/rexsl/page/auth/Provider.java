@@ -27,26 +27,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page;
+package com.rexsl.page.auth;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.rexsl.page.Link;
+import java.io.IOException;
 
 /**
- * Mocker of base page for {@link PageBuilder}.
+ * Authentication provider.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.4.7
  */
-@XmlRootElement(name = "foo")
-public class BasePageMocker extends BasePage<BasePageMocker, Resource> {
+public interface Provider {
 
     /**
-     * Get message.
-     * @return The message
+     * Get authentication link.
+     * @return The link
      */
-    @XmlElement
-    public final String getMessage() {
-        return "hello, world!";
-    }
+    Link link();
+
+    /**
+     * Get user's identity.
+     * @return Identity
+     * @throws IOException If failed
+     */
+    Identity identity() throws IOException;
 
 }

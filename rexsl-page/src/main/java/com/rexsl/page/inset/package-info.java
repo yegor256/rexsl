@@ -27,26 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Mocker of base page for {@link PageBuilder}.
+ * Insets.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.4.7
  */
-@XmlRootElement(name = "foo")
-public class BasePageMocker extends BasePage<BasePageMocker, Resource> {
-
-    /**
-     * Get message.
-     * @return The message
-     */
-    @XmlElement
-    public final String getMessage() {
-        return "hello, world!";
-    }
-
-}
+package com.rexsl.page.inset;

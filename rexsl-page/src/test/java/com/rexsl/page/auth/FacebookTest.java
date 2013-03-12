@@ -27,66 +27,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page;
+package com.rexsl.page.auth;
 
-import com.rexsl.page.inset.LinksInset;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
-import javax.ws.rs.core.SecurityContext;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.rexsl.page.Resource;
+import com.rexsl.page.ResourceMocker;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 /**
- * Test case for {@link BasePage}.
+ * Test case for {@link Facebook}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
-public final class BasePageTest {
+public final class FacebookTest {
 
     /**
-     * BasePage can be converted to XML.
+     * Facebook can be quiet when cookie is absent.
      * @throws Exception If there is some problem inside
      */
     @Test
-    public void convertsToXml() throws Exception {
-        final BasePageTest.FooRs res = new BasePageTest.FooRs();
-        res.setUriInfo(new UriInfoMocker().mock());
-        res.setSecurityContext(Mockito.mock(SecurityContext.class));
-        final BasePageTest.FooPage page = new BasePageTest.FooPage()
-            .init(res)
-            .append(new JaxbBundle("title", "hello, world!"))
-            .link(new Link("test", "/foo"));
+    public void doestRenderWhenCookieIsAbsent() throws Exception {
+        final Resource resource = new ResourceMocker().mock();
+        final Provider provider = new Facebook(resource, "", "");
         MatcherAssert.assertThat(
-            JaxbConverter.the(page.render().build().getEntity()),
-            XhtmlMatchers.hasXPaths(
-                "/page/@date",
-                "/page/@ip",
-                "/page/@ssl",
-                "/page/millis",
-                "/page/title[. = 'hello, world!']",
-                "/page/links/link[@rel = 'home']",
-                "/page/links/link[@rel = 'self']",
-                "/page/links/link[@rel = 'test']"
-            )
+            provider.identity(),
+            Matchers.equalTo(Identity.ANONYMOUS)
         );
-    }
-
-    /**
-     * Base resource for tests.
-     */
-    @Inset.Default(LinksInset.class)
-    private static final class FooRs extends BaseResource {
-    }
-
-    /**
-     * Base page for tests.
-     */
-    @XmlRootElement(name = "page")
-    private static final class FooPage
-        extends BasePage<BasePageTest.FooPage, Resource> {
     }
 
 }

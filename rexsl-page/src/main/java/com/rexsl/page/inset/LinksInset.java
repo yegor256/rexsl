@@ -27,26 +27,52 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page;
+package com.rexsl.page.inset;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.jcabi.aspects.Loggable;
+import com.rexsl.page.BasePage;
+import com.rexsl.page.Inset;
+import com.rexsl.page.Link;
+import com.rexsl.page.Resource;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Response;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * Mocker of base page for {@link PageBuilder}.
+ * Most popular links.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.4.7
  */
-@XmlRootElement(name = "foo")
-public class BasePageMocker extends BasePage<BasePageMocker, Resource> {
+@ToString
+@EqualsAndHashCode(of = "resource")
+public final class LinksInset implements Inset {
 
     /**
-     * Get message.
-     * @return The message
+     * The resource.
      */
-    @XmlElement
-    public final String getMessage() {
-        return "hello, world!";
+    private final transient Resource resource;
+
+    /**
+     * Public ctor.
+     * @param res The resource
+     */
+    public LinksInset(@NotNull final Resource res) {
+        this.resource = res;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Loggable(Loggable.DEBUG)
+    public void render(@NotNull final BasePage<?, ?> page,
+        @NotNull final Response.ResponseBuilder builder) {
+        assert this.resource != null;
+        page.link(new Link("self", "./"));
+        page.link(new Link("home", "/"));
     }
 
 }

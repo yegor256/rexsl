@@ -141,11 +141,12 @@ public final class CookieBuilder {
 
     /**
      * With value like this.
-     * @param txt The value
+     * @param object The value
      * @return This object
      * @see <a href="http://tools.ietf.org/html/rfc2616#section-2.2">RFC2616</a>
      */
-    public CookieBuilder value(@NotNull final String txt) {
+    public CookieBuilder value(@NotNull final Object object) {
+        final String txt = object.toString();
         // @checkstyle LineLength (1 line)
         if (!txt.matches("[\\x21\\x23-\\x2B\\x2D-\\x3A\\x3C-\\x5B\\x5D-\\x7E]*")) {
             throw new IllegalArgumentException(

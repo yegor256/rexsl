@@ -29,24 +29,44 @@
  */
 package com.rexsl.page;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import javax.ws.rs.core.Response;
 
 /**
- * Mocker of base page for {@link PageBuilder}.
+ * Insertion into a page.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.4.7
+ * @see BasePage
  */
-@XmlRootElement(name = "foo")
-public class BasePageMocker extends BasePage<BasePageMocker, Resource> {
+public interface Inset {
+
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    @interface Runtime {
+    }
+
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    @interface Default {
+        /**
+         * Class to instantiate.
+         */
+        Class<? extends Inset>[] value();
+    }
 
     /**
-     * Get message.
-     * @return The message
+     * Render it into the response builder.
+     * @param page The page to render
+     * @param builder The builder
      */
-    @XmlElement
-    public final String getMessage() {
-        return "hello, world!";
-    }
+    void render(BasePage<?, ?> page, Response.ResponseBuilder builder);
 
 }

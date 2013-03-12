@@ -27,66 +27,69 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page;
+package com.rexsl.page.auth;
 
-import com.rexsl.page.inset.LinksInset;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
-import javax.ws.rs.core.SecurityContext;
-import javax.xml.bind.annotation.XmlRootElement;
-import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import com.jcabi.urn.URN;
+import java.net.URI;
 import org.mockito.Mockito;
 
 /**
- * Test case for {@link BasePage}.
+ * Builds an instance of {@link Identity}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
-public final class BasePageTest {
+public final class IdentityMocker {
 
     /**
-     * BasePage can be converted to XML.
-     * @throws Exception If there is some problem inside
+     * The mock.
      */
-    @Test
-    public void convertsToXml() throws Exception {
-        final BasePageTest.FooRs res = new BasePageTest.FooRs();
-        res.setUriInfo(new UriInfoMocker().mock());
-        res.setSecurityContext(Mockito.mock(SecurityContext.class));
-        final BasePageTest.FooPage page = new BasePageTest.FooPage()
-            .init(res)
-            .append(new JaxbBundle("title", "hello, world!"))
-            .link(new Link("test", "/foo"));
-        MatcherAssert.assertThat(
-            JaxbConverter.the(page.render().build().getEntity()),
-            XhtmlMatchers.hasXPaths(
-                "/page/@date",
-                "/page/@ip",
-                "/page/@ssl",
-                "/page/millis",
-                "/page/title[. = 'hello, world!']",
-                "/page/links/link[@rel = 'home']",
-                "/page/links/link[@rel = 'self']",
-                "/page/links/link[@rel = 'test']"
-            )
-        );
+    private final transient Identity identity = Mockito.mock(Identity.class);
+
+    /**
+     * Public ctor.
+     */
+    public IdentityMocker() {
+        this.withName("Mocked Joe");
+        this.withURN(URN.create("urn:rexsl:mocked"));
+        this.withPhoto(Identity.ANONYMOUS.photo());
     }
 
     /**
-     * Base resource for tests.
+     * With this name.
+     * @param name The name
+     * @return This object
      */
-    @Inset.Default(LinksInset.class)
-    private static final class FooRs extends BaseResource {
+    public IdentityMocker withName(final String name) {
+        Mockito.doReturn(name).when(this.identity).name();
+        return this;
     }
 
     /**
-     * Base page for tests.
+     * With this URN.
+     * @param urn The URN
+     * @return This object
      */
-    @XmlRootElement(name = "page")
-    private static final class FooPage
-        extends BasePage<BasePageTest.FooPage, Resource> {
+    public IdentityMocker withURN(final URN urn) {
+        Mockito.doReturn(urn).when(this.identity).urn();
+        return this;
+    }
+
+    /**
+     * With this photo.
+     * @param photo The photo
+     * @return This object
+     */
+    public IdentityMocker withPhoto(final URI photo) {
+        Mockito.doReturn(photo).when(this.identity).photo();
+        return this;
+    }
+
+    /**
+     * Build an instance of provided class.
+     * @return The identity just created
+     */
+    public Identity mock() {
+        return this.identity;
     }
 
 }

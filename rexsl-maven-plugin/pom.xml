@@ -353,13 +353,8 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!-- XML APIs. This is the latest version, don't upgrade it
-            unless you're definitely sure that the new one is really the
-            new one -->
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>2.0.2</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <!-- Groovy engine. -->

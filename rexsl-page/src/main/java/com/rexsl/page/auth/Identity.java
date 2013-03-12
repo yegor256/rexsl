@@ -27,26 +27,57 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page;
+package com.rexsl.page.auth;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.jcabi.aspects.Immutable;
+import com.jcabi.urn.URN;
+import java.net.URI;
 
 /**
- * Mocker of base page for {@link PageBuilder}.
+ * Authentication inset.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.4.7
+ * @see BasePage
  */
-@XmlRootElement(name = "foo")
-public class BasePageMocker extends BasePage<BasePageMocker, Resource> {
+@Immutable
+public interface Identity {
 
     /**
-     * Get message.
-     * @return The message
+     * Anonymous.
      */
-    @XmlElement
-    public final String getMessage() {
-        return "hello, world!";
-    }
+    Identity ANONYMOUS = new Identity() {
+        @Override
+        public URN urn() {
+            return URN.create("urn:rexsl:anonymous");
+        }
+        @Override
+        public String name() {
+            return "anonymous";
+        }
+        @Override
+        public URI photo() {
+            return URI.create("http://img.rexsl.com/anonymous.png");
+        }
+    };
+
+    /**
+     * Unique URN.
+     * @return Unique name of it, e.g. "urn:facebook:1815696122110"
+     */
+    URN urn();
+
+    /**
+     * Full name of the person to display, e.g. "John Doe".
+     * @return Full name
+     */
+    String name();
+
+    /**
+     * URI of his/her photo.
+     * @return URI of the image
+     */
+    URI photo();
 
 }

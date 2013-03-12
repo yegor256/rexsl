@@ -27,84 +27,43 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page;
+package com.rexsl.page.inset;
 
-import com.rexsl.core.annotations.Stylesheet;
+import com.rexsl.page.BasePage;
+import com.rexsl.page.BasePageMocker;
+import com.rexsl.page.Inset;
+import com.rexsl.page.Resource;
+import com.rexsl.page.ResourceMocker;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.ws.rs.core.Response;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link PageBuilder}.
+ * Test case for {@link LinksInset}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
-public final class PageBuilderTest {
+public final class LinksInsetTest {
 
     /**
-     * Object can be converted to XML through JAXB.
+     * LinksInset can render itself to the page.
      * @throws Exception If there is some problem inside
      */
     @Test
-    public void buildsJaxbPageConvertableToXml() throws Exception {
-        final String stylesheet = "test-stylesheet";
-        final Object page = new PageBuilder()
-            .stylesheet(stylesheet)
-            .build(BasePageMocker.class)
-            .init(new ResourceMocker().mock());
+    public void rendersPageToXml() throws Exception {
+        final Resource resource = new ResourceMocker().mock();
+        final Inset inset = new LinksInset(resource);
+        final BasePage<?, ?> page = new BasePageMocker().init(resource);
+        inset.render(page, Response.ok());
         MatcherAssert.assertThat(
             JaxbConverter.the(page),
-            XhtmlMatchers.hasXPath("/foo/message[contains(.,'hello')]")
-        );
-    }
-
-    /**
-     * Child class can be converted to XML through JAXB.
-     * @throws Exception If there is some problem inside
-     */
-    @Test
-    public void buildsJaxbPageFromBareClass() throws Exception {
-        new PageBuilder().build(BarePage.class);
-    }
-
-    /**
-     * Sample dummy page.
-     */
-    public static class BarePage extends BasePageMocker {
-    }
-
-    /**
-     * PageBuilder can add correct annotations.
-     * @throws Exception If there is some problem inside
-     */
-    @Test
-    public void addsCorrectAnnotations() throws Exception {
-        final String xsl = "/some/path/test.xsl";
-        final Object page = new PageBuilder()
-            .stylesheet(xsl)
-            .build(PageBuilderTest.BarPage.class);
-        MatcherAssert.assertThat(
-            page.getClass().getAnnotation(XmlType.class).name(),
-            Matchers.equalTo(
-                "com.rexsl.page.PageBuilderTest$BarPage$somepathtestxsl"
+            XhtmlMatchers.hasXPaths(
+                "/*/links/link[@rel='self']",
+                "/*/links/link[@rel='home']"
             )
         );
-        MatcherAssert.assertThat(
-            page.getClass().getAnnotation(Stylesheet.class).value(),
-            Matchers.equalTo(xsl)
-        );
-    }
-
-    /**
-     * Sample dummy page.
-     */
-    @XmlRootElement(name = "bar")
-    public static class BarPage {
     }
 
 }

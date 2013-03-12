@@ -27,84 +27,88 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page;
+package com.rexsl.page.auth;
 
-import com.rexsl.core.annotations.Stylesheet;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import com.jcabi.urn.URN;
+import com.jcabi.urn.URNMocker;
+import java.net.URI;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link PageBuilder}.
+ * Test case for {@link Encrypted}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
-public final class PageBuilderTest {
+public final class EncryptedTest {
 
     /**
-     * Object can be converted to XML through JAXB.
+     * Encrypted can be converted to text and back.
      * @throws Exception If there is some problem inside
      */
     @Test
-    public void buildsJaxbPageConvertableToXml() throws Exception {
-        final String stylesheet = "test-stylesheet";
-        final Object page = new PageBuilder()
-            .stylesheet(stylesheet)
-            .build(BasePageMocker.class)
-            .init(new ResourceMocker().mock());
+    public void convertsToTextAndBack() throws Exception {
+        final String key = "&6%4\u0433-({}*7hrs";
+        final String salt = "\u0444\u0433@#gdsf\":?>::";
+        final String name = "John Doe, \u0433";
+        final URN urn = new URNMocker().mock();
+        final Identity user = new Encrypted(
+            new Identity() {
+                @Override
+                public URN urn() {
+                    return urn;
+                }
+                @Override
+                public String name() {
+                    return name;
+                }
+                @Override
+                public URI photo() {
+                    return URI.create("#");
+                }
+            },
+            key,
+            salt
+        );
+        final Identity reverted = Encrypted.parse(
+            user.toString(), key, salt
+        );
         MatcherAssert.assertThat(
-            JaxbConverter.the(page),
-            XhtmlMatchers.hasXPath("/foo/message[contains(.,'hello')]")
+            reverted.name(),
+            Matchers.equalTo(name)
+        );
+        MatcherAssert.assertThat(
+            reverted.urn(),
+            Matchers.equalTo(urn)
         );
     }
 
     /**
-     * Child class can be converted to XML through JAXB.
+     * Encrypted can throw on NULL.
      * @throws Exception If there is some problem inside
      */
-    @Test
-    public void buildsJaxbPageFromBareClass() throws Exception {
-        new PageBuilder().build(BarePage.class);
+    @Test(expected = Encrypted.DecryptionException.class)
+    public void throwsOnNullInput() throws Exception {
+        Encrypted.parse(null, "", "");
     }
 
     /**
-     * Sample dummy page.
-     */
-    public static class BarePage extends BasePageMocker {
-    }
-
-    /**
-     * PageBuilder can add correct annotations.
+     * Encrypted can throw on invalid input.
      * @throws Exception If there is some problem inside
      */
-    @Test
-    public void addsCorrectAnnotations() throws Exception {
-        final String xsl = "/some/path/test.xsl";
-        final Object page = new PageBuilder()
-            .stylesheet(xsl)
-            .build(PageBuilderTest.BarPage.class);
-        MatcherAssert.assertThat(
-            page.getClass().getAnnotation(XmlType.class).name(),
-            Matchers.equalTo(
-                "com.rexsl.page.PageBuilderTest$BarPage$somepathtestxsl"
-            )
-        );
-        MatcherAssert.assertThat(
-            page.getClass().getAnnotation(Stylesheet.class).value(),
-            Matchers.equalTo(xsl)
-        );
+    @Test(expected = Encrypted.DecryptionException.class)
+    public void throwsOnBrokenInput() throws Exception {
+        Encrypted.parse("invalid-data", "", "");
     }
 
     /**
-     * Sample dummy page.
+     * Encrypted can throw on empty input.
+     * @throws Exception If there is some problem inside
      */
-    @XmlRootElement(name = "bar")
-    public static class BarPage {
+    @Test(expected = Encrypted.DecryptionException.class)
+    public void throwsOnEmptyInput() throws Exception {
+        Encrypted.parse("", "", "");
     }
 
 }
