@@ -56,4 +56,18 @@ public final class GoogleTest {
         );
     }
 
+    /**
+     * Google can generate a HATEOAS link.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void generatesLink() throws Exception {
+        final Resource resource = new ResourceMocker().mock();
+        final Provider provider = new Google(resource, "KEY", "SECRET");
+        MatcherAssert.assertThat(
+            provider.link().getHref().toString(),
+            Matchers.containsString("client_id=KEY")
+        );
+    }
+
 }
