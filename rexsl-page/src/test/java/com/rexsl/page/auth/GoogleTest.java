@@ -66,7 +66,10 @@ public final class GoogleTest {
         final Provider provider = new Google(resource, "KEY", "SECRET");
         MatcherAssert.assertThat(
             provider.link().getHref().toString(),
-            Matchers.containsString("client_id=KEY")
+            Matchers.allOf(
+                Matchers.containsString("client_id=KEY"),
+                Matchers.containsString("rexsl-google")
+            )
         );
     }
 
