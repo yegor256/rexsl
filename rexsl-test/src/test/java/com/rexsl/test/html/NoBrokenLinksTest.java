@@ -60,11 +60,24 @@ public final class NoBrokenLinksTest {
     }
 
     /**
-     * NoBrokenLinks can find broken links in HTML, with XML namespace.
+     * NoBrokenLinks can find empty links in HTML.
      * @throws Exception If something goes wrong inside
      */
     @Test(expected = AssertionError.class)
-    public void findsBrokenLinksInHtmlWithNamespace() throws Exception {
+    public void findsEmptyLinksInHtml() throws Exception {
+        new NoBrokenLinks(new URI("http://www.facebook.com/")).assertThat(
+            NoBrokenLinksTest.response(
+                "<html><head><link rel='stylesheet' href=''/></head></html>"
+            )
+        );
+    }
+
+    /**
+     * NoBrokenLinks can find empty links in HTML.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = AssertionError.class)
+    public void findsBrLinksInHtmlWithNamespace() throws Exception {
         final URI home = new URI("http://www.rexsl.com/rexsl-test");
         new NoBrokenLinks(home).assertThat(
             NoBrokenLinksTest.response(
