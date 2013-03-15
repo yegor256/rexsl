@@ -65,6 +65,11 @@ public final class Google implements Provider {
     private static final String FLAG = "rexsl-google";
 
     /**
+     * Google state query param.
+     */
+    private static final String STATE = "state";
+
+    /**
      * Resource.
      */
     private final transient Resource resource;
@@ -99,8 +104,11 @@ public final class Google implements Provider {
     @Loggable(Loggable.DEBUG)
     public Identity identity() throws IOException {
         Identity identity = Identity.ANONYMOUS;
-        if (this.resource.uriInfo().getQueryParameters()
-            .containsKey(Google.FLAG)) {
+        final boolean authed = this.resource.uriInfo()
+            .getQueryParameters().containsKey(Google.STATE)
+            && this.resource.uriInfo().getQueryParameters()
+            .getFirst(Google.STATE).equals(Google.FLAG);
+        if (authed) {
             final List<String> code = this.resource.uriInfo()
                 // @checkstyle MultipleStringLiterals (1 line)
                 .getQueryParameters().get("code");
@@ -127,23 +135,13 @@ public final class Google implements Provider {
                 .queryParam("client_id", "{id}")
                 .queryParam("redirect_uri", "{uri}")
                 .queryParam("response_type", "code")
+                .queryParam(Google.STATE, Google.FLAG)
                 .queryParam(
                     "scope",
                     "https://www.googleapis.com/auth/userinfo.profile"
                 )
-                .build(this.appId, this.redirectUri())
+                .build(this.appId, this.resource.uriInfo().getBaseUri())
         );
-    }
-
-    /**
-     * Redirect URI.
-     * @return The URI
-     */
-    private URI redirectUri() {
-        return this.resource.uriInfo().getRequestUriBuilder()
-            .clone()
-            .queryParam(Google.FLAG, "")
-            .build();
     }
 
     /**
@@ -164,7 +162,7 @@ public final class Google implements Provider {
                     // @checkstyle LineLength (1 line)
                     "client_id=%s&redirect_uri=%s&client_secret=%s&grant_type=authorization_code&code=%s",
                     Google.encode(this.appId),
-                    Google.encode(this.redirectUri().toString()),
+                    Google.encode(this.resource.uriInfo().getBaseUri()),
                     Google.encode(this.appKey),
                     Google.encode(code)
                 )
@@ -218,9 +216,9 @@ public final class Google implements Provider {
      * @param text The text to encode
      * @return Encoded
      */
-    private static String encode(final String text) {
+    private static String encode(final Object text) {
         try {
-            return URLEncoder.encode(text, CharEncoding.UTF_8);
+            return URLEncoder.encode(text.toString(), CharEncoding.UTF_8);
         } catch (java.io.UnsupportedEncodingException ex) {
             throw new IllegalStateException(ex);
         }

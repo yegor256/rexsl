@@ -31,6 +31,8 @@ package com.rexsl.page.auth;
 
 import com.rexsl.page.Resource;
 import com.rexsl.page.ResourceMocker;
+import com.rexsl.page.UriInfoMocker;
+import java.net.URI;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -62,13 +64,16 @@ public final class GoogleTest {
      */
     @Test
     public void generatesLink() throws Exception {
-        final Resource resource = new ResourceMocker().mock();
+        final Resource resource = new ResourceMocker()
+            .withUriInfo(new UriInfoMocker().withBaseUri(new URI("/A")).mock())
+            .mock();
         final Provider provider = new Google(resource, "KEY", "SECRET");
         MatcherAssert.assertThat(
             provider.link().getHref().toString(),
             Matchers.allOf(
                 Matchers.containsString("client_id=KEY"),
-                Matchers.containsString("rexsl-google")
+                Matchers.containsString("state=rexsl-google"),
+                Matchers.containsString("redirect_uri=/A")
             )
         );
     }
