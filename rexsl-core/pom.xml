@@ -76,27 +76,17 @@
             <!-- Embedded Java Servlet Container, for tests only. -->
             <groupId>com.sun.grizzly</groupId>
             <artifactId>grizzly-servlet-webserver</artifactId>
-            <version>1.9.55</version>
+            <version>1.9.56</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- JAXB 2.0 API. -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.2.7</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jsr173_api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
-            <!-- JAXB 2.0 implementation, required in runtime. -->
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>2.2.7-b52</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -123,34 +113,27 @@
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
-            <!-- Saxon for XSLT 2.0 -->
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon</artifactId>
-            <version>8.7</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!-- Saxon DOM for XSLT 2.0 -->
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon-dom</artifactId>
-            <version>8.7</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <!-- Jersey serlvet -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-servlet</artifactId>
-            <version>${jersey.version}</version>
         </dependency>
         <dependency>
-            <!-- Jersey core -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
-            <version>${jersey.version}</version>
         </dependency>
         <dependency>
             <!--
@@ -159,32 +142,22 @@
             -->
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
-            <version>1.7.2</version>
+            <version>1.7.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <!-- implementation of Javax Servlet API 3.0 -->
-            <groupId>org.glassfish</groupId>
+            <groupId>org.eclipse.jetty.orbit</groupId>
             <artifactId>javax.servlet</artifactId>
-            <version>10.0-b28</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- implementation of Javax Mail API, required by Jersey -->
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4.6-rc1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!--
-            Javax Servlet API 2.4. We're using this old version intentionally,
-            in order to make the framework compatible with all possible (incl.
-            very old) web containers. See ticket #42 for more information.
-            -->
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>3.0-alpha-1</version>
+            <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
