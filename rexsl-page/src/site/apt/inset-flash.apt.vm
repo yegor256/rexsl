@@ -1,0 +1,103 @@
+ ------
+ RESTful Flash Messages (via Cookies)
+ ------
+ Yegor Bugayenko
+ ------
+ 2013-03-15
+ ------
+
+~~
+~~ Copyright (c) 2011-2013, ReXSL.com
+~~ All rights reserved.
+~~
+~~ Redistribution and use in source and binary forms, with or without
+~~ modification, are permitted provided that the following conditions
+~~ are met: 1) Redistributions of source code must retain the above
+~~ copyright notice, this list of conditions and the following
+~~ disclaimer. 2) Redistributions in binary form must reproduce the above
+~~ copyright notice, this list of conditions and the following
+~~ disclaimer in the documentation and/or other materials provided
+~~ with the distribution. 3) Neither the name of the ReXSL.com nor
+~~ the names of its contributors may be used to endorse or promote
+~~ products derived from this software without specific prior written
+~~ permission.
+~~
+~~ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+~~ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+~~ NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+~~ FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+~~ THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+~~ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+~~ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+~~ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+~~ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+~~ STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+~~ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+~~ OF THE POSSIBILITY OF SUCH DAMAGE.
+~~
+
+RESTful Flash Messages (via Cookies)
+
+  "Flash message" is a message rendered to the user only once, right
+  after she completes some operation. For example, after a form is
+  submitted and processed, your website shows the same page where the form
+  was filled, but with updated data. It is always convenient to show a
+  short notification text to the user, informing her that the form
+  was processed successfully (or not). This is how you do it with
+  {{{./apidocs-${project.version}/com/rexsl/page/inset/FlashInset.html}<<<FlashInset>>>}}:
+
++--
+@Inset.Default(FlashInset.class)
+public abstract class BaseRs extends BaseResource {
+  // some other base methods
+}
++--
+
+  BaseRs is a parent of all your JAX-RS resources (suffixed with <<<Rs>>>,
+  by convention). Now this is what happens in your concrete resource:
+
++--
+@Path("/form")
+public final class IndexRs extends BaseRs {
+  @Path("/submit")
+  @PUT
+  public void submit(@FormParam("text") final String text) {
+    throw FlashInset.forward(
+      this.uriInfo().getBaseUriBuilder().clone().path("/form").build(),
+      "your text was successfully saved",
+      Level.INFO
+    );
+  }
+}
++--
+
+  <<<FlashInset.forward()>>> creates an instance of
+  {{{http://docs.oracle.com/javaee/6/api/javax/ws/rs/WebApplicationException.html}<<<WebApplicationException>>>}}
+  that encapsulates a JAX-RS
+  {{{http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/Response.html}<<<Response>>>}}
+  with a
+  {{{http://en.wikipedia.org/wiki/HTTP_cookie}cookie}} in it. That cookie
+  contains a
+  {{{http://en.wikipedia.org/wiki/Base32}Base32-encoded}}
+  message and logging level provided to the
+  <<<FlashInset.forward()>>> method. Besides that, the response contains
+  an HTTP response code
+  {{{http://en.wikipedia.org/wiki/HTTP_303}"303 See Other"}} and a
+  {{{http://en.wikipedia.org/wiki/HTTP_location}<<<Location>>>}} header.
+
+  When the next page is rendered the inset Base32-decodes the cookie and
+  adds the following element to the page:
+
++--
+<page>
+  <flash>
+    <message>your text was successfully saved</message>
+    <level>INFO</level>
+  </flash>
+</page>
++--
+
+  Besides that, a cookie gets destroyed by a new cookie with the same
+  name but with an empty value. That's how we guarantee that the message
+  is rendered only once to the end-user.
+

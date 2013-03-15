@@ -40,6 +40,12 @@
             <item name="Mock API" href="testapidocs-${project.version}/index.html"/>
             <item name="Release History" href="changes-report.html"/>
         </menu>
+        <menu name="Insets">
+            <item name="Flash messages" href="inset-flash.html"/>
+            <item name="Package versioning" href="inset-version.html"/>
+            <item name="Default links" href="inset-links.html"/>
+            <item name="OAuth authentication" href="inset-oauth.html"/>
+        </menu>
         <menu ref="reports"/>
     </body>
 </project>
