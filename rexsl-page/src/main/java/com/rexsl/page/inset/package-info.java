@@ -33,6 +33,6 @@
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.4.7
+ * @since 0.4.8
  */
 package com.rexsl.page.inset;

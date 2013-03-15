@@ -116,3 +116,12 @@ public final class IndexRs extends BaseRs {
   }
 }
 +--
+
+  URN of identity is created by authentication providers and consists
+  of namespace ID (<<<"facebook">>> for Facebook and <<<"google">>> for Google)
+  and namespace specific string with a unique ID of the user, as defined
+  by the provider. You can use this URN as a unique identifier of the user
+  in your system. It is always unique.
+
+  When a user is not authenticated <<<AuthInset#identity()>>> method returns
+  <<<Identity.ANONYMOUS>>>.

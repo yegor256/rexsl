@@ -33,7 +33,7 @@ public class BaseRs extends BaseResource {
      * @return The inset
      */
     @Inset.Runtime
-    public Inset ver() {
+    public Inset version() {
         return new VersionInset(
             Manifests.read("Example-Version"),
             Manifests.read("Example-Revision"),

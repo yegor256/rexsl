@@ -47,7 +47,7 @@ import org.apache.commons.codec.binary.Base32;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.4.7
+ * @since 0.4.8
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @Immutable

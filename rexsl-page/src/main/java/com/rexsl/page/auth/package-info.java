@@ -33,6 +33,7 @@
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.4.7
+ * @since 0.4.8
+ * @link <a href="http://www.rexsl.com/rexsl-page/inset-oauth.html">OAuth in RESTful Interfaces</a>
  */
 package com.rexsl.page.auth;

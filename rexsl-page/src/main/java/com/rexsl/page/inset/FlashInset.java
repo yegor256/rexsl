@@ -53,8 +53,9 @@ import org.apache.commons.lang.CharEncoding;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.4.7
+ * @since 0.4.8
  * @see BasePage
+ * @link <a href="http://www.rexsl.com/rexsl-page/inset-flash.html">Flash messages in RESTful interfaces</a>
  */
 @ToString
 @EqualsAndHashCode(of = "resource")

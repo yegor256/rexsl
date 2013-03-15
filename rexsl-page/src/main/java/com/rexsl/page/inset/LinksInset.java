@@ -40,11 +40,12 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Most popular links.
+ * Most popular default HATEOAS links.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.4.7
+ * @since 0.4.8
+ * @link <a href="http://www.rexsl.com/rexsl-page/inset-links.html">Default HATEOAS links</a>
  */
 @ToString
 @EqualsAndHashCode(of = "resource")
