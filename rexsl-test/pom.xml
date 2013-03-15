@@ -57,22 +57,17 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <!-- JAX-RS implementation, core library -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>${jersey.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- Jersey client -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>${jersey.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <!--
-            Jersey core lib. This artifact is in "compile" scope because
+            This artifact is in "compile" scope because
             jersey-client needs it in compile time (I believe it's a design
             flaw of Jersey). Ideally we should have JAX-RS API in "provided"
             scope and this one in "test" scope. I reported the problem
@@ -80,27 +75,15 @@
             -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
-            <version>${jersey.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
-            <!-- JAXB 2.0 API. -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.2.7</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jsr173_api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
-            <!-- JAXB 2.0 implementation, required in runtime. -->
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>2.2.7-b52</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -110,7 +93,7 @@
             -->
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.2</version>
+            <version>1.7.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -137,7 +120,6 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.7</version>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
@@ -156,7 +138,7 @@
             <!-- Embedded Java Servlet Container, for tests only. -->
             <groupId>com.sun.grizzly</groupId>
             <artifactId>grizzly-servlet-webserver</artifactId>
-            <version>1.9.55</version>
+            <version>1.9.56</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -178,45 +160,32 @@
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <!--
-            XSLT 2.0 transformer. In order to replace a default implementation
-            provided by JDK with Saxon we are using text files inside
-            "src/main/resources/META-INF/services" directory.
-            -->
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon</artifactId>
-            <version>8.7</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!--
-            DOM in Saxon. This dependency is required for XML-to-XHTML
-            transformation, performed by Saxon. XmlMatchers, for example,
-            user DOMResult as a target of transformation and main Saxon
-            artifact doesn't know how to work with this target. Saxon-dom knows.
-            If you remove this dependency all XmlMatchers
-            -->
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon-dom</artifactId>
-            <version>8.7</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.11</version>
+            <version>1.9.12</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.11</version>
+            <version>1.9.12</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.reb4j</groupId>
             <artifactId>net.sourceforge.reb4j</artifactId>
-            <version>1.0.0</version>
+            <version>2.1.0</version>
         </dependency>
     </dependencies>
 </project>

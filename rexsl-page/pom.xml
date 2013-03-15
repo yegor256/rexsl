@@ -96,37 +96,23 @@
             <version>3.12.1.GA</version>
         </dependency>
         <dependency>
-            <!-- JAX-RS API -->
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
-            <version>1.1.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <!-- Jersey core lib -->
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
-            <version>${jersey.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- JAXB 2.0 API. -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.2.7</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jsr173_api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
-            <!-- JAXB 2.0 implementation, required in runtime. -->
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>2.2.7-b52</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -148,21 +134,16 @@
             -->
             <groupId>com.restfb</groupId>
             <artifactId>restfb</artifactId>
-            <version>1.6.11</version>
+            <version>1.6.12</version>
         </dependency>
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <!--
-            Javax Servlet API 2.4. We're using this old version intentionally,
-            in order to make the framework compatible with all possible (incl.
-            very old) web containers. See ticket #42 for more information.
-            -->
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>3.0-alpha-1</version>
+            <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

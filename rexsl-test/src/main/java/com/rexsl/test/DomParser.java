@@ -35,7 +35,12 @@ import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilderFactory;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import net.sourceforge.reb4j.Regex;
+import net.sourceforge.reb4j.Adopted;
+import net.sourceforge.reb4j.Entity;
+import net.sourceforge.reb4j.Group;
+import net.sourceforge.reb4j.Literal;
+import net.sourceforge.reb4j.Sequence;
+import net.sourceforge.reb4j.charclass.CharClass;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.w3c.dom.Document;
@@ -115,33 +120,44 @@ final class DomParser {
 
     /**
      * Pattern initialization method.
-     * @return The pattern
+     * @return The pattern that matches any valid XML document
      */
     private static Pattern buildPattern() {
-        // @checkstyle LineLength (2 line)DPT
-        final String startCharacter =
-            "[:_a-zA-Z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD]";
-        final String character = "[-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]";
-        final Regex prolog = Regex.fromPattern(
-            Pattern.compile("(<\\?xml.*\\?>\\s*)")
-        );
-        final Regex doctype = Regex.fromPattern(
-            Pattern.compile("(<!DOCTYPE.*>)")
-        );
-        final Regex comment = Regex.fromPattern(
-            Pattern.compile("(<!--.*-->)")
-        );
-        final Regex element = Regex
-            .fromPattern(Pattern.compile(startCharacter)).atLeastOnce()
-            .then(Regex.fromPattern(Pattern.compile(character)).star());
-        return Regex.sequence(
-            prolog.optional(),
-            doctype.optional(),
-            comment.optional(),
-            Regex.literal("<"),
-            element.then(Regex.fromPattern(Pattern.compile(".")).star()),
-            element.or(Regex.literal("/")),
-            Regex.literal(">")
+        final CharClass start = CharClass.characters(':', '_')
+            .union(CharClass.range('a', 'z'))
+            .union(CharClass.range('A', 'Z'))
+            .union(CharClass.range('\u00C0', '\u00D6'))
+            .union(CharClass.range('\u00D8', '\u00F6'))
+            .union(CharClass.range('\u00F8', '\u02FF'))
+            .union(CharClass.range('\u0370', '\u037D'))
+            .union(CharClass.range('\u037F', '\u1FFF'))
+            .union(CharClass.range('\u200C', '\u200D'))
+            .union(CharClass.range('\u2070', '\u218F'))
+            .union(CharClass.range('\u2C00', '\u2FEF'))
+            .union(CharClass.range('\u3001', '\uD7FF'))
+            .union(CharClass.range('\uF900', '\uFDCF'))
+            .union(CharClass.range('\uFDF0', '\uFFFD'));
+        final CharClass letter = CharClass.characters('-', '.', '\u00B7')
+            .union(CharClass.range('0', '9'))
+            .union(CharClass.range('\u0300', '\u036F'))
+            .union(CharClass.range('\u203F', '\u2040'));
+        final Sequence element = start
+            .andThen(Group.nonCapturing(letter).anyTimes());
+        return Sequence.sequence(
+            Group.nonCapturing(
+                Adopted.fromPattern(Pattern.compile("<\\?xml.*\\?>\\s*"))
+            ).optional(),
+            Group.nonCapturing(
+                Adopted.fromPattern(Pattern.compile("<!DOCTYPE.*>"))
+            ).optional(),
+            Group.nonCapturing(
+                Adopted.fromPattern(Pattern.compile("<!--.*-->"))
+            ).optional(),
+            Literal.literal('<'),
+            element,
+            Entity.ANY_CHAR.anyTimes(),
+            Group.nonCapturing(element.or(CharClass.character('/'))),
+            Literal.literal('>')
         ).toPattern();
     }
 }

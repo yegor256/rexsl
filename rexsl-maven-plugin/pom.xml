@@ -46,6 +46,10 @@
     <artifactId>rexsl-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>rexsl-maven-plugin</name>
+    <properties>
+        <maven.version>3.0.5</maven.version>
+        <aether.version>1.13.1</aether.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -70,20 +74,13 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!--
-            Javax Servlet API, version 3.0+.
-            -->
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <!-- don't change this version, higher ones don't work -->
-            <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <!-- JAX-RS API -->
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
-            <version>1.1.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -111,13 +108,12 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.1.9.Final</version>
+            <version>4.2.0.CR2</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
-            <version>${jersey.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -125,12 +121,6 @@
             <artifactId>rexsl-core</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>activation</artifactId>
-                    <groupId>javax.activation</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
@@ -187,47 +177,40 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.2.2</version>
             <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.sonatype.aether</groupId>
             <artifactId>aether-api</artifactId>
-            <version>1.13.1</version>
+            <version>${aether.version}</version>
         </dependency>
         <dependency>
             <groupId>org.sonatype.aether</groupId>
             <artifactId>aether-util</artifactId>
-            <version>1.13.1</version>
+            <version>${aether.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>3.0.4</version>
+            <version>${maven.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
-            <version>3.0.4</version>
+            <version>${maven.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>3.0.4</version>
+            <version>${maven.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
-            <version>3.0.4</version>
+            <version>${maven.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -268,7 +251,7 @@
         <dependency>
             <groupId>org.sonatype.sisu</groupId>
             <artifactId>sisu-inject-plexus</artifactId>
-            <version>2.3.2</version>
+            <version>2.3.3</version>
             <scope>runtime</scope>
             <exclusions>
                 <exclusion>
@@ -296,10 +279,8 @@
             </exclusions>
         </dependency>
         <dependency>
-            <!-- Implementation of Serlvet API, from Jetty -->
             <groupId>org.eclipse.jetty.orbit</groupId>
             <artifactId>javax.servlet</artifactId>
-            <version>3.0.0.v201112011016</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -311,14 +292,7 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4.6-rc1</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.activation</groupId>
-                    <artifactId>activation</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -329,32 +303,19 @@
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
-            <!--
-            XSLT 2.0 transformer. In order to replace a default implementation
-            provided by JDK with Saxon we are using text files inside
-            "src/main/resources/META-INF/services" directory.
-            -->
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon</artifactId>
-            <version>8.7</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!--
-            DOM in Saxon. This dependency is required for XML-to-XHTML
-            transformation, performed by Saxon. XmlMatchers, for example,
-            user DOMResult as a target of transformation and main Saxon
-            artifact doesn't know how to work with this target. Saxon-dom knows.
-            If you remove this dependency all XmlMatchers
-            -->
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon-dom</artifactId>
-            <version>8.7</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <!-- Groovy engine. -->
@@ -384,7 +345,7 @@
         <dependency>
             <groupId>com.sun.grizzly</groupId>
             <artifactId>grizzly-servlet-webserver</artifactId>
-            <version>1.9.55</version>
+            <version>1.9.56</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
