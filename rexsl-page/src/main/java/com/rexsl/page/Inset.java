@@ -59,7 +59,7 @@ import javax.ws.rs.core.Response;
  *         builder.header(HttpHeaders.VARY, "Cookie");
  *     }
  *   };
- * }
+ * }</pre>
  *
  * <p>For every new page methods {@code version()} and {@code supplementary()}
  * will be called. Returned insets will be used to help in page rendering.
