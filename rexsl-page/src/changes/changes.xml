@@ -30,5 +30,13 @@
  -->
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.4.8" date="15 Mar 2013" description="Insets introduced">
+            <action dev="yegor" issue="628" type="add">
+                Insets introduced for JAX-RS resources, renderable
+                into JAXB pages and JAX-RS responses. First few
+                insets implemented, incl. FlashInset, LinksInset, VersionInset,
+                Facebook, and Google (for authentication).
+            </action>
+        </release>
     </body>
 </document>

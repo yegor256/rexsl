@@ -44,12 +44,14 @@ import lombok.ToString;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.4.7
+ * @since 0.4.8
  * @see BasePage
+ * @link <a href="http://www.rexsl.com/rexsl-page/inset-version.html">How to version WAR packages</a>
  */
 @Immutable
 @ToString
 @EqualsAndHashCode(of = { "version", "revision", "date" })
+@Loggable(Loggable.DEBUG)
 public final class VersionInset implements Inset {
 
     /**
@@ -84,7 +86,6 @@ public final class VersionInset implements Inset {
      * {@inheritDoc}
      */
     @Override
-    @Loggable(Loggable.DEBUG)
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
         page.append(

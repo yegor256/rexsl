@@ -39,19 +39,63 @@ import javax.ws.rs.core.Response;
 /**
  * Insertion into a page.
  *
+ * <p>Post-rendering strategy applied to a {@link BasePage} and
+ * {@link Response.Builder}. You can define your own insets as anonymous
+ * classes, for example:
+ *
+ * <pre> &#64;Inset.Default({ LinksInset.class, FlashInset.class })
+ * public class BaseRs extends BaseResource {
+ *   &#64;Inset.Runtime
+ *   public Inset ver() {
+ *     return new VersionInset("1.0", "", "13-Mar-2013");
+ *   }
+ *   &#64;Inset.Runtime
+ *   public Inset supplementary() {
+ *     return new Inset() {
+ *       &#64;Override
+ *       public void render(final BasePage&lt;?, ?&gt; page,
+ *         final Response.ResponseBuilder builder) {
+ *         builder.type(MediaType.TEXT_XML);
+ *         builder.header(HttpHeaders.VARY, "Cookie");
+ *     }
+ *   };
+ * }</pre>
+ *
+ * <p>For every new page methods {@code version()} and {@code supplementary()}
+ * will be called. Returned insets will be used to help in page rendering.
+ * Their {@link #render(BasePage,Response.ResponseBuilder)} methods will be
+ * used to extend the JAXB page and the JAX-RS response.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.4.7
+ * @since 0.4.8
  * @see BasePage
  */
 public interface Inset {
 
+    /**
+     * Annotates a method of JAX-RS resource that returns an instance
+     * of {@link Inset}.
+     *
+     * <p>The method will be called automatically for every page rendered. The
+     * returned {@link Inset} will be used to render the page. If an annotated
+     * method returns an object, which is not a instance of {@link Inset} a
+     * runtime exception will be thrown.
+     */
     @Documented
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
     @interface Runtime {
     }
 
+    /**
+     * Annotates a JAX-RS resource, informing the rendering mechanism about
+     * all Inset classes required for page rendering.
+     *
+     * <p>All classes listed in the annotation will be instantiated with
+     * one-argument constructors. If such constructor is absent a runtime
+     * exception is thrown.
+     */
     @Documented
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
