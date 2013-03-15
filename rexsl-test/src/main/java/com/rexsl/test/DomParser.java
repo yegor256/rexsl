@@ -144,9 +144,15 @@ final class DomParser {
         final Sequence element = start
             .andThen(Group.nonCapturing(letter).anyTimes());
         return Sequence.sequence(
-            Group.nonCapturing(Adopted.fromPattern(Pattern.compile("<\\?xml.*\\?>\\s*"))).optional(),
-            Group.nonCapturing(Adopted.fromPattern(Pattern.compile("<!DOCTYPE.*>"))).optional(),
-            Group.nonCapturing(Adopted.fromPattern(Pattern.compile("<!--.*-->"))).optional(),
+            Group.nonCapturing(
+                Adopted.fromPattern(Pattern.compile("<\\?xml.*\\?>\\s*"))
+            ).optional(),
+            Group.nonCapturing(
+                Adopted.fromPattern(Pattern.compile("<!DOCTYPE.*>"))
+            ).optional(),
+            Group.nonCapturing(
+                Adopted.fromPattern(Pattern.compile("<!--.*-->"))
+            ).optional(),
             Literal.literal('<'),
             element,
             Entity.ANY_CHAR.anyTimes(),
