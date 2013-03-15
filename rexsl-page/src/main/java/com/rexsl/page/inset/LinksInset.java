@@ -49,6 +49,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(of = "resource")
+@Loggable(Loggable.DEBUG)
 public final class LinksInset implements Inset {
 
     /**
@@ -68,7 +69,6 @@ public final class LinksInset implements Inset {
      * {@inheritDoc}
      */
     @Override
-    @Loggable(Loggable.DEBUG)
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
         assert this.resource != null;

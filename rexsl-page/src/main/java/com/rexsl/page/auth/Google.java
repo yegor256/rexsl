@@ -55,9 +55,11 @@ import org.apache.commons.lang.CharEncoding;
  * @version $Id$
  * @since 0.4.8
  * @link <a href="http://www.rexsl.com/rexsl-page/inset-oauth.html">OAuth in RESTful Interfaces</a>
+ * @link <a href="https://developers.google.com/accounts/docs/OAuth2">Google OAuth</a>
  */
 @ToString
 @EqualsAndHashCode(of = { "appId", "appKey" })
+@Loggable(Loggable.DEBUG)
 public final class Google implements Provider {
 
     /**
@@ -102,7 +104,6 @@ public final class Google implements Provider {
      * {@inheritDoc}
      */
     @Override
-    @Loggable(Loggable.DEBUG)
     public Identity identity() throws IOException {
         Identity identity = Identity.ANONYMOUS;
         final boolean authed = this.resource.uriInfo()
@@ -127,7 +128,6 @@ public final class Google implements Provider {
      * {@inheritDoc}
      */
     @Override
-    @Loggable(Loggable.DEBUG)
     public Link link() {
         return new Link(
             "auth-google",

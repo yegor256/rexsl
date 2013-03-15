@@ -59,6 +59,7 @@ import org.apache.commons.lang.CharEncoding;
  */
 @ToString
 @EqualsAndHashCode(of = "resource")
+@Loggable(Loggable.DEBUG)
 public final class FlashInset implements Inset {
 
     /**
@@ -88,7 +89,6 @@ public final class FlashInset implements Inset {
      * {@inheritDoc}
      */
     @Override
-    @Loggable(Loggable.DEBUG)
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
         if (this.resource.httpHeaders().getCookies()
@@ -118,7 +118,6 @@ public final class FlashInset implements Inset {
      * @param level Message level
      * @return The exception to throw
      */
-    @Loggable(Loggable.DEBUG)
     public static WebApplicationException forward(@NotNull final URI uri,
         @NotNull final String message, @NotNull final Level level) {
         return new WebApplicationException(

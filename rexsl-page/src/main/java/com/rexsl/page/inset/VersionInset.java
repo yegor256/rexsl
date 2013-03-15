@@ -51,6 +51,7 @@ import lombok.ToString;
 @Immutable
 @ToString
 @EqualsAndHashCode(of = { "version", "revision", "date" })
+@Loggable(Loggable.DEBUG)
 public final class VersionInset implements Inset {
 
     /**
@@ -85,7 +86,6 @@ public final class VersionInset implements Inset {
      * {@inheritDoc}
      */
     @Override
-    @Loggable(Loggable.DEBUG)
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
         page.append(

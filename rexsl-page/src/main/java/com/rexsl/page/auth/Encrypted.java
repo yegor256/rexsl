@@ -52,6 +52,7 @@ import org.apache.commons.codec.binary.Base32;
  */
 @Immutable
 @EqualsAndHashCode(of = { "identity", "key", "salt" })
+@Loggable(Loggable.DEBUG)
 final class Encrypted implements Identity {
 
     /**
@@ -115,7 +116,6 @@ final class Encrypted implements Identity {
      * {@inheritDoc}
      */
     @Override
-    @Loggable(Loggable.DEBUG)
     public String toString() {
         final ByteArrayOutputStream data = new ByteArrayOutputStream();
         try {
@@ -139,7 +139,6 @@ final class Encrypted implements Identity {
      * @return Instance of the class
      * @throws Encrypted.DecryptionException If can't decrypt
      */
-    @Loggable(Loggable.DEBUG)
     public static Encrypted parse(final String txt,
         final String key, final String salt)
         throws Encrypted.DecryptionException {
