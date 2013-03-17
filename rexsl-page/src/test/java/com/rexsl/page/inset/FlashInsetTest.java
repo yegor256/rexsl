@@ -101,8 +101,11 @@ public final class FlashInsetTest {
     @Test
     public void buildsForwardingException() throws Exception {
         MatcherAssert.assertThat(
-            FlashInset.forward(URI.create("#link"), "hello", Level.INFO)
-                .getResponse().getMetadata(),
+            FlashInset.forward(
+                URI.create("#link"),
+                "hello",
+                Level.INFO
+            ).getResponse().getMetadata(),
             Matchers.allOf(
                 Matchers.hasEntry(
                     Matchers.equalTo(HttpHeaders.LOCATION),
@@ -115,7 +118,39 @@ public final class FlashInsetTest {
                     Matchers.hasItem(
                         Matchers.hasToString(
                             Matchers.containsString(
-                                "Rexsl-Flash=KNCVMRKSIU5GQZLMNRXQ===="
+                                "Rexsl-Flash=JFHEMTZ2NBSWY3DP"
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * FlashInset can build a severe web application exception.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void buildsSevereForwardingException() throws Exception {
+        MatcherAssert.assertThat(
+            FlashInset.forward(
+                URI.create("#some-link"),
+                new IllegalArgumentException("problem text")
+            ).getResponse().getMetadata(),
+            Matchers.allOf(
+                Matchers.hasEntry(
+                    Matchers.equalTo(HttpHeaders.LOCATION),
+                    Matchers.hasItem(
+                        Matchers.hasToString(Matchers.startsWith("#some-li"))
+                    )
+                ),
+                Matchers.hasEntry(
+                    Matchers.equalTo(HttpHeaders.SET_COOKIE),
+                    Matchers.hasItem(
+                        Matchers.hasToString(
+                            Matchers.containsString(
+                                "Rexsl-Flash=KNCVMRKSIU5HA4TPMJWGK3JAORSXQ5A="
                             )
                         )
                     )
