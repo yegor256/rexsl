@@ -29,6 +29,7 @@
  */
 package com.rexsl.page;
 
+import com.rexsl.page.inset.FlashInset;
 import com.rexsl.page.inset.LinksInset;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
@@ -52,8 +53,9 @@ public final class BasePageTest {
      */
     @Test
     public void convertsToXml() throws Exception {
-        final BasePageTest.FooRs res = new BasePageTest.FooRs();
+        final BasePageTest.ConcreteRs res = new BasePageTest.ConcreteRs();
         res.setUriInfo(new UriInfoMocker().mock());
+        res.setHttpHeaders(new HttpHeadersMocker().mock());
         res.setSecurityContext(Mockito.mock(SecurityContext.class));
         final BasePageTest.FooPage page = new BasePageTest.FooPage()
             .init(res)
@@ -77,8 +79,15 @@ public final class BasePageTest {
     /**
      * Base resource for tests.
      */
-    @Inset.Default(LinksInset.class)
-    private static final class FooRs extends BaseResource {
+    @Inset.Default({ LinksInset.class, FlashInset.class })
+    private static class FooBaseRs extends BaseResource {
+    }
+
+    /**
+     * Concrete resource for tests.
+     */
+    @Inset.Default({ LinksInset.class, FlashInset.class })
+    private static final class ConcreteRs extends BasePageTest.FooBaseRs {
     }
 
     /**
