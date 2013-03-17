@@ -354,6 +354,31 @@ public final class JerseyTestResponseTest {
     }
 
     /**
+     * TestResponse can avoid transferring of empty cookies.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void avoidsTransferringOfEmptyCookiesOnFollow() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectHeader(
+                HttpHeaders.COOKIE,
+                Matchers.not(Matchers.containsString("second"))
+            )
+            .mock();
+        final ClientResponse resp = new ClientResponseMocker()
+            .withHeader(HttpHeaders.SET_COOKIE, "first=A; path=/")
+            .withHeader(HttpHeaders.SET_COOKIE, "second=; path=/")
+            .withHeader(HttpHeaders.LOCATION, container.home().toString())
+            .mock();
+        final TestResponse response =
+            new JerseyTestResponse(this.fetcher(resp), this.decor);
+        response.follow()
+            .get("GET with one removed cookie")
+            .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
      * TestResponse can preserve XML configuration.
      * @throws Exception If something goes wrong inside
      */
