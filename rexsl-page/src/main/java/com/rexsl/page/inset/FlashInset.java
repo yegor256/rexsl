@@ -55,7 +55,7 @@ import org.apache.commons.lang.CharEncoding;
  * @version $Id$
  * @since 0.4.8
  * @see BasePage
- * @link <a href="http://www.rexsl.com/rexsl-page/inset-flash.html">Flash messages in RESTful interfaces</a>
+ * @see <a href="http://www.rexsl.com/rexsl-page/inset-flash.html">Flash messages in RESTful interfaces</a>
  */
 @ToString
 @EqualsAndHashCode(of = "resource")

@@ -46,7 +46,7 @@ import lombok.ToString;
  * @version $Id$
  * @since 0.4.8
  * @see BasePage
- * @link <a href="http://www.rexsl.com/rexsl-page/inset-version.html">How to version WAR packages</a>
+ * @see <a href="http://www.rexsl.com/rexsl-page/inset-version.html">How to version WAR packages</a>
  */
 @Immutable
 @ToString

@@ -41,6 +41,6 @@
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @link <a href="http://www.rexsl.com/rexsl-test">project site</a>
+ * @see <a href="http://www.rexsl.com/rexsl-test">project site</a>
  */
 package com.rexsl.test;

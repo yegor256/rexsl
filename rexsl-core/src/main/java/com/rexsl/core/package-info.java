@@ -45,6 +45,6 @@
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://www.rexsl.com">Introduction to ReXSL</a>
- * @link <a href="http://www.rexsl.com/rexsl-core">project site</a>
+ * @see <a href="http://www.rexsl.com/rexsl-core">project site</a>
  */
 package com.rexsl.core;

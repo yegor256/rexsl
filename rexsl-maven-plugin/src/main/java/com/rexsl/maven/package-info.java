@@ -41,6 +41,6 @@
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @link <a href="http://www.rexsl.com/rexsl-maven-plugin">project site</a>
+ * @see <a href="http://www.rexsl.com/rexsl-maven-plugin">project site</a>
  */
 package com.rexsl.maven;

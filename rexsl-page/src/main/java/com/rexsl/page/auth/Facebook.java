@@ -51,8 +51,8 @@ import lombok.ToString;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.4.8
- * @link <a href="http://www.rexsl.com/rexsl-page/inset-oauth.html">OAuth in RESTful Interfaces</a>
- * @link <a href="http://developers.facebook.com/docs/reference/dialogs/oauth/">Facebook OAuth</a>
+ * @see <a href="http://www.rexsl.com/rexsl-page/inset-oauth.html">OAuth in RESTful Interfaces</a>
+ * @see <a href="http://developers.facebook.com/docs/reference/dialogs/oauth/">Facebook OAuth</a>
  */
 @ToString
 @EqualsAndHashCode(of = { "appId", "appKey" })
