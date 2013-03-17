@@ -80,7 +80,7 @@ public final class FlashInsetTest {
         final Resource resource = new ResourceMocker().withHttpHeaders(
             new HttpHeadersMocker().withHeader(
                 HttpHeaders.COOKIE,
-                "Rexsl-Flash=INFO:hello;path=/"
+                "Rexsl-Flash=JFHEMTZ2NBSWY3DPFQQHO33SNRSCC===;path=/"
             ).mock()
         ).mock();
         final Inset inset = new FlashInset(resource);
@@ -89,7 +89,7 @@ public final class FlashInsetTest {
         MatcherAssert.assertThat(
             JaxbConverter.the(page),
             XhtmlMatchers.hasXPath(
-                "/*/flash[message = '' and level = 'INFO']"
+                "/*/flash[message = 'hello, world!' and level = 'INFO']"
             )
         );
     }
