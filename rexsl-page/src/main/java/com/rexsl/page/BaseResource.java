@@ -70,6 +70,7 @@ import lombok.ToString;
  * @see PageBuilder
  */
 @ToString
+@Loggable(Loggable.DEBUG)
 public class BaseResource implements Resource {
 
     /**
@@ -204,7 +205,6 @@ public class BaseResource implements Resource {
      * @param info The info to inject
      */
     @Context
-    @Loggable(Loggable.DEBUG)
     public final void setUriInfo(@NotNull final UriInfo info) {
         if (this.needsForwarding()) {
             this.iuriInfo = new ForwardedUriInfo(info, this.ihttpHeaders);
@@ -219,7 +219,6 @@ public class BaseResource implements Resource {
      * @param prov List of providers
      */
     @Context
-    @Loggable(Loggable.DEBUG)
     public final void setProviders(@NotNull final Providers prov) {
         this.iproviders = prov;
     }
@@ -230,7 +229,6 @@ public class BaseResource implements Resource {
      * @param hdrs List of headers
      */
     @Context
-    @Loggable(Loggable.DEBUG)
     public final void setHttpHeaders(@NotNull final HttpHeaders hdrs) {
         this.ihttpHeaders.set(hdrs);
     }
@@ -241,7 +239,6 @@ public class BaseResource implements Resource {
      * @param request The request
      */
     @Context
-    @Loggable(Loggable.DEBUG)
     public final void setHttpServletRequest(
         @NotNull final HttpServletRequest request) {
         this.ihttpRequest = request;
@@ -254,7 +251,6 @@ public class BaseResource implements Resource {
      * @since 0.4.7
      */
     @Context
-    @Loggable(Loggable.DEBUG)
     public final void setSecurityContext(
         @NotNull final SecurityContext context) {
         this.security = context;

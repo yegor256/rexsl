@@ -129,7 +129,7 @@ import org.w3c.dom.Element;
  * @since 0.3.7
  */
 @SuppressWarnings("PMD.NullAssignment")
-@ToString
+@ToString(of = { "name", "content" })
 public final class JaxbBundle {
 
     /**

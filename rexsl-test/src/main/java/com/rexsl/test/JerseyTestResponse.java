@@ -103,8 +103,9 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     public String toString() {
         return Logger.format(
-            "HTTP request:\n%s\nHTTP response:\n%s",
+            "HTTP request:\n%s\nHTTP response (%d):\n%s",
             this.request,
+            this.getStatus(),
             new ClientResponseDecor(this.fetcher.fetch(), this.getBody())
         );
     }

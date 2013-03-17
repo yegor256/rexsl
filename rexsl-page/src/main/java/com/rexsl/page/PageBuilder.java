@@ -29,14 +29,14 @@
  */
 package com.rexsl.page;
 
-import com.jcabi.log.Logger;
+import com.jcabi.aspects.Loggable;
 import com.rexsl.core.annotations.Schema;
 import com.rexsl.core.annotations.Stylesheet;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -49,7 +49,6 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlType;
 import lombok.ToString;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Page builder.
@@ -109,6 +108,7 @@ import org.apache.commons.lang.StringUtils;
  * @see JaxbBundle
  */
 @ToString
+@Loggable(Loggable.DEBUG)
 public final class PageBuilder {
 
     /**
@@ -117,10 +117,6 @@ public final class PageBuilder {
     static {
         ClassPool.getDefault().insertClassPath(
             new ClassClassPath(PageBuilder.class)
-        );
-        Logger.debug(
-            PageBuilder.class,
-            "#PageBuilder(): javassist initialized"
         );
     }
 
@@ -143,9 +139,7 @@ public final class PageBuilder {
      */
     @NotNull
     public PageBuilder stylesheet(@NotNull final String uri) {
-        this.xsl = UriBuilder.fromUri(uri)
-            .replaceQuery("")
-            .build();
+        this.xsl = UriBuilder.fromUri(uri).replaceQuery("").build();
         return this;
     }
 
@@ -176,13 +170,6 @@ public final class PageBuilder {
         } catch (IllegalAccessException ex) {
             throw new IllegalStateException(ex);
         }
-        Logger.debug(
-            PageBuilder.class,
-            // @checkstyle LineLength (1 line)
-            "#build(%s): page of class %[type]s created",
-            base.getName(),
-            page
-        );
         return page;
     }
 
@@ -265,15 +252,7 @@ public final class PageBuilder {
                 attribute.addAnnotation(existing);
             }
             file.addAttribute(attribute);
-            final Class<?> cls = ctc.toClass();
-            Logger.debug(
-                this,
-                "#construct('%s', %s): class %s created",
-                name,
-                base.getName(),
-                cls.getName()
-            );
-            return cls;
+            return ctc.toClass();
         } catch (javassist.NotFoundException ex) {
             throw new IllegalStateException(ex);
         } catch (javassist.CannotCompileException ex) {
@@ -300,22 +279,7 @@ public final class PageBuilder {
                     new HashMap<Object, Object>()
                 )
             );
-            final Annotation[] all = attrib.getAnnotations();
-            final List<String> names = new ArrayList<String>();
-            for (Annotation annotation : all) {
-                result.add(annotation);
-                names.add(annotation.getTypeName());
-            }
-            Logger.debug(
-                this,
-                // @checkstyle LineLength (1 line)
-                "#annotations(%s, %s): %d found in base class, %d of them are copied: %s",
-                dest.getName(),
-                parent.getName(),
-                all.length,
-                result.size(),
-                StringUtils.join(names, ", ")
-            );
+            result.addAll(Arrays.asList(attrib.getAnnotations()));
         }
         return result;
     }

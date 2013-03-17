@@ -29,6 +29,7 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.core.XslResolver;
 import java.lang.reflect.InvocationTargetException;
@@ -121,6 +122,7 @@ import lombok.ToString;
 @SuppressWarnings("unchecked")
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "resource")
+@Loggable(Loggable.DEBUG)
 public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
 
     /**
@@ -182,12 +184,12 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     public final T append(@NotNull final Object element) {
         this.elements.add(element);
         if (!(element instanceof org.w3c.dom.Element)) {
-            final XslResolver resolver = (XslResolver) this.home()
-                .providers()
-                .getContextResolver(
+            final XslResolver resolver = XslResolver.class.cast(
+                this.home().providers().getContextResolver(
                     Marshaller.class,
                     MediaType.APPLICATION_XML_TYPE
-                );
+                )
+            );
             resolver.add(element.getClass());
         }
         return (T) this;
@@ -302,19 +304,20 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      */
     private static Set<Class<? extends Inset>> defaults(
         final Class<?> type) {
-        Set<Class<? extends Inset>> insets;
-        if (type != null && type.isAnnotationPresent(Inset.Default.class)) {
-            insets = new HashSet<Class<? extends Inset>>(
-                Arrays.asList(
-                    type.getAnnotation(Inset.Default.class).value()
-                )
-            );
+        final Set<Class<? extends Inset>> insets =
+            new HashSet<Class<? extends Inset>>();
+        if (type != null) {
+            if (type.isAnnotationPresent(Inset.Default.class)) {
+                insets.addAll(
+                    Arrays.asList(
+                        type.getAnnotation(Inset.Default.class).value()
+                    )
+                );
+            }
             insets.addAll(BasePage.defaults(type.getSuperclass()));
             for (Class<?> iface : type.getInterfaces()) {
                 insets.addAll(BasePage.defaults(iface));
             }
-        } else {
-            insets = new HashSet<Class<? extends Inset>>();
         }
         return insets;
     }
