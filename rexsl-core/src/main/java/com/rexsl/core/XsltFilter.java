@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import java.io.IOException;
@@ -83,6 +84,7 @@ import org.apache.commons.lang.CharEncoding;
  */
 @ToString
 @EqualsAndHashCode(of = "tfactory")
+@Loggable(Loggable.DEBUG)
 public final class XsltFilter implements Filter {
 
     /**
@@ -103,12 +105,6 @@ public final class XsltFilter implements Filter {
         } catch (java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
-        Logger.info(
-            this,
-            "#init(%s): XSLT filter initialized (ReXSL version: %s)",
-            config.getClass().getName(),
-            Manifests.read("ReXSL-Version")
-        );
     }
 
     /**
@@ -136,10 +132,7 @@ public final class XsltFilter implements Filter {
      */
     @Override
     public void destroy() {
-        Logger.info(
-            this,
-            "#destroy(): XSLT filter destroyed"
-        );
+        // nothing to do
     }
 
     /**
@@ -182,7 +175,6 @@ public final class XsltFilter implements Filter {
      * @checkstyle RedundantThrows (2 lines)
      */
     private String transform(final String xml) throws ServletException {
-        final long start = System.currentTimeMillis();
         final StringWriter writer = new StringWriter();
         try {
             final Source stylesheet = this.tfactory.getAssociatedStylesheet(
@@ -201,7 +193,7 @@ public final class XsltFilter implements Filter {
             }
             Logger.debug(
                 this,
-                "#tranform(%d chars): found '%s' associated stylesheet by %s",
+                "#transform(%d chars): found '%s' associated stylesheet by %s",
                 xml.length(),
                 stylesheet.getSystemId(),
                 this.tfactory.getClass().getName()
@@ -228,15 +220,7 @@ public final class XsltFilter implements Filter {
                 ex
             );
         }
-        final String output = writer.toString();
-        Logger.debug(
-            this,
-            "#tranform(%d chars): produced %d chars in %[ns]s",
-            xml.length(),
-            output.length(),
-            System.currentTimeMillis() - start
-        );
-        return output;
+        return writer.toString();
     }
 
     /**

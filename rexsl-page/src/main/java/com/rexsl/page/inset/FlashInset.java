@@ -98,10 +98,8 @@ public final class FlashInset implements Inset {
             );
             page.append(
                 new JaxbBundle("flash")
-                    .add("message", cookie.message())
-                    .up()
-                    .add("level", cookie.level())
-                    .up()
+                    .add("message", cookie.message()).up()
+                    .add("level", cookie.level()).up()
             );
             builder.cookie(
                 new CookieBuilder(this.resource.uriInfo().getBaseUri())
@@ -123,7 +121,7 @@ public final class FlashInset implements Inset {
         return new WebApplicationException(
             Response.status(HttpURLConnection.HTTP_SEE_OTHER)
                 .location(uri)
-                .cookie(new FlashInset.Flash(uri, message, Level.SEVERE))
+                .cookie(new FlashInset.Flash(uri, message, level))
                 .header(FlashInset.HEADER, message)
                 .entity(message)
                 .build()

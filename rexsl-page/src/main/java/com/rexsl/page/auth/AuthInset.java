@@ -60,6 +60,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(of = { "resource", "key", "salt" })
+@Loggable(Loggable.DEBUG)
 public final class AuthInset implements Inset {
 
     /**
@@ -112,7 +113,6 @@ public final class AuthInset implements Inset {
      * @param salt Security salt
      * @return Encrypted text for cookie
      */
-    @Loggable(Loggable.DEBUG)
     public static String encrypt(@NotNull final Identity identity,
         @NotNull final String key, @NotNull final String salt) {
         return new Encrypted(identity, key, salt).toString();
@@ -123,7 +123,6 @@ public final class AuthInset implements Inset {
      * @param prov Additional authentication provider
      * @return This object
      */
-    @Loggable(Loggable.DEBUG)
     public AuthInset with(@NotNull final Provider prov) {
         this.providers.add(prov);
         return this;
@@ -133,7 +132,6 @@ public final class AuthInset implements Inset {
      * Get user's identity (runtime exception if not authenticated).
      * @return Identity, if authenticated
      */
-    @Loggable(Loggable.DEBUG)
     @Cacheable(lifetime = 1, unit = TimeUnit.SECONDS)
     public Identity identity() {
         Identity identity = Identity.ANONYMOUS;
@@ -177,7 +175,6 @@ public final class AuthInset implements Inset {
      * {@inheritDoc}
      */
     @Override
-    @Loggable(Loggable.DEBUG)
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
         final Identity identity = this.identity();

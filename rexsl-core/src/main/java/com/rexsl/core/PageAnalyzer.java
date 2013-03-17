@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
@@ -79,37 +80,62 @@ final class PageAnalyzer {
             this.request.getHeader(HttpHeaders.ACCEPT)
         );
         // @checkstyle BooleanExpressionComplexity (1 line)
-        final boolean dontTouch =
-            this.page.isEmpty()
-            || !this.page.startsWith("<?xml ")
-            || !this.page.contains("<?xml-stylesheet ")
-            || accept.explicit(MediaType.APPLICATION_XML)
-            || (
-                agent.isXsltCapable()
-                && accept.accepts(MediaType.APPLICATION_XML)
-            );
-        if (dontTouch) {
-            Logger.debug(
-                this,
-                // @checkstyle LineLength (1 line)
-                "#needsTransformation('%s': %d chars): User-Agent='%s', Accept='%s', no need to transform",
-                this.request.getRequestURI(),
-                this.page.length(),
-                agent,
-                accept
-            );
-        } else {
-            Logger.debug(
-                this,
-                // @checkstyle LineLength (1 line)
-                "#filtneedsTransformationer('%s': %d chars): User-Agent='%s', Accept='%s', transformation required",
-                this.request.getRequestURI(),
-                this.page.length(),
-                agent,
-                accept
-            );
-        }
-        return !dontTouch;
+        final boolean needs = this.notEmpty() && this.containsXml()
+            && !this.xmlDemanded(accept)
+            && !this.xslAccepted(agent, accept);
+        Logger.debug(
+            this,
+            // @checkstyle LineLength (1 line)
+            "#needsTransformation('%s': '%[text]s'): User-Agent='%s', Accept='%s', %B",
+            this.request.getRequestURI(),
+            this.page,
+            agent,
+            accept,
+            needs
+        );
+        return needs;
+    }
+
+    /**
+     * Page require transformation, since it's not an empty page?
+     * @return TRUE if the page requires transformation
+     */
+    @Loggable(Loggable.DEBUG)
+    private boolean notEmpty() {
+        return !this.page.isEmpty();
+    }
+
+    /**
+     * Page require transformation, since it contains XML and XSL stylesheet?
+     * @return TRUE if the page requires transformation
+     */
+    @Loggable(Loggable.DEBUG)
+    private boolean containsXml() {
+        return this.page.startsWith("<?xml ")
+            && this.page.contains("<?xml-stylesheet ");
+    }
+
+    /**
+     * Page requires transformation, since XML media type is not required?
+     * @param types Media types
+     * @return TRUE if the page requires transformation
+     */
+    @Loggable(Loggable.DEBUG)
+    private boolean xmlDemanded(final TypesMatcher types) {
+        return types.explicit(MediaType.APPLICATION_XML);
+    }
+
+    /**
+     * Page requires transformation, since XSL is not welcome by the client?
+     * @param agent User agent of the client
+     * @param types Media types
+     * @return TRUE if the page requires transformation
+     */
+    @Loggable(Loggable.DEBUG)
+    private boolean xslAccepted(final UserAgent agent,
+        final TypesMatcher types) {
+        return agent.isXsltCapable()
+            && types.accepts(MediaType.APPLICATION_XML);
     }
 
 }

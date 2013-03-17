@@ -29,6 +29,7 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.aspects.Loggable;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,6 +72,7 @@ import lombok.ToString;
  *  but not in Chrome. see http://stackoverflow.com/questions/1612177
  */
 @ToString
+@Loggable(Loggable.DEBUG)
 public final class CookieBuilder {
 
     /**

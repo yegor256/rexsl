@@ -29,13 +29,17 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.core.XslResolver;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MediaType;
@@ -118,6 +122,7 @@ import lombok.ToString;
 @SuppressWarnings("unchecked")
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "resource")
+@Loggable(Loggable.DEBUG)
 public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
 
     /**
@@ -157,11 +162,9 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     @NotNull
     public final Response.ResponseBuilder render() {
         final Response.ResponseBuilder builder = Response.ok();
-        if (this.resource.getClass().isAnnotationPresent(Inset.Default.class)) {
-            for (Class<? extends Inset> type : this.resource.getClass()
-                .getAnnotation(Inset.Default.class).value()) {
-                this.inset(type).render(this, builder);
-            }
+        for (Class<? extends Inset> type
+            : BasePage.defaults(this.resource.getClass())) {
+            this.inset(type).render(this, builder);
         }
         for (Method method : this.resource.getClass().getMethods()) {
             if (method.isAnnotationPresent(Inset.Runtime.class)) {
@@ -181,12 +184,12 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     public final T append(@NotNull final Object element) {
         this.elements.add(element);
         if (!(element instanceof org.w3c.dom.Element)) {
-            final XslResolver resolver = (XslResolver) this.home()
-                .providers()
-                .getContextResolver(
+            final XslResolver resolver = XslResolver.class.cast(
+                this.home().providers().getContextResolver(
                     Marshaller.class,
                     MediaType.APPLICATION_XML_TYPE
-                );
+                )
+            );
             resolver.add(element.getClass());
         }
         return (T) this;
@@ -292,6 +295,31 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     @XmlElement
     public final long getMillis() {
         return System.currentTimeMillis() - this.home().started();
+    }
+
+    /**
+     * Get all specified (by annotations) default insets.
+     * @param type The type to fetch them from or NULL
+     * @return List of them
+     */
+    private static Set<Class<? extends Inset>> defaults(
+        final Class<?> type) {
+        final Set<Class<? extends Inset>> insets =
+            new HashSet<Class<? extends Inset>>();
+        if (type != null) {
+            if (type.isAnnotationPresent(Inset.Default.class)) {
+                insets.addAll(
+                    Arrays.asList(
+                        type.getAnnotation(Inset.Default.class).value()
+                    )
+                );
+            }
+            insets.addAll(BasePage.defaults(type.getSuperclass()));
+            for (Class<?> iface : type.getInterfaces()) {
+                insets.addAll(BasePage.defaults(iface));
+            }
+        }
+        return insets;
     }
 
     /**

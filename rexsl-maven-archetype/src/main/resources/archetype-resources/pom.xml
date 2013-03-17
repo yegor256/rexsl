@@ -17,6 +17,7 @@
     <name>${artifactId}</name>
     <properties>
         <rexsl.version>@project.version@</rexsl.version>
+        <jcabi.version>@jcabi.version@</jcabi.version>
     </properties>
     <dependencies>
         <dependency>

@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.core.annotations.Schema;
 import com.rexsl.core.annotations.Stylesheet;
@@ -69,6 +70,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 @EqualsAndHashCode(of = { "xsdFolder", "classes", "context" })
 @Provider
 @Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
+@Loggable(Loggable.DEBUG)
 public final class XslResolver implements ContextResolver<Marshaller> {
 
     /**
@@ -115,11 +117,6 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 this.xsdFolder
             );
         }
-        Logger.debug(
-            this,
-            "#setServletContext(%s): context injected by JAX-RS",
-            ctx.getClass().getName()
-        );
     }
 
     /**
@@ -235,12 +232,6 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         } else {
             stylesheet = ((Stylesheet) antn).value();
         }
-        Logger.debug(
-            XslResolver.class,
-            "#stylesheet(%s): '%s' stylesheet discovered",
-            type.getName(),
-            stylesheet
-        );
         return stylesheet;
     }
 
@@ -316,12 +307,6 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 schema = ((Schema) antn).value();
             }
         }
-        Logger.debug(
-            XslResolver.class,
-            "#schema(%s): '%s' schema discovered",
-            type.getName(),
-            schema
-        );
         return schema;
     }
 
