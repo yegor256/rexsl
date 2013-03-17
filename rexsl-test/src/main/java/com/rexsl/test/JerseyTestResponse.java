@@ -445,10 +445,12 @@ final class JerseyTestResponse implements TestResponse {
     private TestClient follow(final URI uri) {
         final TestClient client = RestTester.start(uri);
         for (NewCookie cookie : this.fetcher.fetch().getCookies()) {
-            client.header(
-                HttpHeaders.COOKIE,
-                new Cookie(cookie.getName(), cookie.getValue()).toString()
-            );
+            if (!cookie.getValue().isEmpty()) {
+                client.header(
+                    HttpHeaders.COOKIE,
+                    new Cookie(cookie.getName(), cookie.getValue()).toString()
+                );
+            }
         }
         return client;
     }
