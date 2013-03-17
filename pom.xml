@@ -108,9 +108,9 @@
         <url>http://ci.rexsl.com:8080/job/rexsl/</url>
     </ciManagement>
     <scm>
-        <connection>scm:svn:svn://svn.rexsl.com/rexsl/trunk/rexsl</connection>
-        <developerConnection>scm:svn:svn://svn.rexsl.com/rexsl/trunk/rexsl</developerConnection>
-        <url>http://svn.rexsl.com/rexsl/trunk/rexsl</url>
+        <connection>scm:svn:svn://svn.rexsl.com/rexsl/trunk</connection>
+        <developerConnection>scm:svn:svn://svn.rexsl.com/rexsl/trunk</developerConnection>
+        <url>http://svn.rexsl.com/rexsl/trunk</url>
     </scm>
     <distributionManagement>
         <site>
