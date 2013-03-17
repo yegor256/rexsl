@@ -66,6 +66,9 @@
                         <goals>
                             <goal>integration-test</goal>
                         </goals>
+                        <configuration>
+                            <testProjectsDirectory>${project.build.directory}/archetype-integration-test</testProjectsDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
