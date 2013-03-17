@@ -45,7 +45,7 @@ import lombok.ToString;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.4.8
- * @link <a href="http://www.rexsl.com/rexsl-page/inset-links.html">Default HATEOAS links</a>
+ * @see <a href="http://www.rexsl.com/rexsl-page/inset-links.html">Default HATEOAS links</a>
  */
 @ToString
 @EqualsAndHashCode(of = "resource")

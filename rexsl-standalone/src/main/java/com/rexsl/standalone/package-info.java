@@ -42,6 +42,6 @@
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.8
- * @link <a href="http://www.rexsl.com/rexsl-standalone">project site</a>
+ * @see <a href="http://www.rexsl.com/rexsl-standalone">project site</a>
  */
 package com.rexsl.standalone;
