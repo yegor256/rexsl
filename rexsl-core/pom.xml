@@ -142,7 +142,7 @@
             -->
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
-            <version>1.7.3</version>
+            <version>1.7.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

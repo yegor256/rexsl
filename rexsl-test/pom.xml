@@ -93,7 +93,7 @@
             -->
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.3</version>
+            <version>1.7.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -142,19 +142,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!--
-            Apache Xerces is a JAXP implementation of DOM/XPath and
-            XML Schema validator. In order to replace a default implementation
-            provided by JDK with Xerces we are using text files inside
-            "src/main/resources/META-INF/services" directory. Every file
-            identifies the class to be used as an implementation for
-            a given factory. This approach gives us enough flexibility
-            to replace implementation at any moment, if necessary.
-            -->
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
-            <!-- Version 2.9.1 is the only one that works, don't change it. -->
-            <version>2.9.1</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>

@@ -108,7 +108,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.2.0.CR2</version>
+            <version>4.2.0.Final</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
