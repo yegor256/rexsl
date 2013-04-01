@@ -49,6 +49,10 @@ public interface Identity {
      */
     Identity ANONYMOUS = new Identity() {
         @Override
+        public String toString() {
+            return this.urn().toString();
+        }
+        @Override
         public URN urn() {
             return URN.create("urn:rexsl:anonymous");
         }

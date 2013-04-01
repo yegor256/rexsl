@@ -29,13 +29,17 @@
  */
 package com.rexsl.page;
 
+import java.net.HttpCookie;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import org.mockito.Mockito;
@@ -84,6 +88,7 @@ public final class HttpHeadersMocker {
         Mockito.doReturn(map).when(this.subj).getRequestHeaders();
         Mockito.doAnswer(
             new Answer<List<String>>() {
+                @Override
                 public List<String> answer(final InvocationOnMock inv) {
                     final String name = inv.getArguments()[0].toString();
                     return HttpHeadersMocker.this.headers.get(name);
@@ -92,6 +97,7 @@ public final class HttpHeadersMocker {
         ).when(this.subj).getRequestHeader(Mockito.anyString());
         Mockito.doAnswer(
             new Answer<String>() {
+                @Override
                 public String answer(final InvocationOnMock inv) {
                     final String name = inv.getArguments()[0].toString();
                     String first = null;
@@ -108,6 +114,7 @@ public final class HttpHeadersMocker {
         ).when(map).getFirst(Mockito.anyString());
         Mockito.doAnswer(
             new Answer<Boolean>() {
+                @Override
                 public Boolean answer(final InvocationOnMock inv) {
                     return HttpHeadersMocker.this.headers.containsKey(
                         inv.getArguments()[0].toString()
@@ -117,6 +124,7 @@ public final class HttpHeadersMocker {
         ).when(map).containsKey(Mockito.anyString());
         Mockito.doAnswer(
             new Answer<Set<Map.Entry<String, List<String>>>>() {
+                @Override
                 public Set<Map.Entry<String, List<String>>> answer(
                     final InvocationOnMock inv) {
                     return HttpHeadersMocker.this.headers.entrySet();
@@ -125,6 +133,7 @@ public final class HttpHeadersMocker {
         ).when(map).entrySet();
         Mockito.doAnswer(
             new Answer<Set<String>>() {
+                @Override
                 public Set<String> answer(final InvocationOnMock inv) {
                     return HttpHeadersMocker.this.headers.keySet();
                 }
@@ -132,6 +141,7 @@ public final class HttpHeadersMocker {
         ).when(map).keySet();
         Mockito.doAnswer(
             new Answer<List<String>>() {
+                @Override
                 public List<String> answer(final InvocationOnMock inv) {
                     return HttpHeadersMocker.this.headers.get(
                         inv.getArguments()[0].toString()
@@ -139,6 +149,31 @@ public final class HttpHeadersMocker {
                 }
             }
         ).when(map).get(Mockito.anyString());
+        Mockito.doAnswer(
+            new Answer<Map<String, Cookie>>() {
+                @Override
+                public Map<String, Cookie> answer(final InvocationOnMock inv) {
+                    final ConcurrentMap<String, Cookie> cookies =
+                        new ConcurrentHashMap<String, Cookie>();
+                    final Collection<String> headers =
+                        HttpHeadersMocker.this.headers.get(HttpHeaders.COOKIE);
+                    if (headers != null) {
+                        for (String header : headers) {
+                            for (HttpCookie cookie : HttpCookie.parse(header)) {
+                                cookies.put(
+                                    cookie.getName(),
+                                    new Cookie(
+                                        cookie.getName(),
+                                        cookie.getValue()
+                                    )
+                                );
+                            }
+                        }
+                    }
+                    return cookies;
+                }
+            }
+        ).when(this.subj).getCookies();
         return this.subj;
     }
 

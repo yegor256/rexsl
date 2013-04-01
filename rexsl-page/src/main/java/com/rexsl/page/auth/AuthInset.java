@@ -115,7 +115,7 @@ public final class AuthInset implements Inset {
      */
     public static String encrypt(@NotNull final Identity identity,
         @NotNull final String key, @NotNull final String salt) {
-        return new Encrypted(identity, key, salt).toString();
+        return new Encrypted(identity, key, salt).cookie();
     }
 
     /**
@@ -160,7 +160,7 @@ public final class AuthInset implements Inset {
             } catch (Encrypted.DecryptionException ex) {
                 Logger.warn(
                     this,
-                    "Failed to decrypt '%s' from %s to '%s': %[exception]s",
+                    "Failed to decrypt '%s' from '%s' to '%s': %[exception]s",
                     cookie,
                     this.resource.httpServletRequest().getRemoteAddr(),
                     this.resource.httpServletRequest().getRequestURI(),
@@ -228,7 +228,7 @@ public final class AuthInset implements Inset {
     private NewCookie cookie(final Identity identity) {
         return new CookieBuilder(this.resource.uriInfo().getBaseUri())
             .name(AuthInset.AUTH_COOKIE)
-            .value(new Encrypted(identity, this.key, this.salt))
+            .value(new Encrypted(identity, this.key, this.salt).cookie())
             .temporary()
             .build();
     }

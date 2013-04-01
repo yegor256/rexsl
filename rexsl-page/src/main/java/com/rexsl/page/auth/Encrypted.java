@@ -40,6 +40,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.codec.binary.Base32;
 
 /**
@@ -51,6 +52,7 @@ import org.apache.commons.codec.binary.Base32;
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @Immutable
+@ToString(of = "identity")
 @EqualsAndHashCode(of = { "identity", "key", "salt" })
 @Loggable(Loggable.DEBUG)
 final class Encrypted implements Identity {
@@ -113,10 +115,10 @@ final class Encrypted implements Identity {
     }
 
     /**
-     * {@inheritDoc}
+     * Get its value for cookie.
+     * @return The value
      */
-    @Override
-    public String toString() {
+    public String cookie() {
         final ByteArrayOutputStream data = new ByteArrayOutputStream();
         try {
             final DataOutputStream stream = new DataOutputStream(data);
