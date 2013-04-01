@@ -66,23 +66,10 @@ public final class HttpHeadersMocker {
         new ConcurrentSkipListMap<String, List<String>>();
 
     /**
-     * With this header on board.
-     * @param name The name of it
-     * @param value The value of it
-     * @return This object
-     */
-    public HttpHeadersMocker withHeader(final String name, final String value) {
-        this.headers.putIfAbsent(name, new LinkedList<String>());
-        this.headers.get(name).add(value);
-        return this;
-    }
-
-    /**
-     * Build an instance of provided class.
-     * @return The resource just created
+     * Public ctor.
      */
     @SuppressWarnings("unchecked")
-    public HttpHeaders mock() {
+    public HttpHeadersMocker() {
         final MultivaluedMap<String, String> map =
             Mockito.mock(MultivaluedMap.class);
         Mockito.doReturn(map).when(this.subj).getRequestHeaders();
@@ -149,16 +136,36 @@ public final class HttpHeadersMocker {
                 }
             }
         ).when(map).get(Mockito.anyString());
+    }
+
+    /**
+     * With this header on board.
+     * @param name The name of it
+     * @param value The value of it
+     * @return This object
+     */
+    public HttpHeadersMocker withHeader(final String name, final String value) {
+        this.headers.putIfAbsent(name, new LinkedList<String>());
+        this.headers.get(name).add(value);
+        return this;
+    }
+
+    /**
+     * Build an instance of provided class.
+     * @return The resource just created
+     */
+    public HttpHeaders mock() {
         Mockito.doAnswer(
+            // @checkstyle AnonInnerLength (50 lines)
             new Answer<Map<String, Cookie>>() {
                 @Override
                 public Map<String, Cookie> answer(final InvocationOnMock inv) {
                     final ConcurrentMap<String, Cookie> cookies =
                         new ConcurrentHashMap<String, Cookie>();
-                    final Collection<String> headers =
+                    final Collection<String> hdrs =
                         HttpHeadersMocker.this.headers.get(HttpHeaders.COOKIE);
-                    if (headers != null) {
-                        for (String header : headers) {
+                    if (hdrs != null) {
+                        for (String header : hdrs) {
                             for (HttpCookie cookie : HttpCookie.parse(header)) {
                                 cookies.put(
                                     cookie.getName(),

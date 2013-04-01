@@ -156,7 +156,9 @@ public final class AuthInset implements Inset {
             final String cookie = this.resource.httpHeaders().getCookies()
                 .get(AuthInset.AUTH_COOKIE).getValue();
             try {
-                identity = Encrypted.parse(cookie, this.key, this.salt);
+                identity = new Identity.Simple(
+                    Encrypted.parse(cookie, this.key, this.salt)
+                );
             } catch (Encrypted.DecryptionException ex) {
                 Logger.warn(
                     this,

@@ -161,20 +161,7 @@ final class Encrypted implements Identity {
                 throw new Encrypted.DecryptionException("invalid salt");
             }
             return new Encrypted(
-                new Identity() {
-                    @Override
-                    public URN urn() {
-                        return urn;
-                    }
-                    @Override
-                    public String name() {
-                        return name;
-                    }
-                    @Override
-                    public URI photo() {
-                        return URI.create(photo);
-                    }
-                },
+                new Identity.Simple(urn, name, URI.create(photo)),
                 key,
                 salt
             );
