@@ -320,8 +320,8 @@
         <dependency>
             <!-- Groovy engine. -->
             <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all-minimal</artifactId>
-            <version>1.5.8</version>
+            <artifactId>groovy-all</artifactId>
+            <version>2.1.2</version>
         </dependency>
         <dependency>
             <!-- Javax.el implementation, required for Jetty in tests -->
@@ -357,6 +357,17 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <!-- @see https://github.com/yegor256/jcabi/issues/179 -->
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>jcabi-versioning-packages</id>
+                        <phase>never</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <executions>

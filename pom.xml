@@ -194,9 +194,21 @@
             </dependency>
             <dependency>
                 <!-- JAX-RS implementation, core library -->
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>4.1</version>
+            </dependency>
+            <dependency>
+                <!-- JAX-RS implementation, core library -->
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-server</artifactId>
                 <version>${jersey.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>asm</groupId>
+                        <artifactId>asm</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <!-- Jersey client -->
@@ -213,8 +225,8 @@
                 <version>${jersey.version}</version>
                 <exclusions>
                     <exclusion>
-                        <artifactId>activation</artifactId>
                         <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

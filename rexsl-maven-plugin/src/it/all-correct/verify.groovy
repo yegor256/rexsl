@@ -42,7 +42,7 @@ assert log.text.contains('All ReXSL checks passed')
 // Let's verify that we're getting natural log from the application,
 // as it's designed there (not a Maven log). This message will be visible in
 // logs only if in-application logging facility is used.
-assert log.text.contains('servlet initialized')
+assert log.text.contains('com.rexsl.core.RestfulServlet: #init():')
 
 // Let's verify that all files are packaged in destination folder
 def css = new File(basedir, 'target/all-correct-1.0/css/screen.css')
