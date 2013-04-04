@@ -29,6 +29,7 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.aspects.Loggable;
 import com.rexsl.test.TestResponse;
 import java.net.URI;
 import java.util.regex.Pattern;
@@ -45,6 +46,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "uri")
+@Loggable(Loggable.DEBUG)
 final class DefaultCssValidator extends BaseValidator implements Validator {
 
     /**

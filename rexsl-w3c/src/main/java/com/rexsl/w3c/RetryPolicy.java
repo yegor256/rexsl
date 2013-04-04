@@ -29,6 +29,7 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
@@ -46,6 +47,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(callSuper = false, of = { "xpath", "valid" })
+@Loggable(Loggable.DEBUG)
 final class RetryPolicy implements AssertionPolicy {
 
     /**

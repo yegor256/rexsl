@@ -29,6 +29,7 @@
  */
 package com.rexsl.test.html;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.test.AssertionPolicy;
 import com.rexsl.test.TestResponse;
@@ -62,6 +63,7 @@ import org.hamcrest.Matchers;
  */
 @ToString
 @EqualsAndHashCode(of = "home")
+@Loggable(Loggable.DEBUG)
 public final class NoBrokenLinks implements AssertionPolicy {
 
     /**
