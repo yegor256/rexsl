@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import java.util.AbstractMap;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -45,6 +46,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(callSuper = true)
+@Loggable(Loggable.DEBUG)
 final class Header extends AbstractMap.SimpleEntry<String, String> {
 
     /**

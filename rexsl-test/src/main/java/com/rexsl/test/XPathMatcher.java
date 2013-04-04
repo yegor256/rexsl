@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
@@ -49,6 +50,7 @@ import org.w3c.dom.Node;
  */
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "xpath")
+@Loggable(Loggable.DEBUG)
 final class XPathMatcher<T> extends TypeSafeMatcher<T> {
 
     /**

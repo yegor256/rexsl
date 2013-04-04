@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -52,6 +53,7 @@ import org.codehaus.jackson.node.MissingNode;
  */
 @ToString
 @EqualsAndHashCode(of = "node")
+@Loggable(Loggable.DEBUG)
 public final class SimpleJson implements JsonDocument {
 
     /**

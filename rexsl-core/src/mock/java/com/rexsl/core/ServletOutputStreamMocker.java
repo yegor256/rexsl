@@ -30,7 +30,7 @@
 package com.rexsl.core;
 
 import javax.servlet.ServletOutputStream;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;

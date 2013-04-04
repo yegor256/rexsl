@@ -53,7 +53,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.validation.SchemaFactory;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Provider of JAXB {@link Marshaller} for JAX-RS framework.
