@@ -30,9 +30,15 @@
 package com.rexsl.page;
 
 import java.net.URI;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.ext.Providers;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * Test case for {@link BaseResource}.
@@ -64,6 +70,33 @@ public final class BaseResourceTest {
             res.uriInfo().getBaseUri().toString(),
             Matchers.equalTo("https://example.com/foo")
         );
+    }
+
+    /**
+     * BaseResource can set and return context elements.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void setsAndReturnsContextElements() throws Exception {
+        final BaseResource res = new BaseResourceTest.FooResource();
+        final Providers provs = Mockito.mock(Providers.class);
+        res.setProviders(provs);
+        MatcherAssert.assertThat(res.providers(), Matchers.equalTo(provs));
+        final HttpHeaders headers = Mockito.mock(HttpHeaders.class);
+        res.setHttpHeaders(headers);
+        MatcherAssert.assertThat(res.httpHeaders(), Matchers.equalTo(headers));
+        final HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
+        res.setHttpServletRequest(req);
+        MatcherAssert.assertThat(
+            res.httpServletRequest(),
+            Matchers.equalTo(req)
+        );
+        final SecurityContext sctx = Mockito.mock(SecurityContext.class);
+        res.setSecurityContext(sctx);
+        MatcherAssert.assertThat(res.securityContext(), Matchers.equalTo(sctx));
+        final ServletContext vctx = Mockito.mock(ServletContext.class);
+        res.setServletContext(vctx);
+        MatcherAssert.assertThat(res.servletContext(), Matchers.equalTo(vctx));
     }
 
     /**
