@@ -30,11 +30,11 @@
 package com.rexsl.foo.xhtml
 
 import com.rexsl.test.XhtmlMatchers
-import org.junit.Assert
-import org.junit.matchers.JUnitMatchers
+import org.hamcrest.Matchers
+import org.hamcrest.MatcherAssert
 
-Assert.assertThat(rexsl.document, JUnitMatchers.containsString('hello'))
-Assert.assertThat(
+MatcherAssert.assertThat(rexsl.document, Matchers.containsString('hello'))
+MatcherAssert.assertThat(
     rexsl.document,
     XhtmlMatchers.hasXPath("//xhtml:input[contains(@value,'hello')]")
 )

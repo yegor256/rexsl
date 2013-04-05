@@ -55,7 +55,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Converts XML to XHTML, if necessary.

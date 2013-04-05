@@ -32,6 +32,9 @@ package com.rexsl.page.auth;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.urn.URN;
 import java.net.URI;
+import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Authentication inset.
@@ -48,6 +51,10 @@ public interface Identity {
      * Anonymous.
      */
     Identity ANONYMOUS = new Identity() {
+        @Override
+        public String toString() {
+            return this.urn().toString();
+        }
         @Override
         public URN urn() {
             return URN.create("urn:rexsl:anonymous");
@@ -79,5 +86,67 @@ public interface Identity {
      * @return URI of the image
      */
     URI photo();
+
+    /**
+     * Simple Identity.
+     */
+    @Immutable
+    @ToString
+    @EqualsAndHashCode(of = "idnt")
+    final class Simple implements Identity {
+        /**
+         * URN of it.
+         */
+        private final transient URN idnt;
+        /**
+         * Name of it.
+         */
+        private final transient String title;
+        /**
+         * Photo.
+         */
+        private final transient String pic;
+        /**
+         * Public ctor.
+         * @param urn URN of it
+         * @param name Name of it
+         * @param photo Photo
+         */
+        public Simple(@NotNull final URN urn, @NotNull final String name,
+            @NotNull final URI photo) {
+            this.idnt = urn;
+            this.title = name;
+            this.pic = photo.toString();
+        }
+        /**
+         * Public ctor.
+         * @param identity Original identity
+         */
+        public Simple(@NotNull final Identity identity) {
+            this(identity.urn(), identity.name(), identity.photo());
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public URN urn() {
+            return this.idnt;
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String name() {
+            return this.title;
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public URI photo() {
+            return URI.create(this.pic);
+        }
+
+    }
 
 }

@@ -32,13 +32,11 @@ package com.rexsl.maven.utils;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.maven.LogMocker;
 import com.rexsl.test.RestTester;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.slf4j.impl.StaticLoggerBinder;
 
 /**
  * Grizzly test case.
@@ -72,8 +70,6 @@ public final class EmbeddedContainerTest {
             .withTextFile("target/webdir/file.txt", "some test data")
             .withTextFile("src/test/rexsl/setup/test.groovy", "assert true")
             .mock();
-        final LogMocker lmocker = new LogMocker();
-        StaticLoggerBinder.getSingleton().setMavenLog(lmocker.mock());
         final EmbeddedContainer container = EmbeddedContainer.start(env);
         final URI home = new URI(
             Logger.format("http://localhost:%d/file.txt", env.port())

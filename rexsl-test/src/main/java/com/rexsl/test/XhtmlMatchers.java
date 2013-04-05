@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
@@ -54,6 +55,7 @@ import org.hamcrest.Matchers;
  */
 @ToString
 @EqualsAndHashCode
+@Loggable(Loggable.DEBUG)
 public final class XhtmlMatchers {
 
     /**

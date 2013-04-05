@@ -29,6 +29,7 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.aspects.Loggable;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -62,6 +63,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode
+@Loggable(Loggable.DEBUG)
 public final class ValidatorBuilder {
 
     /**

@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Wrapper that redirects all the writes to {@link ByteArrayOutputStream}.

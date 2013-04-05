@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.StringWriter;
 import javax.validation.constraints.NotNull;
@@ -85,6 +86,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode
+@Loggable(Loggable.DEBUG)
 public final class JaxbConverter {
 
     /**

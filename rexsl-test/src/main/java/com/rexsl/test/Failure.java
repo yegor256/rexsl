@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -45,6 +46,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(of = "reason")
+@Loggable(Loggable.DEBUG)
 final class Failure implements AssertionPolicy {
 
     /**

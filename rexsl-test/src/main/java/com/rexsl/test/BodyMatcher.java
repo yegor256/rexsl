@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -46,6 +47,7 @@ import org.hamcrest.MatcherAssert;
  */
 @ToString
 @EqualsAndHashCode(of = "matcher")
+@Loggable(Loggable.DEBUG)
 final class BodyMatcher implements AssertionPolicy {
 
     /**

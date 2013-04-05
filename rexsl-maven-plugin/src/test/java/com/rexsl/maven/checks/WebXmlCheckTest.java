@@ -87,7 +87,6 @@ public final class WebXmlCheckTest {
      * @return TRUE if we're online
      */
     private static boolean online() {
-        new com.rexsl.maven.LogMocker().mock();
         boolean online;
         try {
             online = RestTester.start(

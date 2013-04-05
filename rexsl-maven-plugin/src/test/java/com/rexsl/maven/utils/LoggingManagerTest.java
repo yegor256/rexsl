@@ -30,7 +30,6 @@
 package com.rexsl.maven.utils;
 
 import com.jcabi.log.Logger;
-import com.rexsl.maven.LogMocker;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
@@ -38,7 +37,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.impl.StaticLoggerBinder;
 
 /**
  * LoggingManager test.
@@ -54,8 +52,6 @@ public final class LoggingManagerTest {
     @Test
     @Ignore
     public void enter() throws IOException {
-        final LogMocker lmocker = new LogMocker();
-        StaticLoggerBinder.getSingleton().setMavenLog(lmocker.mock());
         LoggingManager.enter("LoggingManagerTest");
         Logger.info(this, "Hello, world!");
         LoggingManager.leave();
@@ -74,8 +70,6 @@ public final class LoggingManagerTest {
     @Test
     @Ignore
     public void leave() throws IOException {
-        final LogMocker lmocker = new LogMocker();
-        StaticLoggerBinder.getSingleton().setMavenLog(lmocker.mock());
         LoggingManager.enter("LoggingManagerLeave");
         Logger.info(this, "Message inside scope");
         LoggingManager.leave();

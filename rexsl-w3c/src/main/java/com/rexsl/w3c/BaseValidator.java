@@ -29,6 +29,7 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.test.RestTester;
 import com.rexsl.test.TestResponse;
@@ -43,7 +44,7 @@ import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.InputStreamBody;
@@ -57,6 +58,7 @@ import org.apache.http.entity.mime.content.StringBody;
  */
 @ToString
 @EqualsAndHashCode
+@Loggable(Loggable.DEBUG)
 class BaseValidator {
 
     /**

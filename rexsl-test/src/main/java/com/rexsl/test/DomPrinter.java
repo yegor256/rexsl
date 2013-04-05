@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import java.io.StringWriter;
 import javax.validation.constraints.NotNull;
 import javax.xml.transform.OutputKeys;
@@ -49,6 +50,7 @@ import org.w3c.dom.Node;
  * @since 0.3.7
  */
 @EqualsAndHashCode(of = "node")
+@Loggable(Loggable.DEBUG)
 final class DomPrinter {
 
     /**

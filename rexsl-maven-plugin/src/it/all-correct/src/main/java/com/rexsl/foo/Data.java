@@ -30,7 +30,7 @@
 package com.rexsl.foo;
 
 import com.jcabi.log.Logger;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Holder of data.

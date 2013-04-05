@@ -34,7 +34,6 @@ import java.util.Properties;
 import org.apache.maven.project.MavenProject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -44,15 +43,6 @@ import org.mockito.Mockito;
  * @version $Id$
  */
 public final class MavenEnvironmentTest {
-
-    /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogMocker().mock();
-    }
 
     /**
      * MavenEnvironment can return pre-set props.

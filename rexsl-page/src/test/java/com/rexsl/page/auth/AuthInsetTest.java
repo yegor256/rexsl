@@ -29,6 +29,7 @@
  */
 package com.rexsl.page.auth;
 
+import com.jcabi.urn.URN;
 import com.rexsl.page.BasePage;
 import com.rexsl.page.BasePageMocker;
 import com.rexsl.page.HttpHeadersMocker;
@@ -69,27 +70,32 @@ public final class AuthInsetTest {
     }
 
     /**
-     * AuthInset can render cookie and add a cleaning header.
+     * AuthInset can read cookie and add a cleaning header.
      * @throws Exception If there is some problem inside
-     * @todo #628 Doesn't work because HttpHeadersMocker doesn't implement
-     *  method getCookies() correctly
      */
     @Test
-    @org.junit.Ignore
-    public void rendersCookieAndAddsHttpHeader() throws Exception {
-        final Resource resource = new ResourceMocker().withHttpHeaders(
-            new HttpHeadersMocker().withHeader(
-                HttpHeaders.COOKIE,
-                "Rexsl-Auth=test;path=/"
-            ).mock()
-        ).mock();
-        final Inset inset = new AuthInset(resource, "", "");
+    public void readsCookieAndAddsHttpHeader() throws Exception {
+        final String key = "74^54\u20ac";
+        final String salt = "76Yt4\u0433{}*Fs";
+        final URN urn = new URN("urn:test:7362423");
+        final String name = "John \u20ac Smith";
+        final String cookie = AuthInset.encrypt(
+            new IdentityMocker()
+                .withURN(urn)
+                .withName(name)
+                .mock(),
+            key,
+            salt
+        );
+        final Resource resource = this.resource(cookie);
+        final Inset inset = new AuthInset(resource, key, salt);
         final BasePage<?, ?> page = new BasePageMocker().init(resource);
         inset.render(page, Response.ok());
         MatcherAssert.assertThat(
             JaxbConverter.the(page),
-            XhtmlMatchers.hasXPath(
-                "/*/identity[name = 'John' and urn = 'urn:test:1']"
+            XhtmlMatchers.hasXPaths(
+                String.format("/*/identity[name='%s']", name),
+                String.format("/*/identity[urn='%s']", urn)
             )
         );
     }
@@ -127,6 +133,42 @@ public final class AuthInsetTest {
             AuthInset.encrypt(new IdentityMocker().mock(), "", ""),
             Matchers.startsWith("0087ASJE79P6AU3JDGT6QRR3DDIM800A9LNM6Q")
         );
+    }
+
+    /**
+     * AuthInset can return a unique identity.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void buildsUniqueIdentitiesAlways() throws Exception {
+        final String key = "74^54\u20ac0*43hsi";
+        final String salt = "76Yt4\u0433{}s";
+        final String cookie = AuthInset.encrypt(
+            new IdentityMocker().mock(), key, salt
+        );
+        MatcherAssert.assertThat(
+            new AuthInset(this.resource(cookie), key, salt).identity(),
+            Matchers.allOf(
+                Matchers.not(Matchers.equalTo(Identity.ANONYMOUS)),
+                Matchers.equalTo(
+                    new AuthInset(this.resource(cookie), key, salt).identity()
+                )
+            )
+        );
+    }
+
+    /**
+     * Make resource with the given auth cookie.
+     * @param cookie The cookie
+     * @return The resource made
+     */
+    private Resource resource(final String cookie) {
+        return new ResourceMocker().withHttpHeaders(
+            new HttpHeadersMocker().withHeader(
+                HttpHeaders.COOKIE,
+                String.format("Rexsl-Auth=%s;path=/", cookie)
+            ).mock()
+        ).mock();
     }
 
 }
