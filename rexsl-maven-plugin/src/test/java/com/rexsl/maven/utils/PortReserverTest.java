@@ -29,7 +29,6 @@
  */
 package com.rexsl.maven.utils;
 
-import com.rexsl.maven.LogMocker;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -47,7 +46,6 @@ public final class PortReserverTest {
      */
     @Test
     public void canReserverTcpPort() throws Exception {
-        new LogMocker().mock();
         final int first = new PortReserver().port();
         MatcherAssert.assertThat(first, Matchers.greaterThan(0));
         final int second = new PortReserver().port();
