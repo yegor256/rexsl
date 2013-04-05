@@ -32,7 +32,7 @@ package com.rexsl.core;
 import java.io.InputStream;
 import javax.servlet.ServletContext;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.mockito.Mockito;
 
 /**

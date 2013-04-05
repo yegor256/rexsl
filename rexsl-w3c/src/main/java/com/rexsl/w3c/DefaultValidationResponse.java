@@ -29,6 +29,7 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -48,6 +49,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(
     of = { "ivalid", "validator", "type", "encoding", "ierrors", "iwarnings" }
 )
+@Loggable(Loggable.DEBUG)
 final class DefaultValidationResponse implements ValidationResponse {
 
     /**

@@ -61,7 +61,6 @@ public final class EnvironmentMocker {
      * Public ctor.
      */
     public EnvironmentMocker() {
-        new LogMocker().mock();
         final File temp = Files.createTempDir();
         try {
             FileUtils.forceDeleteOnExit(temp);

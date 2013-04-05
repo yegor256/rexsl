@@ -105,8 +105,8 @@
             <artifactId>jcabi-manifests</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -147,7 +147,7 @@
             -->
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
-            <version>1.7.4</version>
+            <version>1.7.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

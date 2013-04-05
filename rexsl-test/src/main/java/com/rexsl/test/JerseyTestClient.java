@@ -42,7 +42,7 @@ import javax.ws.rs.core.HttpHeaders;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Implementation of {@link TestClient}.

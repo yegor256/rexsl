@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.util.regex.Pattern;
 import javax.validation.constraints.NotNull;
@@ -42,7 +43,7 @@ import net.sourceforge.reb4j.Literal;
 import net.sourceforge.reb4j.Sequence;
 import net.sourceforge.reb4j.charclass.CharClass;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.w3c.dom.Document;
 
 /**
@@ -55,6 +56,7 @@ import org.w3c.dom.Document;
  */
 @ToString
 @EqualsAndHashCode(of = "xml")
+@Loggable(Loggable.DEBUG)
 final class DomParser {
 
     /**
@@ -83,7 +85,7 @@ final class DomParser {
         }
         if (!DomParser.PATTERN.matcher(txt.replaceAll("\\s", "")).matches()) {
             throw new IllegalArgumentException(
-                Logger.format("Doesn't look like XML: '%s'", txt)
+                String.format("Doesn't look like XML: '%s'", txt)
             );
         }
         this.xml = txt;

@@ -50,7 +50,7 @@ import javax.xml.transform.stream.StreamSource;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Resolves resources using {@link ServletContext}.

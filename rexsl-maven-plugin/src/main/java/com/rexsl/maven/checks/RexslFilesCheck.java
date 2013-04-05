@@ -45,7 +45,7 @@ import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.NotFileFilter;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Checks rexsl directory contents.
@@ -72,8 +72,8 @@ final class RexslFilesCheck implements Check {
         "PMD.AvoidDuplicateLiterals",
         "unchecked"
     })
-    private static final Map<String, String> EXTS = ArrayUtils.toMap(
-        new String[][]{
+    private static final Map<Object, Object> EXTS = ArrayUtils.toMap(
+        new Object[][]{
             {"xml", "xml"},
             {"xhtml", "groovy"},
             {"scripts", "groovy"},
@@ -122,7 +122,8 @@ final class RexslFilesCheck implements Check {
         boolean valid = true;
         for (File file : this.getFiles(folder)) {
             final String ext = FilenameUtils.getExtension(file.getPath());
-            final String regex = RexslFilesCheck.EXTS.get(folder.getName());
+            final String regex = RexslFilesCheck.EXTS
+                .get(folder.getName()).toString();
             if (!ext.matches(regex)) {
                 Logger.warn(
                     this,

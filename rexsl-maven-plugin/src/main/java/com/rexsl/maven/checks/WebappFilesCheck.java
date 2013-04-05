@@ -43,7 +43,7 @@ import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.NotFileFilter;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Checks webapp directory contents.
@@ -70,7 +70,7 @@ final class WebappFilesCheck implements Check {
         "PMD.AvoidDuplicateLiterals",
         "unchecked"
     })
-    private static final Map<String, String> EXTS = ArrayUtils.toMap(
+    private static final Map<Object, Object> EXTS = ArrayUtils.toMap(
         new String[][]{
             {"webapp", ".*\\.html|robots.txt"},
             {"WEB-INF", ".*\\.xml"},
@@ -134,7 +134,8 @@ final class WebappFilesCheck implements Check {
                 valid = false;
                 break;
             }
-            final String regex = WebappFilesCheck.EXTS.get(current.getName());
+            final String regex = WebappFilesCheck.EXTS
+                .get(current.getName()).toString();
             final String name = file.getName();
             if (!name.matches(regex)) {
                 Logger.warn(

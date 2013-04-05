@@ -115,7 +115,7 @@ public final class AuthInset implements Inset {
      */
     public static String encrypt(@NotNull final Identity identity,
         @NotNull final String key, @NotNull final String salt) {
-        return new Encrypted(identity, key, salt).toString();
+        return new Encrypted(identity, key, salt).cookie();
     }
 
     /**
@@ -156,11 +156,13 @@ public final class AuthInset implements Inset {
             final String cookie = this.resource.httpHeaders().getCookies()
                 .get(AuthInset.AUTH_COOKIE).getValue();
             try {
-                identity = Encrypted.parse(cookie, this.key, this.salt);
+                identity = new Identity.Simple(
+                    Encrypted.parse(cookie, this.key, this.salt)
+                );
             } catch (Encrypted.DecryptionException ex) {
                 Logger.warn(
                     this,
-                    "Failed to decrypt '%s' from %s to '%s': %[exception]s",
+                    "Failed to decrypt '%s' from '%s' to '%s': %[exception]s",
                     cookie,
                     this.resource.httpServletRequest().getRemoteAddr(),
                     this.resource.httpServletRequest().getRequestURI(),
@@ -211,11 +213,7 @@ public final class AuthInset implements Inset {
                     this.resource.uriInfo().getRequestUriBuilder()
                         .replaceQuery("")
                         .build()
-                ).cookie(
-                    new CookieBuilder(this.resource.uriInfo().getBaseUri())
-                        .name(AuthInset.AUTH_COOKIE)
-                        .build()
-                ).build()
+                ).cookie(this.logout()).build()
             );
         }
     }
@@ -225,11 +223,33 @@ public final class AuthInset implements Inset {
      * @param identity The identity to wrap into the cookie
      * @return The cookie
      */
-    private NewCookie cookie(final Identity identity) {
+    public NewCookie cookie(final Identity identity) {
         return new CookieBuilder(this.resource.uriInfo().getBaseUri())
             .name(AuthInset.AUTH_COOKIE)
-            .value(new Encrypted(identity, this.key, this.salt))
+            .value(new Encrypted(identity, this.key, this.salt).cookie())
             .temporary()
+            .build();
+    }
+
+    /**
+     * Logout authentication cookie.
+     *
+     * <p>Use this cookie to log user out of the system, for example:
+     *
+     * <pre> if (you_are_not_allowed()) {
+     *   throw new WebApplicationException(
+     *     Response.seeOther(this.uriInfo().getBaseUri())
+     *       .cookie(this.auth().logout())
+     *       .build()
+     *   );
+     * }
+     * </pre>
+     *
+     * @return The cookie
+     */
+    public NewCookie logout() {
+        return new CookieBuilder(this.resource.uriInfo().getBaseUri())
+            .name(AuthInset.AUTH_COOKIE)
             .build();
     }
 

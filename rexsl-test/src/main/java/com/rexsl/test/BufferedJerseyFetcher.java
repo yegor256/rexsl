@@ -29,14 +29,14 @@
  */
 package com.rexsl.test;
 
-import com.jcabi.log.Logger;
+import com.jcabi.aspects.Loggable;
 import com.sun.jersey.api.client.ClientResponse;
 import java.io.IOException;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Buffer in front {@link JerseyFetcher}.
@@ -48,6 +48,7 @@ import org.apache.commons.lang.CharEncoding;
  */
 @ToString(of = "fetcher")
 @EqualsAndHashCode(of = { "fetcher", "rsp", "entity" })
+@Loggable(Loggable.DEBUG)
 final class BufferedJerseyFetcher implements JerseyFetcher {
 
     /**
@@ -107,11 +108,6 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
                 if (this.entity.contains("\uFFFD")) {
                     throw new IOException("broken Unicode text in entity");
                 }
-                Logger.debug(
-                    this,
-                    "#body(): HTTP response body:\n%s",
-                    new ClientResponseDecor(this.fetch(), this.entity)
-                );
             }
             return this.entity;
         }
@@ -130,7 +126,6 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
                     this.rsp = this.fetcher.fetch();
                 // @checkstyle IllegalCatch (1 line)
                 } catch (RuntimeException ex) {
-                    Logger.warn(this, "Failed to fetch: %[exception]s", ex);
                     throw new AssertionError(ex);
                 }
             }

@@ -37,7 +37,7 @@ import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Template from static URL, loaded just once on setup.
@@ -77,7 +77,7 @@ final class StaticTemplate implements Template {
     public String render(@NotNull final String defect) {
         return this.text.replace(
             StaticTemplate.MARKER,
-            StringEscapeUtils.escapeHtml(defect)
+            StringEscapeUtils.escapeHtml4(defect)
         );
     }
 

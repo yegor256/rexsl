@@ -34,7 +34,6 @@ import com.rexsl.test.RestTester;
 import com.rexsl.test.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -43,15 +42,6 @@ import org.junit.Test;
  * @version $Id$
  */
 public final class RuntimeResolverTest {
-
-    /**
-     * Forward SLF4J to Maven Log.
-     * @throws Exception If something is wrong inside
-     */
-    @BeforeClass
-    public static void startLogging() throws Exception {
-        new com.rexsl.maven.LogMocker().mock();
-    }
 
     /**
      * RuntimeResolver can resolve source by URL.
