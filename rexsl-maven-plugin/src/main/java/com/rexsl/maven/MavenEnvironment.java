@@ -159,7 +159,13 @@ public final class MavenEnvironment implements Environment {
         if (tonly) {
             scopes = Arrays.asList(JavaScopes.TEST);
         } else {
-            scopes = Arrays.asList(JavaScopes.COMPILE, JavaScopes.PROVIDED);
+            scopes = Arrays.asList(
+                JavaScopes.TEST,
+                JavaScopes.COMPILE,
+                JavaScopes.PROVIDED,
+                JavaScopes.RUNTIME,
+                JavaScopes.SYSTEM
+            );
         }
         return new Classpath(this.project, new File(this.localRepo), scopes);
     }
