@@ -178,5 +178,4 @@ public final class MavenEnvironment implements Environment {
         return this.runtimeFiltering;
     }
 
-
 }

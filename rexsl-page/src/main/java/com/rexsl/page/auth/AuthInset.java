@@ -213,11 +213,7 @@ public final class AuthInset implements Inset {
                     this.resource.uriInfo().getRequestUriBuilder()
                         .replaceQuery("")
                         .build()
-                ).cookie(
-                    new CookieBuilder(this.resource.uriInfo().getBaseUri())
-                        .name(AuthInset.AUTH_COOKIE)
-                        .build()
-                ).build()
+                ).cookie(this.logout()).build()
             );
         }
     }
@@ -227,11 +223,33 @@ public final class AuthInset implements Inset {
      * @param identity The identity to wrap into the cookie
      * @return The cookie
      */
-    private NewCookie cookie(final Identity identity) {
+    public NewCookie cookie(final Identity identity) {
         return new CookieBuilder(this.resource.uriInfo().getBaseUri())
             .name(AuthInset.AUTH_COOKIE)
             .value(new Encrypted(identity, this.key, this.salt).cookie())
             .temporary()
+            .build();
+    }
+
+    /**
+     * Logout authentication cookie.
+     *
+     * <p>Use this cookie to log user out of the system, for example:
+     *
+     * <pre> if (you_are_not_allowed()) {
+     *   throw new WebApplicationException(
+     *     Response.seeOther(this.uriInfo().getBaseUri())
+     *       .cookie(this.auth().logout())
+     *       .build()
+     *   );
+     * }
+     * </pre>
+     *
+     * @return The cookie
+     */
+    public NewCookie logout() {
+        return new CookieBuilder(this.resource.uriInfo().getBaseUri())
+            .name(AuthInset.AUTH_COOKIE)
             .build();
     }
 

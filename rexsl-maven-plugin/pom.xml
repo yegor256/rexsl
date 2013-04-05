@@ -202,8 +202,16 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <artifactId>junit</artifactId>
+                    <groupId>org.apache.maven</groupId>
+                    <artifactId>maven-compat</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>stax</groupId>
+                    <artifactId>stax-api</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -517,6 +525,24 @@
                                     <resources>
                                         <resource>mime.types</resource>
                                     </resources>
+                                </exception>
+                                <exception>
+                                    <conflictingDependencies>
+                                        <dependency>
+                                            <groupId>org.apache.maven</groupId>
+                                            <artifactId>maven-core</artifactId>
+                                            <version>3.0.5</version>
+                                        </dependency>
+                                        <dependency>
+                                            <groupId>org.apache.maven</groupId>
+                                            <artifactId>maven-project</artifactId>
+                                            <version>3.0-alpha-2</version>
+                                        </dependency>
+                                    </conflictingDependencies>
+                                    <packages>
+                                        <package>org.apache.maven.project</package>
+                                        <package>org.apache.maven.project.artifact</package>
+                                    </packages>
                                 </exception>
                             </exceptions>
                             <ignoredResources combine.children="append">
