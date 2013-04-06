@@ -108,7 +108,7 @@ How to release new version to Maven Central:
 
     7. Deploy to sonatype:
 
-        rm -rf ~/.m2/repository/com/rexsl && mvn -Prexsl -Pqulice -Psonatype clean deploy
+        rm -rf ~/.m2/repository/com/rexsl && mvn -Prexsl -Psonatype clean deploy
 
         Make sure that you have this profile in ~/.m2/settings.xml:
 

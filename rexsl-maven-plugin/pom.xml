@@ -339,8 +339,8 @@
         <dependency>
             <!-- Groovy engine. -->
             <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all-minimal</artifactId>
-            <version>1.5.8</version>
+            <artifactId>groovy-all</artifactId>
+            <version>2.1.2</version>
         </dependency>
         <dependency>
             <!-- Javax.el implementation, required for Jetty in tests -->
