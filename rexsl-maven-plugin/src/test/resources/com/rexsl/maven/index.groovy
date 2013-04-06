@@ -1,6 +1,6 @@
-import org.junit.Assert
-import org.junit.matchers.JUnitMatchers
-Assert.assertThat(
+import org.hamcrest.Matchers
+import org.hamcrest.MatcherAssert
+MatcherAssert.assertThat(
     rexsl.document,
-    JUnitMatchers.containsString('hello')
+    Matchers.containsString('hello')
 )

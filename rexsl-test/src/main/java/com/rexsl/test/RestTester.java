@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -86,6 +87,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode
+@Loggable(Loggable.DEBUG)
 public final class RestTester {
 
     /**

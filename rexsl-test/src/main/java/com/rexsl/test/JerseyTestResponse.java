@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.net.HttpCookie;
 import java.net.URI;
@@ -42,8 +43,8 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.namespace.NamespaceContext;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -60,6 +61,7 @@ import org.w3c.dom.Node;
  */
 @EqualsAndHashCode(of = "fetcher")
 @SuppressWarnings("PMD.TooManyMethods")
+@Loggable(Loggable.DEBUG)
 final class JerseyTestResponse implements TestResponse {
 
     /**

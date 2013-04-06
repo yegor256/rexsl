@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,7 +48,7 @@ import javax.xml.xpath.XPathFactory;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.w3c.dom.Node;
@@ -63,6 +64,7 @@ import org.w3c.dom.NodeList;
  * @since 0.3.7
  */
 @EqualsAndHashCode(of = "dom")
+@Loggable(Loggable.DEBUG)
 public final class SimpleXml implements XmlDocument {
 
     /**

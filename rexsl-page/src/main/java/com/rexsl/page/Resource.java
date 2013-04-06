@@ -33,6 +33,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.SecurityContext;
@@ -100,5 +101,12 @@ public interface Resource {
      * @since 0.4.7
      */
     SecurityContext securityContext();
+
+    /**
+     * Servlet context.
+     * @return The context
+     * @since 0.4.9
+     */
+    ServletContext servletContext();
 
 }

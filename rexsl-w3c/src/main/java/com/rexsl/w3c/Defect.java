@@ -29,6 +29,7 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -44,6 +45,7 @@ import lombok.EqualsAndHashCode;
  * @checkstyle LineLength (2 lines)
  */
 @EqualsAndHashCode(of = { "iline", "icolumn", "isource", "iexplanation", "imessageId", "imessage" })
+@Loggable(Loggable.DEBUG)
 public final class Defect {
 
     /**

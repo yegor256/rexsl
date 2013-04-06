@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ import org.hamcrest.MatcherAssert;
  */
 @ToString
 @EqualsAndHashCode(of = { "name", "matcher" })
+@Loggable(Loggable.DEBUG)
 final class HeaderMatcher implements AssertionPolicy {
 
     /**

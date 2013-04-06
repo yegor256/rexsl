@@ -38,7 +38,7 @@ import java.io.Reader;
 import java.io.Writer;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Packager of CSS files.

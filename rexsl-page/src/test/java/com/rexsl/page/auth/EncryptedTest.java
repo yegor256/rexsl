@@ -53,26 +53,11 @@ public final class EncryptedTest {
         final String salt = "\u0444\u0433@#gdsf\":?>::";
         final String name = "John Doe, \u0433";
         final URN urn = new URNMocker().mock();
-        final Identity user = new Encrypted(
-            new Identity() {
-                @Override
-                public URN urn() {
-                    return urn;
-                }
-                @Override
-                public String name() {
-                    return name;
-                }
-                @Override
-                public URI photo() {
-                    return URI.create("#");
-                }
-            },
-            key,
-            salt
+        final Encrypted user = new Encrypted(
+            new Identity.Simple(urn, name, URI.create("#")), key, salt
         );
         final Identity reverted = Encrypted.parse(
-            user.toString(), key, salt
+            user.cookie(), key, salt
         );
         MatcherAssert.assertThat(
             reverted.name(),

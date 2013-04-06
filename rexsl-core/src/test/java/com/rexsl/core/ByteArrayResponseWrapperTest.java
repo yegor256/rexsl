@@ -30,7 +30,7 @@
 package com.rexsl.core;
 
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;

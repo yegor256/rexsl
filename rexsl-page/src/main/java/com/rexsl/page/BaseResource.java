@@ -32,6 +32,7 @@ package com.rexsl.page;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Context;
@@ -104,6 +105,12 @@ public class BaseResource implements Resource {
      * @since 0.4.7
      */
     private transient SecurityContext security;
+
+    /**
+     * Servlet context.
+     * @since 0.4.9
+     */
+    private transient ServletContext srvltContext;
 
     /**
      * {@inheritDoc}
@@ -200,6 +207,24 @@ public class BaseResource implements Resource {
     }
 
     /**
+     * {@inheritDoc}
+     * @since 0.4.9
+     */
+    @Override
+    @NotNull
+    public final ServletContext servletContext() {
+        if (this.srvltContext == null) {
+            throw new IllegalStateException(
+                Logger.format(
+                    "%[type]s#servletContext was never injected by JAX-RS",
+                    this
+                )
+            );
+        }
+        return this.srvltContext;
+    }
+
+    /**
      * Set URI Info. Should be called by JAX-RS implementation
      * because of {@code @Context} annotation.
      * @param info The info to inject
@@ -254,6 +279,18 @@ public class BaseResource implements Resource {
     public final void setSecurityContext(
         @NotNull final SecurityContext context) {
         this.security = context;
+    }
+
+    /**
+     * Set Servlet Context. Should be called by JAX-RS implementation
+     * because of {@code @Context} annotation.
+     * @param context The security context
+     * @since 0.4.9
+     */
+    @Context
+    public final void setServletContext(
+        @NotNull final ServletContext context) {
+        this.srvltContext = context;
     }
 
     /**

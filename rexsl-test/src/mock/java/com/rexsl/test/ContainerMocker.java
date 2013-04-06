@@ -34,7 +34,7 @@ import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.util.concurrent.Callable;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
