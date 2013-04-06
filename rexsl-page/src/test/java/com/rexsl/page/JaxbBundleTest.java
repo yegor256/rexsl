@@ -31,8 +31,8 @@ package com.rexsl.page;
 
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
+import java.util.Arrays;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -52,21 +52,28 @@ public final class JaxbBundleTest {
             .add("employee")
                 .attr("age", "10")
                 .add("dept")
-                    .add("country", "DE")
-                    .up()
-                    .add("salary", "> \u20AC 50,000")
-                    .up()
-                    .attr("boss", "Charles de Batz-Castelmore d'Artagnan")
-                .up()
-            .up();
+                    .add("country", "DE").up()
+                    .add("salary", "> \u20AC 50,000").up().up()
+                .add(new JaxbBundle("car").add("make", "BMW").up())
+                .add(
+                    "projects",
+                    new JaxbBundle.Group<String>(Arrays.asList("test")) {
+                        @Override
+                        public JaxbBundle bundle(final String name) {
+                            return new JaxbBundle("project").attr("name", name);
+                        }
+                    }
+                )
+                .link(new Link("remove", "#del")).up();
         MatcherAssert.assertThat(
             bundle.element(),
-            Matchers.allOf(
-                XhtmlMatchers.hasXPath(
-                    "/root/employee[@age='10']/dept[country='DE']"
-                ),
-                XhtmlMatchers.hasXPath("//dept[salary='> \u20AC 50,000']"),
-                XhtmlMatchers.hasXPath("//dept[contains(@boss,'Charles')]")
+            XhtmlMatchers.hasXPaths(
+                "/root/employee[@age='10']/dept[country='DE']",
+                "/root/employee/links/link[@rel='remove' and @href='#del']",
+                "/root/employee/projects/project[name='test']",
+                "/root/employee/car[make='BMW']",
+                "//dept[salary='> \u20AC 50,000']",
+                "//dept[contains(@boss,'Charles')]"
             )
         );
     }
@@ -81,6 +88,7 @@ public final class JaxbBundleTest {
             .add("beta-1")
                 .attr("name", "Joe")
             .up()
+            .link(new Link("add", "#add"))
             .add("beta-2")
                 .add("gamma", "works fine, isn't it?")
                 .up()
@@ -90,7 +98,10 @@ public final class JaxbBundleTest {
         page.append(bundle.element());
         MatcherAssert.assertThat(
             JaxbConverter.the(page),
-            XhtmlMatchers.hasXPath("/foo/alpha/beta-2/gamma[contains(.,'it')]")
+            XhtmlMatchers.hasXPaths(
+                "/foo/alpha/beta-2/gamma[contains(.,'it')]",
+                "/foo/alpha/links/link[@rel='add' and @href='#add']"
+            )
         );
     }
 

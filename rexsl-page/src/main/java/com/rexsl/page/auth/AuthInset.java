@@ -187,11 +187,11 @@ public final class AuthInset implements Inset {
         } else {
             page.append(
                 new JaxbBundle("identity")
-                    .add("urn", identity.urn())
+                    .add("urn", identity.urn().toString())
                     .up()
                     .add("name", identity.name())
                     .up()
-                    .add("photo", identity.photo())
+                    .add("photo", identity.photo().toString())
                     .up()
             );
             page.link(

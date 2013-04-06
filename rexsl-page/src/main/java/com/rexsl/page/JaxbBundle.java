@@ -29,6 +29,8 @@
  */
 package com.rexsl.page;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -155,10 +157,52 @@ public final class JaxbBundle {
         new CopyOnWriteArrayList<JaxbBundle>();
 
     /**
+     * Links.
+     */
+    private final transient List<Link> links =
+        new CopyOnWriteArrayList<Link>();
+
+    /**
      * Attributes.
      */
     private final transient ConcurrentMap<String, String> attrs =
         new ConcurrentHashMap<String, String>();
+
+    /**
+     * Group.
+     * @since 0.4.10
+     */
+    public static abstract class Group<T> {
+        /**
+         * Collection of objects.
+         */
+        private final transient Collection<T> objects;
+        /**
+         * Public ctor.
+         * @param objs All objects
+         */
+        public Group(final Collection<T> objs) {
+            this.objects = objs;
+        }
+        /**
+         * Convert an object to JaxbBundle.
+         * @param object The object to convert
+         * @return Bundle produced
+         */
+        public abstract JaxbBundle bundle(T object);
+        /**
+         * Fetch all bundles.
+         * @return All bundles
+         */
+        private Collection<JaxbBundle> bundles() {
+            final Collection<JaxbBundle> bundles =
+                new ArrayList<JaxbBundle>(this.objects.size());
+            for (T object : this.objects) {
+                bundles.add(this.bundle(object));
+            }
+            return bundles;
+        }
+    }
 
     /**
      * Default ctor, for JAXB (always throws a runtime exception).
@@ -215,7 +259,7 @@ public final class JaxbBundle {
      * Add new child XML element.
      * @param nam The name of child element
      * @return The child bundle (use {@link #up()} on it in order to get back to
-     *  this object)
+     *  the parent bundle)
      */
     @NotNull
     public JaxbBundle add(@NotNull final String nam) {
@@ -227,11 +271,11 @@ public final class JaxbBundle {
      * @param nam The name of child
      * @param txt The text
      * @return The child bundle (use {@link #up()} on it in order to get back to
-     *  this object)
+     *  the parent bundle)
      */
     @NotNull
     public JaxbBundle add(@NotNull final String nam,
-        @NotNull final Object txt) {
+        @NotNull final String txt) {
         final JaxbBundle child = new JaxbBundle(this, nam, txt.toString());
         this.children.add(child);
         return child;
@@ -241,13 +285,54 @@ public final class JaxbBundle {
      * Add XML attribute to this bundle.
      * @param nam The name of attribute
      * @param val The plain text value
-     * @return This object
+     * @return New bundle with set attribute
      */
     @NotNull
     public JaxbBundle attr(@NotNull final String nam,
-        @NotNull final Object val) {
+        @NotNull final String val) {
         this.attrs.put(nam, val.toString());
         return this;
+    }
+
+    /**
+     * Add new link into {@code &lt;links&gt;} section.
+     * @param link The link to attach
+     * @return New bundle with a newly added link
+     * @since 0.4.10
+     */
+    @NotNull
+    public JaxbBundle link(@NotNull final Link link) {
+        this.links.add(link);
+        return this;
+    }
+
+    /**
+     * Add new bundle.
+     * @param bundle The bundle to add
+     * @return New bundle with a newly added element
+     * @since 0.4.10
+     */
+    @NotNull
+    public JaxbBundle add(@NotNull final JaxbBundle bundle) {
+        this.children.add(bundle);
+        return this;
+    }
+
+    /**
+     * Add new group.
+     * @param wrap The name of the wrapper
+     * @param group The group
+     * @return New bundle with a newly added group of elements
+     * @since 0.4.10
+     */
+    @NotNull
+    public JaxbBundle add(@NotNull final String wrap,
+        @NotNull final JaxbBundle.Group<?> group) {
+        JaxbBundle holder = this.add(wrap);
+        for (JaxbBundle bundle : group.bundles()) {
+            holder = holder.add(bundle);
+        }
+        return holder.up();
     }
 
     /**
@@ -258,6 +343,11 @@ public final class JaxbBundle {
     @NotNull
     @SuppressWarnings("PMD.ShortMethodName")
     public JaxbBundle up() {
+        if (this.parent == null) {
+            throw new IllegalArgumentException(
+                "Already at the top, can't go #up()"
+            );
+        }
         return this.parent;
     }
 
@@ -284,9 +374,9 @@ public final class JaxbBundle {
     }
 
     /**
-     * Get DOM element.
+     * Create and return a DOM element, inside the document provided.
      * @param doc The document
-     * @return The element
+     * @return The element just created
      */
     private Element element(final Document doc) {
         final Element element = doc.createElement(this.name);
@@ -295,6 +385,17 @@ public final class JaxbBundle {
         }
         for (JaxbBundle child : this.children) {
             element.appendChild(child.element(doc));
+        }
+        if (!this.links.isEmpty()) {
+            final Element lnks = doc.createElement("links");
+            for (Link link : this.links) {
+                final Element lnk = doc.createElement("link");
+                lnk.setAttribute("rel", link.getRel());
+                lnk.setAttribute("href", link.getHref().toString());
+                lnk.setAttribute("type", link.getType());
+                lnks.appendChild(lnk);
+            }
+            element.appendChild(lnks);
         }
         element.appendChild(doc.createTextNode(this.content));
         return element;
