@@ -33,6 +33,7 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.log.Logger;
 import java.util.regex.Pattern;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Product version.
@@ -41,29 +42,28 @@ import lombok.EqualsAndHashCode;
  * @version $Id$
  * @see <a href="http://tools.ietf.org/html/rfc2616#section-3.8">RFC-2616</a>
  */
-@EqualsAndHashCode(of = "normalized")
+@EqualsAndHashCode(of = "origin")
+@ToString(of = "origin")
 @Immutable
 final class ProductVersion implements Comparable<ProductVersion> {
 
     /**
-     * Text presentation of it.
+     * Pattern to split numbers.
      */
-    private final transient String normalized;
+    private static final Pattern SEPARATOR =
+        Pattern.compile(".", Pattern.LITERAL);
+
+    /**
+     * Original version.
+     */
+    private final transient String origin;
 
     /**
      * Public ctor.
      * @param text The text of it
-     * @see <a href="http://stackoverflow.com/questions/198431">prototype</a>
      */
     public ProductVersion(final String text) {
-        final String[] parts = Pattern
-            .compile(".", Pattern.LITERAL)
-            .split(text);
-        final StringBuilder bldr = new StringBuilder();
-        for (String part : parts) {
-            bldr.append(Logger.format("%4s.", part));
-        }
-        this.normalized = bldr.toString();
+        this.origin = text;
     }
 
     /**
@@ -71,15 +71,21 @@ final class ProductVersion implements Comparable<ProductVersion> {
      */
     @Override
     public int compareTo(final ProductVersion ver) {
-        return this.normalized.compareTo(ver.normalized);
+        return this.normalized().compareTo(ver.normalized());
     }
 
     /**
-     * {@inheritDoc}
+     * Get normalized version.
+     * @return Normalized text
+     * @see <a href="http://stackoverflow.com/questions/198431">prototype</a>
      */
-    @Override
-    public String toString() {
-        return this.normalized.replace(" ", "");
+    private String normalized() {
+        final String[] parts = ProductVersion.SEPARATOR.split(this.origin);
+        final StringBuilder bldr = new StringBuilder();
+        for (String part : parts) {
+            bldr.append(Logger.format("%4s.", part));
+        }
+        return bldr.toString();
     }
 
 }

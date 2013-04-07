@@ -46,6 +46,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(of = { "page", "request" })
+@Loggable(Loggable.DEBUG)
 final class PageAnalyzer {
 
     /**
@@ -100,7 +101,6 @@ final class PageAnalyzer {
      * Page require transformation, since it's not an empty page?
      * @return TRUE if the page requires transformation
      */
-    @Loggable(Loggable.DEBUG)
     private boolean notEmpty() {
         return !this.page.isEmpty();
     }
@@ -109,7 +109,6 @@ final class PageAnalyzer {
      * Page require transformation, since it contains XML and XSL stylesheet?
      * @return TRUE if the page requires transformation
      */
-    @Loggable(Loggable.DEBUG)
     private boolean containsXml() {
         return this.page.startsWith("<?xml ")
             && this.page.contains("<?xml-stylesheet ");
@@ -120,7 +119,6 @@ final class PageAnalyzer {
      * @param types Media types
      * @return TRUE if the page requires transformation
      */
-    @Loggable(Loggable.DEBUG)
     private boolean xmlDemanded(final TypesMatcher types) {
         return types.explicit(MediaType.APPLICATION_XML);
     }
@@ -131,7 +129,6 @@ final class PageAnalyzer {
      * @param types Media types
      * @return TRUE if the page requires transformation
      */
-    @Loggable(Loggable.DEBUG)
     private boolean xslAccepted(final UserAgent agent,
         final TypesMatcher types) {
         return agent.isXsltCapable()

@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import com.sun.jersey.api.core.PackagesResourceConfig;
@@ -90,6 +91,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "jersey")
+@Loggable(Loggable.DEBUG)
 public final class RestfulServlet extends HttpServlet {
 
     /**
