@@ -55,15 +55,14 @@ public final class JaxbBundleTest {
                     .add("country", "DE").up()
                     .add("salary", "> \u20AC 50,000").up().up()
                 .add(new JaxbBundle("car").add("make", "BMW").up())
-                .add(
-                    "projects",
+                .add("projects").add(
                     new JaxbBundle.Group<String>(Arrays.asList("\u20ac")) {
                         @Override
                         public JaxbBundle bundle(final String name) {
                             return new JaxbBundle("project").attr("p4", name);
                         }
                     }
-            )
+            ).up()
                 .link(new Link("remove", "#del")).up();
         MatcherAssert.assertThat(
             XhtmlMatchers.xhtml(bundle.element()),
@@ -129,15 +128,14 @@ public final class JaxbBundleTest {
     public void convertsGroupsToXml() throws Exception {
         MatcherAssert.assertThat(
             XhtmlMatchers.xhtml(
-                new JaxbBundle("data-5", "hey").add(
-                    "kids",
+                new JaxbBundle("data-5", "hey").add("kids").add(
                     new JaxbBundle.Group<String>(Arrays.asList("kid")) {
                         @Override
                         public JaxbBundle bundle(final String name) {
                             return new JaxbBundle("alpha").attr("name", name);
                         }
                     }
-                ).element()
+                ).up().element()
             ),
             XhtmlMatchers.hasXPath("/data-5/kids/alpha[@name='kid']")
         );
