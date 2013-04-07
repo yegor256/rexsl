@@ -101,14 +101,14 @@ import org.w3c.dom.Element;
  *
  * <pre> final Element element = new JaxbBundle("garage")
  *   .link(new Link("add", "/add-car"))
- *   .add(
+ *   .add("cars").add(
  *     new JaxbBundle.Group&lt;String&gt;(cars) {
  *       &#64;Override
  *       public JaxbBundle bundle(Car car) {
  *         return new JaxbBundle("car").add("make", car.make()).up();
  *       }
  *     }
- *   )
+ *   ).up()
  *   .add(new JaxbBundle("owner").add("email", "...").up())
  *   .element();</pre>
  *
@@ -345,19 +345,17 @@ public final class JaxbBundle {
 
     /**
      * Add new group.
-     * @param wrap The name of the wrapper
      * @param group The group
      * @return New bundle with a newly added group of elements
      * @since 0.4.10
      */
     @NotNull
-    public JaxbBundle add(@NotNull final String wrap,
-        @NotNull final JaxbBundle.Group<?> group) {
-        JaxbBundle holder = this.add(wrap);
+    public JaxbBundle add(@NotNull final JaxbBundle.Group<?> group) {
+        JaxbBundle holder = this;
         for (JaxbBundle bundle : group.bundles()) {
             holder = holder.add(bundle);
         }
-        return holder.up();
+        return holder;
     }
 
     /**
