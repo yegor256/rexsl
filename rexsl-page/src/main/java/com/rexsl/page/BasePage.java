@@ -56,6 +56,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.w3c.dom.Element;
 
 /**
  * Base page.
@@ -182,16 +183,32 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      */
     @NotNull
     public final T append(@NotNull final Object element) {
-        this.elements.add(element);
-        if (!(element instanceof org.w3c.dom.Element)) {
-            final XslResolver resolver = XslResolver.class.cast(
-                this.home().providers().getContextResolver(
-                    Marshaller.class,
-                    MediaType.APPLICATION_XML_TYPE
+        if (!element.getClass().isAnnotationPresent(XmlRootElement.class)) {
+            throw new IllegalArgumentException(
+                Logger.format(
+                    "class %[type]s doesn't have @XmlRootElement annotation",
+                    element
                 )
             );
-            resolver.add(element.getClass());
         }
+        this.elements.add(element);
+        XslResolver.class.cast(
+            this.home().providers().getContextResolver(
+                Marshaller.class,
+                MediaType.APPLICATION_XML_TYPE
+            )
+        ).add(element.getClass());
+        return (T) this;
+    }
+
+    /**
+     * Append new DOM element.
+     * @param element The element to append
+     * @return This object
+     */
+    @NotNull
+    public final T append(@NotNull final Element element) {
+        this.elements.add(element);
         return (T) this;
     }
 

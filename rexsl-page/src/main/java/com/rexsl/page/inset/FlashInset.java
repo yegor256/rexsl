@@ -99,7 +99,7 @@ public final class FlashInset implements Inset {
             page.append(
                 new JaxbBundle("flash")
                     .add("message", cookie.message()).up()
-                    .add("level", cookie.level()).up()
+                    .add("level", cookie.level().toString()).up()
             );
             builder.cookie(
                 new CookieBuilder(this.resource.uriInfo().getBaseUri())
