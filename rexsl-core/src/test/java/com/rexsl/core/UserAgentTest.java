@@ -74,11 +74,12 @@ public final class UserAgentTest {
     public static Collection<Object[]> params() {
         return Arrays.asList(
             new Object[][] {
+                // @checkstyle LineLength (2 lines)
+                {true, "Mozilla/5.0 AppleWebKit/534.51.22 (KHTML, like Gecko) Version/5.1.1 Safari/534.51.22"},
+                {true, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22"},
                 {false, "Firefox/3.0.2 (Mac; Intel) Version/398.0-beta"},
                 {true, "Chrome/10.5 (HTML like Geko) Version/10"},
                 {false, "Chrome/7 Version/7.89.96655-beta"},
-                // @checkstyle LineLength (1 line)
-                {true, "Mozilla/5.0 AppleWebKit/534.51.22 (KHTML, like Gecko) Version/5.1.1 Safari/534.51.22"},
                 {false, ""},
                 {false, "some incorrect User-Agent header"},
                 {false, null},
@@ -92,10 +93,11 @@ public final class UserAgentTest {
      */
     @Test
     public void decidesToTransform() throws Exception {
+        final UserAgent agent = new UserAgent(this.text);
         MatcherAssert.assertThat(
-            new UserAgent(this.text).isXsltCapable(),
+            agent.isXsltCapable(),
             Matchers.describedAs(
-                this.text,
+                agent.toString(),
                 Matchers.equalTo(this.decision)
             )
         );

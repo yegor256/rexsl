@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Loggable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -47,7 +48,14 @@ import lombok.EqualsAndHashCode;
  * @see <a href="http://tools.ietf.org/html/rfc2616#section-14.43">RFC-2616</a>
  */
 @EqualsAndHashCode(of = "tokens")
+@Loggable(Loggable.DEBUG)
 final class UserAgent {
+
+    /**
+     * Pattern to match a token.
+     */
+    private static final Pattern TOKEN =
+        Pattern.compile("(\\w+/[^ ]+|\\(.*?\\))");
 
     /**
      * List of tokens found in {@code User-Agent} HTTP header.
@@ -73,8 +81,7 @@ final class UserAgent {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public UserAgent(final String text) {
         if (text != null) {
-            final Pattern ptrn = Pattern.compile("(\\w+/[^ ]+|\\(.*?\\))");
-            final Matcher matcher = ptrn.matcher(text);
+            final Matcher matcher = UserAgent.TOKEN.matcher(text);
             while (matcher.find()) {
                 final String group = matcher.group();
                 if (group.charAt(0) != '(') {
@@ -114,7 +121,7 @@ final class UserAgent {
      */
     private boolean isSafari() {
         return this.tokens.containsKey("Safari")
-            && this.isVersionHigherOrEqual("5");
+            && this.isVersionHigherOrEqual("Version", "5");
     }
 
     /**
@@ -122,20 +129,24 @@ final class UserAgent {
      * @return Is it?
      */
     private boolean isChrome() {
-        return this.tokens.containsKey("Chrome")
-            && this.isVersionHigherOrEqual("10");
+        final String token = "Chrome";
+        return this.tokens.containsKey(token)
+            && this.isVersionHigherOrEqual(token, "10");
     }
 
     /**
      * Check if the version is higher or equal than this one.
-     * @param ver The version
-     * @return Returns true if version 'ver' is higher or equal than this object's version
+     * @param token Token, which version we're comparing
+     * @param target Target version to compare with
+     * @return Returns true if token's version is higher
+     *  or equal than the target version
      */
-    private boolean isVersionHigherOrEqual(final String ver) {
-        final ProductVersion found = this.tokens.get("Version");
+    private boolean isVersionHigherOrEqual(final String token,
+        final String target) {
+        final ProductVersion found = this.tokens.get(token);
         boolean result = false;
         if (found != null) {
-            result = found.compareTo(new ProductVersion(ver)) >= 0;
+            result = found.compareTo(new ProductVersion(target)) >= 0;
         }
         return result;
     }
