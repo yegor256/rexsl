@@ -47,7 +47,7 @@ public final class JaxbBundleTest {
      * @throws Exception If there is some problem inside
      */
     @Test
-    public void convertsItselfToXml() throws Exception {
+    public void convertsSimpleDataToXml() throws Exception {
         final JaxbBundle bundle = new JaxbBundle("root")
             .add("employee")
                 .attr("age", "10")
@@ -57,23 +57,22 @@ public final class JaxbBundleTest {
                 .add(new JaxbBundle("car").add("make", "BMW").up())
                 .add(
                     "projects",
-                    new JaxbBundle.Group<String>(Arrays.asList("test")) {
+                    new JaxbBundle.Group<String>(Arrays.asList("\u20ac")) {
                         @Override
                         public JaxbBundle bundle(final String name) {
-                            return new JaxbBundle("project").attr("name", name);
+                            return new JaxbBundle("project").attr("p4", name);
                         }
                     }
-                )
+            )
                 .link(new Link("remove", "#del")).up();
         MatcherAssert.assertThat(
-            bundle.element(),
+            XhtmlMatchers.xhtml(bundle.element()),
             XhtmlMatchers.hasXPaths(
                 "/root/employee[@age='10']/dept[country='DE']",
                 "/root/employee/links/link[@rel='remove' and @href='#del']",
-                "/root/employee/projects/project[name='test']",
+                "/root/employee/projects/project[@p4='\u20ac']",
                 "/root/employee/car[make='BMW']",
-                "//dept[salary='> \u20AC 50,000']",
-                "//dept[contains(@boss,'Charles')]"
+                "//dept[salary='> \u20AC 50,000']"
             )
         );
     }
@@ -84,9 +83,9 @@ public final class JaxbBundleTest {
      */
     @Test
     public void convertsItselfToXmlThroughJaxb() throws Exception {
-        final JaxbBundle bundle = new JaxbBundle("alpha")
+        final JaxbBundle bundle = new JaxbBundle("alef")
             .add("beta-1")
-                .attr("name", "Joe")
+                .attr("full-name", "Joe")
             .up()
             .link(new Link("add", "#add"))
             .add("beta-2")
@@ -99,9 +98,64 @@ public final class JaxbBundleTest {
         MatcherAssert.assertThat(
             JaxbConverter.the(page),
             XhtmlMatchers.hasXPaths(
-                "/foo/alpha/beta-2/gamma[contains(.,'it')]",
-                "/foo/alpha/links/link[@rel='add' and @href='#add']"
+                "/foo/alef/beta-1[@full-name = 'Joe']",
+                "/foo/alef/beta-2/gamma[contains(.,'it')]",
+                "/foo/alef/links/link[@rel='add' and @href='#add']"
             )
+        );
+    }
+
+    /**
+     * JaxbBundle can convert links to XML text.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void convertsLinksToXml() throws Exception {
+        MatcherAssert.assertThat(
+            XhtmlMatchers.xhtml(
+                new JaxbBundle("data-4").link(new Link("x", "#x")).element()
+            ),
+            XhtmlMatchers.hasXPath(
+                "/data-4/links/link[@rel='x' and @href='#x']"
+            )
+        );
+    }
+
+    /**
+     * JaxbBundle can convert groups to XML text.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void convertsGroupsToXml() throws Exception {
+        MatcherAssert.assertThat(
+            XhtmlMatchers.xhtml(
+                new JaxbBundle("data-5", "hey").add(
+                    "kids",
+                    new JaxbBundle.Group<String>(Arrays.asList("kid")) {
+                        @Override
+                        public JaxbBundle bundle(final String name) {
+                            return new JaxbBundle("alpha").attr("name", name);
+                        }
+                    }
+                ).element()
+            ),
+            XhtmlMatchers.hasXPath("/data-5/kids/alpha[@name='kid']")
+        );
+    }
+
+    /**
+     * JaxbBundle can convert kid bundles to XML text.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void convertsKidBundlesToXml() throws Exception {
+        MatcherAssert.assertThat(
+            XhtmlMatchers.xhtml(
+                new JaxbBundle("data-6").add(
+                    new JaxbBundle("cat").add("weight", "2kg").up()
+                ).element()
+            ),
+            XhtmlMatchers.hasXPath("/data-6/cat[weight='2kg']")
         );
     }
 

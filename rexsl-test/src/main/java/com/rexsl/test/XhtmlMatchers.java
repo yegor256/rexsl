@@ -34,10 +34,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.transform.Source;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.w3c.dom.Node;
 
 /**
  * Convenient set of matchers for XHTML/XML content.
@@ -63,6 +65,34 @@ public final class XhtmlMatchers {
      */
     private XhtmlMatchers() {
         // intentionally empty
+    }
+
+    /**
+     * Makes XHTML source presentable for testing.
+     *
+     * <p>Useful method for assertions in unit tests. For example:
+     *
+     * <pre> MatcherAssert.assertThat(
+     *   XhtmlMatchers.xhtml(dom_xml_element),
+     *   XhtmlMatchers.hasXPath("/root/data")
+     * );</pre>
+     *
+     * @param xhtml The source of data
+     * @return Renderable source
+     * @param <T> Type of source
+     * @since 0.4.10
+     */
+    @NotNull
+    public static <T> Source xhtml(@NotNull final T xhtml) {
+        Source source;
+        if (xhtml instanceof Source) {
+            source = Source.class.cast(xhtml);
+        } else if (xhtml instanceof Node) {
+            source = new StringSource(Node.class.cast(xhtml));
+        } else {
+            source = new StringSource(xhtml.toString());
+        }
+        return source;
     }
 
     /**
