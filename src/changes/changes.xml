@@ -30,6 +30,7 @@
  -->
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.4.10" date="7 Apr 2013" description="extra methods in JaxbBundle"/>
         <release version="0.4.9" date="20 Mar 2013" description="Bug fixes, rexsl-page stabilized"/>
         <release version="0.4.8" date="15 Mar 2013" description="Insets in rexsl-page"/>
         <release version="0.4.7" date="9 Mar 2013" description="jcabi 0.7.13 with new aspects"/>
