@@ -60,7 +60,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(of = { "resource", "key", "salt" })
-@Loggable(Loggable.DEBUG)
+@Loggable(value = Loggable.DEBUG, ignore = WebApplicationException.class)
 public final class AuthInset implements Inset {
 
     /**
