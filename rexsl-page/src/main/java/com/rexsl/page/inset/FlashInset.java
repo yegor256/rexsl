@@ -45,8 +45,9 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Flash message (through cookie).
@@ -100,6 +101,7 @@ public final class FlashInset implements Inset {
                 new JaxbBundle("flash")
                     .add("message", cookie.message()).up()
                     .add("level", cookie.level().toString()).up()
+                    .add("msec", Long.toString(cookie.msec())).up()
             );
             builder.cookie(
                 new CookieBuilder(this.resource.uriInfo().getBaseUri())
@@ -107,6 +109,36 @@ public final class FlashInset implements Inset {
                     .build()
             );
         }
+    }
+
+    /**
+     * Create an exception that will redirect to the page with an error message.
+     *
+     * <p>The difference between this method and a static
+     * {@link #forward(URI,String,Level)} is in its awareness of a resource,
+     * which is forwarding. Key benefit is that a non-static method adds extra
+     * value to the cookie, which is time consumed by the resource until the
+     * redirect happened.
+     *
+     * @param uri The URI to forward to
+     * @param message The message to show as error
+     * @param level Message level
+     * @return The exception to throw
+     */
+    public WebApplicationException redirect(@NotNull final URI uri,
+        @NotNull final String message, @NotNull final Level level) {
+        return new WebApplicationException(
+            Response.status(HttpURLConnection.HTTP_SEE_OTHER)
+                .location(uri)
+                .cookie(
+                    new FlashInset.Flash(
+                        uri, message, level,
+                        System.currentTimeMillis() - this.resource.started())
+                )
+                .header(FlashInset.HEADER, message)
+                .entity(message)
+                .build()
+        );
     }
 
     /**
@@ -144,6 +176,10 @@ public final class FlashInset implements Inset {
      */
     public static final class Flash extends NewCookie {
         /**
+         * Total elements expected in a cookie text.
+         */
+        private static final int TOTAL = 3;
+        /**
          * The message.
          */
         private final transient String msg;
@@ -152,31 +188,48 @@ public final class FlashInset implements Inset {
          */
         private final transient Level lvl;
         /**
+         * Milliseconds consumed (or -1).
+         */
+        private final transient long millis;
+        /**
          * Public ctor, from a cookie encoded text.
          * @param cookie The cookie
          */
         public Flash(@NotNull final Cookie cookie) {
             super(FlashInset.COOKIE, cookie.getValue());
-            String[] parts;
-            try {
-                parts = new String(
-                    new Base32().decode(this.getValue()), CharEncoding.UTF_8
-                ).split(":", 2);
-            } catch (java.io.UnsupportedEncodingException ex) {
-                throw new IllegalStateException(ex);
-            }
-            if (parts.length != 2) {
-                throw new IllegalArgumentException(
-                    String.format("can't decode cookie '%s'", this.getValue())
-                );
-            }
-            if (!parts[0].matches("INFO|WARNING|SEVERE")) {
-                throw new IllegalArgumentException(
-                    String.format("invalid cookie '%s'", this.getValue())
-                );
-            }
+            Validate.notBlank(cookie.getValue(), "cookie value is blank");
+            final String decoded = FlashInset.Flash.decode(this.getValue());
+            final String[] parts = decoded.split(":", FlashInset.Flash.TOTAL);
+            Validate.isTrue(
+                parts.length == FlashInset.Flash.TOTAL,
+                // @checkstyle LineLength (1 line)
+                "can't decode cookie '%s' (decoded='%s'), %d parts expected but %d found",
+                this.getValue(),
+                decoded,
+                FlashInset.Flash.TOTAL,
+                parts.length
+            );
+            Validate.isTrue(
+                parts[0].matches("INFO|WARNING|SEVERE"),
+                "can't detect level of cookie '%s' (decoded='%s')",
+                this.getValue(),
+                decoded
+            );
             this.lvl = Level.parse(parts[0]);
-            this.msg = parts[1];
+            Validate.isTrue(
+                parts[1].matches("-1|\\d+"),
+                "can't parse milliseconds in cookie '%s' (decoded='%s')",
+                this.getValue(),
+                decoded
+            );
+            this.millis = Long.parseLong(parts[1]);
+            Validate.notBlank(
+                parts[2],
+                "empty message in cookie '%s' (decoded='%s')",
+                this.getValue(),
+                decoded
+            );
+            this.msg = parts[2];
         }
         /**
          * Public ctor, from exact values.
@@ -186,15 +239,34 @@ public final class FlashInset implements Inset {
          */
         public Flash(@NotNull final URI base,
             @NotNull final String message, @NotNull final Level level) {
+            this(base, message, level, -1);
+        }
+        /**
+         * Public ctor, from exact values.
+         * @param base Base URI where we're using it
+         * @param message The message
+         * @param level The level
+         * @param msec Milliseconds consumed
+         * @checkstyle ParameterNumber (5 lines)
+         */
+        public Flash(@NotNull final URI base,
+            @NotNull final String message, @NotNull final Level level,
+            final long msec) {
             super(
                 new CookieBuilder(base)
                     .name(FlashInset.COOKIE)
-                    .value(FlashInset.Flash.encode(message, level))
+                    .value(FlashInset.Flash.encode(message, level, msec))
                     .temporary()
                     .build()
             );
+            Validate.notBlank(message, "flash message can't be empty");
             this.msg = message;
             this.lvl = level;
+            Validate.isTrue(
+                msec > 0 || msec == -1,
+                "milliseconds can either be positive or equal to -1"
+            );
+            this.millis = msec;
         }
         /**
          * Get message.
@@ -211,6 +283,13 @@ public final class FlashInset implements Inset {
             return this.lvl;
         }
         /**
+         * Milliseconds consumed.
+         * @return The amount of them
+         */
+        public long msec() {
+            return this.millis;
+        }
+        /**
          * {@inheritDoc}
          */
         @Override
@@ -221,13 +300,30 @@ public final class FlashInset implements Inset {
          * Encode message and color.
          * @param message The message
          * @param level The level
+         * @param msec Milliseconds consumed
          * @return Encoded cookie value
          */
-        private static String encode(final String message, final Level level) {
+        private static String encode(final String message, final Level level,
+            final long msec) {
             try {
-                return new Base32().encodeToString(
-                    String.format("%s:%s", level, message)
+                return Base64.encodeBase64URLSafeString(
+                    String.format("%s:%d:%s", level, msec, message)
                         .getBytes(CharEncoding.UTF_8)
+                );
+            } catch (java.io.UnsupportedEncodingException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
+        /**
+         * Decode text.
+         * @param text The text to decode (cookie value)
+         * @return Decoded value
+         */
+        private static String decode(final String text) {
+            try {
+                return new String(
+                    Base64.decodeBase64(text),
+                    CharEncoding.UTF_8
                 );
             } catch (java.io.UnsupportedEncodingException ex) {
                 throw new IllegalStateException(ex);
