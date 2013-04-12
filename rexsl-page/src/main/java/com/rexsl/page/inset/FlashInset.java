@@ -142,6 +142,24 @@ public final class FlashInset implements Inset {
     }
 
     /**
+     * Create an exception that will redirect to the page with an error message.
+     *
+     * <p>The difference between this method and a static
+     * {@link #forward(URI,Exception)} is in its awareness of a resource,
+     * which is forwarding. Key benefit is that a non-static method adds extra
+     * value to the cookie, which is time consumed by the resource until the
+     * redirect happened.
+     *
+     * @param uri The URI to forward to
+     * @param cause The cause of this problem
+     * @return The exception to throw
+     */
+    public WebApplicationException redirect(@NotNull final URI uri,
+        @NotNull final Exception cause) {
+        return this.redirect(uri, cause.getMessage(), Level.SEVERE);
+    }
+
+    /**
      * Create an exception that will forward to the page with an error message.
      * @param uri The URI to forward to
      * @param message The message to show as error
