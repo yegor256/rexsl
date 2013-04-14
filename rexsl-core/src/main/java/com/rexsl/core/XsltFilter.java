@@ -94,6 +94,7 @@ public final class XsltFilter implements Filter {
 
     /**
      * {@inheritDoc}
+     * @checkstyle RedundantThrows (4 lines)
      */
     @Override
     public void init(@NotNull final FilterConfig config)
