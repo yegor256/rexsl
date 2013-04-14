@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Handler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -173,11 +174,6 @@ public final class RestfulServlet extends HttpServlet {
         this.reconfigureJUL();
         final FilterConfig cfg = new ServletConfigWrapper(config, props);
         this.jersey.init(cfg);
-        Logger.info(
-            this,
-            "#init(%s): servlet initialized with Jersey JAX-RS implementation",
-            config.getClass().getName()
-        );
     }
 
     /**
@@ -209,15 +205,7 @@ public final class RestfulServlet extends HttpServlet {
         final long start = System.currentTimeMillis();
         this.jersey.service(request, response);
         final long duration = System.currentTimeMillis() - start;
-        // @checkstyle MagicNumber (1 line)
-        if (duration < 1000) {
-            Logger.debug(
-                this,
-                "#service(%s): by Jersey in %[ms]s",
-                request.getRequestURI(),
-                duration
-            );
-        } else {
+        if (duration > TimeUnit.SECONDS.toMillis(1)) {
             Logger.warn(
                 this,
                 "#service(%s %s): %[ms]s is too slow (IP=%s)",
@@ -227,10 +215,7 @@ public final class RestfulServlet extends HttpServlet {
                 request.getRemoteAddr()
             );
         }
-        response.addHeader(
-            "X-Rexsl-Millis",
-            Long.toString(duration)
-        );
+        response.addHeader("X-Rexsl-Millis", Long.toString(duration));
         response.addHeader(
             "X-Rexsl-Version",
             String.format(

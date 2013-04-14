@@ -29,7 +29,6 @@
  */
 package com.rexsl.core;
 
-import com.jcabi.manifests.Manifests;
 import com.rexsl.test.XhtmlMatchers;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -57,7 +56,6 @@ public final class XsltFilterTest {
      */
     @Test
     public void transformsFromXmlToHtml() throws Exception {
-        Manifests.inject("ReXSL-Version", "1.0-SNAPSHOT");
         final ServletContext context = new ServletContextMocker()
             .withResource(
                 "/foo.xsl",
@@ -83,11 +81,10 @@ public final class XsltFilterTest {
         filter.destroy();
         MatcherAssert.assertThat(
             response,
-            XhtmlMatchers.hasXPath("//xhtml:div[.='\u0443\u0440\u0430']")
-        );
-        MatcherAssert.assertThat(
-            response,
-            XhtmlMatchers.hasXPath("/xhtml:html/xhtml:p[.='\u0443']")
+            XhtmlMatchers.hasXPaths(
+                "//xhtml:div[.='\u0443\u0440\u0430']",
+                "/xhtml:html/xhtml:p[.='\u0443']"
+            )
         );
     }
 
