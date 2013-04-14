@@ -177,39 +177,9 @@ public final class XsltFilter implements Filter {
     private String transform(final String xml) throws ServletException {
         final StringWriter writer = new StringWriter();
         try {
-            final Source stylesheet = this.tfactory.getAssociatedStylesheet(
-                this.source(xml),
-                null,
-                null,
-                null
-            );
-            if (stylesheet == null) {
-                throw new ServletException(
-                    Logger.format(
-                        "No associated stylesheet found at:%n%s",
-                        xml
-                    )
-                );
-            }
-            Logger.debug(
-                this,
-                "#transform(%d chars): found '%s' associated stylesheet by %s",
-                xml.length(),
-                stylesheet.getSystemId(),
-                this.tfactory.getClass().getName()
-            );
-            final Transformer trans = this.tfactory.newTransformer(stylesheet);
-            trans.transform(
+            this.transformer(this.stylesheet(xml)).transform(
                 this.source(xml),
                 new StreamResult(writer)
-            );
-        } catch (TransformerConfigurationException ex) {
-            throw new ServletException(
-                Logger.format(
-                    "Failed to configure XSL transformer: '%s'",
-                    xml
-                ),
-                ex
             );
         } catch (TransformerException ex) {
             throw new ServletException(
@@ -230,6 +200,80 @@ public final class XsltFilter implements Filter {
      */
     private Source source(final String xml) {
         return new StreamSource(new StringReader(xml));
+    }
+
+    /**
+     * Retrieve a stylesheet from this XML (throws an exception if
+     * no stylesheet is attached).
+     * @param xml The XML
+     * @return Stylesheet found
+     * @throws ServletException If fails
+     * @checkstyle RedundantThrows (3 lines)
+     */
+    private Source stylesheet(final String xml) throws ServletException {
+        Source stylesheet;
+        try {
+            stylesheet = this.tfactory.getAssociatedStylesheet(
+                this.source(xml), null, null, null
+            );
+        } catch (TransformerConfigurationException ex) {
+            throw new ServletException(
+                Logger.format(
+                    "Failed to configure XSL transformer: '%[text]s'",
+                    xml
+                ),
+                ex
+            );
+        }
+        if (stylesheet == null) {
+            throw new ServletException(
+                Logger.format(
+                    "No associated stylesheet found at: '%[text]s'",
+                    xml
+                )
+            );
+        }
+        Logger.debug(
+            this,
+            "#transform(%d chars): found '%s' associated stylesheet by %s",
+            xml.length(),
+            stylesheet.getSystemId(),
+            this.tfactory.getClass().getName()
+        );
+        return stylesheet;
+    }
+
+    /**
+     * Make a transformer from this stylesheet.
+     * @param stylesheet The stylesheet
+     * @return Transformer
+     * @throws ServletException If fails
+     * @checkstyle RedundantThrows (3 lines)
+     */
+    private Transformer transformer(final Source stylesheet)
+        throws ServletException {
+        Transformer tran;
+        try {
+            tran = this.tfactory.newTransformer(stylesheet);
+        } catch (TransformerConfigurationException ex) {
+            throw new ServletException(
+                Logger.format(
+                    "Failed to create an XSL transformer for '%s'",
+                    stylesheet.getSystemId()
+                ),
+                ex
+            );
+        }
+        if (tran == null) {
+            throw new ServletException(
+                Logger.format(
+                    "%[type]s failed to create new XSL transformer for %s",
+                    this.tfactory,
+                    stylesheet
+                )
+            );
+        }
+        return tran;
     }
 
 }
