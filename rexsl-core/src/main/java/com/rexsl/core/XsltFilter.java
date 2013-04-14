@@ -96,9 +96,15 @@ public final class XsltFilter implements Filter {
      * {@inheritDoc}
      */
     @Override
-    public void init(@NotNull final FilterConfig config) {
+    public void init(@NotNull final FilterConfig config)
+        throws ServletException {
         final ServletContext context = config.getServletContext();
         this.tfactory = TransformerFactory.newInstance();
+        if (this.tfactory == null) {
+            throw new ServletException(
+                "failed to make a new instance of TransformerFactory"
+            );
+        }
         this.tfactory.setURIResolver(new ContextResourceResolver(context));
         try {
             Manifests.append(context);
@@ -118,8 +124,8 @@ public final class XsltFilter implements Filter {
         if (req instanceof HttpServletRequest
             && res instanceof HttpServletResponse) {
             this.filter(
-                (HttpServletRequest) req,
-                (HttpServletResponse) res,
+                HttpServletRequest.class.cast(req),
+                HttpServletResponse.class.cast(res),
                 chain
             );
         } else {
