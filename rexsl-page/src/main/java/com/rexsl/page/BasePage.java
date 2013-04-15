@@ -264,9 +264,12 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      */
     @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")
-    @NotNull
     public final Collection<Link> getLinks() {
-        return Collections.unmodifiableCollection(this.links);
+        Collection<Link> list = null;
+        if (!this.links.isEmpty()) {
+            list = Collections.unmodifiableCollection(this.links);
+        }
+        return list;
     }
 
     /**
