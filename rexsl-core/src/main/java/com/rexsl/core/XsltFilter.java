@@ -106,6 +106,16 @@ public final class XsltFilter implements Filter {
                 "failed to make a new instance of TransformerFactory"
             );
         }
+        if (!"net.sf.saxon.TransformerFactoryImpl"
+            .equals(this.tfactory.getClass().getName())) {
+            Logger.warn(
+                this,
+                // @checkstyle LineLength (1 line)
+                "Be aware that Saxon implementation of %s is replaced with %[type]s, which may lead to unexpected problems",
+                this.tfactory,
+                TransformerFactory.class.getName()
+            );
+        }
         this.tfactory.setURIResolver(new ContextResourceResolver(context));
         try {
             Manifests.append(context);
