@@ -301,7 +301,7 @@ public final class JaxbBundle {
     @NotNull
     public JaxbBundle add(@NotNull final String nam,
         @NotNull final String txt) {
-        final JaxbBundle child = new JaxbBundle(this, nam, txt.toString());
+        final JaxbBundle child = new JaxbBundle(this, nam, txt);
         this.children.add(child);
         return child;
     }
@@ -315,7 +315,7 @@ public final class JaxbBundle {
     @NotNull
     public JaxbBundle attr(@NotNull final String nam,
         @NotNull final String val) {
-        this.attrs.put(nam, val.toString());
+        this.attrs.put(nam, val);
         return this;
     }
 
