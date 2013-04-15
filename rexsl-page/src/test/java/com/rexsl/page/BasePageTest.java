@@ -77,6 +77,26 @@ public final class BasePageTest {
     }
 
     /**
+     * BasePage can be converted to XML without links.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void convertsToXmlWithoutLinks() throws Exception {
+        final BaseResource res = new BasePageTest.EmptyRs();
+        res.setUriInfo(new UriInfoMocker().mock());
+        res.setHttpHeaders(new HttpHeadersMocker().mock());
+        res.setSecurityContext(Mockito.mock(SecurityContext.class));
+        final BasePageTest.FooPage page = new BasePageTest.FooPage().init(res);
+        MatcherAssert.assertThat(
+            JaxbConverter.the(page.render().build().getEntity()),
+            XhtmlMatchers.hasXPaths(
+                "/page[count(links) = 0]",
+                "/page[@ip and @ssl]"
+            )
+        );
+    }
+
+    /**
      * Base resource for tests.
      */
     @Inset.Default({ LinksInset.class, FlashInset.class })
@@ -88,6 +108,12 @@ public final class BasePageTest {
      */
     @Inset.Default({ LinksInset.class, FlashInset.class })
     private static final class ConcreteRs extends BasePageTest.FooBaseRs {
+    }
+
+    /**
+     * Empty resource.
+     */
+    private static final class EmptyRs extends BaseResource {
     }
 
     /**
