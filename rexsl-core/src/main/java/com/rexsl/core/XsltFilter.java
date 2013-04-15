@@ -274,9 +274,9 @@ public final class XsltFilter implements Filter {
         if (tran == null) {
             throw new ServletException(
                 Logger.format(
-                    "%[type]s failed to create new XSL transformer for %s",
+                    "%[type]s failed to create new XSL transformer for '%s'",
                     this.tfactory,
-                    stylesheet
+                    stylesheet.getSystemId()
                 )
             );
         }
