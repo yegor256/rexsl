@@ -59,6 +59,7 @@ public final class BasePageTest {
         res.setSecurityContext(Mockito.mock(SecurityContext.class));
         final BasePageTest.FooPage page = new BasePageTest.FooPage()
             .init(res)
+            .append(new JaxbBundle("single").add("x").up())
             .append(new JaxbBundle("title", "hello, world!"))
             .link(new Link("test", "/foo"));
         MatcherAssert.assertThat(
@@ -68,6 +69,7 @@ public final class BasePageTest {
                 "/page/@ip",
                 "/page/@ssl",
                 "/page/millis",
+                "/page/single/x",
                 "/page/title[. = 'hello, world!']",
                 "/page/links/link[@rel = 'home']",
                 "/page/links/link[@rel = 'self']",

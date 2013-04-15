@@ -245,7 +245,7 @@ public final class JaxbBundle {
     public JaxbBundle(@NotNull final String nam) {
         this.parent = null;
         this.name = nam;
-        this.content = null;
+        this.content = "";
     }
 
     /**
@@ -253,14 +253,10 @@ public final class JaxbBundle {
      * @param nam The name of XML element
      * @param text Text content of the XML document
      */
-    public JaxbBundle(@NotNull final String nam, final String text) {
+    public JaxbBundle(@NotNull final String nam, @NotNull final String text) {
         this.parent = null;
         this.name = nam;
-        if (text == null) {
-            this.content = null;
-        } else {
-            this.content = text;
-        }
+        this.content = text;
     }
 
     /**
@@ -270,14 +266,10 @@ public final class JaxbBundle {
      * @param text Text content of the XML element
      */
     private JaxbBundle(@NotNull final JaxbBundle prnt,
-        @NotNull final String nam, final String text) {
+        @NotNull final String nam, @NotNull final String text) {
         this.parent = prnt;
         this.name = nam;
-        if (text == null) {
-            this.content = null;
-        } else {
-            this.content = text;
-        }
+        this.content = text;
     }
 
     /**
