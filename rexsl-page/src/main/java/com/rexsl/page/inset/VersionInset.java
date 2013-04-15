@@ -89,7 +89,7 @@ public final class VersionInset implements Inset {
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
         page.append(
-            new JaxbBundle("version")
+            new JaxbBundle("version", "")
                 .add("name", this.version)
                 .up()
                 .add("revision", this.revision)

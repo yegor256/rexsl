@@ -41,7 +41,7 @@
     <parent>
         <groupId>com.jcabi</groupId>
         <artifactId>parent</artifactId>
-        <version>0.7.16</version>
+        <version>0.7.17</version>
     </parent>
     <groupId>com.rexsl</groupId>
     <artifactId>rexsl</artifactId>
@@ -128,7 +128,8 @@
         <httpcomponents.version>4.2.2</httpcomponents.version>
         <jersey.version>1.17.1</jersey.version>
         <jetty.version>8.0.2.v20111006</jetty.version>
-        <jcabi.version>1.0-SNAPSHOT</jcabi.version>
+        <saxon.version>8.7</saxon.version>
+        <xerces.version>2.9.1</xerces.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -251,7 +252,7 @@
                 -->
                 <groupId>net.sf.saxon</groupId>
                 <artifactId>saxon</artifactId>
-                <version>8.7</version>
+                <version>${saxon.version}</version>
             </dependency>
             <dependency>
                 <!--
@@ -263,7 +264,7 @@
                 -->
                 <groupId>net.sf.saxon</groupId>
                 <artifactId>saxon-dom</artifactId>
-                <version>8.7</version>
+                <version>${saxon.version}</version>
             </dependency>
             <dependency>
                 <!--
@@ -277,8 +278,7 @@
                 -->
                 <groupId>xerces</groupId>
                 <artifactId>xercesImpl</artifactId>
-                <!-- Version 2.9.1 is the only one that works, don't change it. -->
-                <version>2.9.1</version>
+                <version>${xerces.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
