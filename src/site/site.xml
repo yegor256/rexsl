@@ -42,6 +42,9 @@
         <name>ReXSL</name>
         <src>http://img.rexsl.com/logo.png</src>
         <href>http://www.rexsl.com/</href>
+        <title>home page of ReXSL.com</title>
+        <width>200</width>
+        <height>45</height>
     </bannerLeft>
     <body>
         <head>
