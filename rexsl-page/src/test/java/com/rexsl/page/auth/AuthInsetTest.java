@@ -37,11 +37,14 @@ import com.rexsl.page.Inset;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
 import com.rexsl.page.ResourceMocker;
+import com.rexsl.page.UriInfoMocker;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
 import java.io.IOException;
+import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -50,6 +53,7 @@ import org.junit.Test;
  * Test case for {@link AuthInset}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 public final class AuthInsetTest {
 
@@ -95,7 +99,8 @@ public final class AuthInsetTest {
             JaxbConverter.the(page),
             XhtmlMatchers.hasXPaths(
                 String.format("/*/identity[name='%s']", name),
-                String.format("/*/identity[urn='%s']", urn)
+                String.format("/*/identity[urn='%s']", urn),
+                String.format("/*/identity[token='%s']", cookie)
             )
         );
     }
@@ -133,6 +138,12 @@ public final class AuthInsetTest {
             AuthInset.encrypt(new IdentityMocker().mock(), "", ""),
             Matchers.startsWith("0087ASJE79P6AU3JDGT6QRR3DDIM800A9LNM6Q")
         );
+        MatcherAssert.assertThat(
+            new AuthInset(new ResourceMocker().mock(), "", "").encrypt(
+                new IdentityMocker().mock()
+            ),
+            Matchers.startsWith("0087ASJE79P6AU3JDGT6QRR3DDIM800A9LNM6")
+        );
     }
 
     /**
@@ -154,6 +165,58 @@ public final class AuthInsetTest {
                     new AuthInset(this.resource(cookie), key, salt).identity()
                 )
             )
+        );
+    }
+
+    /**
+     * AuthInset can read query and add a cleaning header.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void readsQueryAndAddsHttpHeader() throws Exception {
+        final String key = "74^F\u20ac";
+        final String salt = "76YW\u0433{}!s";
+        final URN urn = new URN("urn:test:7873");
+        final String name = "Jeff \u20ac Lebowski";
+        final String token = AuthInset.encrypt(
+            new IdentityMocker()
+                .withURN(urn)
+                .withName(name)
+                .mock(),
+            key,
+            salt
+        );
+        final URI uri = UriBuilder.fromUri("http://localhost:80")
+            .queryParam("rexsl-auth", "{token}")
+            .build(token);
+        final Resource resource = new ResourceMocker()
+            .withUriInfo(new UriInfoMocker().withRequestUri(uri).mock())
+            .mock();
+        final Inset inset = new AuthInset(resource, key, salt);
+        final BasePage<?, ?> page = new BasePageMocker().init(resource);
+        inset.render(page, Response.ok());
+        MatcherAssert.assertThat(
+            JaxbConverter.the(page),
+            XhtmlMatchers.hasXPaths(
+                String.format("/*/identity[name = '%s']", name),
+                String.format("/*/identity[urn = '%s']", urn),
+                String.format("/*/identity[token = '%s']", token)
+            )
+        );
+    }
+
+    /**
+     * AuthInset can enrich an URI.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void enrichesUriWithToken() throws Exception {
+        final Resource resource = new ResourceMocker().mock();
+        final AuthInset inset = new AuthInset(resource, "98^y", "0P':");
+        final URI uri = inset.enrich(new URI("http://google.com/?test"));
+        MatcherAssert.assertThat(
+            uri.getQuery(),
+            Matchers.containsString("rexsl-auth=74LIM2QN08M1O")
         );
     }
 
