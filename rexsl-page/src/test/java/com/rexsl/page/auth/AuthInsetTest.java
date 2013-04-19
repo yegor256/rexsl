@@ -35,6 +35,7 @@ import com.rexsl.page.BasePageMocker;
 import com.rexsl.page.HttpHeadersMocker;
 import com.rexsl.page.Inset;
 import com.rexsl.page.Link;
+import com.rexsl.page.MultivaluedMapMocker;
 import com.rexsl.page.Resource;
 import com.rexsl.page.ResourceMocker;
 import com.rexsl.page.UriInfoMocker;
@@ -44,7 +45,6 @@ import java.io.IOException;
 import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -186,12 +186,11 @@ public final class AuthInsetTest {
             key,
             salt
         );
-        final URI uri = UriBuilder.fromUri("http://localhost:80")
-            .queryParam("rexsl-auth", "{token}")
-            .build(token);
-        final Resource resource = new ResourceMocker()
-            .withUriInfo(new UriInfoMocker().withRequestUri(uri).mock())
-            .mock();
+        final Resource resource = new ResourceMocker().withUriInfo(
+            new UriInfoMocker().withQueryParameters(
+                new MultivaluedMapMocker().with("rexsl-auth", token)
+            ).mock()
+        ).mock();
         final Inset inset = new AuthInset(resource, key, salt);
         final BasePage<?, ?> page = new BasePageMocker().init(resource);
         inset.render(page, Response.ok());

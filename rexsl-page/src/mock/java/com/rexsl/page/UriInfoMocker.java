@@ -30,16 +30,6 @@
 package com.rexsl.page;
 
 import java.net.URI;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -50,19 +40,12 @@ import org.mockito.Mockito;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-@SuppressWarnings("PMD.TooManyMethods")
 public final class UriInfoMocker {
 
     /**
      * The mock.
      */
     private final transient UriInfo info = Mockito.mock(UriInfo.class);
-
-    /**
-     * Query parameters.
-     */
-    private final transient ConcurrentMap<String, Set<String>> params =
-        new ConcurrentHashMap<String, Set<String>>();
 
     /**
      * Public ctor.
@@ -74,8 +57,7 @@ public final class UriInfoMocker {
         this.withRequestUri(
             UriBuilder.fromUri("http://localhost:99/local/foo").build()
         );
-        Mockito.doReturn(new UriInfoMocker.SimpleMultivaluedMap(this.params))
-            .when(this.info).getQueryParameters();
+        this.withQueryParameters(new MultivaluedMapMocker());
     }
 
     /**
@@ -90,6 +72,17 @@ public final class UriInfoMocker {
         Mockito.doReturn(UriBuilder.fromUri(uri))
             .when(this.info).getAbsolutePathBuilder();
         Mockito.doReturn(uri).when(this.info).getAbsolutePath();
+        return this;
+    }
+
+    /**
+     * With this query parameters.
+     * @param params Parameters
+     * @return This object
+     */
+    public UriInfoMocker withQueryParameters(
+        final MultivaluedMap<String, String> params) {
+        Mockito.doReturn(params).when(this.info).getQueryParameters();
         return this;
     }
 
@@ -111,157 +104,6 @@ public final class UriInfoMocker {
      */
     public UriInfo mock() {
         return this.info;
-    }
-
-    private static final class SimpleMultivaluedMap
-        implements MultivaluedMap<String, String> {
-        /**
-         * The map.
-         */
-        private final transient ConcurrentMap<String, Set<String>> map;
-        /**
-         * Public ctor.
-         * @param origin Map
-         */
-        public SimpleMultivaluedMap(
-            final ConcurrentMap<String, Set<String>> origin) {
-            this.map = origin;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void putSingle(final String key, final String value) {
-            throw new UnsupportedOperationException();
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void add(final String key, final String value) {
-            throw new UnsupportedOperationException();
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String getFirst(final String key) {
-            final Set<String> vals = this.map.get(key);
-            String first = null;
-            if (!vals.isEmpty()) {
-                first = vals.iterator().next();
-            }
-            return first;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int size() {
-            return this.map.size();
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean isEmpty() {
-            return this.map.isEmpty();
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean containsKey(final Object key) {
-            return this.map.containsKey(key);
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean containsValue(final Object value) {
-            boolean contains = false;
-            for (Set<String> list : this.map.values()) {
-                if (list.contains(value.toString())) {
-                    contains = true;
-                    break;
-                }
-            }
-            return contains;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public List<String> get(final Object key) {
-            return new ArrayList<String>(this.map.get(key));
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public List<String> put(final String key, final List<String> value) {
-            throw new UnsupportedOperationException();
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public List<String> remove(final Object key) {
-            throw new UnsupportedOperationException();
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void putAll(
-            final Map<? extends String, ? extends List<String>> all) {
-            throw new UnsupportedOperationException();
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void clear() {
-            throw new UnsupportedOperationException();
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Set<String> keySet() {
-            return this.map.keySet();
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-        public Collection<List<String>> values() {
-            final Collection<List<String>> values =
-                new LinkedList<List<String>>();
-            for (Set<String> list : this.map.values()) {
-                values.add(new ArrayList<String>(list));
-            }
-            return values;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-        public Set<Entry<String, List<String>>> entrySet() {
-            final Set<Entry<String, List<String>>> entries =
-                new HashSet<Entry<String, List<String>>>();
-            for (Map.Entry<String, Set<String>> entry : this.map.entrySet()) {
-                entries.add(
-                    new AbstractMap.SimpleEntry<String, List<String>>(
-                        entry.getKey(),
-                        new ArrayList<String>(entry.getValue())
-                    )
-                );
-            }
-            return entries;
-        }
     }
 
 }

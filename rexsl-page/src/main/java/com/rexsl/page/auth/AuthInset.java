@@ -43,11 +43,10 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -184,7 +183,26 @@ public final class AuthInset implements Inset {
                 );
             }
         }
-        if (this.resource.httpHeaders().getCookies()
+        final MultivaluedMap<String, String> params =
+            this.resource.uriInfo().getQueryParameters();
+        if (params.containsKey(AuthInset.AUTH_PARAM)
+            && !params.get(AuthInset.AUTH_PARAM).isEmpty()) {
+            final String token = params.get(AuthInset.AUTH_PARAM).get(0);
+            try {
+                identity = new Identity.Simple(
+                    Encrypted.parse(token, this.key, this.salt)
+                );
+            } catch (Encrypted.DecryptionException ex) {
+                throw new WebApplicationException(
+                    ex,
+                    Response.status(HttpURLConnection.HTTP_FORBIDDEN)
+                        .entity(ex.getMessage())
+                        .build()
+                );
+            }
+            this.resource.uriInfo().getBaseUriBuilder()
+                .queryParam(AuthInset.AUTH_PARAM, token);
+        } else if (this.resource.httpHeaders().getCookies()
             .containsKey(AuthInset.AUTH_COOKIE)) {
             final String cookie = this.resource.httpHeaders().getCookies()
                 .get(AuthInset.AUTH_COOKIE).getValue();
@@ -201,25 +219,6 @@ public final class AuthInset implements Inset {
                     this.resource.httpServletRequest().getRequestURI(),
                     ex
                 );
-            }
-        } else {
-            final ConcurrentMap<String, String> params = AuthInset.parse(
-                this.resource.uriInfo().getRequestUri()
-            );
-            if (params.containsKey(AuthInset.AUTH_PARAM)) {
-                final String token = params.get(AuthInset.AUTH_PARAM);
-                try {
-                    identity = new Identity.Simple(
-                        Encrypted.parse(token, this.key, this.salt)
-                    );
-                } catch (Encrypted.DecryptionException ex) {
-                    throw new WebApplicationException(
-                        ex,
-                        Response.status(HttpURLConnection.HTTP_FORBIDDEN)
-                            .entity(ex.getMessage())
-                            .build()
-                    );
-                }
             }
         }
         return identity;
@@ -305,28 +304,6 @@ public final class AuthInset implements Inset {
         return new CookieBuilder(this.resource.uriInfo().getBaseUri())
             .name(AuthInset.AUTH_COOKIE)
             .build();
-    }
-
-    /**
-     * Parse URI and return a map of its query params.
-     * @param uri The URI to parse
-     * @return Map of params
-     */
-    public static ConcurrentMap<String, String> parse(final URI uri) {
-        final ConcurrentMap<String, String> params =
-            new ConcurrentHashMap<String, String>();
-        final String query = uri.getQuery();
-        if (query != null) {
-            for (String param : query.split("&")) {
-                final String[] pair = param.split("=");
-                if (pair.length > 1) {
-                    params.put(pair[0], pair[1]);
-                } else {
-                    params.put(pair[0], "");
-                }
-            }
-        }
-        return params;
     }
 
 }
