@@ -64,9 +64,15 @@ import lombok.ToString;
 public final class AuthInset implements Inset {
 
     /**
-     * Cookie name.
+     * Name of identity authentication cookie.
      */
     private static final String AUTH_COOKIE = "Rexsl-Auth";
+
+    /**
+     * Name of identity authentication query param.
+     * @since 0.5
+     */
+    private static final String AUTH_PARAM = "rexsl-auth";
 
     /**
      * Logout Query param.
@@ -116,6 +122,16 @@ public final class AuthInset implements Inset {
     public static String encrypt(@NotNull final Identity identity,
         @NotNull final String key, @NotNull final String salt) {
         return new Encrypted(identity, key, salt).cookie();
+    }
+
+    /**
+     * Encrypt identity into text.
+     * @param identity The identity to encrypt
+     * @return Encrypted text for cookie
+     * @since 0.5
+     */
+    public String encrypt(@NotNull final Identity identity) {
+        return AuthInset.encrypt(identity, key, salt);
     }
 
     /**
