@@ -40,8 +40,11 @@ import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.WebApplicationException;
@@ -57,6 +60,7 @@ import lombok.ToString;
  * @version $Id$
  * @since 0.4.8
  * @see <a href="http://www.rexsl.com/rexsl-page/inset-oauth.html">OAuth in RESTful Interfaces</a>
+ * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @ToString
 @EqualsAndHashCode(of = { "resource", "key", "salt" })
@@ -131,7 +135,7 @@ public final class AuthInset implements Inset {
      * @since 0.5
      */
     public String encrypt(@NotNull final Identity identity) {
-        return AuthInset.encrypt(identity, key, salt);
+        return AuthInset.encrypt(identity, this.key, this.salt);
     }
 
     /**
@@ -185,6 +189,25 @@ public final class AuthInset implements Inset {
                     ex
                 );
             }
+        } else {
+            final ConcurrentMap<String, String> params = AuthInset.parse(
+                this.resource.uriInfo().getRequestUri()
+            );
+            if (params.containsKey(AuthInset.AUTH_PARAM)) {
+                final String token = params.get(AuthInset.AUTH_PARAM);
+                try {
+                    identity = new Identity.Simple(
+                        Encrypted.parse(token, this.key, this.salt)
+                    );
+                } catch (Encrypted.DecryptionException ex) {
+                    throw new WebApplicationException(
+                        ex,
+                        Response.status(HttpURLConnection.HTTP_FORBIDDEN)
+                            .entity(ex.getMessage())
+                            .build()
+                    );
+                }
+            }
         }
         return identity;
     }
@@ -208,6 +231,8 @@ public final class AuthInset implements Inset {
                     .add("name", identity.name())
                     .up()
                     .add("photo", identity.photo().toString())
+                    .up()
+                    .add("token", this.encrypt(identity))
                     .up()
             );
             page.link(
@@ -267,6 +292,28 @@ public final class AuthInset implements Inset {
         return new CookieBuilder(this.resource.uriInfo().getBaseUri())
             .name(AuthInset.AUTH_COOKIE)
             .build();
+    }
+
+    /**
+     * Parse URI and return a map of its query params.
+     * @param uri The URI to parse
+     * @return Map of params
+     */
+    public static ConcurrentMap<String, String> parse(final URI uri) {
+        final ConcurrentMap<String, String> params =
+            new ConcurrentHashMap<String, String>();
+        final String query = uri.getQuery();
+        if (query != null) {
+            for (String param : query.split("&")) {
+                final String[] pair = param.split("=");
+                if (pair.length > 1) {
+                    params.put(pair[0], pair[1]);
+                } else {
+                    params.put(pair[0], "");
+                }
+            }
+        }
+        return params;
     }
 
 }

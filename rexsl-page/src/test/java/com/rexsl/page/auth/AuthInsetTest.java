@@ -53,6 +53,7 @@ import org.junit.Test;
  * Test case for {@link AuthInset}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 public final class AuthInsetTest {
 
@@ -99,7 +100,7 @@ public final class AuthInsetTest {
             XhtmlMatchers.hasXPaths(
                 String.format("/*/identity[name='%s']", name),
                 String.format("/*/identity[urn='%s']", urn),
-                String.format("/*/identity[auth='%s']", cookie)
+                String.format("/*/identity[token='%s']", cookie)
             )
         );
     }
@@ -199,7 +200,7 @@ public final class AuthInsetTest {
             XhtmlMatchers.hasXPaths(
                 String.format("/*/identity[name = '%s']", name),
                 String.format("/*/identity[urn = '%s']", urn),
-                String.format("/*/identity[auth = '%s']", token)
+                String.format("/*/identity[token = '%s']", token)
             )
         );
     }
