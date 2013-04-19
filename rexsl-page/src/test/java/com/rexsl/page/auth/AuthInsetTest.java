@@ -206,6 +206,21 @@ public final class AuthInsetTest {
     }
 
     /**
+     * AuthInset can enrich an URI.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void enrichesUriWithToken() throws Exception {
+        final Resource resource = new ResourceMocker().mock();
+        final AuthInset inset = new AuthInset(resource, "98^y", "0P':");
+        final URI uri = inset.enrich(new URI("http://google.com/?test"));
+        MatcherAssert.assertThat(
+            uri.getQuery(),
+            Matchers.containsString("rexsl-auth=74LIM2QN08M1O")
+        );
+    }
+
+    /**
      * Make resource with the given auth cookie.
      * @param cookie The cookie
      * @return The resource made

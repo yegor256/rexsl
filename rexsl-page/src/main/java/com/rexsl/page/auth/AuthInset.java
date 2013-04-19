@@ -50,6 +50,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -136,6 +137,18 @@ public final class AuthInset implements Inset {
      */
     public String encrypt(@NotNull final Identity identity) {
         return AuthInset.encrypt(identity, this.key, this.salt);
+    }
+
+    /**
+     * Enrich the URI with authentication token.
+     * @param uri URI to extend/enrich
+     * @return New URI
+     * @since 0.5
+     */
+    public URI enrich(@NotNull final URI uri) {
+        return UriBuilder.fromUri(uri)
+            .queryParam(AuthInset.AUTH_PARAM, "{tkn}")
+            .build(this.encrypt(this.identity()));
     }
 
     /**
