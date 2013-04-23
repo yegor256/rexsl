@@ -100,18 +100,18 @@
         </developer>
     </developers>
     <issueManagement>
-        <system>trac</system>
-        <url>http://trac.rexsl.com/rexsl/</url>
+        <system>github</system>
+        <url>https://github.com/yegor256/rexsl/issues</url>
     </issueManagement>
+    <scm>
+        <connection>scm:git:github.com:yegor256/rexsl.git</connection>
+        <developerConnection>scm:git:github.com:yegor256/rexsl.git</developerConnection>
+        <url>https://github.com/yegor256/rexsl</url>
+    </scm>
     <ciManagement>
         <system>jenkins</system>
         <url>http://ci.rexsl.com:8080/job/rexsl/</url>
     </ciManagement>
-    <scm>
-        <connection>scm:svn:svn://svn.rexsl.com/rexsl/trunk</connection>
-        <developerConnection>scm:svn:svn://svn.rexsl.com/rexsl/trunk</developerConnection>
-        <url>http://svn.rexsl.com/rexsl/trunk</url>
-    </scm>
     <distributionManagement>
         <site>
             <!--
