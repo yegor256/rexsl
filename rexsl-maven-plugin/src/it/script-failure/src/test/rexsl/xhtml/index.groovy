@@ -27,13 +27,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo.xhtml
 
-import com.rexsl.test.XhtmlMatchers
-import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
+import org.hamcrest.MatcherAssert
 
-MatcherAssert.assertThat(rexsl.document, Matchers.containsString('say hello'))
-MatcherAssert.assertThat(
-    rexsl.document,
-    XhtmlMatchers.hasXPath("//div[contains(.,'say hello')]")
-)
+MatcherAssert.assertThat(rexsl.document, Matchers.notNullValue())

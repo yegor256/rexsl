@@ -27,13 +27,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.foo.scripts
 
-import com.rexsl.test.XhtmlMatchers
-import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers
+import com.jcabi.log.Logger
 
-MatcherAssert.assertThat(rexsl.document, Matchers.containsString('say hello'))
-MatcherAssert.assertThat(
-    rexsl.document,
-    XhtmlMatchers.hasXPath("//div[contains(.,'say hello')]")
-)
+Logger.info(this, 'HomePage script running...')
+
