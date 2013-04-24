@@ -88,35 +88,7 @@ final class ContextResourceResolver implements URIResolver {
             stream = this.local(href);
         }
         if (stream == null) {
-            URI uri;
-            if (base == null || base.isEmpty()) {
-                uri = UriBuilder.fromUri(href).build();
-            } else {
-                try {
-                    uri = new URL(new URL(base), href).toURI();
-                } catch (MalformedURLException ex) {
-                    throw new TransformerException(ex);
-                } catch (URISyntaxException ex) {
-                    throw new TransformerException(ex);
-                }
-            }
-            if (uri.isAbsolute()) {
-                try {
-                    stream = this.fetch(uri);
-                } catch (IOException ex) {
-                    throw new TransformerException(
-                        String.format("failed to fetch absolute URI '%s'", uri),
-                        ex
-                    );
-                }
-            } else {
-                throw new TransformerException(
-                    Logger.format(
-                        "URI '%s' is not absolute, can't be resolved",
-                        uri
-                    )
-                );
-            }
+            stream = this.absolute(href, base);
         }
         final Source source = this.source(stream);
         IOUtils.closeQuietly(stream);
@@ -168,6 +140,48 @@ final class ContextResourceResolver implements URIResolver {
             );
         }
         return stream;
+    }
+
+    /**
+     * Try to find and return a resource, which is absolute.
+     * @param href HREF provided by the client
+     * @param base Base
+     * @return The stream found
+     * @throws TransformerException If fails
+     */
+    private InputStream absolute(final String href, final String base)
+        throws TransformerException {
+        URI uri;
+        if (base == null || base.isEmpty()) {
+            uri = UriBuilder.fromUri(href).build();
+        } else {
+            try {
+                uri = new URL(new URL(base), href).toURI();
+            } catch (MalformedURLException ex) {
+                throw new TransformerException(ex);
+            } catch (URISyntaxException ex) {
+                throw new TransformerException(ex);
+            }
+        }
+        if (!uri.isAbsolute()) {
+            throw new TransformerException(
+                String.format(
+                    // @checkstyle LineLength (1 line)
+                    "Non-absolute URI '%s' can't be resolved, href='%s', base='%s'",
+                    uri,
+                    href,
+                    base
+                )
+            );
+        }
+        try {
+            return this.fetch(uri);
+        } catch (IOException ex) {
+            throw new TransformerException(
+                String.format("failed to fetch absolute URI '%s'", uri),
+                ex
+            );
+        }
     }
 
     /**
