@@ -29,6 +29,7 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,6 +62,7 @@ import org.apache.commons.lang3.CharEncoding;
  */
 @ToString
 @EqualsAndHashCode(of = "context")
+@Loggable(Loggable.DEBUG)
 final class ContextResourceResolver implements URIResolver {
 
     /**
@@ -128,18 +130,11 @@ final class ContextResourceResolver implements URIResolver {
      * @param path The path to resource to load from
      * @return The stream opened or NULL if nothing found
      */
+    @Loggable(Loggable.DEBUG)
     private InputStream local(final String path) {
-        final InputStream stream = this.context.getResourceAsStream(
+        return this.context.getResourceAsStream(
             URI.create(path).getPath()
         );
-        if (stream != null) {
-            Logger.debug(
-                this,
-                "#local('%s'): found local resource",
-                path
-            );
-        }
-        return stream;
     }
 
     /**
@@ -149,6 +144,7 @@ final class ContextResourceResolver implements URIResolver {
      * @return The stream found
      * @throws TransformerException If fails
      */
+    @Loggable(Loggable.DEBUG)
     private InputStream absolute(final String href, final String base)
         throws TransformerException {
         URI uri;
@@ -178,7 +174,12 @@ final class ContextResourceResolver implements URIResolver {
             return this.fetch(uri);
         } catch (IOException ex) {
             throw new TransformerException(
-                String.format("failed to fetch absolute URI '%s'", uri),
+                String.format(
+                    "failed to fetch absolute URI '%s', href='%s', base='%s'",
+                    href,
+                    base,
+                    uri
+                ),
                 ex
             );
         }
@@ -207,8 +208,8 @@ final class ContextResourceResolver implements URIResolver {
      * @return The stream opened
      * @throws IOException If some problem happens
      */
+    @Loggable(Loggable.DEBUG)
     private InputStream http(final HttpURLConnection conn) throws IOException {
-        final long start = System.currentTimeMillis();
         InputStream stream;
         try {
             conn.connect();
@@ -222,14 +223,6 @@ final class ContextResourceResolver implements URIResolver {
                     )
                 );
             }
-            Logger.debug(
-                this,
-                "#fetch('%s'): retrieved %d bytes of type '%s' in %[ms]s",
-                conn.getURL(),
-                conn.getContentLength(),
-                conn.getContentType(),
-                System.currentTimeMillis() - start
-            );
             stream = IOUtils.toInputStream(
                 IOUtils.toString(conn.getInputStream())
             );
