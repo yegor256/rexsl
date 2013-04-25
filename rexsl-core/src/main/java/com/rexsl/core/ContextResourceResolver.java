@@ -83,14 +83,20 @@ final class ContextResourceResolver implements URIResolver {
      */
     @Override
     @NotNull
+    @SuppressWarnings({
+        "PMD.ExceptionAsFlowControl", "PMD.PreserveStackTrace"
+    })
     public Source resolve(@NotNull final String href, final String base)
         throws TransformerException {
-        InputStream stream = null;
-        if (href.charAt(0) == '/') {
+        InputStream stream;
+        try {
             stream = this.local(href);
-        }
-        if (stream == null) {
-            stream = this.absolute(href, base);
+        } catch (TransformerException ex) {
+            try {
+                stream = this.absolute(href, base);
+            } catch (TransformerException exp) {
+                throw new TransformerException(ex.getMessage(), exp);
+            }
         }
         final Source source = this.source(stream);
         IOUtils.closeQuietly(stream);
@@ -129,12 +135,30 @@ final class ContextResourceResolver implements URIResolver {
      * Load stream from local address.
      * @param path The path to resource to load from
      * @return The stream opened or NULL if nothing found
+     * @throws TransformerException If not found
      */
     @Loggable(Loggable.DEBUG)
-    private InputStream local(final String path) {
-        return this.context.getResourceAsStream(
+    private InputStream local(final String path)
+        throws TransformerException {
+        if (path.charAt(0) != '/') {
+            throw new TransformerException(
+                String.format("'%s' is not a local path", path)
+            );
+        }
+        final InputStream stream = this.context.getResourceAsStream(
             URI.create(path).getPath()
         );
+        if (stream == null) {
+            throw new TransformerException(
+                Logger.format(
+                    "local resource '%s' not found by %[type]s, realPath='%s'",
+                    path,
+                    this.context,
+                    this.context.getRealPath(path)
+                )
+            );
+        }
+        return stream;
     }
 
     /**
@@ -142,7 +166,7 @@ final class ContextResourceResolver implements URIResolver {
      * @param href HREF provided by the client
      * @param base Base
      * @return The stream found
-     * @throws TransformerException If fails
+     * @throws TransformerException If not found
      */
     @Loggable(Loggable.DEBUG)
     private InputStream absolute(final String href, final String base)
