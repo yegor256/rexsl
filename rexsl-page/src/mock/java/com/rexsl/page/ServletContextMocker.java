@@ -71,9 +71,9 @@ public final class ServletContextMocker {
                     return null;
                 }
             }
-        ).when(this.subj).setAttribute(
-            Mockito.anyString(), Mockito.anyObject()
-        );
+        )
+            .when(this.subj)
+            .setAttribute(Mockito.anyString(), Mockito.anyObject());
         Mockito.doAnswer(
             new Answer<Object>() {
                 @Override
