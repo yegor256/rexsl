@@ -127,11 +127,36 @@ public final class ResourceMocker {
     }
 
     /**
-     * Build an instance of provided class.
+     * Build an instance of {@link Resource}.
      * @return The resource
      */
     public Resource mock() {
         return this.resource;
+    }
+
+    /**
+     * Build an instance of provided class.
+     * @param type Type of resource
+     * @return The resource
+     * @param <T> Type of it
+     * @since 0.4.11
+     */
+    public <T extends BaseResource> T mock(final Class<T> type) {
+        final T rest;
+        try {
+            rest = type.newInstance();
+        } catch (InstantiationException ex) {
+            throw new IllegalArgumentException(ex);
+        } catch (IllegalAccessException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        rest.setHttpHeaders(this.resource.httpHeaders());
+        rest.setHttpServletRequest(this.resource.httpServletRequest());
+        rest.setProviders(this.resource.providers());
+        rest.setSecurityContext(this.resource.securityContext());
+        rest.setServletContext(this.resource.servletContext());
+        rest.setUriInfo(this.resource.uriInfo());
+        return rest;
     }
 
 }
