@@ -126,6 +126,12 @@ public interface Identity {
             this(identity.urn(), identity.name(), identity.photo());
         }
         /**
+         * Public ctor for a test identity, with default coordinates.
+         */
+        public Simple() {
+            this(URN.create("urn:test:0"), "John Doe", URI.create("#"));
+        }
+        /**
          * {@inheritDoc}
          */
         @Override

@@ -300,6 +300,7 @@ public final class AuthInset implements Inset {
      *
      * @return The cookie
      */
+    @Cacheable.FlushAfter
     public NewCookie logout() {
         return new CookieBuilder(this.resource.uriInfo().getBaseUri())
             .name(AuthInset.AUTH_COOKIE)

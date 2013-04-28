@@ -109,24 +109,13 @@ public final class Facebook implements Provider {
                 );
             }
             final User fbuser = this.fetch(this.token(code.get(0)));
-            identity = new Identity() {
-                @Override
-                public URN urn() {
-                    return URN.create(
-                        String.format("urn:facebook:%s", fbuser.getId())
-                    );
-                }
-                @Override
-                public String name() {
-                    return fbuser.getName();
-                }
-                @Override
-                public URI photo() {
-                    return UriBuilder.fromUri("https://graph.facebook.com/")
-                        .path("/{id}/picture")
-                        .build(fbuser.getId());
-                }
-            };
+            identity = new Identity.Simple(
+                URN.create(String.format("urn:facebook:%s", fbuser.getId())),
+                fbuser.getName(),
+                UriBuilder.fromUri("https://graph.facebook.com/")
+                    .path("/{id}/picture")
+                    .build(fbuser.getId())
+            );
         }
         return identity;
     }

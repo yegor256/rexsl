@@ -186,30 +186,18 @@ public final class Google implements Provider {
             .queryParam("access_token", "{token}")
             .build(token);
         final JsonDocument json = RestTester.start(uri).get("user info");
-        // @checkstyle AnonInnerLength (50 lines)
-        return new Identity() {
-            @Override
-            public URN urn() {
-                return URN.create(
-                    String.format("urn:google:%s", json.json("id").get(0))
-                );
-            }
-            @Override
-            public String name() {
-                return json.json("name").get(0);
-            }
-            @Override
-            public URI photo() {
-                final List<String> pics = json.json("picture");
-                URI photo;
-                if (pics.isEmpty()) {
-                    photo = Identity.ANONYMOUS.photo();
-                } else {
-                    photo = URI.create(pics.get(0));
-                }
-                return photo;
-            }
-        };
+        final List<String> pics = json.json("picture");
+        URI photo;
+        if (pics.isEmpty()) {
+            photo = Identity.ANONYMOUS.photo();
+        } else {
+            photo = URI.create(pics.get(0));
+        }
+        return new Identity.Simple(
+            URN.create(String.format("urn:google:%s", json.json("id").get(0))),
+            json.json("name").get(0),
+            photo
+        );
     }
 
     /**

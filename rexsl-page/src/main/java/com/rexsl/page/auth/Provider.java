@@ -31,6 +31,7 @@ package com.rexsl.page.auth;
 
 import com.rexsl.page.Link;
 import java.io.IOException;
+import javax.validation.constraints.NotNull;
 
 /**
  * Authentication provider.
@@ -49,10 +50,52 @@ public interface Provider {
     Link link();
 
     /**
-     * Get user's identity.
-     * @return Identity
-     * @throws IOException If failed
+     * Get user's identity or {@link Identity.ANONYMOUS} if can't authenticate.
+     * @return Identity authenticated (or {@link Identity.ANONYMOUS})
+     * @throws IOException If failed for some exceptional reason
      */
     Identity identity() throws IOException;
+
+    /**
+     * Always returns the same identity (mostly used for unit testing).
+     *
+     * <p>This class is very useful for unit testing, when you need to
+     * configure JAX-RS resource with a pre-authenticated identity,
+     * for example:
+     *
+     * <pre> final Identity identity = new Identity.Simple();
+     * final IndexRs rest = new ResourceMocker().mock(IndexRs.class);
+     * rest.auth().with(new Provider.Always(identity));
+     * </pre>
+     *
+     * @since 0.4.11
+     */
+    final class Always implements Provider {
+        /**
+         * The identity to return.
+         */
+        private final transient Identity idnt;
+        /**
+         * Public ctor.
+         * @param identity Identity to return always
+         */
+        public Always(@NotNull final Identity identity) {
+            this.idnt = identity;
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Link link() {
+            return new Link("auth-always", "/always");
+        }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Identity identity() throws IOException {
+            return this.idnt;
+        }
+    }
 
 }
