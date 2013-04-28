@@ -31,6 +31,7 @@ package com.rexsl.page;
 
 import com.rexsl.core.XslResolver;
 import java.net.URI;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -74,6 +75,7 @@ public final class ResourceMocker {
         this.withProviders(providers);
         final SecurityContext security = Mockito.mock(SecurityContext.class);
         this.withSecurityContext(security);
+        this.withServletContext(new ServletContextMocker().mock());
     }
 
     /**
@@ -123,6 +125,17 @@ public final class ResourceMocker {
      */
     public ResourceMocker withSecurityContext(final SecurityContext ctx) {
         Mockito.doReturn(ctx).when(this.resource).securityContext();
+        return this;
+    }
+
+    /**
+     * With this instance of {@link ServletContext}.
+     * @param ctx The context
+     * @return This object
+     * @since 0.4.11
+     */
+    public ResourceMocker withServletContext(final ServletContext ctx) {
+        Mockito.doReturn(ctx).when(this.resource).servletContext();
         return this;
     }
 
