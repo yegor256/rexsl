@@ -66,7 +66,7 @@ public final class ServletContextMocker {
                 public Void answer(final InvocationOnMock invocation) {
                     ServletContextMocker.this.attributes.put(
                         invocation.getArguments()[0].toString(),
-                        invocation.getArguments()[0]
+                        invocation.getArguments()[1]
                     );
                     return null;
                 }
