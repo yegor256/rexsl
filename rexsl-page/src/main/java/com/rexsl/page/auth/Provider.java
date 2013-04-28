@@ -31,6 +31,11 @@ package com.rexsl.page.auth;
 
 import com.rexsl.page.Link;
 import java.io.IOException;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -55,6 +60,16 @@ public interface Provider {
      * @throws IOException If failed for some exceptional reason
      */
     Identity identity() throws IOException;
+
+    /**
+     * Annotates a provider that requires redirecting
+     * right after authentication.
+     */
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    @interface Redirect {
+    }
 
     /**
      * Always returns the same identity (mostly used for unit testing).

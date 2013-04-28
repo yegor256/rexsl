@@ -65,6 +65,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode(of = { "resource", "key", "salt" })
 @Loggable(value = Loggable.DEBUG, ignore = WebApplicationException.class)
+@SuppressWarnings("PMD.TooManyMethods")
 public final class AuthInset implements Inset {
 
     /**
@@ -161,65 +162,18 @@ public final class AuthInset implements Inset {
     }
 
     /**
-     * Get user's identity (runtime exception if not authenticated).
+     * Get user's identity ({@link WebApplicationException}
+     * if not authenticated).
      * @return Identity, if authenticated
      */
     @Cacheable(lifetime = 1, unit = TimeUnit.SECONDS)
     public Identity identity() {
-        Identity identity = Identity.ANONYMOUS;
-        for (Provider prov : this.providers) {
-            try {
-                identity = prov.identity();
-            } catch (IOException ex) {
-                throw new IllegalStateException(ex);
-            }
-            if (!identity.equals(Identity.ANONYMOUS)) {
-                throw new WebApplicationException(
-                    Response.status(HttpURLConnection.HTTP_SEE_OTHER).location(
-                        this.resource.uriInfo().getRequestUriBuilder()
-                            .replaceQuery("")
-                            .build()
-                    ).cookie(this.cookie(identity)).build()
-                );
-            }
+        Identity identity = this.ofProviders();
+        if (identity == Identity.ANONYMOUS) {
+            identity = this.ofQuery();
         }
-        final MultivaluedMap<String, String> params =
-            this.resource.uriInfo().getQueryParameters();
-        if (params.containsKey(AuthInset.AUTH_PARAM)
-            && !params.get(AuthInset.AUTH_PARAM).isEmpty()) {
-            final String token = params.get(AuthInset.AUTH_PARAM).get(0);
-            try {
-                identity = new Identity.Simple(
-                    Encrypted.parse(token, this.key, this.salt)
-                );
-            } catch (Encrypted.DecryptionException ex) {
-                throw new WebApplicationException(
-                    ex,
-                    Response.status(HttpURLConnection.HTTP_FORBIDDEN)
-                        .entity(ex.getMessage())
-                        .build()
-                );
-            }
-            this.resource.uriInfo().getBaseUriBuilder()
-                .queryParam(AuthInset.AUTH_PARAM, token);
-        } else if (this.resource.httpHeaders().getCookies()
-            .containsKey(AuthInset.AUTH_COOKIE)) {
-            final String cookie = this.resource.httpHeaders().getCookies()
-                .get(AuthInset.AUTH_COOKIE).getValue();
-            try {
-                identity = new Identity.Simple(
-                    Encrypted.parse(cookie, this.key, this.salt)
-                );
-            } catch (Encrypted.DecryptionException ex) {
-                Logger.warn(
-                    this,
-                    "Failed to decrypt '%s' from '%s' to '%s': %[exception]s",
-                    cookie,
-                    this.resource.httpServletRequest().getRemoteAddr(),
-                    this.resource.httpServletRequest().getRequestURI(),
-                    ex
-                );
-            }
+        if (identity == Identity.ANONYMOUS) {
+            identity = this.ofCookies();
         }
         return identity;
     }
@@ -305,6 +259,92 @@ public final class AuthInset implements Inset {
         return new CookieBuilder(this.resource.uriInfo().getBaseUri())
             .name(AuthInset.AUTH_COOKIE)
             .build();
+    }
+
+    /**
+     * Authenticate using providers.
+     * @return Identity found or ANONYMOUS
+     */
+    private Identity ofProviders() {
+        Identity identity = Identity.ANONYMOUS;
+        for (Provider prov : this.providers) {
+            try {
+                identity = prov.identity();
+            } catch (IOException ex) {
+                throw new IllegalStateException(ex);
+            }
+            if (identity.equals(Identity.ANONYMOUS)) {
+                continue;
+            }
+            if (prov.getClass().isAnnotationPresent(Provider.Redirect.class)) {
+                throw new WebApplicationException(
+                    Response.status(HttpURLConnection.HTTP_SEE_OTHER).location(
+                        this.resource.uriInfo().getRequestUriBuilder()
+                            .replaceQuery("")
+                            .build()
+                    ).cookie(this.cookie(identity)).build()
+                );
+            }
+            break;
+        }
+        return identity;
+    }
+
+    /**
+     * Authenticate using query params.
+     * @return Identity found or ANONYMOUS
+     */
+    private Identity ofQuery() {
+        Identity identity = Identity.ANONYMOUS;
+        final MultivaluedMap<String, String> params =
+            this.resource.uriInfo().getQueryParameters();
+        if (params.containsKey(AuthInset.AUTH_PARAM)
+            && !params.get(AuthInset.AUTH_PARAM).isEmpty()) {
+            final String token = params.get(AuthInset.AUTH_PARAM).get(0);
+            try {
+                identity = new Identity.Simple(
+                    Encrypted.parse(token, this.key, this.salt)
+                );
+            } catch (Encrypted.DecryptionException ex) {
+                throw new WebApplicationException(
+                    ex,
+                    Response.status(HttpURLConnection.HTTP_FORBIDDEN)
+                        .entity(ex.getMessage())
+                        .build()
+                );
+            }
+            this.resource.uriInfo().getBaseUriBuilder()
+                .queryParam(AuthInset.AUTH_PARAM, token);
+        }
+        return identity;
+    }
+
+    /**
+     * Authenticate using cookies.
+     * @return Identity found or ANONYMOUS
+     */
+    private Identity ofCookies() {
+        Identity identity = Identity.ANONYMOUS;
+        if (this.resource.httpHeaders().getCookies()
+            .containsKey(AuthInset.AUTH_COOKIE)) {
+            final String cookie = this.resource.httpHeaders().getCookies()
+                .get(AuthInset.AUTH_COOKIE).getValue();
+            try {
+                identity = new Identity.Simple(
+                    Encrypted.parse(cookie, this.key, this.salt)
+                );
+            } catch (Encrypted.DecryptionException ex) {
+                Logger.warn(
+                    this,
+                    "Failed to decrypt '%s' from '%s' to '%s': %[exception]s",
+                    cookie,
+                    this.resource.httpServletRequest().getRemoteAddr(),
+                    this.resource.httpServletRequest().getRequestURI(),
+                    ex
+                );
+            }
+        }
+        return identity;
     }
 
 }

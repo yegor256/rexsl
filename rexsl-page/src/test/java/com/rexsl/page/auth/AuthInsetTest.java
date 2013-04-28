@@ -110,20 +110,21 @@ public final class AuthInsetTest {
      * @throws Exception If there is some problem inside
      */
     @Test(expected = javax.ws.rs.WebApplicationException.class)
-    public void authenticatesWithProvider() throws Exception {
+    public void authenticatesWithRedirectingProvider() throws Exception {
         final Resource resource = new ResourceMocker().mock();
-        final Inset inset = new AuthInset(resource, "", "").with(
-            new Provider() {
-                @Override
-                public Link link() {
-                    throw new UnsupportedOperationException();
-                }
-                @Override
-                public Identity identity() throws IOException {
-                    return new IdentityMocker().mock();
-                }
+        @Provider.Redirect
+        final class Redirector implements Provider {
+            @Override
+            public Link link() {
+                throw new UnsupportedOperationException();
             }
-        );
+            @Override
+            public Identity identity() throws IOException {
+                return new IdentityMocker().mock();
+            }
+        }
+        final Inset inset = new AuthInset(resource, "", "")
+            .with(new Redirector());
         final BasePage<?, ?> page = new BasePageMocker().init(resource);
         inset.render(page, Response.ok());
     }

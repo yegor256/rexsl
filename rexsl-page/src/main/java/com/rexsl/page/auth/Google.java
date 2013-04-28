@@ -60,6 +60,7 @@ import org.apache.commons.lang3.CharEncoding;
 @ToString
 @EqualsAndHashCode(of = { "appId", "appKey" })
 @Loggable(Loggable.DEBUG)
+@Provider.Redirect
 public final class Google implements Provider {
 
     /**
