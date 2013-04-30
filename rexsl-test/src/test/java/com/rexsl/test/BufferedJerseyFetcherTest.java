@@ -30,9 +30,9 @@
 package com.rexsl.test;
 
 import com.sun.jersey.api.client.ClientResponse;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -44,26 +44,23 @@ import org.mockito.Mockito;
 public final class BufferedJerseyFetcherTest {
 
     /**
-     * BufferedJerseyFetcher can read XML in ISO-8859-1 encoding.
+     * BufferedJerseyFetcher can fail to read XML in ISO-8859-1 encoding.
      * @throws Exception If there is some problem inside
      */
-    @Test
-    public void canReadNonUnicodeXmlDocuments() throws Exception {
+    @Test(expected = IOException.class)
+    public void failsOnNonUnicodeXmlDocuments() throws Exception {
         final ClientResponse response = Mockito.mock(ClientResponse.class);
         Mockito.doReturn(true).when(response).hasEntity();
         Mockito.doReturn(
             IOUtils.toInputStream(
-                "<?xml version='1.0' encoding='ISO-8859-1'><root>\u009F</root>",
+                "<?xml version='1.0' encoding='ISO-8859-1'>\n<a>\u009F</a>",
                 Charset.forName("ISO-8859-1")
             )
         ).when(response).getEntityInputStream();
         final JerseyFetcher origin = Mockito.mock(JerseyFetcher.class);
         Mockito.doReturn(response).when(origin).fetch();
         final BufferedJerseyFetcher fetcher = new BufferedJerseyFetcher(origin);
-        MatcherAssert.assertThat(
-            fetcher.body(),
-            XhtmlMatchers.hasXPath("/root")
-        );
+        fetcher.body();
     }
 
 }

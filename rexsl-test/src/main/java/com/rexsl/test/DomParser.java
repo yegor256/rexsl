@@ -147,7 +147,12 @@ final class DomParser {
             .andThen(Group.nonCapturing(letter).anyTimes());
         return Sequence.sequence(
             Group.nonCapturing(
-                Adopted.fromPattern(Pattern.compile("<\\?xml.*\\?>\\s*"))
+                Adopted.fromPattern(
+                    Pattern.compile(
+                        "<\\?xml.*\\?>\\s*",
+                        Pattern.CASE_INSENSITIVE
+                    )
+                )
             ).optional(),
             Group.nonCapturing(
                 Adopted.fromPattern(Pattern.compile("<!DOCTYPE.*>"))

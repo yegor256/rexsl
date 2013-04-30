@@ -35,11 +35,12 @@ import java.io.IOException;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * Buffer in front {@link JerseyFetcher}.
+ * Buffer in front of {@link JerseyFetcher}.
  *
  * <p>Objects of this class are mutable and thread-safe.
  *
@@ -50,6 +51,11 @@ import org.apache.commons.lang3.CharEncoding;
 @EqualsAndHashCode(of = { "fetcher", "rsp", "entity" })
 @Loggable(Loggable.DEBUG)
 final class BufferedJerseyFetcher implements JerseyFetcher {
+
+    /**
+     * UTF-8 error marker.
+     */
+    private static final String ERR = "\uFFFD";
 
     /**
      * Fetcher of response.
@@ -63,7 +69,7 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
     private transient ClientResponse rsp;
 
     /**
-     * The body of HTTP response, should be loaded on demand in
+     * The UTF-8 body of HTTP response, should be loaded on demand in
      * {@link #body()}.
      * @see #body()
      */
@@ -89,31 +95,15 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
     }
 
     /**
-     * Get body of request.
-     * @return The body as string
+     * Get body of request, as a UTF-8 string.
+     * @return The body as UTF-8 string
      * @throws IOException If can't read it from response
      */
     @NotNull
     public String body() throws IOException {
         synchronized (this.fetcher) {
             if (this.entity == null) {
-                final ClientResponse response = this.fetch();
-                if (response.hasEntity()) {
-                    this.entity = IOUtils.toString(
-                        response.getEntityInputStream(),
-                        CharEncoding.UTF_8
-                    );
-                } else {
-                    this.entity = "";
-                }
-                if (this.entity.contains("\uFFFD")) {
-                    throw new IOException(
-                        String.format(
-                            "broken Unicode text in entity: '%s'",
-                            this.entity
-                        )
-                    );
-                }
+                this.entity = this.load();
             }
             return this.entity;
         }
@@ -137,6 +127,40 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
             }
             return this.rsp;
         }
+    }
+
+    /**
+     * Load body and return it as a UTF-8 string (method is not thread safe!).
+     * @return The body as UTF-8 string
+     * @throws IOException If can't read it from response
+     */
+    private String load() throws IOException {
+        final ClientResponse response = this.fetch();
+        String body;
+        if (response.hasEntity()) {
+            final byte[] bytes = IOUtils.toByteArray(
+                response.getEntityInputStream()
+            );
+            body = new String(bytes, CharEncoding.UTF_8);
+            if (body.contains(BufferedJerseyFetcher.ERR)) {
+                throw new IOException(
+                    String.format(
+                        "broken Unicode text at line #%d in '%s' (%d bytes)",
+                        StringUtils.countMatches(
+                            "\n",
+                            body.substring(
+                                0, body.indexOf(BufferedJerseyFetcher.ERR)
+                            )
+                        ) + 2,
+                        body,
+                        bytes.length
+                    )
+                );
+            }
+        } else {
+            body = "";
+        }
+        return body;
     }
 
 }

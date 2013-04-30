@@ -115,22 +115,23 @@ public final class DomParserTest {
     }
 
     /**
-     * DomParser allows XML documents with prolog.
+     * DomParser allows valid XML formatting.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void allowsProlog() throws Exception {
-        new DomParser("<?xml version=\"1.0\"?><a/>");
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    public void allowsValidXmlFormatting() throws Exception {
+        final String[] texts = new String[] {
+            "<?xml version=\"1.0\" encoding='ISO-8895-1'?><a/>",
+            "<:a/>",
+            "<ns:a><ns2:test-me/></ns:a>",
+            "<_a/>",
+            "<\u00c0a/>",
+            "<something>\uFFFD</something>",
+        };
+        for (String text : texts) {
+            new DomParser(text);
+        }
     }
 
-    /**
-     * DomParser allows XML documents with prolog.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void allowsStartCharacter() throws Exception {
-        new DomParser("<:a/>");
-        new DomParser("<_a/>");
-        new DomParser("<\u00c0a/>");
-    }
 }

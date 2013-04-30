@@ -122,10 +122,11 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * else that can't be translated into a UTF-8 string a runtime exception
      * will be thrown).
      *
-     * <p>The only encoding supported here is UTF-8. If the body of response
+     * <p><strong>DISCLAIMER</strong>:
+     * The only encoding supported here is UTF-8. If the body of response
      * contains any chars that can't be used and should be replaced with
      * a "replacement character", a {@link AssertionError} will be thrown. If
-     * you need to use some other encodings use
+     * you need to use some other encodings, use
      * {@link java.net.HttpURLConnection} directly.
      *
      * @return The body, as a UTF-8 string
