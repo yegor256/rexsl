@@ -97,9 +97,10 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
     public String body() throws IOException {
         synchronized (this.fetcher) {
             if (this.entity == null) {
-                if (this.fetch().hasEntity()) {
+                final ClientResponse response = this.fetch();
+                if (response.hasEntity()) {
                     this.entity = IOUtils.toString(
-                        this.fetch().getEntityInputStream(),
+                        response.getEntityInputStream(),
                         CharEncoding.UTF_8
                     );
                 } else {
