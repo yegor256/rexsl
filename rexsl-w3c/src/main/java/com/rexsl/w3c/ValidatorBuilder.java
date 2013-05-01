@@ -69,12 +69,14 @@ public final class ValidatorBuilder {
     /**
      * Static instance of HTML validator.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final Validator HTML =
         new DefaultHtmlValidator();
 
     /**
      * Static instance of CSS validator.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final Validator CSS =
         new DefaultCssValidator();
 
