@@ -172,6 +172,7 @@
                                 http://trac.rexsl.com/rexsl/ticket/90
                                 -->
                                 <rexsl.injected>123</rexsl.injected>
+                                <null.property></null.property>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>

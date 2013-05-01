@@ -219,13 +219,21 @@ public final class CheckMojo extends AbstractRexslMojo {
         if (this.systemPropertyVariables != null) {
             for (Map.Entry<String, String> var
                 : this.systemPropertyVariables.entrySet()) {
-                System.setProperty(var.getKey(), var.getValue());
-                Logger.info(
-                    this,
-                    "System variable '%s' set to '%s'",
-                    var.getKey(),
-                    var.getValue()
-                );
+                if (var.getValue() == null) {
+                    Logger.warn(
+                        this,
+                        "System variable '%s' can't be set to NULL",
+                        var.getKey()
+                    );
+                } else {
+                    System.setProperty(var.getKey(), var.getValue());
+                    Logger.info(
+                        this,
+                        "System variable '%s' set to '%s'",
+                        var.getKey(),
+                        var.getValue()
+                    );
+                }
             }
         }
         return before;
