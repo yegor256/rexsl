@@ -184,11 +184,15 @@ public final class SimpleXml implements XmlDocument {
      * <p>An {@link IllegalArgumentException} is thrown if the parameter
      * passed is not in XML format.
      *
-     * @param stream The input stream
+     * <p>The provided input stream will be closed automatically after
+     * getting data from it.
+     *
+     * @param stream The input stream, which will be closed automatically
      * @throws IOException In case of I/O problem
      */
     public SimpleXml(@NotNull final InputStream stream) throws IOException {
         this(IOUtils.toString(stream, CharEncoding.UTF_8));
+        stream.close();
     }
 
     /**
