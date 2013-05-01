@@ -134,6 +134,8 @@ How to release new version to Maven Central:
 
     10. Merge the branch back to master.
 
+        git checkout master && git merge 690 && git push origin master && git branch -D 690
+
     11. Deploy site to Amazon S3 (in approx 4 hours):
 
         git checkout rexsl-0.4.11
