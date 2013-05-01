@@ -330,7 +330,8 @@ public final class Link {
                 base.getHost(),
                 base.getPort(),
                 UriBuilder.fromUri(base).path(rel.getPath()).build().getPath(),
-                query.toString(),
+                // @checkstyle AvoidInlineConditionals (1 line)
+                query.length() == 0 ? null : query.toString(),
                 base.getFragment()
             );
         } catch (java.net.URISyntaxException ex) {
