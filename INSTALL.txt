@@ -124,8 +124,8 @@ How to release new version to Maven Central:
 
     8. Copy your branch to tags:
 
-        git tag -a jcabi-0.4.11 -m '#690: version 0.4.11 released to Maven Central'
-        git push origin jcabi-0.4.11
+        git tag -a rexsl-0.4.11 -m '#690: version 0.4.11 released to Maven Central'
+        git push origin rexsl-0.4.11
 
     9. Set version back to SNAPSHOT:
 
