@@ -32,6 +32,7 @@ package com.rexsl.maven;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.utils.PortReserver;
+import java.util.Map;
 import java.util.Properties;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
@@ -95,6 +96,32 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
     private transient Integer port;
 
     /**
+     * System variables to be set before running tests.
+     *
+     * <p>You define them in a similar way as in
+     * <a href="http://maven.apache.org/plugins/maven-surefire-plugin/"
+     * >maven-surefire-plugin</a>,
+     * for example you want to reconfigure LOG4J just for the tests:
+     *
+     * <pre>
+     * &lt;plugin>
+     *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+     *   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
+     *   &lt;configuration&gt;
+     *     &lt;systemPropertyVariables&gt;
+     *       &lt;log4j.configuration&gt;./x.props&lt;/log4j.configuration&gt;
+     *     &lt;/systemPropertyVariables&gt;
+     *   &lt;/configuration&gt;
+     * &lt;/plugin&gt;
+     * </pre>
+     *
+     * @parameter
+     * @since 0.3
+     */
+    @SuppressWarnings("PMD.LongVariable")
+    private transient Map<String, String> systemPropertyVariables;
+
+    /**
      * Environment.
      */
     private transient MavenEnvironment environment;
@@ -133,6 +160,15 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
     @Loggable(Loggable.DEBUG)
     public final void setSession(final RepositorySystemSession sess) {
         this.session = sess;
+    }
+
+    /**
+     * Set systemPropertyVariables.
+     * @param props Properties
+     */
+    @Loggable(Loggable.DEBUG)
+    public final void setsystemProperties(final Map<String, String> props) {
+        this.systemPropertyVariables = props;
     }
 
     /**
@@ -180,7 +216,12 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
         } else {
             this.environment.setPort(this.port);
         }
-        this.run();
+        final Properties before = this.inject();
+        try {
+            this.run();
+        } finally {
+            this.revert(before);
+        }
     }
 
     /**
@@ -188,5 +229,44 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * @throws MojoFailureException If some problem inside
      */
     protected abstract void run() throws MojoFailureException;
+
+    /**
+     * Sets the system properties to the argument passed.
+     * @param before The properties.
+     */
+    private void revert(final Properties before) {
+        System.setProperties(before);
+    }
+
+    /**
+     * Injects system property variables and returns the properties as
+     * they are before being modified in the method.
+     * @return The properties before being modified
+     */
+    private Properties inject() {
+        final Properties before = new Properties();
+        before.putAll(System.getProperties());
+        if (this.systemPropertyVariables != null) {
+            for (Map.Entry<String, String> var
+                : this.systemPropertyVariables.entrySet()) {
+                if (var.getValue() == null) {
+                    Logger.warn(
+                        this,
+                        "System variable '%s' can't be set to NULL",
+                        var.getKey()
+                    );
+                } else {
+                    System.setProperty(var.getKey(), var.getValue());
+                    Logger.info(
+                        this,
+                        "System variable '%s' set to '%s'",
+                        var.getKey(),
+                        var.getValue()
+                    );
+                }
+            }
+        }
+        return before;
+    }
 
 }

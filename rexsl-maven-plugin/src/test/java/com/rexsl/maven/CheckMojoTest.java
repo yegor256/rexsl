@@ -29,7 +29,6 @@
  */
 package com.rexsl.maven;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -80,16 +79,10 @@ public final class CheckMojoTest {
         mojo.setChecksProvider(provider);
         final MavenProject project = new MavenProjectMocker().mock();
         mojo.setProject(project);
-        final Field sysPropField =
-            CheckMojo.class.getDeclaredField("systemPropertyVariables");
-        sysPropField.setAccessible(true);
         final ConcurrentHashMap<String, String> systemProperties =
             new ConcurrentHashMap<String, String>();
         systemProperties.put("new-property", "some-value");
-        sysPropField.set(
-            mojo,
-            systemProperties
-        );
+        mojo.setsystemProperties(systemProperties);
         final int beforeCount = System.getProperties().size();
         mojo.execute();
         final int afterCount = System.getProperties().size();

@@ -33,8 +33,6 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.checks.DefaultChecksProvider;
 import com.rexsl.maven.utils.LoggingManager;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -48,32 +46,6 @@ import org.apache.maven.plugin.MojoFailureException;
  * @threadSafe
  */
 public final class CheckMojo extends AbstractRexslMojo {
-
-    /**
-     * System variables to be set before running tests.
-     *
-     * <p>You define them in a similar way as in
-     * <a href="http://maven.apache.org/plugins/maven-surefire-plugin/"
-     * >maven-surefire-plugin</a>,
-     * for example you want to reconfigure LOG4J just for the tests:
-     *
-     * <pre>
-     * &lt;plugin>
-     *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
-     *   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
-     *   &lt;configuration&gt;
-     *     &lt;systemPropertyVariables&gt;
-     *       &lt;log4j.configuration&gt;./x.props&lt;/log4j.configuration&gt;
-     *     &lt;/systemPropertyVariables&gt;
-     *   &lt;/configuration&gt;
-     * &lt;/plugin&gt;
-     * </pre>
-     *
-     * @parameter
-     * @since 0.3
-     */
-    @SuppressWarnings("PMD.LongVariable")
-    private transient Map<String, String> systemPropertyVariables;
 
     /**
      * Skip all tests.
@@ -142,31 +114,26 @@ public final class CheckMojo extends AbstractRexslMojo {
     @Override
     protected void run() throws MojoFailureException {
         final long start = System.currentTimeMillis();
-        final Properties before = this.inject();
         this.provider.setTest(this.test);
         if (this.check != null) {
             this.provider.setCheck(this.check);
         }
         final Set<Check> checks = this.provider.all();
-        try {
-            for (Check chck : checks) {
-                if (this.skipTests) {
-                    Logger.warn(
-                        this,
-                        "%[type]s skipped because of skipTests",
-                        chck
-                    );
-                    continue;
-                }
-                LoggingManager.enter(chck.getClass().getSimpleName());
-                try {
-                    this.single(chck);
-                } finally {
-                    LoggingManager.leave();
-                }
+        for (Check chck : checks) {
+            if (this.skipTests) {
+                Logger.warn(
+                    this,
+                    "%[type]s skipped because of skipTests",
+                    chck
+                );
+                continue;
             }
-        } finally {
-            this.revert(before);
+            LoggingManager.enter(chck.getClass().getSimpleName());
+            try {
+                this.single(chck);
+            } finally {
+                LoggingManager.leave();
+            }
         }
         Logger.info(
             this,
@@ -198,45 +165,6 @@ public final class CheckMojo extends AbstractRexslMojo {
             chck,
             System.currentTimeMillis() - start
         );
-    }
-
-    /**
-     * Sets the system properties to the argument passed.
-     * @param before The properties.
-     */
-    private void revert(final Properties before) {
-        System.setProperties(before);
-    }
-
-    /**
-     * Injects system property variables and returns the properties as
-     * they are before being modified in the method.
-     * @return The properties before being modified
-     */
-    private Properties inject() {
-        final Properties before = new Properties();
-        before.putAll(System.getProperties());
-        if (this.systemPropertyVariables != null) {
-            for (Map.Entry<String, String> var
-                : this.systemPropertyVariables.entrySet()) {
-                if (var.getValue() == null) {
-                    Logger.warn(
-                        this,
-                        "System variable '%s' can't be set to NULL",
-                        var.getKey()
-                    );
-                } else {
-                    System.setProperty(var.getKey(), var.getValue());
-                    Logger.info(
-                        this,
-                        "System variable '%s' set to '%s'",
-                        var.getKey(),
-                        var.getValue()
-                    );
-                }
-            }
-        }
-        return before;
     }
 
 }
