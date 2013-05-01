@@ -45,7 +45,7 @@
     </parent>
     <groupId>com.rexsl</groupId>
     <artifactId>rexsl</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.4.11</version>
     <packaging>pom</packaging>
     <name>rexsl</name>
     <modules>
@@ -280,6 +280,19 @@
                 <groupId>xerces</groupId>
                 <artifactId>xercesImpl</artifactId>
                 <version>${xerces.version}</version>
+            </dependency>
+            <dependency>
+                <!-- Embedded Java Servlet Container, for tests only. -->
+                <groupId>com.sun.grizzly</groupId>
+                <artifactId>grizzly-servlet-webserver</artifactId>
+                <version>1.9.57</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
