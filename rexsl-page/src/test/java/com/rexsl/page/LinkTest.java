@@ -114,4 +114,24 @@ public final class LinkTest {
         );
     }
 
+    /**
+     * Link can build a clean URI, without trailing question mark.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void buildsCleanUri() throws Exception {
+        final Link link = new Link("lnk-6", "./end");
+        link.attachTo(
+            new ResourceMocker().withUriInfo(
+                new UriInfoMocker()
+                    .withRequestUri(new URI("http://boom.example.com/"))
+                    .mock()
+            ).mock()
+        );
+        MatcherAssert.assertThat(
+            link.getHref().toString(),
+            Matchers.equalTo("http://boom.example.com/end")
+        );
+    }
+
 }
