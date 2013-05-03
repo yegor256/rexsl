@@ -30,6 +30,9 @@
 package com.rexsl.test;
 
 import com.jcabi.aspects.Loggable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
@@ -37,6 +40,7 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.w3c.dom.Node;
@@ -77,6 +81,12 @@ public final class XhtmlMatchers {
      *   XhtmlMatchers.hasXPath("/root/data")
      * );</pre>
      *
+     * <p>The method understands different input types differently. For example,
+     * an {@link InputStream} will be read as a UTF-8 document, {@link Reader}
+     * will be read as a document, a {@link Source} will be used "as is",
+     * {@link Node} will be printed as a text, etc. The goal is to make any
+     * input type presentable as an XML document, as much as it is possible.
+     *
      * @param xhtml The source of data
      * @return Renderable source
      * @param <T> Type of source
@@ -87,6 +97,22 @@ public final class XhtmlMatchers {
         Source source;
         if (xhtml instanceof Source) {
             source = Source.class.cast(xhtml);
+        } else if (xhtml instanceof InputStream) {
+            try {
+                source = new StringSource(
+                    IOUtils.toString(InputStream.class.cast(xhtml))
+                );
+            } catch (IOException ex) {
+                throw new IllegalArgumentException(ex);
+            }
+        } else if (xhtml instanceof Reader) {
+            try {
+                source = new StringSource(
+                    IOUtils.toString(Reader.class.cast(xhtml))
+                );
+            } catch (IOException ex) {
+                throw new IllegalArgumentException(ex);
+            }
         } else if (xhtml instanceof Node) {
             source = new StringSource(Node.class.cast(xhtml));
         } else {
