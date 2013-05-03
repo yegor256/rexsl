@@ -98,20 +98,22 @@ public final class XhtmlMatchers {
         if (xhtml instanceof Source) {
             source = Source.class.cast(xhtml);
         } else if (xhtml instanceof InputStream) {
+            final InputStream stream = InputStream.class.cast(xhtml);
             try {
-                source = new StringSource(
-                    IOUtils.toString(InputStream.class.cast(xhtml))
-                );
+                source = new StringSource(IOUtils.toString(stream));
             } catch (IOException ex) {
                 throw new IllegalArgumentException(ex);
+            } finally {
+                IOUtils.closeQuietly(stream);
             }
         } else if (xhtml instanceof Reader) {
+            final Reader reader = Reader.class.cast(xhtml);
             try {
-                source = new StringSource(
-                    IOUtils.toString(Reader.class.cast(xhtml))
-                );
+                source = new StringSource(IOUtils.toString(reader));
             } catch (IOException ex) {
                 throw new IllegalArgumentException(ex);
+            } finally {
+                IOUtils.closeQuietly(reader);
             }
         } else if (xhtml instanceof Node) {
             source = new StringSource(Node.class.cast(xhtml));
