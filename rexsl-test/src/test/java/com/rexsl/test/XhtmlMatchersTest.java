@@ -29,10 +29,12 @@
  */
 package com.rexsl.test;
 
+import java.io.InputStreamReader;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.commons.io.IOUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -82,6 +84,22 @@ public final class XhtmlMatchersTest {
             XhtmlMatchers.hasXPath("/ns1:b/ns1:file[.='abc.txt']", "bar")
         );
         MatcherAssert.assertThat("<a><b/></a>", XhtmlMatchers.hasXPath("//b"));
+    }
+
+    /**
+     * XhtmlMatchers can match an InputStream.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void matchesInputStreamAndReader() throws Exception {
+        MatcherAssert.assertThat(
+            IOUtils.toInputStream("<b><file>foo.txt</file></b>"),
+            XhtmlMatchers.hasXPath("/b/file[.='foo.txt']")
+        );
+        MatcherAssert.assertThat(
+            new InputStreamReader(IOUtils.toInputStream("<xx><y/></xx>")),
+            XhtmlMatchers.hasXPath("/xx/y")
+        );
     }
 
     /**
