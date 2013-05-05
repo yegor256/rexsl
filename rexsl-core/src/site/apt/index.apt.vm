@@ -93,9 +93,6 @@ ReXSL core module
 
 * Supplementary Classes
 
-  {{{./apidocs-${project.version}/com/rexsl/core/Manifests.html}<<<Manifests>>>}} is
-  a convenient accessor to <<<MANIFEST.MF>>> files of your web application.
-
   {{{./apidocs-${project.version}/com/rexsl/core/annotations/Stylesheet.html}<<<Stylesheet>>>}} annotation
   enables re-configuration of XSL stylesheet name for a JAXB-annotated object.
 

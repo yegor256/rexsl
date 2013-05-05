@@ -40,18 +40,22 @@ RESTful Java Client
 
   The module contains a collection of usable tools for testing of
   ReXSL-powered application (or any other RESTful server).
-  {{{./apidocs-${project.version}/com/rexsl/test/RestTester.html}<<<com.rexsl.test.RestTester>>>}}
+  {{{./apidocs-${project.version}/com/rexsl/test/RestTester.html}<<<RestTester>>>}}
   is a RESTful Java client with a fluent interface:
 
 +--
-String body = RestTester.start("http://www.rexsl.com")
-  .header(HttpHeaders.USER_AGENT, "Safari 4")
-  .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
-  .get("reading front page of ReXSL.com")
-  .assertStatus(HttpURLConnection.HTTP_OK)
-  .assertBody(Matchers.containsString("ReXSL"))
-  .assertXPath("//xhtml:body")
-  .getBody();
+public class Main {
+  public void main() {
+    String body = RestTester.start("http://www.rexsl.com")
+      .header(HttpHeaders.USER_AGENT, "Safari 4")
+      .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
+      .get("reading front page of ReXSL.com")
+      .assertStatus(HttpURLConnection.HTTP_OK)
+      .assertBody(Matchers.containsString("ReXSL"))
+      .assertXPath("//xhtml:body")
+      .getBody();
+  }
+}
 +--
 
   The beauty of this RESTful Java client (comparing to others) is that it
@@ -61,10 +65,10 @@ String body = RestTester.start("http://www.rexsl.com")
 
   Other important classes in this module:
 
-   * {{{./apidocs-${project.version}/com/rexsl/test/JaxbConverter.html}<<<com.rexsl.test.JaxbConverter>>>}}
+   * {{{./apidocs-${project.version}/com/rexsl/test/JaxbConverter.html}<<<JaxbConverter>>>}}
      - convenient JAXB-to-XML converter
 
-   * {{{./apidocs-${project.version}/com/rexsl/test/SimpleXml.html}<<<com.rexsl.test.SimpleXml>>>}}
+   * {{{./apidocs-${project.version}/com/rexsl/test/SimpleXml.html}<<<SimpleXml>>>}}
      - simple object-oriented XML parser
 
   Include this dependency into your project (or download
