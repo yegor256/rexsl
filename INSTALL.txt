@@ -141,6 +141,11 @@ How to release new version to Maven Central:
         git checkout rexsl-0.4.11
         mvn -Psite -Prexsl clean install site-deploy
 
-    12. Close the ticket as "fixed"
+    12. Announce the release in Google Groups:
+        https://groups.google.com/forum/?fromgroups#!forum/rexsl
+
+    13. Announce the release in Twitter/Facebook/everywhere :)
+
+    14. Close the ticket as "fixed"
 
     That's it
