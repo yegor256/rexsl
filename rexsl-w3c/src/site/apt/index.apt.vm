@@ -43,17 +43,25 @@ W3C Validator in Java
   It's simple (see {{{./apidocs-${project.version}/}JavaDoc}} for more details):
 
 +--
-String xhtml = "<html><body><p>Hello, world!</p></body></html>";
-ValidationResponse response = new ValidatorBuilder().html().validate(xhtml);
-assert response.valid();
+public class My {
+  public void main() {
+    String xhtml = "<html><body><p>Hello, world!</p></body></html>";
+    ValidationResponse response = new ValidatorBuilder().html().validate(xhtml);
+    assert response.valid();
+  }
+}
 +--
 
   Similar mechanism for CSS:
 
 +--
-String css = "body { font-family: Arial; }";
-ValidationResponse response = new ValidatorBuilder().css().validate(css);
-assert response.valid();
+public class My {
+  public void main() {
+    String css = "body { font-family: Arial; }";
+    ValidationResponse response = new ValidatorBuilder().css().validate(css);
+    assert response.valid();
+  }
+}
 +--
 
   This dependency you add to <<<pom.xml>>> (or download

@@ -43,7 +43,7 @@ ReXSL Maven Archetype
   To create your new ReXSL-powered project just run::
 
 +--
-mvn archetype:generate \
+$ mvn archetype:generate \
   -DarchetypeGroupId=com.rexsl \
   -DarchetypeArtifactId=rexsl-maven-archetype \
   -DarchetypeVersion=${project.version}
@@ -53,10 +53,10 @@ mvn archetype:generate \
   and type:
 
 +--
-mvn clean package rexsl:run -Drexsl.port=9099
+$ mvn clean package rexsl:run -Drexsl.port=9099
 +--
 
-  The application will start and in a minute you can point
-  your browser at <<<http://localhost:9099>>>. A "hello, world!" message
+  The application will start and, in a minute, you can point
+  your browser to <<<http://localhost:9099>>>. A "hello, world!" message
   should indicate the success.
 
