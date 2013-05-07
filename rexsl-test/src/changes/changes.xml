@@ -30,6 +30,12 @@
  -->
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.4.12" date="7 May 2013" description="improvements in XhtmlMatchers">
+            <action dev="yegor" issue="691" type="add">
+                XhtmlMatchers understand InputStream and Reader, converts
+                them to String and uses as XML
+            </action>
+        </release>
         <release version="0.4.4" date="19 Nov 2012" description="com.rexsl.core.Manifests moved to jcabi-manifests">
             <action dev="yegor" issue="612" type="add">
                 Class com.rexsl.test.RestTester automatically adds
