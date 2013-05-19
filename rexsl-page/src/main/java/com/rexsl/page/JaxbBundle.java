@@ -30,8 +30,8 @@
 package com.rexsl.page;
 
 import com.jcabi.aspects.Loggable;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -199,12 +199,12 @@ public final class JaxbBundle {
         /**
          * Collection of objects.
          */
-        private final transient Collection<T> objects;
+        private final transient Iterable<T> objects;
         /**
          * Public ctor.
          * @param objs All objects
          */
-        public Group(final Collection<T> objs) {
+        public Group(final Iterable<T> objs) {
             this.objects = objs;
         }
         /**
@@ -218,8 +218,7 @@ public final class JaxbBundle {
          * @return All bundles
          */
         private Collection<JaxbBundle> bundles() {
-            final Collection<JaxbBundle> bundles =
-                new ArrayList<JaxbBundle>(this.objects.size());
+            final Collection<JaxbBundle> bundles = new LinkedList<JaxbBundle>();
             for (T object : this.objects) {
                 bundles.add(this.bundle(object));
             }
