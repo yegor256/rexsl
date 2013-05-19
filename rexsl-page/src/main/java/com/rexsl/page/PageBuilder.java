@@ -33,10 +33,10 @@ import com.jcabi.aspects.Loggable;
 import com.rexsl.core.annotations.Schema;
 import com.rexsl.core.annotations.Stylesheet;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -269,14 +269,14 @@ public final class PageBuilder {
      */
     private Collection<Annotation> annotations(final CtClass dest,
         final CtClass parent) {
-        final Collection<Annotation> result = new ArrayList<Annotation>();
+        final Collection<Annotation> result = new LinkedList<Annotation>();
         final AttributeInfo originals =
             parent.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
         if (originals != null) {
             final AnnotationsAttribute attrib = AnnotationsAttribute.class.cast(
                 originals.copy(
                     dest.getClassFile().getConstPool(),
-                    new HashMap<Object, Object>()
+                    new HashMap<Object, Object>(0)
                 )
             );
             result.addAll(Arrays.asList(attrib.getAnnotations()));
@@ -301,7 +301,7 @@ public final class PageBuilder {
          * @param fle Class file
          * @param attr Attribute
          */
-        public Annotations(final ClassFile fle,
+        protected Annotations(final ClassFile fle,
             final AnnotationsAttribute attr) {
             this.file = fle;
             this.attribute = attr;

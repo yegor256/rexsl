@@ -110,6 +110,8 @@ import org.w3c.dom.Element;
  *
  * <p>The class is mutable and thread-safe.
  *
+ * @param <T> Type of page
+ * @param <R> Type of JAX-RS resource
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.7
@@ -325,7 +327,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     private static Set<Class<? extends Inset>> defaults(
         final Class<?> type) {
         final Set<Class<? extends Inset>> insets =
-            new HashSet<Class<? extends Inset>>();
+            new HashSet<Class<? extends Inset>>(0);
         if (type != null) {
             if (type.isAnnotationPresent(Inset.Default.class)) {
                 insets.addAll(

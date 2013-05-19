@@ -83,7 +83,7 @@ final class Encrypted implements Identity {
      * @param secret Secret key for encryption
      * @param slt Salt for encryption
      */
-    public Encrypted(@NotNull final Identity idn,
+    protected Encrypted(@NotNull final Identity idn,
         @NotNull final String secret, @NotNull final String slt) {
         this.identity = idn;
         this.key = secret;

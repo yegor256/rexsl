@@ -186,10 +186,11 @@ public final class JaxbBundle {
      * Attributes.
      */
     private final transient ConcurrentMap<String, String> attrs =
-        new ConcurrentHashMap<String, String>();
+        new ConcurrentHashMap<String, String>(0);
 
     /**
      * Group.
+     * @param <T> Type of encapsulated elements
      * @since 0.4.10
      * @checkstyle AbstractClassName (2 lines)
      */

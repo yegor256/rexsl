@@ -102,7 +102,7 @@ public final class AuthInset implements Inset {
     /**
      * Providers.
      */
-    private final transient Set<Provider> providers = new HashSet<Provider>();
+    private final transient Set<Provider> providers = new HashSet<Provider>(0);
 
     /**
      * Public ctor.

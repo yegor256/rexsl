@@ -96,7 +96,7 @@ public final class JaxbGroup {
      * Classes already created before.
      */
     private static final ConcurrentMap<String, Class<?>> READY =
-        new ConcurrentHashMap<String, Class<?>>();
+        new ConcurrentHashMap<String, Class<?>>(0);
 
     /**
      * Collection of elements.
