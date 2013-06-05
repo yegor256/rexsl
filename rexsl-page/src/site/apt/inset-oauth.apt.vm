@@ -65,6 +65,7 @@ public abstract class BaseRs extends BaseResource {
   public final AuthInset auth() {
     return new AuthInset(this, "secret-key", "salt")
         .with(new Facebook(this, "3f54a...", "a4fe5s..."))
+        .with(new Github(this, "8fe...", "34b2a..."))
         .with(new Google(this, "7395..", "7auajs..."));
   }
 }
@@ -77,6 +78,7 @@ public abstract class BaseRs extends BaseResource {
 <page>
   <links>
     <link rel="auth-facebook" href="https://www.facebook.com/dial..." />
+    <link rel="auth-github" href="https://github.com/login/oauth/au..." />
     <link rel="auth-google" href="https://accounts.google.com/o/oaut..." />
     ... other links ...
   </links>
