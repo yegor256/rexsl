@@ -33,8 +33,8 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
+import com.rexsl.test.JsonDocument;
 import com.rexsl.test.RestTester;
-import com.rexsl.test.XmlDocument;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -178,21 +178,14 @@ public final class Github implements Provider {
             .fromUri("https://api.github.com/user")
             .queryParam("access_token", "{token}")
             .build(token);
-        final XmlDocument xml = RestTester.start(uri)
-            .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
+        final JsonDocument json = RestTester.start(uri)
+            .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
             .get("reading Github user profile")
-            .assertStatus(HttpURLConnection.HTTP_OK)
-            .nodes("/OAuth")
-            .get(0);
+            .assertStatus(HttpURLConnection.HTTP_OK);
         return new Identity.Simple(
-            URN.create(
-                String.format(
-                    "urn:github:%s",
-                    xml.xpath("id/text()").get(0)
-                )
-            ),
-            xml.xpath("name/text()").get(0),
-            URI.create(xml.xpath("avatar_url/text()").get(0))
+            URN.create(String.format("urn:github:%s", json.json("id").get(0))),
+            json.json("name").get(0),
+            URI.create(json.json("avatar_url").get(0))
         );
     }
 
