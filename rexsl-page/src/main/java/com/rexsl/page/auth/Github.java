@@ -104,7 +104,7 @@ public final class Github implements Provider {
             final List<String> code = this.resource.uriInfo()
                 // @checkstyle MultipleStringLiterals (1 line)
                 .getQueryParameters().get("code");
-            if (code.isEmpty()) {
+            if (code == null || code.isEmpty()) {
                 throw new IllegalStateException(
                     "HTTP query parameter 'code' is mandatory"
                 );
