@@ -29,6 +29,7 @@
  */
 package com.rexsl.page.auth;
 
+import com.jcabi.aspects.Tv;
 import com.jcabi.urn.URN;
 import com.rexsl.page.BasePage;
 import com.rexsl.page.BasePageMocker;
@@ -64,7 +65,7 @@ public final class AuthInsetTest {
     @Test
     public void doestRenderWhenCookieIsAbsent() throws Exception {
         final Resource resource = new ResourceMocker().mock();
-        final Inset inset = new AuthInset(resource, "", "");
+        final Inset inset = new AuthInset(resource, "");
         final BasePage<?, ?> page = new BasePageMocker().init(resource);
         inset.render(page, Response.ok());
         MatcherAssert.assertThat(
@@ -80,7 +81,6 @@ public final class AuthInsetTest {
     @Test
     public void readsCookieAndAddsHttpHeader() throws Exception {
         final String key = "74^54\u20ac";
-        final String salt = "76Yt4\u0433{}*Fs";
         final URN urn = new URN("urn:test:7362423");
         final String name = "John \u20ac Smith";
         final String cookie = AuthInset.encrypt(
@@ -88,11 +88,10 @@ public final class AuthInsetTest {
                 .withURN(urn)
                 .withName(name)
                 .mock(),
-            key,
-            salt
+            key
         );
         final Resource resource = this.resource(cookie);
-        final Inset inset = new AuthInset(resource, key, salt);
+        final Inset inset = new AuthInset(resource, key);
         final BasePage<?, ?> page = new BasePageMocker().init(resource);
         inset.render(page, Response.ok());
         MatcherAssert.assertThat(
@@ -100,7 +99,7 @@ public final class AuthInsetTest {
             XhtmlMatchers.hasXPaths(
                 String.format("/*/identity[name='%s']", name),
                 String.format("/*/identity[urn='%s']", urn),
-                String.format("/*/identity[token='%s']", cookie)
+                "/*/identity/token"
             )
         );
     }
@@ -123,7 +122,7 @@ public final class AuthInsetTest {
                 return new IdentityMocker().mock();
             }
         }
-        final Inset inset = new AuthInset(resource, "", "")
+        final Inset inset = new AuthInset(resource, "")
             .with(new Redirector());
         final BasePage<?, ?> page = new BasePageMocker().init(resource);
         inset.render(page, Response.ok());
@@ -136,14 +135,14 @@ public final class AuthInsetTest {
     @Test
     public void encryptsIdentityToText() throws Exception {
         MatcherAssert.assertThat(
-            AuthInset.encrypt(new IdentityMocker().mock(), "", ""),
-            Matchers.startsWith("0087ASJE79P6AU3JDGT6QRR3DDIM800A9LNM6Q")
+            AuthInset.encrypt(new IdentityMocker().mock(), "").length(),
+            Matchers.greaterThan(Tv.FIFTY)
         );
         MatcherAssert.assertThat(
-            new AuthInset(new ResourceMocker().mock(), "", "").encrypt(
+            new AuthInset(new ResourceMocker().mock(), "").encrypt(
                 new IdentityMocker().mock()
-            ),
-            Matchers.startsWith("0087ASJE79P6AU3JDGT6QRR3DDIM800A9LNM6")
+            ).length(),
+            Matchers.greaterThan(Tv.FIFTY)
         );
     }
 
@@ -154,16 +153,15 @@ public final class AuthInsetTest {
     @Test
     public void buildsUniqueIdentitiesAlways() throws Exception {
         final String key = "74^54\u20ac0*43hsi";
-        final String salt = "76Yt4\u0433{}s";
         final String cookie = AuthInset.encrypt(
-            new IdentityMocker().mock(), key, salt
+            new IdentityMocker().mock(), key
         );
         MatcherAssert.assertThat(
-            new AuthInset(this.resource(cookie), key, salt).identity(),
+            new AuthInset(this.resource(cookie), key).identity(),
             Matchers.allOf(
                 Matchers.not(Matchers.equalTo(Identity.ANONYMOUS)),
                 Matchers.equalTo(
-                    new AuthInset(this.resource(cookie), key, salt).identity()
+                    new AuthInset(this.resource(cookie), key).identity()
                 )
             )
         );
@@ -176,7 +174,6 @@ public final class AuthInsetTest {
     @Test
     public void readsQueryAndAddsHttpHeader() throws Exception {
         final String key = "74^F\u20ac";
-        final String salt = "76YW\u0433{}!s";
         final URN urn = new URN("urn:test:7873");
         final String name = "Jeff \u20ac Lebowski";
         final String token = AuthInset.encrypt(
@@ -184,15 +181,14 @@ public final class AuthInsetTest {
                 .withURN(urn)
                 .withName(name)
                 .mock(),
-            key,
-            salt
+            key
         );
         final Resource resource = new ResourceMocker().withUriInfo(
             new UriInfoMocker().withQueryParameters(
                 new MultivaluedMapMocker().with("rexsl-auth", token)
             ).mock()
         ).mock();
-        final Inset inset = new AuthInset(resource, key, salt);
+        final Inset inset = new AuthInset(resource, key);
         final BasePage<?, ?> page = new BasePageMocker().init(resource);
         inset.render(page, Response.ok());
         MatcherAssert.assertThat(
@@ -200,7 +196,7 @@ public final class AuthInsetTest {
             XhtmlMatchers.hasXPaths(
                 String.format("/*/identity[name = '%s']", name),
                 String.format("/*/identity[urn = '%s']", urn),
-                String.format("/*/identity[token = '%s']", token)
+                "//identity/token"
             )
         );
     }
@@ -212,11 +208,11 @@ public final class AuthInsetTest {
     @Test
     public void enrichesUriWithToken() throws Exception {
         final Resource resource = new ResourceMocker().mock();
-        final AuthInset inset = new AuthInset(resource, "98^y", "0P':");
+        final AuthInset inset = new AuthInset(resource, "98^y");
         final URI uri = inset.enrich(new URI("http://google.com/?test"));
         MatcherAssert.assertThat(
             uri.getQuery(),
-            Matchers.containsString("rexsl-auth=74LIM2QN08M1O")
+            Matchers.containsString("rexsl-auth=")
         );
     }
 

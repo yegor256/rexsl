@@ -50,14 +50,13 @@ public final class EncryptedTest {
     @Test
     public void convertsToTextAndBack() throws Exception {
         final String key = "&6%4\u0433-({}*7hrs";
-        final String salt = "\u0444\u0433@#gdsf\":?>::";
         final String name = "John Doe, \u0433";
         final URN urn = new URNMocker().mock();
         final Encrypted user = new Encrypted(
-            new Identity.Simple(urn, name, URI.create("#")), key, salt
+            new Identity.Simple(urn, name, URI.create("#")), key
         );
         final Identity reverted = Encrypted.parse(
-            user.cookie(), key, salt
+            user.cookie(), key
         );
         MatcherAssert.assertThat(
             reverted.name(),
@@ -75,7 +74,7 @@ public final class EncryptedTest {
      */
     @Test(expected = Encrypted.DecryptionException.class)
     public void throwsOnNullInput() throws Exception {
-        Encrypted.parse(null, "", "");
+        Encrypted.parse(null, "");
     }
 
     /**
@@ -84,7 +83,7 @@ public final class EncryptedTest {
      */
     @Test(expected = Encrypted.DecryptionException.class)
     public void throwsOnBrokenInput() throws Exception {
-        Encrypted.parse("invalid-data", "", "");
+        Encrypted.parse("invalid-data", "");
     }
 
     /**
@@ -93,7 +92,7 @@ public final class EncryptedTest {
      */
     @Test(expected = Encrypted.DecryptionException.class)
     public void throwsOnEmptyInput() throws Exception {
-        Encrypted.parse("", "", "");
+        Encrypted.parse("", "");
     }
 
 }

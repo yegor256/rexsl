@@ -63,7 +63,7 @@ import lombok.ToString;
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @ToString
-@EqualsAndHashCode(of = { "resource", "key", "salt" })
+@EqualsAndHashCode(of = { "resource", "key" })
 @Loggable(value = Loggable.DEBUG, ignore = WebApplicationException.class)
 @SuppressWarnings("PMD.TooManyMethods")
 public final class AuthInset implements Inset {
@@ -95,11 +95,6 @@ public final class AuthInset implements Inset {
     private final transient String key;
 
     /**
-     * Security salt.
-     */
-    private final transient String salt;
-
-    /**
      * Providers.
      */
     private final transient Set<Provider> providers = new HashSet<Provider>(0);
@@ -108,25 +103,21 @@ public final class AuthInset implements Inset {
      * Public ctor.
      * @param res The resource
      * @param sec Security key
-     * @param slt Security salt
      */
-    public AuthInset(@NotNull final Resource res, @NotNull final String sec,
-        @NotNull final String slt) {
+    public AuthInset(@NotNull final Resource res, @NotNull final String sec) {
         this.resource = res;
         this.key = sec;
-        this.salt = slt;
     }
 
     /**
      * Encrypt identity into text.
      * @param identity The identity to encrypt
      * @param key Security key
-     * @param salt Security salt
      * @return Encrypted text for cookie
      */
     public static String encrypt(@NotNull final Identity identity,
-        @NotNull final String key, @NotNull final String salt) {
-        return new Encrypted(identity, key, salt).cookie();
+        @NotNull final String key) {
+        return new Encrypted(identity, key).cookie();
     }
 
     /**
@@ -136,7 +127,7 @@ public final class AuthInset implements Inset {
      * @since 0.5
      */
     public String encrypt(@NotNull final Identity identity) {
-        return AuthInset.encrypt(identity, this.key, this.salt);
+        return AuthInset.encrypt(identity, this.key);
     }
 
     /**
@@ -233,7 +224,7 @@ public final class AuthInset implements Inset {
     public NewCookie cookie(final Identity identity) {
         return new CookieBuilder(this.resource.uriInfo().getBaseUri())
             .name(AuthInset.AUTH_COOKIE)
-            .value(new Encrypted(identity, this.key, this.salt).cookie())
+            .value(new Encrypted(identity, this.key).cookie())
             .temporary()
             .build();
     }
@@ -303,7 +294,7 @@ public final class AuthInset implements Inset {
             final String token = params.get(AuthInset.AUTH_PARAM).get(0);
             try {
                 identity = new Identity.Simple(
-                    Encrypted.parse(token, this.key, this.salt)
+                    Encrypted.parse(token, this.key)
                 );
             } catch (Encrypted.DecryptionException ex) {
                 throw new WebApplicationException(
@@ -331,7 +322,7 @@ public final class AuthInset implements Inset {
                 .get(AuthInset.AUTH_COOKIE).getValue();
             try {
                 identity = new Identity.Simple(
-                    Encrypted.parse(cookie, this.key, this.salt)
+                    Encrypted.parse(cookie, this.key)
                 );
             } catch (Encrypted.DecryptionException ex) {
                 Logger.warn(

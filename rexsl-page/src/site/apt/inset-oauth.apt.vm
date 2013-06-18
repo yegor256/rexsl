@@ -63,7 +63,7 @@ OAuth Authentication for JAX-RS Resources
 public abstract class BaseRs extends BaseResource {
   @Inset.Runtime
   public final AuthInset auth() {
-    return new AuthInset(this, "secret-key", "salt")
+    return new AuthInset(this, "secret-key")
         .with(new Facebook(this, "3f54a...", "a4fe5s..."))
         .with(new Github(this, "8fe...", "34b2a..."))
         .with(new Google(this, "7395..", "7auajs..."));
