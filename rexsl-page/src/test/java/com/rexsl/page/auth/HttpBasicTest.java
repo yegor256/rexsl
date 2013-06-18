@@ -94,4 +94,29 @@ public final class HttpBasicTest {
         );
     }
 
+    /**
+     * HttpBasic can handle empty parts gracefully.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void gracefullyHandlesEmptyParts() throws Exception {
+        final Resource resource = new ResourceMocker().withHttpHeaders(
+            new HttpHeadersMocker().withHeader(
+                HttpHeaders.AUTHORIZATION, "Basic Og=="
+            ).mock()
+        ).mock();
+        new HttpBasic(
+            resource,
+            new HttpBasic.Vault() {
+                @Override
+                public Identity authenticate(final String user,
+                    final String password) {
+                    MatcherAssert.assertThat(user, Matchers.equalTo(""));
+                    MatcherAssert.assertThat(password, Matchers.equalTo(""));
+                    return Identity.ANONYMOUS;
+                }
+            }
+        ).identity();
+    }
+
 }

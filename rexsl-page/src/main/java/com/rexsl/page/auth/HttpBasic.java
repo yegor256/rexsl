@@ -44,6 +44,7 @@ import lombok.ToString;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * HTTP Basic authentication provider.
@@ -112,34 +113,7 @@ public final class HttpBasic implements Provider {
             .getRequestHeader(HttpHeaders.AUTHORIZATION);
         Identity identity = Identity.ANONYMOUS;
         if (headers != null && !headers.isEmpty()) {
-            final String[] parts = headers.get(0).split("\\s+");
-            if (!"Basic".equals(parts[0])) {
-                throw FlashInset.forward(
-                    this.resource.uriInfo().getBaseUri(),
-                    String.format(
-                        "Invalid authentication scheme '%s'",
-                        parts[0]
-                    ),
-                    Level.SEVERE
-                );
-            }
-            final String[] tokens = new String(
-                Base64.decodeBase64(parts[1]), Charsets.UTF_8
-            ).split(":");
-            if (tokens.length != 2) {
-                throw FlashInset.forward(
-                    this.resource.uriInfo().getBaseUri(),
-                    String.format(
-                        "Authentication string has %d part(s), two expected",
-                        tokens.length
-                    ),
-                    Level.SEVERE
-                );
-            }
-            identity = this.vault.authenticate(
-                URLDecoder.decode(tokens[0], CharEncoding.UTF_8),
-                URLDecoder.decode(tokens[1], CharEncoding.UTF_8)
-            );
+            identity = this.parse(headers.get(0));
         }
         return identity;
     }
@@ -152,6 +126,45 @@ public final class HttpBasic implements Provider {
         return new Link(
             "auth-basic",
             this.resource.uriInfo().getBaseUri()
+        );
+    }
+
+    /**
+     * Parse header and return identity.
+     * @param header The HTTP header to parse
+     * @return Identity found (or anonymous)
+     * @throws IOException If fails
+     */
+    private Identity parse(final String header) throws IOException {
+        final String[] parts = header.split("\\s+");
+        if (!"Basic".equals(parts[0])) {
+            throw FlashInset.forward(
+                this.resource.uriInfo().getBaseUri(),
+                String.format(
+                    "Invalid authentication scheme '%s'",
+                    parts[0]
+                ),
+                Level.SEVERE
+            );
+        }
+        final String body = new String(
+            Base64.decodeBase64(parts[1]), Charsets.UTF_8
+        );
+        final String[] tokens = StringUtils.splitPreserveAllTokens(body, ':');
+        if (tokens.length != 2) {
+            throw FlashInset.forward(
+                this.resource.uriInfo().getBaseUri(),
+                String.format(
+                    "Authentication body '%s' has %d part(s), two expected",
+                    body,
+                    tokens.length
+                ),
+                Level.SEVERE
+            );
+        }
+        return this.vault.authenticate(
+            URLDecoder.decode(tokens[0], CharEncoding.UTF_8),
+            URLDecoder.decode(tokens[1], CharEncoding.UTF_8)
         );
     }
 
