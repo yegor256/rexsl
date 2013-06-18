@@ -57,7 +57,6 @@ import org.apache.commons.lang3.StringUtils;
 @ToString
 @EqualsAndHashCode(of = "vault")
 @Loggable(Loggable.DEBUG)
-@Provider.Redirect
 public final class HttpBasic implements Provider {
 
     /**

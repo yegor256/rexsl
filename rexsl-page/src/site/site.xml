@@ -45,6 +45,7 @@
             <item name="Package versioning" href="inset-version.html"/>
             <item name="Default links" href="inset-links.html"/>
             <item name="OAuth authentication" href="inset-oauth.html"/>
+            <item name="HTTP Basic authentication" href="inset-http-basic.html"/>
         </menu>
         <menu ref="reports"/>
     </body>
