@@ -37,6 +37,9 @@
             <action dev="yegor" issue="700" type="add">
                 HTTP Basic authentication implemented
             </action>
+            <action dev="yegor" issue="701" type="add">
+                AuthInset generates salt as a random set of bytes
+            </action>
         </release>
         <release version="0.4.10" date="7 Apr 2013" description="extra features in JaxbBundle">
             <action dev="yegor" issue="660" type="add">
