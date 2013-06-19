@@ -127,7 +127,7 @@ public final class FlashInset implements Inset {
      */
     public WebApplicationException redirect(@NotNull final URI uri,
         @NotNull final String message, @NotNull final Level level) {
-        return new WebApplicationException(
+        return new FlashException(
             Response.status(HttpURLConnection.HTTP_SEE_OTHER)
                 .location(uri)
                 .cookie(
@@ -137,7 +137,9 @@ public final class FlashInset implements Inset {
                 )
                 .header(FlashInset.HEADER, message)
                 .entity(message)
-                .build()
+                .build(),
+            message,
+            level
         );
     }
 
@@ -168,13 +170,15 @@ public final class FlashInset implements Inset {
      */
     public static WebApplicationException forward(@NotNull final URI uri,
         @NotNull final String message, @NotNull final Level level) {
-        return new WebApplicationException(
+        return new FlashException(
             Response.status(HttpURLConnection.HTTP_SEE_OTHER)
                 .location(uri)
                 .cookie(new FlashInset.Flash(uri, message, level))
                 .header(FlashInset.HEADER, message)
                 .entity(message)
-                .build()
+                .build(),
+            message,
+            level
         );
     }
 
