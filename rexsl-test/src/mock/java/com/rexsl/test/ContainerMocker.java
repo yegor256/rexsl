@@ -231,7 +231,17 @@ public final class ContainerMocker {
      * @return This object
      */
     public ContainerMocker mock() {
-        this.port = this.reservePort();
+        return this.mock(reservePort());
+    }
+    
+    /**
+     * Mock it, and return this object.
+     * @param port The port where it works
+     * @return This object
+     * @since 0.5
+     */
+    public ContainerMocker mock(final int port) {
+        this.port = port;
         this.gws = new GrizzlyWebServer(this.port);
         this.gws.addGrizzlyAdapter(this.adapter, new String[] {"/"});
         this.start();
