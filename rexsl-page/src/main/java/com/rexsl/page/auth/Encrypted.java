@@ -59,6 +59,7 @@ import org.apache.commons.lang3.StringUtils;
 @ToString(of = "identity")
 @EqualsAndHashCode(of = { "identity", "key" })
 @Loggable(Loggable.DEBUG)
+@Loggable.Quiet
 final class Encrypted implements Identity {
 
     /**

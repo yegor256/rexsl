@@ -44,7 +44,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import lombok.EqualsAndHashCode;
@@ -61,7 +60,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(of = { "resource", "key" })
-@Loggable(value = Loggable.DEBUG, ignore = WebApplicationException.class)
+@Loggable(Loggable.DEBUG)
 @SuppressWarnings("PMD.TooManyMethods")
 public final class AuthInset implements Inset {
 
@@ -132,7 +131,7 @@ public final class AuthInset implements Inset {
     }
 
     /**
-     * Get user's identity ({@link WebApplicationException}
+     * Get user's identity ({@link AuthException}
      * if not authenticated).
      * @return Identity, if authenticated
      */
@@ -182,12 +181,16 @@ public final class AuthInset implements Inset {
         }
         if (this.resource.uriInfo().getQueryParameters()
             .containsKey(AuthInset.LOGOUT_FLAG)) {
-            throw new WebApplicationException(
+            throw new AuthException(
                 Response.status(HttpURLConnection.HTTP_SEE_OTHER).location(
                     this.resource.uriInfo().getRequestUriBuilder()
                         .replaceQuery("")
                         .build()
-                ).cookie(this.logout()).build()
+                ).cookie(this.logout()).build(),
+                String.format(
+                    "redirecting because of '%s' flag in HTTP query",
+                    AuthInset.LOGOUT_FLAG
+                )
             );
         }
     }
@@ -211,7 +214,7 @@ public final class AuthInset implements Inset {
      * <p>Use this cookie to log user out of the system, for example:
      *
      * <pre> if (you_are_not_allowed()) {
-     *   throw new WebApplicationException(
+     *   throw new AuthException(
      *     Response.seeOther(this.uriInfo().getBaseUri())
      *       .cookie(this.auth().logout())
      *       .build()
@@ -244,12 +247,16 @@ public final class AuthInset implements Inset {
                 continue;
             }
             if (prov.getClass().isAnnotationPresent(Provider.Redirect.class)) {
-                throw new WebApplicationException(
+                throw new AuthException(
                     Response.status(HttpURLConnection.HTTP_SEE_OTHER).location(
                         this.resource.uriInfo().getRequestUriBuilder()
                             .replaceQuery("")
                             .build()
-                    ).cookie(this.cookie(identity)).build()
+                    ).cookie(this.cookie(identity)).build(),
+                    Logger.format(
+                        "redirecting because of @Provider.Redirect at %[type]s",
+                        prov
+                    )
                 );
             }
             break;
