@@ -34,6 +34,9 @@
             <action dev="yegor" issue="685" type="add">
                 Github authentication implemented
             </action>
+            <action dev="yegor" issue="699" type="add">
+                Dashes in authentication token for readability
+            </action>
             <action dev="yegor" issue="700" type="add">
                 HTTP Basic authentication implemented
             </action>

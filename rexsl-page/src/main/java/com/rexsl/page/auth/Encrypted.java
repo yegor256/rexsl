@@ -45,6 +45,7 @@ import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Encrypted identity.
@@ -129,11 +130,14 @@ final class Encrypted implements Identity {
         } catch (java.io.IOException ex) {
             throw new IllegalArgumentException(ex);
         }
-        return Encrypted.CODER.encodeToString(
-            Encrypted.xor(
-                Encrypted.salt(data.toByteArray()),
-                this.key.getBytes()
-            )
+        return StringUtils.join(
+            Encrypted.CODER.encodeToString(
+                Encrypted.xor(
+                    Encrypted.salt(data.toByteArray()),
+                    this.key.getBytes()
+                )
+            ).split("(?<=\\G.{8})"),
+            "-"
         );
     }
 
@@ -149,7 +153,7 @@ final class Encrypted implements Identity {
         if (txt == null) {
             throw new Encrypted.DecryptionException("text can't be NULL");
         }
-        final byte[] bytes = Encrypted.CODER.decode(txt);
+        final byte[] bytes = Encrypted.CODER.decode(txt.replaceAll("- ", ""));
         final DataInputStream stream = new DataInputStream(
             new ByteArrayInputStream(
                 Encrypted.unsalt(Encrypted.xor(bytes, key.getBytes()))
