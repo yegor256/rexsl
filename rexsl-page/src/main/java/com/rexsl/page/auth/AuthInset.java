@@ -40,16 +40,13 @@ import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -72,12 +69,6 @@ public final class AuthInset implements Inset {
      * Name of identity authentication cookie.
      */
     private static final String AUTH_COOKIE = "Rexsl-Auth";
-
-    /**
-     * Name of identity authentication query param.
-     * @since 0.5
-     */
-    private static final String AUTH_PARAM = "rexsl-auth";
 
     /**
      * Logout Query param.
@@ -131,18 +122,6 @@ public final class AuthInset implements Inset {
     }
 
     /**
-     * Enrich the URI with authentication token.
-     * @param uri URI to extend/enrich
-     * @return New URI
-     * @since 0.5
-     */
-    public URI enrich(@NotNull final URI uri) {
-        return UriBuilder.fromUri(uri)
-            .queryParam(AuthInset.AUTH_PARAM, "{tkn}")
-            .build(this.encrypt(this.identity()));
-    }
-
-    /**
      * With this authentication provider.
      * @param prov Additional authentication provider
      * @return This object
@@ -160,9 +139,6 @@ public final class AuthInset implements Inset {
     @Cacheable(lifetime = 1, unit = TimeUnit.SECONDS)
     public Identity identity() {
         Identity identity = this.ofProviders();
-        if (identity == Identity.ANONYMOUS) {
-            identity = this.ofQuery();
-        }
         if (identity == Identity.ANONYMOUS) {
             identity = this.ofCookies();
         }
@@ -277,35 +253,6 @@ public final class AuthInset implements Inset {
                 );
             }
             break;
-        }
-        return identity;
-    }
-
-    /**
-     * Authenticate using query params.
-     * @return Identity found or ANONYMOUS
-     */
-    private Identity ofQuery() {
-        Identity identity = Identity.ANONYMOUS;
-        final MultivaluedMap<String, String> params =
-            this.resource.uriInfo().getQueryParameters();
-        if (params.containsKey(AuthInset.AUTH_PARAM)
-            && !params.get(AuthInset.AUTH_PARAM).isEmpty()) {
-            final String token = params.get(AuthInset.AUTH_PARAM).get(0);
-            try {
-                identity = new Identity.Simple(
-                    Encrypted.parse(token, this.key)
-                );
-            } catch (Encrypted.DecryptionException ex) {
-                throw new WebApplicationException(
-                    ex,
-                    Response.status(HttpURLConnection.HTTP_FORBIDDEN)
-                        .entity(ex.getMessage())
-                        .build()
-                );
-            }
-            this.resource.uriInfo().getBaseUriBuilder()
-                .queryParam(AuthInset.AUTH_PARAM, token);
         }
         return identity;
     }

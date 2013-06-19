@@ -101,11 +101,16 @@ public abstract class BaseRs extends BaseResource {
     <urn>urn:facebook:54321</urn>
     <name>John Doe</name>
     <photo>http://images.facebook.com/...</photo>
+    <token>7PGELH0M-FHS09VC0-...-1L33MJA7</token>
   </identity>
 </page>
 +--
 
-  Also, you can get an access to the authenticated identity:
+  Authentication token in <<<"token">>> element is the exact value
+  of <<<Rexsl-Auth>>> cookie, which identifies the authenticated user.
+
+  Also, you can get an access to the authenticated identity
+  programmatically:
 
 +--
 public final class IndexRs extends BaseRs {
@@ -120,10 +125,14 @@ public final class IndexRs extends BaseRs {
 +--
 
   URN of identity is created by authentication providers and consists
-  of namespace ID (<<<"facebook">>> for Facebook and <<<"google">>> for Google)
+  of namespace ID (<<<"facebook">>> for {{{http:://www.facebook.com}Facebook}},
+  <<<"google">>> for {{{http://www.google.com}Google}},
+  <<<"github">>> for {{{http://www.github.com}Github}}, etc.)
   and namespace specific string with a unique ID of the user, as defined
   by the provider. You can use this URN as a unique identifier of the user
   in your system. It is always unique.
 
   When a user is not authenticated <<<AuthInset#identity()>>> method returns
   <<<Identity.ANONYMOUS>>>.
+
+  See also {{{./inset-http-basic.html}HTTP Basic Authentication}}.

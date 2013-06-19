@@ -36,14 +36,11 @@ import com.rexsl.page.BasePageMocker;
 import com.rexsl.page.HttpHeadersMocker;
 import com.rexsl.page.Inset;
 import com.rexsl.page.Link;
-import com.rexsl.page.MultivaluedMapMocker;
 import com.rexsl.page.Resource;
 import com.rexsl.page.ResourceMocker;
-import com.rexsl.page.UriInfoMocker;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
 import java.io.IOException;
-import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import org.hamcrest.MatcherAssert;
@@ -164,55 +161,6 @@ public final class AuthInsetTest {
                     new AuthInset(this.resource(cookie), key).identity()
                 )
             )
-        );
-    }
-
-    /**
-     * AuthInset can read query and add a cleaning header.
-     * @throws Exception If there is some problem inside
-     */
-    @Test
-    public void readsQueryAndAddsHttpHeader() throws Exception {
-        final String key = "74^F\u20ac";
-        final URN urn = new URN("urn:test:7873");
-        final String name = "Jeff \u20ac Lebowski";
-        final String token = AuthInset.encrypt(
-            new IdentityMocker()
-                .withURN(urn)
-                .withName(name)
-                .mock(),
-            key
-        );
-        final Resource resource = new ResourceMocker().withUriInfo(
-            new UriInfoMocker().withQueryParameters(
-                new MultivaluedMapMocker().with("rexsl-auth", token)
-            ).mock()
-        ).mock();
-        final Inset inset = new AuthInset(resource, key);
-        final BasePage<?, ?> page = new BasePageMocker().init(resource);
-        inset.render(page, Response.ok());
-        MatcherAssert.assertThat(
-            JaxbConverter.the(page),
-            XhtmlMatchers.hasXPaths(
-                String.format("/*/identity[name = '%s']", name),
-                String.format("/*/identity[urn = '%s']", urn),
-                "//identity/token"
-            )
-        );
-    }
-
-    /**
-     * AuthInset can enrich an URI.
-     * @throws Exception If there is some problem inside
-     */
-    @Test
-    public void enrichesUriWithToken() throws Exception {
-        final Resource resource = new ResourceMocker().mock();
-        final AuthInset inset = new AuthInset(resource, "98^y");
-        final URI uri = inset.enrich(new URI("http://google.com/?test"));
-        MatcherAssert.assertThat(
-            uri.getQuery(),
-            Matchers.containsString("rexsl-auth=")
         );
     }
 
