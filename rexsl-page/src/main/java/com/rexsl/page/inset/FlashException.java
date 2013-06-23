@@ -60,14 +60,11 @@ final class FlashException extends WebApplicationException {
      * @param response The resource
      * @param log Log message
      * @param level Logging level
-     * @todo #699 Would be nice to introduce a method Logger.log(), which
-     *  would accept java.util.logging.Level as the first parameter and log
-     *  the message according to it.
      */
     protected FlashException(final Response response, final String log,
         final Level level) {
         super(response);
-        Logger.debug(FlashException.class, "%s %s", level, log);
+        Logger.log(level, FlashException.class, log);
     }
 
 }
