@@ -124,7 +124,7 @@ public final class XhtmlMatchers {
     }
 
     /**
-     * Matches content agains XPath query.
+     * Matches content against XPath query.
      * @param query The query
      * @return Matcher suitable for JUnit/Hamcrest matching
      * @param <T> Type of XML content provided
@@ -135,7 +135,7 @@ public final class XhtmlMatchers {
     }
 
     /**
-     * Matches content agains XPath query, with custom namespaces.
+     * Matches content against XPath query, with custom namespaces.
      *
      * <p>Every namespace from the {@code namespaces} list will be assigned to
      * its own prefix, in order of appearance. Start with {@code 1}.
@@ -160,7 +160,7 @@ public final class XhtmlMatchers {
     }
 
     /**
-     * Matches content agains XPath query, with custom context.
+     * Matches content against XPath query, with custom context.
      * @param query The query
      * @param ctx The context
      * @return Matcher suitable for JUnit/Hamcrest matching
@@ -181,7 +181,7 @@ public final class XhtmlMatchers {
     @NotNull
     public static <T> Matcher<T> hasXPaths(final String...xpaths) {
         final List<Matcher<? super T>> list =
-            new ArrayList<Matcher<? super T>>();
+            new ArrayList<Matcher<? super T>>(xpaths.length);
         for (String xpath : xpaths) {
             list.add(XhtmlMatchers.<T>hasXPath(xpath));
         }

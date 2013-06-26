@@ -93,7 +93,7 @@ final class JerseyTestResponse implements TestResponse {
      * @param ftch Response fetcher
      * @param rqst Decorated request, for logging purposes
      */
-    public JerseyTestResponse(@NotNull final JerseyFetcher ftch,
+    protected JerseyTestResponse(@NotNull final JerseyFetcher ftch,
         @NotNull final RequestDecor rqst) {
         this.fetcher = new BufferedJerseyFetcher(ftch);
         this.request = rqst;
@@ -177,7 +177,7 @@ final class JerseyTestResponse implements TestResponse {
     @Override
     @NotNull
     public List<String> xpath(@NotNull final String query) {
-        return this.getXml().xpath(query);
+        return Collections.unmodifiableList(this.getXml().xpath(query));
     }
 
     /**
@@ -238,6 +238,7 @@ final class JerseyTestResponse implements TestResponse {
             cookie,
             Matchers.notNullValue()
         );
+        assert cookie != null;
         return cookie;
     }
 

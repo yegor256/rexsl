@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import com.jcabi.aspects.Loggable;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -96,7 +97,7 @@ public final class SimpleJson implements JsonDocument {
             }
             result.add(SimpleJson.unquote(doc.getTextValue()));
         }
-        return result;
+        return Collections.unmodifiableList(result);
     }
 
     /**
@@ -110,13 +111,16 @@ public final class SimpleJson implements JsonDocument {
         for (JsonNode item : this.getNodes(query)) {
             result.add(new SimpleJson(item));
         }
-        return result;
+        return Collections.unmodifiableList(result);
     }
 
     /**
-     * Unquotates given string. For some reason jackson stores
-     * text values quoted, so there is a need in unquoting them
-     * @param str To unqoute
+     * Un-quotes given string.
+     *
+     * <p>For some reason Jackson stores
+     * text values quoted, so there is a need in un-quoting them.
+     *
+     * @param str Text to un-qoute
      * @return Unquoted string
      */
     private static String unquote(final String str) {
@@ -149,10 +153,10 @@ public final class SimpleJson implements JsonDocument {
     }
 
     /**
-     * Finds subnode matchig query for given node.
+     * Finds sub-node matching query for given node.
      * @param start To search in
      * @param tokenizer Path
-     * @return Node matching qury
+     * @return Node matching query
      */
     private JsonNode getTerminalNode(
         final JsonNode start,

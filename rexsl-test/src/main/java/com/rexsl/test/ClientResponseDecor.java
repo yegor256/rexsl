@@ -65,7 +65,7 @@ final class ClientResponseDecor implements Formattable {
      * @param resp The response
      * @param text Body text
      */
-    public ClientResponseDecor(@NotNull final ClientResponse resp,
+    protected ClientResponseDecor(@NotNull final ClientResponse resp,
         @NotNull final String text) {
         this.response = resp;
         this.body = text;

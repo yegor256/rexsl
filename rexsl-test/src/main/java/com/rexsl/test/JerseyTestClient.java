@@ -65,7 +65,7 @@ final class JerseyTestClient implements TestClient {
     /**
      * Headers.
      */
-    private final transient List<Header> headers = new ArrayList<Header>();
+    private final transient List<Header> headers = new ArrayList<Header>(0);
 
     /**
      * Entry point.
@@ -76,7 +76,7 @@ final class JerseyTestClient implements TestClient {
      * Public ctor.
      * @param res The resource to work with
      */
-    public JerseyTestClient(@NotNull final WebResource res) {
+    protected JerseyTestClient(@NotNull final WebResource res) {
         this.resource = res;
         this.home = res.getURI();
         final String info = this.home.getUserInfo();

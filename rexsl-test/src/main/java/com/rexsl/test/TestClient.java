@@ -43,8 +43,8 @@ import javax.validation.constraints.NotNull;
 public interface TestClient {
 
     /**
-     * Get destination of the client.
-     * @return This destination
+     * Get destination URI of the client.
+     * @return The destination it is currently pointing to
      */
     URI uri();
 

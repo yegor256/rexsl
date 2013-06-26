@@ -58,7 +58,7 @@ final class Failure implements AssertionPolicy {
      * Public ctor.
      * @param txt The reason of failure
      */
-    public Failure(@NotNull final String txt) {
+    protected Failure(@NotNull final String txt) {
         this.reason = txt;
     }
 

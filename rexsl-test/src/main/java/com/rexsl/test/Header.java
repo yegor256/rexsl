@@ -59,7 +59,7 @@ final class Header extends AbstractMap.SimpleEntry<String, String> {
      * @param key The name of it
      * @param value The value
      */
-    public Header(@NotNull final String key, @NotNull final String value) {
+    protected Header(@NotNull final String key, @NotNull final String value) {
         super(Header.normalized(key), value);
     }
 

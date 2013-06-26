@@ -80,7 +80,7 @@ final class RequestDecor implements Formattable {
      * @param hdrs The headers
      * @param text Body text
      */
-    public RequestDecor(@NotNull final Collection<Header> hdrs,
+    protected RequestDecor(@NotNull final Collection<Header> hdrs,
         @NotNull final String text) {
         this.headers = hdrs;
         this.body = text;

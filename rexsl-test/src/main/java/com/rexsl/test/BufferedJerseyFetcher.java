@@ -79,7 +79,7 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
      * Public ctor.
      * @param ftch Response fetcher
      */
-    public BufferedJerseyFetcher(@NotNull final JerseyFetcher ftch) {
+    protected BufferedJerseyFetcher(@NotNull final JerseyFetcher ftch) {
         this.fetcher = ftch;
     }
 

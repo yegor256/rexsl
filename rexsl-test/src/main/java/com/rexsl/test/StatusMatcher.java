@@ -57,7 +57,7 @@ final class StatusMatcher implements AssertionPolicy {
      * Public ctor.
      * @param mtch The matcher to use
      */
-    public StatusMatcher(final Matcher<Integer> mtch) {
+    protected StatusMatcher(final Matcher<Integer> mtch) {
         this.matcher = mtch;
     }
 

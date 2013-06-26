@@ -64,7 +64,7 @@ final class XpathAssertionMatcher implements AssertionPolicy {
      * @param src The source
      * @param path The XPath to find there
      */
-    public XpathAssertionMatcher(final XmlDocument src, final String path) {
+    protected XpathAssertionMatcher(final XmlDocument src, final String path) {
         this.xml = src;
         this.xpath = path;
     }

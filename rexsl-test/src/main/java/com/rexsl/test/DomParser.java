@@ -79,7 +79,7 @@ final class DomParser {
      *
      * @param txt The XML in text
      */
-    public DomParser(@NotNull final String txt) {
+    protected DomParser(@NotNull final String txt) {
         if (txt.isEmpty()) {
             throw new IllegalArgumentException("Empty document, not an XML");
         }

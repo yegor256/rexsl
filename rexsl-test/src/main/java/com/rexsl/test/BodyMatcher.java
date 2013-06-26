@@ -59,7 +59,7 @@ final class BodyMatcher implements AssertionPolicy {
      * Public ctor.
      * @param mtch The matcher to use
      */
-    public BodyMatcher(final Matcher<String> mtch) {
+    protected BodyMatcher(final Matcher<String> mtch) {
         this.matcher = mtch;
     }
 

@@ -158,7 +158,7 @@ public final class NoBrokenLinks implements AssertionPolicy {
     /**
      * Get HTTP response code from this URL.
      * @param url The URL to get
-     * @return HTTP respose code
+     * @return HTTP response code
      */
     private static int http(final URL url) {
         int code = HttpURLConnection.HTTP_BAD_REQUEST;

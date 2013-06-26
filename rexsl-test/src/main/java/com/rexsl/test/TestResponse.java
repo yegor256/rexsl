@@ -127,7 +127,7 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * contains any chars that can't be used and should be replaced with
      * a "replacement character", a {@link AssertionError} will be thrown. If
      * you need to use some other encodings, use
-     * {@link java.net.HttpURLConnection} directly.
+     * {@link java.net.HttpURLConnection} directly instead of ReXSL.
      *
      * @return The body, as a UTF-8 string
      */
@@ -203,9 +203,9 @@ public interface TestResponse extends XmlDocument, JsonDocument {
     TestResponse assertXPath(@NotNull String xpath);
 
     /**
-     * Verifies the Json data against the element identifier argument,
+     * Verifies the JSON data against the element identifier argument,
      * and throws {@link AssertionError} in case of mismatch.
-     * @param element Element in the Json data of this object
+     * @param element Element in the JSON data of this object
      * @return This object
      */
     TestResponse assertJson(@NotNull String element);

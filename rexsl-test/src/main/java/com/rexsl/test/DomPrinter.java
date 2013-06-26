@@ -68,7 +68,7 @@ final class DomPrinter {
      * Public ctor.
      * @param elm The node
      */
-    public DomPrinter(@NotNull final Node elm) {
+    protected DomPrinter(@NotNull final Node elm) {
         this.node = elm;
     }
 

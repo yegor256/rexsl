@@ -100,7 +100,7 @@ final class ListWrapper<T> implements List<T> {
      * @param node The XML
      * @param addr Address
      */
-    public ListWrapper(@NotNull final List<T> list, @NotNull final Node node,
+    protected ListWrapper(@NotNull final List<T> list, @NotNull final Node node,
         @NotNull final String addr) {
         this.original = list;
         this.dom = node;
@@ -122,7 +122,7 @@ final class ListWrapper<T> implements List<T> {
          * @param node The XML with error
          * @param xpath The address
          */
-        public NodeNotFoundException(@NotNull final String message,
+        protected NodeNotFoundException(@NotNull final String message,
             @NotNull final Node node, @NotNull final String xpath) {
             super(
                 Logger.format(
@@ -323,7 +323,7 @@ final class ListWrapper<T> implements List<T> {
      * {@code start} or {@code end} is bigger than the size of the list. In all
      * other cases of illegal method call (start is less than zero, end is
      * less than zero, or start is bigger than end) a standard
-     * {@link IndexOutOfBoundException} is thrown (by the incapsulated
+     * {@link IndexOutOfBoundException} is thrown (by the encapsulated
      * implementation of {@Link List}).
      */
     @Override

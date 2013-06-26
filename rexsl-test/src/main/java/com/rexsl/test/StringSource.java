@@ -62,7 +62,7 @@ final class StringSource extends DOMSource {
      * Public ctor.
      * @param text The content of the document
      */
-    public StringSource(@NotNull final String text) {
+    protected StringSource(@NotNull final String text) {
         super();
         this.xml = text;
         super.setNode(new DomParser(text).document());
@@ -72,7 +72,7 @@ final class StringSource extends DOMSource {
      * Public ctor.
      * @param node The node
      */
-    public StringSource(@NotNull final Node node) {
+    protected StringSource(@NotNull final Node node) {
         super();
         final StringWriter writer = new StringWriter();
         try {

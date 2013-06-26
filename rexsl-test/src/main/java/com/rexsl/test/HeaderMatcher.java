@@ -68,7 +68,7 @@ final class HeaderMatcher implements AssertionPolicy {
      * @param hdr The name of the header to match
      * @param mtch The matcher to use
      */
-    public HeaderMatcher(@NotNull final String hdr,
+    protected HeaderMatcher(@NotNull final String hdr,
         @NotNull final Matcher<Iterable<String>> mtch) {
         this.name = hdr;
         this.matcher = mtch;

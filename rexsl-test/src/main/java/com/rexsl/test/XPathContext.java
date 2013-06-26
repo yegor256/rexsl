@@ -75,7 +75,7 @@ final class XPathContext implements NamespaceContext {
      * {@link SimpleXml#SimpleXml(String)} ctor. When adding/changing this
      * list - don't forget to document it there.
      */
-    public XPathContext() {
+    protected XPathContext() {
         this.map.put("xhtml", "http://www.w3.org/1999/xhtml");
         this.map.put("xs", "http://www.w3.org/2001/XMLSchema");
         this.map.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
@@ -87,7 +87,7 @@ final class XPathContext implements NamespaceContext {
      * Public ctor with custom namespaces.
      * @param namespaces List of namespaces
      */
-    public XPathContext(final Object... namespaces) {
+    protected XPathContext(final Object... namespaces) {
         this();
         for (int pos = 0; pos < namespaces.length; ++pos) {
             this.map.put(

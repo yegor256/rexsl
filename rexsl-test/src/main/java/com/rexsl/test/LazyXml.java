@@ -64,7 +64,7 @@ final class LazyXml implements XmlDocument {
      * @param src Source of content
      * @param ctx Namespace context
      */
-    public LazyXml(@NotNull final TestResponse src,
+    protected LazyXml(@NotNull final TestResponse src,
         @NotNull final XPathContext ctx) {
         this.response = src;
         this.context = ctx;
