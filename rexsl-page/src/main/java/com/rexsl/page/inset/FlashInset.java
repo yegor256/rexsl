@@ -61,6 +61,7 @@ import org.apache.commons.lang3.Validate;
 @ToString
 @EqualsAndHashCode(of = "resource")
 @Loggable(Loggable.DEBUG)
+@SuppressWarnings("PMD.TooManyMethods")
 public final class FlashInset implements Inset {
 
     /**
@@ -98,10 +99,11 @@ public final class FlashInset implements Inset {
                 this.resource.httpHeaders().getCookies().get(FlashInset.COOKIE)
             );
             page.append(
-                new JaxbBundle("flash")
-                    .add("message", cookie.message()).up()
-                    .add("level", cookie.level().toString()).up()
-                    .add("msec", Long.toString(cookie.msec())).up()
+                FlashInset.bundle(
+                    cookie.level(),
+                    cookie.message(),
+                    cookie.msec()
+                )
             );
             builder.cookie(
                 new CookieBuilder(this.resource.uriInfo().getBaseUri())
@@ -109,6 +111,21 @@ public final class FlashInset implements Inset {
                     .build()
             );
         }
+    }
+
+    /**
+     * Make a bundle.
+     * @param level Logging level
+     * @param msg Message
+     * @param msec Time spent
+     * @return JaxbBundle injectable into the page
+     */
+    public static JaxbBundle bundle(@NotNull final Level level,
+        @NotNull final String msg, final long msec) {
+        return new JaxbBundle("flash")
+            .add("message", msg).up()
+            .add("level", level.toString()).up()
+            .add("msec", Long.toString(msec)).up();
     }
 
     /**
