@@ -35,7 +35,6 @@ import com.rexsl.page.BasePage;
 import com.rexsl.page.BasePageMocker;
 import com.rexsl.page.HttpHeadersMocker;
 import com.rexsl.page.Inset;
-import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
 import com.rexsl.page.ResourceMocker;
 import com.rexsl.test.JaxbConverter;
@@ -110,10 +109,6 @@ public final class AuthInsetTest {
         final Resource resource = new ResourceMocker().mock();
         @Provider.Redirect
         final class Redirector implements Provider {
-            @Override
-            public Link link() {
-                throw new UnsupportedOperationException();
-            }
             @Override
             public Identity identity() throws IOException {
                 return new IdentityMocker().mock();

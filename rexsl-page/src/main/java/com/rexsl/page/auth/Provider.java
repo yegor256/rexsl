@@ -49,10 +49,15 @@ import javax.validation.constraints.NotNull;
 public interface Provider {
 
     /**
-     * Get authentication link.
-     * @return The link
+     * Visible provider, for end-user.
      */
-    Link link();
+    interface Visible {
+        /**
+         * Get authentication link.
+         * @return The link
+         */
+        Link link();
+    }
 
     /**
      * Get user's identity or {@link Identity.ANONYMOUS} if can't authenticate.
@@ -96,13 +101,6 @@ public interface Provider {
          */
         public Always(@NotNull final Identity identity) {
             this.idnt = identity;
-        }
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Link link() {
-            return new Link("auth-always", "/always");
         }
         /**
          * {@inheritDoc}

@@ -67,7 +67,7 @@ public final class GoogleTest {
         final Resource resource = new ResourceMocker()
             .withUriInfo(new UriInfoMocker().withBaseUri(new URI("/A")).mock())
             .mock();
-        final Provider provider = new Google(resource, "KEY", "SECRET");
+        final Provider.Visible provider = new Google(resource, "KEY", "SECRET");
         MatcherAssert.assertThat(
             provider.link().getHref().toString(),
             Matchers.allOf(

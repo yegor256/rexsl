@@ -58,7 +58,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "appId", "appKey" })
 @Loggable(Loggable.DEBUG)
 @Provider.Redirect
-public final class Github implements Provider {
+public final class Github implements Provider, Provider.Visible {
 
     /**
      * Query param.

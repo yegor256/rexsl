@@ -58,7 +58,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "appId", "appKey" })
 @Loggable(Loggable.DEBUG)
 @Provider.Redirect
-public final class Facebook implements Provider {
+public final class Facebook implements Provider, Provider.Visible {
 
     /**
      * Query param.

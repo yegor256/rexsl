@@ -63,7 +63,7 @@ public final class GithubTest {
     @Test
     public void generatesLink() throws Exception {
         final Resource resource = new ResourceMocker().mock();
-        final Provider provider = new Github(resource, "KEY", "SECRET");
+        final Provider.Visible provider = new Github(resource, "KEY", "SECRET");
         MatcherAssert.assertThat(
             provider.link().getHref().toString(),
             Matchers.allOf(

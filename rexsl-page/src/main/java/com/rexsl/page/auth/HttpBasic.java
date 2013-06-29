@@ -30,7 +30,6 @@
 package com.rexsl.page.auth;
 
 import com.jcabi.aspects.Loggable;
-import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
 import com.rexsl.page.inset.FlashInset;
 import java.io.IOException;
@@ -115,17 +114,6 @@ public final class HttpBasic implements Provider {
             identity = this.parse(headers.get(0));
         }
         return identity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Link link() {
-        return new Link(
-            "auth-basic",
-            this.resource.uriInfo().getBaseUri()
-        );
     }
 
     /**

@@ -153,7 +153,9 @@ public final class AuthInset implements Inset {
         final Identity identity = this.identity();
         if (identity.equals(Identity.ANONYMOUS)) {
             for (Provider prov : this.providers) {
-                page.link(prov.link());
+                if (prov instanceof Provider.Visible) {
+                    page.link(Provider.Visible.class.cast(prov).link());
+                }
             }
         } else {
             page.append(
