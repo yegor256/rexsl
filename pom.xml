@@ -294,6 +294,18 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <!-- JSR 353 for JSON support -->
+                <groupId>javax.json</groupId>
+                <artifactId>javax.json-api</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <!-- Reference Implementation of JSR 353 -->
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.json</artifactId>
+                <version>1.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <profiles>

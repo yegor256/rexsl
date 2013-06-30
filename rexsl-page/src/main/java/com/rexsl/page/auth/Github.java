@@ -33,12 +33,12 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
-import com.rexsl.test.JsonDocument;
 import com.rexsl.test.RestTester;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.List;
+import javax.json.JsonObject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -178,14 +178,16 @@ public final class Github implements Provider, Provider.Visible {
             .fromUri("https://api.github.com/user")
             .queryParam("access_token", "{token}")
             .build(token);
-        final JsonDocument json = RestTester.start(uri)
+        final JsonObject json = RestTester.start(uri)
             .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
             .get("reading Github user profile")
-            .assertStatus(HttpURLConnection.HTTP_OK);
+            .assertStatus(HttpURLConnection.HTTP_OK)
+            .getJson()
+            .readObject();
         return new Identity.Simple(
-            URN.create(String.format("urn:github:%s", json.json("id").get(0))),
-            json.json("name").get(0),
-            URI.create(json.json("avatar_url").get(0))
+            URN.create(String.format("urn:github:%d", json.getInt("id"))),
+            json.getString("name"),
+            URI.create(json.getString("avatar_url"))
         );
     }
 

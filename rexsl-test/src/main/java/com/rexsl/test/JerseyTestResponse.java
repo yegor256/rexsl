@@ -31,10 +31,13 @@ package com.rexsl.test;
 
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
+import java.io.StringReader;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
+import javax.json.Json;
+import javax.json.JsonReader;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
@@ -80,13 +83,6 @@ final class JerseyTestResponse implements TestResponse {
      * @see #getXml()
      */
     private transient XmlDocument xml;
-
-    /**
-     * The Json document in the body, should be loaded on demand in
-     * {@link #getJson()}.
-     * @see #getJson()
-     */
-    private transient JsonDocument jsonDocument;
 
     /**
      * Public ctor.
@@ -149,6 +145,19 @@ final class JerseyTestResponse implements TestResponse {
     public String getBody() {
         try {
             return this.fetcher.body();
+        } catch (java.io.IOException ex) {
+            throw new AssertionError(ex);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    public JsonReader getJson() {
+        try {
+            return Json.createReader(new StringReader(this.fetcher.body()));
         } catch (java.io.IOException ex) {
             throw new AssertionError(ex);
         }
@@ -398,20 +407,6 @@ final class JerseyTestResponse implements TestResponse {
     }
 
     /**
-     * Get JsonDocument of the body.
-     * @return The Json document
-     */
-    @NotNull
-    public JsonDocument getJson() {
-        synchronized (this.fetcher) {
-            if (this.jsonDocument == null) {
-                this.jsonDocument = new SimpleJson(this.getBody());
-            }
-            return this.jsonDocument;
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -419,24 +414,6 @@ final class JerseyTestResponse implements TestResponse {
     public TestResponse assertJson(@NotNull final String element) {
         Logger.warn(this, "method #assertJson() is not implemented yet");
         return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public List<String> json(@NotNull final String query) {
-        return this.getJson().json(query);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public List<JsonDocument> nodesJson(@NotNull final String query) {
-        return Collections.unmodifiableList(this.getJson().nodesJson(query));
     }
 
     /**

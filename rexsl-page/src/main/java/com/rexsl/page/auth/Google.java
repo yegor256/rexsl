@@ -33,13 +33,13 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
-import com.rexsl.test.JsonDocument;
 import com.rexsl.test.RestTester;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.List;
+import javax.json.JsonObject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -170,9 +170,10 @@ public final class Google implements Provider, Provider.Visible {
                 )
             )
             .assertStatus(HttpURLConnection.HTTP_OK)
+            .getJson()
+            .readObject()
             // @checkstyle MultipleStringLiterals (1 line)
-            .json("access_token")
-            .get(0);
+            .getString("access_token");
     }
 
     /**
@@ -186,17 +187,20 @@ public final class Google implements Provider, Provider.Visible {
             .queryParam("alt", "json")
             .queryParam("access_token", "{token}")
             .build(token);
-        final JsonDocument json = RestTester.start(uri).get("user info");
-        final List<String> pics = json.json("picture");
+        final JsonObject json = RestTester.start(uri)
+            .get("fetch user info")
+            .getJson()
+            .readObject();
         URI photo;
-        if (pics.isEmpty()) {
+        // @checkstyle MultipleStringLiterals (1 line)
+        if (json.isNull("picture")) {
             photo = Identity.ANONYMOUS.photo();
         } else {
-            photo = URI.create(pics.get(0));
+            photo = URI.create(json.getString("picture"));
         }
         return new Identity.Simple(
-            URN.create(String.format("urn:google:%s", json.json("id").get(0))),
-            json.json("name").get(0),
+            URN.create(String.format("urn:google:%d", json.getInt("id"))),
+            json.getString("name"),
             photo
         );
     }

@@ -32,9 +32,7 @@ package com.rexsl.test;
 import com.sun.jersey.api.client.ClientResponse;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.Collection;
 import javax.ws.rs.core.HttpHeaders;
-import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -151,106 +149,23 @@ public final class JerseyTestResponseTest {
     }
 
     /**
-     * TestResponse can retrieve data from Json format.
+     * TestResponse can read and return a JSON document.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void findsDataInJsonFormat() throws Exception {
-        final String data =
-            // @checkstyle LineLength (1 line)
-            "{\"data\":[{\"id\":\"12\",\"name\":\"John\"},{\"id\":\"13\",\"name\":\"\u0443\u0440\u0430\"}]}";
+    public void readsJsonDocument() throws Exception {
         final ClientResponse resp = new ClientResponseMocker()
-            .withEntity(data)
+            .withEntity("{\"foo-foo\":2, \"bar\":\"hello!\"}")
             .mock();
         final TestResponse response =
             new JerseyTestResponse(this.fetcher(resp), this.decor);
         MatcherAssert.assertThat(
-            response.assertJson("data[1]").json("data[1].name"),
-            Matchers.allOf(
-                Matchers.<String>hasSize(1),
-                (Matcher<? super Collection<String>>) Matchers.everyItem(
-                    Matchers.<String>equalTo("\u0443\u0440\u0430")
-                )
-            )
+            response.getJson().readObject().getInt("foo-foo"),
+            Matchers.equalTo(2)
         );
-    }
-
-    /**
-     * TestResponse can return missing results.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void findsJsonNodeByInvalidIndex() throws Exception {
-        final String data =
-            // @checkstyle LineLength (1 line)
-            "{\"data\":[{\"id\":\"12\",\"name\":\"Johnny\"},{\"id\":\"13\",\"name\":\"Dan\"}]}";
-        final ClientResponse resp = new ClientResponseMocker()
-            .withEntity(data)
-            .mock();
-        final TestResponse response =
-            new JerseyTestResponse(this.fetcher(resp), this.decor);
         MatcherAssert.assertThat(
-            response.assertJson("data[2]").json("data[2].name"),
-            Matchers.hasSize(0)
-        );
-    }
-
-    /**
-     * TestResponse can return missing results.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void findsJsonNodeByInvalidName() throws Exception {
-        final String data =
-            // @checkstyle LineLength (1 line)
-            "{\"data1\":[{\"id\":\"12\",\"name\":\"Jack\"},{\"id\":\"13\",\"name\":\"Dan\"}]}";
-        final ClientResponse resp = new ClientResponseMocker()
-            .withEntity(data)
-            .mock();
-        final TestResponse response =
-            new JerseyTestResponse(this.fetcher(resp), this.decor);
-        MatcherAssert.assertThat(
-            response.assertJson("data1[0]").json("data1[0].namen"),
-            Matchers.hasSize(0)
-        );
-    }
-
-    /**
-     * TestResponse throws exception when invalid node index passed.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test (expected = IllegalArgumentException.class)
-    public void failsOnInvalidIndexInJsonExpression() throws Exception {
-        final String data =
-            // @checkstyle LineLength (1 line)
-            "{\"data2\":[{\"id\":\"12\",\"name\":\"Jack\"},{\"id\":\"13\",\"name\":\"Dan\"}]}";
-        final ClientResponse resp = new ClientResponseMocker()
-            .withEntity(data)
-            .mock();
-        final TestResponse response =
-            new JerseyTestResponse(this.fetcher(resp), this.decor);
-        response.assertJson("data2[0]").json("data2[abc].namen");
-    }
-
-    /**
-     * TestResponse throws exception when invalid node index passed.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void canReturnListOfJsonValues() throws Exception {
-        final String data =
-            "{\"data1\":{\"data3\":[\"val1\",\"val2\"]}}";
-        final ClientResponse resp = new ClientResponseMocker()
-            .withEntity(data)
-            .mock();
-        final TestResponse response =
-            new JerseyTestResponse(this.fetcher(resp), this.decor);
-        MatcherAssert.assertThat(
-            response.assertJson("data1/data3").json("data1.data3"),
-            Matchers.allOf(
-                Matchers.hasItem("val2"),
-                Matchers.hasItem("val1")
-            )
+            response.getJson().readObject().getString("bar"),
+            Matchers.equalTo("hello!")
         );
     }
 

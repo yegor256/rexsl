@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import javax.json.JsonReader;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MultivaluedMap;
@@ -71,7 +72,7 @@ import org.hamcrest.Matcher;
  * @version $Id$
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public interface TestResponse extends XmlDocument, JsonDocument {
+public interface TestResponse extends XmlDocument {
 
     /**
      * How many attempts to make when {@link #assertThat(AssertionPolicy)}
@@ -132,6 +133,12 @@ public interface TestResponse extends XmlDocument, JsonDocument {
      * @return The body, as a UTF-8 string
      */
     String getBody();
+
+    /**
+     * Get JSON.
+     * @return The body as a JSON document
+     */
+    JsonReader getJson();
 
     /**
      * {@inheritDoc}
