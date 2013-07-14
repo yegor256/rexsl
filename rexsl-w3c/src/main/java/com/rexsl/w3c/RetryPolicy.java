@@ -64,7 +64,7 @@ final class RetryPolicy implements AssertionPolicy {
      * Public ctor.
      * @param addr The XPath addr to check
      */
-    public RetryPolicy(final String addr) {
+    protected RetryPolicy(final String addr) {
         this.xpath = addr;
     }
 

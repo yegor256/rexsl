@@ -87,7 +87,7 @@ public final class DefaultCssValidatorTest {
      */
     @Test
     public void ignoresEntireDocument() throws Exception {
-        final Validator validator = new DefaultCssValidator();
+        final Validator validator = ValidatorBuilder.CSS;
         final ValidationResponse response = validator.validate(
             // @checkstyle RegexpSingleline (1 line)
             "/* hey */\n\n/* JIGSAW IGNORE: .. */\n\n* { abc: cde }\n"

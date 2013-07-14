@@ -55,17 +55,10 @@ final class DefaultHtmlValidator extends BaseValidator implements Validator {
     private final transient URI uri;
 
     /**
-     * Public ctor with default entry point.
-     */
-    public DefaultHtmlValidator() {
-        this(URI.create("http://validator.w3.org/check"));
-    }
-
-    /**
      * Public ctor.
      * @param entry Entry point to use
      */
-    public DefaultHtmlValidator(@NotNull final URI entry) {
+    protected DefaultHtmlValidator(@NotNull final URI entry) {
         super();
         this.uri = entry;
     }

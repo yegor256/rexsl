@@ -93,7 +93,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      * @param enc Charset of the document
      * @checkstyle ParameterNumber (3 lines)
      */
-    public DefaultValidationResponse(final boolean val,
+    protected DefaultValidationResponse(final boolean val,
         @NotNull final URI server, @NotNull final String tpe,
         @NotNull final Charset enc) {
         this.ivalid = val;

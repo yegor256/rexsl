@@ -55,17 +55,10 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
     private final transient URI uri;
 
     /**
-     * Public ctor with default entry point.
-     */
-    public DefaultCssValidator() {
-        this(URI.create("http://jigsaw.w3.org/css-validator/validator"));
-    }
-
-    /**
      * Public ctor.
      * @param entry Entry point to use
      */
-    public DefaultCssValidator(@NotNull final URI entry) {
+    protected DefaultCssValidator(@NotNull final URI entry) {
         super();
         this.uri = entry;
     }

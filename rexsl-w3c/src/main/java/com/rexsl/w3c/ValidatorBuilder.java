@@ -30,6 +30,7 @@
 package com.rexsl.w3c;
 
 import com.jcabi.aspects.Loggable;
+import java.net.URI;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -70,15 +71,17 @@ public final class ValidatorBuilder {
      * Static instance of HTML validator.
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    public static final Validator HTML =
-        new DefaultHtmlValidator();
+    public static final Validator HTML = new DefaultHtmlValidator(
+        URI.create("http://validator.w3.org/check")
+    );
 
     /**
      * Static instance of CSS validator.
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    public static final Validator CSS =
-        new DefaultCssValidator();
+    public static final Validator CSS = new DefaultCssValidator(
+        URI.create("http://jigsaw.w3.org/css-validator/validator")
+    );
 
     /**
      * Build HTML validator.
@@ -96,6 +99,26 @@ public final class ValidatorBuilder {
     @NotNull
     public Validator css() {
         return ValidatorBuilder.CSS;
+    }
+
+    /**
+     * Build HTML validator, pointing to the given URI of W3C engine.
+     * @param uri URI of validator
+     * @return The validator
+     */
+    @NotNull
+    public Validator html(final URI uri) {
+        return new DefaultHtmlValidator(uri);
+    }
+
+    /**
+     * Build CSS validator, pointing to the given URI of W3C engine.
+     * @param uri URI of validator
+     * @return The validator
+     */
+    @NotNull
+    public Validator css(final URI uri) {
+        return new DefaultCssValidator(uri);
     }
 
 }
