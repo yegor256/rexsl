@@ -6,6 +6,13 @@ application as a RESTful "web service" while XSL stylesheets transform it to an 
 
 Read more at [www.rexsl.com](http://www.rexsl.com).
 
+For example, these sites use ReXSL:
+[s3auth.com](http://www.s3auth.com),
+[expinia.com](http://p.expinia.com),
+[netbout.com](http://www.netbout.com),
+[rultor.com](http://www.rultor.com),
+[bibrarian.com](http://www.bibrarian.com).
+
 ## How to contribute
 
 Fork repository, make changes, send us a pull request. We will review
