@@ -285,7 +285,7 @@
                 <!-- Embedded Java Servlet Container, for tests only. -->
                 <groupId>com.sun.grizzly</groupId>
                 <artifactId>grizzly-servlet-webserver</artifactId>
-                <version>1.9.57</version>
+                <version>1.9.58</version>
                 <scope>test</scope>
                 <exclusions>
                     <exclusion>
@@ -304,7 +304,7 @@
                 <!-- Reference Implementation of JSR 353 -->
                 <groupId>org.glassfish</groupId>
                 <artifactId>javax.json</artifactId>
-                <version>1.0</version>
+                <version>1.0.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

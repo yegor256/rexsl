@@ -30,5 +30,11 @@
  -->
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
     <body>
+        <release version="0.4.13" date="14 Jul 2013" description="custom URI for validators">
+            <action dev="yegor" issue="706" type="add">
+                W3C validators can be instantiated with a custom URI,
+                which allows their usage with locally installed W3C engine
+            </action>
+        </release>
     </body>
 </document>
