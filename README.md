@@ -1,4 +1,4 @@
-<img src="http://img.rexsl.com/logo-big.png" />
+<img src="http://img.rexsl.com/logo-200x45.png" />
 
 The idea is simple - to make a RESTful XML API available in a browser-friendly
 format renderable with XSL stylesheets. With ReXSL you develop your web
