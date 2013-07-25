@@ -199,7 +199,7 @@ public final class Google implements Provider, Provider.Visible {
             photo = URI.create(json.getString("picture"));
         }
         return new Identity.Simple(
-            URN.create(String.format("urn:google:%d", json.getInt("id"))),
+            URN.create(String.format("urn:google:%s", json.getString("id"))),
             json.getString("name"),
             photo
         );
