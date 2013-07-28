@@ -95,6 +95,7 @@ How to release new version to Maven Central:
     3. Set new version:
 
         mvn versions:set
+        git commit -am '#690: version set to 0.4.11'
 
     4. Update all versions:
 
