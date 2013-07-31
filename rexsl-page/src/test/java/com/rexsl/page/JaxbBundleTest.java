@@ -32,8 +32,11 @@ package com.rexsl.page;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
 import java.util.Arrays;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Test case for {@link JaxbBundle}.
@@ -154,6 +157,24 @@ public final class JaxbBundleTest {
                 ).element()
             ),
             XhtmlMatchers.hasXPath("/data-6/cat[weight='2kg']")
+        );
+    }
+
+    /**
+     * JaxbBundle can append DOM elements.
+     * @throws Exception If there is some problem inside
+     */
+    @Test
+    public void appendsDomElements() throws Exception {
+        final Document dom = DocumentBuilderFactory.newInstance()
+            .newDocumentBuilder()
+            .newDocument();
+        final Element root = dom.createElement("super");
+        dom.appendChild(root);
+        root.appendChild(dom.createTextNode("hello, world!"));
+        MatcherAssert.assertThat(
+            XhtmlMatchers.xhtml(new JaxbBundle("foo-5").add(root).element()),
+            XhtmlMatchers.hasXPath("/foo-5/super[.='hello, world!']")
         );
     }
 

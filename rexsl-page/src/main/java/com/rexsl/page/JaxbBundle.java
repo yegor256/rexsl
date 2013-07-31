@@ -177,6 +177,12 @@ public final class JaxbBundle {
         new CopyOnWriteArrayList<JaxbBundle>();
 
     /**
+     * DOM children.
+     */
+    private final transient List<Element> elements =
+        new CopyOnWriteArrayList<Element>();
+
+    /**
      * Links.
      */
     private final transient List<Link> links =
@@ -281,6 +287,18 @@ public final class JaxbBundle {
     @NotNull
     public JaxbBundle add(@NotNull final String nam) {
         return this.add(nam, "");
+    }
+
+    /**
+     * Add new child XML element.
+     * @param element The DOM element to add
+     * @return The same bundle
+     * @since 0.4.15
+     */
+    @NotNull
+    public JaxbBundle add(@NotNull final Element element) {
+        this.elements.add(element);
+        return this;
     }
 
     /**
@@ -400,6 +418,9 @@ public final class JaxbBundle {
         }
         for (JaxbBundle child : this.children) {
             element.appendChild(child.element(doc));
+        }
+        for (Element child : this.elements) {
+            element.appendChild(doc.importNode(child, true));
         }
         if (!this.links.isEmpty()) {
             final Element lnks = doc.createElement("links");
