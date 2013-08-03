@@ -47,7 +47,7 @@ Making Runnable JAR
   <artifactId>rexsl-standalone</artifactId>
   <version>${project.version}</version>
   <classifier>bin</classifier>
-  <scope>runtime</scope>
+  <scope>test</scope>
 </dependency>
 +--
 
