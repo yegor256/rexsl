@@ -129,7 +129,7 @@
         <httpcomponents.version>4.2.2</httpcomponents.version>
         <jersey.version>1.17.1</jersey.version>
         <jetty.version>8.0.2.v20111006</jetty.version>
-        <saxon.version>8.7</saxon.version>
+        <saxon.version>9.1.0.8</saxon.version>
         <xerces.version>2.9.1</xerces.version>
     </properties>
     <dependencyManagement>
@@ -251,21 +251,18 @@
                 provided by JDK with Saxon we are using text files inside
                 "src/main/resources/META-INF/services" directory.
                 -->
-                <groupId>net.sf.saxon</groupId>
+                <groupId>net.sourceforge.saxon</groupId>
                 <artifactId>saxon</artifactId>
                 <version>${saxon.version}</version>
             </dependency>
             <dependency>
                 <!--
-                DOM in Saxon. This dependency is required for XML-to-XHTML
-                transformation, performed by Saxon. XmlMatchers, for example,
-                user DOMResult as a target of transformation and main Saxon
-                artifact doesn't know how to work with this target. Saxon-dom knows.
-                If you remove this dependency all XmlMatchers
+                XSLT 2.0 transformer, DOM component.
                 -->
-                <groupId>net.sf.saxon</groupId>
-                <artifactId>saxon-dom</artifactId>
+                <groupId>net.sourceforge.saxon</groupId>
+                <artifactId>saxon</artifactId>
                 <version>${saxon.version}</version>
+                <classifier>dom</classifier>
             </dependency>
             <dependency>
                 <!--

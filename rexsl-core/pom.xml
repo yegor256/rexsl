@@ -110,14 +110,15 @@
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.sf.saxon</groupId>
+            <groupId>net.sourceforge.saxon</groupId>
             <artifactId>saxon</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>saxon-dom</artifactId>
+            <groupId>net.sourceforge.saxon</groupId>
+            <artifactId>saxon</artifactId>
             <scope>runtime</scope>
+            <classifier>dom</classifier>
         </dependency>
         <dependency>
             <groupId>xml-apis</groupId>

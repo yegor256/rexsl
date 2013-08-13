@@ -60,7 +60,7 @@ public final class XsltFilterTest {
             .withResource(
                 "/foo.xsl",
                 // @checkstyle LineLength (1 line)
-                "<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform' xmlns:x='http://www.w3.org/1999/xhtml'><template match='/'><x:html><x:div><value-of select='/page/data'/></x:div><x:p>\u0443</x:p></x:html></template></stylesheet>"
+                "<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform' xmlns:x='http://www.w3.org/1999/xhtml' version='2.0'><template match='/'><x:html><x:div><value-of select='/page/data'/></x:div><x:p>\u0443</x:p></x:html></template></stylesheet>"
         ).mock();
         final FilterConfig config = new FilterConfigMocker()
             .withServletContext(context)
