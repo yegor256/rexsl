@@ -129,6 +129,17 @@ public final class FlashInset implements Inset {
     }
 
     /**
+     * Make a bundle.
+     * @param level Logging level
+     * @param msg Message
+     * @return JaxbBundle injectable into the page
+     * @since 0.4.16
+     */
+    public static JaxbBundle bundle(final Level level, final String msg) {
+        return FlashInset.bundle(level, msg, 0L);
+    }
+
+    /**
      * Create an exception that will redirect to the page with an error message.
      *
      * <p>The difference between this method and a static
