@@ -187,21 +187,29 @@ public final class Google implements Provider, Provider.Visible {
             .queryParam("alt", "json")
             .queryParam("access_token", "{token}")
             .build(token);
-        final JsonObject json = RestTester.start(uri)
-            .get("fetch user info")
-            .getJson()
-            .readObject();
-        URI photo;
-        // @checkstyle MultipleStringLiterals (1 line)
-        if (json.isNull("picture")) {
-            photo = Identity.ANONYMOUS.photo();
-        } else {
-            photo = URI.create(json.getString("picture"));
-        }
+        return this.parse(
+            RestTester.start(uri)
+                .get("fetch user info")
+                .getJson()
+                .readObject()
+        );
+    }
+
+    /**
+     * Make identity from JSON object.
+     * @param json JSON received from Google
+     * @return Identity found
+     */
+    private Identity parse(final JsonObject json) {
         return new Identity.Simple(
             URN.create(String.format("urn:google:%s", json.getString("id"))),
-            json.getString("name"),
-            photo
+            json.getString("name", Identity.ANONYMOUS.name()),
+            URI.create(
+                json.getString(
+                    "picture",
+                    Identity.ANONYMOUS.photo().toString()
+                )
+            )
         );
     }
 
