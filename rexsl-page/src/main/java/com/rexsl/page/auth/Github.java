@@ -178,16 +178,31 @@ public final class Github implements Provider, Provider.Visible {
             .fromUri("https://api.github.com/user")
             .queryParam("access_token", "{token}")
             .build(token);
-        final JsonObject json = RestTester.start(uri)
-            .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
-            .get("reading Github user profile")
-            .assertStatus(HttpURLConnection.HTTP_OK)
-            .getJson()
-            .readObject();
+        return this.parse(
+            RestTester.start(uri)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+                .get("reading Github user profile")
+                .assertStatus(HttpURLConnection.HTTP_OK)
+                .getJson()
+                .readObject()
+        );
+    }
+
+    /**
+     * Make identity from JSON object.
+     * @param json JSON received from Github
+     * @return Identity found
+     */
+    private Identity parse(final JsonObject json) {
         return new Identity.Simple(
             URN.create(String.format("urn:github:%d", json.getInt("id"))),
-            json.getString("name"),
-            URI.create(json.getString("avatar_url"))
+            json.getString("name", Identity.ANONYMOUS.name()),
+            URI.create(
+                json.getString(
+                    "avatar_url",
+                    Identity.ANONYMOUS.photo().toString()
+                )
+            )
         );
     }
 
