@@ -313,7 +313,7 @@ public final class FlashInset implements Inset {
             this.msg = message;
             this.lvl = level;
             Validate.isTrue(
-                msec > 0 || msec == -1,
+                msec >= 0 || msec == -1,
                 "milliseconds can either be positive or equal to -1"
             );
             this.millis = msec;
