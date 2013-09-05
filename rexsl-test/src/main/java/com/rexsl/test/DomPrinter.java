@@ -81,6 +81,7 @@ final class DomPrinter {
         try {
             final Transformer transformer = DomPrinter.FACTORY.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.VERSION, "1.1");
             transformer.transform(
                 new DOMSource(this.node),
                 new StreamResult(writer)
