@@ -72,7 +72,7 @@ public final class LinksInset implements Inset {
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
         assert this.resource != null;
-        page.link(new Link("self", "./"));
+        page.link(new Link("self", "."));
         page.link(new Link("home", "/"));
     }
 

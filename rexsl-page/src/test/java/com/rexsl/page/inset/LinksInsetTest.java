@@ -66,7 +66,7 @@ public final class LinksInsetTest {
         MatcherAssert.assertThat(
             JaxbConverter.the(page),
             XhtmlMatchers.hasXPaths(
-                "/page/links/link[@rel='home']",
+                "/*/links/link[@rel='home']",
                 "//link[@rel='self' and @href='http://localhost:80/test']"
             )
         );
