@@ -34,8 +34,10 @@ import com.rexsl.page.BasePageMocker;
 import com.rexsl.page.Inset;
 import com.rexsl.page.Resource;
 import com.rexsl.page.ResourceMocker;
+import com.rexsl.page.UriInfoMocker;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
+import java.net.URI;
 import javax.ws.rs.core.Response;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -53,15 +55,19 @@ public final class LinksInsetTest {
      */
     @Test
     public void rendersPageToXml() throws Exception {
-        final Resource resource = new ResourceMocker().mock();
+        final Resource resource = new ResourceMocker().withUriInfo(
+            new UriInfoMocker().withRequestUri(
+                new URI("http://localhost:80/test")
+            ).mock()
+        ).mock();
         final Inset inset = new LinksInset(resource);
         final BasePage<?, ?> page = new BasePageMocker().init(resource);
         inset.render(page, Response.ok());
         MatcherAssert.assertThat(
             JaxbConverter.the(page),
             XhtmlMatchers.hasXPaths(
-                "/*/links/link[@rel='self']",
-                "/*/links/link[@rel='home']"
+                "/page/links/link[@rel='home']",
+                "//link[@rel='self' and @href='http://localhost:80/test']"
             )
         );
     }
