@@ -33,8 +33,10 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.transform.Source;
@@ -43,7 +45,9 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -65,7 +69,7 @@ final class RuntimeResolver implements URIResolver {
      * Public ctor.
      * @param uri The home page of the site
      */
-    public RuntimeResolver(@NotNull final URI uri) {
+    protected RuntimeResolver(@NotNull final URI uri) {
         this.home = UriBuilder.fromUri(uri).path("/").build();
     }
 
@@ -76,41 +80,60 @@ final class RuntimeResolver implements URIResolver {
     @Loggable(Loggable.DEBUG)
     public Source resolve(@NotNull final String href, final String base)
         throws TransformerException {
-        URL url;
-        final String format = String.format(
-            "%s%s",
-            this.home,
-            StringUtils.stripStart(href, "/ ")
-        );
-        try {
-            if (base == null || base.isEmpty()) {
-                url = new URL(format);
-            } else {
-                if (base.startsWith("http")
-                    || base.startsWith("https")) {
-                    url = new URL(new URL(base), href);
-                } else {
-                    url = new URL(new URL(base), format);
-                }
-            }
-        } catch (java.net.MalformedURLException ex) {
-            throw new TransformerException(ex);
-        }
+        final URL url = this.url(href, base);
         Source src;
         try {
             src = this.fetch(url);
-        } catch (java.io.IOException ex) {
-            throw new TransformerException(ex);
+        } catch (IOException ex) {
+            throw new TransformerException(
+                String.format("failed to fetch '%s' at base '%s'", href, base),
+                ex
+            );
         }
-        src.setSystemId(href);
+        src.setSystemId(url.toString());
         Logger.debug(
-            this,
-            "#resolve(%s, %s): resolved from %s",
-            href,
-            base,
-            url
+            this, "#resolve(%s, %s): resolved from %s",
+            href, base, url
         );
         return src;
+    }
+
+    /**
+     * Make URL to fetch.
+     * @param href Href requested
+     * @param base Base
+     * @return URL
+     * @throws TransformerException If fails
+     */
+    private URL url(final String href, final String base)
+        throws TransformerException {
+        URL url;
+        final String abs = String.format(
+            "%s%s", this.home, StringUtils.stripStart(href, "/ ")
+        );
+        try {
+            if (base == null || base.isEmpty()) {
+                url = new URL(abs);
+            } else if (base.matches("https?://.*")) {
+                url = new URL(new URL(base), href);
+            } else if (href.charAt(0) == '.') {
+                url = new URL(
+                    FilenameUtils.normalize(
+                        String.format(
+                            "%s/%s", FilenameUtils.getFullPath(base), href
+                        )
+                    )
+                );
+            } else {
+                url = new URL(new URL(base), abs);
+            }
+        } catch (MalformedURLException ex) {
+            throw new TransformerException(
+                String.format("URL failure of '%s' at base '%s'", href, base),
+                ex
+            );
+        }
+        return url;
     }
 
     /**
@@ -120,28 +143,32 @@ final class RuntimeResolver implements URIResolver {
      * @throws IOException If some IO problem inside
      */
     private Source fetch(final URL url) throws IOException {
-        final HttpURLConnection conn = HttpURLConnection.class.cast(
-            url.openConnection()
-        );
-        Source src;
+        final URLConnection conn = url.openConnection();
+        final Source src;
         try {
             conn.connect();
-            final int code = conn.getResponseCode();
-            if (code != HttpURLConnection.HTTP_OK) {
-                throw new IOException(
-                    Logger.format(
-                        "URL %s returned %d code (instead of %d)",
-                        url,
-                        code,
-                        HttpURLConnection.HTTP_OK
-                    )
-                );
+            if (conn instanceof HttpURLConnection) {
+                final int code = HttpURLConnection.class.cast(conn)
+                    .getResponseCode();
+                if (code != HttpURLConnection.HTTP_OK) {
+                    throw new IOException(
+                        Logger.format(
+                            "URL %s returned %d code (instead of %d)",
+                            url, code, HttpURLConnection.HTTP_OK
+                        )
+                    );
+                }
             }
             src = new StreamSource(
-                IOUtils.toInputStream(IOUtils.toString(conn.getInputStream()))
+                IOUtils.toInputStream(
+                    IOUtils.toString(conn.getInputStream(), CharEncoding.UTF_8),
+                    CharEncoding.UTF_8
+                )
             );
         } finally {
-            conn.disconnect();
+            if (conn instanceof HttpURLConnection) {
+                HttpURLConnection.class.cast(conn).disconnect();
+            }
         }
         return src;
     }

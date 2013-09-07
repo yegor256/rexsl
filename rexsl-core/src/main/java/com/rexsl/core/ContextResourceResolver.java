@@ -35,6 +35,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -50,8 +51,10 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Resolves resources using {@link ServletContext}.
@@ -88,19 +91,17 @@ final class ContextResourceResolver implements URIResolver {
     })
     public Source resolve(@NotNull final String href, final String base)
         throws TransformerException {
-        InputStream stream;
+        Source source;
         try {
-            stream = this.local(href);
+            source = this.local(href, base);
         } catch (TransformerException ex) {
             try {
-                stream = this.absolute(href, base);
+                source = this.source(this.absolute(href, base));
+                source.setSystemId(href);
             } catch (TransformerException exp) {
                 throw new TransformerException(ex.getMessage(), exp);
             }
         }
-        final Source source = this.source(stream);
-        IOUtils.closeQuietly(stream);
-        source.setSystemId(href);
         return source;
     }
     /**
@@ -124,41 +125,44 @@ final class ContextResourceResolver implements URIResolver {
                     )
                 )
             );
-        } catch (java.io.UnsupportedEncodingException ex) {
+        } catch (UnsupportedEncodingException ex) {
             throw new TransformerException(ex);
         } catch (IOException ex) {
             throw new TransformerException(ex);
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
         return source;
     }
     /**
      * Load stream from local address.
      * @param path The path to resource to load from
+     * @param base Base of request
      * @return The stream opened or NULL if nothing found
      * @throws TransformerException If not found
      */
     @Loggable(Loggable.DEBUG)
-    private InputStream local(final String path)
+    private Source local(final String path, final String base)
         throws TransformerException {
         if (path.charAt(0) != '/' && path.charAt(0) != '.') {
             throw new TransformerException(
                 String.format("'%s' is not a local path", path)
             );
         }
-        final InputStream stream = this.context.getResourceAsStream(
-            URI.create(path).getPath()
-        );
+        final String abs = this.compose(path, base);
+        final InputStream stream = this.context.getResourceAsStream(abs);
         if (stream == null) {
             throw new TransformerException(
                 Logger.format(
-                    "local resource '%s' not found by %[type]s, realPath='%s'",
-                    path,
-                    this.context,
-                    this.context.getRealPath(path)
+                    // @checkstyle LineLength (1 line)
+                    "local resource '%s' not found by %[type]s, abs='%s', realPath='%s'",
+                    path, this.context, abs, this.context.getRealPath(abs)
                 )
             );
         }
-        return stream;
+        final Source source = this.source(stream);
+        source.setSystemId(abs);
+        return source;
     }
 
     /**
@@ -188,9 +192,7 @@ final class ContextResourceResolver implements URIResolver {
                 String.format(
                     // @checkstyle LineLength (1 line)
                     "Non-absolute URI '%s' can't be resolved, href='%s', base='%s'",
-                    uri,
-                    href,
-                    base
+                    uri, href, base
                 )
             );
         }
@@ -200,9 +202,7 @@ final class ContextResourceResolver implements URIResolver {
             throw new TransformerException(
                 String.format(
                     "failed to fetch absolute URI '%s', href='%s', base='%s'",
-                    href,
-                    base,
-                    uri
+                    href, base, uri
                 ),
                 ex
             );
@@ -242,18 +242,35 @@ final class ContextResourceResolver implements URIResolver {
                 throw new IOException(
                     Logger.format(
                         "Invalid HTTP response code %d at '%s'",
-                        code,
-                        conn.getURL()
+                        code, conn.getURL()
                     )
                 );
             }
             stream = IOUtils.toInputStream(
-                IOUtils.toString(conn.getInputStream())
+                IOUtils.toString(conn.getInputStream(), CharEncoding.UTF_8),
+                CharEncoding.UTF_8
             );
         } finally {
             conn.disconnect();
         }
         return stream;
+    }
+
+    /**
+     * Compose a local path from path component and base.
+     * @param path Path
+     * @param base Base
+     * @return Absolute local path
+     */
+    private String compose(final String path, final String base) {
+        final StringBuilder full = new StringBuilder();
+        if (!StringUtils.isEmpty(base) && path.charAt(0) != '/') {
+            full.append(FilenameUtils.getFullPath(base)).append('/');
+        }
+        full.append(URI.create(path).getPath());
+        return URI.create(
+            FilenameUtils.normalizeNoEndSeparator(full.toString())
+        ).getPath();
     }
 
 }

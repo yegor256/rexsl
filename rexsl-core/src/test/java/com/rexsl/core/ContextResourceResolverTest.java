@@ -71,12 +71,13 @@ public final class ContextResourceResolverTest {
     @Test
     public void resolvesResourceByHref() throws Exception {
         final String href = "/test.xml?123";
+        final String ref = "/test.xml";
         final ServletContext ctx = new ServletContextMocker()
-            .withResource("/test.xml", "<r>\u0443</r>")
+            .withResource(ref, "<r>\u0443</r>")
             .mock();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve(href, null);
-        MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(href));
+        MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(ref));
         MatcherAssert.assertThat(src, XhtmlMatchers.hasXPath("/r[.='\u0443']"));
     }
 
@@ -86,12 +87,13 @@ public final class ContextResourceResolverTest {
      */
     @Test
     public void resolvesResourceByRelativeLocalPath() throws Exception {
+        final String ref = "/a/text.txt";
         final ServletContext ctx = new ServletContextMocker()
-            .withResource("/a/test.txt", "")
+            .withResource(ref, "")
             .mock();
         final URIResolver resolver = new ContextResourceResolver(ctx);
-        final Source src = resolver.resolve("./text.txt", "/a/smth.xml");
-        MatcherAssert.assertThat(src, Matchers.notNullValue());
+        final Source src = resolver.resolve("./text.txt?xxx", "/a/smth.xml?z");
+        MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(ref));
     }
 
     /**
@@ -101,12 +103,13 @@ public final class ContextResourceResolverTest {
     @Test
     public void resolvesResourceByHrefAndBlankBase() throws Exception {
         final String href = "/test2.xml?1234";
+        final String ref = "/test2.xml";
         final ServletContext ctx = new ServletContextMocker()
-            .withResource("/test2.xml", "<r>\u0444</r>")
+            .withResource(ref, "<r>\u0444</r>")
             .mock();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve(href, "");
-        MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(href));
+        MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(ref));
         MatcherAssert.assertThat(src, XhtmlMatchers.hasXPath("/r[.='\u0444']"));
     }
 

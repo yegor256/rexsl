@@ -32,6 +32,7 @@ package com.rexsl.test;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -42,6 +43,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -129,7 +131,13 @@ public final class ClientResponseMocker {
      * @return This object
      */
     public ClientResponseMocker withEntity(final String entity) {
-        return this.withEntity(IOUtils.toInputStream(entity));
+        try {
+            return this.withEntity(
+                IOUtils.toInputStream(entity, CharEncoding.UTF_8)
+            );
+        } catch (IOException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**

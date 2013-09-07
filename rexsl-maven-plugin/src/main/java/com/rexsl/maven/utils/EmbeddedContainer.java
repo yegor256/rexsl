@@ -143,11 +143,11 @@ public final class EmbeddedContainer {
      * @return The params
      */
     private static ConcurrentMap<String, String> params(final Environment env) {
-        final List<String> folders = new ArrayList<String>();
+        final List<String> folders = new ArrayList<String>(0);
         folders.add(new File(env.basedir(), "src/main/webapp").getPath());
         folders.add(new File(env.basedir(), "src/test/rexsl").getPath());
         final ConcurrentMap<String, String> params =
-            new ConcurrentHashMap<String, String>();
+            new ConcurrentHashMap<String, String>(0);
         params.put(
             RuntimeEnvironment.BASEDIR_PARAM,
             env.basedir().getAbsolutePath()
@@ -207,7 +207,7 @@ public final class EmbeddedContainer {
      * @see #start(Environment)
      */
     private static String testClasspath(final Environment env) {
-        final List<String> urls = new ArrayList<String>();
+        final List<String> urls = new ArrayList<String>(0);
         for (File path : env.classpath(true)) {
             if (path.isDirectory()) {
                 urls.add(Logger.format("%s/", path.getAbsolutePath()));

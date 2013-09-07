@@ -114,9 +114,8 @@ class BaseValidator {
             entity.addPart(
                 name,
                 new InputStreamBody(
-                    IOUtils.toInputStream(content),
-                    type,
-                    "file"
+                    IOUtils.toInputStream(content, CharEncoding.UTF_8),
+                    type, "file"
                 )
             );
             entity.addPart("output", new StringBody("soap12"));
