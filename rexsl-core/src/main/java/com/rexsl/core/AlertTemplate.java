@@ -57,7 +57,7 @@ final class AlertTemplate implements Template {
      * Public ctor.
      * @param msg The message to show
      */
-    public AlertTemplate(@NotNull final String msg) {
+    protected AlertTemplate(@NotNull final String msg) {
         this.message = msg;
     }
 

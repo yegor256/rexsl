@@ -65,7 +65,7 @@ final class StaticTemplate implements Template {
      * Public ctor.
      * @param uri URI of template to use
      */
-    public StaticTemplate(@NotNull final URI uri) {
+    protected StaticTemplate(@NotNull final URI uri) {
         this.text = StaticTemplate.load(uri);
     }
 

@@ -69,7 +69,7 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
      * @param response Servlet response being wrapped.
      * @see XsltFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
      */
-    public ByteArrayResponseWrapper(
+    protected ByteArrayResponseWrapper(
         @NotNull final HttpServletResponse response) {
         super(response);
         try {

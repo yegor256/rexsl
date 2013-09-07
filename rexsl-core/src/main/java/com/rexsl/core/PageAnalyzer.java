@@ -64,7 +64,7 @@ final class PageAnalyzer {
      * @param text The text of response
      * @param rqst The request
      */
-    public PageAnalyzer(final String text, final HttpServletRequest rqst) {
+    protected PageAnalyzer(final String text, final HttpServletRequest rqst) {
         this.page = text;
         this.request = rqst;
     }

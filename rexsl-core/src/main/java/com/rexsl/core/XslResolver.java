@@ -88,7 +88,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     /**
      * Classes to process.
      */
-    private final transient Set<Class<?>> classes = new HashSet<Class<?>>();
+    private final transient Set<Class<?>> classes = new HashSet<Class<?>>(0);
 
     /**
      * JAXB context.

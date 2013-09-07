@@ -62,7 +62,7 @@ final class ProductVersion implements Comparable<ProductVersion> {
      * Public ctor.
      * @param text The text of it
      */
-    public ProductVersion(final String text) {
+    protected ProductVersion(final String text) {
         this.origin = text;
     }
 

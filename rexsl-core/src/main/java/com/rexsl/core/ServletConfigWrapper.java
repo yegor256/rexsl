@@ -68,7 +68,7 @@ final class ServletConfigWrapper implements FilterConfig {
      * @param cfg Servlet config
      * @param props Properties to add to existing params
      */
-    public ServletConfigWrapper(@NotNull final ServletConfig cfg,
+    protected ServletConfigWrapper(@NotNull final ServletConfig cfg,
         @NotNull final Properties props) {
         this.config = cfg;
         this.properties = props;

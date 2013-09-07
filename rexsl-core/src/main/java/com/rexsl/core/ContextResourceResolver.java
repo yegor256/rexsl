@@ -74,7 +74,7 @@ final class ContextResourceResolver implements URIResolver {
      * Constructor.
      * @param ctx Servlet Context.
      */
-    public ContextResourceResolver(@NotNull final ServletContext ctx) {
+    protected ContextResourceResolver(@NotNull final ServletContext ctx) {
         this.context = ctx;
     }
 

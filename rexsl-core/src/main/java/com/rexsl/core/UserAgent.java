@@ -62,7 +62,7 @@ final class UserAgent {
      */
     @SuppressWarnings("PMD.UseConcurrentHashMap")
     private final transient Map<String, ProductVersion> tokens =
-        new HashMap<String, ProductVersion>();
+        new HashMap<String, ProductVersion>(0);
 
     /**
      * Public ctor.
@@ -79,7 +79,7 @@ final class UserAgent {
      *  a header is absent in the HTTP request
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public UserAgent(final String text) {
+    protected UserAgent(final String text) {
         if (text != null) {
             final Matcher matcher = UserAgent.TOKEN.matcher(text);
             while (matcher.find()) {

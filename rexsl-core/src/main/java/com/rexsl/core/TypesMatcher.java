@@ -67,7 +67,7 @@ final class TypesMatcher {
      * Public ctor.
      * @param header The text of HTTP "Accept" header
      */
-    public TypesMatcher(final String header) {
+    protected TypesMatcher(final String header) {
         final Set<String> set = new TreeSet<String>();
         if (header != null) {
             for (String range : header.trim().split(",")) {
