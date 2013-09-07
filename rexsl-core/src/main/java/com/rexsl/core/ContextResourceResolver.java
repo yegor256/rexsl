@@ -140,7 +140,7 @@ final class ContextResourceResolver implements URIResolver {
     @Loggable(Loggable.DEBUG)
     private InputStream local(final String path)
         throws TransformerException {
-        if (path.charAt(0) != '/') {
+        if (path.charAt(0) != '/' && path.charAt(0) != '.') {
             throw new TransformerException(
                 String.format("'%s' is not a local path", path)
             );

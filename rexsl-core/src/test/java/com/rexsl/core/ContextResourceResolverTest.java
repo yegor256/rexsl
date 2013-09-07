@@ -81,6 +81,20 @@ public final class ContextResourceResolverTest {
     }
 
     /**
+     * ContextResourceResolver can resolve resource by relative local path.
+     * @throws Exception If something goes wrong
+     */
+    @Test
+    public void resolvesResourceByRelativeLocalPath() throws Exception {
+        final ServletContext ctx = new ServletContextMocker()
+            .withResource("/a/test.txt", "")
+            .mock();
+        final URIResolver resolver = new ContextResourceResolver(ctx);
+        final Source src = resolver.resolve("./text.txt", "/a/smth.xml");
+        MatcherAssert.assertThat(src, Matchers.notNullValue());
+    }
+
+    /**
      * ContextResourceResolver can resolve resource by HREF and blank base.
      * @throws Exception If something goes wrong
      */
