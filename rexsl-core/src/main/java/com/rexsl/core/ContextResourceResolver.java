@@ -141,7 +141,6 @@ final class ContextResourceResolver implements URIResolver {
      * @return The stream opened or NULL if nothing found
      * @throws TransformerException If not found
      */
-    @Loggable(Loggable.DEBUG)
     private Source local(final String path, final String base)
         throws TransformerException {
         if (path.charAt(0) != '/' && path.charAt(0) != '.') {
@@ -172,7 +171,6 @@ final class ContextResourceResolver implements URIResolver {
      * @return The stream found
      * @throws TransformerException If not found
      */
-    @Loggable(Loggable.DEBUG)
     private InputStream absolute(final String href, final String base)
         throws TransformerException {
         URI uri;
@@ -232,7 +230,6 @@ final class ContextResourceResolver implements URIResolver {
      * @return The stream opened
      * @throws IOException If some problem happens
      */
-    @Loggable(Loggable.DEBUG)
     private InputStream http(final HttpURLConnection conn) throws IOException {
         InputStream stream;
         try {
