@@ -262,7 +262,9 @@ final class ContextResourceResolver implements URIResolver {
     private String compose(final String path, final String base) {
         final StringBuilder full = new StringBuilder();
         if (!StringUtils.isEmpty(base) && path.charAt(0) != '/') {
-            full.append(FilenameUtils.getFullPath(base)).append('/');
+            full.append(
+                FilenameUtils.getFullPath(URI.create(base).getPath())
+            ).append('/');
         }
         full.append(URI.create(path).getPath());
         return URI.create(
