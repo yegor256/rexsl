@@ -85,17 +85,14 @@ How to release new version to Maven Central:
     https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-8.ReleaseIt
     http://www.sonatype.com/books/nexus-book/reference/staging-sect-managing-plugin.html
 
-    1. Create a new ticket in Trac, explaining why you want to release
-       a new version (for example see ticket #607)
+    1. Create new branch
 
-    2. Create new branch
+        git checkout -b r
 
-        git checkout -b 690
-
-    3. Set new version:
+    2. Set new version:
 
         mvn versions:set
-        git commit -am '#690: version set to 0.4.11'
+        git commit -am 'version set to 0.4.11'
 
     4. Update all versions:
 
