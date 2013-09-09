@@ -94,17 +94,17 @@ How to release new version to Maven Central:
         mvn versions:set
         git commit -am 'version set to 0.4.11'
 
-    4. Update all versions:
+    3. Update all versions:
 
         mvn versions:use-latest-versions
 
-    5. Update all changes/changes.xml files
+    4. Update all changes/changes.xml files
 
-    6. Commit your changes
+    5. Commit your changes
 
-        git commit -am '#690: versions up'
+        git commit -am 'versions updates'
 
-    7. Deploy to sonatype:
+    6. Deploy to sonatype:
 
         rm -rf ~/.m2/repository/com/rexsl
         mvn -Prexsl -Psonatype clean deploy
