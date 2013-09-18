@@ -129,7 +129,6 @@
         <jersey.version>1.17.1</jersey.version>
         <jetty.version>8.0.2.v20111006</jetty.version>
         <saxon.version>9.1.0.8</saxon.version>
-        <xerces.version>2.9.1</xerces.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -262,20 +261,6 @@
                 <artifactId>saxon</artifactId>
                 <version>${saxon.version}</version>
                 <classifier>dom</classifier>
-            </dependency>
-            <dependency>
-                <!--
-                Apache Xerces is a JAXP implementation of DOM/XPath and
-                XML Schema validator. In order to replace a default implementation
-                provided by JDK with Xerces we are using text files inside
-                "src/main/resources/META-INF/services" directory. Every file
-                identifies the class to be used as an implementation for
-                a given factory. This approach gives us enough flexibility
-                to replace implementation at any moment, if necessary.
-                -->
-                <groupId>xerces</groupId>
-                <artifactId>xercesImpl</artifactId>
-                <version>${xerces.version}</version>
             </dependency>
             <dependency>
                 <!-- Embedded Java Servlet Container, for tests only. -->
