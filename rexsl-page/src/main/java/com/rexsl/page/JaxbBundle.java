@@ -195,44 +195,6 @@ public final class JaxbBundle {
         new ConcurrentHashMap<String, String>(0);
 
     /**
-     * Group.
-     * @param <T> Type of encapsulated elements
-     * @since 0.4.10
-     * @checkstyle AbstractClassName (2 lines)
-     */
-    @SuppressWarnings("PMD.AbstractNaming")
-    public abstract static class Group<T> {
-        /**
-         * Collection of objects.
-         */
-        private final transient Iterable<T> objects;
-        /**
-         * Public ctor.
-         * @param objs All objects
-         */
-        public Group(final Iterable<T> objs) {
-            this.objects = objs;
-        }
-        /**
-         * Convert an object to JaxbBundle.
-         * @param object The object to convert
-         * @return Bundle produced
-         */
-        public abstract JaxbBundle bundle(T object);
-        /**
-         * Fetch all bundles.
-         * @return All bundles
-         */
-        private Collection<JaxbBundle> bundles() {
-            final Collection<JaxbBundle> bundles = new LinkedList<JaxbBundle>();
-            for (T object : this.objects) {
-                bundles.add(this.bundle(object));
-            }
-            return bundles;
-        }
-    }
-
-    /**
      * Default ctor, for JAXB (always throws a runtime exception).
      *
      * <p>You're not supposed to use this constructor. Instead, use either
@@ -435,6 +397,44 @@ public final class JaxbBundle {
         }
         element.appendChild(doc.createTextNode(this.content));
         return element;
+    }
+
+    /**
+     * Group.
+     * @param <T> Type of encapsulated elements
+     * @since 0.4.10
+     * @checkstyle AbstractClassName (2 lines)
+     */
+    @SuppressWarnings("PMD.AbstractNaming")
+    public abstract static class Group<T> {
+        /**
+         * Collection of objects.
+         */
+        private final transient Iterable<T> objects;
+        /**
+         * Public ctor.
+         * @param objs All objects
+         */
+        public Group(final Iterable<T> objs) {
+            this.objects = objs;
+        }
+        /**
+         * Convert an object to JaxbBundle.
+         * @param object The object to convert
+         * @return Bundle produced
+         */
+        public abstract JaxbBundle bundle(T object);
+        /**
+         * Fetch all bundles.
+         * @return All bundles
+         */
+        private Collection<JaxbBundle> bundles() {
+            final Collection<JaxbBundle> bundles = new LinkedList<JaxbBundle>();
+            for (T object : this.objects) {
+                bundles.add(this.bundle(object));
+            }
+            return bundles;
+        }
     }
 
 }

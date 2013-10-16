@@ -108,35 +108,6 @@ final class ListWrapper<T> implements List<T> {
     }
 
     /**
-     * Node not found in XmlDocument.
-     */
-    private static final class NodeNotFoundException
-        extends IndexOutOfBoundsException {
-        /**
-         * Serialization marker.
-         */
-        private static final long serialVersionUID = 0x7526FA78EEDAC470L;
-        /**
-         * Public ctor.
-         * @param message Error message
-         * @param node The XML with error
-         * @param xpath The address
-         */
-        protected NodeNotFoundException(@NotNull final String message,
-            @NotNull final Node node, @NotNull final String xpath) {
-            super(
-                Logger.format(
-                    "XPath '%s' not found in '%s': %s",
-                    StringEscapeUtils.escapeJava(xpath),
-                    // @checkstyle LineLength (1 line)
-                    StringEscapeUtils.escapeJava(new DomPrinter(node).toString()),
-                    message
-            )
-            );
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -368,6 +339,35 @@ final class ListWrapper<T> implements List<T> {
     @Override
     public <E> E[] toArray(@NotNull final E[] array) {
         return this.original.toArray(array);
+    }
+
+    /**
+     * Node not found in XmlDocument.
+     */
+    private static final class NodeNotFoundException
+        extends IndexOutOfBoundsException {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = 0x7526FA78EEDAC470L;
+        /**
+         * Public ctor.
+         * @param message Error message
+         * @param node The XML with error
+         * @param xpath The address
+         */
+        protected NodeNotFoundException(@NotNull final String message,
+            @NotNull final Node node, @NotNull final String xpath) {
+            super(
+                Logger.format(
+                    "XPath '%s' not found in '%s': %s",
+                    StringEscapeUtils.escapeJava(xpath),
+                    // @checkstyle LineLength (1 line)
+                    StringEscapeUtils.escapeJava(new DomPrinter(node).toString()),
+                    message
+            )
+            );
+        }
     }
 
 }

@@ -241,23 +241,6 @@ public final class DefaultChecksProvider implements ChecksProvider {
     }
 
     /**
-     * Thrown when class can't be built.
-     */
-    private static final class InvalidCheckException extends Exception {
-        /**
-         * Serialization marker.
-         */
-        private static final long serialVersionUID = 0x7526FA7CDAA2147AL;
-        /**
-         * Public ctor.
-         * @param cause Cause of the problem
-         */
-        public InvalidCheckException(final Throwable cause) {
-            super(cause);
-        }
-    }
-
-    /**
      * Build check from its name.
      * @param name Full name of the class or a short one
      * @return The check
@@ -287,6 +270,23 @@ public final class DefaultChecksProvider implements ChecksProvider {
         }
         check.setScope(this.test);
         return check;
+    }
+
+    /**
+     * Thrown when class can't be built.
+     */
+    private static final class InvalidCheckException extends Exception {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = 0x7526FA7CDAA2147AL;
+        /**
+         * Public ctor.
+         * @param cause Cause of the problem
+         */
+        public InvalidCheckException(final Throwable cause) {
+            super(cause);
+        }
     }
 
 }

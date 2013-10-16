@@ -123,5 +123,3 @@ RESTful Java Web Framework on top of JAX-RS, XSL, and JAXB
   curious what is it all about. Besides that, don't hesitate to submit a
   ticket to {{{http://trac.rexsl.com/rexsl}our Trac}} when something
   doesn't work or you need more features.
-
-  Currently deployed revision: <<<${buildNumber}>>>

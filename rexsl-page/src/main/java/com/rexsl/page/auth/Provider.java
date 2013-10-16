@@ -49,17 +49,6 @@ import javax.validation.constraints.NotNull;
 public interface Provider {
 
     /**
-     * Visible provider, for end-user.
-     */
-    interface Visible {
-        /**
-         * Get authentication link.
-         * @return The link
-         */
-        Link link();
-    }
-
-    /**
      * Get user's identity or {@link Identity.ANONYMOUS} if can't authenticate.
      * @return Identity authenticated (or {@link Identity.ANONYMOUS})
      * @throws IOException If failed for some exceptional reason
@@ -74,6 +63,17 @@ public interface Provider {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     @interface Redirect {
+    }
+
+    /**
+     * Visible provider, for end-user.
+     */
+    interface Visible {
+        /**
+         * Get authentication link.
+         * @return The link
+         */
+        Link link();
     }
 
     /**

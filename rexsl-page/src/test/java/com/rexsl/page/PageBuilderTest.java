@@ -73,12 +73,6 @@ public final class PageBuilderTest {
     }
 
     /**
-     * Sample dummy page.
-     */
-    public static class BarePage extends BasePageMocker {
-    }
-
-    /**
      * PageBuilder can add correct annotations.
      * @throws Exception If there is some problem inside
      */
@@ -105,6 +99,12 @@ public final class PageBuilderTest {
      */
     @XmlRootElement(name = "bar")
     public static class BarPage {
+    }
+
+    /**
+     * Sample dummy page.
+     */
+    public static class BarePage extends BasePageMocker {
     }
 
 }

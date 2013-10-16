@@ -223,6 +223,29 @@ final class Encrypted implements Identity {
     }
 
     /**
+     * XOR array of bytes.
+     * @param input The input to XOR
+     * @param secret Secret key
+     * @return Encrypted output
+     */
+    private static byte[] xor(final byte[] input, final byte[] secret) {
+        final byte[] output = new byte[input.length];
+        if (secret.length == 0) {
+            System.arraycopy(input, 0, output, 0, input.length);
+        } else {
+            int spos = 0;
+            for (int pos = 0; pos < input.length; ++pos) {
+                output[pos] = (byte) (input[pos] ^ secret[spos]);
+                ++spos;
+                if (spos >= secret.length) {
+                    spos = 0;
+                }
+            }
+        }
+        return output;
+    }
+
+    /**
      * Thrown by {@link Encrypted#valueOf(String)} if we can't decrypt.
      */
     public static final class DecryptionException extends Exception {
@@ -245,26 +268,5 @@ final class Encrypted implements Identity {
             super(cause);
         }
     }
-    /**
-     * XOR array of bytes.
-     * @param input The input to XOR
-     * @param secret Secret key
-     * @return Encrypted output
-     */
-    private static byte[] xor(final byte[] input, final byte[] secret) {
-        final byte[] output = new byte[input.length];
-        if (secret.length == 0) {
-            System.arraycopy(input, 0, output, 0, input.length);
-        } else {
-            int spos = 0;
-            for (int pos = 0; pos < input.length; ++pos) {
-                output[pos] = (byte) (input[pos] ^ secret[spos]);
-                ++spos;
-                if (spos >= secret.length) {
-                    spos = 0;
-                }
-            }
-        }
-        return output;
-    }
+
 }

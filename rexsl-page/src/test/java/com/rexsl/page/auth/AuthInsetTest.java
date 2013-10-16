@@ -107,15 +107,8 @@ public final class AuthInsetTest {
     @Test(expected = javax.ws.rs.WebApplicationException.class)
     public void authenticatesWithRedirectingProvider() throws Exception {
         final Resource resource = new ResourceMocker().mock();
-        @Provider.Redirect
-        final class Redirector implements Provider {
-            @Override
-            public Identity identity() throws IOException {
-                return new IdentityMocker().mock();
-            }
-        }
         final Inset inset = new AuthInset(resource, "")
-            .with(new Redirector());
+            .with(new AuthInsetTest.Redirector());
         final BasePage<?, ?> page = new BasePageMocker().init(resource);
         inset.render(page, Response.ok());
     }
@@ -171,6 +164,17 @@ public final class AuthInsetTest {
                 String.format("Rexsl-Auth=%s;path=/", cookie)
             ).mock()
         ).mock();
+    }
+
+    /**
+     * Test provider that redirects.
+     */
+    @Provider.Redirect
+    final class Redirector implements Provider {
+        @Override
+        public Identity identity() throws IOException {
+            return new IdentityMocker().mock();
+        }
     }
 
 }

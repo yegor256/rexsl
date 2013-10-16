@@ -69,19 +69,6 @@ public final class HttpBasic implements Provider {
     };
 
     /**
-     * Vault the authenticates.
-     */
-    public interface Vault {
-        /**
-         * Authenticate or not.
-         * @param user User name
-         * @param password Password
-         * @return Authenticated identity or {@link Identity.ANONYMOUS}
-         */
-        Identity authenticate(String user, String password);
-    }
-
-    /**
      * Resource.
      */
     private final transient Resource resource;
@@ -153,6 +140,19 @@ public final class HttpBasic implements Provider {
             URLDecoder.decode(tokens[0], CharEncoding.UTF_8),
             URLDecoder.decode(tokens[1], CharEncoding.UTF_8)
         );
+    }
+
+    /**
+     * Vault the authenticates.
+     */
+    public interface Vault {
+        /**
+         * Authenticate or not.
+         * @param user User name
+         * @param password Password
+         * @return Authenticated identity or {@link Identity.ANONYMOUS}
+         */
+        Identity authenticate(String user, String password);
     }
 
 }
