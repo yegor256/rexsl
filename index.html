@@ -7,7 +7,7 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl-page - RESTful XML Page Modeler</title>
+        <title>rexsl-standalone - Runnable JAR</title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
                     <meta name="author" content="Yegor Bugayenko" />
                                                                                                                         
@@ -56,42 +56,7 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="testapidocs-0.5.1/index.html" title="Mock API">Mock API</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
                                                                     <a href="changes-report.html" title="Release History">Release History</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                            <li>
-                    Insets
-                                            <ul>
-                                                                            <li>
-                                                                    <a href="inset-flash.html" title="Flash messages">Flash messages</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="inset-version.html" title="Package versioning">Package versioning</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="inset-links.html" title="Default links">Default links</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="inset-oauth.html" title="OAuth authentication">OAuth authentication</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="inset-http-basic.html" title="HTTP Basic authentication">HTTP Basic authentication</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -105,12 +70,12 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
         <div id="content">
-                            <a href="https://github.com/yegor256/rexsl/rexsl-page">
+                            <a href="https://github.com/yegor256/rexsl/rexsl-standalone">
                     <img style="position: absolute; top: 0; right: 0; border: 0; width: 100px; height: 100px;"
                         src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
                         alt="Fork me on GitHub" />
@@ -125,7 +90,7 @@
                             <ul id="breadcrumbs">
                                             <li>                        <a href=".." title="rexsl.com">rexsl.com</a>
         </li>
-                                            <li>                                    <a href="./" title="rexsl-page">rexsl-page</a>
+                                            <li>                                    <a href="./" title="rexsl-standalone">rexsl-standalone</a>
         </li>
                                     </ul>
                         <p>
@@ -134,37 +99,31 @@
                 0.5.1
             </p>
             <article>
-                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><div class="section"><h2>RESTful XML Page Modeler<a name="RESTful_XML_Page_Modeler"></a></h2><p>With this module you can build REST XML responses much faster (provided you defined <tt>MyPage</tt> class already):</p><div class="source"><pre>@Path(&quot;/&quot;)
-public class MainRs {
-  @GET
-  @Produces(MediaTypes.APPLICATION_XML)
-  public MyPage front() {
-    return new PageBuilder()
-      .stylesheet(&quot;/xsl/front.xsl&quot;)
-      .build(MyPage.class)
-      .add(new JaxbBundle(&quot;score&quot;, 123));
-  }
-}</pre></div><p>The response will look like:</p><div class="source"><pre>&lt;?xml version=&quot;1.0&quot; ?&gt;
-&lt;?xml-stylesheet type='text/xsl' href='/xsl/front.xsl'?&gt;
-&lt;page&gt;
-  &lt;score&gt;123&lt;/score&gt;
-&lt;/page&gt;</pre></div><p>Isn't it neat? :) Start reading from <a href="./apidocs-0.5.1/com/rexsl/page/PageBuilder.html"><tt>PageBuilder</tt></a>.</p><p>Since version 0.4.8 you can use &quot;insets&quot;, which implement basic functionalities required by most web applications, including <a href="./inset-flash.html">flash messages</a>, <a href="./inset-links.html">default HATEOAS links</a>, <a href="./inset-version.html">version data</a>, and <a href="./inset-oauth.html">OAuth authentication</a>.</p><p>Include this dependency into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-page/0.5.1/rexsl-page-0.5.1.jar">rexsl-page-0.5.1.jar</a> and add to classpath):</p><div class="source"><pre>&lt;dependency&gt;
+                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><div class="section"><h2>Making Runnable JAR<a name="Making_Runnable_JAR"></a></h2><p>To make a runnable JAR with ReXSL inside add this dependency to your project:</p><div class="source"><pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
-  &lt;artifactId&gt;rexsl-page&lt;/artifactId&gt;
+  &lt;artifactId&gt;rexsl-standalone&lt;/artifactId&gt;
   &lt;version&gt;0.5.1&lt;/version&gt;
-&lt;/dependency&gt;</pre></div><p>This module also contains a few mockers. To use it you should include this dependencies into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-page/0.5.1/rexsl-page-0.5.1-mock.jar">rexsl-page-0.5.1-mock.jar</a> and add to classpath):</p><div class="source"><pre>&lt;dependency&gt;
-  &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
-  &lt;artifactId&gt;rexsl-page&lt;/artifactId&gt;
-  &lt;version&gt;0.5.1&lt;/version&gt;
-  &lt;classifier&gt;mock&lt;/classifier&gt;
+  &lt;classifier&gt;bin&lt;/classifier&gt;
   &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-  &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-  &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;
-  &lt;version&gt;2.4&lt;/version&gt;
-  &lt;scope&gt;provided&lt;/scope&gt;
-&lt;/dependency&gt;</pre></div></div>
+&lt;/dependency&gt;</pre></div><p>Then, configure <tt>maven-war-plugin</tt>:</p><div class="source"><pre>&lt;plugin&gt;
+  &lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    &lt;archive&gt;
+      &lt;manifest&gt;
+        &lt;mainClass&gt;com.rexsl.standalone.RexslMain&lt;/mainClass&gt;
+      &lt;/manifest&gt;
+    &lt;/archive&gt;
+    &lt;overlays&gt;
+      &lt;overlay&gt;
+        &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+        &lt;artifactId&gt;rexsl-standalone&lt;/artifactId&gt;
+        &lt;classifier&gt;bin&lt;/classifier&gt;
+        &lt;type&gt;jar&lt;/type&gt;
+      &lt;/overlay&gt;
+    &lt;/overlays&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;</pre></div><p>Now, package the entire project and run the WAR created:</p><div class="source"><pre>$ mvn clean package
+$ java -jar target/example-1.0-SNAPSHOT.war 8080</pre></div><p>Should start a container at <tt>http://localhost:8080/</tt>.</p></div>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;
