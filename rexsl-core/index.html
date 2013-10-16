@@ -51,12 +51,12 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="apidocs-0.5.1/index.html" title="API 0.5.1 (JavaDoc)">API 0.5.1 (JavaDoc)</a>
+                                                                    <a href="apidocs-1.0-SNAPSHOT/index.html" title="API 1.0-SNAPSHOT (JavaDoc)">API 1.0-SNAPSHOT (JavaDoc)</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="testapidocs-0.5.1/index.html" title="Mock API">Mock API</a>
+                                                                    <a href="testapidocs-1.0-SNAPSHOT/index.html" title="Mock API">Mock API</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -110,11 +110,15 @@
                                     </ul>
                         <p>
                 
-                19-Sep-2013
-                0.5.1
+                16-Oct-2013
+                1.0-SNAPSHOT
             </p>
             <article>
-                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><div class="section"><h2>ReXSL core module<a name="ReXSL_core_module"></a></h2><p>There are two classes that you should use in your project (both of them are always mandatory): <a href="./apidocs-0.5.1/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> and <a href="./apidocs-0.5.1/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a>. Use them in <tt>WEB-INF/web.xml</tt>:</p><div class="source"><pre>&lt;filter&gt;
+                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><div class="section">
+<h2>ReXSL core module<a name="ReXSL_core_module"></a></h2>
+<p>There are two classes that you should use in your project (both of them are always mandatory): <a href="./apidocs-1.0-SNAPSHOT/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> and <a href="./apidocs-1.0-SNAPSHOT/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a>. Use them in <tt>WEB-INF/web.xml</tt>:</p>
+<div class="source">
+<pre>&lt;filter&gt;
   &lt;filter-name&gt;XsltFilter&lt;/filter-name&gt;
   &lt;filter-class&gt;com.rexsl.core.XsltFilter&lt;/filter-class&gt;
 &lt;/filter&gt;
@@ -135,11 +139,22 @@
 &lt;servlet-mapping&gt;
   &lt;servlet-name&gt;RestfulServlet&lt;/servlet-name&gt;
   &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;</pre></div><p><a href="./apidocs-0.5.1/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> is responsible for handling of JAX-RS requests and converting your JAXB annotated classes into XML documents.</p><p><a href="./apidocs-0.5.1/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a> is converting XML output documents into XHTML when necessary.</p><p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-core/0.5.1/rexsl-core-0.5.1.jar">rexsl-core-0.5.1.jar</a> and add it to classpath):</p><div class="source"><pre>&lt;dependency&gt;
+&lt;/servlet-mapping&gt;</pre></div>
+<p><a href="./apidocs-1.0-SNAPSHOT/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> is responsible for handling of JAX-RS requests and converting your JAXB annotated classes into XML documents.</p>
+<p><a href="./apidocs-1.0-SNAPSHOT/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a> is converting XML output documents into XHTML when necessary.</p>
+<p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-core/1.0-SNAPSHOT/rexsl-core-1.0-SNAPSHOT.jar">rexsl-core-1.0-SNAPSHOT.jar</a> and add it to classpath):</p>
+<div class="source">
+<pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-core&lt;/artifactId&gt;
-  &lt;version&gt;0.5.1&lt;/version&gt;
-&lt;/dependency&gt;</pre></div><p>Also take a look at <a href="../rexsl-page">rexsl-page</a>, which helps to build RESTful XML pages.</p><div class="section"><h3>Supplementary Classes<a name="Supplementary_Classes"></a></h3><p><a href="./apidocs-0.5.1/com/rexsl/core/annotations/Stylesheet.html"><tt>Stylesheet</tt></a> annotation enables re-configuration of XSL stylesheet name for a JAXB-annotated object.</p><p><a href="./apidocs-0.5.1/com/rexsl/core/annotations/Schema.html"><tt>Schema</tt></a> annotation lets you set the name of XML Schema of a JAXB-annotated object.</p><p><a href="./apidocs-0.5.1/com/rexsl/core/ExceptionTrap.html"><tt>ExceptionTrap</tt></a> servlet helps you to catch all uncaught exceptions and manage them gracefully, showing some information to your end-users.</p></div></div>
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</pre></div>
+<p>Also take a look at <a href="../rexsl-page">rexsl-page</a>, which helps to build RESTful XML pages.</p>
+<div class="section">
+<h3>Supplementary Classes<a name="Supplementary_Classes"></a></h3>
+<p><a href="./apidocs-1.0-SNAPSHOT/com/rexsl/core/annotations/Stylesheet.html"><tt>Stylesheet</tt></a> annotation enables re-configuration of XSL stylesheet name for a JAXB-annotated object.</p>
+<p><a href="./apidocs-1.0-SNAPSHOT/com/rexsl/core/annotations/Schema.html"><tt>Schema</tt></a> annotation lets you set the name of XML Schema of a JAXB-annotated object.</p>
+<p><a href="./apidocs-1.0-SNAPSHOT/com/rexsl/core/ExceptionTrap.html"><tt>ExceptionTrap</tt></a> servlet helps you to catch all uncaught exceptions and manage them gracefully, showing some information to your end-users.</p></div></div>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;
