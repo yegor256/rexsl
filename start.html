@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<!--
+ * Copyright (c) 2012-2013, JCabi.com
+ * All rights reserved.
+ -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>rexsl - ReXSL, Quick Start Guide</title>
+        <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
+                    <meta name="author" content="Yegor Bugayenko" />
+                            <script>
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', 'UA-1963507-22']);
+                _gaq.push(['_trackPageview']);
+                (function() {
+                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
+                                                                                                                
+<link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
+                                                                                                                
+<link rel="author" href="https://plus.google.com/u/0/114792568016408327418?rel=author"/>
+                                            <link rel="stylesheet" href="./css/highlight.css" />
+        <script src="./js/jquery-1.8.3.min.js"></script>
+        <script src="./js/highlight-7.3.min.js"></script>
+        <script>
+            $(document).ready(
+                function() {
+                    $('div.source pre').each(
+                        function (idx, element) {
+                            hljs.highlightBlock(element);
+                        }
+                    );
+                }
+            );
+        </script>
+    </head>
+    <body>
+                <ul id="menu">
+                                                    <li>
+                    Overview
+                                            <ul>
+                                                                            <li>
+                                                                    <a href="index.html" title="Introduction">Introduction</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                            <strong>                        <a href="start.html" title="Quick Start">Quick Start</a>
+        </strong>
+                                                                                                                <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                                                    <a href="testing.html" title="Testing">Testing</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                </ul>
+                                    </li>
+                            <li>
+                    Examples
+                                            <ul>
+                                                                            <li>
+                                                                    <a href="example-archetype.html" title="Start from archetype">Start from archetype</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                </ul>
+                                    </li>
+                            <li>
+                    Modules
+                                            <ul>
+                                                                            <li>
+                                                                    <a href="rexsl-w3c/index.html" title="rexsl-w3c">rexsl-w3c</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                                                    <a href="rexsl-test/index.html" title="rexsl-test">rexsl-test</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                                                    <a href="rexsl-core/index.html" title="rexsl-core">rexsl-core</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                                                    <a href="rexsl-page/index.html" title="rexsl-page">rexsl-page</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                                                    <a href="rexsl-maven-plugin/index.html" title="rexsl-maven-plugin">rexsl-maven-plugin</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                                                    <a href="rexsl-standalone/index.html" title="rexsl-standalone">rexsl-standalone</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                                                    <a href="rexsl-maven-archetype/index.html" title="rexsl-maven-archetype">rexsl-maven-archetype</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                </ul>
+                                    </li>
+                            <li>
+                    Project Documentation
+                                            <ul>
+                                                                            <li>
+                                                                    <a href="project-info.html" title="Project Information">Project Information</a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                        <li>
+                                                                    <a href="project-reports.html" title="Project Reports">Project Reports</a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                </ul>
+                                    </li>
+                    </ul>
+        <div id="content">
+                            <a href="https://github.com/yegor256/rexsl">
+                    <img style="position: absolute; top: 0; right: 0; border: 0; width: 100px; height: 100px;"
+                        src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
+                        alt="Fork me on GitHub" />
+                </a>
+                        <a href="./" title="home page of ReXSL.com">
+                <img src="http://img.rexsl.com/logo.png"
+                    alt="ReXSL"
+                                            width="200"
+                                                                height="45"
+                                    />
+            </a>
+                        <p>
+                
+                19-Sep-2013
+                0.5.1
+            </p>
+            <article>
+                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><div class="section"><h2>ReXSL, Quick Start Guide<a name="ReXSL_Quick_Start_Guide"></a></h2><p>To get better understanding of key components let's spend 5 minutes and create a project manually, step by step (you can also use <a href="./example-archetype.html"><tt>rexsl-maven-archetype</tt></a>, which will create a different and more advanced project structure in one go). Start with a new Maven project with the following directory structure:</p><div class="source"><pre>/foo
+  pom.xml
+  /src
+    /main
+      /java
+        /foo
+          Home.java
+          FrontEnd.java
+      /webapp
+        /WEB-INF
+          web.xml
+        /xsl
+          layout.xsl
+          Home.xsl
+    /test
+      /java
+        /foo
+          HomeTest.java
+      /rexsl
+        /xhtml
+          index.groovy
+        /xml
+          index.xml
+        /scripts
+          RendersHomePage.groovy
+        /xsd
+          foo.Home.xsd</pre></div><p>Maven <tt>pom.xml</tt> should look like this:</p><div class="source"><pre>&lt;project&gt;
+  [...]
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;!-- JAX-RS API --&gt;
+      &lt;groupId&gt;javax.ws.rs&lt;/groupId&gt;
+      &lt;artifactId&gt;jsr311-api&lt;/artifactId&gt;
+      &lt;version&gt;1.1.1&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;!-- JAXB 2.0 API --&gt;
+      &lt;groupId&gt;javax.xml.bind&lt;/groupId&gt;
+      &lt;artifactId&gt;jaxb-api&lt;/artifactId&gt;
+      &lt;version&gt;2.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;!-- ReXSL runtime library --&gt;
+      &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+      &lt;artifactId&gt;rexsl-core&lt;/artifactId&gt;
+      &lt;version&gt;0.5.1&lt;/version&gt;
+      &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;!-- ReXSL test harness --&gt;
+      &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+      &lt;artifactId&gt;rexsl-test&lt;/artifactId&gt;
+      &lt;version&gt;0.5.1&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;!-- Matchers for JUnit from http://code.google.com/p/hamcrest/ --&gt;
+      &lt;groupId&gt;org.hamcrest&lt;/groupId&gt;
+      &lt;artifactId&gt;hamcrest-library&lt;/artifactId&gt;
+      &lt;version&gt;1.3&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;!-- Unit testing framework from http://www.junit.org/ --&gt;
+      &lt;groupId&gt;junit&lt;/groupId&gt;
+      &lt;artifactId&gt;junit-dep&lt;/artifactId&gt;
+      &lt;version&gt;4.10&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  [...]
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+        &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;0.5.1&lt;/version&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;goals&gt;
+              &lt;goal&gt;check&lt;/goal&gt;
+              &lt;goal&gt;package&lt;/goal&gt;
+            &lt;/goals&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+&lt;/project&gt;</pre></div><p><tt>web.xml</tt> should be simple and include one servlet and one filter from ReXSL (it's Servlet API 3.0):</p><div class="source"><pre>&lt;web-app version=&quot;3.0&quot;
+  xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
+  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot;&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;default&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/css/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;default&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/xsl/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  &lt;filter&gt;
+    &lt;filter-name&gt;XsltFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;com.rexsl.core.XsltFilter&lt;/filter-class&gt;
+  &lt;/filter&gt;
+  &lt;filter-mapping&gt;
+    &lt;filter-name&gt;XsltFilter&lt;/filter-name&gt;
+    &lt;servlet-name&gt;RestfulServlet&lt;/servlet-name&gt;
+  &lt;/filter-mapping&gt;
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;RestfulServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;com.rexsl.core.RestfulServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;com.rexsl.PACKAGES&lt;/param-name&gt;
+      &lt;param-value&gt;foo&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;RestfulServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  &lt;mime-mapping&gt;
+    &lt;extension&gt;xsl&lt;/extension&gt;
+    &lt;mime-type&gt;text/xsl&lt;/mime-type&gt;
+  &lt;/mime-mapping&gt;
+&lt;/web-app&gt;</pre></div><p>Now let's create JAX-RS front end (<tt>FrontEnd.java</tt>):</p><div class="source"><pre>package foo;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+@Path(&quot;/&quot;)
+public class FrontEnd {
+  @GET
+  @Produces(MediaType.APPLICATION_XML)
+  public Home home() {
+    return new Home();
+  }
+}</pre></div><p>And JAXB-annotated data class <tt>Home.java</tt>:</p><div class="source"><pre>package foo;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement(name = &quot;page&quot;)
+@XmlAccessorType(XmlAccessType.NONE)
+public class Home {
+  @XmlElement
+  public String getText() {
+    return &quot;Hello, world!&quot;;
+  }
+}</pre></div><p>Now let's unit-test our data class in <tt>src/test/java/foo/HomeTest.java</tt>:</p><div class="source"><pre>package foo;
+import com.rexsl.test.JaxbConverter;
+import com.rexsl.test.XhtmlMatchers;
+import org.junit.Test;
+public class HomeTest {
+  @Test
+  public void testXmlContents() {
+    Home home = new Home();
+    Assert.assertThat(
+      JaxbConverter.the(home),
+      XhtmlMatchers.hasXPath(&quot;/page/text[contains(.,'world')]&quot;)
+    );
+  }
+}</pre></div><p>And now let's create a test XML document (<tt>src/test/rexsl/xml/index.xml</tt>):</p><div class="source"><pre>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;?xml-stylesheet href='/xsl/Home.xsl' type='text/xsl' ?&gt;
+&lt;page&gt;
+  &lt;text&gt;let's say hello!&lt;/text&gt;
+&lt;/page&gt;</pre></div><p>This document will be XSL-transformed by <tt>rexsl-maven-plugin:check</tt> Maven goal and validated by <tt>src/test/rexsl/xhtml/index.groovy</tt>:</p><div class="source"><pre>import com.rexsl.test.XhtmlMatchers
+import org.hamcrest.Matchers
+import org.junit.Assert
+Assert.assertThat(rexsl.document, Matchers.containsString('say hello'))
+Assert.assertThat(
+    rexsl.document,
+    XhtmlMatchers.hasXPath(&quot;//xhtml:div[contains(.,'say hello')]&quot;)
+)</pre></div><p>And now the most interesting part, a test script in <tt>src/test/rexsl/scripts/RendersHomePage.groovy</tt> (<tt>rexsl.home</tt> is provided by <tt>rexsl-maven-plugin</tt> executor):</p><div class="source"><pre>package foo
+import com.rexsl.test.RestTester
+import javax.ws.rs.core.HttpHeaders
+import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.UriBuilder
+RestTester.start(rexsl.home)
+  .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
+  .header(HttpHeaders.USER_AGENT, 'Safari')
+  .get('loading home page')
+  .assertStatus(HttpURLConnection.HTTP_OK)
+  .assertXPath(&quot;//xhtml:div[contains(.,'world')]&quot;)
+RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-address'))
+  .get('loading non-existing URL')
+  .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)</pre></div><p>Now let's create <tt>src/main/webapp/xsl/layout.xsl</tt>:</p><div class="source"><pre>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;
+  xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;
+  xmlns=&quot;http://www.w3.org/1999/xhtml&quot;
+  xmlns:xhtml=&quot;http://www.w3.org/1999/xhtml&quot;
+  version=&quot;2.0&quot; exclude-result-prefixes=&quot;xs xsl xhtml&quot;&gt;
+  &lt;xsl:output method=&quot;xhtml&quot;
+    doctype-system=&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;
+    doctype-public=&quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; /&gt;
+  &lt;xsl:template match=&quot;/&quot;&gt;
+    &lt;html xml:lang=&quot;en&quot;&gt;
+      &lt;body&gt;
+        &lt;div id=&quot;content&quot;&gt;
+          &lt;xsl:call-template name=&quot;content&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</pre></div><p>And main page XSL at <tt>src/main/webapp/xsl/Home.xsl</tt>:</p><div class="source"><pre>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;
+  xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;
+  xmlns=&quot;http://www.w3.org/1999/xhtml&quot;
+  xmlns:xhtml=&quot;http://www.w3.org/1999/xhtml&quot;
+  version=&quot;2.0&quot; exclude-result-prefixes=&quot;xs xsl xhtml&quot;&gt;
+  &lt;xsl:output method=&quot;xhtml&quot;/&gt;
+  &lt;xsl:include href=&quot;/xsl/layout.xsl&quot;/&gt;
+  &lt;xsl:template name=&quot;content&quot;&gt;
+    &lt;xsl:value-of select=&quot;/page/text&quot; /&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</pre></div><p>The last step is to create <tt>src/test/rexsl/xsd/foo.Home.xsd</tt> in order to validate XML output on fly:</p><div class="source"><pre>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;xs:schema xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+  &lt;xs:element name=&quot;page&quot;&gt;
+    &lt;xs:complexType&gt;
+      &lt;xs:all&gt;
+        &lt;xs:element name=&quot;text&quot; type=&quot;xs:string&quot; minOccurs=&quot;1&quot; maxOccurs=&quot;1&quot; /&gt;
+      &lt;/xs:all&gt;
+    &lt;/xs:complexType&gt;
+  &lt;/xs:element&gt;
+&lt;/xs:schema&gt;</pre></div><p>That's it. All you have to do now is to run <tt>mvn package</tt> and deploy your WAR to production server.</p><p>To test the system on your local machine run <tt>mvn package rexsl:run -Drexsl.port=9099</tt> and open <tt>http://localhost:9099</tt> with your favorite browser.</p><p>What's especially cool is that you can can make changes to your <tt>webapp/*</tt> files and they will become available on-fly in web (without restart of the application). Just refresh the page in browser.</p></div>
+            </article>
+            <p style="margin-bottom: 3em; margin-top: 2em;">
+                Copyright &#169;
+                                                    2011-2013
+                                ReXSL.com, All Rights Reserved.
+                <a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.
+            </p>
+            <a href="http://maven.apache.org" title="site is built by Apache Maven"
+                style='position: absolute; bottom: 1em; right: 1em;'>
+                <img src='images/built-by-maven.png' style='width: 50px; height: 17px;'
+                    alt='site is built by Apache Maven'/>
+            </a>
+        </div>
+    </body>
+</html>
