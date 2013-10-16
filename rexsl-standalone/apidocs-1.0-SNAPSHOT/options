@@ -1,0 +1,34 @@
+-classpath
+'/mnt/jenkins/jobs/rexsl/workspace/rexsl/rexsl-standalone/target/classes:/home/ubuntu/.m2/repository/org/eclipse/jetty/jetty-security/8.0.2.v20111006/jetty-security-8.0.2.v20111006.jar:/home/ubuntu/.m2/repository/org/eclipse/jetty/jetty-webapp/8.0.2.v20111006/jetty-webapp-8.0.2.v20111006.jar:/home/ubuntu/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/home/ubuntu/.m2/repository/org/eclipse/jetty/jetty-continuation/8.0.2.v20111006/jetty-continuation-8.0.2.v20111006.jar:/home/ubuntu/.m2/repository/com/jcabi/jcabi-log/0.4.1/jcabi-log-0.4.1.jar:/home/ubuntu/.m2/repository/org/eclipse/jetty/jetty-util/8.0.2.v20111006/jetty-util-8.0.2.v20111006.jar:/home/ubuntu/.m2/repository/org/eclipse/jetty/jetty-xml/8.0.2.v20111006/jetty-xml-8.0.2.v20111006.jar:/home/ubuntu/.m2/repository/org/eclipse/jetty/jetty-servlet/8.0.2.v20111006/jetty-servlet-8.0.2.v20111006.jar:/home/ubuntu/.m2/repository/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar:/home/ubuntu/.m2/repository/org/mortbay/jetty/servlet-api/3.0.20100224/servlet-api-3.0.20100224.jar:/home/ubuntu/.m2/repository/org/eclipse/jetty/jetty-io/8.0.2.v20111006/jetty-io-8.0.2.v20111006.jar:/home/ubuntu/.m2/repository/org/eclipse/jetty/jetty-server/8.0.2.v20111006/jetty-server-8.0.2.v20111006.jar:/home/ubuntu/.m2/repository/org/eclipse/jetty/jetty-http/8.0.2.v20111006/jetty-http-8.0.2.v20111006.jar'
+-encoding
+'UTF-8'
+-protected
+-quiet
+-sourcepath
+'/mnt/jenkins/jobs/rexsl/workspace/rexsl/rexsl-standalone/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2011-2012 <a href="http://www.rexsl.com">ReXSL.com</a>. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/mnt/jenkins/jobs/rexsl/workspace/rexsl/rexsl-standalone/target/site/apidocs-1.0-SNAPSHOT'
+-docencoding
+'UTF-8'
+-doctitle
+'rexsl-standalone 1.0-SNAPSHOT API'
+-link
+'http://download.oracle.com/javaee/6/api'
+-link
+'http://www.jcabi.com/jcabi-log/apidocs'
+-linkoffline
+'http://download.oracle.com/javase/6/docs/api' '/mnt/jenkins/jobs/rexsl/workspace/rexsl/rexsl-standalone/target/javadoc-bundle-options'
+-serialwarn
+-tag
+"todo:a:To do:"
+-tag
+"checkstyle:a:Suppressed checkstyle violations:"
+-use
+-version
+-windowtitle
+'rexsl-standalone 1.0-SNAPSHOT API'

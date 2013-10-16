@@ -1,0 +1,5 @@
+com.rexsl.maven
+com.rexsl.maven.packers
+com.rexsl.maven.utils
+com.rexsl.maven.aether
+com.rexsl.maven.checks

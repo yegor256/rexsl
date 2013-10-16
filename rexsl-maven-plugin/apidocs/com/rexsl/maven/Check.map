@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="c300" href="./Check.html" title="com.rexsl.maven.Check" alt="" coords="309,11,557,101"/>
+<area shape="rect" id="c318" href="./checks/InContainerScriptsCheck.html" title="com.rexsl.maven.checks.InContainerScriptsCheck" alt="" coords="16,161,264,250"/>
+<area shape="rect" id="c319" href="./checks/FilesStructureCheck.html" title="com.rexsl.maven.checks.FilesStructureCheck" alt="" coords="309,161,557,250"/>
+<area shape="rect" id="c320" href="./checks/XhtmlOutputCheck.html" title="com.rexsl.maven.checks.XhtmlOutputCheck" alt="" coords="603,161,851,250"/>
+</map>
