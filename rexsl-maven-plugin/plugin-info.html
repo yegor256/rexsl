@@ -157,12 +157,12 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="changes-report.html" title="Changes Report">Changes Report</a>
+                                                                    <a href="github-report.html" title="GitHub Report">GitHub Report</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="rempl/index.html" title="REMPL reports">REMPL reports</a>
+                                                                    <a href="changes-report.html" title="Changes Report">Changes Report</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -192,13 +192,28 @@
                                     </ul>
                         <p>
                 
-                19-Sep-2013
+                16-Oct-2013
                 0.5.1
             </p>
             <article>
-                <div class="section"><h2>Plugin Documentation<a name="Plugin_Documentation"></a></h2><a name="Plugin_Documentation"></a><p>Goals available for this plugin:</p><table border="0" class="bodyTable"><tr class="a"><th>Goal</th><th>Description</th></tr><tr class="b"><td><a href="check-mojo.html">rexsl:check</a></td><td>Test entire project against RESTful principles.</td></tr><tr class="a"><td><a href="help-mojo.html">rexsl:help</a></td><td>Display help information on rexsl-maven-plugin.<br />
+                <div class="section">
+<h2>Plugin Documentation<a name="Plugin_Documentation"></a></h2><a name="Plugin_Documentation"></a>
+<p>Goals available for this plugin:</p>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>Goal</th>
+<th>Description</th></tr>
+<tr class="b">
+<td><a href="check-mojo.html">rexsl:check</a></td>
+<td>Test entire project against RESTful principles.</td></tr>
+<tr class="a">
+<td><a href="help-mojo.html">rexsl:help</a></td>
+<td>Display help information on rexsl-maven-plugin.<br />
 Call <code>mvn rexsl:help -Ddetail=true
--Dgoal=&lt;goal-name&gt;</code> to display parameter details.</td></tr><tr class="b"><td><a href="package-mojo.html">rexsl:package</a></td><td>Package resources. 
+-Dgoal=&lt;goal-name&gt;</code> to display parameter details.</td></tr>
+<tr class="b">
+<td><a href="package-mojo.html">rexsl:package</a></td>
+<td>Package resources. 
 <p>Text resources should be packed before they got delivered to the
 <code>WAR</code> package. For example, comments should be removed
 from CSS and XSL stylesheets, JavaScripts should be minified, etc.
@@ -233,7 +248,10 @@ touch these files again (to avoid their packaging):</p>
     [..]
   &lt;/configuration&gt;
 &lt;/plugin&gt;
-</pre></td></tr><tr class="a"><td><a href="run-mojo.html">rexsl:run</a></td><td>Run WAR as a web server to enable interactive testing of a web
+</pre></td></tr>
+<tr class="a">
+<td><a href="run-mojo.html">rexsl:run</a></td>
+<td>Run WAR as a web server to enable interactive testing of a web
 application. 
 <p>Run <code>mvn clean package rexsl:run -Drexsl.port=9099</code>
 and open your browser at <code>http://localhost:9099/</code>. You
@@ -242,7 +260,28 @@ interesting is that you can make changes to static resources
 (<code>xsl</code>, <code>css</code> and other files in
 <code>src/main/webapp</code>) and then just refresh the page in a
 browser. New versions of the files will be delivered. That's how
-you can interactively test your XSL stylesheets.</p></td></tr></table><div class="section"><h3>System Requirements<a name="System_Requirements"></a></h3><a name="System_Requirements"></a><p>The following specifies the minimum requirements to run this Maven plugin:</p><table border="0" class="bodyTable"><tr class="a"><td>Maven</td><td>2.0</td></tr><tr class="b"><td>JDK</td><td>1.6</td></tr><tr class="a"><td>Memory</td><td>No minimum requirement.</td></tr><tr class="b"><td>Disk Space</td><td>No minimum requirement.</td></tr></table></div><div class="section"><h3>Usage<a name="Usage"></a></h3><a name="Usage"></a><p>You should specify the version in your project's plugin configuration:</p><div class="source"><pre>&lt;project&gt;
+you can interactively test your XSL stylesheets.</p></td></tr></table>
+<div class="section">
+<h3>System Requirements<a name="System_Requirements"></a></h3><a name="System_Requirements"></a>
+<p>The following specifies the minimum requirements to run this Maven plugin:</p>
+<table border="0" class="bodyTable">
+<tr class="a">
+<td>Maven</td>
+<td>2.0</td></tr>
+<tr class="b">
+<td>JDK</td>
+<td>1.6</td></tr>
+<tr class="a">
+<td>Memory</td>
+<td>No minimum requirement.</td></tr>
+<tr class="b">
+<td>Disk Space</td>
+<td>No minimum requirement.</td></tr></table></div>
+<div class="section">
+<h3>Usage<a name="Usage"></a></h3><a name="Usage"></a>
+<p>You should specify the version in your project's plugin configuration:</p>
+<div class="source">
+<pre>&lt;project&gt;
   ...
   &lt;build&gt;
     &lt;!-- To define the plugin version in your parent POM --&gt;
@@ -268,7 +307,8 @@ you can interactively test your XSL stylesheets.</p></td></tr></table><div class
   &lt;/build&gt;
   ...
 &lt;/project&gt;
-</pre></div><p>For more information, see <a class="externalLink" href="http://maven.apache.org/guides/mini/guide-configuring-plugins.html">&quot;Guide to Configuring Plug-ins&quot;</a></p></div></div>
+</pre></div>
+<p>For more information, see <a class="externalLink" href="http://maven.apache.org/guides/mini/guide-configuring-plugins.html">&quot;Guide to Configuring Plug-ins&quot;</a></p></div></div>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;

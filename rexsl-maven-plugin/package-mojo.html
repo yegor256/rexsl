@@ -129,24 +129,32 @@
                                     </ul>
                         <p>
                 
-                19-Sep-2013
+                16-Oct-2013
                 0.5.1
             </p>
             <article>
                 
   
-    <div class="section"><h2>rexsl:package<a name="rexsl:package"></a></h2>
-      <p><b>Full name</b>:</p>
-      <p>com.rexsl:rexsl-maven-plugin:0.5.1:package</p>
-      <p><b>Description</b>:</p>
-      <div>Package resources. 
+    <div class="section">
+<h2>rexsl:package<a name="rexsl:package"></a></h2>
+      
+<p><b>Full name</b>:</p>
+      
+<p>com.rexsl:rexsl-maven-plugin:0.5.1:package</p>
+      
+<p><b>Description</b>:</p>
+      
+<div>Package resources. 
+
 <p>Text resources should be packed before they got delivered to the
 <tt>WAR</tt> package. For example, comments should be removed
 from CSS and XSL stylesheets, JavaScripts should be minified, etc.
 We have a number of convenient packers that do this job, you just
 need to call them. First of a <tt>package</tt> goal should be
 called:</p>
-<div><pre>
+
+<div>
+<pre>
 &lt;plugin&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
@@ -162,11 +170,14 @@ called:</p>
 &lt;/plugin&gt;
 </pre></div>
 
+
 <p>The goal will package all files it knows about and place their
 packaged (minified) versions into <tt>webappDirectory</tt>.
 Then, you should configure <tt>maven-war-plugin</tt> to not
 touch these files again (to avoid their packaging):</p>
-<div><pre>
+
+<div>
+<pre>
 &lt;plugin&gt;
   &lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;
   &lt;configuration&gt;
@@ -175,65 +186,115 @@ touch these files again (to avoid their packaging):</p>
   &lt;/configuration&gt;
 &lt;/plugin&gt;
 </pre></div></div>
-      <p><b>Attributes</b>:</p>
-      <ul>
-        <li>Requires a Maven project to be executed.</li>
-        <li>The goal is thread-safe and supports parallel builds.</li>
-        <li>Binds by default to the <a class="externalLink" href="http://maven.apache.org/ref/current/maven-core/lifecycles.html">lifecycle phase</a>: <tt>process-resources</tt>.</li>
+      
+<p><b>Attributes</b>:</p>
+      
+<ul>
+        
+<li>Requires a Maven project to be executed.</li>
+        
+<li>The goal is thread-safe and supports parallel builds.</li>
+        
+<li>Binds by default to the <a class="externalLink" href="http://maven.apache.org/ref/current/maven-core/lifecycles.html">lifecycle phase</a>: <tt>process-resources</tt>.</li>
       </ul>
-      <div class="section"><h3>Required Parameters<a name="Required_Parameters"></a></h3>
-        <table class="bodyTable" border="0">
-          <tr class="a">
-            <th>Name</th>
-            <th>Type</th>
-            <th>Since</th>
-            <th>Description</th>
+      
+<div class="section">
+<h3>Required Parameters<a name="Required_Parameters"></a></h3>
+        
+<table class="bodyTable" border="0">
+          
+<tr class="a">
+            
+<th>Name</th>
+            
+<th>Type</th>
+            
+<th>Since</th>
+            
+<th>Description</th>
           </tr>
-          <tr class="b">
-            <td><b><a href="#skip">skip</a></b></td>
-            <td><tt>boolean</tt></td>
-            <td><tt>-</tt></td>
-            <td>Shall we skip execution?<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>rexsl.skip</tt>.</td>
+          
+<tr class="b">
+            
+<td><b><a href="#skip">skip</a></b></td>
+            
+<td><tt>boolean</tt></td>
+            
+<td><tt>-</tt></td>
+            
+<td>Shall we skip execution?<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>rexsl.skip</tt>.</td>
           </tr>
-          <tr class="a">
-            <td><b><a href="#webappDirectory">webappDirectory</a></b></td>
-            <td><tt>String</tt></td>
-            <td><tt>-</tt></td>
-            <td>Webapp directory.<br /><b>Default value is</b>: <tt>${project.build.directory}/${project.build.finalName}</tt>.<br /><b>User property is</b>: <tt>rexsl.webappDirectory</tt>.</td>
+          
+<tr class="a">
+            
+<td><b><a href="#webappDirectory">webappDirectory</a></b></td>
+            
+<td><tt>String</tt></td>
+            
+<td><tt>-</tt></td>
+            
+<td>Webapp directory.<br /><b>Default value is</b>: <tt>${project.build.directory}/${project.build.finalName}</tt>.<br /><b>User property is</b>: <tt>rexsl.webappDirectory</tt>.</td>
           </tr>
         </table>
       </div>
-      <div class="section"><h3>Optional Parameters<a name="Optional_Parameters"></a></h3>
-        <table class="bodyTable" border="0">
-          <tr class="a">
-            <th>Name</th>
-            <th>Type</th>
-            <th>Since</th>
-            <th>Description</th>
+      
+<div class="section">
+<h3>Optional Parameters<a name="Optional_Parameters"></a></h3>
+        
+<table class="bodyTable" border="0">
+          
+<tr class="a">
+            
+<th>Name</th>
+            
+<th>Type</th>
+            
+<th>Since</th>
+            
+<th>Description</th>
           </tr>
-          <tr class="b">
-            <td><b><a href="#filtering">filtering</a></b></td>
-            <td><tt>boolean</tt></td>
-            <td><tt>0.3.7</tt></td>
-            <td>Static resources (CSS, XSL, JS, etc.) should be filtered before
+          
+<tr class="b">
+            
+<td><b><a href="#filtering">filtering</a></b></td>
+            
+<td><tt>boolean</tt></td>
+            
+<td><tt>0.3.7</tt></td>
+            
+<td>Static resources (CSS, XSL, JS, etc.) should be filtered before
 packaging. 
+
 <p>At the moment only properties defined in
 <tt>pom/properties</tt> section are supported.</p><br /><b>User property is</b>: <tt>rexsl.filtering</tt>.</td>
           </tr>
-          <tr class="a">
-            <td><b><a href="#port">port</a></b></td>
-            <td><tt>Integer</tt></td>
-            <td><tt>-</tt></td>
-            <td>TPC port to bind to (by default a random port is used).<br /><b>User property is</b>: <tt>rexsl.port</tt>.</td>
+          
+<tr class="a">
+            
+<td><b><a href="#port">port</a></b></td>
+            
+<td><tt>Integer</tt></td>
+            
+<td><tt>-</tt></td>
+            
+<td>TPC port to bind to (by default a random port is used).<br /><b>User property is</b>: <tt>rexsl.port</tt>.</td>
           </tr>
-          <tr class="b">
-            <td><b><a href="#systemPropertyVariables">systemPropertyVariables</a></b></td>
-            <td><tt>Map</tt></td>
-            <td><tt>0.3</tt></td>
-            <td>System variables to be set before running tests. 
+          
+<tr class="b">
+            
+<td><b><a href="#systemPropertyVariables">systemPropertyVariables</a></b></td>
+            
+<td><tt>Map</tt></td>
+            
+<td><tt>0.3</tt></td>
+            
+<td>System variables to be set before running tests. 
+
 <p>You define them in a similar way as in <a class="externalLink" href="http://maven.apache.org/plugins/maven-surefire-plugin/">maven-surefire-plugin</a>,
 for example you want to reconfigure LOG4J just for the tests:</p>
-<div><pre>
+
+<div>
+<pre>
 &lt;plugin&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
@@ -247,35 +308,63 @@ for example you want to reconfigure LOG4J just for the tests:</p>
           </tr>
         </table>
       </div>
-      <div class="section"><h3>Parameter Details<a name="Parameter_Details"></a></h3>
-        <p><b><a name="filtering">filtering</a>:</b></p>
-        <div>Static resources (CSS, XSL, JS, etc.) should be filtered before
+      
+<div class="section">
+<h3>Parameter Details<a name="Parameter_Details"></a></h3>
+        
+<p><b><a name="filtering">filtering</a>:</b></p>
+        
+<div>Static resources (CSS, XSL, JS, etc.) should be filtered before
 packaging. 
+
 <p>At the moment only properties defined in
 <tt>pom/properties</tt> section are supported.</p></div>
-        <ul>
-          <li><b>Type</b>: <tt>boolean</tt></li>
-          <li><b>Since</b>: <tt>0.3.7</tt></li>
-          <li><b>Required</b>: <tt>No</tt></li>
-          <li><b>User Property</b>: <tt>rexsl.filtering</tt></li>
-        </ul><hr /><p><b><a name="port">port</a>:</b></p>
-        <div>TPC port to bind to (by default a random port is used).</div>
-        <ul>
-          <li><b>Type</b>: <tt>java.lang.Integer</tt></li>
-          <li><b>Required</b>: <tt>No</tt></li>
-          <li><b>User Property</b>: <tt>rexsl.port</tt></li>
-        </ul><hr /><p><b><a name="skip">skip</a>:</b></p>
-        <div>Shall we skip execution?</div>
-        <ul>
-          <li><b>Type</b>: <tt>boolean</tt></li>
-          <li><b>Required</b>: <tt>Yes</tt></li>
-          <li><b>User Property</b>: <tt>rexsl.skip</tt></li>
-          <li><b>Default</b>: <tt>false</tt></li>
-        </ul><hr /><p><b><a name="systemPropertyVariables">systemPropertyVariables</a>:</b></p>
-        <div>System variables to be set before running tests. 
+        
+<ul>
+          
+<li><b>Type</b>: <tt>boolean</tt></li>
+          
+<li><b>Since</b>: <tt>0.3.7</tt></li>
+          
+<li><b>Required</b>: <tt>No</tt></li>
+          
+<li><b>User Property</b>: <tt>rexsl.filtering</tt></li>
+        </ul><hr />
+<p><b><a name="port">port</a>:</b></p>
+        
+<div>TPC port to bind to (by default a random port is used).</div>
+        
+<ul>
+          
+<li><b>Type</b>: <tt>java.lang.Integer</tt></li>
+          
+<li><b>Required</b>: <tt>No</tt></li>
+          
+<li><b>User Property</b>: <tt>rexsl.port</tt></li>
+        </ul><hr />
+<p><b><a name="skip">skip</a>:</b></p>
+        
+<div>Shall we skip execution?</div>
+        
+<ul>
+          
+<li><b>Type</b>: <tt>boolean</tt></li>
+          
+<li><b>Required</b>: <tt>Yes</tt></li>
+          
+<li><b>User Property</b>: <tt>rexsl.skip</tt></li>
+          
+<li><b>Default</b>: <tt>false</tt></li>
+        </ul><hr />
+<p><b><a name="systemPropertyVariables">systemPropertyVariables</a>:</b></p>
+        
+<div>System variables to be set before running tests. 
+
 <p>You define them in a similar way as in <a class="externalLink" href="http://maven.apache.org/plugins/maven-surefire-plugin/">maven-surefire-plugin</a>,
 for example you want to reconfigure LOG4J just for the tests:</p>
-<div><pre>
+
+<div>
+<pre>
 &lt;plugin&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
@@ -286,17 +375,28 @@ for example you want to reconfigure LOG4J just for the tests:</p>
   &lt;/configuration&gt;
 &lt;/plugin&gt;
 </pre></div></div>
-        <ul>
-          <li><b>Type</b>: <tt>java.util.Map</tt></li>
-          <li><b>Since</b>: <tt>0.3</tt></li>
-          <li><b>Required</b>: <tt>No</tt></li>
-        </ul><hr /><p><b><a name="webappDirectory">webappDirectory</a>:</b></p>
-        <div>Webapp directory.</div>
-        <ul>
-          <li><b>Type</b>: <tt>java.lang.String</tt></li>
-          <li><b>Required</b>: <tt>Yes</tt></li>
-          <li><b>User Property</b>: <tt>rexsl.webappDirectory</tt></li>
-          <li><b>Default</b>: <tt>${project.build.directory}/${project.build.finalName}</tt></li>
+        
+<ul>
+          
+<li><b>Type</b>: <tt>java.util.Map</tt></li>
+          
+<li><b>Since</b>: <tt>0.3</tt></li>
+          
+<li><b>Required</b>: <tt>No</tt></li>
+        </ul><hr />
+<p><b><a name="webappDirectory">webappDirectory</a>:</b></p>
+        
+<div>Webapp directory.</div>
+        
+<ul>
+          
+<li><b>Type</b>: <tt>java.lang.String</tt></li>
+          
+<li><b>Required</b>: <tt>Yes</tt></li>
+          
+<li><b>User Property</b>: <tt>rexsl.webappDirectory</tt></li>
+          
+<li><b>Default</b>: <tt>${project.build.directory}/${project.build.finalName}</tt></li>
         </ul>
       </div>
     </div>
