@@ -41,9 +41,9 @@
 <a class="jxr_linenumber" name="31" href="#31">31</a>  
 <a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> com.jcabi.aspects.Loggable;
 <a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> com.jcabi.log.Logger;
-<a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.RestTester;
-<a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.TestResponse;
-<a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.XmlDocument;
+<a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> com.jcabi.xml.XML;
+<a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.RestTester;
+<a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.TestResponse;
 <a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> java.io.ByteArrayOutputStream;
 <a class="jxr_linenumber" name="38" href="#38">38</a>  <strong class="jxr_keyword">import</strong> java.net.URI;
 <a class="jxr_linenumber" name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.Charset;
@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="131" href="#131">131</a> <em class="jxr_javadoccomment">     * @param soap The response</em>
 <a class="jxr_linenumber" name="132" href="#132">132</a> <em class="jxr_javadoccomment">     * @return The validation response just built</em>
 <a class="jxr_linenumber" name="133" href="#133">133</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="134" href="#134">134</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../com/rexsl/w3c/DefaultValidationResponse.html">DefaultValidationResponse</a> build(<strong class="jxr_keyword">final</strong> <a href="../../../com/rexsl/test/XmlDocument.html">XmlDocument</a> soap) {
+<a class="jxr_linenumber" name="134" href="#134">134</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../com/rexsl/w3c/DefaultValidationResponse.html">DefaultValidationResponse</a> build(<strong class="jxr_keyword">final</strong> XML soap) {
 <a class="jxr_linenumber" name="135" href="#135">135</a>         <strong class="jxr_keyword">final</strong> <a href="../../../com/rexsl/w3c/DefaultValidationResponse.html">DefaultValidationResponse</a> resp = <strong class="jxr_keyword">new</strong> <a href="../../../com/rexsl/w3c/DefaultValidationResponse.html">DefaultValidationResponse</a>(
 <a class="jxr_linenumber" name="136" href="#136">136</a>             <span class="jxr_string">"true"</span>.equals(<strong class="jxr_keyword">this</strong>.textOf(soap.xpath(<span class="jxr_string">"//m:validity/text()"</span>))),
 <a class="jxr_linenumber" name="137" href="#137">137</a>             UriBuilder.fromUri(
@@ -150,10 +150,10 @@
 <a class="jxr_linenumber" name="140" href="#140">140</a>             <strong class="jxr_keyword">this</strong>.textOf(soap.xpath(<span class="jxr_string">"//m:doctype/text()"</span>)),
 <a class="jxr_linenumber" name="141" href="#141">141</a>             <strong class="jxr_keyword">this</strong>.charset(<strong class="jxr_keyword">this</strong>.textOf(soap.xpath(<span class="jxr_string">"//m:charset/text()"</span>)))
 <a class="jxr_linenumber" name="142" href="#142">142</a>         );
-<a class="jxr_linenumber" name="143" href="#143">143</a>         <strong class="jxr_keyword">for</strong> (XmlDocument node : soap.nodes(<span class="jxr_string">"//m:error"</span>)) {
+<a class="jxr_linenumber" name="143" href="#143">143</a>         <strong class="jxr_keyword">for</strong> (XML node : soap.nodes(<span class="jxr_string">"//m:error"</span>)) {
 <a class="jxr_linenumber" name="144" href="#144">144</a>             resp.addError(<strong class="jxr_keyword">this</strong>.defect(node));
 <a class="jxr_linenumber" name="145" href="#145">145</a>         }
-<a class="jxr_linenumber" name="146" href="#146">146</a>         <strong class="jxr_keyword">for</strong> (XmlDocument node : soap.nodes(<span class="jxr_string">"//m:warning"</span>)) {
+<a class="jxr_linenumber" name="146" href="#146">146</a>         <strong class="jxr_keyword">for</strong> (XML node : soap.nodes(<span class="jxr_string">"//m:warning"</span>)) {
 <a class="jxr_linenumber" name="147" href="#147">147</a>             resp.addWarning(<strong class="jxr_keyword">this</strong>.defect(node));
 <a class="jxr_linenumber" name="148" href="#148">148</a>         }
 <a class="jxr_linenumber" name="149" href="#149">149</a>         <strong class="jxr_keyword">return</strong> resp;
@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="198" href="#198">198</a> <em class="jxr_javadoccomment">     * @param node The node</em>
 <a class="jxr_linenumber" name="199" href="#199">199</a> <em class="jxr_javadoccomment">     * @return The defect</em>
 <a class="jxr_linenumber" name="200" href="#200">200</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="201" href="#201">201</a>     <strong class="jxr_keyword">private</strong> <a href="../../../com/rexsl/w3c/Defect.html">Defect</a> defect(<strong class="jxr_keyword">final</strong> <a href="../../../com/rexsl/test/XmlDocument.html">XmlDocument</a> node) {
+<a class="jxr_linenumber" name="201" href="#201">201</a>     <strong class="jxr_keyword">private</strong> <a href="../../../com/rexsl/w3c/Defect.html">Defect</a> defect(<strong class="jxr_keyword">final</strong> XML node) {
 <a class="jxr_linenumber" name="202" href="#202">202</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/rexsl/w3c/Defect.html">Defect</a>(
 <a class="jxr_linenumber" name="203" href="#203">203</a>             <strong class="jxr_keyword">this</strong>.intOf(node.xpath(<span class="jxr_string">"m:line/text()"</span>)),
 <a class="jxr_linenumber" name="204" href="#204">204</a>             <strong class="jxr_keyword">this</strong>.intOf(node.xpath(<span class="jxr_string">"m:col/text()"</span>)),

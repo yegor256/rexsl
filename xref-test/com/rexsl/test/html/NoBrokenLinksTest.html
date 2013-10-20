@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">package</strong> com.rexsl.test.html;
 <a class="jxr_linenumber" name="31" href="#31">31</a>  
-<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.SimpleXml;
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> com.jcabi.xml.XMLDocument;
 <a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.TestResponse;
 <a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> java.net.URI;
 <a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> java.util.List;
@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="123" href="#123">123</a>             <strong class="jxr_keyword">new</strong> Answer&lt;List&lt;String&gt;&gt;() {
 <a class="jxr_linenumber" name="124" href="#124">124</a>                 <strong class="jxr_keyword">public</strong> List&lt;String&gt; answer(<strong class="jxr_keyword">final</strong> InvocationOnMock inv) {
 <a class="jxr_linenumber" name="125" href="#125">125</a>                     <strong class="jxr_keyword">final</strong> String xpath = inv.getArguments()[0].toString();
-<a class="jxr_linenumber" name="126" href="#126">126</a>                     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SimpleXml(body).xpath(xpath);
+<a class="jxr_linenumber" name="126" href="#126">126</a>                     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> XMLDocument(body).xpath(xpath);
 <a class="jxr_linenumber" name="127" href="#127">127</a>                 }
 <a class="jxr_linenumber" name="128" href="#128">128</a>             }
 <a class="jxr_linenumber" name="129" href="#129">129</a>         ).when(response).xpath(Mockito.anyString());
