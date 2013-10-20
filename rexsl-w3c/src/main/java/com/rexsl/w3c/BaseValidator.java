@@ -31,9 +31,9 @@ package com.rexsl.w3c;
 
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
+import com.jcabi.xml.XML;
 import com.rexsl.test.RestTester;
 import com.rexsl.test.TestResponse;
-import com.rexsl.test.XmlDocument;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -131,7 +131,7 @@ class BaseValidator {
      * @param soap The response
      * @return The validation response just built
      */
-    protected final DefaultValidationResponse build(final XmlDocument soap) {
+    protected final DefaultValidationResponse build(final XML soap) {
         final DefaultValidationResponse resp = new DefaultValidationResponse(
             "true".equals(this.textOf(soap.xpath("//m:validity/text()"))),
             UriBuilder.fromUri(
@@ -140,10 +140,10 @@ class BaseValidator {
             this.textOf(soap.xpath("//m:doctype/text()")),
             this.charset(this.textOf(soap.xpath("//m:charset/text()")))
         );
-        for (XmlDocument node : soap.nodes("//m:error")) {
+        for (XML node : soap.nodes("//m:error")) {
             resp.addError(this.defect(node));
         }
-        for (XmlDocument node : soap.nodes("//m:warning")) {
+        for (XML node : soap.nodes("//m:warning")) {
             resp.addWarning(this.defect(node));
         }
         return resp;
@@ -198,7 +198,7 @@ class BaseValidator {
      * @param node The node
      * @return The defect
      */
-    private Defect defect(final XmlDocument node) {
+    private Defect defect(final XML node) {
         return new Defect(
             this.intOf(node.xpath("m:line/text()")),
             this.intOf(node.xpath("m:col/text()")),

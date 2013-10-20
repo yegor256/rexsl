@@ -43,6 +43,10 @@
     <name>rexsl-w3c</name>
     <dependencies>
         <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-xml</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
             <version>${project.version}</version>
