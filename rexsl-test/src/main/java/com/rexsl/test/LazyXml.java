@@ -29,6 +29,9 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
+import com.jcabi.xml.XPathContext;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
@@ -47,7 +50,7 @@ import org.w3c.dom.Node;
  */
 @ToString
 @EqualsAndHashCode(of = "response")
-final class LazyXml implements XmlDocument {
+final class LazyXml implements XML {
 
     /**
      * Underlying source.
@@ -58,6 +61,14 @@ final class LazyXml implements XmlDocument {
      * Namespace context to use.
      */
     private final transient XPathContext context;
+
+    /**
+     * Public ctor.
+     * @param src Source of content
+     */
+    protected LazyXml(@NotNull final TestResponse src) {
+        this(src, new XPathContext());
+    }
 
     /**
      * Public ctor.
@@ -86,7 +97,7 @@ final class LazyXml implements XmlDocument {
     @Override
     @NotNull
     public List<String> xpath(@NotNull final String query) {
-        return new SimpleXml(this.response.getBody())
+        return new XMLDocument(this.response.getBody())
             .merge(this.context)
             .xpath(query);
     }
@@ -97,7 +108,7 @@ final class LazyXml implements XmlDocument {
     @Override
     @NotNull
     public Node node() {
-        return new SimpleXml(this.response.getBody()).node();
+        return new XMLDocument(this.response.getBody()).node();
     }
 
     /**
@@ -105,8 +116,8 @@ final class LazyXml implements XmlDocument {
      */
     @Override
     @NotNull
-    public List<XmlDocument> nodes(@NotNull final String query) {
-        return new SimpleXml(this.response.getBody())
+    public List<XML> nodes(@NotNull final String query) {
+        return new XMLDocument(this.response.getBody())
             .merge(this.context)
             .nodes(query);
     }
@@ -116,7 +127,7 @@ final class LazyXml implements XmlDocument {
      */
     @Override
     @NotNull
-    public XmlDocument merge(@NotNull final NamespaceContext ctx) {
+    public XML merge(@NotNull final NamespaceContext ctx) {
         return new LazyXml(this.response, this.context.merge(ctx));
     }
 

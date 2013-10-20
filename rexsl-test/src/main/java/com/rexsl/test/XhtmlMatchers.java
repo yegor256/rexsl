@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.jcabi.aspects.Loggable;
+import com.jcabi.xml.XPathContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -141,12 +142,10 @@ public final class XhtmlMatchers {
      * its own prefix, in order of appearance. Start with {@code 1}.
      * For example:
      *
-     * <pre>
-     * MatcherAssert.assert(
+     * <pre> MatcherAssert.assert(
      *   "&lt;foo xmlns='my-namespace'&gt;&lt;/foo&gt;",
      *   XhtmlMatchers.hasXPath("/ns1:foo", "my-namespace")
-     * );
-     * </pre>
+     * );</pre>
      *
      * @param query The query
      * @param namespaces List of namespaces

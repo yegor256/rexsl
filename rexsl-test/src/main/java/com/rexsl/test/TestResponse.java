@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.xml.XML;
 import javax.json.JsonReader;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Cookie;
@@ -72,7 +73,7 @@ import org.hamcrest.Matcher;
  * @version $Id$
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public interface TestResponse extends XmlDocument {
+public interface TestResponse extends XML {
 
     /**
      * How many attempts to make when {@link #assertThat(AssertionPolicy)}

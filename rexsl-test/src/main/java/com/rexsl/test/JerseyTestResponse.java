@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
+import com.jcabi.xml.XML;
 import java.io.StringReader;
 import java.net.HttpCookie;
 import java.net.URI;
@@ -82,7 +83,7 @@ final class JerseyTestResponse implements TestResponse {
      * {@link #getXml()}.
      * @see #getXml()
      */
-    private transient XmlDocument xml;
+    private transient XML xml;
 
     /**
      * Public ctor.
@@ -281,7 +282,7 @@ final class JerseyTestResponse implements TestResponse {
      */
     @Override
     @NotNull
-    public List<XmlDocument> nodes(@NotNull final String query) {
+    public List<XML> nodes(@NotNull final String query) {
         return Collections.unmodifiableList(this.getXml().nodes(query));
     }
 
@@ -397,10 +398,10 @@ final class JerseyTestResponse implements TestResponse {
      * @return The XML document
      */
     @NotNull
-    public XmlDocument getXml() {
+    public XML getXml() {
         synchronized (this.fetcher) {
             if (this.xml == null) {
-                this.xml = new LazyXml(this, new XPathContext());
+                this.xml = new LazyXml(this);
             }
             return this.xml;
         }

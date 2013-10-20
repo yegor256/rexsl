@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -97,7 +98,10 @@ public final class XhtmlMatchersTest {
             XhtmlMatchers.hasXPath("/b/file[.='foo.txt']")
         );
         MatcherAssert.assertThat(
-            new InputStreamReader(IOUtils.toInputStream("<xx><y/></xx>")),
+            new InputStreamReader(
+                IOUtils.toInputStream("<xx><y/></xx>", Charsets.UTF_8),
+                Charsets.UTF_8
+            ),
             XhtmlMatchers.hasXPath("/xx/y")
         );
     }

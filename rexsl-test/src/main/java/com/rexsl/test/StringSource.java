@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.xml.XMLDocument;
 import java.io.StringWriter;
 import java.util.Locale;
 import javax.validation.constraints.NotNull;
@@ -65,7 +66,7 @@ final class StringSource extends DOMSource {
     protected StringSource(@NotNull final String text) {
         super();
         this.xml = text;
-        super.setNode(new DomParser(text).document());
+        super.setNode(new XMLDocument(text).node());
     }
 
     /**

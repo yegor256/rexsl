@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.jcabi.log.Logger;
+import com.jcabi.xml.XML;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -52,7 +53,7 @@ final class XpathAssertionMatcher implements AssertionPolicy {
     /**
      * The source.
      */
-    private final transient XmlDocument xml;
+    private final transient XML xml;
 
     /**
      * The matcher to use.
@@ -64,7 +65,7 @@ final class XpathAssertionMatcher implements AssertionPolicy {
      * @param src The source
      * @param path The XPath to find there
      */
-    protected XpathAssertionMatcher(final XmlDocument src, final String path) {
+    protected XpathAssertionMatcher(final XML src, final String path) {
         this.xml = src;
         this.xpath = path;
     }
@@ -81,7 +82,7 @@ final class XpathAssertionMatcher implements AssertionPolicy {
                 response
             ),
             this.xml.nodes(this.xpath),
-            Matchers.not(Matchers.<XmlDocument>empty())
+            Matchers.not(Matchers.<XML>empty())
         );
     }
 

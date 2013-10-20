@@ -29,7 +29,7 @@
  */
 package com.rexsl.test.html;
 
-import com.rexsl.test.SimpleXml;
+import com.jcabi.xml.XMLDocument;
 import com.rexsl.test.TestResponse;
 import java.net.URI;
 import java.util.List;
@@ -123,7 +123,7 @@ public final class NoBrokenLinksTest {
             new Answer<List<String>>() {
                 public List<String> answer(final InvocationOnMock inv) {
                     final String xpath = inv.getArguments()[0].toString();
-                    return new SimpleXml(body).xpath(xpath);
+                    return new XMLDocument(body).xpath(xpath);
                 }
             }
         ).when(response).xpath(Mockito.anyString());

@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.jcabi.aspects.Loggable;
+import com.jcabi.xml.XMLDocument;
 import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
 import lombok.EqualsAndHashCode;
@@ -80,7 +81,7 @@ final class XPathMatcher<T> extends TypeSafeMatcher<T> {
      */
     @Override
     public boolean matchesSafely(@NotNull final T input) {
-        return !new SimpleXml(XhtmlMatchers.xhtml(input))
+        return !new XMLDocument(XhtmlMatchers.xhtml(input))
             .merge(this.context)
             .nodes(this.xpath)
             .isEmpty();
