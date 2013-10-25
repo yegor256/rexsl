@@ -65,9 +65,6 @@ public final class LinksInset implements Inset {
         this.resource = res;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {

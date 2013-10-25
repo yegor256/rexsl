@@ -74,9 +74,6 @@ final class HeaderMatcher implements AssertionPolicy {
         this.matcher = mtch;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void assertThat(@NotNull final TestResponse response) {
         List<String> headers = response.getHeaders().get(this.name);
@@ -94,9 +91,6 @@ final class HeaderMatcher implements AssertionPolicy {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isRetryNeeded(final int attempt) {
         return false;

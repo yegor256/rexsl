@@ -94,9 +94,6 @@ final class StringSource extends DOMSource {
         super.setNode(node);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder();

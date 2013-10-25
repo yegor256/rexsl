@@ -85,17 +85,11 @@ final class XslPacker extends AbstractPacker {
     private static final XPathFactory XPATHFACTORY =
         XPathFactory.newInstance();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected String extension() {
         return "xsl";
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void pack(@NotNull final Reader input, @NotNull final File dest)
         throws IOException {

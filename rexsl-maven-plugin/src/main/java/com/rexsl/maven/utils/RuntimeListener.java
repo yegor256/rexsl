@@ -45,9 +45,6 @@ import javax.validation.constraints.NotNull;
  */
 public final class RuntimeListener implements ServletContextListener {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("PMD.UseProperClassLoader")
     @Loggable(Loggable.DEBUG)
@@ -90,9 +87,6 @@ public final class RuntimeListener implements ServletContextListener {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void contextDestroyed(@NotNull final ServletContextEvent event) {

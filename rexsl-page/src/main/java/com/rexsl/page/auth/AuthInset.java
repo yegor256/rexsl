@@ -144,9 +144,6 @@ public final class AuthInset implements Inset {
         return identity;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {

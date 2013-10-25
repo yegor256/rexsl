@@ -74,18 +74,12 @@ final class ServletConfigWrapper implements FilterConfig {
         this.properties = props;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public String getFilterName() {
         return Logger.format("%s-filter", this.config.getServletName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getInitParameter(@NotNull final String name) {
         String value = this.properties.getProperty(name);
@@ -95,9 +89,6 @@ final class ServletConfigWrapper implements FilterConfig {
         return value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public Enumeration<String> getInitParameterNames() {
@@ -112,9 +103,6 @@ final class ServletConfigWrapper implements FilterConfig {
         return Collections.enumeration(names);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public ServletContext getServletContext() {

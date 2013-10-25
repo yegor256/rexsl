@@ -64,9 +64,6 @@ public class TransformerFactoryMock extends TransformerFactory {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Transformer newTransformer()
         throws TransformerConfigurationException {
@@ -85,18 +82,12 @@ public class TransformerFactoryMock extends TransformerFactory {
         return transformer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Templates newTemplates(Source source)
         throws TransformerConfigurationException {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Source getAssociatedStylesheet(
         Source source,
@@ -107,62 +98,38 @@ public class TransformerFactoryMock extends TransformerFactory {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setURIResolver(URIResolver uriResolver) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public URIResolver getURIResolver() {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setFeature(String name, boolean enabled)
         throws TransformerConfigurationException {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean getFeature(String name) {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setAttribute(String name, Object value) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Object getAttribute(String name) {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setErrorListener(ErrorListener errorListener) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ErrorListener getErrorListener() {
         return null;

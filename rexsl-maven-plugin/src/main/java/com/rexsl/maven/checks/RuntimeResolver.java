@@ -73,9 +73,6 @@ final class RuntimeResolver implements URIResolver {
         this.home = UriBuilder.fromUri(uri).path("/").build();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public Source resolve(@NotNull final String href, final String base)

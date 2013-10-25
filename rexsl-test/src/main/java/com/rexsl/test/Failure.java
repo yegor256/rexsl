@@ -62,9 +62,6 @@ final class Failure implements AssertionPolicy {
         this.reason = txt;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void assertThat(@NotNull final TestResponse response) {
         throw new AssertionError(
@@ -72,9 +69,6 @@ final class Failure implements AssertionPolicy {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isRetryNeeded(final int attempt) {
         return false;

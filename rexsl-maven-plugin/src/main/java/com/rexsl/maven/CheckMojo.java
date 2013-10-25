@@ -108,9 +108,6 @@ public final class CheckMojo extends AbstractRexslMojo {
         this.test = tst;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void run() throws MojoFailureException {
         final long start = System.currentTimeMillis();

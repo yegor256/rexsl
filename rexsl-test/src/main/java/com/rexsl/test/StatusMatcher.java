@@ -61,9 +61,6 @@ final class StatusMatcher implements AssertionPolicy {
         this.matcher = mtch;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void assertThat(final TestResponse response) {
         MatcherAssert.assertThat(
@@ -76,9 +73,6 @@ final class StatusMatcher implements AssertionPolicy {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isRetryNeeded(final int attempt) {
         return false;

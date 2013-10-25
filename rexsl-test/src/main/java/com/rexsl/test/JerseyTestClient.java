@@ -102,18 +102,12 @@ final class JerseyTestClient implements TestClient {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public URI uri() {
         return this.home;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestClient header(@NotNull final String name,
@@ -137,9 +131,6 @@ final class JerseyTestClient implements TestClient {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse get(@NotNull final String desc) {
@@ -155,9 +146,6 @@ final class JerseyTestClient implements TestClient {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse post(@NotNull final String desc,
@@ -175,9 +163,6 @@ final class JerseyTestClient implements TestClient {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse put(@NotNull final String desc,
@@ -195,9 +180,6 @@ final class JerseyTestClient implements TestClient {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse delete(@NotNull final String desc) {
@@ -213,9 +195,6 @@ final class JerseyTestClient implements TestClient {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse head(@NotNull final String desc) {
@@ -231,9 +210,6 @@ final class JerseyTestClient implements TestClient {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse options(@NotNull final String desc,

@@ -66,9 +66,6 @@ public final class RuntimeFilter implements Filter {
      */
     private final transient List<File> folders = new ArrayList<File>();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void destroy() {
@@ -102,9 +99,6 @@ public final class RuntimeFilter implements Filter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     @Loggable(Loggable.DEBUG)

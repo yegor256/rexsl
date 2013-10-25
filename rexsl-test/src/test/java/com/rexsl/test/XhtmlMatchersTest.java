@@ -240,9 +240,6 @@ public final class XhtmlMatchersTest {
          * XML namespace.
          */
         public static final String NAMESPACE = "foo-namespace";
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public String toString() {
             return "<a><c/></a>";

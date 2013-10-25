@@ -79,9 +79,6 @@ public final class NoBrokenLinks implements AssertionPolicy {
         this.home = uri;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void assertThat(final TestResponse response) {
         final Collection<String> links = response.xpath(
@@ -117,9 +114,6 @@ public final class NoBrokenLinks implements AssertionPolicy {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isRetryNeeded(final int attempt) {
         return false;

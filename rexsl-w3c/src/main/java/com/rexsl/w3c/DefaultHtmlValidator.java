@@ -63,9 +63,6 @@ final class DefaultHtmlValidator extends BaseValidator implements Validator {
         this.uri = entry;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     @SuppressWarnings("PMD.AvoidCatchingThrowable")

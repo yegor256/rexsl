@@ -84,25 +84,16 @@ public final class MultivaluedMapMocker
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void putSingle(final String key, final String value) {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void add(final String key, final String value) {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getFirst(final String key) {
         final Set<String> vals = this.map.get(key);
@@ -113,33 +104,21 @@ public final class MultivaluedMapMocker
         return first;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int size() {
         return this.map.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isEmpty() {
         return this.map.isEmpty();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean containsKey(final Object key) {
         return this.map.containsKey(key);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean containsValue(final Object value) {
         boolean contains = false;
@@ -152,58 +131,37 @@ public final class MultivaluedMapMocker
         return contains;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<String> get(final Object key) {
         return new ArrayList<String>(this.map.get(key));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<String> put(final String key, final List<String> value) {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<String> remove(final Object key) {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void putAll(
         final Map<? extends String, ? extends List<String>> all) {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<String> keySet() {
         return this.map.keySet();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Collection<List<String>> values() {
@@ -215,9 +173,6 @@ public final class MultivaluedMapMocker
         return values;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Set<Entry<String, List<String>>> entrySet() {

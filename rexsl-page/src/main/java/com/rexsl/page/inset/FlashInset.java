@@ -87,9 +87,6 @@ public final class FlashInset implements Inset {
         this.resource = res;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {
@@ -339,9 +336,6 @@ public final class FlashInset implements Inset {
         public long msec() {
             return this.millis;
         }
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public String getPath() {
             return "/";

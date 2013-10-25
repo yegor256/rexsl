@@ -63,9 +63,6 @@ final class BodyMatcher implements AssertionPolicy {
         this.matcher = mtch;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void assertThat(final TestResponse response) {
         MatcherAssert.assertThat(
@@ -78,9 +75,6 @@ final class BodyMatcher implements AssertionPolicy {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isRetryNeeded(final int attempt) {
         return false;

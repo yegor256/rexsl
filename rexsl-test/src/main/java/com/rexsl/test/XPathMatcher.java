@@ -76,9 +76,6 @@ final class XPathMatcher<T> extends TypeSafeMatcher<T> {
         this.context = ctx;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean matchesSafely(@NotNull final T input) {
         return !new XMLDocument(XhtmlMatchers.xhtml(input))
@@ -87,9 +84,6 @@ final class XPathMatcher<T> extends TypeSafeMatcher<T> {
             .isEmpty();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void describeTo(@NotNull final Description description) {
         description.appendText("an XML document with XPath ")

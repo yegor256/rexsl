@@ -67,9 +67,6 @@ final class RootArtifact {
         this.exclusions = excl;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         return Logger.format(

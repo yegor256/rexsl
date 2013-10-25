@@ -93,25 +93,16 @@ final class Encrypted implements Identity {
         this.key = secret;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public URN urn() {
         return this.identity.urn();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String name() {
         return this.identity.name();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public URI photo() {
         return this.identity.photo();

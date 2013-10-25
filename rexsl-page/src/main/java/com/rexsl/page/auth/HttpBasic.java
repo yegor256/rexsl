@@ -89,9 +89,6 @@ public final class HttpBasic implements Provider {
         this.vault = vlt;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Identity identity() throws IOException {
         final List<String> headers = this.resource.httpHeaders()

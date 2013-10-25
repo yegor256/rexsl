@@ -101,9 +101,6 @@ public final class Google implements Provider, Provider.Visible {
         this.appKey = key;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Identity identity() throws IOException {
         Identity identity = Identity.ANONYMOUS;
@@ -125,9 +122,6 @@ public final class Google implements Provider, Provider.Visible {
         return identity;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Link link() {
         return new Link(

@@ -68,18 +68,12 @@ final class WebXmlCheck implements Check {
      */
     private final transient AtomicInteger errors = new AtomicInteger();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {

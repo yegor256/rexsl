@@ -81,18 +81,12 @@ final class WebappFilesCheck implements Check {
         }
     );
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void setScope(final String scope) {
         // nothing to scope here
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public boolean validate(final Environment env) {

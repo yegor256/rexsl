@@ -116,27 +116,18 @@ public final class MavenEnvironment implements Environment {
         this.localRepo = dir;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public File basedir() {
         return this.project.getBasedir();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public int port() {
         return this.iport;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public File webdir() {
@@ -148,9 +139,6 @@ public final class MavenEnvironment implements Environment {
         return new File(dir);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     @Loggable(Loggable.DEBUG)
@@ -170,9 +158,6 @@ public final class MavenEnvironment implements Environment {
         return new Classpath(this.project, new File(this.localRepo), scopes);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean useRuntimeFiltering() {
         return this.runtimeFiltering;

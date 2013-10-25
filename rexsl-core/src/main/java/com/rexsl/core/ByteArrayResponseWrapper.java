@@ -90,25 +90,16 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
         return this.stream.toByteArray();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public PrintWriter getWriter() {
         return this.writer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public ServletOutputStream getOutputStream() throws IOException {
         return new ServletOutputStream() {
-            /**
-             * {@inheritDoc}
-             */
             @Override
             public void write(final int part) throws IOException {
                 ByteArrayResponseWrapper.this.stream.write(part);

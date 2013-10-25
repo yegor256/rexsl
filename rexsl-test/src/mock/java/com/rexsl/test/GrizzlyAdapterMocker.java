@@ -105,9 +105,6 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     private final transient ConcurrentMap<String, String> headers =
         new ConcurrentHashMap<String, String>();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings({ "PMD.AvoidCatchingThrowable", "rawtypes" })
     public void service(final GrizzlyRequest request,

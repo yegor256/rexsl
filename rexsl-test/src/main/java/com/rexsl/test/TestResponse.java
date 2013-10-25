@@ -141,9 +141,6 @@ public interface TestResponse extends XML {
      */
     JsonReader getJson();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     TestResponse registerNs(@NotNull String prefix, @NotNull Object uri);
 

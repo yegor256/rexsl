@@ -102,9 +102,6 @@ public interface Provider {
         public Always(@NotNull final Identity identity) {
             this.idnt = identity;
         }
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public Identity identity() throws IOException {
             return this.idnt;

@@ -61,18 +61,12 @@ import org.apache.commons.io.FilenameUtils;
 @EqualsAndHashCode
 final class LibrariesCheck implements Check {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void setScope(@NotNull final String scope) {
         // nothing to scope here
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     @Loggable(Loggable.DEBUG)

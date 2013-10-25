@@ -69,9 +69,6 @@ final class StaticTemplate implements Template {
         this.text = StaticTemplate.load(uri);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public String render(@NotNull final String defect) {

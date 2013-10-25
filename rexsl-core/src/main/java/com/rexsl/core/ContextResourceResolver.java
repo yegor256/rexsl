@@ -81,9 +81,6 @@ final class ContextResourceResolver implements URIResolver {
         this.context = ctx;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     @SuppressWarnings({

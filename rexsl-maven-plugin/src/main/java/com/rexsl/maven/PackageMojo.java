@@ -113,9 +113,6 @@ public final class PackageMojo extends AbstractRexslMojo {
         this.filtering = fltr;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void run() {
         Filter filter;
@@ -150,9 +147,6 @@ public final class PackageMojo extends AbstractRexslMojo {
      *  supported. I don't know how to get access to all other project props.
      */
     private final class PropsFilter implements Filter {
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public Reader filter(final File file) throws IOException {
             final String origin = FileUtils.readFileToString(file);

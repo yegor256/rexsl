@@ -56,17 +56,11 @@ import org.apache.commons.lang3.CharEncoding;
  */
 final class CssPacker extends AbstractPacker {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected String extension() {
         return "css";
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void pack(@NotNull final Reader input, @NotNull final File dest)
         throws IOException {

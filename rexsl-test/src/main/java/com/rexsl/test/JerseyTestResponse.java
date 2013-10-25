@@ -96,9 +96,6 @@ final class JerseyTestResponse implements TestResponse {
         this.request = rqst;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         return Logger.format(
@@ -109,9 +106,6 @@ final class JerseyTestResponse implements TestResponse {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestClient rel(@NotNull final String query) {
@@ -129,18 +123,12 @@ final class JerseyTestResponse implements TestResponse {
         return this.follow(UriBuilder.fromUri(links.get(0)).build());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestClient follow() {
         return this.follow(this.fetcher.fetch().getLocation());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public String getBody() {
@@ -151,9 +139,6 @@ final class JerseyTestResponse implements TestResponse {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public JsonReader getJson() {
@@ -164,35 +149,23 @@ final class JerseyTestResponse implements TestResponse {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getStatus() {
         return this.fetcher.fetch().getStatus();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public Node node() {
         return this.getXml().node();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public List<String> xpath(@NotNull final String query) {
         return Collections.unmodifiableList(this.getXml().xpath(query));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public String getStatusLine() {
@@ -203,18 +176,12 @@ final class JerseyTestResponse implements TestResponse {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public MultivaluedMap<String, String> getHeaders() {
         return this.fetcher.fetch().getHeaders();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
@@ -252,9 +219,6 @@ final class JerseyTestResponse implements TestResponse {
         return cookie;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse registerNs(@NotNull final String prefix,
@@ -265,9 +229,6 @@ final class JerseyTestResponse implements TestResponse {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse merge(@NotNull final NamespaceContext ctx) {
@@ -277,18 +238,12 @@ final class JerseyTestResponse implements TestResponse {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public List<XML> nodes(@NotNull final String query) {
         return Collections.unmodifiableList(this.getXml().nodes(query));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse assertThat(@NotNull final AssertionPolicy assertion) {
@@ -330,27 +285,18 @@ final class JerseyTestResponse implements TestResponse {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public void fail(@NotNull final String reason) {
         this.assertThat(new Failure(reason));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse assertStatus(final int status) {
         return this.assertStatus(Matchers.equalTo(status));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse assertStatus(@NotNull final Matcher<Integer> matcher) {
@@ -358,9 +304,6 @@ final class JerseyTestResponse implements TestResponse {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse assertHeader(@NotNull final String name,
@@ -369,9 +312,6 @@ final class JerseyTestResponse implements TestResponse {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse assertBody(@NotNull final Matcher<String> matcher) {
@@ -379,9 +319,6 @@ final class JerseyTestResponse implements TestResponse {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse assertXPath(@NotNull final String xpath) {
@@ -407,9 +344,6 @@ final class JerseyTestResponse implements TestResponse {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public TestResponse assertJson(@NotNull final String element) {

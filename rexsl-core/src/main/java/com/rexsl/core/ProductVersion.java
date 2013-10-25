@@ -66,9 +66,6 @@ final class ProductVersion implements Comparable<ProductVersion> {
         this.origin = text;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int compareTo(final ProductVersion ver) {
         return this.normalized().compareTo(ver.normalized());

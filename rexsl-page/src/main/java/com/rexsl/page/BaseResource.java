@@ -112,17 +112,11 @@ public class BaseResource implements Resource {
      */
     private transient ServletContext srvltContext;
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public final long started() {
         return this.start;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public final Providers providers() {
@@ -137,9 +131,6 @@ public class BaseResource implements Resource {
         return this.iproviders;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public final HttpHeaders httpHeaders() {
@@ -154,9 +145,6 @@ public class BaseResource implements Resource {
         return this.ihttpHeaders.get();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public final UriInfo uriInfo() {
@@ -171,9 +159,6 @@ public class BaseResource implements Resource {
         return this.iuriInfo;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public final HttpServletRequest httpServletRequest() {

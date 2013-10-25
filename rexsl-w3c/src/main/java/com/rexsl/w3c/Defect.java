@@ -103,9 +103,6 @@ public final class Defect {
         this.imessage = message.trim();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         return Logger.format(

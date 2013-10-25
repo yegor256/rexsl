@@ -102,9 +102,6 @@ final class DefaultValidationResponse implements ValidationResponse {
         this.encoding = enc;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         final StringBuilder text = new StringBuilder();
@@ -117,49 +114,31 @@ final class DefaultValidationResponse implements ValidationResponse {
         return text.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean valid() {
         return this.ivalid;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public URI checkedBy() {
         return this.validator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String doctype() {
         return this.type;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Charset charset() {
         return this.encoding;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<Defect> errors() {
         return Collections.unmodifiableSet(this.ierrors);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<Defect> warnings() {
         return Collections.unmodifiableSet(this.iwarnings);

@@ -74,9 +74,6 @@ final class InContainerScriptsCheck implements Check {
      */
     @SuppressWarnings("PMD.FinalFieldCouldBeStatic")
     private final transient Object mutex = "_mutex_";
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void setScope(@NotNull final String scope) {
@@ -85,9 +82,6 @@ final class InContainerScriptsCheck implements Check {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {

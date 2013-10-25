@@ -97,117 +97,78 @@ final class ForwardedUriInfo implements UriInfo {
         this.headers = hdrs;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public URI getAbsolutePath() {
         return this.getAbsolutePathBuilder().build();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public UriBuilder getAbsolutePathBuilder() {
         return this.forward(this.info.getAbsolutePathBuilder());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public URI getBaseUri() {
         return this.getBaseUriBuilder().build();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public UriBuilder getBaseUriBuilder() {
         return this.forward(this.info.getBaseUriBuilder());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public URI getRequestUri() {
         return this.getRequestUriBuilder().build();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public UriBuilder getRequestUriBuilder() {
         return this.forward(this.info.getRequestUriBuilder());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public List<Object> getMatchedResources() {
         return this.info.getMatchedResources();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public List<String> getMatchedURIs() {
         return this.info.getMatchedURIs();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public List<String> getMatchedURIs(final boolean decode) {
         return this.info.getMatchedURIs(decode);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public String getPath() {
         return this.info.getPath();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public String getPath(final boolean decode) {
         return this.info.getPath(decode);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public MultivaluedMap<String, String> getPathParameters() {
         return this.info.getPathParameters();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public MultivaluedMap<String, String> getPathParameters(
@@ -215,36 +176,24 @@ final class ForwardedUriInfo implements UriInfo {
         return this.info.getPathParameters(decode);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public List<PathSegment> getPathSegments() {
         return this.info.getPathSegments();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public List<PathSegment> getPathSegments(final boolean decode) {
         return this.info.getPathSegments(decode);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public MultivaluedMap<String, String> getQueryParameters() {
         return this.info.getQueryParameters();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public MultivaluedMap<String, String> getQueryParameters(

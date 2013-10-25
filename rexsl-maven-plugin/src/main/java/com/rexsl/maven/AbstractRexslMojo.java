@@ -187,9 +187,6 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
         return this.environment;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public final void execute() throws MojoFailureException {
         StaticLoggerBinder.getSingleton().setMavenLog(this.getLog());

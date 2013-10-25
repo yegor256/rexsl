@@ -63,9 +63,6 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
         this.uri = entry;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
     @NotNull

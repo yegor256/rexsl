@@ -82,9 +82,6 @@ public final class VersionInset implements Inset {
         this.date = when;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void render(@NotNull final BasePage<?, ?> page,
         @NotNull final Response.ResponseBuilder builder) {

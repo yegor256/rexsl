@@ -111,9 +111,6 @@ final class XhtmlOutputCheck implements Check {
         this.validator = val;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void setScope(@NotNull final String scope) {
@@ -122,9 +119,6 @@ final class XhtmlOutputCheck implements Check {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {

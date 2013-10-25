@@ -109,9 +109,6 @@ final class BufferedJerseyFetcher implements JerseyFetcher {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     @NotNull

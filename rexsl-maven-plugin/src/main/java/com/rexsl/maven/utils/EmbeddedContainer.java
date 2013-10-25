@@ -228,9 +228,6 @@ public final class EmbeddedContainer {
      * Custom security policy that allows access to classloader.
      */
     private static final class FreePolicy extends Policy {
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public boolean implies(final ProtectionDomain domain,
             final Permission perm) {

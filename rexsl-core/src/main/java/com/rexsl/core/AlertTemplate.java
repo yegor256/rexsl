@@ -61,9 +61,6 @@ final class AlertTemplate implements Template {
         this.message = msg;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public String render(@NotNull final String defect) {

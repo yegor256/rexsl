@@ -81,9 +81,6 @@ final class LazyXml implements XML {
         this.context = ctx;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public LazyXml registerNs(@NotNull final String prefix,
@@ -91,9 +88,6 @@ final class LazyXml implements XML {
         return new LazyXml(this.response, this.context.add(prefix, uri));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public List<String> xpath(@NotNull final String query) {
@@ -102,18 +96,12 @@ final class LazyXml implements XML {
             .xpath(query);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public Node node() {
         return new XMLDocument(this.response.getBody()).node();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public List<XML> nodes(@NotNull final String query) {
@@ -122,9 +110,6 @@ final class LazyXml implements XML {
             .nodes(query);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @NotNull
     public XML merge(@NotNull final NamespaceContext ctx) {

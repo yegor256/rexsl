@@ -68,9 +68,6 @@ final class RetryPolicy implements AssertionPolicy {
         this.xpath = addr;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void assertThat(@NotNull final TestResponse response) {
         if (response.getStatus() != HttpURLConnection.HTTP_OK) {
@@ -82,9 +79,6 @@ final class RetryPolicy implements AssertionPolicy {
         this.valid = true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isRetryNeeded(final int attempt) {
         final long delay = attempt * 2L;

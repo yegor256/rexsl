@@ -48,9 +48,6 @@ import javax.validation.constraints.NotNull;
  */
 abstract class AbstractPacker implements Packer {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     @Loggable(Loggable.DEBUG)

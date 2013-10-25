@@ -144,9 +144,6 @@ public final class XsltFilter implements Filter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void destroy() {
         // nothing to do

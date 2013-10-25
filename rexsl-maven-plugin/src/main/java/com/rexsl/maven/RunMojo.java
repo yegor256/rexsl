@@ -51,9 +51,6 @@ import org.apache.maven.plugin.MojoFailureException;
  */
 public final class RunMojo extends AbstractRexslMojo {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void run() throws MojoFailureException {
         this.env().setRuntimeFiltering(true);

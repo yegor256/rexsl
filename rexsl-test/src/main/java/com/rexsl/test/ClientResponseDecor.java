@@ -71,9 +71,6 @@ final class ClientResponseDecor implements Formattable {
         this.body = text;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         final Formatter fmt = new Formatter();

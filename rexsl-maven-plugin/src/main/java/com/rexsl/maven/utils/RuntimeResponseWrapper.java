@@ -93,18 +93,12 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
         return this.stream;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public PrintWriter getWriter() {
         return this.writer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void sendError(final int stc, @NotNull final String msg) {
@@ -112,17 +106,11 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
         this.message = msg;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setStatus(final int stc) {
         this.status = stc;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void flushBuffer() throws IOException {
@@ -154,16 +142,10 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public ServletOutputStream getOutputStream() throws IOException {
         return new ServletOutputStream() {
-            /**
-             * {@inheritDoc}
-             */
             @Override
             public void write(final int part) throws IOException {
                 RuntimeResponseWrapper.this.stream.write(part);

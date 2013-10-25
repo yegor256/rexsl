@@ -47,9 +47,6 @@ import lombok.ToString;
 @Immutable
 final class XsdEventHandler implements ValidationEventHandler {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean handleEvent(final ValidationEvent event) {
         Logger.error(

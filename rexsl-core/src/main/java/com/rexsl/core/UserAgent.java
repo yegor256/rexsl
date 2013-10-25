@@ -92,9 +92,6 @@ final class UserAgent {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         final StringBuilder text = new StringBuilder();

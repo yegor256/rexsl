@@ -70,9 +70,6 @@ final class XpathAssertionMatcher implements AssertionPolicy {
         this.xpath = path;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void assertThat(final TestResponse response) {
         MatcherAssert.assertThat(
@@ -86,9 +83,6 @@ final class XpathAssertionMatcher implements AssertionPolicy {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isRetryNeeded(final int attempt) {
         return false;

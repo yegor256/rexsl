@@ -191,9 +191,6 @@ public final class DefaultChecksProvider implements ChecksProvider {
     @SuppressWarnings("PMD.FinalFieldCouldBeStatic")
     private final transient Object mutex = "_mutex_";
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public Set<Check> all() {
@@ -215,9 +212,6 @@ public final class DefaultChecksProvider implements ChecksProvider {
         return Collections.unmodifiableSet(all);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void setTest(@NotNull final String scope) {
@@ -226,9 +220,6 @@ public final class DefaultChecksProvider implements ChecksProvider {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public void setCheck(@NotNull final String scope) {

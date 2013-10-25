@@ -110,17 +110,11 @@ public final class ExceptionTrap extends HttpServlet {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void destroy() {
         // nothing to do
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @LogExceptions
     public void service(final HttpServletRequest request,

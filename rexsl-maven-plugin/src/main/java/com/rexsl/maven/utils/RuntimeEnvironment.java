@@ -80,9 +80,6 @@ final class RuntimeEnvironment implements Environment {
         this.context = ctx;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public File basedir() {
@@ -91,9 +88,6 @@ final class RuntimeEnvironment implements Environment {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public File webdir() {
@@ -126,9 +120,6 @@ final class RuntimeEnvironment implements Environment {
         throw new UnsupportedOperationException("#useRuntimeFiltering()");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @Loggable(Loggable.DEBUG)
     public int port() {

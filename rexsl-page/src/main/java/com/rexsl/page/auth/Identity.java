@@ -131,23 +131,14 @@ public interface Identity {
         public Simple() {
             this(URN.create("urn:test:0"), "John Doe", URI.create("#"));
         }
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public URN urn() {
             return this.idnt;
         }
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public String name() {
             return this.title;
         }
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public URI photo() {
             return URI.create(this.pic);
