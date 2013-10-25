@@ -29,7 +29,7 @@
  */
 package com.rexsl.maven;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * Provider of checks.
@@ -48,7 +48,7 @@ public interface ChecksProvider {
      *
      * @return List of checks
      */
-    Set<Check> all();
+    Collection<Check> all();
 
     /**
      * Sets the scope of tests to execute.

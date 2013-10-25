@@ -33,35 +33,37 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.checks.DefaultChecksProvider;
 import com.rexsl.maven.utils.LoggingManager;
-import java.util.Set;
+import java.util.Collection;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
- * Test entire project against RESTful principles.
+ * Test the entire project against RESTful principles.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @goal check
- * @phase integration-test
- * @threadSafe
  */
+@Mojo(
+    name = "check", defaultPhase = LifecyclePhase.INTEGRATION_TEST,
+    threadSafe = true
+)
 public final class CheckMojo extends AbstractRexslMojo {
 
     /**
      * Skip all tests.
-     *
-     * @parameter property="skipTests" default-value="false"
      * @since 0.3.8
      */
+    @Parameter(property = "skipTests", defaultValue = "false")
     private transient boolean skipTests;
 
     /**
      * Regular expression that determines tests ({@code groovy},
      * {@code xml}, etc.) to be executed during test.
-     *
-     * @parameter property="rexsl.test" default-value=".*"
      * @since 0.3.6
      */
+    @Parameter(property = "rexsl.test", defaultValue = ".*")
     private transient String test = ".*";
 
     /**
@@ -71,9 +73,9 @@ public final class CheckMojo extends AbstractRexslMojo {
      * <p>Set it to some irrelevant value in order to see a full list of
      * available checks, for example: {@code mvn rexsl:check -Drexsl.check=foo}.
      *
-     * @parameter property="rexsl.check"
      * @since 0.3.6
      */
+    @Parameter(property = "rexsl.check")
     private transient String check;
 
     /**
@@ -115,8 +117,8 @@ public final class CheckMojo extends AbstractRexslMojo {
         if (this.check != null) {
             this.provider.setCheck(this.check);
         }
-        final Set<Check> checks = this.provider.all();
-        for (Check chck : checks) {
+        final Collection<Check> checks = this.provider.all();
+        for (final Check chck : checks) {
             if (this.skipTests) {
                 Logger.warn(
                     this,

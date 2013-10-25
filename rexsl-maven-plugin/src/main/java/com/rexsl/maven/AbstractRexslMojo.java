@@ -34,11 +34,13 @@ import com.jcabi.log.Logger;
 import com.rexsl.maven.utils.PortReserver;
 import java.util.Map;
 import java.util.Properties;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.slf4j.impl.StaticLoggerBinder;
-import org.sonatype.aether.RepositorySystemSession;
 
 /**
  * Abstract mojo.
@@ -62,37 +64,35 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
 
     /**
      * Maven project, to be injected by Maven itself.
-     * @parameter property="project"
-     * @required
-     * @readonly
      */
-    private transient MavenProject iproject;
+    @Component
+    private transient MavenProject prj;
 
     /**
      * The current repository/network configuration of Maven.
-     * @parameter default-value="${repositorySystemSession}"
-     * @readonly
      */
-    private transient RepositorySystemSession session;
+    @Component
+    private transient MavenSession session;
 
     /**
      * Shall we skip execution?
-     * @parameter property="rexsl.skip" default-value="false"
-     * @required
      */
+    @Parameter(property = "rexsl.skip", defaultValue = "false")
     private transient boolean skip;
 
     /**
      * Webapp directory.
-     * @parameter property="rexsl.webappDirectory" default-value="${project.build.directory}/${project.build.finalName}"
-     * @required
      */
+    @Parameter(
+        property = "rexsl.webappDirectory",
+        defaultValue = "${project.build.directory}/${project.build.finalName}"
+    )
     private transient String webappDirectory;
 
     /**
      * TPC port to bind to (by default a random port is used).
-     * @parameter property="rexsl.port"
      */
+    @Parameter(property = "rexsl.port")
     private transient Integer port;
 
     /**
@@ -103,8 +103,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * >maven-surefire-plugin</a>,
      * for example you want to reconfigure LOG4J just for the tests:
      *
-     * <pre>
-     * &lt;plugin>
+     * <pre>&lt;plugin>
      *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
      *   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
      *   &lt;configuration&gt;
@@ -112,13 +111,12 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      *       &lt;log4j.configuration&gt;./x.props&lt;/log4j.configuration&gt;
      *     &lt;/systemPropertyVariables&gt;
      *   &lt;/configuration&gt;
-     * &lt;/plugin&gt;
-     * </pre>
+     * &lt;/plugin&gt;</pre>
      *
-     * @parameter
      * @since 0.3
      */
     @SuppressWarnings("PMD.LongVariable")
+    @Parameter
     private transient Map<String, String> systemPropertyVariables;
 
     /**
@@ -132,7 +130,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      */
     @Loggable(Loggable.DEBUG)
     public final void setProject(final MavenProject proj) {
-        this.iproject = proj;
+        this.prj = proj;
     }
 
     /**
@@ -158,7 +156,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * @param sess The session
      */
     @Loggable(Loggable.DEBUG)
-    public final void setSession(final RepositorySystemSession sess) {
+    public final void setSession(final MavenSession sess) {
         this.session = sess;
     }
 
@@ -167,7 +165,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * @param props Properties
      */
     @Loggable(Loggable.DEBUG)
-    public final void setsystemProperties(final Map<String, String> props) {
+    public final void setSystemProperties(final Map<String, String> props) {
         this.systemPropertyVariables = props;
     }
 
@@ -176,7 +174,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      * @return The project
      */
     protected final MavenProject project() {
-        return this.iproject;
+        return this.prj;
     }
 
     /**
@@ -205,7 +203,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
         this.environment = new MavenEnvironment(this.project(), properties);
         if (this.session != null) {
             this.environment.setLocalRepository(
-                this.session.getLocalRepository().getBasedir().getPath()
+                this.session.getLocalRepository().getBasedir()
             );
         }
         if (this.port == null) {

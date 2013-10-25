@@ -43,6 +43,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.CharEncoding;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Package resources.
@@ -53,8 +56,7 @@ import org.apache.commons.lang3.CharEncoding;
  * convenient packers that do this job, you just need to call them. First of
  * a {@code package} goal should be called:
  *
- * <pre>
- * &lt;plugin>
+ * <pre>&lt;plugin>
  *   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
  *   &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
  *   &lt;version&gt;...&lt;/version&gt;
@@ -66,30 +68,28 @@ import org.apache.commons.lang3.CharEncoding;
  *       &lt;/goals&gt;
  *     &lt;/execution&gt;
  *   &lt;/executions&gt;
- * &lt;/plugin&gt;
- * </pre>
+ * &lt;/plugin&gt;</pre>
  *
  * <p>The goal will package all files it knows about and place their packaged
  * (minified) versions into {@code webappDirectory}. Then, you should configure
  * {@code maven-war-plugin} to not touch these files again (to avoid their
  * packaging):
  *
- * <pre>
- * &lt;plugin>
+ * <pre>&lt;plugin>
  *   &lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;
  *   &lt;configuration&gt;
  *     &lt;warSourceExcludes&gt;js/**, css/**, xsl/**&lt;/warSourceExcludes&gt;
  *     [..]
  *   &lt;/configuration&gt;
- * &lt;/plugin&gt;
- * </pre>
+ * &lt;/plugin&gt;</pre>
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @goal package
- * @phase process-resources
- * @threadSafe
  */
+@Mojo(
+    name = "package", defaultPhase = LifecyclePhase.PROCESS_RESOURCES,
+    threadSafe = true
+)
 public final class PackageMojo extends AbstractRexslMojo {
 
     /**
@@ -99,10 +99,10 @@ public final class PackageMojo extends AbstractRexslMojo {
      * <p>At the moment only properties defined in {@code pom/properties}
      * section are supported.
      *
-     * @parameter property="rexsl.filtering"
      * @since 0.3.7
      * @see <a href="http://trac.rexsl.com/rexsl/ticket/342">Introduced in ticket #342</a>
      */
+    @Parameter(property = "rexsl.filtering")
     private transient boolean filtering;
 
     /**

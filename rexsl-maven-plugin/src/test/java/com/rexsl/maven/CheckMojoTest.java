@@ -29,9 +29,12 @@
  */
 package com.rexsl.maven;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
@@ -39,8 +42,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.sonatype.aether.RepositorySystemSession;
-import org.sonatype.aether.repository.LocalRepository;
 
 /**
  * Test case for {@link CheckMojo}.
@@ -71,7 +72,7 @@ public final class CheckMojoTest {
     @Test
     public void restoresSystemPropertiesAfterExecution() throws Exception {
         final ChecksProvider provider = Mockito.mock(ChecksProvider.class);
-        final Set<Check> checks = new HashSet<Check>();
+        final Collection<Check> checks = new HashSet<Check>(0);
         final Check check = new CheckMocker().withResult(true).mock();
         checks.add(check);
         Mockito.doReturn(checks).when(provider).all();
@@ -79,17 +80,14 @@ public final class CheckMojoTest {
         mojo.setChecksProvider(provider);
         final MavenProject project = new MavenProjectMocker().mock();
         mojo.setProject(project);
-        final ConcurrentHashMap<String, String> systemProperties =
+        final ConcurrentMap<String, String> props =
             new ConcurrentHashMap<String, String>();
-        systemProperties.put("new-property", "some-value");
-        mojo.setsystemProperties(systemProperties);
-        final int beforeCount = System.getProperties().size();
+        props.put("new-property", "some-value");
+        mojo.setSystemProperties(props);
+        final int before = System.getProperties().size();
         mojo.execute();
-        final int afterCount = System.getProperties().size();
-        MatcherAssert.assertThat(
-            beforeCount,
-            Matchers.is(afterCount)
-        );
+        final int after = System.getProperties().size();
+        MatcherAssert.assertThat(before, Matchers.equalTo(after));
     }
 
     /**
@@ -113,7 +111,7 @@ public final class CheckMojoTest {
     @Test
     public void onePositiveCheckIsExecuted() throws Exception {
         final ChecksProvider provider = Mockito.mock(ChecksProvider.class);
-        final Set<Check> checks = new HashSet<Check>();
+        final Collection<Check> checks = new HashSet<Check>(0);
         final Check check = new CheckMocker().withResult(true).mock();
         checks.add(check);
         Mockito.doReturn(checks).when(provider).all();
@@ -133,9 +131,10 @@ public final class CheckMojoTest {
     private CheckMojo mojo() {
         final CheckMojo mojo = new CheckMojo();
         mojo.setWebappDirectory("");
-        final RepositorySystemSession session =
-            Mockito.mock(RepositorySystemSession.class);
-        final LocalRepository repo = new LocalRepository(".");
+        final MavenSession session =
+            Mockito.mock(MavenSession.class);
+        final ArtifactRepository repo = Mockito.mock(ArtifactRepository.class);
+        Mockito.doReturn(".").when(repo).getBasedir();
         Mockito.doReturn(repo).when(session).getLocalRepository();
         mojo.setSession(session);
         mojo.setLog(new SystemStreamLog());

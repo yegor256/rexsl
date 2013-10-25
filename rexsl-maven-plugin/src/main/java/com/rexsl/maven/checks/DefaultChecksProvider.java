@@ -193,7 +193,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
 
     @Override
     @Loggable(Loggable.DEBUG)
-    public Set<Check> all() {
+    public Collection<Check> all() {
         final Set<Check> all = new LinkedHashSet<Check>();
         for (String name : this.checks) {
             try {

@@ -31,7 +31,7 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Check;
 import com.rexsl.maven.ChecksProvider;
-import java.util.Set;
+import java.util.Collection;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -49,7 +49,7 @@ public final class DefaultChecksProviderTest {
      */
     @Test
     public void retrievesSetOfChecks() throws Exception {
-        final Set<Check> checks = new DefaultChecksProvider().all();
+        final Collection<Check> checks = new DefaultChecksProvider().all();
         MatcherAssert.assertThat(
             checks,
             Matchers.hasSize(Matchers.greaterThan(0))
@@ -65,7 +65,7 @@ public final class DefaultChecksProviderTest {
         final ChecksProvider checksProvider = new DefaultChecksProvider();
         final String sCheck = "JigsawCssCheck";
         checksProvider.setCheck(sCheck);
-        final Set<Check> checks = checksProvider.all();
+        final Collection<Check> checks = checksProvider.all();
         MatcherAssert.assertThat(
             checks,
             Matchers.allOf(
