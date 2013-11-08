@@ -103,100 +103,94 @@
 <a class="jxr_linenumber" name="93" href="#93">93</a>          <strong class="jxr_keyword">this</strong>.validator = val;
 <a class="jxr_linenumber" name="94" href="#94">94</a>      }
 <a class="jxr_linenumber" name="95" href="#95">95</a>  
-<a class="jxr_linenumber" name="96" href="#96">96</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="97" href="#97">97</a>  <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
-<a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="99" href="#99">99</a>      @Override
-<a class="jxr_linenumber" name="100" href="#100">100</a>     @Loggable(Loggable.DEBUG)
-<a class="jxr_linenumber" name="101" href="#101">101</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setScope(@NotNull <strong class="jxr_keyword">final</strong> String scope) {
-<a class="jxr_linenumber" name="102" href="#102">102</a>         <em class="jxr_comment">// nothing to scope here</em>
-<a class="jxr_linenumber" name="103" href="#103">103</a>     }
-<a class="jxr_linenumber" name="104" href="#104">104</a> 
-<a class="jxr_linenumber" name="105" href="#105">105</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="106" href="#106">106</a> <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
-<a class="jxr_linenumber" name="107" href="#107">107</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="108" href="#108">108</a>     @Override
-<a class="jxr_linenumber" name="109" href="#109">109</a>     @Loggable(Loggable.DEBUG)
-<a class="jxr_linenumber" name="110" href="#110">110</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> validate(@NotNull <strong class="jxr_keyword">final</strong> <a href="../../../../com/rexsl/maven/Environment.html">Environment</a> env) {
-<a class="jxr_linenumber" name="111" href="#111">111</a>         <strong class="jxr_keyword">final</strong> File dir = <strong class="jxr_keyword">new</strong> File(env.basedir(), JigsawCssCheck.CSS_DIR);
-<a class="jxr_linenumber" name="112" href="#112">112</a>         <strong class="jxr_keyword">boolean</strong> success = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="113" href="#113">113</a>         <strong class="jxr_keyword">if</strong> (dir.exists()) {
-<a class="jxr_linenumber" name="114" href="#114">114</a>             <strong class="jxr_keyword">final</strong> Collection&lt;File&gt; files = <strong class="jxr_keyword">new</strong> <a href="../../../../com/rexsl/maven/utils/FileFinder.html">FileFinder</a>(dir, <span class="jxr_string">"css"</span>).random();
-<a class="jxr_linenumber" name="115" href="#115">115</a>             <strong class="jxr_keyword">for</strong> (File css : files) {
-<a class="jxr_linenumber" name="116" href="#116">116</a>                 <strong class="jxr_keyword">final</strong> String name =
-<a class="jxr_linenumber" name="117" href="#117">117</a>                     FilenameUtils.removeExtension(css.getName());
-<a class="jxr_linenumber" name="118" href="#118">118</a>                 LoggingManager.enter(name);
-<a class="jxr_linenumber" name="119" href="#119">119</a>                 success &amp;= <strong class="jxr_keyword">this</strong>.one(css);
-<a class="jxr_linenumber" name="120" href="#120">120</a>                 LoggingManager.leave();
-<a class="jxr_linenumber" name="121" href="#121">121</a>                 <strong class="jxr_keyword">if</strong> (!success) {
-<a class="jxr_linenumber" name="122" href="#122">122</a>                     Logger.warn(
-<a class="jxr_linenumber" name="123" href="#123">123</a>                         <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="124" href="#124">124</a>                         <span class="jxr_string">"Validation Failed!"</span>
-<a class="jxr_linenumber" name="125" href="#125">125</a>                     );
-<a class="jxr_linenumber" name="126" href="#126">126</a>                 }
-<a class="jxr_linenumber" name="127" href="#127">127</a>             }
-<a class="jxr_linenumber" name="128" href="#128">128</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="129" href="#129">129</a>             Logger.info(
-<a class="jxr_linenumber" name="130" href="#130">130</a>                 <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="131" href="#131">131</a>                 <span class="jxr_string">"%s directory is absent, no CSS tests"</span>,
-<a class="jxr_linenumber" name="132" href="#132">132</a>                 JigsawCssCheck.CSS_DIR
-<a class="jxr_linenumber" name="133" href="#133">133</a>             );
-<a class="jxr_linenumber" name="134" href="#134">134</a>         }
-<a class="jxr_linenumber" name="135" href="#135">135</a>         <strong class="jxr_keyword">return</strong> success;
-<a class="jxr_linenumber" name="136" href="#136">136</a>     }
-<a class="jxr_linenumber" name="137" href="#137">137</a> 
-<a class="jxr_linenumber" name="138" href="#138">138</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="139" href="#139">139</a> <em class="jxr_javadoccomment">     * Check one CSS page.</em>
-<a class="jxr_linenumber" name="140" href="#140">140</a> <em class="jxr_javadoccomment">     * @param file Check this particular CSS document</em>
-<a class="jxr_linenumber" name="141" href="#141">141</a> <em class="jxr_javadoccomment">     * @return Is CSS valid?</em>
-<a class="jxr_linenumber" name="142" href="#142">142</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="143" href="#143">143</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> one(<strong class="jxr_keyword">final</strong> File file) {
-<a class="jxr_linenumber" name="144" href="#144">144</a>         <strong class="jxr_keyword">boolean</strong> valid = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="145" href="#145">145</a>         String page = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="146" href="#146">146</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="147" href="#147">147</a>             page = FileUtils.readFileToString(file);
-<a class="jxr_linenumber" name="148" href="#148">148</a>         } <strong class="jxr_keyword">catch</strong> (java.io.IOException ex) {
-<a class="jxr_linenumber" name="149" href="#149">149</a>             Logger.error(
-<a class="jxr_linenumber" name="150" href="#150">150</a>                 <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="151" href="#151">151</a>                 <span class="jxr_string">"Failed:\n%[exception]s"</span>,
-<a class="jxr_linenumber" name="152" href="#152">152</a>                 ex
-<a class="jxr_linenumber" name="153" href="#153">153</a>             );
-<a class="jxr_linenumber" name="154" href="#154">154</a>             valid = false;
-<a class="jxr_linenumber" name="155" href="#155">155</a>         }
-<a class="jxr_linenumber" name="156" href="#156">156</a>         <strong class="jxr_keyword">if</strong> (valid) {
-<a class="jxr_linenumber" name="157" href="#157">157</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/rexsl/w3c/ValidationResponse.html">ValidationResponse</a> response = <strong class="jxr_keyword">this</strong>.validator.validate(page);
-<a class="jxr_linenumber" name="158" href="#158">158</a>             <strong class="jxr_keyword">final</strong> Set&lt;Defect&gt; defects = <strong class="jxr_keyword">new</strong> HashSet&lt;Defect&gt;();
-<a class="jxr_linenumber" name="159" href="#159">159</a>             defects.addAll(response.errors());
-<a class="jxr_linenumber" name="160" href="#160">160</a>             defects.addAll(response.warnings());
-<a class="jxr_linenumber" name="161" href="#161">161</a>             <strong class="jxr_keyword">for</strong> (Defect defect : defects) {
-<a class="jxr_linenumber" name="162" href="#162">162</a>                 Logger.error(
-<a class="jxr_linenumber" name="163" href="#163">163</a>                     <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="164" href="#164">164</a>                     <span class="jxr_string">"[%d] %s: %s"</span>,
-<a class="jxr_linenumber" name="165" href="#165">165</a>                     defect.line(),
-<a class="jxr_linenumber" name="166" href="#166">166</a>                     defect.message(),
-<a class="jxr_linenumber" name="167" href="#167">167</a>                     defect.explanation()
-<a class="jxr_linenumber" name="168" href="#168">168</a>                 );
-<a class="jxr_linenumber" name="169" href="#169">169</a>             }
-<a class="jxr_linenumber" name="170" href="#170">170</a>             <strong class="jxr_keyword">if</strong> (!response.valid() &amp;&amp; valid) {
+<a class="jxr_linenumber" name="96" href="#96">96</a>      @Override
+<a class="jxr_linenumber" name="97" href="#97">97</a>      @Loggable(Loggable.DEBUG)
+<a class="jxr_linenumber" name="98" href="#98">98</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setScope(@NotNull <strong class="jxr_keyword">final</strong> String scope) {
+<a class="jxr_linenumber" name="99" href="#99">99</a>          <em class="jxr_comment">// nothing to scope here</em>
+<a class="jxr_linenumber" name="100" href="#100">100</a>     }
+<a class="jxr_linenumber" name="101" href="#101">101</a> 
+<a class="jxr_linenumber" name="102" href="#102">102</a>     @Override
+<a class="jxr_linenumber" name="103" href="#103">103</a>     @Loggable(Loggable.DEBUG)
+<a class="jxr_linenumber" name="104" href="#104">104</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> validate(@NotNull <strong class="jxr_keyword">final</strong> <a href="../../../../com/rexsl/maven/Environment.html">Environment</a> env) {
+<a class="jxr_linenumber" name="105" href="#105">105</a>         <strong class="jxr_keyword">final</strong> File dir = <strong class="jxr_keyword">new</strong> File(env.basedir(), JigsawCssCheck.CSS_DIR);
+<a class="jxr_linenumber" name="106" href="#106">106</a>         <strong class="jxr_keyword">boolean</strong> success = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="107" href="#107">107</a>         <strong class="jxr_keyword">if</strong> (dir.exists()) {
+<a class="jxr_linenumber" name="108" href="#108">108</a>             <strong class="jxr_keyword">final</strong> Collection&lt;File&gt; files = <strong class="jxr_keyword">new</strong> <a href="../../../../com/rexsl/maven/utils/FileFinder.html">FileFinder</a>(dir, <span class="jxr_string">"css"</span>).random();
+<a class="jxr_linenumber" name="109" href="#109">109</a>             <strong class="jxr_keyword">for</strong> (File css : files) {
+<a class="jxr_linenumber" name="110" href="#110">110</a>                 <strong class="jxr_keyword">final</strong> String name =
+<a class="jxr_linenumber" name="111" href="#111">111</a>                     FilenameUtils.removeExtension(css.getName());
+<a class="jxr_linenumber" name="112" href="#112">112</a>                 LoggingManager.enter(name);
+<a class="jxr_linenumber" name="113" href="#113">113</a>                 success &amp;= <strong class="jxr_keyword">this</strong>.one(css);
+<a class="jxr_linenumber" name="114" href="#114">114</a>                 LoggingManager.leave();
+<a class="jxr_linenumber" name="115" href="#115">115</a>                 <strong class="jxr_keyword">if</strong> (!success) {
+<a class="jxr_linenumber" name="116" href="#116">116</a>                     Logger.warn(
+<a class="jxr_linenumber" name="117" href="#117">117</a>                         <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="118" href="#118">118</a>                         <span class="jxr_string">"Validation Failed!"</span>
+<a class="jxr_linenumber" name="119" href="#119">119</a>                     );
+<a class="jxr_linenumber" name="120" href="#120">120</a>                 }
+<a class="jxr_linenumber" name="121" href="#121">121</a>             }
+<a class="jxr_linenumber" name="122" href="#122">122</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="123" href="#123">123</a>             Logger.info(
+<a class="jxr_linenumber" name="124" href="#124">124</a>                 <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="125" href="#125">125</a>                 <span class="jxr_string">"%s directory is absent, no CSS tests"</span>,
+<a class="jxr_linenumber" name="126" href="#126">126</a>                 JigsawCssCheck.CSS_DIR
+<a class="jxr_linenumber" name="127" href="#127">127</a>             );
+<a class="jxr_linenumber" name="128" href="#128">128</a>         }
+<a class="jxr_linenumber" name="129" href="#129">129</a>         <strong class="jxr_keyword">return</strong> success;
+<a class="jxr_linenumber" name="130" href="#130">130</a>     }
+<a class="jxr_linenumber" name="131" href="#131">131</a> 
+<a class="jxr_linenumber" name="132" href="#132">132</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="133" href="#133">133</a> <em class="jxr_javadoccomment">     * Check one CSS page.</em>
+<a class="jxr_linenumber" name="134" href="#134">134</a> <em class="jxr_javadoccomment">     * @param file Check this particular CSS document</em>
+<a class="jxr_linenumber" name="135" href="#135">135</a> <em class="jxr_javadoccomment">     * @return Is CSS valid?</em>
+<a class="jxr_linenumber" name="136" href="#136">136</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="137" href="#137">137</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> one(<strong class="jxr_keyword">final</strong> File file) {
+<a class="jxr_linenumber" name="138" href="#138">138</a>         <strong class="jxr_keyword">boolean</strong> valid = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="139" href="#139">139</a>         String page = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="140" href="#140">140</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="141" href="#141">141</a>             page = FileUtils.readFileToString(file);
+<a class="jxr_linenumber" name="142" href="#142">142</a>         } <strong class="jxr_keyword">catch</strong> (java.io.IOException ex) {
+<a class="jxr_linenumber" name="143" href="#143">143</a>             Logger.error(
+<a class="jxr_linenumber" name="144" href="#144">144</a>                 <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="145" href="#145">145</a>                 <span class="jxr_string">"Failed:\n%[exception]s"</span>,
+<a class="jxr_linenumber" name="146" href="#146">146</a>                 ex
+<a class="jxr_linenumber" name="147" href="#147">147</a>             );
+<a class="jxr_linenumber" name="148" href="#148">148</a>             valid = false;
+<a class="jxr_linenumber" name="149" href="#149">149</a>         }
+<a class="jxr_linenumber" name="150" href="#150">150</a>         <strong class="jxr_keyword">if</strong> (valid) {
+<a class="jxr_linenumber" name="151" href="#151">151</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/rexsl/w3c/ValidationResponse.html">ValidationResponse</a> response = <strong class="jxr_keyword">this</strong>.validator.validate(page);
+<a class="jxr_linenumber" name="152" href="#152">152</a>             <strong class="jxr_keyword">final</strong> Set&lt;Defect&gt; defects = <strong class="jxr_keyword">new</strong> HashSet&lt;Defect&gt;();
+<a class="jxr_linenumber" name="153" href="#153">153</a>             defects.addAll(response.errors());
+<a class="jxr_linenumber" name="154" href="#154">154</a>             defects.addAll(response.warnings());
+<a class="jxr_linenumber" name="155" href="#155">155</a>             <strong class="jxr_keyword">for</strong> (Defect defect : defects) {
+<a class="jxr_linenumber" name="156" href="#156">156</a>                 Logger.error(
+<a class="jxr_linenumber" name="157" href="#157">157</a>                     <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="158" href="#158">158</a>                     <span class="jxr_string">"[%d] %s: %s"</span>,
+<a class="jxr_linenumber" name="159" href="#159">159</a>                     defect.line(),
+<a class="jxr_linenumber" name="160" href="#160">160</a>                     defect.message(),
+<a class="jxr_linenumber" name="161" href="#161">161</a>                     defect.explanation()
+<a class="jxr_linenumber" name="162" href="#162">162</a>                 );
+<a class="jxr_linenumber" name="163" href="#163">163</a>             }
+<a class="jxr_linenumber" name="164" href="#164">164</a>             <strong class="jxr_keyword">if</strong> (!response.valid() &amp;&amp; valid) {
+<a class="jxr_linenumber" name="165" href="#165">165</a>                 Logger.error(
+<a class="jxr_linenumber" name="166" href="#166">166</a>                     <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="167" href="#167">167</a>                     <span class="jxr_string">"%s contains invalid CSS (see errors above):\n%s"</span>,
+<a class="jxr_linenumber" name="168" href="#168">168</a>                     file,
+<a class="jxr_linenumber" name="169" href="#169">169</a>                     StringEscapeUtils.escapeJava(page).replace(<span class="jxr_string">"&#92;&#92;n"</span>, <span class="jxr_string">"\n"</span>)
+<a class="jxr_linenumber" name="170" href="#170">170</a>                 );
 <a class="jxr_linenumber" name="171" href="#171">171</a>                 Logger.error(
 <a class="jxr_linenumber" name="172" href="#172">172</a>                     <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="173" href="#173">173</a>                     <span class="jxr_string">"%s contains invalid CSS (see errors above):\n%s"</span>,
-<a class="jxr_linenumber" name="174" href="#174">174</a>                     file,
-<a class="jxr_linenumber" name="175" href="#175">175</a>                     StringEscapeUtils.escapeJava(page).replace(<span class="jxr_string">"&#92;&#92;n"</span>, <span class="jxr_string">"\n"</span>)
+<a class="jxr_linenumber" name="173" href="#173">173</a>                     <span class="jxr_string">"CSS validation failed with %d errors and %d warnings"</span>,
+<a class="jxr_linenumber" name="174" href="#174">174</a>                     response.errors().size(),
+<a class="jxr_linenumber" name="175" href="#175">175</a>                     response.warnings().size()
 <a class="jxr_linenumber" name="176" href="#176">176</a>                 );
-<a class="jxr_linenumber" name="177" href="#177">177</a>                 Logger.error(
-<a class="jxr_linenumber" name="178" href="#178">178</a>                     <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="179" href="#179">179</a>                     <span class="jxr_string">"CSS validation failed with %d errors and %d warnings"</span>,
-<a class="jxr_linenumber" name="180" href="#180">180</a>                     response.errors().size(),
-<a class="jxr_linenumber" name="181" href="#181">181</a>                     response.warnings().size()
-<a class="jxr_linenumber" name="182" href="#182">182</a>                 );
-<a class="jxr_linenumber" name="183" href="#183">183</a>                 valid = false;
-<a class="jxr_linenumber" name="184" href="#184">184</a>             }
-<a class="jxr_linenumber" name="185" href="#185">185</a>         }
-<a class="jxr_linenumber" name="186" href="#186">186</a>         <strong class="jxr_keyword">return</strong> valid;
-<a class="jxr_linenumber" name="187" href="#187">187</a>     }
-<a class="jxr_linenumber" name="188" href="#188">188</a> 
-<a class="jxr_linenumber" name="189" href="#189">189</a> }
+<a class="jxr_linenumber" name="177" href="#177">177</a>                 valid = false;
+<a class="jxr_linenumber" name="178" href="#178">178</a>             }
+<a class="jxr_linenumber" name="179" href="#179">179</a>         }
+<a class="jxr_linenumber" name="180" href="#180">180</a>         <strong class="jxr_keyword">return</strong> valid;
+<a class="jxr_linenumber" name="181" href="#181">181</a>     }
+<a class="jxr_linenumber" name="182" href="#182">182</a> 
+<a class="jxr_linenumber" name="183" href="#183">183</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

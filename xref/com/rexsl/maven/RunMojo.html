@@ -61,31 +61,28 @@
 <a class="jxr_linenumber" name="51" href="#51">51</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="52" href="#52">52</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../com/rexsl/maven/RunMojo.html">RunMojo</a> <strong class="jxr_keyword">extends</strong> <a href="../../../com/rexsl/maven/AbstractRexslMojo.html">AbstractRexslMojo</a> {
 <a class="jxr_linenumber" name="53" href="#53">53</a>  
-<a class="jxr_linenumber" name="54" href="#54">54</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
-<a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="57" href="#57">57</a>      @Override
-<a class="jxr_linenumber" name="58" href="#58">58</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> MojoFailureException {
-<a class="jxr_linenumber" name="59" href="#59">59</a>          <strong class="jxr_keyword">this</strong>.env().setRuntimeFiltering(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="60" href="#60">60</a>          <strong class="jxr_keyword">final</strong> <a href="../../../com/rexsl/maven/utils/EmbeddedContainer.html">EmbeddedContainer</a> container = EmbeddedContainer.start(<strong class="jxr_keyword">this</strong>.env());
-<a class="jxr_linenumber" name="61" href="#61">61</a>          Logger.info(
-<a class="jxr_linenumber" name="62" href="#62">62</a>              <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="63" href="#63">63</a>              <span class="jxr_string">"Available at http://localhost:%d"</span>,
-<a class="jxr_linenumber" name="64" href="#64">64</a>              <strong class="jxr_keyword">this</strong>.env().port()
-<a class="jxr_linenumber" name="65" href="#65">65</a>          );
-<a class="jxr_linenumber" name="66" href="#66">66</a>          Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Press Ctrl-C to stop..."</span>);
-<a class="jxr_linenumber" name="67" href="#67">67</a>          <strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
-<a class="jxr_linenumber" name="68" href="#68">68</a>              <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="69" href="#69">69</a>                  <em class="jxr_comment">// @checkstyle MagicNumber (1 line)</em>
-<a class="jxr_linenumber" name="70" href="#70">70</a>                  Thread.sleep(1000);
-<a class="jxr_linenumber" name="71" href="#71">71</a>              } <strong class="jxr_keyword">catch</strong> (java.lang.InterruptedException ex) {
-<a class="jxr_linenumber" name="72" href="#72">72</a>                  container.stop();
-<a class="jxr_linenumber" name="73" href="#73">73</a>                  Thread.currentThread().interrupt();
-<a class="jxr_linenumber" name="74" href="#74">74</a>              }
-<a class="jxr_linenumber" name="75" href="#75">75</a>          }
-<a class="jxr_linenumber" name="76" href="#76">76</a>      }
-<a class="jxr_linenumber" name="77" href="#77">77</a>  
-<a class="jxr_linenumber" name="78" href="#78">78</a>  }
+<a class="jxr_linenumber" name="54" href="#54">54</a>      @Override
+<a class="jxr_linenumber" name="55" href="#55">55</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> MojoFailureException {
+<a class="jxr_linenumber" name="56" href="#56">56</a>          <strong class="jxr_keyword">this</strong>.env().setRuntimeFiltering(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="57" href="#57">57</a>          <strong class="jxr_keyword">final</strong> <a href="../../../com/rexsl/maven/utils/EmbeddedContainer.html">EmbeddedContainer</a> container = EmbeddedContainer.start(<strong class="jxr_keyword">this</strong>.env());
+<a class="jxr_linenumber" name="58" href="#58">58</a>          Logger.info(
+<a class="jxr_linenumber" name="59" href="#59">59</a>              <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="60" href="#60">60</a>              <span class="jxr_string">"Available at http://localhost:%d"</span>,
+<a class="jxr_linenumber" name="61" href="#61">61</a>              <strong class="jxr_keyword">this</strong>.env().port()
+<a class="jxr_linenumber" name="62" href="#62">62</a>          );
+<a class="jxr_linenumber" name="63" href="#63">63</a>          Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Press Ctrl-C to stop..."</span>);
+<a class="jxr_linenumber" name="64" href="#64">64</a>          <strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
+<a class="jxr_linenumber" name="65" href="#65">65</a>              <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="66" href="#66">66</a>                  <em class="jxr_comment">// @checkstyle MagicNumber (1 line)</em>
+<a class="jxr_linenumber" name="67" href="#67">67</a>                  Thread.sleep(1000);
+<a class="jxr_linenumber" name="68" href="#68">68</a>              } <strong class="jxr_keyword">catch</strong> (java.lang.InterruptedException ex) {
+<a class="jxr_linenumber" name="69" href="#69">69</a>                  container.stop();
+<a class="jxr_linenumber" name="70" href="#70">70</a>                  Thread.currentThread().interrupt();
+<a class="jxr_linenumber" name="71" href="#71">71</a>              }
+<a class="jxr_linenumber" name="72" href="#72">72</a>          }
+<a class="jxr_linenumber" name="73" href="#73">73</a>      }
+<a class="jxr_linenumber" name="74" href="#74">74</a>  
+<a class="jxr_linenumber" name="75" href="#75">75</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
