@@ -100,4 +100,13 @@ public interface TestClient {
      * @return This object
      */
     TestResponse options(@NotNull String description, @NotNull Object body);
+
+    /**
+     * Execute {@code PATCH} request.
+     * @param description Short description of the operation
+     * @param body Request entity as a string
+     * @return This object
+     */
+    TestResponse patch(@NotNull String description, @NotNull Object body);
+
 }

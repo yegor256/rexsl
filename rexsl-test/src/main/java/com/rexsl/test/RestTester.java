@@ -121,6 +121,11 @@ public final class RestTester {
     public static final String OPTIONS = "OPTIONS";
 
     /**
+     * PATCH method name.
+     */
+    public static final String PATCH = "PATCH";
+
+    /**
      * It's a utility class.
      */
     private RestTester() {

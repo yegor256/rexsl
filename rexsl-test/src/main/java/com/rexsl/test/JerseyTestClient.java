@@ -182,6 +182,23 @@ final class JerseyTestClient implements TestClient {
 
     @Override
     @NotNull
+    public TestResponse patch(@NotNull final String desc,
+        @NotNull final Object body) {
+        final String content = body.toString();
+        return new JerseyTestResponse(
+            new JerseyFetcher() {
+                @Override
+                public ClientResponse fetch() {
+                    return JerseyTestClient.this
+                        .method(RestTester.PATCH, content, desc);
+                }
+            },
+            new RequestDecor(this.headers, content)
+        );
+    }
+
+    @Override
+    @NotNull
     public TestResponse delete(@NotNull final String desc) {
         return new JerseyTestResponse(
             new JerseyFetcher() {
