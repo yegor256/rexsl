@@ -29,15 +29,26 @@
  */
 package com.rexsl.maven;
 
-import com.jcabi.aether.Classpath;
 import com.jcabi.aspects.Loggable;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Set;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
-import org.sonatype.aether.util.artifact.JavaScopes;
+import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
+import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
+import org.apache.maven.shared.dependency.graph.DependencyNode;
+import org.apache.maven.shared.dependency.graph.internal.DefaultDependencyGraphBuilder;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 /**
  * Environment proxy, between Maven plugin and checks.
@@ -54,6 +65,11 @@ public final class MavenEnvironment implements Environment {
     public static final String WEBAPP_DIR = "webappDirectory";
 
     /**
+     * Maven test scope name.
+     */
+    public static final String TEST_SCOPE = "test";
+
+    /**
      * The project, from Maven plugin.
      */
     private final transient MavenProject project;
@@ -62,11 +78,6 @@ public final class MavenEnvironment implements Environment {
      * The list of properties from Maven plugin.
      */
     private final transient Properties properties;
-
-    /**
-     * Location of local repo.
-     */
-    private transient String localRepo;
 
     /**
      * Shall we use runtime filtering?
@@ -79,13 +90,30 @@ public final class MavenEnvironment implements Environment {
     private transient int iport;
 
     /**
+     * Container.
+     */
+    private final transient PlexusContainer container;
+
+    /**
+     * The current repository/network configuration of Maven.
+     */
+    private final transient MavenSession session;
+
+    /**
      * Ctor.
      * @param prj Maven project
+     * @param sess Maven session
+     * @param cntnr Plexus container
      * @param props Properties
+     * @checkstyle ParameterNumberCheck (4 lines)
      */
-    public MavenEnvironment(final MavenProject prj,
-        final Properties props) {
+    public MavenEnvironment(
+        final MavenProject prj, final MavenSession sess,
+        final PlexusContainer cntnr, final Properties props
+    ) {
         this.project = prj;
+        this.session = sess;
+        this.container = cntnr;
         this.properties = props;
     }
 
@@ -105,15 +133,6 @@ public final class MavenEnvironment implements Environment {
     @Loggable(Loggable.DEBUG)
     public void setRuntimeFiltering(final boolean filtering) {
         this.runtimeFiltering = filtering;
-    }
-
-    /**
-     * Set location of local repository.
-     * @param dir The directory of the repository
-     */
-    @Loggable(Loggable.DEBUG)
-    public void setLocalRepository(final String dir) {
-        this.localRepo = dir;
     }
 
     @Override
@@ -143,24 +162,83 @@ public final class MavenEnvironment implements Environment {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     @Loggable(Loggable.DEBUG)
     public Set<File> classpath(final boolean tonly) {
-        Collection<String> scopes;
-        if (tonly) {
-            scopes = Arrays.asList(JavaScopes.TEST);
-        } else {
-            scopes = Arrays.asList(
-                JavaScopes.TEST,
-                JavaScopes.COMPILE,
-                JavaScopes.PROVIDED,
-                JavaScopes.RUNTIME,
-                JavaScopes.SYSTEM
+        final Collection<String> scopes;
+        final Set<File> files = new HashSet<File>();
+        try {
+            if (tonly) {
+                scopes = Collections.singletonList(MavenEnvironment.TEST_SCOPE);
+                for (String path : this.project.getTestClasspathElements()) {
+                    files.add(new File(path));
+                }
+            } else {
+                scopes = Arrays.asList(
+                    MavenEnvironment.TEST_SCOPE,
+                    "compile",
+                    "provided",
+                    "runtime",
+                    "system"
+                );
+                for (String path : this.project.getCompileClasspathElements()) {
+                    files.add(new File(path));
+                }
+                for (String path : this.project.getTestClasspathElements()) {
+                    files.add(new File(path));
+                }
+            }
+            final DependencyGraphBuilder builder =
+                (DefaultDependencyGraphBuilder) this.container.lookup(
+                    DependencyGraphBuilder.class.getCanonicalName()
+                );
+            final DependencyNode node = builder.buildDependencyGraph(
+                this.project,
+                new ArtifactFilter() {
+                    @Override
+                    public boolean include(final Artifact artifact) {
+                        return scopes.contains(artifact.getScope());
+                    }
+                }
             );
+            files.addAll(this.dependencies(node, scopes));
+        } catch (DependencyGraphBuilderException ex) {
+            throw new IllegalStateException(ex);
+        } catch (ComponentLookupException ex) {
+            throw new IllegalStateException(ex);
+        } catch (DependencyResolutionRequiredException ex) {
+            throw new IllegalStateException(ex);
         }
-        return new Classpath(this.project, new File(this.localRepo), scopes);
+        return files;
+    }
+
+    /**
+     * Retrieve dependencies for from given node and scope.
+     * @param node Node to traverse.
+     * @param scps Scopes to use.
+     * @return Collection of dependency files.
+     */
+    private Collection<File> dependencies(final DependencyNode node,
+        final Collection<String> scps) {
+        final Artifact artifact = node.getArtifact();
+        final Collection<File> files = new LinkedList<File>();
+        if ((artifact.getScope() == null)
+            || scps.contains(artifact.getScope())) {
+            if (artifact.getScope() == null) {
+                files.add(artifact.getFile());
+            } else {
+                files.add(
+                    this.session.getLocalRepository().find(artifact).getFile()
+                );
+            }
+            for (DependencyNode child : node.getChildren()) {
+                if (child.getArtifact().compareTo(node.getArtifact()) != 0) {
+                    files.addAll(this.dependencies(child, scps));
+                }
+            }
+        }
+        return files;
     }
 
     @Override
     public boolean useRuntimeFiltering() {
         return this.runtimeFiltering;
     }
-
 }
