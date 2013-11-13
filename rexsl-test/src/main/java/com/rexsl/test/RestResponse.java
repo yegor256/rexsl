@@ -163,7 +163,7 @@ public final class RestResponse extends AbstractResponse {
     public RestResponse assertHeader(
         @NotNull(message = "header name can't be NULL") final String name,
         @NotNull(message = "matcher can't be NULL")
-        final Matcher<Iterable<? extends String>> matcher) {
+        final Matcher<Iterable<String>> matcher) {
         MatcherAssert.assertThat(
             String.format(
                 "HTTP header %s is not valid:\n%s",
@@ -182,7 +182,7 @@ public final class RestResponse extends AbstractResponse {
     public Request follow() {
         this.assertHeader(
             HttpHeaders.LOCATION,
-            Matchers.<String>emptyIterable()
+            Matchers.emptyIterableOf(String.class)
         );
         return this.back().uri().set(
             URI.create(this.headers().get(HttpHeaders.LOCATION).get(0))

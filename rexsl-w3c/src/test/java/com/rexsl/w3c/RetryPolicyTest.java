@@ -29,7 +29,6 @@
  */
 package com.rexsl.w3c;
 
-import com.rexsl.test.TestResponseMocker;
 import java.net.HttpURLConnection;
 import org.hamcrest.MatcherAssert;
 import org.junit.Assert;

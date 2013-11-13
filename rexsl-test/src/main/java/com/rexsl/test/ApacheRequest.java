@@ -40,6 +40,7 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Map;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import lombok.EqualsAndHashCode;
@@ -101,6 +102,15 @@ public final class ApacheRequest implements Request {
      * Body to use.
      */
     private final transient RequestBody content;
+
+    /**
+     * Public ctor.
+     * @param uri The resource to work with
+     */
+    ApacheRequest(@NotNull(message = "URI can't be NULL")
+        final URI uri) {
+        this(uri.toString());
+    }
 
     /**
      * Public ctor.
@@ -266,13 +276,14 @@ public final class ApacheRequest implements Request {
      * @param list Apache HTTP headers
      * @return Body in UTF-8
      */
-    private static Array<Header> headers(
+    private static Array<Map.Entry<String, String>> headers(
         final org.apache.http.Header[] list) {
-        final Collection<Header> headers = new LinkedList<Header>();
+        final Collection<Map.Entry<String, String>> headers =
+            new LinkedList<Map.Entry<String, String>>();
         for (final org.apache.http.Header header : list) {
             headers.add(new Header(header.getName(), header.getValue()));
         }
-        return new Array<Header>(headers);
+        return new Array<Map.Entry<String, String>>(headers);
     }
 
     @Override

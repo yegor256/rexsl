@@ -34,25 +34,29 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link TestClient} and {@link TestClientMocker}.
+ * Test case for {@link JsonResponse}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-public final class TestClientTest {
+public final class JsonResponseTest {
 
     /**
-     * TestClientMocker can mock URI returning mechanism.
+     * JsonResponse can read and return a JSON document.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void mocksUriReturningMethod() throws Exception {
-        final String uri = "http://localhost/some-path";
-        final TestClient client = new TestClientMocker()
-            .withUri(uri)
+    public void readsJsonDocument() throws Exception {
+        final Response resp = new ResponseMocker()
+            .withBody("{\"foo-foo\":2, \"bar\":\"hello!\"}")
             .mock();
+        final JsonResponse response = new JsonResponse(resp);
         MatcherAssert.assertThat(
-            client.uri().toString(),
-            Matchers.equalTo(uri)
+            response.json().readObject().getInt("foo-foo"),
+            Matchers.equalTo(2)
+        );
+        MatcherAssert.assertThat(
+            response.json().readObject().getString("bar"),
+            Matchers.equalTo("hello!")
         );
     }
 
