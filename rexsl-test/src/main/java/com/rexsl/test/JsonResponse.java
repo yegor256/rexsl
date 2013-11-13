@@ -34,6 +34,7 @@ import java.io.StringReader;
 import javax.json.Json;
 import javax.json.JsonReader;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 
 /**
  * JSON response.
@@ -43,6 +44,7 @@ import javax.validation.constraints.NotNull;
  * @since 0.8
  */
 @Immutable
+@EqualsAndHashCode(callSuper = true)
 public final class JsonResponse extends AbstractResponse {
 
     /**

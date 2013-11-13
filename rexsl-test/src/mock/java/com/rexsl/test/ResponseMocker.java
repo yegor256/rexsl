@@ -44,7 +44,7 @@ import org.mockito.Mockito;
 public final class ResponseMocker {
 
     /**
-     * Responses.
+     * Response mocked.
      */
     private final transient Response response = Mockito.mock(Response.class);
 
@@ -59,6 +59,7 @@ public final class ResponseMocker {
      */
     public ResponseMocker() {
         Mockito.doReturn(this.headers).when(this.response).headers();
+        Mockito.doReturn(new RequestMocker().mock()).when(this.response).back();
         this.withStatus(HttpURLConnection.HTTP_OK);
         this.withBody("");
     }
@@ -93,6 +94,16 @@ public final class ResponseMocker {
      */
     public ResponseMocker withBody(final String body) {
         Mockito.doReturn(body).when(this.response).body();
+        return this;
+    }
+
+    /**
+     * Return this request.
+     * @param request The request
+     * @return This object
+     */
+    public ResponseMocker with(final Request request) {
+        Mockito.doReturn(request).when(this.response).back();
         return this;
     }
 

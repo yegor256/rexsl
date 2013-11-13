@@ -38,6 +38,7 @@ import java.util.Map;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.CustomMatcher;
 import org.hamcrest.Matcher;
@@ -52,6 +53,7 @@ import org.hamcrest.Matchers;
  * @since 0.8
  */
 @Immutable
+@EqualsAndHashCode(callSuper = true)
 public final class RestResponse extends AbstractResponse {
 
     /**
@@ -175,6 +177,16 @@ public final class RestResponse extends AbstractResponse {
     }
 
     /**
+     * Jump to a new location.
+     * @param uri Destination to jump to
+     * @return New request
+     */
+    @NotNull(message = "request is never NULL")
+    public Request jump(@NotNull(message = "URI can't be NULL") final URI uri) {
+        return this.back().uri().set(uri).back();
+    }
+
+    /**
      * Follow LOCATION header.
      * @return New request
      */
@@ -182,11 +194,11 @@ public final class RestResponse extends AbstractResponse {
     public Request follow() {
         this.assertHeader(
             HttpHeaders.LOCATION,
-            Matchers.emptyIterableOf(String.class)
+            Matchers.not(Matchers.emptyIterableOf(String.class))
         );
-        return this.back().uri().set(
+        return this.jump(
             URI.create(this.headers().get(HttpHeaders.LOCATION).get(0))
-        ).back();
+        );
     }
 
     /**

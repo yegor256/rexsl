@@ -142,7 +142,8 @@ final class DefaultResponse implements Response {
 
     @Override
     public String toString() {
-        final StringBuilder text = new StringBuilder(0);
+        final StringBuilder text = new StringBuilder(0)
+            .append(this.code).append(' ').append(this.phrase).append('\n');
         for (final Map.Entry<String, String> header : this.hdrs) {
             text.append(
                 Logger.format(

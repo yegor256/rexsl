@@ -277,7 +277,7 @@ public final class ApacheRequest implements Request {
      * @return Body in UTF-8
      */
     private static Array<Map.Entry<String, String>> headers(
-        final org.apache.http.Header[] list) {
+        final org.apache.http.Header... list) {
         final Collection<Map.Entry<String, String>> headers =
             new LinkedList<Map.Entry<String, String>>();
         for (final org.apache.http.Header header : list) {
@@ -288,8 +288,11 @@ public final class ApacheRequest implements Request {
 
     @Override
     public String toString() {
-        final StringBuilder text = new StringBuilder(0);
-        for (final Header header : this.headers) {
+        final StringBuilder text = new StringBuilder("HTTP/1.1 ")
+            .append(this.mtd).append(' ')
+            .append(this.home.get().getPath())
+            .append('\n');
+        for (final Map.Entry<String, String> header : this.headers) {
             text.append(
                 Logger.format(
                     "%s: %s\n",
