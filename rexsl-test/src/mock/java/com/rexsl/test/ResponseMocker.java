@@ -29,45 +29,70 @@
  */
 package com.rexsl.test;
 
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import org.mockito.Mockito;
 
 /**
- * Mocker of {@link TestResponse}.
+ * Mocker of {@link Response}.
  * @author Yegor Bugayenko (yegor@netbout.com)
  * @version $Id$
  */
-public final class TestResponseMocker {
+public final class ResponseMocker {
 
     /**
-     * Mock.
+     * Responses.
      */
-    private final transient TestResponse response =
-        Mockito.mock(TestResponse.class);
+    private final transient Response response = Mockito.mock(Response.class);
+
+    /**
+     * Headers.
+     */
+    private final transient ConcurrentMap<String, List<String>> headers =
+        new ConcurrentHashMap<String, List<String>>();
 
     /**
      * Public ctor.
      */
-    public TestResponseMocker() {
+    public ResponseMocker() {
+        Mockito.doReturn(this.headers).when(this.response).headers();
+        this.withStatus(HttpURLConnection.HTTP_OK);
         this.withBody("");
     }
 
     /**
-     * Return this body.
-     * @param body The body
+     * Return this status code.
+     * @param code The code
      * @return This object
      */
-    public TestResponseMocker withBody(final String body) {
-        Mockito.doReturn(body).when(this.response).getBody();
+    public ResponseMocker withStatus(final int code) {
+        Mockito.doReturn(code).when(this.response).status();
         return this;
     }
 
     /**
-     * Return this status code.
-     * @param code The status code
+     * Return this header.
+     * @param name The name of ti
+     * @param value The value
      * @return This object
      */
-    public TestResponseMocker withStatus(final int code) {
-        Mockito.doReturn(code).when(this.response).getStatus();
+    public ResponseMocker withHeader(final String name,
+        final String value) {
+        this.headers.putIfAbsent(name, new ArrayList<String>(0));
+        this.headers.get(name).add(value);
+        return this;
+    }
+
+    /**
+     * Return this entity.
+     * @param body The entity
+     * @return This object
+     */
+    public ResponseMocker withBody(final String body) {
+        Mockito.doReturn(body).when(this.response).body();
         return this;
     }
 
@@ -75,7 +100,7 @@ public final class TestResponseMocker {
      * Mock it.
      * @return Mocked class
      */
-    public TestResponse mock() {
+    public Response mock() {
         return this.response;
     }
 

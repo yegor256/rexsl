@@ -30,9 +30,12 @@
 package com.rexsl.test;
 
 import com.jcabi.aspects.Immutable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Implementation of {@link RequestBody}.
@@ -42,8 +45,8 @@ import lombok.ToString;
  * @since 0.8
  */
 @Immutable
-@ToString(of = "home")
-@EqualsAndHashCode(of = "home")
+@ToString(of = "text")
+@EqualsAndHashCode(of = { "req", "text" })
 final class DefaultBody implements RequestBody {
 
     /**
@@ -87,9 +90,16 @@ final class DefaultBody implements RequestBody {
     public RequestBody formParam(
         @NotNull(message = "form param name can't be NULL") final String name,
         @NotNull(message = "param value can't be NULL") final Object value) {
-        return new DefaultBody(
-            this.req, ""
-        );
+        try {
+            return new DefaultBody(
+                this.req,
+                new StringBuilder(this.text).append(name).append('=').append(
+                    URLEncoder.encode(value.toString(), CharEncoding.UTF_8)
+                ).append('&').toString()
+            );
+        } catch (UnsupportedEncodingException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
 }
