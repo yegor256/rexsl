@@ -31,7 +31,7 @@
 import java.text.SimpleDateFormat
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.UriBuilder
-import com.rexsl.test.RestTester
+
 import org.hamcrest.Matchers
 
 RestTester.start(UriBuilder.fromUri(rexsl.home).path('/css/screen.css'))

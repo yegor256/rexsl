@@ -50,7 +50,7 @@ import org.junit.Test;
 public final class RestTesterTest {
 
     /**
-     * RestTester can send HTTP request and process HTTP response.
+     * RestTester can fetch HTTP request and process HTTP response.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -69,7 +69,7 @@ public final class RestTesterTest {
     }
 
     /**
-     * RestTester can send HTTP headers.
+     * RestTester can fetch HTTP headers.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -90,7 +90,7 @@ public final class RestTesterTest {
     }
 
     /**
-     * RestTester can send GET request with query params.
+     * RestTester can fetch GET request with query params.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -110,7 +110,7 @@ public final class RestTesterTest {
     }
 
     /**
-     * RestTester can send body with HTTP POST request.
+     * RestTester can fetch body with HTTP POST request.
      * @throws Exception If something goes wrong inside
      * @todo #151 Is it possible to initialize input variable with
      *  InputStream from request without side effects on request?
@@ -144,7 +144,7 @@ public final class RestTesterTest {
     }
 
     /**
-     * RestTester can send body with HTTP POST request.
+     * RestTester can fetch body with HTTP POST request.
      * @throws Exception If something goes wrong inside
      * @todo #151 Is it possible to initialize input variable with
      *  InputStream from request without side effects on request?

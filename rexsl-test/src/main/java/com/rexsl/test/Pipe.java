@@ -29,38 +29,24 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
-import org.mockito.Mockito;
+import com.jcabi.aspects.Immutable;
+import javax.validation.constraints.NotNull;
 
 /**
- * Test case for {@link BufferedJerseyFetcher}.
- * @author Yegor Bugayenko (yegor@netbout.com)
+ * RESTful pipe.
+ *
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.8
  */
-public final class BufferedJerseyFetcherTest {
+@Immutable
+public interface Pipe {
 
     /**
-     * BufferedJerseyFetcher can fail to read XML in ISO-8859-1 encoding.
-     * @throws Exception If there is some problem inside
+     * Go to the original response.
+     * @return The response
      */
-    @Test(expected = IOException.class)
-    public void failsOnNonUnicodeXmlDocuments() throws Exception {
-        final ClientResponse response = Mockito.mock(ClientResponse.class);
-        Mockito.doReturn(true).when(response).hasEntity();
-        Mockito.doReturn(
-            IOUtils.toInputStream(
-                "<?xml version='1.0' encoding='ISO-8859-1'>\n<a>\u009F</a>",
-                Charset.forName("ISO-8859-1")
-            )
-        ).when(response).getEntityInputStream();
-        final JerseyFetcher origin = Mockito.mock(JerseyFetcher.class);
-        Mockito.doReturn(response).when(origin).fetch();
-        final BufferedJerseyFetcher fetcher = new BufferedJerseyFetcher(origin);
-        fetcher.body();
-    }
+    @NotNull(message = "response is never NULL")
+    Response back();
 
 }

@@ -29,55 +29,67 @@
  */
 package com.rexsl.test;
 
-import com.jcabi.aspects.Loggable;
-import com.jcabi.log.Logger;
+import com.jcabi.aspects.Immutable;
+import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 
 /**
- * Matches HTTP body against matcher.
- *
- * <p>This class is immutable and thread-safe.
+ * Implementation of {@link RequestBody}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.3.4
+ * @since 0.8
  */
-@ToString
-@EqualsAndHashCode(of = "matcher")
-@Loggable(Loggable.DEBUG)
-final class BodyMatcher implements AssertionPolicy {
+@Immutable
+@ToString(of = "home")
+@EqualsAndHashCode(of = "home")
+final class DefaultBody implements RequestBody {
 
     /**
-     * The matcher to use.
+     * Original request.
      */
-    private final transient Matcher<String> matcher;
+    private final transient Request req;
+
+    /**
+     * Text.
+     */
+    private final transient String text;
 
     /**
      * Public ctor.
-     * @param mtch The matcher to use
+     * @param request Original request
+     * @param txt Content to encapsulate
      */
-    protected BodyMatcher(final Matcher<String> mtch) {
-        this.matcher = mtch;
+    DefaultBody(final Request request, final String txt) {
+        this.text = txt;
+        this.req = request;
     }
 
     @Override
-    public void assertThat(final TestResponse response) {
-        MatcherAssert.assertThat(
-            Logger.format(
-                "HTTP response content has to match:\n%s",
-                response
-            ),
-            response.getBody(),
-            this.matcher
+    public Request back() {
+        return this.req;
+    }
+
+    @Override
+    @NotNull
+    public String get() {
+        return this.text;
+    }
+
+    @Override
+    public RequestBody set(@NotNull(message = "content can't be NULL")
+        final String txt) {
+        return new DefaultBody(this.req, txt);
+    }
+
+    @Override
+    public RequestBody formParam(
+        @NotNull(message = "form param name can't be NULL") final String name,
+        @NotNull(message = "param value can't be NULL") final Object value) {
+        return new DefaultBody(
+            this.req, ""
         );
-    }
-
-    @Override
-    public boolean isRetryNeeded(final int attempt) {
-        return false;
     }
 
 }

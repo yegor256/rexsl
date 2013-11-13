@@ -30,7 +30,6 @@
 package com.rexsl.test.html;
 
 import com.jcabi.xml.XMLDocument;
-import com.rexsl.test.TestResponse;
 import java.net.URI;
 import java.util.List;
 import org.junit.Test;

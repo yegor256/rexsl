@@ -31,7 +31,6 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.test.RestTester;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import org.hamcrest.MatcherAssert;

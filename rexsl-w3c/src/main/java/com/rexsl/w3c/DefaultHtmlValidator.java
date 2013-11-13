@@ -30,7 +30,6 @@
 package com.rexsl.w3c;
 
 import com.jcabi.aspects.Loggable;
-import com.rexsl.test.TestResponse;
 import java.net.URI;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MediaType;

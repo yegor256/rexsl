@@ -29,37 +29,59 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
-import java.util.Formattable;
-import java.util.Formatter;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import org.junit.Test;
-import org.mockito.Mockito;
+import com.jcabi.aspects.Immutable;
+import java.net.URI;
+import javax.validation.constraints.NotNull;
 
 /**
- * Test case for {@link ClientResponseDecor}.
- * @author Yegor Bugayenko (yegor@netbout.com)
+ * Request URI.
+ *
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.8
  */
-public final class ClientResponseDecorTest {
+@Immutable
+public interface RequestURI {
 
     /**
-     * BoutMocker can assign title to the bout.
-     * @throws Exception If there is some problem inside
+     * Get back to the request it's related to.
+     * @return The request we're in
      */
-    @Test
-    public void canHaveATitleMocked() throws Exception {
-        final ClientResponse response = new ClientResponseMocker()
-            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML)
-            .mock();
-        final Formattable decor =
-            new ClientResponseDecor(response, "works, \u0443\u0440\u0430!");
-        final Appendable dest = Mockito.mock(Appendable.class);
-        final Formatter fmt = new Formatter(dest);
-        decor.formatTo(fmt, 0, 0, 0);
-        Mockito.verify(dest).append(Mockito.contains("Content-Type: text/xml"));
-        Mockito.verify(dest).append(Mockito.contains("\\u0443\\u0440\\u0430"));
-    }
+    @NotNull(message = "request is never NULL")
+    Request back();
+
+    /**
+     * Get URI.
+     * @return The destination it is currently pointing to
+     */
+    @NotNull(message = "URI is never NULL")
+    URI get();
+
+    /**
+     * Set URI.
+     * @param uri URI to set
+     * @return New alternated URI
+     */
+    @NotNull(message = "URI is never NULL")
+    RequestURI set(@NotNull(message = "URI can't be NULL") URI uri);
+
+    /**
+     * Add query param.
+     * @param name Query param name
+     * @param value Value of the query param to set
+     * @return New alternated URI
+     */
+    @NotNull(message = "URI is never NULL")
+    RequestURI queryParam(
+        @NotNull(message = "query param name can't be NULL") String name,
+        @NotNull(message = "query param value can't be NULL") Object value);
+
+    /**
+     * Add URI path.
+     * @param segment Path segment to add
+     * @return New alternated URI
+     */
+    @NotNull(message = "URI is never NULL")
+    RequestURI path(@NotNull(message = "path can't be NULL") String segment);
 
 }

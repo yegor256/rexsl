@@ -85,7 +85,7 @@ public final class JaxbConverterTest {
             JaxbConverter.the(employee, JaxbConverterTest.Foo.class),
             XhtmlMatchers.hasXPath(
                 "/employee/injected/ns1:name",
-                Foo.NAMESPACE
+                JaxbConverterTest.Foo.NAMESPACE
             )
         );
     }
@@ -112,7 +112,9 @@ public final class JaxbConverterTest {
         final Object object = new JaxbConverterTest.Foo();
         MatcherAssert.assertThat(
             JaxbConverter.the(object),
-            XhtmlMatchers.hasXPath("/ns1:foo/ns1:name", Foo.NAMESPACE)
+            XhtmlMatchers.hasXPath(
+                "/ns1:foo/ns1:name", JaxbConverterTest.Foo.NAMESPACE
+            )
         );
     }
 
@@ -145,7 +147,7 @@ public final class JaxbConverterTest {
         }
         /**
          * Returns a simple string. This method is not called directly, but
-         * is used in {@link convertsJaxbObjectToXml()} for JAXB converting
+         * is used in {@code convertsJaxbObjectToXml()} for JAXB converting
          * of the object to XML.
          * @return The text
          */

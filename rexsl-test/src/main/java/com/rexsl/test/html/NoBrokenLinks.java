@@ -31,8 +31,6 @@ package com.rexsl.test.html;
 
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
-import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.TestResponse;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;

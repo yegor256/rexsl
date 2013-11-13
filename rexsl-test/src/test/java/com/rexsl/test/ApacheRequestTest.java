@@ -38,14 +38,14 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 /**
- * Test case for {@link JerseyTestClient}.
+ * Test case for {@link ApacheRequest}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-public final class JerseyTestClientTest {
+public final class ApacheRequestTest {
 
     /**
-     * TestClient can send GET request twice.
+     * TestClient can fetch GET request twice.
      * @throws Exception If something goes wrong inside
      */
     @Test

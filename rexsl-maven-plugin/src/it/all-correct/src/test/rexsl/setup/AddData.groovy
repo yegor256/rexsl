@@ -29,7 +29,7 @@
  */
 package com.rexsl.foo.setup
 
-import com.rexsl.test.RestTester
+
 import com.jcabi.log.Logger
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType

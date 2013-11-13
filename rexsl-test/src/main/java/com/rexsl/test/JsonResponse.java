@@ -29,22 +29,54 @@
  */
 package com.rexsl.test;
 
-import com.sun.jersey.api.client.ClientResponse;
+import com.jcabi.aspects.Immutable;
+import java.io.StringReader;
+import javax.json.Json;
+import javax.json.JsonReader;
+import javax.validation.constraints.NotNull;
 
 /**
- * Fetcher of {@link ClientResponse}.
- *
- * <p>Implementation of this interface shall be immutable and thread-safe.
+ * JSON response.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.8
  */
-interface JerseyFetcher {
+@Immutable
+public final class JsonResponse extends AbstractResponse {
 
     /**
-     * Fetch ClientResponse with a real HTTP request.
-     * @return The client response just fetched
+     * Public ctor.
+     * @param resp Response
      */
-    ClientResponse fetch();
+    public JsonResponse(@NotNull(message = "response can't be NULL")
+        final Response resp) {
+        super(resp);
+    }
+
+    /**
+     * Verifies the JSON data against the element identifier argument,
+     * and throws {@link AssertionError} in case of mismatch.
+     * @param element Element in the JSON data of this object
+     * @return This object
+     */
+    @NotNull(message = "JSON response is never NULL")
+    public JsonResponse assertJson(
+        @NotNull(message = "JSON query can't be NULL")
+        final String element) {
+        throw new UnsupportedOperationException(
+            // @checkstyle LineLength (1 line)
+            "assertJson() is not implemented yet, since we are not sure which JSON query standard to use"
+        );
+    }
+
+    /**
+     * Read body as JSON.
+     * @return Json reader
+     */
+    @NotNull(message = "JSON reader is never NULL")
+    public JsonReader json() {
+        return Json.createReader(new StringReader(this.body()));
+    }
 
 }

@@ -29,63 +29,70 @@
  */
 package com.rexsl.test;
 
-import com.jcabi.log.Logger;
-import com.jcabi.xml.XML;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import com.jcabi.aspects.Immutable;
+import java.util.List;
+import java.util.Map;
+import javax.validation.constraints.NotNull;
 
 /**
- * Matches HTTP header against required value.
- *
- * <p>This class is immutable and thread-safe.
+ * RESTful response returned by {@link Request#fetch()}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.3.4
+ * @since 0.8
  */
-@ToString
-@EqualsAndHashCode(of = { "xml", "xpath" })
-final class XpathAssertionMatcher implements AssertionPolicy {
+@Immutable
+public interface Response {
 
     /**
-     * The source.
+     * Get back to the request it's related to.
+     * @return The request we're in
      */
-    private final transient XML xml;
+    @NotNull(message = "request is never NULL")
+    Request back();
 
     /**
-     * The matcher to use.
+     * Get status of the response as a positive integer number.
+     * @return The status code
      */
-    private final transient String xpath;
+    int status();
 
     /**
-     * Public ctor.
-     * @param src The source
-     * @param path The XPath to find there
+     * Get status line reason phrase.
+     * @return The status line reason phrase
      */
-    protected XpathAssertionMatcher(final XML src, final String path) {
-        this.xml = src;
-        this.xpath = path;
-    }
+    @NotNull(message = "reason phrase is never NULL")
+    String reason();
 
-    @Override
-    public void assertThat(final TestResponse response) {
-        MatcherAssert.assertThat(
-            Logger.format(
-                "XPath '%s' has to exist in:\n%s",
-                StringEscapeUtils.escapeJava(this.xpath),
-                response
-            ),
-            this.xml.nodes(this.xpath),
-            Matchers.not(Matchers.<XML>empty())
-        );
-    }
+    /**
+     * Get a collection of all headers.
+     * @return The headers
+     */
+    @NotNull(message = "map of headers is never NULL")
+    Map<String, List<String>> headers();
 
-    @Override
-    public boolean isRetryNeeded(final int attempt) {
-        return false;
-    }
+    /**
+     * Get body as a string, assuming it's {@code UTF-8} (if there is something
+     * else that can't be translated into a UTF-8 string a runtime exception
+     * will be thrown).
+     *
+     * <p><strong>DISCLAIMER</strong>:
+     * The only encoding supported here is UTF-8. If the body of response
+     * contains any chars that can't be used and should be replaced with
+     * a "replacement character", a {@link RuntimeException} will be thrown. If
+     * you need to use some other encodings, use
+     * {@link java.net.HttpURLConnection} directly instead of ReXSL.
+     *
+     * @return The body, as a UTF-8 string
+     */
+    @NotNull(message = "response body is never NULL")
+    String body();
+
+    /**
+     * Convert it to another type, by encapsulation.
+     * @param type Type to use
+     * @param <T> Type to use
+     */
+    <T> T as(Class<T> type);
 
 }

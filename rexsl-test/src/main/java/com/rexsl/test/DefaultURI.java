@@ -29,49 +29,82 @@
  */
 package com.rexsl.test;
 
-import com.jcabi.aspects.Loggable;
-import com.jcabi.log.Logger;
+import com.jcabi.aspects.Immutable;
+import java.net.URI;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Always fail.
- *
- * <p>This class is immutable and thread-safe.
+ * Implementation of {@link RequestURI}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.3.4
  */
-@ToString
-@EqualsAndHashCode(of = "reason")
-@Loggable(Loggable.DEBUG)
-final class Failure implements AssertionPolicy {
+@Immutable
+@ToString(of = "home")
+@EqualsAndHashCode(of = "home")
+final class DefaultURI implements RequestURI {
 
     /**
-     * The reason of failure.
+     * Original request.
      */
-    private final transient String reason;
+    private final transient Request req;
+
+    /**
+     * URI.
+     */
+    private final transient String home;
 
     /**
      * Public ctor.
-     * @param txt The reason of failure
+     * @param request Original request
+     * @param uri The resource to work with
      */
-    protected Failure(@NotNull final String txt) {
-        this.reason = txt;
+    DefaultURI(final Request request, final URI uri) {
+        this.home = uri.toString();
+        this.req = request;
     }
 
     @Override
-    public void assertThat(@NotNull final TestResponse response) {
-        throw new AssertionError(
-            Logger.format("%s:\n%s", this.reason, response)
+    public Request back() {
+        return this.req;
+    }
+
+    @Override
+    @NotNull
+    public URI get() {
+        return URI.create(this.home);
+    }
+
+    @Override
+    public RequestURI set(@NotNull(message = "URI can't be NULL")
+        final URI uri) {
+        return new DefaultURI(this.req, uri);
+    }
+
+    @Override
+    public RequestURI queryParam(
+        @NotNull(message = "query param name can't be NULL") final String name,
+        @NotNull(message = "param value can't be NULL") final Object value) {
+        return new DefaultURI(
+            this.req,
+            UriBuilder.fromUri(this.home)
+                .queryParam(name, "{value}")
+                .build(value)
         );
     }
 
     @Override
-    public boolean isRetryNeeded(final int attempt) {
-        return false;
+    public RequestURI path(
+        @NotNull(message = "path can't be NULL") final String segment) {
+        return new DefaultURI(
+            this.req,
+            UriBuilder.fromUri(this.home)
+                .path(segment)
+                .build()
+        );
     }
 
 }
