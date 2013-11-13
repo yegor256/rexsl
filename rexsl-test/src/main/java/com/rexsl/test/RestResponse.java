@@ -183,7 +183,23 @@ public final class RestResponse extends AbstractResponse {
      */
     @NotNull(message = "request is never NULL")
     public Request jump(@NotNull(message = "URI can't be NULL") final URI uri) {
-        return this.back().uri().set(uri).back();
+        final Request req = this.back().uri().set(uri).back();
+        final Map<String, List<String>> headers = this.headers();
+        if (headers.containsKey(HttpHeaders.SET_COOKIE)) {
+            for (final String header : headers.get(HttpHeaders.SET_COOKIE)) {
+                for (final HttpCookie cookie : HttpCookie.parse(header)) {
+                    req.header(
+                        HttpHeaders.COOKIE,
+                        String.format(
+                            "%s=%s",
+                            cookie.getName(),
+                            cookie.getValue()
+                        )
+                    );
+                }
+            }
+        }
+        return req;
     }
 
     /**
