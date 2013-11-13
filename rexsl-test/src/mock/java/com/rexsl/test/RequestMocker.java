@@ -29,68 +29,46 @@
  */
 package com.rexsl.test;
 
-import com.jcabi.aspects.Immutable;
-import java.util.List;
-import java.util.Map;
-import lombok.EqualsAndHashCode;
+import java.net.URI;
+import org.mockito.Mockito;
 
 /**
- * Abstract response.
- *
- * @author Yegor Bugayenko (yegor@tpc2.com)
+ * Mocker of {@link Request}.
+ * @author Yegor Bugayenko (yegor@netbout.com)
  * @version $Id$
- * @since 0.8
  */
-@Immutable
-@EqualsAndHashCode(of = "response")
-abstract class AbstractResponse implements Response {
+public final class RequestMocker {
 
     /**
-     * Encapsulated response.
+     * Request mocked.
      */
-    private final transient Response response;
+    private final transient Request request = Mockito.mock(Request.class);
 
     /**
-     * Ctor.
-     * @param resp Response
+     * Public ctor.
      */
-    AbstractResponse(final Response resp) {
-        this.response = resp;
+    public RequestMocker() {
+        Mockito.doReturn(this.request).when(this.request)
+            .header(Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(this.request).when(this.request)
+            .method(Mockito.anyString());
+        Mockito.doReturn(
+            new DefaultURI(
+                this.request,
+                URI.create("http://localhost:8080/test")
+            )
+        ).when(this.request).uri();
+        Mockito.doReturn(
+            new DefaultBody(this.request, "test body content")
+        ).when(this.request).body();
     }
 
-    @Override
-    public String toString() {
-        return this.response.toString();
-    }
-
-    @Override
-    public Request back() {
-        return this.response.back();
-    }
-
-    @Override
-    public int status() {
-        return this.response.status();
-    }
-
-    @Override
-    public String reason() {
-        return this.response.reason();
-    }
-
-    @Override
-    public Map<String, List<String>> headers() {
-        return this.response.headers();
-    }
-
-    @Override
-    public String body() {
-        return this.response.body();
-    }
-
-    @Override
-    public <T> T as(final Class<T> type) {
-        return this.response.as(type);
+    /**
+     * Mock it.
+     * @return Mocked class
+     */
+    public Request mock() {
+        return this.request;
     }
 
 }

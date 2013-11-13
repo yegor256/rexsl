@@ -94,6 +94,7 @@ public final class RestResponseTest {
             new ResponseMocker()
                 .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom; path=/")
                 .withHeader(HttpHeaders.LOCATION, container.home().toString())
+                .with(new ApacheRequest(container.home()))
                 .mock()
         );
         response.follow()
@@ -102,7 +103,7 @@ public final class RestResponseTest {
     }
 
     /**
-     * TestResponse can avoid transferring of empty cookies.
+     * RestResponse can avoid transferring of empty cookies.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -119,6 +120,7 @@ public final class RestResponseTest {
                 .withHeader(HttpHeaders.SET_COOKIE, "first=A; path=/")
                 .withHeader(HttpHeaders.SET_COOKIE, "second=; path=/")
                 .withHeader(HttpHeaders.LOCATION, container.home().toString())
+                .with(new ApacheRequest(container.home()))
                 .mock()
         );
         response.follow()

@@ -34,6 +34,7 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.net.URI;
 import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import org.hamcrest.MatcherAssert;
 
 /**
@@ -44,6 +45,7 @@ import org.hamcrest.MatcherAssert;
  * @since 0.8
  */
 @Immutable
+@EqualsAndHashCode(callSuper = true)
 public final class XmlResponse extends AbstractResponse {
 
     /**
@@ -93,9 +95,9 @@ public final class XmlResponse extends AbstractResponse {
     public Request rel(
         @NotNull(message = "query can't be NULL") final String query) {
         this.assertXPath(query);
-        return this.back().uri().set(
+        return new RestResponse(this).jump(
             URI.create(this.xml().xpath(query).get(0))
-        ).back();
+        );
     }
 
 }
