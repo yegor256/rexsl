@@ -45,7 +45,7 @@ import org.mockito.Mockito;
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public final class JerseyTestResponseTest {
+public final class DefaultResponseTest {
 
     /**
      * The request decor.

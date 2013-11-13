@@ -69,7 +69,7 @@ final class XPathMatcher<T> extends TypeSafeMatcher<T> {
      * @param query The query
      * @param ctx The context
      */
-    protected XPathMatcher(@NotNull final String query,
+    XPathMatcher(@NotNull final String query,
         @NotNull final NamespaceContext ctx) {
         super();
         this.xpath = query;

@@ -32,8 +32,6 @@ package com.rexsl.w3c;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
-import com.rexsl.test.RestTester;
-import com.rexsl.test.TestResponse;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.nio.charset.Charset;

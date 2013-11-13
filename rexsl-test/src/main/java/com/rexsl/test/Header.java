@@ -29,8 +29,9 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
-import java.util.AbstractMap;
+import java.util.Map;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.EqualsAndHashCode;
@@ -39,15 +40,24 @@ import lombok.ToString;
 /**
  * HTTP header.
  *
- * <p>Objects of this class are immutable and thread-safe.
- *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@Immutable
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @Loggable(Loggable.DEBUG)
-final class Header extends AbstractMap.SimpleEntry<String, String> {
+final class Header implements Map.Entry<String, String> {
+
+    /**
+     * Key.
+     */
+    private final transient String left;
+
+    /**
+     * Value.
+     */
+    private final transient String right;
 
     /**
      * Serialization marker.
@@ -59,8 +69,9 @@ final class Header extends AbstractMap.SimpleEntry<String, String> {
      * @param key The name of it
      * @param value The value
      */
-    protected Header(@NotNull final String key, @NotNull final String value) {
-        super(Header.normalized(key), value);
+    Header(@NotNull final String key, @NotNull final String value) {
+        this.left = Header.normalized(key);
+        this.right = value;
     }
 
     /**
@@ -96,7 +107,7 @@ final class Header extends AbstractMap.SimpleEntry<String, String> {
      * @return Upper-case char
      */
     private static char upper(final char chr) {
-        char upper;
+        final char upper;
         if (chr >= 'a' && chr <= 'z') {
             upper = (char) (chr - ('a' - 'A'));
         } else {
@@ -105,4 +116,18 @@ final class Header extends AbstractMap.SimpleEntry<String, String> {
         return upper;
     }
 
+    @Override
+    public String getKey() {
+        return this.left;
+    }
+
+    @Override
+    public String getValue() {
+        return this.right;
+    }
+
+    @Override
+    public String setValue(final String value) {
+        throw new UnsupportedOperationException("#setValue()");
+    }
 }

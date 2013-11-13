@@ -35,7 +35,6 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.types.User;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
-import com.rexsl.test.RestTester;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;

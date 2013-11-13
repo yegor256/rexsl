@@ -31,8 +31,6 @@ package com.rexsl.w3c;
 
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
-import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.TestResponse;
 import java.net.HttpURLConnection;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;

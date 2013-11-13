@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import java.util.Map;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -46,7 +47,8 @@ public final class HeaderTest {
      */
     @Test
     public void normalizesHeaderKey() throws Exception {
-        final Header header = new Header("content-type", "text/plain");
+        final Map.Entry<String, String> header =
+            new Header("content-type", "text/plain");
         MatcherAssert.assertThat(
             header.getKey(),
             Matchers.equalTo("Content-Type")

@@ -29,53 +29,63 @@
  */
 package com.rexsl.test;
 
-import com.jcabi.log.Logger;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.jcabi.aspects.Immutable;
+import java.util.List;
+import java.util.Map;
+import javax.validation.constraints.NotNull;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 
 /**
- * Matches HTTP status against required value.
- *
- * <p>This class is immutable and thread-safe.
+ * Abstract response.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.3.4
+ * @since 0.8
  */
-@ToString
-@EqualsAndHashCode(of = "matcher")
-final class StatusMatcher implements AssertionPolicy {
+@Immutable
+abstract class AbstractResponse implements Response {
 
     /**
-     * The matcher to use.
+     * Encapsulated response.
      */
-    private final transient Matcher<Integer> matcher;
+    private final transient Response response;
 
     /**
-     * Public ctor.
-     * @param mtch The matcher to use
+     * Ctor.
+     * @param resp Response
      */
-    protected StatusMatcher(final Matcher<Integer> mtch) {
-        this.matcher = mtch;
+    AbstractResponse(final Response resp) {
+        this.response = resp;
     }
 
     @Override
-    public void assertThat(final TestResponse response) {
-        MatcherAssert.assertThat(
-            Logger.format(
-                "HTTP status code has to match:\n%s",
-                response
-            ),
-            response.getStatus(),
-            this.matcher
-        );
+    public Request back() {
+        return this.response.back();
     }
 
     @Override
-    public boolean isRetryNeeded(final int attempt) {
-        return false;
+    public int status() {
+        return this.response.status();
+    }
+
+    @Override
+    public String reason() {
+        return this.response.reason();
+    }
+
+    @Override
+    public Map<String, List<String>> headers() {
+        return this.response.headers();
+    }
+
+    @Override
+    public String body() {
+        return this.response.body();
+    }
+
+    @Override
+    public <T> T as(final Class<T> type) {
+        return this.response.as(type);
     }
 
 }

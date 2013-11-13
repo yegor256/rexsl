@@ -30,7 +30,6 @@
 package com.rexsl.w3c;
 
 import com.jcabi.aspects.Loggable;
-import com.rexsl.test.TestResponse;
 import java.net.URI;
 import java.util.regex.Pattern;
 import javax.validation.constraints.NotNull;

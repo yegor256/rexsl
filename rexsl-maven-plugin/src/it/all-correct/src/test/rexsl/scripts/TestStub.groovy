@@ -29,7 +29,7 @@
  */
 package com.rexsl.foo.scripts
 
-import com.rexsl.test.RestTester
+
 import javax.ws.rs.core.UriBuilder
 import org.hamcrest.Matchers
 

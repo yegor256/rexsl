@@ -29,71 +29,73 @@
  */
 package com.rexsl.test;
 
-import com.jcabi.aspects.Loggable;
-import com.jcabi.log.Logger;
-import java.util.ArrayList;
-import java.util.List;
+import com.jcabi.aspects.Immutable;
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
+import java.net.URI;
 import javax.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 
 /**
- * Matches HTTP header against required value.
- *
- * <p>This class is immutable and thread-safe.
+ * XML response.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.3.4
+ * @since 0.8
  */
-@ToString
-@EqualsAndHashCode(of = { "name", "matcher" })
-@Loggable(Loggable.DEBUG)
-final class HeaderMatcher implements AssertionPolicy {
-
-    /**
-     * Header's name.
-     */
-    private final transient String name;
-
-    /**
-     * The matcher to use.
-     */
-    private final transient Matcher<Iterable<String>> matcher;
+@Immutable
+public final class XmlResponse extends AbstractResponse {
 
     /**
      * Public ctor.
-     * @param hdr The name of the header to match
-     * @param mtch The matcher to use
+     * @param resp Response
      */
-    protected HeaderMatcher(@NotNull final String hdr,
-        @NotNull final Matcher<Iterable<String>> mtch) {
-        this.name = hdr;
-        this.matcher = mtch;
+    public XmlResponse(
+        @NotNull(message = "response can't be NULL") final Response resp) {
+        super(resp);
     }
 
-    @Override
-    public void assertThat(@NotNull final TestResponse response) {
-        List<String> headers = response.getHeaders().get(this.name);
-        if (headers == null) {
-            headers = new ArrayList<String>(0);
-        }
+    /**
+     * Get XML body.
+     * @return XML body
+     */
+    @NotNull(message = "XML is never NULL")
+    public XML xml() {
+        return new XMLDocument(this.body());
+    }
+
+    /**
+     * Verifies HTTP response body XHTML/XML content against XPath query,
+     * and throws {@link AssertionError} in case of mismatch.
+     * @param xpath Query to use
+     * @return This object
+     */
+    @NotNull(message = "response is never NULL")
+    public XmlResponse assertXPath(
+        @NotNull(message = "xpath can't be NULL") final String xpath) {
         MatcherAssert.assertThat(
-            Logger.format(
-                "HTTP header '%[text]s' has to match:\n%s",
-                this.name,
-                response
+            String.format(
+                "XML doesn't contain required XPath '%s':\n%s",
+                xpath, this.body()
             ),
-            headers,
-            this.matcher
+            this.body(),
+            XhtmlMatchers.hasXPath(xpath)
         );
+        return this;
     }
 
-    @Override
-    public boolean isRetryNeeded(final int attempt) {
-        return false;
+    /**
+     * Follow XML link.
+     * @param query XPath query to fetch new URI
+     * @return New request
+     */
+    @NotNull(message = "request is never NULL")
+    public Request rel(
+        @NotNull(message = "query can't be NULL") final String query) {
+        this.assertXPath(query);
+        return this.back().uri().set(
+            URI.create(this.xml().xpath(query).get(0))
+        ).back();
     }
 
 }

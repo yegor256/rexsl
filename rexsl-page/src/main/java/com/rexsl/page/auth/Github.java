@@ -33,7 +33,6 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
-import com.rexsl.test.RestTester;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;

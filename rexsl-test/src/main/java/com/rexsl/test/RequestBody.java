@@ -29,23 +29,50 @@
  */
 package com.rexsl.test;
 
-import org.junit.Test;
+import com.jcabi.aspects.Immutable;
+import javax.validation.constraints.NotNull;
 
 /**
- * Test case for {@link Failure}.
+ * Request body.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.8
  */
-public final class FailureTest {
+@Immutable
+public interface RequestBody {
 
     /**
-     * Failure can fail on demand.
-     * @throws Exception If something goes wrong inside
+     * Get back to the request it's related to.
+     * @return The request we're in
      */
-    @Test(expected = AssertionError.class)
-    public void throwsExceptionOnDemand() throws Exception {
-        final AssertionPolicy assertion = new Failure("some text");
-        assertion.assertThat(new TestResponseMocker().mock());
-    }
+    @NotNull(message = "request is never NULL")
+    Request back();
+
+    /**
+     * Get text content.
+     * @return Content in UTF-8
+     */
+    @NotNull(message = "body can't be NULL")
+    String get();
+
+    /**
+     * Set text content.
+     * @param body Body content
+     * @return New alternated body
+     */
+    @NotNull(message = "body is never NULL")
+    RequestBody set(@NotNull(message = "body can't be NULL") String body);
+
+    /**
+     * Add form param.
+     * @param name Query param name
+     * @param value Value of the query param to set
+     * @return New alternated body
+     */
+    @NotNull(message = "body is never NULL")
+    RequestBody formParam(
+        @NotNull(message = "form param name can't be NULL") String name,
+        @NotNull(message = "form param value can't be NULL") Object value);
 
 }

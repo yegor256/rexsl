@@ -111,7 +111,7 @@ final class CssStaticCheck implements Check {
      *
      * <p>CSSLint report is a plain text document, where every line is a
      * message about one defect. In this method we split this plain text
-     * document into lines and send them one by one to the log. If there are
+     * document into lines and fetch them one by one to the log. If there are
      * no lines in the document we return {@code true}, which means that
      * there are no errors and the CSS document is valid.
      *

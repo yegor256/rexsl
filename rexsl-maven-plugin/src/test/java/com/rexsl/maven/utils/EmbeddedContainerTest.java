@@ -32,7 +32,6 @@ package com.rexsl.maven.utils;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.test.RestTester;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import org.hamcrest.Matchers;
