@@ -91,7 +91,7 @@ final class WebappFilesCheck implements Check {
     @Loggable(Loggable.DEBUG)
     public boolean validate(final Environment env) {
         final File dir = new File(env.basedir(), "src/main/webapp");
-        boolean valid;
+        final boolean valid;
         if (dir.exists()) {
             valid = this.validate(env.basedir(), dir);
         } else {

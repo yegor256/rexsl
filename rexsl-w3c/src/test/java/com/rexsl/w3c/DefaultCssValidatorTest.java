@@ -36,7 +36,7 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 /**
- * Integration case for {@link DefaultCssValidator}.
+ * Test case for {@link DefaultCssValidator}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
@@ -65,28 +65,6 @@ public final class DefaultCssValidatorTest {
     }
 
     /**
-     * DefaultCssValidator can validate CSS document, with invalid content.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void validatesInvalidCssDocument() throws Exception {
-        final URI uri = new ContainerMocker().returnBody(
-            StringUtils.join(
-                "<e:Envelope",
-                " xmlns:e='http://www.w3.org/2003/05/soap-envelope'>",
-                "<env:Body><m:cssvalidationresponse ",
-                " xmlns:m='http://www.w3.org/2005/07/css-validator'> ",
-                "<m:validity>false</m:validity>",
-                "<m:checkedby>somebody</m:checkedby>",
-                "</m:cssvalidationresponse></env:Body></e:Envelope>"
-            )
-        ).mock().home();
-        final Validator validator = new DefaultCssValidator(uri);
-        final ValidationResponse response = validator.validate("");
-        MatcherAssert.assertThat(response.toString(), !response.valid());
-    }
-
-    /**
      * DefaultCssValidator can ignore the entire document.
      * @throws Exception If something goes wrong inside
      */
@@ -97,18 +75,6 @@ public final class DefaultCssValidatorTest {
             // @checkstyle RegexpSingleline (1 line)
             "/* hey */\n\n/* JIGSAW IGNORE: .. */\n\n* { abc: cde }\n"
         );
-        MatcherAssert.assertThat(response.toString(), response.valid());
-    }
-
-    /**
-     * DefaultCssValidator can succeed if W3C response is broken.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void succeedsWithBrokenWebResponse() throws Exception {
-        final URI uri = new ContainerMocker().returnBody("<x/>").mock().home();
-        final Validator validator = new DefaultCssValidator(uri);
-        final ValidationResponse response = validator.validate("");
         MatcherAssert.assertThat(response.toString(), response.valid());
     }
 

@@ -95,7 +95,7 @@ final class RexslFilesCheck implements Check {
         final File dir = new File(env.basedir(), "src/test/rexsl");
         boolean valid = true;
         if (dir.exists()) {
-            for (File folder : dir.listFiles()) {
+            for (final File folder : dir.listFiles()) {
                 if (!RexslFilesCheck.EXTS.containsKey(folder.getName())) {
                     continue;
                 }
@@ -114,7 +114,7 @@ final class RexslFilesCheck implements Check {
      */
     private boolean validate(final File folder) {
         boolean valid = true;
-        for (File file : this.getFiles(folder)) {
+        for (final File file : this.getFiles(folder)) {
             final String ext = FilenameUtils.getExtension(file.getPath());
             final String regex = RexslFilesCheck.EXTS
                 .get(folder.getName()).toString();
