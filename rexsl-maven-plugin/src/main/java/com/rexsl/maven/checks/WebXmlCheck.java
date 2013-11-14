@@ -35,8 +35,7 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URI;
+import java.net.URL;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilder;
@@ -78,7 +77,7 @@ final class WebXmlCheck implements Check {
 
     @Override
     @Loggable(Loggable.DEBUG)
-    public boolean validate(@NotNull final Environment env) {
+    public boolean validate(@NotNull final Environment env) throws IOException {
         final File file = new File(
             env.basedir(),
             "src/main/webapp/WEB-INF/web.xml"
@@ -161,12 +160,10 @@ final class WebXmlCheck implements Check {
      * @return TRUE if we're offline
      */
     private static boolean offline() {
-        boolean offline;
+        boolean offline = false;
         try {
-            offline = .start(
-                URI.create("http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd")
-            ).get("validate it").getStatus() != HttpURLConnection.HTTP_OK;
-        } catch (AssertionError ex) {
+            new URL("http://www.google.com").getContent();
+        } catch (IOException ex) {
             offline = true;
         }
         if (offline) {
