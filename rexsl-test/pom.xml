@@ -64,7 +64,6 @@
             <groupId>javax.json</groupId>
             <artifactId>javax.json-api</artifactId>
             <optional>true</optional>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
@@ -172,6 +171,19 @@
         </dependency>
     </dependencies>
     <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
