@@ -265,6 +265,7 @@
                             <manifestEntries>
                                 <ReXSL-Version>${project.version}</ReXSL-Version>
                                 <ReXSL-Build>${buildNumber}</ReXSL-Build>
+                                <ReXSL-Date>${maven.build.timestamp}</ReXSL-Date>
                             </manifestEntries>
                         </archive>
                     </configuration>

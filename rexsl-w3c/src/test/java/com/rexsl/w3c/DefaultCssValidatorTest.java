@@ -31,11 +31,12 @@ package com.rexsl.w3c;
 
 import com.rexsl.test.ContainerMocker;
 import java.net.URI;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 /**
- * Test case for {@link DefaultCssValidator}.
+ * Integration case for {@link DefaultCssValidator}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
@@ -48,13 +49,15 @@ public final class DefaultCssValidatorTest {
     @Test
     public void validatesCssDocument() throws Exception {
         final URI uri = new ContainerMocker().returnBody(
-            // @checkstyle StringLiteralsConcatenation (6 lines)
-            "<env:Envelope xmlns:env='http://www.w3.org/2003/05/soap-envelope'>"
-            + "<env:Body><m:cssvalidationresponse"
-            + " xmlns:m='http://www.w3.org/2005/07/css-validator'>"
-            + "<m:validity>true</m:validity>"
-            + "<m:checkedby>W3C</m:checkedby>"
-            + "</m:cssvalidationresponse></env:Body></env:Envelope>"
+            StringUtils.join(
+                "<env:Envelope",
+                " xmlns:env='http://www.w3.org/2003/05/soap-envelope'>",
+                "<env:Body><m:cssvalidationresponse",
+                " xmlns:m='http://www.w3.org/2005/07/css-validator'>",
+                "<m:validity>true</m:validity>",
+                "<m:checkedby>W3C</m:checkedby>",
+                "</m:cssvalidationresponse></env:Body></env:Envelope>"
+            )
         ).mock().home();
         final Validator validator = new DefaultCssValidator(uri);
         final ValidationResponse response = validator.validate("* { }");
@@ -68,13 +71,15 @@ public final class DefaultCssValidatorTest {
     @Test
     public void validatesInvalidCssDocument() throws Exception {
         final URI uri = new ContainerMocker().returnBody(
-            // @checkstyle StringLiteralsConcatenation (6 lines)
-            "<e:Envelope xmlns:e='http://www.w3.org/2003/05/soap-envelope'>"
-            + "<env:Body><m:cssvalidationresponse "
-            + " xmlns:m='http://www.w3.org/2005/07/css-validator'> "
-            + "<m:validity>false</m:validity>"
-            + "<m:checkedby>somebody</m:checkedby>"
-            + "</m:cssvalidationresponse></env:Body></e:Envelope>"
+            StringUtils.join(
+                "<e:Envelope",
+                " xmlns:e='http://www.w3.org/2003/05/soap-envelope'>",
+                "<env:Body><m:cssvalidationresponse ",
+                " xmlns:m='http://www.w3.org/2005/07/css-validator'> ",
+                "<m:validity>false</m:validity>",
+                "<m:checkedby>somebody</m:checkedby>",
+                "</m:cssvalidationresponse></env:Body></e:Envelope>"
+            )
         ).mock().home();
         final Validator validator = new DefaultCssValidator(uri);
         final ValidationResponse response = validator.validate("");

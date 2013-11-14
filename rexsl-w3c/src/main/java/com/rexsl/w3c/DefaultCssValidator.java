@@ -29,7 +29,11 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
+import com.rexsl.test.Request;
+import com.rexsl.test.XmlResponse;
+import java.io.IOException;
 import java.net.URI;
 import java.util.regex.Pattern;
 import javax.validation.constraints.NotNull;
@@ -43,6 +47,7 @@ import lombok.ToString;
  * @version $Id$
  * @see <a href="http://jigsaw.w3.org/css-validator/api.html">W3C API</a>
  */
+@Immutable
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "uri")
 @Loggable(Loggable.DEBUG)
@@ -51,22 +56,22 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
     /**
      * The URI to use in W3C.
      */
-    private final transient URI uri;
+    private final transient String uri;
 
     /**
      * Public ctor.
      * @param entry Entry point to use
      */
-    protected DefaultCssValidator(@NotNull final URI entry) {
+    DefaultCssValidator(@NotNull final URI entry) {
         super();
-        this.uri = entry;
+        this.uri = entry.toString();
     }
 
     @Override
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     @NotNull
-    public ValidationResponse validate(@NotNull final String css) {
-        ValidationResponse response;
+    public ValidationResponse validate(@NotNull final String css)
+        throws IOException {
+        final ValidationResponse response;
         final Pattern pattern = Pattern.compile(
             ".*^/\\* JIGSAW IGNORE: [^\\n]+\\*/$.*",
             Pattern.MULTILINE | Pattern.DOTALL
@@ -84,32 +89,19 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
      * @param css The CSS stylesheet to check
      * @return The response
      */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    private ValidationResponse processed(final String css) {
-        DefaultValidationResponse response;
-        try {
-            final TestResponse soap = this
-                .send(
-                    this.uri,
-                    this.entity("file", this.filter(css), "text/css")
-            )
+    private ValidationResponse processed(final String css) throws IOException {
+        final Request req = this.request(
+            this.uri,
+            this.entity("file", DefaultCssValidator.filter(css), "text/css")
+        );
+        return this.build(
+            req.fetch().as(XmlResponse.class)
                 .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
                 .registerNs("m", "http://www.w3.org/2005/07/css-validator")
-                .assertThat(
-                    new RetryPolicy(
-                        "/env:Envelope/env:Body/m:cssvalidationresponse"
-                    )
-                )
                 .assertXPath("//m:validity")
-                .assertXPath("//m:checkedby");
-            response = this.build(soap);
-        } catch (AssertionError ex) {
-            response = this.success(ex.getMessage());
-        // @checkstyle IllegalCatchCheck (1 line)
-        } catch (Throwable ex) {
-            response = this.failure(ex);
-        }
-        return response;
+                .assertXPath("//m:checkedby")
+                .xml()
+        );
     }
 
     /**
@@ -117,7 +109,7 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
      * @param css The css document
      * @return New document, with lines excluded
      */
-    private String filter(final String css) {
+    private static String filter(final String css) {
         return Pattern.compile(
             "^/\\* JIGSAW: [^\\n]+\\*/$",
             Pattern.MULTILINE | Pattern.DOTALL
