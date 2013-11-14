@@ -538,6 +538,16 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>jslint-maven-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <file>main/resources/com/rexsl/maven/checks/rhinoUnitUtil.js</file>
+                                <file>main/resources/com/rexsl/maven/checks/rhinoUnitWrapper.js</file>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
                         <groupId>com.ning.maven.plugins</groupId>
                         <artifactId>maven-duplicate-finder-plugin</artifactId>
                         <configuration>
