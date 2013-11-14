@@ -34,6 +34,7 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
 import com.rexsl.w3c.Validator;
 import com.rexsl.w3c.ValidatorMocker;
+import java.io.IOException;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
@@ -111,9 +112,10 @@ public final class XhtmlOutputCheckTest {
 
     /**
      * XhtmlOutputCheck can check only tests matching pattern.
+     * @throws IOException If IO problem
      */
     @Test
-    public void checksOnlyMatchingTests() {
+    public void checksOnlyMatchingTests() throws IOException {
         // @checkstyle MultipleStringLiterals (9 lines)
         final Environment env = new EnvironmentMocker()
             .withFile("target/webdir/xsl/layout.xsl")

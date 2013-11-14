@@ -32,6 +32,7 @@ package com.rexsl.maven.checks;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
+import java.io.IOException;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
@@ -63,9 +64,10 @@ public final class InContainerScriptsCheckTest {
 
     /**
      * InContainerScriptsCheck can check only tests matching pattern.
+     * @throws IOException If fails
      */
     @Test
-    public void checksOnlyMatchingTests() {
+    public void checksOnlyMatchingTests() throws IOException {
         // @checkstyle MultipleStringLiterals (8 lines)
         final Environment env = new EnvironmentMocker()
             .withFile("target/webdir/xsl/layout.xsl")

@@ -168,7 +168,6 @@ public final class DefaultChecksProvider implements ChecksProvider {
                 "com.rexsl.maven.checks.LibrariesCheck",
                 "com.rexsl.maven.checks.XhtmlOutputCheck",
                 "com.rexsl.maven.checks.InContainerScriptsCheck",
-                "com.rexsl.maven.checks.JSUnitTestsCheck",
                 "com.rexsl.maven.checks.WebXmlCheck"
             )
         );

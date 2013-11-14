@@ -83,7 +83,8 @@
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version> <!-- doesn't work with higher versions, use 3.0.1 -->
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -319,8 +320,7 @@
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
-            <artifactId>guava-io</artifactId>
-            <version>r03</version>
+            <artifactId>guava</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -533,16 +533,6 @@
             <id>qulice</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>jslint-maven-plugin</artifactId>
-                        <configuration>
-                            <excludes>
-                                <file>main/resources/com/rexsl/maven/checks/rhinoUnitUtil.js</file>
-                                <file>main/resources/com/rexsl/maven/checks/rhinoUnitWrapper.js</file>
-                            </excludes>
-                        </configuration>
-                    </plugin>
                     <plugin>
                         <groupId>com.ning.maven.plugins</groupId>
                         <artifactId>maven-duplicate-finder-plugin</artifactId>
