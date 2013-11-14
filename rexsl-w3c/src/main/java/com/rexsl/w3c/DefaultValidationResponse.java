@@ -93,7 +93,7 @@ final class DefaultValidationResponse implements ValidationResponse {
      * @param enc Charset of the document
      * @checkstyle ParameterNumber (3 lines)
      */
-    protected DefaultValidationResponse(final boolean val,
+    DefaultValidationResponse(final boolean val,
         @NotNull final URI server, @NotNull final String tpe,
         @NotNull final Charset enc) {
         this.ivalid = val;
@@ -104,14 +104,14 @@ final class DefaultValidationResponse implements ValidationResponse {
 
     @Override
     public String toString() {
-        final StringBuilder text = new StringBuilder();
-        text.append(Logger.format("Validity: %B\n", this.ivalid));
-        text.append(Logger.format("Validator: \"%s\"\n", this.validator));
-        text.append(Logger.format("DOCTYPE: \"%s\"\n", this.type));
-        text.append(Logger.format("Charset: \"%s\"\n", this.encoding));
-        text.append("Errors:\n").append(this.asText(this.ierrors));
-        text.append("Warnings:\n").append(this.asText(this.iwarnings));
-        return text.toString();
+        return new StringBuilder(0)
+            .append(Logger.format("Validity: %B\n", this.ivalid))
+            .append(Logger.format("Validator: \"%s\"\n", this.validator))
+            .append(Logger.format("DOCTYPE: \"%s\"\n", this.type))
+            .append(Logger.format("Charset: \"%s\"\n", this.encoding))
+            .append("Errors:\n").append(this.asText(this.ierrors))
+            .append("Warnings:\n").append(this.asText(this.iwarnings))
+            .toString();
     }
 
     @Override
@@ -174,9 +174,9 @@ final class DefaultValidationResponse implements ValidationResponse {
      * @return The text
      */
     private String asText(final Set<Defect> defects) {
-        final StringBuilder text = new StringBuilder();
-        for (Defect defect : defects) {
-            text.append("  ").append(defect.toString()).append("\n");
+        final StringBuilder text = new StringBuilder(0);
+        for (final Defect defect : defects) {
+            text.append("  ").append(defect.toString()).append('\n');
         }
         return text.toString();
     }

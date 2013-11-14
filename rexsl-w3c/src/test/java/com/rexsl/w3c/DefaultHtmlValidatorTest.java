@@ -33,6 +33,7 @@ import com.rexsl.test.ContainerMocker;
 import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -51,15 +52,16 @@ public final class DefaultHtmlValidatorTest {
     @Test
     public void validatesHtmlDocument() throws Exception {
         final URI uri = new ContainerMocker().returnBody(
-            // @checkstyle StringLiteralsConcatenation (8 lines)
-            "<env:Envelope xmlns:env='http://www.w3.org/2003/05/soap-envelope'>"
-            + "<env:Body><m:markupvalidationresponse"
-            + " xmlns:m='http://www.w3.org/2005/10/markup-validator'>"
-            + "<m:validity>true</m:validity>"
-            + "<m:checkedby>W3C</m:checkedby>"
-            + "<m:doctype>text/html</m:doctype>"
-            + "<m:charset>UTF-8</m:charset>"
-            + "</m:markupvalidationresponse></env:Body></env:Envelope>"
+            StringUtils.join(
+                "<env:Envelope xmlns:env='http://www.w3.org/2003/05/soap-envelope'>",
+                "<env:Body><m:markupvalidationresponse",
+                " xmlns:m='http://www.w3.org/2005/10/markup-validator'>",
+                "<m:validity>true</m:validity>",
+                "<m:checkedby>W3C</m:checkedby>",
+                "<m:doctype>text/html</m:doctype>",
+                "<m:charset>UTF-8</m:charset>",
+                "</m:markupvalidationresponse></env:Body></env:Envelope>"
+            )
         ).mock().home();
         final Validator validator = new DefaultHtmlValidator(uri);
         final ValidationResponse response = validator.validate("<html/>");

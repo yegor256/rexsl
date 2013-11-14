@@ -46,7 +46,6 @@ import lombok.ToString;
 @Immutable
 @ToString
 @EqualsAndHashCode
-@Loggable(Loggable.DEBUG)
 final class Header implements Map.Entry<String, String> {
 
     /**

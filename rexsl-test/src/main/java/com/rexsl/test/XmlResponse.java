@@ -30,9 +30,12 @@
 package com.rexsl.test;
 
 import com.jcabi.aspects.Immutable;
+import com.jcabi.immutable.ArrayMap;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import com.jcabi.xml.XPathContext;
 import java.net.URI;
+import java.util.Map;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.hamcrest.MatcherAssert;
@@ -49,12 +52,28 @@ import org.hamcrest.MatcherAssert;
 public final class XmlResponse extends AbstractResponse {
 
     /**
+     * Map of namespaces.
+     */
+    private final transient ArrayMap<String, String> namespaces;
+
+    /**
      * Public ctor.
      * @param resp Response
      */
     public XmlResponse(
         @NotNull(message = "response can't be NULL") final Response resp) {
+        this(resp, new ArrayMap<String, String>());
+    }
+
+    /**
+     * Public ctor.
+     * @param resp Response
+     * @param map Map of namespaces
+     */
+    private XmlResponse(final Response resp,
+        final ArrayMap<String, String> map) {
         super(resp);
+        this.namespaces = map;
     }
 
     /**
@@ -67,6 +86,19 @@ public final class XmlResponse extends AbstractResponse {
     }
 
     /**
+     * Register this new namespace.
+     * @param prefix Prefix to use
+     * @param uri Namespace URI
+     * @return This object
+     */
+    @NotNull(message = "response is never NULL")
+    public XmlResponse registerNs(
+        @NotNull(message = "prefix can't be NULL") final String prefix,
+        @NotNull(message = "URI can't be NULL") final String uri) {
+        return new XmlResponse(this, this.namespaces.with(prefix, uri));
+    }
+
+    /**
      * Verifies HTTP response body XHTML/XML content against XPath query,
      * and throws {@link AssertionError} in case of mismatch.
      * @param xpath Query to use
@@ -75,13 +107,18 @@ public final class XmlResponse extends AbstractResponse {
     @NotNull(message = "response is never NULL")
     public XmlResponse assertXPath(
         @NotNull(message = "xpath can't be NULL") final String xpath) {
+        XPathContext context = new XPathContext();
+        for (final Map.Entry<String, String> entry
+            : this.namespaces.entrySet()) {
+            context = context.add(entry.getKey(), entry.getValue());
+        }
         MatcherAssert.assertThat(
             String.format(
                 "XML doesn't contain required XPath '%s':\n%s",
                 xpath, this.body()
             ),
             this.body(),
-            XhtmlMatchers.hasXPath(xpath)
+            XhtmlMatchers.hasXPath(xpath, context)
         );
         return this;
     }
