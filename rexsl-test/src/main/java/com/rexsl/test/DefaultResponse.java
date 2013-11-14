@@ -33,6 +33,7 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
 import com.jcabi.log.Logger;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Implementation of {@link Response}, based on Apache HTTP client.
@@ -52,6 +54,11 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(of = "req")
 @Loggable(Loggable.DEBUG)
 final class DefaultResponse implements Response {
+
+    /**
+     * UTF-8 error marker.
+     */
+    private static final String ERR = "\uFFFD";
 
     /**
      * Request.
@@ -81,14 +88,28 @@ final class DefaultResponse implements Response {
     /**
      * Public ctor.
      * @param request The request
+     * @throws IOException If some data are not valid
      */
     DefaultResponse(final Request request, final int status,
         final String reason, final Array<Map.Entry<String, String>> headers,
-        final String body) {
+        final String body) throws IOException {
         this.req = request;
         this.code = status;
         this.phrase = reason;
         this.hdrs = headers;
+        if (body.contains(DefaultResponse.ERR)) {
+            throw new IOException(
+                String.format(
+                    "broken Unicode text at line #%d in '%s' (%d bytes)",
+                    StringUtils.countMatches(
+                        "\n",
+                        body.substring(0, body.indexOf(DefaultResponse.ERR))
+                    ) + 2,
+                    body,
+                    body.getBytes().length
+                )
+            );
+        }
         this.content = body;
     }
 

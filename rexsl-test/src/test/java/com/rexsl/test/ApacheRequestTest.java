@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -314,10 +315,10 @@ public final class ApacheRequestTest {
     }
 
     /**
-     * ApacheRequest can silently proceed on connection error.
+     * ApacheRequest can throw a correct exception on connection error.
      * @throws Exception If something goes wrong inside
      */
-    @Test(expected = AssertionError.class)
+    @Test(expected = IOException.class)
     public void continuesOnConnectionError() throws Exception {
         new ApacheRequest("http://absent-1.rexsl.com/")
             .method(Request.GET)

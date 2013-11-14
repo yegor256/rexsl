@@ -29,14 +29,13 @@
  */
 package com.rexsl.test;
 
-import com.jcabi.log.Logger;
 import java.io.ByteArrayInputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.w3c.dom.Node;
 
 /**
@@ -47,21 +46,20 @@ import org.w3c.dom.Node;
 public final class StringSourceTest {
 
     /**
-     * StringSource can format XML text propertly.
+     * StringSource can format XML text properly.
      * @throws Exception If something goes wrong inside
      */
     @Test
     public void formatsIncomingXmlDocument() throws Exception {
         final String xml = "<a><b>\u0443\u0440\u0430!</b></a>";
-        final StringSource source = new StringSource(xml);
         MatcherAssert.assertThat(
-            source.toString(),
+            new StringSource(xml).toString(),
             Matchers.containsString("&#443;")
         );
     }
 
     /**
-     * Check convert node to string.
+     * StringSource can convert node to string.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -69,58 +67,17 @@ public final class StringSourceTest {
         final DocumentBuilder builder = DocumentBuilderFactory
             .newInstance()
             .newDocumentBuilder();
-        final String xmlString = Logger.format(
-            "<nodeName>%s%s%s<a/><a withArg=\"%s\"/></nodeName>",
-            "<?some instruction?>",
-            "<!--comment-->",
-            "<a>withText</a>",
-            "value"
+        final String xml = StringUtils.join(
+            "<nodeName><?some instruction?><!--comment-->",
+            "<a>withText</a><a/><a withArg='value'/></nodeName>"
         );
         final Node node = builder.parse(
-            new ByteArrayInputStream(xmlString.getBytes())
-        );
-        final StringSource source = new StringSource(node);
-        final String actual = source.toString();
-        MatcherAssert.assertThat(
-            actual, Matchers.containsString("nodeName")
+            new ByteArrayInputStream(xml.getBytes())
         );
         MatcherAssert.assertThat(
-            actual, Matchers.containsString("<a/>")
-        );
-        MatcherAssert.assertThat(
-            actual, Matchers.containsString("withText")
-        );
-        MatcherAssert.assertThat(
-            actual, Matchers.containsString("<a withArg=\"value\"/>")
-        );
-        MatcherAssert.assertThat(
-            actual, Matchers.containsString("some instruction")
-        );
-        MatcherAssert.assertThat(
-            actual, Matchers.containsString("comment")
+            new StringSource(node).toString(),
+            XhtmlMatchers.hasXPath("/nodeName/a")
         );
     }
 
-    /**
-     * Check transformation failure.
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testTransformationFailure() {
-        final String propertyName = "javax.xml.transform.TransformerFactory";
-        final String defaultFactory =
-            System.getProperty(propertyName);
-        System.setProperty(
-            propertyName,
-            TransformerFactoryMock.class.getCanonicalName()
-        );
-        try {
-            new StringSource(Mockito.mock(Node.class));
-        } finally {
-            if (defaultFactory == null) {
-                System.clearProperty(propertyName);
-            } else {
-                System.setProperty(propertyName, defaultFactory);
-            }
-        }
-    }
 }
