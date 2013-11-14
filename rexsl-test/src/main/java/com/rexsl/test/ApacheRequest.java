@@ -38,16 +38,17 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -69,11 +70,6 @@ import org.apache.http.util.EntityUtils;
 public final class ApacheRequest implements Request {
 
     /**
-     * UTF-8 error marker.
-     */
-    private static final String ERR = "\uFFFD";
-
-    /**
      * Default user agent.
      */
     private static final String AGENT = String.format(
@@ -86,7 +82,7 @@ public final class ApacheRequest implements Request {
     /**
      * Request URI.
      */
-    private final transient RequestURI home;
+    private final transient String home;
 
     /**
      * Method to use.
@@ -101,7 +97,7 @@ public final class ApacheRequest implements Request {
     /**
      * Body to use.
      */
-    private final transient RequestBody content;
+    private final transient String content;
 
     /**
      * Public ctor.
@@ -118,10 +114,7 @@ public final class ApacheRequest implements Request {
      */
     ApacheRequest(@NotNull(message = "URI can't be NULL")
         final String uri) {
-        this.home = new DefaultURI(this, URI.create(uri));
-        this.headers = new Array<Header>();
-        this.mtd = Request.GET;
-        this.content = new DefaultBody(this, "");
+        this(uri, new Array<Header>(), Request.GET, "");
     }
 
     /**
@@ -131,8 +124,8 @@ public final class ApacheRequest implements Request {
      * @param method HTTP method
      * @param body HTTP request body
      */
-    private ApacheRequest(final RequestURI uri, final Iterable<Header> hdrs,
-        final String method, final RequestBody body) {
+    private ApacheRequest(final String uri, final Iterable<Header> hdrs,
+        final String method, final String body) {
         this.home = uri;
         this.headers = new Array<Header>(hdrs);
         this.mtd = method;
@@ -142,7 +135,7 @@ public final class ApacheRequest implements Request {
     @Override
     @NotNull
     public RequestURI uri() {
-        return this.home;
+        return new ApacheRequest.ApacheURI(this, this.home);
     }
 
     @Override
@@ -159,7 +152,7 @@ public final class ApacheRequest implements Request {
 
     @Override
     public RequestBody body() {
-        return this.content;
+        return new ApacheRequest.ApacheBody(this, this.content);
     }
 
     @Override
@@ -183,8 +176,9 @@ public final class ApacheRequest implements Request {
                     return ApacheRequest.this.mtd;
                 }
             };
-        req.setURI(this.home.get());
-        req.setEntity(new StringEntity(this.content.get(), Charsets.UTF_8));
+        final URI uri = URI.create(this.home);
+        req.setURI(uri);
+        req.setEntity(new StringEntity(this.content, Charsets.UTF_8));
         boolean agent = false;
         for (final Header header : this.headers) {
             req.addHeader(header.getKey(), header.getValue());
@@ -198,7 +192,7 @@ public final class ApacheRequest implements Request {
                 ApacheRequest.AGENT
             );
         }
-        final String info = this.home.get().getUserInfo();
+        final String info = uri.getUserInfo();
         if (info != null) {
             final String[] parts = info.split(":", 2);
             try {
@@ -225,11 +219,11 @@ public final class ApacheRequest implements Request {
             this,
             "#fetch(%s %s): completed in %[ms]s [%d %s]: %s",
             this.mtd,
-            this.home.get().getPath(),
+            URI.create(this.home).getPath(),
             System.currentTimeMillis() - start,
             response.getStatusLine().getStatusCode(),
             response.getStatusLine().getReasonPhrase(),
-            this.home.get()
+            this.home
         );
         try {
             return new DefaultResponse(
@@ -255,19 +249,6 @@ public final class ApacheRequest implements Request {
         if (entity != null) {
             body = EntityUtils.toString(entity, Charsets.UTF_8);
         }
-        if (body.contains(ApacheRequest.ERR)) {
-            throw new IOException(
-                String.format(
-                    "broken Unicode text at line #%d in '%s' (%d bytes)",
-                    StringUtils.countMatches(
-                        "\n",
-                        body.substring(0, body.indexOf(ApacheRequest.ERR))
-                    ) + 2,
-                    body,
-                    body.getBytes().length
-                )
-            );
-        }
         return body;
     }
 
@@ -290,7 +271,7 @@ public final class ApacheRequest implements Request {
     public String toString() {
         final StringBuilder text = new StringBuilder("HTTP/1.1 ")
             .append(this.mtd).append(' ')
-            .append(this.home.get().getPath())
+            .append(URI.create(this.home).getPath())
             .append('\n');
         for (final Map.Entry<String, String> header : this.headers) {
             text.append(
@@ -302,12 +283,149 @@ public final class ApacheRequest implements Request {
             );
         }
         text.append('\n');
-        if (this.content.get().isEmpty()) {
+        if (this.content.isEmpty()) {
             text.append("<<empty request body>>");
         } else {
-            text.append(this.content.get());
+            text.append(this.content);
         }
         return text.toString();
+    }
+
+    /**
+     * Apache URI.
+     */
+    @Immutable
+    @EqualsAndHashCode(of = "address")
+    private static final class ApacheURI implements RequestURI {
+        /**
+         * URI encapsulated.
+         */
+        private final transient String address;
+        /**
+         * Apache request encapsulated.
+         */
+        private final transient ApacheRequest owner;
+        /**
+         * Public ctor.
+         * @param req Request
+         * @param uri The URI to start with
+         */
+        ApacheURI(final ApacheRequest req, final String uri) {
+            this.owner = req;
+            this.address = uri;
+        }
+        @Override
+        public String toString() {
+            return this.address;
+        }
+        @Override
+        public Request back() {
+            return new ApacheRequest(
+                this.address,
+                this.owner.headers,
+                this.owner.mtd,
+                this.owner.content
+            );
+        }
+        @Override
+        public URI get() {
+            return URI.create(this.owner.home);
+        }
+        @Override
+        public RequestURI set(@NotNull(message = "URI can't be NULL")
+            final URI uri) {
+            return new ApacheRequest.ApacheURI(this.owner, uri.toString());
+        }
+        @Override
+        public RequestURI queryParam(
+            @NotNull(message = "query param name can't be NULL") final String name,
+            @NotNull(message = "param value can't be NULL") final Object value) {
+            return new ApacheRequest.ApacheURI(
+                this.owner,
+                UriBuilder.fromUri(this.address)
+                    .queryParam(name, "{value}")
+                    .build(value).toString()
+            );
+        }
+        @Override
+        public RequestURI path(
+            @NotNull(message = "path can't be NULL") final String segment) {
+            return new ApacheRequest.ApacheURI(
+                this.owner,
+                UriBuilder.fromUri(this.address)
+                    .path(segment)
+                    .build().toString()
+            );
+        }
+    }
+
+    /**
+     * Apache URI.
+     */
+    @Immutable
+    @EqualsAndHashCode(of = "text")
+    private static final class ApacheBody implements RequestBody {
+        /**
+         * Content encapsulated.
+         */
+        private final transient String text;
+        /**
+         * Apache request encapsulated.
+         */
+        private final transient ApacheRequest owner;
+        /**
+         * Public ctor.
+         * @param req Request
+         * @param txt Text to encapsulate
+         */
+        ApacheBody(final ApacheRequest req, final String txt) {
+            this.owner = req;
+            this.text = txt;
+        }
+        @Override
+        public String toString() {
+            return this.text;
+        }
+        @Override
+        public Request back() {
+            return new ApacheRequest(
+                this.owner.home,
+                this.owner.headers,
+                this.owner.mtd,
+                this.text
+            );
+        }
+        @Override
+        public String get() {
+            return this.text;
+        }
+        @Override
+        public RequestBody set(@NotNull(message = "content can't be NULL")
+            final String txt) {
+            return new ApacheRequest.ApacheBody(this.owner, txt);
+        }
+        @Override
+        public RequestBody formParam(
+            @NotNull(message = "form param name can't be NULL") final String name,
+            @NotNull(message = "param value can't be NULL") final Object value) {
+            try {
+                return new ApacheRequest.ApacheBody(
+                    this.owner,
+                    new StringBuilder(this.text)
+                        .append(name)
+                        .append('=')
+                        .append(
+                            URLEncoder.encode(
+                                value.toString(), CharEncoding.UTF_8
+                            )
+                        )
+                        .append('&')
+                        .toString()
+                );
+            } catch (UnsupportedEncodingException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
     }
 
 }

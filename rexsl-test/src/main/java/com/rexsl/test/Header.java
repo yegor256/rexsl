@@ -38,7 +38,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * HTTP header.
+ * Immutable HTTP header.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
@@ -60,11 +60,6 @@ final class Header implements Map.Entry<String, String> {
     private final transient String right;
 
     /**
-     * Serialization marker.
-     */
-    private static final long serialVersionUID = 0x7526FA78EEA2147AL;
-
-    /**
      * Public ctor.
      * @param key The name of it
      * @param value The value
@@ -72,6 +67,21 @@ final class Header implements Map.Entry<String, String> {
     Header(@NotNull final String key, @NotNull final String value) {
         this.left = Header.normalized(key);
         this.right = value;
+    }
+
+    @Override
+    public String getKey() {
+        return this.left;
+    }
+
+    @Override
+    public String getValue() {
+        return this.right;
+    }
+
+    @Override
+    public String setValue(final String value) {
+        throw new UnsupportedOperationException("#setValue()");
     }
 
     /**
@@ -89,7 +99,8 @@ final class Header implements Map.Entry<String, String> {
      * @return Normalized key
      */
     @NotNull
-    private static String normalized(@NotNull
+    private static String normalized(
+        @NotNull(message = "key can't be NULL")
         @Pattern(regexp = "[a-zA-Z0-9\\-]+") final String key) {
         final char[] chars = key.toCharArray();
         chars[0] = Header.upper(chars[0]);
@@ -116,18 +127,4 @@ final class Header implements Map.Entry<String, String> {
         return upper;
     }
 
-    @Override
-    public String getKey() {
-        return this.left;
-    }
-
-    @Override
-    public String getValue() {
-        return this.right;
-    }
-
-    @Override
-    public String setValue(final String value) {
-        throw new UnsupportedOperationException("#setValue()");
-    }
 }

@@ -59,7 +59,6 @@ public final class ResponseMocker {
      */
     public ResponseMocker() {
         Mockito.doReturn(this.headers).when(this.response).headers();
-        Mockito.doReturn(new RequestMocker().mock()).when(this.response).back();
         this.withStatus(HttpURLConnection.HTTP_OK);
         this.withBody("");
     }

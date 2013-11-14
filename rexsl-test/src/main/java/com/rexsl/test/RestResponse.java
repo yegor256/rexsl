@@ -33,6 +33,7 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.log.Logger;
 import java.net.HttpCookie;
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
@@ -166,12 +167,16 @@ public final class RestResponse extends AbstractResponse {
         @NotNull(message = "header name can't be NULL") final String name,
         @NotNull(message = "matcher can't be NULL")
         final Matcher<Iterable<String>> matcher) {
+        Iterable<String> values = this.headers().get(name);
+        if (values == null) {
+            values = Collections.emptyList();
+        }
         MatcherAssert.assertThat(
             String.format(
                 "HTTP header %s is not valid:\n%s",
                 name, this
             ),
-            this.headers().get(name), matcher
+            values, matcher
         );
         return this;
     }
@@ -183,12 +188,12 @@ public final class RestResponse extends AbstractResponse {
      */
     @NotNull(message = "request is never NULL")
     public Request jump(@NotNull(message = "URI can't be NULL") final URI uri) {
-        final Request req = this.back().uri().set(uri).back();
+        Request req = this.back().uri().set(uri).back();
         final Map<String, List<String>> headers = this.headers();
         if (headers.containsKey(HttpHeaders.SET_COOKIE)) {
             for (final String header : headers.get(HttpHeaders.SET_COOKIE)) {
                 for (final HttpCookie cookie : HttpCookie.parse(header)) {
-                    req.header(
+                    req = req.header(
                         HttpHeaders.COOKIE,
                         String.format(
                             "%s=%s",
