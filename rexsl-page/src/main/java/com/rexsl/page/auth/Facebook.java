@@ -35,6 +35,8 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.types.User;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
+import com.rexsl.test.ApacheRequest;
+import com.rexsl.test.RestResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -160,13 +162,13 @@ public final class Facebook implements Provider, Provider.Visible {
                 this.appKey,
                 code
             );
-        final String response = RestTester.start(uri)
-            .get("fetch Facebook access token")
+        final String response = new ApacheRequest(uri)
+            .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
-            .getBody();
+            .body();
         final String[] sectors = response.split("&");
         String token = null;
-        for (String sector : sectors) {
+        for (final String sector : sectors) {
             final String[] pair = sector.split("=");
             if (pair.length != 2) {
                 throw new IllegalArgumentException(

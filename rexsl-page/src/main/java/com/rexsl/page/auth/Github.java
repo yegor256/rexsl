@@ -33,6 +33,11 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
+import com.rexsl.test.ApacheRequest;
+import com.rexsl.test.JsonResponse;
+import com.rexsl.test.Request;
+import com.rexsl.test.RestResponse;
+import com.rexsl.test.XmlResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -153,31 +158,32 @@ public final class Github implements Provider, Provider.Visible {
                 this.appKey,
                 code
             );
-        return RestTester.start(uri)
+        return new ApacheRequest(uri)
+            .method(Request.POST)
             .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
-            .post("", "getting Github access token")
+            .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
-            .xpath("/OAuth/access_token/text()")
-            .get(0);
+            .as(XmlResponse.class)
+            .xml().xpath("/OAuth/access_token/text()").get(0);
     }
 
     /**
      * Get user name from Github, with the token provided.
      * @param token Github access token
      * @return The user found in Github
+     * @throws IOException If fails
      */
-    private Identity fetch(final String token) {
+    private Identity fetch(final String token) throws IOException {
         final URI uri = UriBuilder
             .fromUri("https://api.github.com/user")
             .queryParam("access_token", "{token}")
             .build(token);
         return this.parse(
-            RestTester.start(uri)
+            new ApacheRequest(uri)
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
-                .get("reading Github user profile")
+                .fetch().as(RestResponse.class)
                 .assertStatus(HttpURLConnection.HTTP_OK)
-                .getJson()
-                .readObject()
+                .as(JsonResponse.class).json().readObject()
         );
     }
 
