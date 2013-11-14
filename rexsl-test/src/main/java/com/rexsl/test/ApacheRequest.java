@@ -53,7 +53,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
@@ -63,10 +62,12 @@ import org.apache.http.util.EntityUtils;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8
+ * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @Immutable
-@EqualsAndHashCode(of = { "home", "mtd", "headers", "content" })
+@EqualsAndHashCode(of = { "home", "mtd", "hdrs", "content" })
 @Loggable(Loggable.DEBUG)
+@SuppressWarnings("PMD.TooManyMethods")
 public final class ApacheRequest implements Request {
 
     /**
@@ -92,7 +93,7 @@ public final class ApacheRequest implements Request {
     /**
      * Headers.
      */
-    private final transient Array<Header> headers;
+    private final transient Array<Header> hdrs;
 
     /**
      * Body to use.
@@ -103,7 +104,7 @@ public final class ApacheRequest implements Request {
      * Public ctor.
      * @param uri The resource to work with
      */
-    ApacheRequest(@NotNull(message = "URI can't be NULL")
+    public ApacheRequest(@NotNull(message = "URI can't be NULL")
         final URI uri) {
         this(uri.toString());
     }
@@ -112,7 +113,7 @@ public final class ApacheRequest implements Request {
      * Public ctor.
      * @param uri The resource to work with
      */
-    ApacheRequest(@NotNull(message = "URI can't be NULL")
+    public ApacheRequest(@NotNull(message = "URI can't be NULL")
         final String uri) {
         this(uri, new Array<Header>(), Request.GET, "");
     }
@@ -120,14 +121,15 @@ public final class ApacheRequest implements Request {
     /**
      * Public ctor.
      * @param uri The resource to work with
-     * @param hdrs Headers
+     * @param headers Headers
      * @param method HTTP method
      * @param body HTTP request body
+     * @checkstyle ParameterNumber (5 lines)
      */
-    private ApacheRequest(final String uri, final Iterable<Header> hdrs,
+    ApacheRequest(final String uri, final Iterable<Header> headers,
         final String method, final String body) {
         this.home = uri;
-        this.headers = new Array<Header>(hdrs);
+        this.hdrs = new Array<Header>(headers);
         this.mtd = method;
         this.content = body;
     }
@@ -144,7 +146,7 @@ public final class ApacheRequest implements Request {
         @NotNull(message = "header value can't be NULL") final Object value) {
         return new ApacheRequest(
             this.home,
-            this.headers.with(new Header(name, value.toString())),
+            this.hdrs.with(new Header(name, value.toString())),
             this.mtd,
             this.content
         );
@@ -160,7 +162,7 @@ public final class ApacheRequest implements Request {
         @NotNull(message = "method can't be NULL") final String method) {
         return new ApacheRequest(
             this.home,
-            this.headers,
+            this.hdrs,
             method,
             this.content
         );
@@ -168,7 +170,37 @@ public final class ApacheRequest implements Request {
 
     @Override
     public Response fetch() throws IOException {
-        final CloseableHttpClient client = HttpClients.createDefault();
+        final long start = System.currentTimeMillis();
+        final CloseableHttpResponse response =
+            HttpClients.createDefault().execute(this.httpRequest());
+        Logger.info(
+            this,
+            "#fetch(%s %s): completed in %[ms]s [%d %s]: %s",
+            this.mtd,
+            URI.create(this.home).getPath(),
+            System.currentTimeMillis() - start,
+            response.getStatusLine().getStatusCode(),
+            response.getStatusLine().getReasonPhrase(),
+            this.home
+        );
+        try {
+            return new DefaultResponse(
+                this,
+                response.getStatusLine().getStatusCode(),
+                response.getStatusLine().getReasonPhrase(),
+                ApacheRequest.headers(response.getAllHeaders()),
+                ApacheRequest.consume(response.getEntity())
+            );
+        } finally {
+            response.close();
+        }
+    }
+
+    /**
+     * Create request.
+     * @return Request
+     */
+    public HttpEntityEnclosingRequestBase httpRequest() {
         final HttpEntityEnclosingRequestBase req =
             new HttpEntityEnclosingRequestBase() {
                 @Override
@@ -180,7 +212,7 @@ public final class ApacheRequest implements Request {
         req.setURI(uri);
         req.setEntity(new StringEntity(this.content, Charsets.UTF_8));
         boolean agent = false;
-        for (final Header header : this.headers) {
+        for (final Header header : this.hdrs) {
             req.addHeader(header.getKey(), header.getValue());
             if (header.sameAs(HttpHeaders.USER_AGENT)) {
                 agent = true;
@@ -213,29 +245,7 @@ public final class ApacheRequest implements Request {
                 throw new IllegalStateException(ex);
             }
         }
-        final long start = System.currentTimeMillis();
-        final CloseableHttpResponse response = client.execute(req);
-        Logger.info(
-            this,
-            "#fetch(%s %s): completed in %[ms]s [%d %s]: %s",
-            this.mtd,
-            URI.create(this.home).getPath(),
-            System.currentTimeMillis() - start,
-            response.getStatusLine().getStatusCode(),
-            response.getStatusLine().getReasonPhrase(),
-            this.home
-        );
-        try {
-            return new DefaultResponse(
-                this,
-                response.getStatusLine().getStatusCode(),
-                response.getStatusLine().getReasonPhrase(),
-                ApacheRequest.headers(response.getAllHeaders()),
-                ApacheRequest.consume(response.getEntity())
-            );
-        } finally {
-            response.close();
-        }
+        return req;
     }
 
     /**
@@ -253,10 +263,11 @@ public final class ApacheRequest implements Request {
     }
 
     /**
-     * Make a list of all headers.
-     * @param list Apache HTTP headers
+     * Make a list of all hdrs.
+     * @param list Apache HTTP hdrs
      * @return Body in UTF-8
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private static Array<Map.Entry<String, String>> headers(
         final org.apache.http.Header... list) {
         final Collection<Map.Entry<String, String>> headers =
@@ -273,7 +284,7 @@ public final class ApacheRequest implements Request {
             .append(this.mtd).append(' ')
             .append(URI.create(this.home).getPath())
             .append('\n');
-        for (final Map.Entry<String, String> header : this.headers) {
+        for (final Map.Entry<String, String> header : this.hdrs) {
             text.append(
                 Logger.format(
                     "%s: %s\n",
@@ -310,7 +321,7 @@ public final class ApacheRequest implements Request {
          * @param req Request
          * @param uri The URI to start with
          */
-        ApacheURI(final ApacheRequest req, final String uri) {
+        public ApacheURI(final ApacheRequest req, final String uri) {
             this.owner = req;
             this.address = uri;
         }
@@ -322,7 +333,7 @@ public final class ApacheRequest implements Request {
         public Request back() {
             return new ApacheRequest(
                 this.address,
-                this.owner.headers,
+                this.owner.hdrs,
                 this.owner.mtd,
                 this.owner.content
             );
@@ -338,8 +349,8 @@ public final class ApacheRequest implements Request {
         }
         @Override
         public RequestURI queryParam(
-            @NotNull(message = "query param name can't be NULL") final String name,
-            @NotNull(message = "param value can't be NULL") final Object value) {
+            @NotNull(message = "param name can't be NULL") final String name,
+            @NotNull(message = "value can't be NULL") final Object value) {
             return new ApacheRequest.ApacheURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
@@ -378,7 +389,7 @@ public final class ApacheRequest implements Request {
          * @param req Request
          * @param txt Text to encapsulate
          */
-        ApacheBody(final ApacheRequest req, final String txt) {
+        public ApacheBody(final ApacheRequest req, final String txt) {
             this.owner = req;
             this.text = txt;
         }
@@ -390,7 +401,7 @@ public final class ApacheRequest implements Request {
         public Request back() {
             return new ApacheRequest(
                 this.owner.home,
-                this.owner.headers,
+                this.owner.hdrs,
                 this.owner.mtd,
                 this.text
             );
@@ -406,8 +417,8 @@ public final class ApacheRequest implements Request {
         }
         @Override
         public RequestBody formParam(
-            @NotNull(message = "form param name can't be NULL") final String name,
-            @NotNull(message = "param value can't be NULL") final Object value) {
+            @NotNull(message = "name can't be NULL") final String name,
+            @NotNull(message = "value can't be NULL") final Object value) {
             try {
                 return new ApacheRequest.ApacheBody(
                     this.owner,

@@ -46,6 +46,7 @@ import org.junit.Test;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class ApacheRequestTest {
 
     /**
@@ -55,12 +56,12 @@ public final class ApacheRequestTest {
     @Test
     public void sendsHttpRequestAndProcessesHttpResponse() throws Exception {
         final ContainerMocker container = new ContainerMocker()
-            .expectRequestUri(Matchers.containsString("foo"))
+            .expectRequestUri(Matchers.containsString("helloall"))
             .expectMethod(Matchers.equalTo(Request.GET))
             .returnBody("hello!!".getBytes(CharEncoding.UTF_8))
             .mock();
         new ApacheRequest(container.home())
-            .uri().path("/foo").back()
+            .uri().path("/helloall").back()
             .method(Request.GET)
             .fetch().as(RestResponse.class)
             .assertBody(Matchers.containsString("!!"))
@@ -83,7 +84,7 @@ public final class ApacheRequestTest {
             .expectMethod(Matchers.equalTo(Request.GET))
             .mock();
         new ApacheRequest(container.home())
-            .uri().path("/foo").back()
+            .uri().path("/foo1").back()
             .method(Request.GET)
             .header(HttpHeaders.ACCEPT, "*/*")
             .fetch().as(RestResponse.class)
@@ -271,7 +272,7 @@ public final class ApacheRequestTest {
             .mock();
         new ApacheRequest(container.home())
             .method(Request.GET)
-            .uri().path("/abcde").back()
+            .uri().path("/abcdefff").back()
             .fetch().as(RestResponse.class)
             .assertBody(Matchers.containsString("\u0443\u0440\u0430"))
             .assertBody(Matchers.containsString("!"));
@@ -300,11 +301,10 @@ public final class ApacheRequestTest {
      */
     @Test
     public void sendsBasicAuthenticationHeader() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .expectHeader(
-                HttpHeaders.AUTHORIZATION,
-                Matchers.equalTo("Basic dXNlcjpwd2Q=")
-            ).mock();
+        final ContainerMocker container = new ContainerMocker().expectHeader(
+            HttpHeaders.AUTHORIZATION,
+            Matchers.equalTo("Basic dXNlcjpwd2Q=")
+        ).mock();
         final URI uri = UriBuilder.fromUri(container.home())
             .userInfo("user:pwd").build();
         new ApacheRequest(uri)

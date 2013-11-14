@@ -77,10 +77,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-        </dependency>
-        <dependency>
             <!--
             This artifact is in "compile" scope because
             jersey-client needs it in compile time (I believe it's a design
@@ -156,10 +152,12 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.saxon</groupId>

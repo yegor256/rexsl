@@ -92,7 +92,10 @@ public interface Response {
      * Convert it to another type, by encapsulation.
      * @param type Type to use
      * @param <T> Type to use
+     * @return New response
+     * @checkstyle MethodName (3 lines)
      */
+    @SuppressWarnings("PMD.ShortMethodName")
     <T> T as(Class<T> type);
 
 }

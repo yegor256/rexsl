@@ -38,7 +38,7 @@ import javax.validation.constraints.NotNull;
  *
  * <p>Instance of this class is supposed to be used this way:
  *
- * <pre>String name = new ApacheRequest("https://www.example.com:8080")
+ * <pre> String name = new ApacheRequest("https://www.example.com:8080")
  *   .uri().path("/users").queryParam("id", 333)
  *   .back()
  *   .method(Request.GET)
