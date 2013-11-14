@@ -30,6 +30,7 @@
 package com.rexsl.maven.checks;
 
 import com.rexsl.test.ContainerMocker;
+import com.rexsl.test.Request;
 import com.rexsl.test.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -67,12 +68,12 @@ public final class RuntimeResolverTest {
     public void resolvesSourceByUrlWithBase() throws Exception {
         final String css = "/css/test.css";
         final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectMethod(Matchers.equalTo(Request.GET))
             .expectRequestUri(Matchers.equalTo(css))
             .returnBody("<test/>")
             .mock();
         final ContainerMocker reserve = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(RestTester.GET))
+            .expectMethod(Matchers.equalTo(Request.GET))
             .expectRequestUri(Matchers.equalTo(css))
             .returnBody("<doc/>")
             .mock();
