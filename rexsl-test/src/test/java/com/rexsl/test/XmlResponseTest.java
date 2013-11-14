@@ -108,8 +108,8 @@ public final class XmlResponseTest {
             new ResponseMocker()
                 .withBody("<a xmlns='urn:foo'><b>yes!</b></a>")
                 .mock()
-        );
-        final XML xml = response.xml().registerNs("foo", "urn:foo");
+        ).registerNs("foo", "urn:foo");
+        final XML xml = response.xml();
         MatcherAssert.assertThat(
             xml.xpath("//foo:b/text()").get(0),
             Matchers.equalTo("yes!")

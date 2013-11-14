@@ -31,11 +31,8 @@ package com.rexsl.w3c;
 
 import com.rexsl.test.ContainerMocker;
 import java.net.URI;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -53,7 +50,8 @@ public final class DefaultHtmlValidatorTest {
     public void validatesHtmlDocument() throws Exception {
         final URI uri = new ContainerMocker().returnBody(
             StringUtils.join(
-                "<env:Envelope xmlns:env='http://www.w3.org/2003/05/soap-envelope'>",
+                "<env:Envelope",
+                " xmlns:env='http://www.w3.org/2003/05/soap-envelope'>",
                 "<env:Body><m:markupvalidationresponse",
                 " xmlns:m='http://www.w3.org/2005/10/markup-validator'>",
                 "<m:validity>true</m:validity>",
@@ -66,31 +64,6 @@ public final class DefaultHtmlValidatorTest {
         final Validator validator = new DefaultHtmlValidator(uri);
         final ValidationResponse response = validator.validate("<html/>");
         MatcherAssert.assertThat(response.toString(), response.valid());
-    }
-
-    /**
-     * DefaultHtmlValidator can validate HTML document when W3C response is
-     * broken (incorrectly formatted).
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void validatesWithBrokenResponse() throws Exception {
-        final URI uri = new ContainerMocker()
-            .expectHeader(HttpHeaders.ACCEPT, "application/soap+xml")
-            .expectHeader(
-                HttpHeaders.USER_AGENT,
-                Matchers.containsString("ReXSL")
-            )
-            .expectHeader(
-                HttpHeaders.CONTENT_TYPE,
-                Matchers.startsWith(MediaType.MULTIPART_FORM_DATA)
-            )
-            .returnBody("oops...")
-            .mock()
-            .home();
-        final Validator validator = new DefaultHtmlValidator(uri);
-        final ValidationResponse response = validator.validate("<a/>");
-        MatcherAssert.assertThat(response.toString(), !response.valid());
     }
 
 }

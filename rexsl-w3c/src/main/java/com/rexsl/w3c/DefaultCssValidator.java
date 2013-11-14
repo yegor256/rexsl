@@ -88,6 +88,7 @@ final class DefaultCssValidator extends BaseValidator implements Validator {
      * Return a response after real processing of the CSS.
      * @param css The CSS stylesheet to check
      * @return The response
+     * @throws IOException if fails
      */
     private ValidationResponse processed(final String css) throws IOException {
         final Request req = this.request(

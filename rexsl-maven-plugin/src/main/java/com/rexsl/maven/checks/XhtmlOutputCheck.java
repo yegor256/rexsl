@@ -30,12 +30,15 @@
 package com.rexsl.maven.checks;
 
 import com.jcabi.aspects.Loggable;
+import com.jcabi.aspects.RetryOnFailure;
+import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.FileFinder;
+import com.rexsl.maven.utils.GroovyException;
 import com.rexsl.maven.utils.GroovyExecutor;
 import com.rexsl.maven.utils.LoggingManager;
 import com.rexsl.w3c.Defect;
@@ -43,9 +46,11 @@ import com.rexsl.w3c.ValidationResponse;
 import com.rexsl.w3c.Validator;
 import com.rexsl.w3c.ValidatorBuilder;
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -99,7 +104,7 @@ final class XhtmlOutputCheck implements Check {
     /**
      * Default public ctor.
      */
-    public XhtmlOutputCheck() {
+    XhtmlOutputCheck() {
         this(new ValidatorBuilder().html());
     }
 
@@ -107,7 +112,7 @@ final class XhtmlOutputCheck implements Check {
      * Full ctor, for tests mostly.
      * @param val HTML validator
      */
-    public XhtmlOutputCheck(@NotNull final Validator val) {
+    XhtmlOutputCheck(@NotNull final Validator val) {
         this.validator = val;
     }
 
@@ -121,7 +126,7 @@ final class XhtmlOutputCheck implements Check {
 
     @Override
     @Loggable(Loggable.DEBUG)
-    public boolean validate(@NotNull final Environment env) {
+    public boolean validate(@NotNull final Environment env) throws IOException {
         final File dir = new File(env.basedir(), XhtmlOutputCheck.XML_DIR);
         boolean success = true;
         if (dir.exists()) {
@@ -169,7 +174,8 @@ final class XhtmlOutputCheck implements Check {
      * @param file Check this particular XML document
      * @return Is the XML document valid?
      */
-    private boolean one(final Environment env, final File file) {
+    private boolean one(final Environment env, final File file)
+        throws IOException {
         boolean valid = true;
         final File root = new File(env.basedir(), XhtmlOutputCheck.GROOVY_DIR);
         if (!root.exists()) {
@@ -200,7 +206,7 @@ final class XhtmlOutputCheck implements Check {
                     new BindingBuilder(env).add("document", xhtml).build()
                 );
                 exec.execute(groovy);
-            } catch (com.rexsl.maven.utils.GroovyException ex) {
+            } catch (GroovyException ex) {
                 this.logException(ex);
                 valid = false;
             } catch (InternalCheckException ex) {
@@ -217,8 +223,9 @@ final class XhtmlOutputCheck implements Check {
      * @param xhtml Contains XHTML file to validate.
      * @throws InternalCheckException If file is invalid.
      */
+    @RetryOnFailure(verbose = false, delay = Tv.FIVE, unit = TimeUnit.SECONDS)
     private void validate(final File xml, final String xhtml)
-        throws InternalCheckException {
+        throws InternalCheckException, IOException {
         final ValidationResponse response = this.validator.validate(xhtml);
         if (!response.valid()) {
             Logger.error(
@@ -227,10 +234,10 @@ final class XhtmlOutputCheck implements Check {
                 xml,
                 StringEscapeUtils.escapeJava(xhtml).replace("\\n", "\n")
             );
-            final Set<Defect> defects = new HashSet<Defect>();
+            final Set<Defect> defects = new HashSet<Defect>(0);
             defects.addAll(response.errors());
             defects.addAll(response.warnings());
-            for (Defect defect : defects) {
+            for (final Defect defect : defects) {
                 Logger.error(
                     this,
                     "[%d] %s: %s",

@@ -45,7 +45,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.codec.Charsets;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -104,23 +104,24 @@ class BaseValidator {
      * @param content The content of it
      * @param type Media type of it
      * @return The HTTP post body
+     * @throws IOException if fails
      */
     protected final String entity(final String name, final String content,
         final String type) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            MultipartEntityBuilder.create()
-                .addBinaryBody(
-                    name,
-                    content.getBytes(Charsets.UTF_8),
-                    ContentType.create(type, Charsets.UTF_8),
-                    "file"
-                )
-                .addTextBody("output", "soap12")
-                .setStrictMode()
-                .setCharset(Charsets.UTF_8)
-                .setBoundary(BaseValidator.BOUNDARY)
-                .build()
-                .writeTo(baos);
+        MultipartEntityBuilder.create()
+            .setStrictMode()
+            .setCharset(Charsets.UTF_8)
+            .setBoundary(BaseValidator.BOUNDARY)
+            .addBinaryBody(
+                name,
+                content.getBytes(Charsets.UTF_8),
+                ContentType.create(type, Charsets.UTF_8),
+                "file"
+            )
+            .addTextBody("output", "soap12")
+            .build()
+            .writeTo(baos);
         return baos.toString(CharEncoding.UTF_8);
     }
 

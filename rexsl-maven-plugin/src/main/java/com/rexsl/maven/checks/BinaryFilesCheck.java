@@ -80,7 +80,7 @@ final class BinaryFilesCheck implements Check {
             )
         );
         boolean valid = true;
-        for (File file : files) {
+        for (final File file : files) {
             final String path = file.getAbsolutePath()
                 .substring(dir.getAbsolutePath().length() + 1);
             final String ext = FilenameUtils.getExtension(path);
@@ -88,8 +88,7 @@ final class BinaryFilesCheck implements Check {
                 Logger.warn(
                     this,
                     "File %s has incorrect type/extension '%s'",
-                    file,
-                    ext
+                    file, ext
                 );
                 valid = false;
             }

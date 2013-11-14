@@ -27,30 +27,38 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.w3c;
 
-import java.io.IOException;
-import javax.validation.constraints.NotNull;
+import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
- * Single check to be executed by CheckMojo.
- *
+ * Integration case for {@link DefaultHtmlValidator}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.8
  */
-public interface Check {
+public final class DefaultHtmlValidatorITCase {
 
     /**
-     * Set scope.
-     * @param scope Scope specification
+     * DefaultHtmlValidator can validate HTML document.
+     * @throws Exception If something goes wrong inside
      */
-    void setScope(@NotNull final String scope);
-
-    /**
-     * Perform all validations and return whether everything is fine or not.
-     * @param env Envirorment
-     * @return Everything is fine?
-     */
-    boolean validate(@NotNull final Environment env) throws IOException;
+    @Test
+    public void validatesCssDocument() throws Exception {
+        MatcherAssert.assertThat(
+            ValidatorBuilder.HTML.validate(
+                StringUtils.join(
+                    "<!DOCTYPE html>",
+                    "<html><head><meta charset='UTF-8'/>",
+                    "<title>hey</title></head>",
+                    "<body></body></html>"
+                )
+            ).errors(),
+            Matchers.empty()
+        );
+    }
 
 }

@@ -57,7 +57,7 @@ final class FilesStructureCheck implements Check {
     /**
      * Paths to check.
      */
-    private static final String[] PATHS = new String[] {
+    private static final String[] PATHS = {
         "src/main/webapp/",
         "src/main/webapp/robots.txt",
         "src/main/webapp/xsl/",
@@ -79,7 +79,7 @@ final class FilesStructureCheck implements Check {
     @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {
         boolean success = true;
-        for (String name : FilesStructureCheck.PATHS) {
+        for (final String name : FilesStructureCheck.PATHS) {
             final File file = new File(env.basedir(), name);
             if (!file.exists()) {
                 Logger.warn(

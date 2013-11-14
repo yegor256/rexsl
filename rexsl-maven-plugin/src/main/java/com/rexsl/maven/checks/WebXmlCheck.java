@@ -34,15 +34,18 @@ import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
@@ -92,7 +95,7 @@ final class WebXmlCheck implements Check {
      * @param file File to be validated.
      * @return If file is valid returns {@code TRUE}
      */
-    private boolean validate(final File file) {
+    private boolean validate(final File file) throws IOException {
         final DocumentBuilderFactory factory =
             DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -108,7 +111,7 @@ final class WebXmlCheck implements Check {
                 true
             );
             builder = factory.newDocumentBuilder();
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+        } catch (ParserConfigurationException ex) {
             throw new IllegalStateException(ex);
         }
         this.errors.set(0);
@@ -130,9 +133,7 @@ final class WebXmlCheck implements Check {
         );
         try {
             builder.parse(file);
-        } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalStateException(ex);
-        } catch (java.io.IOException ex) {
+        } catch (SAXException ex) {
             throw new IllegalStateException(ex);
         }
         return this.errors.get() == 0;
@@ -162,7 +163,7 @@ final class WebXmlCheck implements Check {
     private static boolean offline() {
         boolean offline;
         try {
-            offline = RestTester.start(
+            offline = .start(
                 URI.create("http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd")
             ).get("validate it").getStatus() != HttpURLConnection.HTTP_OK;
         } catch (AssertionError ex) {

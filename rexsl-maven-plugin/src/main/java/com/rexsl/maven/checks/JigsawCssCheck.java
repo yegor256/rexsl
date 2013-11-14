@@ -30,6 +30,8 @@
 package com.rexsl.maven.checks;
 
 import com.jcabi.aspects.Loggable;
+import com.jcabi.aspects.RetryOnFailure;
+import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
@@ -40,9 +42,11 @@ import com.rexsl.w3c.ValidationResponse;
 import com.rexsl.w3c.Validator;
 import com.rexsl.w3c.ValidatorBuilder;
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -81,7 +85,7 @@ final class JigsawCssCheck implements Check {
     /**
      * Public ctor, default.
      */
-    public JigsawCssCheck() {
+    JigsawCssCheck() {
         this(new ValidatorBuilder().css());
     }
 
@@ -89,7 +93,7 @@ final class JigsawCssCheck implements Check {
      * Public ctor, with custom validator.
      * @param val The validator to use
      */
-    public JigsawCssCheck(@NotNull final Validator val) {
+    JigsawCssCheck(@NotNull final Validator val) {
         this.validator = val;
     }
 
@@ -101,12 +105,12 @@ final class JigsawCssCheck implements Check {
 
     @Override
     @Loggable(Loggable.DEBUG)
-    public boolean validate(@NotNull final Environment env) {
+    public boolean validate(@NotNull final Environment env) throws IOException {
         final File dir = new File(env.basedir(), JigsawCssCheck.CSS_DIR);
         boolean success = true;
         if (dir.exists()) {
             final Collection<File> files = new FileFinder(dir, "css").random();
-            for (File css : files) {
+            for (final File css : files) {
                 final String name =
                     FilenameUtils.removeExtension(css.getName());
                 LoggingManager.enter(name);
@@ -134,25 +138,22 @@ final class JigsawCssCheck implements Check {
      * @param file Check this particular CSS document
      * @return Is CSS valid?
      */
-    private boolean one(final File file) {
+    @RetryOnFailure(verbose = false, delay = Tv.FIVE, unit = TimeUnit.SECONDS)
+    private boolean one(final File file) throws IOException {
         boolean valid = true;
         String page = null;
         try {
             page = FileUtils.readFileToString(file);
-        } catch (java.io.IOException ex) {
-            Logger.error(
-                this,
-                "Failed:\n%[exception]s",
-                ex
-            );
+        } catch (IOException ex) {
+            Logger.error(this, "Failed:\n%[exception]s", ex);
             valid = false;
         }
         if (valid) {
             final ValidationResponse response = this.validator.validate(page);
-            final Set<Defect> defects = new HashSet<Defect>();
+            final Set<Defect> defects = new HashSet<Defect>(0);
             defects.addAll(response.errors());
             defects.addAll(response.warnings());
-            for (Defect defect : defects) {
+            for (final Defect defect : defects) {
                 Logger.error(
                     this,
                     "[%d] %s: %s",

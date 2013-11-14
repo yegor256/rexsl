@@ -37,6 +37,7 @@ import com.jcabi.xml.XPathContext;
 import java.net.URI;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
+import javax.xml.namespace.NamespaceContext;
 import lombok.EqualsAndHashCode;
 import org.hamcrest.MatcherAssert;
 
@@ -82,7 +83,7 @@ public final class XmlResponse extends AbstractResponse {
      */
     @NotNull(message = "XML is never NULL")
     public XML xml() {
-        return new XMLDocument(this.body());
+        return new XMLDocument(this.body()).merge(this.context());
     }
 
     /**
@@ -107,18 +108,13 @@ public final class XmlResponse extends AbstractResponse {
     @NotNull(message = "response is never NULL")
     public XmlResponse assertXPath(
         @NotNull(message = "xpath can't be NULL") final String xpath) {
-        XPathContext context = new XPathContext();
-        for (final Map.Entry<String, String> entry
-            : this.namespaces.entrySet()) {
-            context = context.add(entry.getKey(), entry.getValue());
-        }
         MatcherAssert.assertThat(
             String.format(
                 "XML doesn't contain required XPath '%s':\n%s",
                 xpath, this.body()
             ),
             this.body(),
-            XhtmlMatchers.hasXPath(xpath, context)
+            XhtmlMatchers.hasXPath(xpath, this.context())
         );
         return this;
     }
@@ -135,6 +131,19 @@ public final class XmlResponse extends AbstractResponse {
         return new RestResponse(this).jump(
             URI.create(this.xml().xpath(query).get(0))
         );
+    }
+
+    /**
+     * Create XPath context.
+     * @return Context
+     */
+    private NamespaceContext context() {
+        XPathContext context = new XPathContext();
+        for (final Map.Entry<String, String> entry
+            : this.namespaces.entrySet()) {
+            context = context.add(entry.getKey(), entry.getValue());
+        }
+        return context;
     }
 
 }
