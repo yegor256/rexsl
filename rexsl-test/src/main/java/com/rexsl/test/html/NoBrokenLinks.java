@@ -29,7 +29,6 @@
  */
 package com.rexsl.test.html;
 
-import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.test.Response;
 import com.rexsl.test.XmlResponse;
@@ -42,24 +41,12 @@ import java.util.Collection;
 import java.util.LinkedList;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 
 /**
  * Matches HTTP header against required value.
- *
- * <p>Use it in combination with {@link com.rexsl.test.RestTester},
- * in order to detect possibly
- * broken links in the HTML output, for example:
- *
- * <pre> RestTester.start(new URI("http://www.rexsl.com/"))
- *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
- *   .get("front page of ReXSL.com")
- *   .assertThat(new NoBrokenLinks())</pre>
- *
- * <p>This class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
@@ -84,6 +71,7 @@ public final class NoBrokenLinks extends BaseMatcher<Response> {
      * @param uri Home page URI, for relative links
      */
     public NoBrokenLinks(final URI uri) {
+        super();
         this.home = uri;
     }
 
@@ -104,10 +92,20 @@ public final class NoBrokenLinks extends BaseMatcher<Response> {
         );
     }
 
+    /**
+     * Check for validness.
+     * @param response Response to check
+     */
     private void check(final Response response) {
         final Collection<String> links = new XmlResponse(response).xml().xpath(
-            // @checkstyle LineLength (1 line)
-            "//head/link/@href | //body//a/@href | //body//img/@src | //xhtml:img/@src | //xhtml:a/@href | //xhtml:link/@href"
+            StringUtils.join(
+                "//head/link/@href",
+                " | //body//a/@href",
+                " | //body//img/@src",
+                " | //xhtml:img/@src",
+                " | //xhtml:a/@href",
+                " | //xhtml:link/@href"
+            )
         );
         Logger.debug(
             this,
@@ -166,9 +164,9 @@ public final class NoBrokenLinks extends BaseMatcher<Response> {
      */
     private static int http(final URL url) {
         int code = HttpURLConnection.HTTP_BAD_REQUEST;
-        HttpURLConnection conn;
         try {
-            conn = HttpURLConnection.class.cast(url.openConnection());
+            final HttpURLConnection conn =
+                HttpURLConnection.class.cast(url.openConnection());
             try {
                 code = conn.getResponseCode();
             } catch (IOException ex) {

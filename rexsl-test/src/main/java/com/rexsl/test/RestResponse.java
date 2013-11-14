@@ -116,9 +116,9 @@ public final class RestResponse extends AbstractResponse {
      * @param matcher Matcher to validate status code
      * @return This object
      */
-    @NotNull(message = "response is never NULL")
+    @NotNull(message = "REST response is never NULL")
     public RestResponse assertStatus(
-        @NotNull(message = "matcher can't be NULL")
+        @NotNull(message = "status matcher can't be NULL")
         final Matcher<Integer> matcher) {
         MatcherAssert.assertThat(
             String.format(
@@ -136,9 +136,9 @@ public final class RestResponse extends AbstractResponse {
      * @param matcher The matcher to use
      * @return This object
      */
-    @NotNull(message = "response is never NULL")
+    @NotNull(message = "REST response is never NULL")
     public RestResponse assertBody(
-        @NotNull(message = "matcher can't be NULL")
+        @NotNull(message = "body matcher can't be NULL")
         final Matcher<String> matcher) {
         MatcherAssert.assertThat(
             String.format(
@@ -165,7 +165,7 @@ public final class RestResponse extends AbstractResponse {
     @NotNull(message = "response is never NULL")
     public RestResponse assertHeader(
         @NotNull(message = "header name can't be NULL") final String name,
-        @NotNull(message = "matcher can't be NULL")
+        @NotNull(message = "header matcher can't be NULL")
         final Matcher<Iterable<String>> matcher) {
         Iterable<String> values = this.headers().get(name);
         if (values == null) {
@@ -187,6 +187,7 @@ public final class RestResponse extends AbstractResponse {
      * @return New request
      */
     @NotNull(message = "request is never NULL")
+    @SuppressWarnings("PMD.UseConcurrentHashMap")
     public Request jump(@NotNull(message = "URI can't be NULL") final URI uri) {
         Request req = this.back().uri().set(uri).back();
         final Map<String, List<String>> headers = this.headers();
@@ -227,6 +228,7 @@ public final class RestResponse extends AbstractResponse {
      * @param name Cookie name
      * @return Cookie found
      */
+    @SuppressWarnings("PMD.UseConcurrentHashMap")
     @NotNull(message = "cookie is never NULL")
     public Cookie cookie(@NotNull final String name) {
         final Map<String, List<String>> headers = this.headers();
@@ -240,13 +242,7 @@ public final class RestResponse extends AbstractResponse {
         Cookie cookie = null;
         for (final HttpCookie candidate : HttpCookie.parse(header)) {
             if (candidate.getName().equals(name)) {
-                cookie = new Cookie(
-                    candidate.getName(),
-                    candidate.getValue(),
-                    candidate.getPath(),
-                    candidate.getDomain(),
-                    candidate.getVersion()
-                );
+                cookie = RestResponse.cookie(candidate);
                 break;
             }
         }
@@ -260,6 +256,21 @@ public final class RestResponse extends AbstractResponse {
         );
         assert cookie != null;
         return cookie;
+    }
+
+    /**
+     * Convert HTTP cookie to a standard one.
+     * @param cookie HTTP cookie
+     * @return Regular one
+     */
+    private static Cookie cookie(final HttpCookie cookie) {
+        return new Cookie(
+            cookie.getName(),
+            cookie.getValue(),
+            cookie.getPath(),
+            cookie.getDomain(),
+            cookie.getVersion()
+        );
     }
 
 }

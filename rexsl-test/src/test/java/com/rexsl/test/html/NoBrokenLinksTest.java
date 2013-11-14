@@ -88,9 +88,9 @@ public final class NoBrokenLinksTest {
         MatcherAssert.assertThat(
             new ResponseMocker().withBody(
                 StringUtils.join(
-                    "<html xmlns='http://www.w3.org/1999/xhtml'>",
+                    "<html xmlns='http://www.w3.org/1999/xhtml' >",
                     "<head><link rel='stylesheet' href='/broken-link'/>",
-                    "</head></html>"
+                    "</head> </html>"
                 )
             ).mock(),
             Matchers.not(

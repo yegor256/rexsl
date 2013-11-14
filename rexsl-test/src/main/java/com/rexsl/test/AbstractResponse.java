@@ -88,7 +88,12 @@ abstract class AbstractResponse implements Response {
         return this.response.body();
     }
 
+    /**
+     * {@inheritDoc}
+     * @checkstyle MethodName (4 lines)
+     */
     @Override
+    @SuppressWarnings("PMD.ShortMethodName")
     public <T> T as(final Class<T> type) {
         return this.response.as(type);
     }

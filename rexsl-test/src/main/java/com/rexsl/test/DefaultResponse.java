@@ -88,7 +88,12 @@ final class DefaultResponse implements Response {
     /**
      * Public ctor.
      * @param request The request
+     * @param status HTTP status
+     * @param reason HTTP reason phrase
+     * @param headers HTTP headers
+     * @param body Body of HTTP response
      * @throws IOException If some data are not valid
+     * @checkstyle ParameterNumber (5 lines)
      */
     DefaultResponse(final Request request, final int status,
         final String reason, final Array<Map.Entry<String, String>> headers,
@@ -130,6 +135,7 @@ final class DefaultResponse implements Response {
     }
 
     @Override
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Map<String, List<String>> headers() {
         final ConcurrentMap<String, List<String>> map =
             new ConcurrentHashMap<String, List<String>>();
@@ -145,7 +151,12 @@ final class DefaultResponse implements Response {
         return this.content;
     }
 
+    /**
+     * {@inheritDoc}
+     * @checkstyle MethodName (4 lines)
+     */
     @Override
+    @SuppressWarnings("PMD.ShortMethodName")
     public <T> T as(final Class<T> type) {
         try {
             return type.getDeclaredConstructor(Response.class)

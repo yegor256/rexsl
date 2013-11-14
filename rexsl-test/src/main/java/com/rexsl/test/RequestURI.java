@@ -71,7 +71,7 @@ public interface RequestURI {
      * @param value Value of the query param to set
      * @return New alternated URI
      */
-    @NotNull(message = "URI is never NULL")
+    @NotNull(message = "request URI is never NULL")
     RequestURI queryParam(
         @NotNull(message = "query param name can't be NULL") String name,
         @NotNull(message = "query param value can't be NULL") Object value);
@@ -81,7 +81,7 @@ public interface RequestURI {
      * @param segment Path segment to add
      * @return New alternated URI
      */
-    @NotNull(message = "URI is never NULL")
+    @NotNull(message = "request URI is never NULL")
     RequestURI path(@NotNull(message = "path can't be NULL") String segment);
 
 }
