@@ -135,7 +135,7 @@ public final class ExceptionTrap extends HttpServlet {
      * @return Builder of text
      */
     private StringBuilder text(final HttpServletRequest request) {
-        final StringBuilder text = new StringBuilder();
+        final StringBuilder text = new StringBuilder(0);
         text.append(Logger.format("date: %s\n", new Date()));
         this.append(text, request, "code");
         this.append(text, request, "message");
@@ -221,9 +221,9 @@ public final class ExceptionTrap extends HttpServlet {
      */
     private static String headers(final HttpServletRequest request) {
         final StringBuilder text = new StringBuilder();
-        final Enumeration<?> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            final String header = headerNames.nextElement().toString();
+        final Enumeration<?> names = request.getHeaderNames();
+        while (names.hasMoreElements()) {
+            final String header = names.nextElement().toString();
             text.append("  ")
                 .append(header)
                 .append(": ")

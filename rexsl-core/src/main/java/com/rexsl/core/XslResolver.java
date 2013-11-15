@@ -49,11 +49,13 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.validation.SchemaFactory;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.xml.sax.SAXException;
 
 /**
  * Provider of JAXB {@link Marshaller} for JAX-RS framework.
@@ -147,7 +149,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 StringEscapeUtils.escapeXml(this.stylesheet(type))
             );
             mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
-        } catch (javax.xml.bind.JAXBException ex) {
+        } catch (JAXBException ex) {
             throw new IllegalStateException(ex);
         }
         if (this.xsdFolder == null) {
@@ -182,7 +184,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                         this.classes.size(),
                         this.stylesheet(cls)
                     );
-                } catch (javax.xml.bind.JAXBException ex) {
+                } catch (JAXBException ex) {
                     throw new IllegalStateException(ex);
                 }
             }
@@ -258,7 +260,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 );
                 try {
                     mrsh.setSchema(factory.newSchema(xsd));
-                } catch (org.xml.sax.SAXException ex) {
+                } catch (SAXException ex) {
                     throw new IllegalStateException(
                         Logger.format(
                             "Failed to use XSD schema from '%s' for class '%s'",
@@ -270,7 +272,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 }
                 try {
                     mrsh.setEventHandler(new XsdEventHandler());
-                } catch (javax.xml.bind.JAXBException ex) {
+                } catch (JAXBException ex) {
                     throw new IllegalStateException(ex);
                 }
                 Logger.debug(
@@ -297,7 +299,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      */
     private static String schema(final Class<?> type) {
         final Annotation antn = type.getAnnotation(Schema.class);
-        String schema;
+        final String schema;
         if (antn == null) {
             schema = Logger.format("%s.xsd", type.getName());
         } else {

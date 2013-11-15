@@ -138,7 +138,7 @@ public final class AuthInset implements Inset {
     @Cacheable(lifetime = 1, unit = TimeUnit.SECONDS)
     public Identity identity() {
         Identity identity = this.ofProviders();
-        if (identity == Identity.ANONYMOUS) {
+        if (identity.equals(Identity.ANONYMOUS)) {
             identity = this.ofCookies();
         }
         return identity;
@@ -149,7 +149,7 @@ public final class AuthInset implements Inset {
         @NotNull final Response.ResponseBuilder builder) {
         final Identity identity = this.identity();
         if (identity.equals(Identity.ANONYMOUS)) {
-            for (Provider prov : this.providers) {
+            for (final Provider prov : this.providers) {
                 if (prov instanceof Provider.Visible) {
                     page.link(Provider.Visible.class.cast(prov).link());
                 }
@@ -236,7 +236,7 @@ public final class AuthInset implements Inset {
      */
     private Identity ofProviders() {
         Identity identity = Identity.ANONYMOUS;
-        for (Provider prov : this.providers) {
+        for (final Provider prov : this.providers) {
             try {
                 identity = prov.identity();
             } catch (IOException ex) {

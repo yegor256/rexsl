@@ -30,6 +30,7 @@
 package com.rexsl.page;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.validation.Valid;
@@ -313,7 +314,7 @@ public final class Link {
     private static URI combine(final URI base, final String path,
         final String params) {
         final URI rel = URI.create(path);
-        final StringBuilder query = new StringBuilder();
+        final StringBuilder query = new StringBuilder(0);
         if (base.getQuery() != null) {
             query.append(base.getQuery());
         }
@@ -334,7 +335,7 @@ public final class Link {
                 query.length() == 0 ? null : query.toString(),
                 base.getFragment()
             );
-        } catch (java.net.URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }
     }

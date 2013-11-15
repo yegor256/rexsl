@@ -61,7 +61,7 @@ final class FlashException extends WebApplicationException {
      * @param log Log message
      * @param level Logging level
      */
-    protected FlashException(final Response response, final String log,
+    FlashException(final Response response, final String log,
         final Level level) {
         super(response);
         Logger.log(level, FlashException.class, log);

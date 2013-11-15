@@ -136,9 +136,7 @@ public final class JaxbGroup {
     public static Object build(
         @NotNull(message = "group can't be NULL") final Collection<?> grp,
         @NotNull(message = "name can't be NULL") final String name) {
-        Logger.info(JaxbGroup.class, "BEFORE");
         synchronized (JaxbGroup.READY) {
-            Logger.info(JaxbGroup.class, "START: " + JaxbGroup.READY);
             final String mnemo = JaxbGroup.mnemo(grp.isEmpty(), name);
             if (!JaxbGroup.READY.containsKey(mnemo)) {
                 JaxbGroup.READY.put(

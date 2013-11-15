@@ -86,7 +86,7 @@ final class ForwardedUriInfo implements UriInfo {
      * @param inf The original UriInfo
      * @param hdrs HTTP headers
      */
-    public ForwardedUriInfo(final UriInfo inf,
+    ForwardedUriInfo(final UriInfo inf,
         final AtomicReference<HttpHeaders> hdrs) {
         if (inf == null) {
             throw new IllegalStateException(
@@ -213,9 +213,9 @@ final class ForwardedUriInfo implements UriInfo {
                     "HttpHeaders is not injected into BaseResource"
                 );
             }
-            for (Map.Entry<String, List<String>> header
+            for (final Map.Entry<String, List<String>> header
                 : this.headers.get().getRequestHeaders().entrySet()) {
-                for (String value : header.getValue()) {
+                for (final String value : header.getValue()) {
                     this.consume(header.getKey(), value);
                 }
             }
@@ -259,8 +259,8 @@ final class ForwardedUriInfo implements UriInfo {
      * @param value HTTP header value
      */
     private void forwarded(final String value) {
-        for (String sector : value.split("\\s*,\\s*")) {
-            for (String opt : sector.split("\\s*;\\s*")) {
+        for (final String sector : value.split("\\s*,\\s*")) {
+            for (final String opt : sector.split("\\s*;\\s*")) {
                 final String[] parts = opt.split("=", 2);
                 if (this.host == null && "host".equals(parts[0])) {
                     this.host = parts[1];
