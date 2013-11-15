@@ -1,50 +1,12 @@
- ------
- ReXSL, Quick Start Guide
- ------
- Yegor Bugayenko
- ------
- 2011-08-21
- ------
+# ReXSL, Quick Start Guide
 
-~~
-~~ Copyright (c) 2011-2013, ReXSL.com
-~~ All rights reserved.
-~~
-~~ Redistribution and use in source and binary forms, with or without
-~~ modification, are permitted provided that the following conditions
-~~ are met: 1) Redistributions of source code must retain the above
-~~ copyright notice, this list of conditions and the following
-~~ disclaimer. 2) Redistributions in binary form must reproduce the above
-~~ copyright notice, this list of conditions and the following
-~~ disclaimer in the documentation and/or other materials provided
-~~ with the distribution. 3) Neither the name of the ReXSL.com nor
-~~ the names of its contributors may be used to endorse or promote
-~~ products derived from this software without specific prior written
-~~ permission.
-~~
-~~ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-~~ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
-~~ NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-~~ FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
-~~ THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-~~ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-~~ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-~~ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-~~ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-~~ STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-~~ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
-~~ OF THE POSSIBILITY OF SUCH DAMAGE.
-~~
+To get better understanding of key components let's spend 5 minutes
+and create a project manually, step by step (you can also use
+[`rexsl-maven-archetype`](./example-archetype.html), which will
+create a different and more advanced project structure in one go).
+Start with a new Maven project with the following directory structure:
 
-ReXSL, Quick Start Guide
-
-  To get better understanding of key components let's spend 5 minutes
-  and create a project manually, step by step (you can also use
-  {{{./example-archetype.html}<<<rexsl-maven-archetype>>>}}, which will
-  create a different and more advanced project structure in one go).
-  Start with a new Maven project with the following directory structure:
-
-+--
+```
 /foo
   pom.xml
   /src
@@ -72,11 +34,11 @@ ReXSL, Quick Start Guide
           RendersHomePage.groovy
         /xsd
           foo.Home.xsd
-+--
+```
 
-  Maven <<<pom.xml>>> should look like this:
+Maven `pom.xml` should look like this:
 
-+--
+```xml
 <project>
   [...]
   <dependencies>
@@ -140,12 +102,12 @@ ReXSL, Quick Start Guide
     </plugins>
   </build>
 </project>
-+--
+```
 
-  <<<web.xml>>> should be simple and include one servlet and one
-  filter from ReXSL (it's Servlet API 3.0):
+`web.xml` should be simple and include one servlet and one
+filter from ReXSL (it's Servlet API 3.0):
 
-+--
+```xml
 <web-app version="3.0"
   xmlns="http://java.sun.com/xml/ns/javaee"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -184,11 +146,11 @@ ReXSL, Quick Start Guide
     <mime-type>text/xsl</mime-type>
   </mime-mapping>
 </web-app>
-+--
+```
 
-  Now let's create JAX-RS front end (<<<FrontEnd.java>>>):
+Now let's create JAX-RS front end (`FrontEnd.java`):
 
-+--
+```
 package foo;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -202,11 +164,11 @@ public class FrontEnd {
     return new Home();
   }
 }
-+--
+```
 
-  And JAXB-annotated data class <<<Home.java>>>:
+And JAXB-annotated data class `Home.java`:
 
-+--
+```
 package foo;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -220,11 +182,11 @@ public class Home {
     return "Hello, world!";
   }
 }
-+--
+```
 
-  Now let's unit-test our data class in <<<src/test/java/foo/HomeTest.java>>>:
+Now, let's unit-test our data class in `src/test/java/foo/HomeTest.java`:
 
-+--
+```
 package foo;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
@@ -239,22 +201,22 @@ public class HomeTest {
     );
   }
 }
-+--
+```
 
-  And now let's create a test XML document (<<<src/test/rexsl/xml/index.xml>>>):
+And now, let's create a test XML document (`src/test/rexsl/xml/index.xml`):
 
-+--
+```xml
 <?xml version="1.0"?>
 <?xml-stylesheet href='/xsl/Home.xsl' type='text/xsl' ?>
 <page>
   <text>let's say hello!</text>
 </page>
-+--
+```
 
-  This document will be XSL-transformed by <<<rexsl-maven-plugin:check>>>
-  Maven goal and validated by <<<src/test/rexsl/xhtml/index.groovy>>>:
+This document will be XSL-transformed by `rexsl-maven-plugin:check`
+Maven goal and validated by `src/test/rexsl/xhtml/index.groovy`:
 
-+--
+```java
 import com.rexsl.test.XhtmlMatchers
 import org.hamcrest.Matchers
 import org.junit.Assert
@@ -263,13 +225,13 @@ Assert.assertThat(
     rexsl.document,
     XhtmlMatchers.hasXPath("//xhtml:div[contains(.,'say hello')]")
 )
-+--
+```
 
-  And now the most interesting part, a test
-  script in <<<src/test/rexsl/scripts/RendersHomePage.groovy>>>
-  (<<<rexsl.home>>> is provided by <<<rexsl-maven-plugin>>> executor):
+And now the most interesting part, a test
+script in `src/test/rexsl/scripts/RendersHomePage.groovy`
+(`rexsl.home` is provided by `rexsl-maven-plugin` executor):
 
-+--
+```
 package foo
 import com.rexsl.test.ApacheRequest
 import com.rexsl.test.RestResponse
@@ -289,11 +251,11 @@ new ApacheRequest(rexsl.home)
   .fetch()
   .as(RestResponse.class)
   .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
-+--
+```
 
-  Now let's create <<<src/main/webapp/xsl/layout.xsl>>>:
+Now let's create `src/main/webapp/xsl/layout.xsl`:
 
-+--
+```xml
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -313,11 +275,11 @@ new ApacheRequest(rexsl.home)
     </html>
   </xsl:template>
 </xsl:stylesheet>
-+--
+```
 
-  And main page XSL at <<<src/main/webapp/xsl/Home.xsl>>>:
+And main page XSL at `src/main/webapp/xsl/Home.xsl`:
 
-+--
+```xml
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -330,12 +292,12 @@ new ApacheRequest(rexsl.home)
     <xsl:value-of select="/page/text" />
   </xsl:template>
 </xsl:stylesheet>
-+--
+```
 
-  The last step is to create <<<src/test/rexsl/xsd/foo.Home.xsd>>>
-  in order to validate XML output on fly:
+The last step is to create `src/test/rexsl/xsd/foo.Home.xsd`
+in order to validate XML output on fly:
 
-+--
+```xml
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="page">
@@ -346,16 +308,16 @@ new ApacheRequest(rexsl.home)
     </xs:complexType>
   </xs:element>
 </xs:schema>
-+--
+```
 
-  That's it. All you have to do now is to run <<<mvn package>>>
-  and deploy your WAR to production server.
+That's it. All you have to do now is to run `mvn package`
+and deploy your WAR to production server.
 
-  To test the system on your local machine run
-  <<<mvn package rexsl:run -Drexsl.port=9099>>>
-  and open <<<http://localhost:9099>>> with your favorite browser.
+To test the system on your local machine run
+`mvn package rexsl:run -Drexsl.port=9099`
+and open `http://localhost:9099` with your favorite browser.
 
-  What's especially cool is that you can can make
-  changes to your <<<webapp/*>>> files and they will become available
-  on-fly in web (without restart of the application). Just refresh the page
-  in browser.
+What's especially cool is that you can can make
+changes to your `webapp/*` files and they will become available
+on-fly in web (without restart of the application). Just refresh the page
+in browser.
