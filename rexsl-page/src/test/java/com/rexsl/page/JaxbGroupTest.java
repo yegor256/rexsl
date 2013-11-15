@@ -29,8 +29,6 @@
  */
 package com.rexsl.page;
 
-import com.jcabi.aspects.Parallel;
-import com.jcabi.aspects.Tv;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
 import java.util.Arrays;
@@ -83,22 +81,6 @@ public final class JaxbGroupTest {
             JaxbConverter.the(group),
             XhtmlMatchers.hasXPath("/group-2[count(*) = 0]")
         );
-    }
-
-    /**
-     * JaxbGroup can make instances in multiple threads.
-     * @throws Exception If there is some problem inside
-     */
-    @Test
-    public void instantiatesInMultipleThreads() throws Exception {
-        final Runnable runnable = new Runnable() {
-            @Override
-            @Parallel(threads = Tv.TEN)
-            public void run() {
-                JaxbGroup.build(Collections.emptyList(), "group-A");
-            }
-        };
-        runnable.run();
     }
 
     /**
