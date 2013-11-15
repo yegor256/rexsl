@@ -37,7 +37,6 @@ import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javassist.CannotCompileException;
-import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
@@ -144,7 +143,6 @@ public final class JaxbGroup {
                     JaxbGroup.construct(JaxbGroup.types(grp), name)
                 );
             }
-            Logger.info(JaxbGroup.class, "STOP");
             try {
                 return JaxbGroup.READY.get(mnemo)
                     .getDeclaredConstructor(Collection.class)
@@ -196,9 +194,8 @@ public final class JaxbGroup {
      */
     private static Class<?> construct(final Collection<Class<?>> types,
         final String name) {
-        final ClassPool pool = ClassPool.getDefault();
         try {
-            final CtClass ctc = pool.getAndRename(
+            final CtClass ctc = PageBuilder.POOL.getAndRename(
                 JaxbGroup.class.getName(),
                 JaxbGroup.mnemo(types.isEmpty(), name)
             );

@@ -124,7 +124,7 @@ import org.w3c.dom.Element;
 @XmlType(name = "com.rexsl.page.BasePage")
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "PMD.ExcessiveImports" })
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "resource")
 @Loggable(Loggable.DEBUG)

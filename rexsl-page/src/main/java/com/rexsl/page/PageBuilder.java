@@ -114,10 +114,16 @@ import lombok.ToString;
 public final class PageBuilder {
 
     /**
+     * Class pool.
+     */
+    @SuppressWarnings("PMD.DefaultPackage")
+    static final ClassPool POOL = ClassPool.getDefault();
+
+    /**
      * Static initialization of Javassist.
      */
     static {
-        ClassPool.getDefault().insertClassPath(
+        PageBuilder.POOL.insertClassPath(
             new ClassClassPath(PageBuilder.class)
         );
     }
@@ -189,7 +195,7 @@ public final class PageBuilder {
                 this.xsl.getPath().replaceAll("[^a-zA-Z0-9]", "")
             );
             final Class<?> cls;
-            if (ClassPool.getDefault().getOrNull(name) == null) {
+            if (PageBuilder.POOL.getOrNull(name) == null) {
                 cls = this.construct(name, base);
             } else {
                 try {
@@ -237,10 +243,9 @@ public final class PageBuilder {
                 )
             );
         }
-        final ClassPool pool = ClassPool.getDefault();
         try {
-            final CtClass parent = pool.get(base.getName());
-            final CtClass ctc = pool.makeClass(name, parent);
+            final CtClass parent = PageBuilder.POOL.get(base.getName());
+            final CtClass ctc = PageBuilder.POOL.makeClass(name, parent);
             final ClassFile file = ctc.getClassFile();
             final AnnotationsAttribute attribute = new AnnotationsAttribute(
                 file.getConstPool(),
