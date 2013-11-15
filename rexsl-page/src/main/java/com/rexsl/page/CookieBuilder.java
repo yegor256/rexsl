@@ -34,6 +34,7 @@ import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.UriBuilder;
@@ -209,12 +210,11 @@ public final class CookieBuilder {
      */
     public NewCookie build() {
         final long msec = this.expires.getTime() - new Date().getTime();
-        int age;
-        if (msec < 0) {
+        final int age;
+        if (msec < 0L) {
             age = -1;
         } else {
-            // @checkstyle MagicNumber (1 line)
-            age = (int) (msec / 1000);
+            age = (int) (msec / TimeUnit.SECONDS.toMillis(1L));
         }
         return new NewCookie(
             this.cookie,

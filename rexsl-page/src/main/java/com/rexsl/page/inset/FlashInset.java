@@ -35,6 +35,7 @@ import com.rexsl.page.CookieBuilder;
 import com.rexsl.page.Inset;
 import com.rexsl.page.JaxbBundle;
 import com.rexsl.page.Resource;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.logging.Level;
@@ -310,7 +311,7 @@ public final class FlashInset implements Inset {
             this.msg = message;
             this.lvl = level;
             Validate.isTrue(
-                msec >= 0 || msec == -1,
+                msec >= 0L || msec == -1L,
                 "milliseconds can either be positive or equal to -1"
             );
             this.millis = msec;
@@ -354,7 +355,7 @@ public final class FlashInset implements Inset {
                     String.format("%s:%d:%s", level, msec, message)
                         .getBytes(CharEncoding.UTF_8)
                 );
-            } catch (java.io.UnsupportedEncodingException ex) {
+            } catch (UnsupportedEncodingException ex) {
                 throw new IllegalStateException(ex);
             }
         }
@@ -369,7 +370,7 @@ public final class FlashInset implements Inset {
                     Base64.decodeBase64(text),
                     CharEncoding.UTF_8
                 );
-            } catch (java.io.UnsupportedEncodingException ex) {
+            } catch (UnsupportedEncodingException ex) {
                 throw new IllegalStateException(ex);
             }
         }

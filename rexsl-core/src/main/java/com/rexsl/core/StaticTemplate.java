@@ -31,6 +31,7 @@ package com.rexsl.core;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.log.Logger;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import javax.validation.constraints.NotNull;
@@ -65,7 +66,7 @@ final class StaticTemplate implements Template {
      * Public ctor.
      * @param uri URI of template to use
      */
-    protected StaticTemplate(@NotNull final URI uri) {
+    StaticTemplate(@NotNull final URI uri) {
         this.text = StaticTemplate.load(uri);
     }
 
@@ -100,7 +101,7 @@ final class StaticTemplate implements Template {
             } else {
                 txt = IOUtils.toString(stream);
             }
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             txt = Logger.format(
                 "%s\nfailed to load '%s': %[exception]s",
                 StaticTemplate.MARKER,

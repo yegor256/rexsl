@@ -67,15 +67,15 @@ final class TypesMatcher {
      * Public ctor.
      * @param header The text of HTTP "Accept" header
      */
-    protected TypesMatcher(final String header) {
+    TypesMatcher(final String header) {
         final Set<String> set = new TreeSet<String>();
         if (header != null) {
-            for (String range : header.trim().split(",")) {
+            for (final String range : header.trim().split(",")) {
                 final String[] parts = range.trim().split(";", 2);
                 set.add(parts[0]);
             }
         }
-        this.types = set.toArray(new String[] {});
+        this.types = set.toArray(new String[set.size()]);
     }
 
     /**
@@ -97,7 +97,7 @@ final class TypesMatcher {
         boolean accepts = Arrays.binarySearch(this.types, match) >= 0;
         if (!accepts) {
             final String[] reqs = match.split(TypesMatcher.SEPARATOR, 2);
-            for (String type : this.types) {
+            for (final String type : this.types) {
                 final String[] parts = type.split(TypesMatcher.SEPARATOR, 2);
                 if (!TypesMatcher.ASTERISK.equals(parts[0])
                     && !parts[0].equals(reqs[0])) {

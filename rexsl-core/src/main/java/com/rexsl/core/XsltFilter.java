@@ -119,7 +119,7 @@ public final class XsltFilter implements Filter {
         this.tfactory.setURIResolver(new ContextResourceResolver(context));
         try {
             Manifests.append(context);
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalStateException(ex);
         }
     }
@@ -225,7 +225,7 @@ public final class XsltFilter implements Filter {
      * @checkstyle RedundantThrows (3 lines)
      */
     private Source stylesheet(final String xml) throws ServletException {
-        Source stylesheet;
+        final Source stylesheet;
         try {
             stylesheet = this.tfactory.getAssociatedStylesheet(
                 this.source(xml), null, null, null
@@ -266,7 +266,7 @@ public final class XsltFilter implements Filter {
      */
     private Transformer transformer(final Source stylesheet)
         throws ServletException {
-        Transformer tran;
+        final Transformer tran;
         try {
             tran = this.tfactory.newTransformer(stylesheet);
         } catch (TransformerConfigurationException ex) {

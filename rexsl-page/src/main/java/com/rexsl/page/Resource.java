@@ -62,7 +62,7 @@ public interface Resource {
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    public @interface Forwarded {
+    @interface Forwarded {
     }
 
     /**

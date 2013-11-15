@@ -32,6 +32,7 @@ package com.rexsl.page.auth;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.restfb.DefaultFacebookClient;
+import com.restfb.exception.FacebookException;
 import com.restfb.types.User;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
@@ -203,7 +204,7 @@ public final class Facebook implements Provider, Provider.Visible {
         try {
             return new DefaultFacebookClient(token)
                 .fetchObject("me", User.class);
-        } catch (com.restfb.exception.FacebookException ex) {
+        } catch (FacebookException ex) {
             throw new IllegalArgumentException(ex);
         }
     }

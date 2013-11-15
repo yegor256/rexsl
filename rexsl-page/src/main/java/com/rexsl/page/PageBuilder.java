@@ -37,9 +37,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import javassist.CannotCompileException;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.AttributeInfo;
 import javassist.bytecode.ClassFile;
@@ -162,7 +164,7 @@ public final class PageBuilder {
      */
     @NotNull
     public <T> T build(@NotNull final Class<T> base) {
-        T page;
+        final T page;
         try {
             page = base.cast(this.createOrFind(base).newInstance());
         } catch (InstantiationException ex) {
@@ -186,7 +188,7 @@ public final class PageBuilder {
                 base.getName(),
                 this.xsl.getPath().replaceAll("[^a-zA-Z0-9]", "")
             );
-            Class<?> cls;
+            final Class<?> cls;
             if (ClassPool.getDefault().getOrNull(name) == null) {
                 cls = this.construct(name, base);
             } else {
@@ -248,14 +250,14 @@ public final class PageBuilder {
                 .append(XmlType.class, "name", name)
                 .append(Stylesheet.class, this.xsl.toString())
                 .append(Schema.class, this.xsd);
-            for (Annotation existing : this.annotations(ctc, parent)) {
+            for (final Annotation existing : this.annotations(ctc, parent)) {
                 attribute.addAnnotation(existing);
             }
             file.addAttribute(attribute);
             return ctc.toClass();
-        } catch (javassist.NotFoundException ex) {
+        } catch (NotFoundException ex) {
             throw new IllegalStateException(ex);
-        } catch (javassist.CannotCompileException ex) {
+        } catch (CannotCompileException ex) {
             throw new IllegalStateException(ex);
         }
     }
@@ -301,7 +303,7 @@ public final class PageBuilder {
          * @param fle Class file
          * @param attr Attribute
          */
-        protected Annotations(final ClassFile fle,
+        Annotations(final ClassFile fle,
             final AnnotationsAttribute attr) {
             this.file = fle;
             this.attribute = attr;

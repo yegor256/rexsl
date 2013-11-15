@@ -37,6 +37,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.SecureRandom;
@@ -161,7 +162,7 @@ final class Encrypted implements Identity {
             );
         } catch (URISyntaxException ex) {
             throw new Encrypted.DecryptionException(ex);
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             throw new Encrypted.DecryptionException(ex);
         }
     }

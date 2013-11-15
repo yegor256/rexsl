@@ -30,11 +30,11 @@
 package com.rexsl.core;
 
 import com.jcabi.log.Logger;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -68,7 +68,7 @@ final class ServletConfigWrapper implements FilterConfig {
      * @param cfg Servlet config
      * @param props Properties to add to existing params
      */
-    protected ServletConfigWrapper(@NotNull final ServletConfig cfg,
+    ServletConfigWrapper(@NotNull final ServletConfig cfg,
         @NotNull final Properties props) {
         this.config = cfg;
         this.properties = props;
@@ -92,8 +92,8 @@ final class ServletConfigWrapper implements FilterConfig {
     @Override
     @NotNull
     public Enumeration<String> getInitParameterNames() {
-        final Set<String> names = new HashSet<String>();
-        for (Object name : this.properties.keySet()) {
+        final Collection<String> names = new HashSet<String>(0);
+        for (final Object name : this.properties.keySet()) {
             names.add(name.toString());
         }
         final Enumeration<?> encapsulated = this.config.getInitParameterNames();

@@ -77,7 +77,7 @@ final class ContextResourceResolver implements URIResolver {
      * Constructor.
      * @param ctx Servlet Context.
      */
-    protected ContextResourceResolver(@NotNull final ServletContext ctx) {
+    ContextResourceResolver(@NotNull final ServletContext ctx) {
         this.context = ctx;
     }
 
@@ -170,7 +170,7 @@ final class ContextResourceResolver implements URIResolver {
      */
     private InputStream absolute(final String href, final String base)
         throws TransformerException {
-        URI uri;
+        final URI uri;
         if (base == null || base.isEmpty()) {
             uri = UriBuilder.fromUri(href).build();
         } else {
@@ -212,7 +212,7 @@ final class ContextResourceResolver implements URIResolver {
      */
     private InputStream fetch(final URI uri) throws IOException {
         final URLConnection conn = uri.toURL().openConnection();
-        InputStream stream;
+        final InputStream stream;
         if (conn instanceof HttpURLConnection) {
             stream = this.http(HttpURLConnection.class.cast(conn));
         } else {
@@ -257,7 +257,7 @@ final class ContextResourceResolver implements URIResolver {
      * @return Absolute local path
      */
     private String compose(final String path, final String base) {
-        final StringBuilder full = new StringBuilder();
+        final StringBuilder full = new StringBuilder(0);
         if (!StringUtils.isEmpty(base) && path.charAt(0) != '/') {
             full.append(
                 FilenameUtils.getFullPath(URI.create(base).getPath())
