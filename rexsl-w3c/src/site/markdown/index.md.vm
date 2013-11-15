@@ -24,7 +24,7 @@ public class My {
 }
 ```
 
-This dependency you add to <<<pom.xml>>> (or download
+This dependency you add to `pom.xml` (or download
 [`rexsl-w3c.jar`](http://repo1.maven.org/maven2/com/rexsl/rexsl-w3c/${project.version}/)):
 
 ```xml
