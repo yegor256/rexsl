@@ -32,12 +32,11 @@ package com.rexsl.foo.scripts
 import com.rexsl.test.ApacheRequest
 import com.rexsl.test.RestResponse
 import com.rexsl.test.XmlResponse
-import javax.ws.rs.core.UriBuilder
 
 new ApacheRequest(rexsl.home)
     .uri().path('/trap').back()
     .fetch()
-    .as(RestResponse.class)
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_OK)
-    .as(XmlResponse.class)
+    .as(XmlResponse)
     .assertXPath('//xhtml:pre[contains(.,"exception_type: NULL")]')

@@ -30,7 +30,6 @@
 
 import com.rexsl.test.ApacheRequest
 import com.rexsl.test.RestResponse
-import com.rexsl.test.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import org.junit.Assert
@@ -43,7 +42,7 @@ for (attempt in 0..5) {
         .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
         .header(HttpHeaders.USER_AGENT, 'Chrome')
         .fetch()
-        .as(RestResponse.class)
+        .as(RestResponse)
         .assertStatus(HttpURLConnection.HTTP_OK)
         .assertHeader(HttpHeaders.CONTENT_LENGTH, Matchers.equalTo(original.length().toString()))
         .body()

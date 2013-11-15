@@ -1,0 +1,66 @@
+# RESTful Flash Messages (via Cookies)
+
+"Flash message" is a message rendered to the user only once, right
+after she completes some operation. For example, after a form is
+submitted and processed, your website shows the same page where the form
+was filled, but with updated data. It is always convenient to show a
+short notification text to the user, informing her that the form
+was processed successfully (or not). This is how you do it with
+[`FlashInset`](./apidocs-${project.version}/com/rexsl/page/inset/FlashInset.html):
+
+```java
+@Inset.Default(FlashInset.class)
+public abstract class BaseRs extends BaseResource {
+  // some other base methods
+}
+```
+
+BaseRs is a parent of all your JAX-RS resources (suffixed with `Rs`,
+by convention). Now this is what happens in your concrete resource:
+
+```java
+@Path("/form")
+public final class IndexRs extends BaseRs {
+  @Path("/submit")
+  @PUT
+  public void submit(@FormParam("text") final String text) {
+    throw FlashInset.forward(
+      this.uriInfo().getBaseUriBuilder().clone().path("/form").build(),
+      "your text was successfully saved",
+      Level.INFO
+    );
+  }
+}
+```
+
+`FlashInset.forward()` creates an instance of
+[`WebApplicationException`](http://docs.oracle.com/javaee/6/api/javax/ws/rs/WebApplicationException.html)
+that encapsulates a JAX-RS
+[`Response`](http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/Response.html)
+with a
+[cookie](http://en.wikipedia.org/wiki/HTTP_cookie) in it.
+That cookie
+contains a
+[Base32-encoded](http://en.wikipedia.org/wiki/Base32)
+message and logging level provided to the
+`FlashInset.forward()` method. Besides that, the response contains
+an HTTP response code
+["303 See Other"](http://en.wikipedia.org/wiki/HTTP_303) and a
+[Location](http://en.wikipedia.org/wiki/HTTP_location) header.
+
+When the next page is rendered the inset Base32-decodes the cookie and
+adds the following element to the page:
+
+```xml
+<page>
+  <flash>
+    <message>your text was successfully saved</message>
+    <level>INFO</level>
+  </flash>
+</page>
+```
+
+Besides that, a cookie gets destroyed by a new cookie with the same
+name but with an empty value. That's how we guarantee that the message
+is rendered only once to the end-user.
+

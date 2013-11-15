@@ -41,8 +41,7 @@ import javax.ws.rs.core.MediaType
  */
 new ApacheRequest(rexsl.home)
     .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
-    .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
     .header(HttpHeaders.USER_AGENT, 'Chrome/10 Version/10')
     .fetch()
-    .as(XmlResponse.class)
+    .as(XmlResponse)
     .assertXPath("/page/text[.='\u0443\u0440\u0430']")

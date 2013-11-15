@@ -29,7 +29,6 @@
  */
 package com.rexsl.foo.scripts
 
-
 import com.rexsl.test.ApacheRequest
 import com.rexsl.test.RestResponse
 import javax.ws.rs.core.HttpHeaders
@@ -44,7 +43,7 @@ def home = UriBuilder.fromUri(System.getProperty('catapult.home')).build()
         .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
         .header(HttpHeaders.USER_AGENT, 'test-1')
         .fetch()
-        .as(RestResponse.class)
+        .as(RestResponse)
         .assertStatus(HttpURLConnection.HTTP_OK)
 }
 
@@ -52,6 +51,6 @@ def home = UriBuilder.fromUri(System.getProperty('catapult.home')).build()
     new ApacheRequest(home)
         .uri().path(it).back()
         .fetch()
-        .as(RestResponse.class)
+        .as(RestResponse)
         .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
 }

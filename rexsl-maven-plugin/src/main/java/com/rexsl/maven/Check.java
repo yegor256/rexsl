@@ -44,13 +44,14 @@ public interface Check {
      * Set scope.
      * @param scope Scope specification
      */
-    void setScope(@NotNull final String scope);
+    void setScope(@NotNull String scope);
 
     /**
      * Perform all validations and return whether everything is fine or not.
      * @param env Envirorment
      * @return Everything is fine?
+     * @throws IOException If fails
      */
-    boolean validate(@NotNull final Environment env) throws IOException;
+    boolean validate(@NotNull Environment env) throws IOException;
 
 }

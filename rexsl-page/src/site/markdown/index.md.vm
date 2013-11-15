@@ -1,0 +1,73 @@
+# RESTful XML Page Modeler
+
+With this module you can build REST XML responses much faster
+(provided you defined `MyPage` class already):
+
+```java
+@Path("/")
+public class MainRs {
+  @GET
+  @Produces(MediaTypes.APPLICATION_XML)
+  public MyPage front() {
+    return new PageBuilder()
+      .stylesheet("/xsl/front.xsl")
+      .build(MyPage.class)
+      .add(new JaxbBundle("score", 123));
+  }
+}
+```
+
+The response will look like:
+
+```xml
+<?xml version="1.0" ?>
+<?xml-stylesheet type='text/xsl' href='/xsl/front.xsl'?>
+<page>
+  <score>123</score>
+</page>
+```
+
+Isn't it neat? :)
+Start reading from
+[`PageBuilder`](./apidocs-${project.version}/com/rexsl/page/PageBuilder.html).
+
+Since version 0.4.8 you can use "insets", which implement basic
+functionalities required by most web applications, including
+[flash messages](./inset-flash.html),
+[default HATEOAS links](./inset-links.html),
+[version data](./inset-version.html), and
+[OAuth authentication](./inset-oauth.html).
+
+Include this dependency into your project (or download
+[`rexsl-page-${project.version}.jar`](http://repo1.maven.org/maven2/com/rexsl/rexsl-page/${project.version}/rexsl-page-${project.version}.jar)
+and add to classpath):
+
+```xml
+<dependency>
+  <groupId>com.rexsl</groupId>
+  <artifactId>rexsl-page</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```
+
+This module also contains a few mockers.
+To use it you should include this dependencies into your project
+(or download
+[`rexsl-page-${project.version}-mock.jar`](http://repo1.maven.org/maven2/com/rexsl/rexsl-page/${project.version}/rexsl-page-${project.version}-mock.jar)
+and add to classpath):
+
+```xml
+<dependency>
+  <groupId>com.rexsl</groupId>
+  <artifactId>rexsl-page</artifactId>
+  <version>${project.version}</version>
+  <classifier>mock</classifier>
+  <scope>test</scope>
+</dependency>
+<dependency>
+  <groupId>javax.servlet</groupId>
+  <artifactId>servlet-api</artifactId>
+  <version>2.4</version>
+  <scope>provided</scope>
+</dependency>
+```
