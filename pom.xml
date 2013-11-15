@@ -132,7 +132,6 @@
                 <version>0.6</version>
             </dependency>
             <dependency>
-                <!-- JAXB 2.0 API. -->
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
                 <version>2.2.9</version>
@@ -144,34 +143,26 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <!-- JAXB 2.0 implementation, required in runtime. -->
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
-                <!-- doesn't work with higher versions, use 2.2.7-b52 -->
-                <version>2.2.7-b52</version>
+                <version>2.2.7-b52</version> <!-- doesn't work with higher versions, use 2.2.7-b52 -->
             </dependency>
             <dependency>
-                <!-- implementation of Javax Servlet API 3.0 -->
                 <groupId>org.eclipse.jetty.orbit</groupId>
                 <artifactId>javax.servlet</artifactId>
                 <version>3.0.0.v201112011016</version>
             </dependency>
             <dependency>
-                <!-- JAX-RS implementation, core library -->
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-server</artifactId>
                 <version>${jersey.version}</version>
             </dependency>
             <dependency>
-                <!-- Jersey client -->
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-client</artifactId>
                 <version>${jersey.version}</version>
             </dependency>
             <dependency>
-                <!--
-                Jersey core lib.
-                -->
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-core</artifactId>
                 <version>${jersey.version}</version>
@@ -183,7 +174,6 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <!-- Jersey serlvet -->
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-servlet</artifactId>
                 <version>${jersey.version}</version>
@@ -202,9 +192,14 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpcomponents.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
-                <!-- implementation of Javax Mail API, required by Jersey -->
                 <groupId>javax.mail</groupId>
                 <artifactId>mail</artifactId>
                 <version>1.5.0-b01</version>
@@ -216,26 +211,17 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <!--
-                XSLT 2.0 transformer. In order to replace a default implementation
-                provided by JDK with Saxon we are using text files inside
-                "src/main/resources/META-INF/services" directory.
-                -->
                 <groupId>net.sourceforge.saxon</groupId>
                 <artifactId>saxon</artifactId>
                 <version>${saxon.version}</version>
             </dependency>
             <dependency>
-                <!--
-                XSLT 2.0 transformer, DOM component.
-                -->
                 <groupId>net.sourceforge.saxon</groupId>
                 <artifactId>saxon</artifactId>
                 <version>${saxon.version}</version>
                 <classifier>dom</classifier>
             </dependency>
             <dependency>
-                <!-- Embedded Java Servlet Container, for tests only. -->
                 <groupId>com.sun.grizzly</groupId>
                 <artifactId>grizzly-servlet-webserver</artifactId>
                 <version>1.9.58</version>
