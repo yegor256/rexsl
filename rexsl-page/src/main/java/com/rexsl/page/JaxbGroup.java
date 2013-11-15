@@ -133,9 +133,12 @@ public final class JaxbGroup {
      * @return JAXB-annotated object, just created
      */
     @NotNull
-    public static Object build(@NotNull final Collection<?> grp,
-        @NotNull final String name) {
+    public static Object build(
+        @NotNull(message = "group can't be NULL") final Collection<?> grp,
+        @NotNull(message = "name can't be NULL") final String name) {
+        Logger.info(JaxbGroup.class, "BEFORE");
         synchronized (JaxbGroup.READY) {
+            Logger.info(JaxbGroup.class, "START: " + JaxbGroup.READY);
             final String mnemo = JaxbGroup.mnemo(grp.isEmpty(), name);
             if (!JaxbGroup.READY.containsKey(mnemo)) {
                 JaxbGroup.READY.put(
@@ -143,6 +146,7 @@ public final class JaxbGroup {
                     JaxbGroup.construct(JaxbGroup.types(grp), name)
                 );
             }
+            Logger.info(JaxbGroup.class, "STOP");
             try {
                 return JaxbGroup.READY.get(mnemo)
                     .getDeclaredConstructor(Collection.class)
@@ -165,7 +169,7 @@ public final class JaxbGroup {
      */
     @XmlAnyElement(lax = true)
     @XmlMixed
-    @NotNull
+    @NotNull(message = "collection is never NULL")
     public Collection<?> getGroup() {
         return Collections.unmodifiableCollection(this.group);
     }
