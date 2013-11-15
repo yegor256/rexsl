@@ -1,0 +1,65 @@
+# Usage of ReXSL Maven Plugin
+
+It's easy:
+
+```xml
+<project>
+  [...]
+  <build>
+    [..]
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <configuration>
+            <warSourceExcludes>js/**, css/**, xsl/**</warSourceExcludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    [..]
+    <plugins>
+      [...]
+      <plugin>
+        <groupId>com.rexsl</groupId>
+        <artifactId>rexsl-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+              <goal>package</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+```
+
+Read more in [intro page](../index.html).
+
+## Cutting Edge Version
+
+If you want to use current version of the product, you can do it with
+this configuration in your `pom.xml`:
+
+```xml
+<pluginRepositories>
+  <pluginRepository>
+    <id>oss.sonatype.org</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+  </pluginRepository>
+</pluginRepositories>
+<build>
+  <plugins>
+    <plugin>
+      <groupId>com.rexsl</groupId>
+      <artifactId>rexsl-maven-plugin</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      [...]
+    </plugin>
+  </plugins>
+</build>
+```

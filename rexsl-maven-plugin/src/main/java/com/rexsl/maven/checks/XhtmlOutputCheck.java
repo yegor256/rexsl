@@ -173,6 +173,7 @@ final class XhtmlOutputCheck implements Check {
      * @param env Environment to work with
      * @param file Check this particular XML document
      * @return Is the XML document valid?
+     * @throws IOException If fails
      */
     private boolean one(final Environment env, final File file)
         throws IOException {
@@ -222,6 +223,8 @@ final class XhtmlOutputCheck implements Check {
      * @param xml The file being validated
      * @param xhtml Contains XHTML file to validate.
      * @throws InternalCheckException If file is invalid.
+     * @throws IOException If fails
+     * @checkstyle ThrowsCount (6 lines)
      */
     @RetryOnFailure(verbose = false, delay = Tv.FIVE, unit = TimeUnit.SECONDS)
     private void validate(final File xml, final String xhtml)

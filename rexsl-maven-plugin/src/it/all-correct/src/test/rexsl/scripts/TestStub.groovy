@@ -39,7 +39,7 @@ import org.hamcrest.Matchers
 new ApacheRequest(rexsl.home)
     .uri().path('/stub').back()
     .fetch()
-    .as(RestResponse.class)
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_OK)
     // This text is from src/test/resources/com/rexsl/foo/stub.txt
     .assertBody(Matchers.containsString('stubbing works fine!'))

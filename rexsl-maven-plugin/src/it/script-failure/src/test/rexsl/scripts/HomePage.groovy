@@ -37,6 +37,6 @@ new ApacheRequest(rexsl.home)
     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
     .header(HttpHeaders.USER_AGENT, 'Safari')
     .fetch()
-    .as(RestResponse.class)
+    .as(RestResponse)
     // we should fail here because status code is 200, not 404
     .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)

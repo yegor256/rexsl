@@ -1,0 +1,24 @@
+# How to pre-configure the application?
+
+Very often you need to pre-configure the application before tests,
+in order to mock connections to some resources. The best example is
+a database server, which you don't have in tests. The application
+has to be pre-configured to work with another database. You can do all
+this in a bootstrap Groovy script:
+
+```
+/foo
+  pom.xml
+  /src
+    /main
+    /test
+      /rexsl
+        /bootstrap
+          ConfigureDatabaseConnection.groovy
+```
+
+The script is able to work with application classes (all other Groovy
+scripts don't have this ability). All bootstrap scripts are executed from
+a context listener inside a container. That's why they can do anything
+your real application can do.
+

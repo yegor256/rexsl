@@ -137,6 +137,7 @@ final class JigsawCssCheck implements Check {
      * Check one CSS page.
      * @param file Check this particular CSS document
      * @return Is CSS valid?
+     * @throws IOException If fails
      */
     @RetryOnFailure(verbose = false, delay = Tv.FIVE, unit = TimeUnit.SECONDS)
     private boolean one(final File file) throws IOException {

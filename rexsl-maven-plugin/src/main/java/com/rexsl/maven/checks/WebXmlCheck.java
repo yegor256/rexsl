@@ -93,6 +93,7 @@ final class WebXmlCheck implements Check {
      * Performs validation of the specified XML file against it's XSD schema.
      * @param file File to be validated.
      * @return If file is valid returns {@code TRUE}
+     * @throws IOException If fails
      */
     private boolean validate(final File file) throws IOException {
         final DocumentBuilderFactory factory =

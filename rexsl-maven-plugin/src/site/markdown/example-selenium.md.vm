@@ -1,0 +1,38 @@
+# How to use Selenium in ReXSL testing?
+
+First, add Selenium dependency to `pom.xml`:
+
+```
+<dependency>
+  <groupId>org.seleniumhq.selenium</groupId>
+  <artifactId>selenium-java</artifactId>
+  <version>2.9.0</version>
+  <scope>test</scope>
+</dependency>
+```
+
+Create a normal groovy script in `src/test/rexsl/scripts` directory:
+
+```
+/foo
+  pom.xml
+  /src
+    /main
+    /test
+      /rexsl
+        /scripts
+          WithSelenium.groovy
+```
+
+Implement test scenario in it, for example:
+
+```java
+import org.hamcrest.MatcherAssert
+import org.hamcrest.Matchers
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
+
+def driver = new HtmlUnitDriver()
+driver.navigate().to(rexsl.home.toString())
+MatcherAssert.assertThat(driver.getTitle(), Matchers.equalTo('home'))
+```
+

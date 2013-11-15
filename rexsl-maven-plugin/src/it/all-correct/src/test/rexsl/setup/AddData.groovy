@@ -32,7 +32,6 @@ package com.rexsl.foo.setup
 import com.rexsl.test.ApacheRequest
 import com.rexsl.test.Request
 import com.rexsl.test.RestResponse
-import com.rexsl.test.XmlResponse
 import com.jcabi.log.Logger
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
@@ -43,7 +42,7 @@ Logger.info(this, 'AddsData script running...')
 // let's validate how data were injected in bootstrap
 new ApacheRequest(rexsl.home)
     .fetch()
-    .as(RestResponse.class)
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString('bootstrapped'))
 
@@ -54,12 +53,12 @@ new ApacheRequest(rexsl.home)
     .method(Request.POST)
     .body().formParam('text', value).back()
     .fetch()
-    .as(RestResponse.class)
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_OK)
 
 // let's validate that it's there
 new ApacheRequest(rexsl.home)
     .fetch()
-    .as(RestResponse.class)
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString(value))

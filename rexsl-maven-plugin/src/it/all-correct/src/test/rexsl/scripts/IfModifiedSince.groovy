@@ -33,7 +33,6 @@ import com.rexsl.test.ApacheRequest
 import com.rexsl.test.RestResponse
 import java.text.SimpleDateFormat
 import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.UriBuilder
 import org.hamcrest.Matchers
 
 new ApacheRequest(rexsl.home)
@@ -45,6 +44,6 @@ new ApacheRequest(rexsl.home)
     )
     .header(HttpHeaders.USER_AGENT, 'somebody')
     .fetch()
-    .as(RestResponse.class)
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_NOT_MODIFIED)
     .assertBody(Matchers.equalTo(''))

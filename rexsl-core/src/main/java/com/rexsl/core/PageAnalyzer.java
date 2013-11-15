@@ -64,7 +64,7 @@ final class PageAnalyzer {
      * @param text The text of response
      * @param rqst The request
      */
-    protected PageAnalyzer(final String text, final HttpServletRequest rqst) {
+    PageAnalyzer(final String text, final HttpServletRequest rqst) {
         this.page = text;
         this.request = rqst;
     }
@@ -88,11 +88,8 @@ final class PageAnalyzer {
             this,
             // @checkstyle LineLength (1 line)
             "#needsTransformation('%s': '%[text]s'): User-Agent='%s', Accept='%s', %B",
-            this.request.getRequestURI(),
-            this.page,
-            agent,
-            accept,
-            needs
+            this.request.getRequestURI(), this.page,
+            agent, accept, needs
         );
         return needs;
     }
@@ -120,7 +117,8 @@ final class PageAnalyzer {
      * @return TRUE if the page requires transformation
      */
     private boolean xmlDemanded(final TypesMatcher types) {
-        return types.explicit(MediaType.APPLICATION_XML);
+        return types.explicit(MediaType.APPLICATION_XML)
+            || types.explicit(MediaType.TEXT_XML);
     }
 
     /**
@@ -132,7 +130,8 @@ final class PageAnalyzer {
     private boolean xslAccepted(final UserAgent agent,
         final TypesMatcher types) {
         return agent.isXsltCapable()
-            && types.accepts(MediaType.APPLICATION_XML);
+            && (types.accepts(MediaType.APPLICATION_XML)
+            || types.accepts(MediaType.TEXT_XML));
     }
 
 }
