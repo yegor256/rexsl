@@ -42,12 +42,21 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link ApacheRequest}.
+ * Test case for {@link BaseRequest} and its children.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public final class ApacheRequestTest {
+public final class BaseRequestTest {
+
+    /**
+     * Make a request.
+     * @param uri URI to start with
+     * @return Request
+     */
+    private Request request(final URI uri) {
+        return new JdkRequest(uri);
+    }
 
     /**
      * ApacheRequest can fetch HTTP request and process HTTP response.
@@ -60,7 +69,7 @@ public final class ApacheRequestTest {
             .expectMethod(Matchers.equalTo(Request.GET))
             .returnBody("hello!!".getBytes(CharEncoding.UTF_8))
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .uri().path("/helloall").back()
             .method(Request.GET)
             .fetch().as(RestResponse.class)
@@ -83,7 +92,7 @@ public final class ApacheRequestTest {
             )
             .expectMethod(Matchers.equalTo(Request.GET))
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .uri().path("/foo1").back()
             .method(Request.GET)
             .header(HttpHeaders.ACCEPT, "*/*")
@@ -104,7 +113,7 @@ public final class ApacheRequestTest {
             .expectMethod(Matchers.equalTo(Request.GET))
             .expectHeader(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .uri().queryParam(name, value).back()
             .method(Request.GET)
             .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
@@ -129,7 +138,7 @@ public final class ApacheRequestTest {
             .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(Request.POST))
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .method(Request.POST)
             .body().formParam(name, value).back()
             .header(
@@ -156,7 +165,7 @@ public final class ApacheRequestTest {
             .expectBody(Matchers.containsString("with"))
             .expectMethod(Matchers.equalTo(Request.POST))
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .method(Request.POST)
             .header(
                 HttpHeaders.CONTENT_TYPE,
@@ -177,7 +186,7 @@ public final class ApacheRequestTest {
             .expectMethod(Matchers.equalTo(Request.GET))
             .returnStatus(HttpURLConnection.HTTP_NOT_FOUND)
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .method(Request.GET)
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
@@ -196,7 +205,7 @@ public final class ApacheRequestTest {
             .expectMethod(Matchers.equalTo(Request.GET))
             .returnBody("some text")
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .method(Request.GET)
             .fetch().as(RestResponse.class)
             .assertBody(Matchers.containsString("some"))
@@ -213,7 +222,7 @@ public final class ApacheRequestTest {
             .expectMethod(Matchers.equalTo(Request.GET))
             .returnHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN)
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .method(Request.GET)
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
@@ -239,7 +248,7 @@ public final class ApacheRequestTest {
             .expectMethod(Matchers.equalTo(Request.GET))
             .returnBody("<root><a>\u0443\u0440\u0430!</a></root>")
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .method(Request.GET)
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
@@ -270,7 +279,7 @@ public final class ApacheRequestTest {
             .returnHeader(HttpHeaders.CONTENT_TYPE, "text/plain;charset=utf-8")
             .returnBody("\u0443\u0440\u0430!")
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .method(Request.GET)
             .uri().path("/abcdefff").back()
             .fetch().as(RestResponse.class)
@@ -288,7 +297,7 @@ public final class ApacheRequestTest {
             .returnHeader(HttpHeaders.CONTENT_TYPE, "text/xml;charset=utf-8")
             .returnBody("<text>\u0443\u0440\u0430!</text>")
             .mock();
-        new ApacheRequest(container.home())
+        this.request(container.home())
             .method(Request.GET)
             .uri().path("/barbar").back()
             .fetch().as(XmlResponse.class)
@@ -307,7 +316,7 @@ public final class ApacheRequestTest {
         ).mock();
         final URI uri = UriBuilder.fromUri(container.home())
             .userInfo("user:pwd").build();
-        new ApacheRequest(uri)
+        this.request(uri)
             .method(Request.GET)
             .uri().path("/abcde").back()
             .fetch().as(RestResponse.class)
@@ -320,7 +329,7 @@ public final class ApacheRequestTest {
      */
     @Test(expected = IOException.class)
     public void continuesOnConnectionError() throws Exception {
-        new ApacheRequest("http://absent-1.rexsl.com/")
+        this.request(new URI("http://absent-1.rexsl.com/"))
             .method(Request.GET)
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
@@ -335,7 +344,7 @@ public final class ApacheRequestTest {
         final ContainerMocker container = new ContainerMocker()
             .expectHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML)
             .mock();
-        final Request req = new ApacheRequest(container.home())
+        final Request req = this.request(container.home())
             .uri().path("/foo").back()
             .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML);
         req.method(Request.GET).fetch().as(RestResponse.class)

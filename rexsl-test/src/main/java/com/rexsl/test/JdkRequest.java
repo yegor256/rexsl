@@ -33,22 +33,22 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.io.Charsets;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.CharEncoding;
 
 /**
- * Implementation of {@link Request}, based on Apache HTTP client.
+ * Implementation of {@link Request}, based on JDK.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
@@ -58,8 +58,7 @@ import org.apache.http.util.EntityUtils;
 @Immutable
 @EqualsAndHashCode(of = "base")
 @Loggable(Loggable.DEBUG)
-@SuppressWarnings("PMD.TooManyMethods")
-public final class ApacheRequest implements Request {
+public final class JdkRequest implements Request {
 
     /**
      * The wire to use.
@@ -70,72 +69,64 @@ public final class ApacheRequest implements Request {
             final String method,
             final Collection<Map.Entry<String, String>> headers,
             final String content) throws IOException {
-            final CloseableHttpResponse response =
-                HttpClients.createDefault().execute(
-                    this.httpRequest(home, method, headers, content)
-                );
+            final HttpURLConnection conn = HttpURLConnection.class.cast(
+                new URL(home).openConnection()
+            );
             try {
+                conn.setRequestMethod(method);
+                conn.setDoOutput(true);
+                for (final Map.Entry<String, String> header : headers) {
+                    conn.setRequestProperty(header.getKey(), header.getValue());
+                }
+                final OutputStreamWriter output = new OutputStreamWriter(
+                    conn.getOutputStream()
+                );
+                try {
+                    output.write(content);
+                } finally {
+                    output.close();
+                }
                 return new DefaultResponse(
                     req,
-                    response.getStatusLine().getStatusCode(),
-                    response.getStatusLine().getReasonPhrase(),
-                    this.headers(response.getAllHeaders()),
-                    this.consume(response.getEntity())
+                    conn.getResponseCode(),
+                    conn.getResponseMessage(),
+                    this.headers(conn.getHeaderFields()),
+                    this.body(conn)
                 );
             } finally {
-                response.close();
+                conn.disconnect();
             }
         }
         /**
-         * Create request.
-         * @return Request
+         * Get headers from response.
+         * @param fields Header fields
+         * @return Headers
          */
-        public HttpEntityEnclosingRequestBase httpRequest(final String home,
-            final String method,
-            final Collection<Map.Entry<String, String>> headers,
-            final String content) {
-            final HttpEntityEnclosingRequestBase req =
-                new HttpEntityEnclosingRequestBase() {
-                    @Override
-                    public String getMethod() {
-                        return method;
-                    }
-                };
-            final URI uri = URI.create(home);
-            req.setURI(uri);
-            req.setEntity(new StringEntity(content, Charsets.UTF_8));
-            for (final Map.Entry<String, String> header : headers) {
-                req.addHeader(header.getKey(), header.getValue());
-            }
-            return req;
-        }
-        /**
-         * Fetch body from http entity.
-         * @param entity HTTP entity
-         * @return Body in UTF-8
-         * @throws IOException If fails
-         */
-        private String consume(final HttpEntity entity) throws IOException {
-            String body = "";
-            if (entity != null) {
-                body = EntityUtils.toString(entity, Charsets.UTF_8);
-            }
-            return body;
-        }
-        /**
-         * Make a list of all hdrs.
-         * @param list Apache HTTP hdrs
-         * @return Body in UTF-8
-         */
-        @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
         private Array<Map.Entry<String, String>> headers(
-            final org.apache.http.Header... list) {
+            final Map<String, List<String>> fields) {
             final Collection<Map.Entry<String, String>> headers =
                 new LinkedList<Map.Entry<String, String>>();
-            for (final org.apache.http.Header header : list) {
-                headers.add(new Header(header.getName(), header.getValue()));
+            for (final Map.Entry<String, List<String>> field
+                : fields.entrySet()) {
+                for (final String value : field.getValue()) {
+                    headers.add(new Header(field.getKey(), value));
+                }
             }
             return new Array<Map.Entry<String, String>>(headers);
+        }
+        /**
+         * Get response body of connection.
+         * @param conn Connection
+         * @return Body
+         * @throws IOException
+         */
+        private String body(final HttpURLConnection conn) throws IOException {
+            final InputStream input = conn.getInputStream();
+            try {
+                return IOUtils.toString(input, CharEncoding.UTF_8);
+            } finally {
+                input.close();
+            }
         }
     };
 
@@ -148,7 +139,7 @@ public final class ApacheRequest implements Request {
      * Public ctor.
      * @param uri The resource to work with
      */
-    public ApacheRequest(@NotNull(message = "URI can't be NULL")
+    public JdkRequest(@NotNull(message = "URI can't be NULL")
     final URI uri) {
         this(uri.toString());
     }
@@ -157,9 +148,9 @@ public final class ApacheRequest implements Request {
      * Public ctor.
      * @param uri The resource to work with
      */
-    public ApacheRequest(@NotNull(message = "URI can't be NULL")
+    public JdkRequest(@NotNull(message = "URI can't be NULL")
     final String uri) {
-        this.base = new BaseRequest(ApacheRequest.WIRE, uri);
+        this.base = new BaseRequest(JdkRequest.WIRE, uri);
     }
 
     @Override
