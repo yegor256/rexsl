@@ -29,11 +29,11 @@
  */
 package com.rexsl.foo.scripts
 
-import com.rexsl.test.ApacheRequest
+import com.rexsl.test.JdkRequest
 import com.rexsl.test.RestResponse
 import com.rexsl.test.XmlResponse
 
-new ApacheRequest(rexsl.home)
+new JdkRequest(rexsl.home)
     .uri().path('/trap').back()
     .fetch()
     .as(RestResponse)
