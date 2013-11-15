@@ -128,6 +128,7 @@ public final class Google implements Provider, Provider.Visible {
             "auth-google",
             UriBuilder
                 .fromUri("https://accounts.google.com/o/oauth2/auth")
+                // @checkstyle MultipleStringLiterals (2 lines)
                 .queryParam("client_id", "{id}")
                 .queryParam("redirect_uri", "{uri}")
                 .queryParam("response_type", "code")
@@ -148,10 +149,6 @@ public final class Google implements Provider, Provider.Visible {
      */
     private String token(final String code) throws IOException {
         return new ApacheRequest("https://accounts.google.com/o/oauth2/token")
-            .header(
-                HttpHeaders.CONTENT_TYPE,
-                MediaType.APPLICATION_FORM_URLENCODED
-            )
             .body()
             .formParam("client_id", this.appId)
             .formParam("redirect_uri", this.resource.uriInfo().getBaseUri())
@@ -159,6 +156,10 @@ public final class Google implements Provider, Provider.Visible {
             .formParam("grant_type", "authorization_code")
             .formParam("code", code)
             .back()
+            .header(
+                HttpHeaders.CONTENT_TYPE,
+                MediaType.APPLICATION_FORM_URLENCODED
+            )
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
             .as(JsonResponse.class).json()

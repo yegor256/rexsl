@@ -29,11 +29,12 @@
  */
 package com.rexsl.foo.scripts
 
-
 import com.jcabi.log.Logger
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
+import com.rexsl.test.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.UriBuilder
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 
@@ -47,17 +48,23 @@ MatcherAssert.assertThat(
     )
 )
 
-RestTester.start(rexsl.home)
+new ApacheRequest(rexsl.home)
     .header(HttpHeaders.ACCEPT, 'text/plain,text/xml')
     .header(HttpHeaders.USER_AGENT, 'FireFox')
-    .get('home page')
+    .fetch()
+    .as(RestResponse.class)
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertHeader(
         HttpHeaders.CONTENT_TYPE,
         Matchers.everyItem(Matchers.startsWith(MediaType.TEXT_HTML))
     )
+    .as(XmlResponse.class)
     .assertXPath('//xhtml:div')
 
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-addr'))
-    .get('non-existing page')
+new ApacheRequest(rexsl.home)
+    .header(HttpHeaders.ACCEPT, 'text/plain,text/xml')
+    .header(HttpHeaders.USER_AGENT, 'FireFox')
+    .uri().path('/strange-addr').back()
+    .fetch()
+    .as(RestResponse.class)
     .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)

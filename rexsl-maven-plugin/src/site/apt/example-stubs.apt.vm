@@ -80,10 +80,12 @@ public class RuntimeExceptionStub {
   This is how we may test it from <<<WhatIfRuntimeException.groovy>>>:
 
 +--
-import com.rexsl.test.RestTester
-RestTester.start(rexsl.home)
-  .get('/runtime-exception')
-  .assertStatus(500)
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
+new ApacheRequest(rexsl.home)
+    .fetch()
+    .as(RestResponse.class)
+    .assertStatus(HttpURLConnection.HTTP_OK)
 +--
 
   The test should pass, and may be extended with additional validations. We

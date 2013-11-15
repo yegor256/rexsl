@@ -29,10 +29,15 @@
  */
 package com.rexsl.foo.scripts
 
-
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
+import com.rexsl.test.XmlResponse
 import javax.ws.rs.core.UriBuilder
 
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/trap'))
-    .get('render exception trap')
+new ApacheRequest(rexsl.home)
+    .uri().path('/trap').back()
+    .fetch()
+    .as(RestResponse.class)
     .assertStatus(HttpURLConnection.HTTP_OK)
+    .as(XmlResponse.class)
     .assertXPath('//xhtml:pre[contains(.,"exception_type: NULL")]')

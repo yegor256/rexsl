@@ -4,16 +4,20 @@
  */
 package ${package}.rexsl.scripts
 
-import com.rexsl.test.RestTester
-import javax.ws.rs.core.UriBuilder
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
+import com.rexsl.test.XmlResponse
 
 [
     '/page-doesnt-exist',
     '/xsl/xsl-stylesheet-doesnt-exist.xsl',
     '/css/stylesheet-is-absent.css',
 ].each {
-    RestTester.start(UriBuilder.fromUri(rexsl.home).path(it))
-        .get('hits non-found page')
+    new ApacheRequest(rexsl.home)
+        .uri().path(it).back()
+        .fetch()
+        .as(RestResponse.class)
         .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
+        .as(XmlResponse.class)
         .assertXPath('//xhtml:h1[contains(.,"Page not found")]')
 }

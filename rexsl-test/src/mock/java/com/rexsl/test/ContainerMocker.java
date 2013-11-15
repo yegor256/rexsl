@@ -31,6 +31,8 @@ package com.rexsl.test;
 
 import com.jcabi.log.Logger;
 import com.sun.grizzly.http.embed.GrizzlyWebServer;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.util.concurrent.Callable;
@@ -52,9 +54,9 @@ import org.hamcrest.Matchers;
  *   .mock()
  *   .home();
  * // sometime later
- * RestTester.start(home)
+ * new ApacheRequest(home)
  *   .header("Accept", "text/xml")
- *   .get("Load sample page")
+ *   .fetch().as(RestResponse.class)
  *   .assertStatus(200);</pre>
  *
  * <p>Keep in mind that container automatically reserves a new free TCP port
@@ -63,7 +65,7 @@ import org.hamcrest.Matchers;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @see RestTester
+ * @see ApacheRequest
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class ContainerMocker {
@@ -111,10 +113,10 @@ public final class ContainerMocker {
     }
 
     /**
-     * Expect this HTTP method (take a look at {@link RestTester} constants).
+     * Expect this HTTP method (take a look at {@link Request} constants).
      * @param matcher Name of the method to expect.
      * @return This object
-     * @see RestTester
+     * @see Request
      */
     public ContainerMocker expectMethod(final Matcher<String> matcher) {
         this.adapter.setMethodMatcher(matcher);
@@ -172,7 +174,7 @@ public final class ContainerMocker {
     public ContainerMocker returnBody(final String body) {
         try {
             return this.returnBody(body.getBytes(CharEncoding.UTF_8));
-        } catch (java.io.UnsupportedEncodingException ex) {
+        } catch (UnsupportedEncodingException ex) {
             throw new IllegalStateException(ex);
         }
     }
@@ -229,8 +231,9 @@ public final class ContainerMocker {
     /**
      * Mock it, and return this object.
      * @return This object
+     * @throws IOException If fails
      */
-    public ContainerMocker mock() {
+    public ContainerMocker mock() throws IOException {
         return this.mock(this.reservePort());
     }
 
@@ -238,9 +241,10 @@ public final class ContainerMocker {
      * Mock it, and return this object.
      * @param prt The port where it works
      * @return This object
+     * @throws IOException If fails
      * @since 0.5
      */
-    public ContainerMocker mock(final int prt) {
+    public ContainerMocker mock(final int prt) throws IOException {
         this.port = prt;
         this.gws = new GrizzlyWebServer(this.port);
         this.gws.addGrizzlyAdapter(this.adapter, new String[] {"/"});
@@ -250,13 +254,10 @@ public final class ContainerMocker {
 
     /**
      * Start container (to use in &#64;Before-annotated unit test method).
+     * @throws IOException If fails
      */
-    public void start() {
-        try {
-            this.gws.start();
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
-        }
+    public void start() throws IOException {
+        this.gws.start();
         Logger.debug(
             this,
             "#start(): Grizzly started at port #%s",
@@ -281,28 +282,23 @@ public final class ContainerMocker {
      * @return URI of the started container
      */
     public URI home() {
-        try {
-            return new URI(Logger.format("http://localhost:%d/", this.port));
-        } catch (java.net.URISyntaxException ex) {
-            throw new IllegalStateException(ex);
-        }
+        return URI.create(
+            String.format("http://localhost:%d/", this.port)
+        );
     }
 
     /**
      * Reserve port.
      * @return Reserved TCP port
+     * @throws IOException If fails
      */
-    private int reservePort() {
+    private int reservePort() throws IOException {
         int reserved;
+        final ServerSocket socket = new ServerSocket(0);
         try {
-            final ServerSocket socket = new ServerSocket(0);
-            try {
-                reserved = socket.getLocalPort();
-            } finally {
-                socket.close();
-            }
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
+            reserved = socket.getLocalPort();
+        } finally {
+            socket.close();
         }
         return reserved;
     }

@@ -28,12 +28,14 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 
-RestTester.start(rexsl.home)
+new ApacheRequest(rexsl.home)
     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
     .header(HttpHeaders.USER_AGENT, 'Safari')
-    .get('load it')
+    .fetch()
+    .as(RestResponse.class)
     .assertStatus(HttpURLConnection.HTTP_OK)

@@ -212,9 +212,9 @@ public final class ApacheRequest implements Request {
         req.setURI(uri);
         req.setEntity(new StringEntity(this.content, Charsets.UTF_8));
         boolean agent = false;
-        for (final Header header : this.hdrs) {
+        for (final Map.Entry<String, String> header : this.hdrs) {
             req.addHeader(header.getKey(), header.getValue());
-            if (header.sameAs(HttpHeaders.USER_AGENT)) {
+            if (header.getKey().equals(HttpHeaders.USER_AGENT)) {
                 agent = true;
             }
         }

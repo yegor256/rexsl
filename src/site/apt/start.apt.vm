@@ -271,18 +271,23 @@ Assert.assertThat(
 
 +--
 package foo
-import com.rexsl.test.RestTester
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
+import com.rexsl.test.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.UriBuilder
-RestTester.start(rexsl.home)
+new ApacheRequest(rexsl.home)
   .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
   .header(HttpHeaders.USER_AGENT, 'Safari')
-  .get('loading home page')
+  .fetch()
+  .as(RestResponse.class)
   .assertStatus(HttpURLConnection.HTTP_OK)
+  .as(XmlResponse.class)
   .assertXPath("//xhtml:div[contains(.,'world')]")
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-address'))
-  .get('loading non-existing URL')
+new ApacheRequest(rexsl.home)
+  .uri().path('/strange-address').back()
+  .fetch()
+  .as(RestResponse.class)
   .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
 +--
 

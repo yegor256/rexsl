@@ -5,13 +5,17 @@
 package ${package}.rexsl.scripts
 
 import com.jcabi.manifests.Manifests
-import com.rexsl.test.RestTester
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
+import com.rexsl.test.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 
-RestTester.start(rexsl.home)
+new ApacheRequest(rexsl.home)
     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
-    .get('reading basic links')
+    .fetch()
+    .as(RestResponse.class)
     .assertStatus(HttpURLConnection.HTTP_OK)
+    .as(XmlResponse.class)
     .assertXPath("/page/links/link[@rel='self']")
     .assertXPath("/page/links/link[@rel='home']")

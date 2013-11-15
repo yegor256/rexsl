@@ -28,13 +28,14 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
 import java.text.SimpleDateFormat
 import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.UriBuilder
-
 import org.hamcrest.Matchers
 
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/css/screen.css'))
+new ApacheRequest(rexsl.home)
+    .uri().path('/css/screen.css').back()
     .header(HttpHeaders.ACCEPT, 'text/plain,text/css')
     .header(
         HttpHeaders.IF_MODIFIED_SINCE,
@@ -42,6 +43,7 @@ RestTester.start(UriBuilder.fromUri(rexsl.home).path('/css/screen.css'))
             .format(new Date())
     )
     .header(HttpHeaders.USER_AGENT, 'Chrome')
-    .get()
+    .fetch()
+    .as(RestResponse.class)
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString('font-family'))
