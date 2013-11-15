@@ -30,26 +30,78 @@
 package com.rexsl.test;
 
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Collection;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 /**
  * Integration case for {@link ApacheRequest}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-public final class ApacheRequestITCase {
+@RunWith(Parameterized.class)
+public final class BaseRequestITCase {
 
     /**
-     * ApacheRequest can fetch HTTP request and process HTTP response.
+     * Type of request.
+     */
+    private final transient Class<? extends Request> type;
+
+    /**
+     * Public ctor.
+     * @param req Request type
+     */
+    public BaseRequestITCase(final Class<? extends Request> req) {
+        this.type = req;
+    }
+
+    /**
+     * Parameters.
+     * @return Array of args
+     */
+    @Parameterized.Parameters
+    public static Collection<Object[]> primeNumbers() {
+        return Arrays.asList(
+            new Object[]{ApacheRequest.class},
+            new Object[]{JdkRequest.class}
+        );
+    }
+
+    /**
+     * Make a request.
+     * @param uri URI to start with
+     * @return Request
+     * @throws Exception If fails
+     */
+    private Request request(final URI uri) throws Exception {
+        return this.type.getDeclaredConstructor(URI.class).newInstance(uri);
+    }
+
+    /**
+     * BaseRequest can fetch HTTP request and process HTTP response.
      * @throws Exception If something goes wrong inside
      */
     @Test
     public void sendsHttpRequestAndProcessesHttpResponse() throws Exception {
-        new ApacheRequest("http://www.rexsl.com")
+        this.request(new URI("http://www.rexsl.com"))
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
             .as(XmlResponse.class)
             .assertXPath("/xhtml:html");
+    }
+
+    /**
+     * BaseRequest can process not-OK response.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void processesNotOkHttpResponse() throws Exception {
+        this.request(new URI("http://www.rexsl.com/file-not-found.txt"))
+            .fetch().as(RestResponse.class)
+            .assertStatus(HttpURLConnection.HTTP_NOT_FOUND);
     }
 
 }

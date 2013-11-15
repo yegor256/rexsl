@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.Collection;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
@@ -40,6 +42,8 @@ import org.apache.commons.lang3.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 /**
  * Test case for {@link BaseRequest} and its children.
@@ -47,15 +51,42 @@ import org.junit.Test;
  * @version $Id$
  */
 @SuppressWarnings("PMD.TooManyMethods")
+@RunWith(Parameterized.class)
 public final class BaseRequestTest {
+
+    /**
+     * Type of request.
+     */
+    private final transient Class<? extends Request> type;
+
+    /**
+     * Public ctor.
+     * @param req Request type
+     */
+    public BaseRequestTest(final Class<? extends Request> req) {
+        this.type = req;
+    }
+
+    /**
+     * Parameters.
+     * @return Array of args
+     */
+    @Parameterized.Parameters
+    public static Collection<Object[]> primeNumbers() {
+        return Arrays.asList(
+            new Object[] {ApacheRequest.class},
+            new Object[] {JdkRequest.class}
+        );
+    }
 
     /**
      * Make a request.
      * @param uri URI to start with
      * @return Request
+     * @throws Exception If fails
      */
-    private Request request(final URI uri) {
-        return new JdkRequest(uri);
+    private Request request(final URI uri) throws Exception {
+        return this.type.getDeclaredConstructor(URI.class).newInstance(uri);
     }
 
     /**

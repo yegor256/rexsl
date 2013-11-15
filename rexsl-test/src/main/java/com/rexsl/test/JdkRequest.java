@@ -62,8 +62,13 @@ public final class JdkRequest implements Request {
 
     /**
      * The wire to use.
+     * @checkstyle AnonInnerLength (200 lines)
      */
     private static final Wire WIRE = new Wire() {
+        /**
+         * {@inheritDoc}
+         * @checkstyle ParameterNumber (6 lines)
+         */
         @Override
         public Response send(final Request req, final String home,
             final String method,
@@ -74,17 +79,20 @@ public final class JdkRequest implements Request {
             );
             try {
                 conn.setRequestMethod(method);
-                conn.setDoOutput(true);
                 for (final Map.Entry<String, String> header : headers) {
                     conn.setRequestProperty(header.getKey(), header.getValue());
                 }
-                final OutputStreamWriter output = new OutputStreamWriter(
-                    conn.getOutputStream()
-                );
-                try {
-                    output.write(content);
-                } finally {
-                    output.close();
+                if (method.equals(Request.POST) || method.equals(Request.PUT)
+                    || method.equals(Request.PATCH)) {
+                    conn.setDoOutput(true);
+                    final OutputStreamWriter output = new OutputStreamWriter(
+                        conn.getOutputStream()
+                    );
+                    try {
+                        output.write(content);
+                    } finally {
+                        output.close();
+                    }
                 }
                 return new DefaultResponse(
                     req,
@@ -108,6 +116,9 @@ public final class JdkRequest implements Request {
                 new LinkedList<Map.Entry<String, String>>();
             for (final Map.Entry<String, List<String>> field
                 : fields.entrySet()) {
+                if (field.getKey() == null) {
+                    continue;
+                }
                 for (final String value : field.getValue()) {
                     headers.add(new Header(field.getKey(), value));
                 }
@@ -121,12 +132,23 @@ public final class JdkRequest implements Request {
          * @throws IOException
          */
         private String body(final HttpURLConnection conn) throws IOException {
-            final InputStream input = conn.getInputStream();
-            try {
-                return IOUtils.toString(input, CharEncoding.UTF_8);
-            } finally {
-                input.close();
+            final InputStream input;
+            if (conn.getResponseCode() >= HttpURLConnection.HTTP_BAD_REQUEST) {
+                input = conn.getErrorStream();
+            } else {
+                input = conn.getInputStream();
             }
+            final String body;
+            if (input == null) {
+                body = "";
+            } else {
+                try {
+                    body = IOUtils.toString(input, CharEncoding.UTF_8);
+                } finally {
+                    input.close();
+                }
+            }
+            return body;
         }
     };
 
