@@ -33,7 +33,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import com.jcabi.xml.XML;
-import com.rexsl.test.ApacheRequest;
+import com.rexsl.test.JdkRequest;
 import com.rexsl.test.Request;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -83,7 +83,7 @@ class BaseValidator {
      * @return The response
      */
     protected final Request request(final String uri, final String entity) {
-        return new ApacheRequest(uri)
+        return new JdkRequest(uri)
             .method(Request.POST)
             .body().set(entity).back()
             .header(HttpHeaders.USER_AGENT, BaseValidator.USER_AGENT)

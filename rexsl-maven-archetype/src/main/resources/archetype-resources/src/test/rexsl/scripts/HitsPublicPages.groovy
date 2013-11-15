@@ -4,7 +4,7 @@
  */
 package ${package}.rexsl.scripts
 
-import com.rexsl.test.ApacheRequest
+import com.rexsl.test.JdkRequest
 import com.rexsl.test.RestResponse
 
 [
@@ -14,7 +14,7 @@ import com.rexsl.test.RestResponse
     '/xsl/index.xsl',
     '/css/screen.css',
 ].each {
-    new ApacheRequest(rexsl.home)
+    new JdkRequest(rexsl.home)
         .uri().path(it).back()
         .fetch()
         .as(RestResponse.class)

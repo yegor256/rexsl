@@ -36,7 +36,7 @@ import com.restfb.exception.FacebookException;
 import com.restfb.types.User;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
-import com.rexsl.test.ApacheRequest;
+import com.rexsl.test.JdkRequest;
 import com.rexsl.test.RestResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -163,7 +163,7 @@ public final class Facebook implements Provider, Provider.Visible {
                 this.appKey,
                 code
             );
-        final String response = new ApacheRequest(uri)
+        final String response = new JdkRequest(uri)
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
             .body();

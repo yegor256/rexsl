@@ -4,7 +4,7 @@
  */
 package ${package}.rexsl.scripts
 
-import com.rexsl.test.ApacheRequest
+import com.rexsl.test.JdkRequest
 import com.rexsl.test.RestResponse
 import com.rexsl.test.XmlResponse
 
@@ -13,7 +13,7 @@ import com.rexsl.test.XmlResponse
     '/xsl/xsl-stylesheet-doesnt-exist.xsl',
     '/css/stylesheet-is-absent.css',
 ].each {
-    new ApacheRequest(rexsl.home)
+    new JdkRequest(rexsl.home)
         .uri().path(it).back()
         .fetch()
         .as(RestResponse.class)

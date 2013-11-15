@@ -33,7 +33,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
-import com.rexsl.test.ApacheRequest;
+import com.rexsl.test.JdkRequest;
 import com.rexsl.test.JsonResponse;
 import com.rexsl.test.RestResponse;
 import java.io.IOException;
@@ -148,7 +148,7 @@ public final class Google implements Provider, Provider.Visible {
      * @throws IOException If fails
      */
     private String token(final String code) throws IOException {
-        return new ApacheRequest("https://accounts.google.com/o/oauth2/token")
+        return new JdkRequest("https://accounts.google.com/o/oauth2/token")
             .body()
             .formParam("client_id", this.appId)
             .formParam("redirect_uri", this.resource.uriInfo().getBaseUri())
@@ -181,7 +181,7 @@ public final class Google implements Provider, Provider.Visible {
             .queryParam("access_token", "{token}")
             .build(token);
         return this.parse(
-            new ApacheRequest(uri).fetch()
+            new JdkRequest(uri).fetch()
                 .as(JsonResponse.class).json()
                 .readObject()
         );

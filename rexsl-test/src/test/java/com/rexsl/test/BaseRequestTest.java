@@ -90,7 +90,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can fetch HTTP request and process HTTP response.
+     * BaseRequest can fetch HTTP request and process HTTP response.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -110,7 +110,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can fetch HTTP headers.
+     * BaseRequest can fetch HTTP headers.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -132,7 +132,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can fetch GET request with query params.
+     * BaseRequest can fetch GET request with query params.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -153,7 +153,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can fetch body with HTTP POST request.
+     * BaseRequest can fetch body with HTTP POST request.
      * @throws Exception If something goes wrong inside
      * @todo #151 Is it possible to initialize input variable with
      *  InputStream from request without side effects on request?
@@ -181,7 +181,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can fetch body with HTTP POST request.
+     * BaseRequest can fetch body with HTTP POST request.
      * @throws Exception If something goes wrong inside
      * @todo #151 Is it possible to initialize input variable with
      *  InputStream from request without side effects on request?
@@ -208,7 +208,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can assert HTTP status code value.
+     * BaseRequest can assert HTTP status code value.
      * @throws Exception If something goes wrong inside.
      */
     @Test
@@ -227,7 +227,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can assert response body.
+     * BaseRequest can assert response body.
      * @throws Exception If something goes wrong inside.
      */
     @Test
@@ -244,7 +244,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can assert HTTP headers in response.
+     * BaseRequest can assert HTTP headers in response.
      * @throws Exception If something goes wrong inside.
      */
     @Test
@@ -270,7 +270,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can assert response body content with XPath query.
+     * BaseRequest can assert response body content with XPath query.
      * @throws Exception If something goes wrong inside.
      */
     @Test
@@ -288,7 +288,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can work with URL returned by ContainerMocker.
+     * BaseRequest can work with URL returned by ContainerMocker.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -301,7 +301,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can handle unicode in plain text response.
+     * BaseRequest can handle unicode in plain text response.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -319,7 +319,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can handle unicode in XML response.
+     * BaseRequest can handle unicode in XML response.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -336,7 +336,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can use basic authentication scheme.
+     * BaseRequest can use basic authentication scheme.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -355,7 +355,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can throw a correct exception on connection error.
+     * BaseRequest can throw a correct exception on connection error.
      * @throws Exception If something goes wrong inside
      */
     @Test(expected = IOException.class)
@@ -367,7 +367,7 @@ public final class BaseRequestTest {
     }
 
     /**
-     * ApacheRequest can fetch GET request twice.
+     * BaseRequest can fetch GET request twice.
      * @throws Exception If something goes wrong inside
      */
     @Test

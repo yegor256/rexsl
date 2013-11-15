@@ -33,7 +33,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
-import com.rexsl.test.ApacheRequest;
+import com.rexsl.test.JdkRequest;
 import com.rexsl.test.JsonResponse;
 import com.rexsl.test.Request;
 import com.rexsl.test.RestResponse;
@@ -158,7 +158,7 @@ public final class Github implements Provider, Provider.Visible {
                 this.appKey,
                 code
             );
-        return new ApacheRequest(uri)
+        return new JdkRequest(uri)
             .method(Request.POST)
             .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
             .fetch().as(RestResponse.class)
@@ -179,7 +179,7 @@ public final class Github implements Provider, Provider.Visible {
             .queryParam("access_token", "{token}")
             .build(token);
         return this.parse(
-            new ApacheRequest(uri)
+            new JdkRequest(uri)
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
                 .fetch().as(RestResponse.class)
                 .assertStatus(HttpURLConnection.HTTP_OK)
