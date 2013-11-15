@@ -40,20 +40,22 @@ RESTful Java Client
 
   The module contains a collection of usable tools for testing of
   ReXSL-powered application (or any other RESTful server).
-  {{{./apidocs-${project.version}/com/rexsl/test/RestTester.html}<<<RestTester>>>}}
+  {{{./apidocs-${project.version}/com/rexsl/test/ApacheRequest.html}<<<ApacheRequest>>>}}
   is a RESTful Java client with a fluent interface:
 
 +--
 public class Main {
   public void main() {
-    String body = RestTester.start("http://www.rexsl.com")
+    String body = new ApacheRequest("http://www.rexsl.com")
       .header(HttpHeaders.USER_AGENT, "Safari 4")
       .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
-      .get("reading front page of ReXSL.com")
+      .fetch()
+      .as(RestResponse.class)
       .assertStatus(HttpURLConnection.HTTP_OK)
       .assertBody(Matchers.containsString("ReXSL"))
+      .as(XmlResponse.class)
       .assertXPath("//xhtml:body")
-      .getBody();
+      .body();
   }
 }
 +--

@@ -82,6 +82,10 @@
         </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
             <artifactId>jcabi-urn</artifactId>
             <version>0.8</version>
             <classifier>mock</classifier>

@@ -5,7 +5,9 @@
 package ${package}.rexsl.scripts
 
 import com.jcabi.manifests.Manifests
-import com.rexsl.test.RestTester
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
+import com.rexsl.test.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 
@@ -14,10 +16,12 @@ def version = Manifests.read('Example-Version')
 def revision = Manifests.read('Example-Revision')
 def date = Manifests.read('Example-Date')
 
-RestTester.start(rexsl.home)
+new ApacheRequest(rexsl.home)
     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
-    .get('reading version')
+    .fetch()
+    .as(RestResponse.class)
     .assertStatus(HttpURLConnection.HTTP_OK)
+    .as(XmlResponse.class)
     .assertXPath("/page/version[name='${version}']")
     .assertXPath("/page/version[revision='${revision}']")
     .assertXPath("/page/version[date='${date}']")

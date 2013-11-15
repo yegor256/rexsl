@@ -29,15 +29,17 @@
  */
 package com.rexsl.foo.scripts
 
-
-import javax.ws.rs.core.UriBuilder
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
 import org.hamcrest.Matchers
 
 // This URL (/stub) is not available in production version of the system,
 // but during tests it should be available because of "src/test/java/com/rexsl/foo/Stub.java"
 // class and its test resources
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/stub'))
-    .get('reading stub')
+new ApacheRequest(rexsl.home)
+    .uri().path('/stub').back()
+    .fetch()
+    .as(RestResponse.class)
     .assertStatus(HttpURLConnection.HTTP_OK)
     // This text is from src/test/resources/com/rexsl/foo/stub.txt
     .assertBody(Matchers.containsString('stubbing works fine!'))

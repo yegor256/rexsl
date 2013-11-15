@@ -83,15 +83,6 @@ final class Header implements Map.Entry<String, String> {
     }
 
     /**
-     * This header has the same key?
-     * @param key The key to compare with
-     * @return TRUE if it's the same header
-     */
-    public boolean sameAs(@NotNull final String key) {
-        return this.getKey().equals(Header.normalized(key));
-    }
-
-    /**
      * Normalize key.
      * @param key The key to normalize
      * @return Normalized key

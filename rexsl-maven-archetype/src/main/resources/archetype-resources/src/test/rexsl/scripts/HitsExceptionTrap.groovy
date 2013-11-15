@@ -4,10 +4,14 @@
  */
 package ${package}.rexsl.scripts
 
-import com.rexsl.test.RestTester
-import javax.ws.rs.core.UriBuilder
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
+import com.rexsl.test.XmlResponse
 
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/trap'))
-    .get('hits exception trap')
+new ApacheRequest(rexsl.home)
+    .uri().path('/trap').back()
+    .fetch()
+    .as(RestResponse.class)
     .assertStatus(HttpURLConnection.HTTP_OK)
+    .as(XmlResponse.class)
     .assertXPath('//xhtml:title[.="Internal application error"]')
