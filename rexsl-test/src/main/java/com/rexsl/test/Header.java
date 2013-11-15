@@ -62,7 +62,7 @@ final class Header implements Map.Entry<String, String> {
      * @param key The name of it
      * @param value The value
      */
-    Header(@NotNull final String key, @NotNull final String value) {
+    Header(final String key, final String value) {
         this.left = Header.normalized(key);
         this.right = value;
     }
