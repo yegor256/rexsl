@@ -63,8 +63,13 @@ public final class ApacheRequest implements Request {
 
     /**
      * The wire to use.
+     * @checkstyle AnonInnerLength (200 lines)
      */
     private static final Wire WIRE = new Wire() {
+        /**
+         * {@inheritDoc}
+         * @checkstyle ParameterNumber (6 lines)
+         */
         @Override
         public Response send(final Request req, final String home,
             final String method,
@@ -89,6 +94,7 @@ public final class ApacheRequest implements Request {
         /**
          * Create request.
          * @return Request
+         * @checkstyle ParameterNumber (6 lines)
          */
         public HttpEntityEnclosingRequestBase httpRequest(final String home,
             final String method,

@@ -163,6 +163,7 @@ final class BaseRequest implements Request {
     }
 
     @Override
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Response fetch() throws IOException {
         final long start = System.currentTimeMillis();
         final Collection<Map.Entry<String, String>> headers =
@@ -287,7 +288,7 @@ final class BaseRequest implements Request {
         }
         @Override
         public RequestURI set(@NotNull(message = "URI can't be NULL")
-        final URI uri) {
+            final URI uri) {
             return new BaseRequest.ApacheURI(this.owner, uri.toString());
         }
         @Override
@@ -356,7 +357,7 @@ final class BaseRequest implements Request {
         }
         @Override
         public RequestBody set(@NotNull(message = "content can't be NULL")
-        final String txt) {
+            final String txt) {
             return new BaseRequest.ApacheBody(this.owner, txt);
         }
         @Override

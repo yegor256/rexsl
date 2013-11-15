@@ -52,7 +52,9 @@ interface Wire {
      * @param method HTTP method
      * @param headers Headers
      * @param content HTTP body
-     * @return Response
+     * @return Response obtained
+     * @throws IOException if fails
+     * @checkstyle ParameterNumber (6 lines)
      */
     Response send(Request req, String home, String method,
         Collection<Map.Entry<String, String>> headers, String content)
