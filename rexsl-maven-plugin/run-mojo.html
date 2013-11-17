@@ -104,7 +104,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
@@ -129,8 +129,8 @@
                                     </ul>
                         <p>
                 
-                20-Oct-2013
-                0.6
+                17-Nov-2013
+                0.8
             </p>
             <article>
                 
@@ -140,7 +140,7 @@
       
 <p><b>Full name</b>:</p>
       
-<p>com.rexsl:rexsl-maven-plugin:0.6:run</p>
+<p>com.rexsl:rexsl-maven-plugin:0.8:run</p>
       
 <p><b>Description</b>:</p>
       
@@ -166,172 +166,9 @@ you can interactively test your XSL stylesheets.</p></div>
       </ul>
       
 <div class="section">
-<h3>Required Parameters<a name="Required_Parameters"></a></h3>
+<h3>Parameters<a name="Parameters"></a></h3>
         
-<table class="bodyTable" border="0">
-          
-<tr class="a">
-            
-<th>Name</th>
-            
-<th>Type</th>
-            
-<th>Since</th>
-            
-<th>Description</th>
-          </tr>
-          
-<tr class="b">
-            
-<td><b><a href="#skip">skip</a></b></td>
-            
-<td><tt>boolean</tt></td>
-            
-<td><tt>-</tt></td>
-            
-<td>Shall we skip execution?<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>rexsl.skip</tt>.</td>
-          </tr>
-          
-<tr class="a">
-            
-<td><b><a href="#webappDirectory">webappDirectory</a></b></td>
-            
-<td><tt>String</tt></td>
-            
-<td><tt>-</tt></td>
-            
-<td>Webapp directory.<br /><b>Default value is</b>: <tt>${project.build.directory}/${project.build.finalName}</tt>.<br /><b>User property is</b>: <tt>rexsl.webappDirectory</tt>.</td>
-          </tr>
-        </table>
-      </div>
-      
-<div class="section">
-<h3>Optional Parameters<a name="Optional_Parameters"></a></h3>
-        
-<table class="bodyTable" border="0">
-          
-<tr class="a">
-            
-<th>Name</th>
-            
-<th>Type</th>
-            
-<th>Since</th>
-            
-<th>Description</th>
-          </tr>
-          
-<tr class="b">
-            
-<td><b><a href="#port">port</a></b></td>
-            
-<td><tt>Integer</tt></td>
-            
-<td><tt>-</tt></td>
-            
-<td>TPC port to bind to (by default a random port is used).<br /><b>User property is</b>: <tt>rexsl.port</tt>.</td>
-          </tr>
-          
-<tr class="a">
-            
-<td><b><a href="#systemPropertyVariables">systemPropertyVariables</a></b></td>
-            
-<td><tt>Map</tt></td>
-            
-<td><tt>0.3</tt></td>
-            
-<td>System variables to be set before running tests. 
-
-<p>You define them in a similar way as in <a class="externalLink" href="http://maven.apache.org/plugins/maven-surefire-plugin/">maven-surefire-plugin</a>,
-for example you want to reconfigure LOG4J just for the tests:</p>
-
-<div>
-<pre>
-&lt;plugin&gt;
-  &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
-  &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
-  &lt;configuration&gt;
-    &lt;systemPropertyVariables&gt;
-      &lt;log4j.configuration&gt;./x.props&lt;/log4j.configuration&gt;
-    &lt;/systemPropertyVariables&gt;
-  &lt;/configuration&gt;
-&lt;/plugin&gt;
-</pre></div><br /></td>
-          </tr>
-        </table>
-      </div>
-      
-<div class="section">
-<h3>Parameter Details<a name="Parameter_Details"></a></h3>
-        
-<p><b><a name="port">port</a>:</b></p>
-        
-<div>TPC port to bind to (by default a random port is used).</div>
-        
-<ul>
-          
-<li><b>Type</b>: <tt>java.lang.Integer</tt></li>
-          
-<li><b>Required</b>: <tt>No</tt></li>
-          
-<li><b>User Property</b>: <tt>rexsl.port</tt></li>
-        </ul><hr />
-<p><b><a name="skip">skip</a>:</b></p>
-        
-<div>Shall we skip execution?</div>
-        
-<ul>
-          
-<li><b>Type</b>: <tt>boolean</tt></li>
-          
-<li><b>Required</b>: <tt>Yes</tt></li>
-          
-<li><b>User Property</b>: <tt>rexsl.skip</tt></li>
-          
-<li><b>Default</b>: <tt>false</tt></li>
-        </ul><hr />
-<p><b><a name="systemPropertyVariables">systemPropertyVariables</a>:</b></p>
-        
-<div>System variables to be set before running tests. 
-
-<p>You define them in a similar way as in <a class="externalLink" href="http://maven.apache.org/plugins/maven-surefire-plugin/">maven-surefire-plugin</a>,
-for example you want to reconfigure LOG4J just for the tests:</p>
-
-<div>
-<pre>
-&lt;plugin&gt;
-  &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
-  &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
-  &lt;configuration&gt;
-    &lt;systemPropertyVariables&gt;
-      &lt;log4j.configuration&gt;./x.props&lt;/log4j.configuration&gt;
-    &lt;/systemPropertyVariables&gt;
-  &lt;/configuration&gt;
-&lt;/plugin&gt;
-</pre></div></div>
-        
-<ul>
-          
-<li><b>Type</b>: <tt>java.util.Map</tt></li>
-          
-<li><b>Since</b>: <tt>0.3</tt></li>
-          
-<li><b>Required</b>: <tt>No</tt></li>
-        </ul><hr />
-<p><b><a name="webappDirectory">webappDirectory</a>:</b></p>
-        
-<div>Webapp directory.</div>
-        
-<ul>
-          
-<li><b>Type</b>: <tt>java.lang.String</tt></li>
-          
-<li><b>Required</b>: <tt>Yes</tt></li>
-          
-<li><b>User Property</b>: <tt>rexsl.webappDirectory</tt></li>
-          
-<li><b>Default</b>: <tt>${project.build.directory}/${project.build.finalName}</tt></li>
-        </ul>
+<p>(no parameters)</p>
       </div>
     </div>
   

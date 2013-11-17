@@ -7,9 +7,8 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl-maven-plugin - Bootstrap scripts</title>
+        <title>rexsl-maven-plugin - </title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
-                    <meta name="author" content="Yegor Bugayenko" />
                                                                                                                         
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
                                                                                                                 
@@ -105,7 +104,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
@@ -130,13 +129,13 @@
                                     </ul>
                         <p>
                 
-                20-Oct-2013
-                0.6
+                17-Nov-2013
+                0.8
             </p>
             <article>
-                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><!-- @version $Id$ --><!--  --><div class="section">
-<h2>How to pre-configure the application?<a name="How_to_pre-configure_the_application"></a></h2>
-<p>Very often you need to pre-configure the application before tests, in order to mock connections to some resources. The best example is a database server, which you don't have in tests. The application has to be pre-configured to work with another database. You can do all this in a bootstrap Groovy script:</p>
+                <h1>How to pre-configure the application?</h1>
+<p>Very often you need to pre-configure the application before tests, in order to mock connections to some resources. The best example is a database server, which you don&#x2019;t have in tests. The application has to be pre-configured to work with another database. You can do all this in a bootstrap Groovy script:</p>
+
 <div class="source">
 <pre>/foo
   pom.xml
@@ -145,8 +144,9 @@
     /test
       /rexsl
         /bootstrap
-          ConfigureDatabaseConnection.groovy</pre></div>
-<p>The script is able to work with application classes (all other Groovy scripts don't have this ability). All bootstrap scripts are executed from a context listener inside a container. That's why they can do anything your real application can do.</p></div>
+          ConfigureDatabaseConnection.groovy
+</pre></div>
+<p>The script is able to work with application classes (all other Groovy scripts don&#x2019;t have this ability). All bootstrap scripts are executed from a context listener inside a container. That&#x2019;s why they can do anything your real application can do.</p>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;

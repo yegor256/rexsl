@@ -7,9 +7,8 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl-maven-plugin - Introduction to ReXSL</title>
+        <title>rexsl-maven-plugin - </title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
-                    <meta name="author" content="Yegor Bugayenko" />
                                                                                                                         
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
                                                                                                                 
@@ -105,7 +104,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
@@ -130,31 +129,56 @@
                                     </ul>
                         <p>
                 
-                20-Oct-2013
-                0.6
+                17-Nov-2013
+                0.8
             </p>
             <article>
-                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><!-- @version $Id$ --><!--  --><div class="section">
-<h2>ReXSL Maven Plugin<a name="ReXSL_Maven_Plugin"></a></h2>
+                <h1>ReXSL Maven Plugin</h1>
 <p>This plugin is helping you to test your ReXSL-powered web application and perform some pre-packaging changes to your web assets (like CSS/XSL stylesheets, JavaScript code, etc.)</p>
 <p>Read more about its <a href="./usage.html">usage</a>.</p>
 <p>The workflow of the plugin is this:</p>
-<ol style="list-style-type: decimal">
-<li>Statically analyze the content of <tt>src/main/webapp</tt> and fail if any prohibited content found there, for example incorrectly formatted CSS stylesheet or <tt>web.xml</tt> file not compliant to its XSD schema.</li>
-<li>Perform XSL transformations on all <tt>xml</tt> files found in <tt>src/test/rexsl/xml</tt> (using your XSL stylesheets attached to them) and validate that resulting HTML documents are compliant to the rules of W3C and your <tt>groovy</tt> files found in <tt>src/test/rexsl/xhtml</tt>.</li>
-<li>Run all pre-start <tt>groovy</tt> scripts from <tt>src/test/rexsl/bootstrap</tt> from plugin class loader.</li>
-<li>Start Java servlet container (Jetty) with your classes and resources, emulating its real deployment to a real container.</li>
-<li>Run all startup data initializing <tt>groovy</tt> scripts from <tt>src/test/rexsl/setup</tt>, inside the container and in its class loader.</li>
-<li>Run all <tt>groovy</tt> tests found in <tt>src/test/rexsl/scripts</tt>.</li>
-<li>Shutdown the container and report success.</li></ol>
+
+<ul>
+  
+<li>
+<p>Statically analyze the content of <tt>src/main/webapp</tt> and fail  if any prohibited content found there, for example incorrectly formatted  CSS stylesheet or <tt>web.xml</tt> file not compliant to its XSD schema.</p></li>
+  
+<li>
+<p>Perform XSL transformations on all <tt>xml</tt> files found in  <tt>src/test/rexsl/xml</tt> (using your XSL stylesheets attached to them)  and validate that resulting HTML documents are compliant to the rules  of W3C and your <tt>groovy</tt> files found in <tt>src/test/rexsl/xhtml</tt>.</p></li>
+  
+<li>
+<p>Run all pre-start <tt>groovy</tt> scripts from  `src/test/rexsl/bootstrap  from plugin class loader.</p></li>
+  
+<li>
+<p>Start Java servlet container (Jetty) with your classes and resources,  emulating its real deployment to a real container.</p></li>
+  
+<li>
+<p>Run all startup data initializing <tt>groovy</tt> scripts from  <tt>src/test/rexsl/setup</tt>, inside the container and in its class loader.</p></li>
+  
+<li>
+<p>Run all <tt>groovy</tt> tests found in <tt>src/test/rexsl/scripts</tt>.</p></li>
+  
+<li>
+<p>Shutdown the container and report success.</p></li>
+</ul>
 <p>Of course, at any step build may fail.</p>
 <p>Detailed list of all checks is <a href="./apidocs/com/rexsl/maven/checks/DefaultChecksProvider.html">here</a>.</p>
 <p>There are a number of cookbook advices, which will help:</p>
+
 <ul>
-<li><a href="./setup.html">How to add application data before tests?</a></li>
-<li><a href="./bootstrap.html">How to pre-configure the application and mock resources?</a></li>
-<li><a href="./stubs.html">How to add extra functionality during tests?</a></li>
-<li><a href="./selenium.html">How to use Selenium in ReXSL testing?</a></li></ul></div>
+  
+<li>
+<p><a href="./setup.html">How to add application data before tests?</a></p></li>
+  
+<li>
+<p><a href="./bootstrap.html">How to pre-configure the application and mock resources?</a></p></li>
+  
+<li>
+<p><a href="./stubs.html">How to add extra functionality during tests?</a></p></li>
+  
+<li>
+<p><a href="./selenium.html">How to use Selenium in ReXSL testing?</a></p></li>
+</ul>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;

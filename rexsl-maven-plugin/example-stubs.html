@@ -7,9 +7,8 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl-maven-plugin - Run-time stubs</title>
+        <title>rexsl-maven-plugin - </title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
-                    <meta name="author" content="Yegor Bugayenko" />
                                                                                                                         
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
                                                                                                                 
@@ -105,7 +104,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
@@ -130,13 +129,13 @@
                                     </ul>
                         <p>
                 
-                20-Oct-2013
-                0.6
+                17-Nov-2013
+                0.8
             </p>
             <article>
-                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><!-- @version $Id$ --><!--  --><div class="section">
-<h2>How to add extra functionality during tests?<a name="How_to_add_extra_functionality_during_tests"></a></h2>
-<p>For example, you want to test your application's behavior when some unexpected runtime exception is happening. You need to inject a special block of code into your application during tests that will throw such an exception, and your test scripts will validate application behavior. We can do it with test stubs located together with your test classes:</p>
+                <h1>How to add extra functionality during tests?</h1>
+<p>For example, you want to test your application&#x2019;s behavior when some unexpected runtime exception is happening. You need to inject a special block of code into your application during tests that will throw such an exception, and your test scripts will validate application behavior. We can do it with test stubs located together with your test classes:</p>
+
 <div class="source">
 <pre>/foo
   pom.xml
@@ -149,8 +148,10 @@
           RuntimeExceptionStub.java
       /rexsl
         /scripts
-          WhatIfRuntimeException.groovy</pre></div>
+          WhatIfRuntimeException.groovy
+</pre></div>
 <p>This is how <tt>RuntimeExceptionStub.java</tt> may look like:</p>
+
 <div class="source">
 <pre>package foo;
 import javax.ws.rs.GET;
@@ -161,14 +162,19 @@ public class RuntimeExceptionStub {
   public String throwIt() {
     throw new IllegalStateException(&quot;hello, world!&quot;);
   }
-}</pre></div>
+}
+</pre></div>
 <p>This is how we may test it from <tt>WhatIfRuntimeException.groovy</tt>:</p>
+
 <div class="source">
-<pre>import com.rexsl.test.RestTester
-RestTester.start(rexsl.home)
-  .get('/runtime-exception')
-  .assertStatus(500)</pre></div>
-<p>The test should pass, and may be extended with additional validations. We may check what exactly is returned, how this page is formatted, etc. The same way as you check regular pages/responses.</p></div>
+<pre>import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
+new ApacheRequest(rexsl.home)
+  .fetch()
+  .as(RestResponse.class)
+  .assertStatus(HttpURLConnection.HTTP_OK)
+</pre></div>
+<p>The test should pass, and may be extended with additional validations. We may check what exactly is returned, how this page is formatted, etc. The same way as you check regular pages/responses.</p>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;

@@ -7,9 +7,8 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl-maven-plugin - ReXSL and Selenium</title>
+        <title>rexsl-maven-plugin - </title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
-                    <meta name="author" content="Yegor Bugayenko" />
                                                                                                                         
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
                                                                                                                 
@@ -105,7 +104,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
@@ -130,21 +129,23 @@
                                     </ul>
                         <p>
                 
-                20-Oct-2013
-                0.6
+                17-Nov-2013
+                0.8
             </p>
             <article>
-                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><!-- @version $Id$ --><!--  --><div class="section">
-<h2>How to use Selenium in ReXSL testing?<a name="How_to_use_Selenium_in_ReXSL_testing"></a></h2>
+                <h1>How to use Selenium in ReXSL testing?</h1>
 <p>First, add Selenium dependency to <tt>pom.xml</tt>:</p>
+
 <div class="source">
 <pre>&lt;dependency&gt;
   &lt;groupId&gt;org.seleniumhq.selenium&lt;/groupId&gt;
   &lt;artifactId&gt;selenium-java&lt;/artifactId&gt;
   &lt;version&gt;2.9.0&lt;/version&gt;
   &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;</pre></div>
+&lt;/dependency&gt;
+</pre></div>
 <p>Create a normal groovy script in <tt>src/test/rexsl/scripts</tt> directory:</p>
+
 <div class="source">
 <pre>/foo
   pom.xml
@@ -153,8 +154,10 @@
     /test
       /rexsl
         /scripts
-          WithSelenium.groovy</pre></div>
+          WithSelenium.groovy
+</pre></div>
 <p>Implement test scenario in it, for example:</p>
+
 <div class="source">
 <pre>import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
@@ -162,7 +165,8 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
 def driver = new HtmlUnitDriver()
 driver.navigate().to(rexsl.home.toString())
-MatcherAssert.assertThat(driver.getTitle(), Matchers.equalTo('home'))</pre></div></div>
+MatcherAssert.assertThat(driver.getTitle(), Matchers.equalTo('home'))
+</pre></div>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;

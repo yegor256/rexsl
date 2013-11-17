@@ -104,7 +104,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
@@ -129,8 +129,8 @@
                                     </ul>
                         <p>
                 
-                20-Oct-2013
-                0.6
+                17-Nov-2013
+                0.8
             </p>
             <article>
                 
@@ -140,11 +140,11 @@
       
 <p><b>Full name</b>:</p>
       
-<p>com.rexsl:rexsl-maven-plugin:0.6:check</p>
+<p>com.rexsl:rexsl-maven-plugin:0.8:check</p>
       
 <p><b>Description</b>:</p>
       
-<div>Test entire project against RESTful principles.</div>
+<div>Test the entire project against RESTful principles.</div>
       
 <p><b>Attributes</b>:</p>
       
@@ -156,46 +156,6 @@
         
 <li>Binds by default to the <a class="externalLink" href="http://maven.apache.org/ref/current/maven-core/lifecycles.html">lifecycle phase</a>: <tt>integration-test</tt>.</li>
       </ul>
-      
-<div class="section">
-<h3>Required Parameters<a name="Required_Parameters"></a></h3>
-        
-<table class="bodyTable" border="0">
-          
-<tr class="a">
-            
-<th>Name</th>
-            
-<th>Type</th>
-            
-<th>Since</th>
-            
-<th>Description</th>
-          </tr>
-          
-<tr class="b">
-            
-<td><b><a href="#skip">skip</a></b></td>
-            
-<td><tt>boolean</tt></td>
-            
-<td><tt>-</tt></td>
-            
-<td>Shall we skip execution?<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>rexsl.skip</tt>.</td>
-          </tr>
-          
-<tr class="a">
-            
-<td><b><a href="#webappDirectory">webappDirectory</a></b></td>
-            
-<td><tt>String</tt></td>
-            
-<td><tt>-</tt></td>
-            
-<td>Webapp directory.<br /><b>Default value is</b>: <tt>${project.build.directory}/${project.build.finalName}</tt>.<br /><b>User property is</b>: <tt>rexsl.webappDirectory</tt>.</td>
-          </tr>
-        </table>
-      </div>
       
 <div class="section">
 <h3>Optional Parameters<a name="Optional_Parameters"></a></h3>
@@ -242,6 +202,17 @@ available checks, for example: <tt>mvn rexsl:check
           
 <tr class="b">
             
+<td><b><a href="#skip">skip</a></b></td>
+            
+<td><tt>boolean</tt></td>
+            
+<td><tt>-</tt></td>
+            
+<td>Shall we skip execution?<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>rexsl.skip</tt>.</td>
+          </tr>
+          
+<tr class="a">
+            
 <td><b><a href="#skipTests">skipTests</a></b></td>
             
 <td><tt>boolean</tt></td>
@@ -251,7 +222,7 @@ available checks, for example: <tt>mvn rexsl:check
 <td>Skip all tests.<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>skipTests</tt>.</td>
           </tr>
           
-<tr class="a">
+<tr class="b">
             
 <td><b><a href="#systemPropertyVariables">systemPropertyVariables</a></b></td>
             
@@ -278,7 +249,7 @@ for example you want to reconfigure LOG4J just for the tests:</p>
 </pre></div><br /></td>
           </tr>
           
-<tr class="b">
+<tr class="a">
             
 <td><b><a href="#test">test</a></b></td>
             
@@ -288,6 +259,17 @@ for example you want to reconfigure LOG4J just for the tests:</p>
             
 <td>Regular expression that determines tests (<tt>groovy</tt>,
 <tt>xml</tt>, etc.) to be executed during test.<br /><b>Default value is</b>: <tt>.*</tt>.<br /><b>User property is</b>: <tt>rexsl.test</tt>.</td>
+          </tr>
+          
+<tr class="b">
+            
+<td><b><a href="#webappDirectory">webappDirectory</a></b></td>
+            
+<td><tt>String</tt></td>
+            
+<td><tt>-</tt></td>
+            
+<td>Webapp directory.<br /><b>Default value is</b>: <tt>${project.build.directory}/${project.build.finalName}</tt>.<br /><b>User property is</b>: <tt>rexsl.webappDirectory</tt>.</td>
           </tr>
         </table>
       </div>
@@ -334,7 +316,7 @@ available checks, for example: <tt>mvn rexsl:check
           
 <li><b>Type</b>: <tt>boolean</tt></li>
           
-<li><b>Required</b>: <tt>Yes</tt></li>
+<li><b>Required</b>: <tt>No</tt></li>
           
 <li><b>User Property</b>: <tt>rexsl.skip</tt></li>
           
@@ -409,7 +391,7 @@ for example you want to reconfigure LOG4J just for the tests:</p>
           
 <li><b>Type</b>: <tt>java.lang.String</tt></li>
           
-<li><b>Required</b>: <tt>Yes</tt></li>
+<li><b>Required</b>: <tt>No</tt></li>
           
 <li><b>User Property</b>: <tt>rexsl.webappDirectory</tt></li>
           
