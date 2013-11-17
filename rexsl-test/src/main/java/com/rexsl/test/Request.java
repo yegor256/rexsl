@@ -39,8 +39,7 @@ import javax.validation.constraints.NotNull;
  * <p>Instance of this class is supposed to be used this way:
  *
  * <pre> String name = new ApacheRequest("https://www.example.com:8080")
- *   .uri().path("/users").queryParam("id", 333)
- *   .back()
+ *   .uri().path("/users").queryParam("id", 333).back()
  *   .method(Request.GET)
  *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
  *   .fetch()
@@ -49,6 +48,7 @@ import javax.validation.constraints.NotNull;
  *   .as(XmlResponse.class)
  *   .assertXPath("/page/links/link[@rel='see']")
  *   .rel("/page/links/link[@rel='see']/@href")
+ *   .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
  *   .fetch()
  *   .as(JsonResponse.class)
  *   .json().getJsonObject().getString("name");</pre>
