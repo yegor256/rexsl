@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,6 +44,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Web Linking response.
@@ -51,10 +52,11 @@ import lombok.EqualsAndHashCode;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.9
- * @see <a href="http://tools.ietf.org/html/rfc5988">RFC 5988</>
+ * @see <a href="http://tools.ietf.org/html/rfc5988">RFC 5988</a>
  */
 @Immutable
 @EqualsAndHashCode(callSuper = true)
+@SuppressWarnings("PMD.TooManyMethods")
 public final class WebLinkingResponse extends AbstractResponse {
 
     /**
@@ -68,13 +70,6 @@ public final class WebLinkingResponse extends AbstractResponse {
     private static final String REL = "rel";
 
     /**
-     * Pattern to match link value.
-     */
-    private static final Pattern PTN = Pattern.compile(
-        "<([^>])>(?:;([a-z]+)=([^;]+))*"
-    );
-
-    /**
      * Public ctor.
      * @param resp Response
      */
@@ -84,12 +79,13 @@ public final class WebLinkingResponse extends AbstractResponse {
     }
 
     /**
-     * Follow link by REL.
+     * Get link by REL.
      * @param rel Relation name
-     * @return The same object
+     * @return Link, if found
+     * @throws IOException If fails
      */
-    @NotNull(message = "response is never NULL")
-    public Request follow(@NotNull(message = "rel can't be NULL")
+    @NotNull(message = "link is never NULL")
+    public WebLinkingResponse.Link link(@NotNull(message = "rel can't be NULL")
         final String rel) throws IOException {
         WebLinkingResponse.Link link = null;
         for (final WebLinkingResponse.Link candidate : this.links()) {
@@ -107,13 +103,26 @@ public final class WebLinkingResponse extends AbstractResponse {
                 )
             );
         }
-        return new RestResponse(this).jump(link.uri());
+        return link;
+    }
+
+    /**
+     * Follow link by REL.
+     * @param rel Relation name
+     * @return The same object
+     * @throws IOException If fails
+     */
+    @NotNull(message = "response is never NULL")
+    public Request follow(@NotNull(message = "rel can't be NULL")
+        final String rel) throws IOException {
+        return new RestResponse(this).jump(this.link(rel).uri());
     }
 
     /**
      * Link with this REL exists?
      * @param rel Relation name
      * @return TRUE if exists
+     * @throws IOException If fails
      */
     public boolean hasLink(@NotNull(message = "rel can't be NULL")
         final String rel) throws IOException {
@@ -134,13 +143,17 @@ public final class WebLinkingResponse extends AbstractResponse {
      * @throws IOException If fails
      */
     @NotNull(message = "list of links is never NULL")
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Collection<WebLinkingResponse.Link> links() throws IOException {
         final Collection<WebLinkingResponse.Link> links =
             new LinkedList<WebLinkingResponse.Link>();
-        final Map<String, List<String>> headers = this.headers();
-        if (headers.containsKey(WebLinkingResponse.HEADER)) {
-            for (final String header : headers.get(WebLinkingResponse.HEADER)) {
-                links.add(new WebLinkingResponse.SimpleLink(header.trim()));
+        final Collection<String> headers =
+            this.headers().get(WebLinkingResponse.HEADER);
+        if (headers != null) {
+            for (final String header : headers) {
+                for (final String part : header.split(",")) {
+                    links.add(new WebLinkingResponse.SimpleLink(part.trim()));
+                }
             }
         }
         return links;
@@ -168,7 +181,7 @@ public final class WebLinkingResponse extends AbstractResponse {
          * Pattern to match link value.
          */
         private static final Pattern PTN = Pattern.compile(
-            "<([^>]+)>\\s*(?:;\\s*([a-z]+)\\s*=\\s*([^;]+))*"
+            "<([^>]+)>\\s*;(.*)"
         );
         /**
          * URI encapsulated.
@@ -197,8 +210,13 @@ public final class WebLinkingResponse extends AbstractResponse {
                 );
             }
             this.addr = matcher.group(1);
-            for (int idx = 1; idx < matcher.groupCount(); idx += 2) {
-                args.put(matcher.group(idx), matcher.group(idx + 1));
+            for (final String pair
+                : matcher.group(2).trim().split("\\s*;\\s*")) {
+                final String[] parts = pair.split("=");
+                args.put(
+                    parts[0].trim().toLowerCase(Locale.ENGLISH),
+                    StringUtils.strip(parts[1].trim(), "\"")
+                );
             }
             this.params = new ArrayMap<String, String>(args);
         }

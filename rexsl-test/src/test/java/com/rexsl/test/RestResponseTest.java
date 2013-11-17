@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import java.net.HttpURLConnection;
+import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -126,6 +127,22 @@ public final class RestResponseTest {
         response.follow()
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * RestResponse can jump to a relative URL.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void jumpsToRelativeUrls() throws Exception {
+        MatcherAssert.assertThat(
+            new RestResponse(
+                new ResponseMocker()
+                    .with(new JdkRequest("http://locahost:888/tt"))
+                    .mock()
+            ).jump(new URI("/foo/bar?hey")).uri().get(),
+            Matchers.hasToString("http://locahost:888/foo/bar?hey")
+        );
     }
 
 }

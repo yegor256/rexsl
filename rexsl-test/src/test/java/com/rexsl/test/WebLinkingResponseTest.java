@@ -33,13 +33,13 @@ import java.net.URI;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 /**
  * Test case for {@link WebLinkingResponse}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.9
+ * @checkstyle MultipleStringLiterals (500 lines)
  */
 public final class WebLinkingResponseTest {
 
@@ -48,20 +48,32 @@ public final class WebLinkingResponseTest {
      * @throws Exception If something goes wrong inside
      */
     @Test
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void parsesLinksInHeaders() throws Exception {
-        final WebLinkingResponse response = new WebLinkingResponse(
-            new ResponseMocker()
-                .withHeader("Link", "</hey/foo>; rel=\"foo\"")
-                .mock()
-        );
-        MatcherAssert.assertThat(
-            response.hasLink("foo"),
-            Matchers.is(true)
-        );
-        MatcherAssert.assertThat(
-            response.hasLink("another one"),
-            Matchers.is(false)
-        );
+        final String[] headers = {
+            "</hey/foo>; title=\"Hi!\"; rel=foo",
+            "</hey/foo>; title=\"\u20ac\"; rel=\"foo\"; media=\"text/xml\"",
+        };
+        for (final String header : headers) {
+            final WebLinkingResponse response = new WebLinkingResponse(
+                new ResponseMocker()
+                    .withHeader("Link", header)
+                    .mock()
+            );
+            final WebLinkingResponse.Link link = response.link("foo");
+            MatcherAssert.assertThat(
+                link.uri(),
+                Matchers.hasToString("/hey/foo")
+            );
+            MatcherAssert.assertThat(
+                link,
+                Matchers.hasKey("title")
+            );
+            MatcherAssert.assertThat(
+                response.hasLink("another one"),
+                Matchers.is(false)
+            );
+        }
     }
 
     /**
@@ -70,21 +82,22 @@ public final class WebLinkingResponseTest {
      */
     @Test
     public void followsLinksInHeaders() throws Exception {
-        final Request request = Mockito.mock(Request.class);
         final WebLinkingResponse response = new WebLinkingResponse(
             new ResponseMocker()
-                .with(request)
-                .withHeader("Link", "</hey/foo>; rel=\"first\"")
-                .withHeader("Link", "<http://localhost/oops>; rel=\"second\"")
+                .with(new JdkRequest("http://localhost/test"))
+                .withHeader(
+                    "Link",
+                    "</a>; rel=\"first\", <http://localhost/o>; rel=\"second\""
+                )
                 .mock()
         );
         MatcherAssert.assertThat(
             response.follow("first").uri().get(),
-            Matchers.equalTo(new URI("http://localhost/test/hey/foo"))
+            Matchers.equalTo(new URI("http://localhost/a"))
         );
         MatcherAssert.assertThat(
-            response.follow("first").uri().get(),
-            Matchers.equalTo(new URI("http://localhost/test/hey/foo"))
+            response.follow("second").uri().get(),
+            Matchers.equalTo(new URI("http://localhost/o"))
         );
     }
 
