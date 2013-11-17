@@ -7,7 +7,7 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl-test - </title>
+        <title>rexsl-w3c - </title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
                                                                                                                         
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
@@ -44,7 +44,7 @@
                     Overview
                                             <ul>
                                                                             <li>
-                                            <strong>                        <a href="index.html" title="RESTful Client">RESTful Client</a>
+                                            <strong>                        <a href="index.html" title="Introduction">Introduction</a>
         </strong>
                                                                                                                 <ul>
                                                     </ul>
@@ -67,31 +67,6 @@
                                                                 </ul>
                                     </li>
                             <li>
-                    Examples
-                                            <ul>
-                                                                            <li>
-                                                                    <a href="example-request.html" title="Make HTTP Request">Make HTTP Request</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="example-xml-response.html" title="XML Response">XML Response</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="example-json-response.html" title="JSON Response">JSON Response</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="example-matchers.html" title="XML/XHTML Matchers">XML/XHTML Matchers</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                            <li>
                     Project Documentation
                                             <ul>
                                                                             <li>
@@ -104,7 +79,7 @@
                                     </li>
                     </ul>
         <div id="content">
-                            <a href="https://github.com/yegor256/rexsl/rexsl-test">
+                            <a href="https://github.com/yegor256/rexsl/rexsl-w3c">
                     <img style="position: absolute; top: 0; right: 0; border: 0; width: 100px; height: 100px;"
                         src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
                         alt="Fork me on GitHub" />
@@ -119,7 +94,7 @@
                             <ul id="breadcrumbs">
                                             <li>                        <a href=".." title="rexsl.com">rexsl.com</a>
         </li>
-                                            <li>                                    <a href="./" title="rexsl-test">rexsl-test</a>
+                                            <li>                                    <a href="./" title="rexsl-w3c">rexsl-w3c</a>
         </li>
                                     </ul>
                         <p>
@@ -128,64 +103,39 @@
                 0.8
             </p>
             <article>
-                <h1>RESTful Java Client</h1>
-<p>The module contains a collection of usable tools for testing of ReXSL-powered application (or any other RESTful server).</p>
-<p><a href="./apidocs-0.8/com/rexsl/test/Request.html"><tt>Request</tt></a> (implemented by <a href="./apidocs-0.8/com/rexsl/test/JdkRequest.html"><tt>JdkRequest</tt></a> and <a href="./apidocs-0.8/com/rexsl/test/ApacheRequest.html"><tt>ApacheRequest</tt></a>) is a RESTful Java client with a fluent interface:</p>
+                <h1>W3C Validator in Java</h1>
+<p>It&#x2019;s simple (see <a href="./apidocs-0.8/">JavaDoc</a> for more details):</p>
 
 <div class="source">
-<pre>public class Main {
+<pre>public class My {
   public void main() {
-    String body = new JdkRequest(&quot;http://www.rexsl.com&quot;)
-      .header(HttpHeaders.USER_AGENT, &quot;Safari 4&quot;)
-      .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
-      .fetch()
-      .as(RestResponse.class)
-      .assertStatus(HttpURLConnection.HTTP_OK)
-      .assertBody(Matchers.containsString(&quot;ReXSL&quot;))
-      .as(XmlResponse.class)
-      .assertXPath(&quot;//xhtml:body&quot;)
-      .body();
+    String xhtml = &quot;&lt;html&gt;&lt;body&gt;&lt;p&gt;Hello, world!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;;
+    ValidationResponse response = new ValidatorBuilder().html().validate(xhtml);
+    assert response.valid();
   }
 }
 </pre></div>
-<p>The beauty of this RESTful Java client (comparing to others) is that it retrieves data and makes test assertions at the same time. Your integration tests will automatically validate your RESTful client against the contract (API) of the server.</p>
-<p>Other important classes in this module:</p>
+<p>Similar mechanism for CSS:</p>
 
-<ul>
-  
-<li>
-<p><a href="./apidocs-0.8/com/rexsl/test/JaxbConverter.html"><tt>JaxbConverter</tt></a>  convenient JAXB-to-XML converter;</p></li>
-  
-<li>
-<p><a href="./apidocs-0.8/com/rexsl/test/XhtmlMatchers.html"><tt>XhtmlMatchers</tt></a>  XML/XHTML Hamcrest matchers.</p></li>
-</ul>
-<p>Include this dependency into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-test/0.8/rexsl-test-0.8.jar"><tt>rexsl-test-0.8.jar</tt></a> and add to classpath):</p>
+<div class="source">
+<pre>public class My {
+  public void main() {
+    String css = &quot;body { font-family: Arial; }&quot;;
+    ValidationResponse response = new ValidatorBuilder().css().validate(css);
+    assert response.valid();
+  }
+}
+</pre></div>
+<p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-w3c/0.8/"><tt>rexsl-w3c.jar</tt></a>):</p>
 
 <div class="source">
 <pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
-  &lt;artifactId&gt;rexsl-test&lt;/artifactId&gt;
+  &lt;artifactId&gt;rexsl-w3c&lt;/artifactId&gt;
   &lt;version&gt;0.8&lt;/version&gt;
-  &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;
 </pre></div>
-<p>This RESTful Java client module also contains a very useful Mocking tool in <a href="./testapidocs-0.8/com/rexsl/test/ContainerMocker.html"><tt>ContainerMocker</tt></a>. To use it you should include this dependencies into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-test/0.8/rexsl-test-0.8-mock.jar"><tt>rexsl-test-0.8-mock.jar</tt></a> and add to classpath):</p>
-
-<div class="source">
-<pre>&lt;dependency&gt;
-  &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
-  &lt;artifactId&gt;rexsl-test&lt;/artifactId&gt;
-  &lt;version&gt;0.8&lt;/version&gt;
-  &lt;classifier&gt;mock&lt;/classifier&gt;
-  &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-  &lt;groupId&gt;com.sun.grizzly&lt;/groupId&gt;
-  &lt;artifactId&gt;grizzly-servlet-webserver&lt;/artifactId&gt;
-  &lt;version&gt;1.9.10&lt;/version&gt;
-  &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-</pre></div>
+<p>All events are logged through <a class="externalLink" href="http://www.slf4j.org/">slf4j</a>, using <tt>&quot;com.rexsl.w3c&quot;</tt> logger. If you want to see them, just add proper binding to classpath, as explained in <a class="externalLink" href="http://www.slf4j.org/manual.html">SLF4J manual</a>.</p>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;
