@@ -81,6 +81,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-xml</artifactId>
+            <version>0.6</version>
+        </dependency>
+        <dependency>
             <!-- ReXSL test harness -->
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
@@ -177,6 +182,13 @@
                         </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jcabi</groupId>
+                        <artifactId>jcabi-xml</artifactId>
+                        <version>0.6</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>

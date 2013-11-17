@@ -79,15 +79,12 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!-- JavaMail API 1.4 -->
             <groupId>javax.mail</groupId>
             <artifactId>mailapi</artifactId>
             <version>1.4.3</version>
@@ -140,7 +137,7 @@
         </dependency>
         <dependency>
             <!--
-            This one is used to forward Grizzly logging to SLF4J. We need it
+            This one is used to forward Jersey logging to SLF4J. We need it
             in "compile" scope.
             -->
             <groupId>org.slf4j</groupId>
@@ -151,6 +148,11 @@
         <dependency>
             <groupId>org.eclipse.jetty.orbit</groupId>
             <artifactId>javax.servlet</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-xml</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
