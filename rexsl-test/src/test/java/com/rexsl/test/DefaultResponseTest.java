@@ -30,10 +30,8 @@
 package com.rexsl.test;
 
 import com.jcabi.immutable.Array;
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.Map;
-import org.apache.commons.lang3.CharEncoding;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -48,18 +46,15 @@ public final class DefaultResponseTest {
      * DefaultResponse can throw when entity is not a Unicode text.
      * @throws Exception If something goes wrong inside
      */
-    @Test(expected = IOException.class)
+    @Test(expected = RuntimeException.class)
     public void throwsWhenEntityIsNotAUnicodeString() throws Exception {
         new DefaultResponse(
             Mockito.mock(Request.class),
             HttpURLConnection.HTTP_OK,
             "some text",
             new Array<Map.Entry<String, String>>(),
-            new String(
-                // @checkstyle MagicNumber (1 line)
-                new byte[]{(byte) 0xC0, (byte) 0xC0},
-                CharEncoding.UTF_8
-            )
+            // @checkstyle MagicNumber (1 line)
+            new byte[]{(byte) 0xC0, (byte) 0xC0}
         ).body();
     }
 

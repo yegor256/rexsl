@@ -45,7 +45,6 @@ import java.util.Map;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Implementation of {@link Request}, based on JDK.
@@ -131,19 +130,19 @@ public final class JdkRequest implements Request {
          * @return Body
          * @throws IOException
          */
-        private String body(final HttpURLConnection conn) throws IOException {
+        private byte[] body(final HttpURLConnection conn) throws IOException {
             final InputStream input;
             if (conn.getResponseCode() >= HttpURLConnection.HTTP_BAD_REQUEST) {
                 input = conn.getErrorStream();
             } else {
                 input = conn.getInputStream();
             }
-            final String body;
+            final byte[] body;
             if (input == null) {
-                body = "";
+                body = new byte[0];
             } else {
                 try {
-                    body = IOUtils.toString(input, CharEncoding.UTF_8);
+                    body = IOUtils.toByteArray(input);
                 } finally {
                     input.close();
                 }

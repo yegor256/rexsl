@@ -88,6 +88,11 @@ abstract class AbstractResponse implements Response {
         return this.response.body();
     }
 
+    @Override
+    public byte[] binary() {
+        return this.response.binary();
+    }
+
     /**
      * {@inheritDoc}
      * @checkstyle MethodName (4 lines)

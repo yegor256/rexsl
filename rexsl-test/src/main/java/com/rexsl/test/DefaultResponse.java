@@ -42,6 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -83,7 +84,7 @@ final class DefaultResponse implements Response {
     /**
      * Content received.
      */
-    private final transient String content;
+    private final transient byte[] content;
 
     /**
      * Public ctor.
@@ -97,25 +98,13 @@ final class DefaultResponse implements Response {
      */
     DefaultResponse(final Request request, final int status,
         final String reason, final Array<Map.Entry<String, String>> headers,
-        final String body) throws IOException {
+        final byte[] body) throws IOException {
         this.req = request;
         this.code = status;
         this.phrase = reason;
         this.hdrs = headers;
-        if (body.contains(DefaultResponse.ERR)) {
-            throw new IOException(
-                String.format(
-                    "broken Unicode text at line #%d in '%s' (%d bytes)",
-                    StringUtils.countMatches(
-                        "\n",
-                        body.substring(0, body.indexOf(DefaultResponse.ERR))
-                    ) + 2,
-                    body,
-                    body.getBytes().length
-                )
-            );
-        }
-        this.content = body;
+        this.content = new byte[body.length];
+        System.arraycopy(body, 0, this.content, 0, body.length);
     }
 
     @Override
@@ -148,9 +137,29 @@ final class DefaultResponse implements Response {
 
     @Override
     public String body() {
-        return this.content;
+        final String body = new String(this.content, Charsets.UTF_8);
+        if (body.contains(DefaultResponse.ERR)) {
+            throw new IllegalStateException(
+                Logger.format(
+                    "broken Unicode text at line #%d in '%[text]s' (%d bytes)",
+                    StringUtils.countMatches(
+                        "\n",
+                        body.substring(0, body.indexOf(DefaultResponse.ERR))
+                    ) + 2,
+                    body,
+                    this.content.length
+                )
+            );
+        }
+        return body;
     }
 
+    @Override
+    public byte[] binary() {
+        final byte[] bytes = new byte[this.content.length];
+        System.arraycopy(this.content, 0, bytes, 0, this.content.length);
+        return bytes;
+    }
     /**
      * {@inheritDoc}
      * @checkstyle MethodName (4 lines)
@@ -190,7 +199,7 @@ final class DefaultResponse implements Response {
             );
         }
         text.append('\n');
-        if (this.content.isEmpty()) {
+        if (this.content.length == 0) {
             text.append("<<empty response body>>");
         } else {
             text.append(this.content);
