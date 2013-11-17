@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="62" href="#62">62</a>  <em class="jxr_javadoccomment">     * Public ctor.</em>
 <a class="jxr_linenumber" name="63" href="#63">63</a>  <em class="jxr_javadoccomment">     * @param text The text of it</em>
 <a class="jxr_linenumber" name="64" href="#64">64</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="65" href="#65">65</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../com/rexsl/core/ProductVersion.html">ProductVersion</a>(<strong class="jxr_keyword">final</strong> String text) {
+<a class="jxr_linenumber" name="65" href="#65">65</a>      <a href="../../../com/rexsl/core/ProductVersion.html">ProductVersion</a>(<strong class="jxr_keyword">final</strong> String text) {
 <a class="jxr_linenumber" name="66" href="#66">66</a>          <strong class="jxr_keyword">this</strong>.origin = text;
 <a class="jxr_linenumber" name="67" href="#67">67</a>      }
 <a class="jxr_linenumber" name="68" href="#68">68</a>  
@@ -88,8 +88,8 @@
 <a class="jxr_linenumber" name="78" href="#78">78</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="79" href="#79">79</a>      <strong class="jxr_keyword">private</strong> String normalized() {
 <a class="jxr_linenumber" name="80" href="#80">80</a>          <strong class="jxr_keyword">final</strong> String[] parts = ProductVersion.SEPARATOR.split(<strong class="jxr_keyword">this</strong>.origin);
-<a class="jxr_linenumber" name="81" href="#81">81</a>          <strong class="jxr_keyword">final</strong> StringBuilder bldr = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="82" href="#82">82</a>          <strong class="jxr_keyword">for</strong> (String part : parts) {
+<a class="jxr_linenumber" name="81" href="#81">81</a>          <strong class="jxr_keyword">final</strong> StringBuilder bldr = <strong class="jxr_keyword">new</strong> StringBuilder(0);
+<a class="jxr_linenumber" name="82" href="#82">82</a>          <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> String part : parts) {
 <a class="jxr_linenumber" name="83" href="#83">83</a>              bldr.append(Logger.format(<span class="jxr_string">"%4s."</span>, part));
 <a class="jxr_linenumber" name="84" href="#84">84</a>          }
 <a class="jxr_linenumber" name="85" href="#85">85</a>          <strong class="jxr_keyword">return</strong> bldr.toString();

@@ -152,106 +152,107 @@
 <a class="jxr_linenumber" name="142" href="#142">142</a>                 )
 <a class="jxr_linenumber" name="143" href="#143">143</a>             );
 <a class="jxr_linenumber" name="144" href="#144">144</a>         }
-<a class="jxr_linenumber" name="145" href="#145">145</a>         <strong class="jxr_keyword">for</strong> (String name : StringUtils.split(param, RestfulServlet.COMMA)) {
-<a class="jxr_linenumber" name="146" href="#146">146</a>             <strong class="jxr_keyword">final</strong> String pkg = name.trim();
-<a class="jxr_linenumber" name="147" href="#147">147</a>             <strong class="jxr_keyword">final</strong> Pattern ptrn = Pattern.compile(
-<a class="jxr_linenumber" name="148" href="#148">148</a>                 <span class="jxr_string">"^([a-z_]{1}[a-z0-9_]*(&#92;&#92;.[a-z_]{1}[a-z0-9_]*)*)$"</span>
-<a class="jxr_linenumber" name="149" href="#149">149</a>             );
-<a class="jxr_linenumber" name="150" href="#150">150</a>             <strong class="jxr_keyword">final</strong> Matcher match = ptrn.matcher(pkg);
-<a class="jxr_linenumber" name="151" href="#151">151</a>             <strong class="jxr_keyword">if</strong> (!match.matches()) {
-<a class="jxr_linenumber" name="152" href="#152">152</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ServletException(
-<a class="jxr_linenumber" name="153" href="#153">153</a>                     Logger.format(
-<a class="jxr_linenumber" name="154" href="#154">154</a>                         <em class="jxr_comment">// @checkstyle LineLength (1 line)</em>
-<a class="jxr_linenumber" name="155" href="#155">155</a>                         <span class="jxr_string">"'%s' servlet parameter contains non-valid data: %s"</span>,
-<a class="jxr_linenumber" name="156" href="#156">156</a>                         RestfulServlet.PACKAGES,
-<a class="jxr_linenumber" name="157" href="#157">157</a>                         pkg
-<a class="jxr_linenumber" name="158" href="#158">158</a>                     )
-<a class="jxr_linenumber" name="159" href="#159">159</a>                 );
-<a class="jxr_linenumber" name="160" href="#160">160</a>             }
-<a class="jxr_linenumber" name="161" href="#161">161</a>             packages.add(pkg);
-<a class="jxr_linenumber" name="162" href="#162">162</a>             Logger.info(
-<a class="jxr_linenumber" name="163" href="#163">163</a>                 <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="164" href="#164">164</a>                 <span class="jxr_string">"#init(): '%s' package added (%d total)"</span>,
-<a class="jxr_linenumber" name="165" href="#165">165</a>                 pkg,
-<a class="jxr_linenumber" name="166" href="#166">166</a>                 packages.size()
-<a class="jxr_linenumber" name="167" href="#167">167</a>             );
-<a class="jxr_linenumber" name="168" href="#168">168</a>         }
-<a class="jxr_linenumber" name="169" href="#169">169</a>         <strong class="jxr_keyword">final</strong> Properties props = <strong class="jxr_keyword">new</strong> Properties();
-<a class="jxr_linenumber" name="170" href="#170">170</a>         props.setProperty(
-<a class="jxr_linenumber" name="171" href="#171">171</a>             PackagesResourceConfig.PROPERTY_PACKAGES,
-<a class="jxr_linenumber" name="172" href="#172">172</a>             StringUtils.join(packages, RestfulServlet.COMMA)
-<a class="jxr_linenumber" name="173" href="#173">173</a>         );
-<a class="jxr_linenumber" name="174" href="#174">174</a>         <strong class="jxr_keyword">this</strong>.reconfigureJUL();
-<a class="jxr_linenumber" name="175" href="#175">175</a>         <strong class="jxr_keyword">final</strong> FilterConfig cfg = <strong class="jxr_keyword">new</strong> <a href="../../../com/rexsl/core/ServletConfigWrapper.html">ServletConfigWrapper</a>(config, props);
-<a class="jxr_linenumber" name="176" href="#176">176</a>         <strong class="jxr_keyword">this</strong>.jersey.init(cfg);
-<a class="jxr_linenumber" name="177" href="#177">177</a>     }
-<a class="jxr_linenumber" name="178" href="#178">178</a> 
-<a class="jxr_linenumber" name="179" href="#179">179</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="180" href="#180">180</a> <em class="jxr_javadoccomment">     * Get jersey servlet, before serialization.</em>
-<a class="jxr_linenumber" name="181" href="#181">181</a> <em class="jxr_javadoccomment">     * @return The servlet</em>
-<a class="jxr_linenumber" name="182" href="#182">182</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="183" href="#183">183</a>     @NotNull
-<a class="jxr_linenumber" name="184" href="#184">184</a>     <strong class="jxr_keyword">public</strong> ServletContainer getJersey() {
-<a class="jxr_linenumber" name="185" href="#185">185</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.jersey;
-<a class="jxr_linenumber" name="186" href="#186">186</a>     }
-<a class="jxr_linenumber" name="187" href="#187">187</a> 
-<a class="jxr_linenumber" name="188" href="#188">188</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="189" href="#189">189</a> <em class="jxr_javadoccomment">     * Set jersey servlet, after de-serialization.</em>
-<a class="jxr_linenumber" name="190" href="#190">190</a> <em class="jxr_javadoccomment">     * @param servlet The servlet to set</em>
-<a class="jxr_linenumber" name="191" href="#191">191</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="192" href="#192">192</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setJersey(@NotNull <strong class="jxr_keyword">final</strong> ServletContainer servlet) {
-<a class="jxr_linenumber" name="193" href="#193">193</a>         <strong class="jxr_keyword">this</strong>.jersey = servlet;
-<a class="jxr_linenumber" name="194" href="#194">194</a>     }
-<a class="jxr_linenumber" name="195" href="#195">195</a> 
-<a class="jxr_linenumber" name="196" href="#196">196</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="197" href="#197">197</a> <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
-<a class="jxr_linenumber" name="198" href="#198">198</a> <em class="jxr_javadoccomment">     * @checkstyle ThrowsCount (6 lines)</em>
-<a class="jxr_linenumber" name="199" href="#199">199</a> <em class="jxr_javadoccomment">     * @checkstyle RedundantThrows (5 lines)</em>
-<a class="jxr_linenumber" name="200" href="#200">200</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="201" href="#201">201</a>     @Override
-<a class="jxr_linenumber" name="202" href="#202">202</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> service(<strong class="jxr_keyword">final</strong> HttpServletRequest request,
-<a class="jxr_linenumber" name="203" href="#203">203</a>         <strong class="jxr_keyword">final</strong> HttpServletResponse response)
-<a class="jxr_linenumber" name="204" href="#204">204</a>         <strong class="jxr_keyword">throws</strong> ServletException, IOException {
-<a class="jxr_linenumber" name="205" href="#205">205</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> start = System.currentTimeMillis();
-<a class="jxr_linenumber" name="206" href="#206">206</a>         <strong class="jxr_keyword">this</strong>.jersey.service(request, response);
-<a class="jxr_linenumber" name="207" href="#207">207</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> duration = System.currentTimeMillis() - start;
-<a class="jxr_linenumber" name="208" href="#208">208</a>         <strong class="jxr_keyword">if</strong> (duration &gt; TimeUnit.SECONDS.toMillis(1)) {
-<a class="jxr_linenumber" name="209" href="#209">209</a>             Logger.warn(
-<a class="jxr_linenumber" name="210" href="#210">210</a>                 <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="211" href="#211">211</a>                 <span class="jxr_string">"#service(%s %s): %[ms]s is too slow (IP=%s)"</span>,
-<a class="jxr_linenumber" name="212" href="#212">212</a>                 request.getMethod(),
-<a class="jxr_linenumber" name="213" href="#213">213</a>                 request.getRequestURI(),
-<a class="jxr_linenumber" name="214" href="#214">214</a>                 duration,
-<a class="jxr_linenumber" name="215" href="#215">215</a>                 request.getRemoteAddr()
-<a class="jxr_linenumber" name="216" href="#216">216</a>             );
-<a class="jxr_linenumber" name="217" href="#217">217</a>         }
-<a class="jxr_linenumber" name="218" href="#218">218</a>         response.addHeader(<span class="jxr_string">"X-Rexsl-Millis"</span>, Long.toString(duration));
-<a class="jxr_linenumber" name="219" href="#219">219</a>         response.addHeader(
-<a class="jxr_linenumber" name="220" href="#220">220</a>             <span class="jxr_string">"X-Rexsl-Version"</span>,
-<a class="jxr_linenumber" name="221" href="#221">221</a>             String.format(
-<a class="jxr_linenumber" name="222" href="#222">222</a>                 <span class="jxr_string">"%s/r%s"</span>,
-<a class="jxr_linenumber" name="223" href="#223">223</a>                 Manifests.read(<span class="jxr_string">"ReXSL-Version"</span>),
-<a class="jxr_linenumber" name="224" href="#224">224</a>                 Manifests.read(<span class="jxr_string">"ReXSL-Build"</span>)
-<a class="jxr_linenumber" name="225" href="#225">225</a>             )
-<a class="jxr_linenumber" name="226" href="#226">226</a>         );
-<a class="jxr_linenumber" name="227" href="#227">227</a>     }
-<a class="jxr_linenumber" name="228" href="#228">228</a> 
-<a class="jxr_linenumber" name="229" href="#229">229</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="230" href="#230">230</a> <em class="jxr_javadoccomment">     * Initialize JUL-to-SLF4J bridge.</em>
-<a class="jxr_linenumber" name="231" href="#231">231</a> <em class="jxr_javadoccomment">     * @see #init(ServletConfig)</em>
-<a class="jxr_linenumber" name="232" href="#232">232</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="233" href="#233">233</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> reconfigureJUL() {
-<a class="jxr_linenumber" name="234" href="#234">234</a>         <strong class="jxr_keyword">final</strong> java.util.logging.Logger rootLogger =
-<a class="jxr_linenumber" name="235" href="#235">235</a>             java.util.logging.LogManager.getLogManager().getLogger(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="236" href="#236">236</a>         <strong class="jxr_keyword">final</strong> Handler[] handlers = rootLogger.getHandlers();
-<a class="jxr_linenumber" name="237" href="#237">237</a>         <strong class="jxr_keyword">for</strong> (Handler handler : handlers) {
-<a class="jxr_linenumber" name="238" href="#238">238</a>             rootLogger.removeHandler(handler);
-<a class="jxr_linenumber" name="239" href="#239">239</a>         }
-<a class="jxr_linenumber" name="240" href="#240">240</a>         org.slf4j.bridge.SLF4JBridgeHandler.install();
-<a class="jxr_linenumber" name="241" href="#241">241</a>         Logger.debug(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"#julToSlf4j(): JUL forwarded to SLF4j"</span>);
-<a class="jxr_linenumber" name="242" href="#242">242</a>     }
-<a class="jxr_linenumber" name="243" href="#243">243</a> 
-<a class="jxr_linenumber" name="244" href="#244">244</a> }
+<a class="jxr_linenumber" name="145" href="#145">145</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> String name
+<a class="jxr_linenumber" name="146" href="#146">146</a>             : StringUtils.split(param, RestfulServlet.COMMA)) {
+<a class="jxr_linenumber" name="147" href="#147">147</a>             <strong class="jxr_keyword">final</strong> String pkg = name.trim();
+<a class="jxr_linenumber" name="148" href="#148">148</a>             <strong class="jxr_keyword">final</strong> Pattern ptrn = Pattern.compile(
+<a class="jxr_linenumber" name="149" href="#149">149</a>                 <span class="jxr_string">"^([a-z_]{1}[a-z0-9_]*(&#92;&#92;.[a-z_]{1}[a-z0-9_]*)*)$"</span>
+<a class="jxr_linenumber" name="150" href="#150">150</a>             );
+<a class="jxr_linenumber" name="151" href="#151">151</a>             <strong class="jxr_keyword">final</strong> Matcher match = ptrn.matcher(pkg);
+<a class="jxr_linenumber" name="152" href="#152">152</a>             <strong class="jxr_keyword">if</strong> (!match.matches()) {
+<a class="jxr_linenumber" name="153" href="#153">153</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ServletException(
+<a class="jxr_linenumber" name="154" href="#154">154</a>                     Logger.format(
+<a class="jxr_linenumber" name="155" href="#155">155</a>                         <em class="jxr_comment">// @checkstyle LineLength (1 line)</em>
+<a class="jxr_linenumber" name="156" href="#156">156</a>                         <span class="jxr_string">"'%s' servlet parameter contains non-valid data: %s"</span>,
+<a class="jxr_linenumber" name="157" href="#157">157</a>                         RestfulServlet.PACKAGES,
+<a class="jxr_linenumber" name="158" href="#158">158</a>                         pkg
+<a class="jxr_linenumber" name="159" href="#159">159</a>                     )
+<a class="jxr_linenumber" name="160" href="#160">160</a>                 );
+<a class="jxr_linenumber" name="161" href="#161">161</a>             }
+<a class="jxr_linenumber" name="162" href="#162">162</a>             packages.add(pkg);
+<a class="jxr_linenumber" name="163" href="#163">163</a>             Logger.info(
+<a class="jxr_linenumber" name="164" href="#164">164</a>                 <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="165" href="#165">165</a>                 <span class="jxr_string">"#init(): '%s' package added (%d total)"</span>,
+<a class="jxr_linenumber" name="166" href="#166">166</a>                 pkg,
+<a class="jxr_linenumber" name="167" href="#167">167</a>                 packages.size()
+<a class="jxr_linenumber" name="168" href="#168">168</a>             );
+<a class="jxr_linenumber" name="169" href="#169">169</a>         }
+<a class="jxr_linenumber" name="170" href="#170">170</a>         <strong class="jxr_keyword">final</strong> Properties props = <strong class="jxr_keyword">new</strong> Properties();
+<a class="jxr_linenumber" name="171" href="#171">171</a>         props.setProperty(
+<a class="jxr_linenumber" name="172" href="#172">172</a>             PackagesResourceConfig.PROPERTY_PACKAGES,
+<a class="jxr_linenumber" name="173" href="#173">173</a>             StringUtils.join(packages, RestfulServlet.COMMA)
+<a class="jxr_linenumber" name="174" href="#174">174</a>         );
+<a class="jxr_linenumber" name="175" href="#175">175</a>         <strong class="jxr_keyword">this</strong>.reconfigureJUL();
+<a class="jxr_linenumber" name="176" href="#176">176</a>         <strong class="jxr_keyword">final</strong> FilterConfig cfg = <strong class="jxr_keyword">new</strong> <a href="../../../com/rexsl/core/ServletConfigWrapper.html">ServletConfigWrapper</a>(config, props);
+<a class="jxr_linenumber" name="177" href="#177">177</a>         <strong class="jxr_keyword">this</strong>.jersey.init(cfg);
+<a class="jxr_linenumber" name="178" href="#178">178</a>     }
+<a class="jxr_linenumber" name="179" href="#179">179</a> 
+<a class="jxr_linenumber" name="180" href="#180">180</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="181" href="#181">181</a> <em class="jxr_javadoccomment">     * Get jersey servlet, before serialization.</em>
+<a class="jxr_linenumber" name="182" href="#182">182</a> <em class="jxr_javadoccomment">     * @return The servlet</em>
+<a class="jxr_linenumber" name="183" href="#183">183</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="184" href="#184">184</a>     @NotNull
+<a class="jxr_linenumber" name="185" href="#185">185</a>     <strong class="jxr_keyword">public</strong> ServletContainer getJersey() {
+<a class="jxr_linenumber" name="186" href="#186">186</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.jersey;
+<a class="jxr_linenumber" name="187" href="#187">187</a>     }
+<a class="jxr_linenumber" name="188" href="#188">188</a> 
+<a class="jxr_linenumber" name="189" href="#189">189</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="190" href="#190">190</a> <em class="jxr_javadoccomment">     * Set jersey servlet, after de-serialization.</em>
+<a class="jxr_linenumber" name="191" href="#191">191</a> <em class="jxr_javadoccomment">     * @param servlet The servlet to set</em>
+<a class="jxr_linenumber" name="192" href="#192">192</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="193" href="#193">193</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setJersey(@NotNull <strong class="jxr_keyword">final</strong> ServletContainer servlet) {
+<a class="jxr_linenumber" name="194" href="#194">194</a>         <strong class="jxr_keyword">this</strong>.jersey = servlet;
+<a class="jxr_linenumber" name="195" href="#195">195</a>     }
+<a class="jxr_linenumber" name="196" href="#196">196</a> 
+<a class="jxr_linenumber" name="197" href="#197">197</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="198" href="#198">198</a> <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
+<a class="jxr_linenumber" name="199" href="#199">199</a> <em class="jxr_javadoccomment">     * @checkstyle ThrowsCount (6 lines)</em>
+<a class="jxr_linenumber" name="200" href="#200">200</a> <em class="jxr_javadoccomment">     * @checkstyle RedundantThrows (5 lines)</em>
+<a class="jxr_linenumber" name="201" href="#201">201</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="202" href="#202">202</a>     @Override
+<a class="jxr_linenumber" name="203" href="#203">203</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> service(<strong class="jxr_keyword">final</strong> HttpServletRequest request,
+<a class="jxr_linenumber" name="204" href="#204">204</a>         <strong class="jxr_keyword">final</strong> HttpServletResponse response)
+<a class="jxr_linenumber" name="205" href="#205">205</a>         <strong class="jxr_keyword">throws</strong> ServletException, IOException {
+<a class="jxr_linenumber" name="206" href="#206">206</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> start = System.currentTimeMillis();
+<a class="jxr_linenumber" name="207" href="#207">207</a>         <strong class="jxr_keyword">this</strong>.jersey.service(request, response);
+<a class="jxr_linenumber" name="208" href="#208">208</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> duration = System.currentTimeMillis() - start;
+<a class="jxr_linenumber" name="209" href="#209">209</a>         <strong class="jxr_keyword">if</strong> (duration &gt; TimeUnit.SECONDS.toMillis(1L)) {
+<a class="jxr_linenumber" name="210" href="#210">210</a>             Logger.warn(
+<a class="jxr_linenumber" name="211" href="#211">211</a>                 <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="212" href="#212">212</a>                 <span class="jxr_string">"#service(%s %s): %[ms]s is too slow (IP=%s)"</span>,
+<a class="jxr_linenumber" name="213" href="#213">213</a>                 request.getMethod(),
+<a class="jxr_linenumber" name="214" href="#214">214</a>                 request.getRequestURI(),
+<a class="jxr_linenumber" name="215" href="#215">215</a>                 duration,
+<a class="jxr_linenumber" name="216" href="#216">216</a>                 request.getRemoteAddr()
+<a class="jxr_linenumber" name="217" href="#217">217</a>             );
+<a class="jxr_linenumber" name="218" href="#218">218</a>         }
+<a class="jxr_linenumber" name="219" href="#219">219</a>         response.addHeader(<span class="jxr_string">"X-Rexsl-Millis"</span>, Long.toString(duration));
+<a class="jxr_linenumber" name="220" href="#220">220</a>         response.addHeader(
+<a class="jxr_linenumber" name="221" href="#221">221</a>             <span class="jxr_string">"X-Rexsl-Version"</span>,
+<a class="jxr_linenumber" name="222" href="#222">222</a>             String.format(
+<a class="jxr_linenumber" name="223" href="#223">223</a>                 <span class="jxr_string">"%s/r%s"</span>,
+<a class="jxr_linenumber" name="224" href="#224">224</a>                 Manifests.read(<span class="jxr_string">"ReXSL-Version"</span>),
+<a class="jxr_linenumber" name="225" href="#225">225</a>                 Manifests.read(<span class="jxr_string">"ReXSL-Build"</span>)
+<a class="jxr_linenumber" name="226" href="#226">226</a>             )
+<a class="jxr_linenumber" name="227" href="#227">227</a>         );
+<a class="jxr_linenumber" name="228" href="#228">228</a>     }
+<a class="jxr_linenumber" name="229" href="#229">229</a> 
+<a class="jxr_linenumber" name="230" href="#230">230</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="231" href="#231">231</a> <em class="jxr_javadoccomment">     * Initialize JUL-to-SLF4J bridge.</em>
+<a class="jxr_linenumber" name="232" href="#232">232</a> <em class="jxr_javadoccomment">     * @see #init(ServletConfig)</em>
+<a class="jxr_linenumber" name="233" href="#233">233</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="234" href="#234">234</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> reconfigureJUL() {
+<a class="jxr_linenumber" name="235" href="#235">235</a>         <strong class="jxr_keyword">final</strong> java.util.logging.Logger rootLogger =
+<a class="jxr_linenumber" name="236" href="#236">236</a>             java.util.logging.LogManager.getLogManager().getLogger(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="237" href="#237">237</a>         <strong class="jxr_keyword">final</strong> Handler[] handlers = rootLogger.getHandlers();
+<a class="jxr_linenumber" name="238" href="#238">238</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Handler handler : handlers) {
+<a class="jxr_linenumber" name="239" href="#239">239</a>             rootLogger.removeHandler(handler);
+<a class="jxr_linenumber" name="240" href="#240">240</a>         }
+<a class="jxr_linenumber" name="241" href="#241">241</a>         org.slf4j.bridge.SLF4JBridgeHandler.install();
+<a class="jxr_linenumber" name="242" href="#242">242</a>         Logger.debug(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"#julToSlf4j(): JUL forwarded to SLF4j"</span>);
+<a class="jxr_linenumber" name="243" href="#243">243</a>     }
+<a class="jxr_linenumber" name="244" href="#244">244</a> 
+<a class="jxr_linenumber" name="245" href="#245">245</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

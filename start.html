@@ -7,9 +7,8 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl - ReXSL, Quick Start Guide</title>
+        <title>rexsl - </title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
-                    <meta name="author" content="Yegor Bugayenko" />
                             <script>
                 var _gaq = _gaq || [];
                 _gaq.push(['_setAccount', 'UA-1963507-22']);
@@ -144,13 +143,13 @@
             </a>
                         <p>
                 
-                08-Nov-2013
-                0.7
+                17-Nov-2013
+                0.8
             </p>
             <article>
-                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><div class="section">
-<h2>ReXSL, Quick Start Guide<a name="ReXSL_Quick_Start_Guide"></a></h2>
-<p>To get better understanding of key components let's spend 5 minutes and create a project manually, step by step (you can also use <a href="./example-archetype.html"><tt>rexsl-maven-archetype</tt></a>, which will create a different and more advanced project structure in one go). Start with a new Maven project with the following directory structure:</p>
+                <h1>ReXSL, Quick Start Guide</h1>
+<p>To get better understanding of key components let&#x2019;s spend 5 minutes and create a project manually, step by step (you can also use <a href="./example-archetype.html"><tt>rexsl-maven-archetype</tt></a>, which will create a different and more advanced project structure in one go). Start with a new Maven project with the following directory structure:</p>
+
 <div class="source">
 <pre>/foo
   pom.xml
@@ -178,8 +177,10 @@
         /scripts
           RendersHomePage.groovy
         /xsd
-          foo.Home.xsd</pre></div>
+          foo.Home.xsd
+</pre></div>
 <p>Maven <tt>pom.xml</tt> should look like this:</p>
+
 <div class="source">
 <pre>&lt;project&gt;
   [...]
@@ -200,14 +201,14 @@
       &lt;!-- ReXSL runtime library --&gt;
       &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
       &lt;artifactId&gt;rexsl-core&lt;/artifactId&gt;
-      &lt;version&gt;0.7&lt;/version&gt;
+      &lt;version&gt;0.8&lt;/version&gt;
       &lt;scope&gt;runtime&lt;/scope&gt;
     &lt;/dependency&gt;
     &lt;dependency&gt;
       &lt;!-- ReXSL test harness --&gt;
       &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
       &lt;artifactId&gt;rexsl-test&lt;/artifactId&gt;
-      &lt;version&gt;0.7&lt;/version&gt;
+      &lt;version&gt;0.8&lt;/version&gt;
       &lt;scope&gt;test&lt;/scope&gt;
     &lt;/dependency&gt;
     &lt;dependency&gt;
@@ -231,7 +232,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
         &lt;artifactId&gt;rexsl-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;0.7&lt;/version&gt;
+        &lt;version&gt;0.8&lt;/version&gt;
         &lt;executions&gt;
           &lt;execution&gt;
             &lt;goals&gt;
@@ -243,8 +244,10 @@
       &lt;/plugin&gt;
     &lt;/plugins&gt;
   &lt;/build&gt;
-&lt;/project&gt;</pre></div>
-<p><tt>web.xml</tt> should be simple and include one servlet and one filter from ReXSL (it's Servlet API 3.0):</p>
+&lt;/project&gt;
+</pre></div>
+<p><tt>web.xml</tt> should be simple and include one servlet and one filter from ReXSL (it&#x2019;s Servlet API 3.0):</p>
+
 <div class="source">
 <pre>&lt;web-app version=&quot;3.0&quot;
   xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
@@ -283,8 +286,10 @@
     &lt;extension&gt;xsl&lt;/extension&gt;
     &lt;mime-type&gt;text/xsl&lt;/mime-type&gt;
   &lt;/mime-mapping&gt;
-&lt;/web-app&gt;</pre></div>
-<p>Now let's create JAX-RS front end (<tt>FrontEnd.java</tt>):</p>
+&lt;/web-app&gt;
+</pre></div>
+<p>Now let&#x2019;s create JAX-RS front end (<tt>FrontEnd.java</tt>):</p>
+
 <div class="source">
 <pre>package foo;
 import javax.ws.rs.GET;
@@ -298,8 +303,10 @@ public class FrontEnd {
   public Home home() {
     return new Home();
   }
-}</pre></div>
+}
+</pre></div>
 <p>And JAXB-annotated data class <tt>Home.java</tt>:</p>
+
 <div class="source">
 <pre>package foo;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -313,8 +320,10 @@ public class Home {
   public String getText() {
     return &quot;Hello, world!&quot;;
   }
-}</pre></div>
-<p>Now let's unit-test our data class in <tt>src/test/java/foo/HomeTest.java</tt>:</p>
+}
+</pre></div>
+<p>Now, let&#x2019;s unit-test our data class in <tt>src/test/java/foo/HomeTest.java</tt>:</p>
+
 <div class="source">
 <pre>package foo;
 import com.rexsl.test.JaxbConverter;
@@ -329,15 +338,19 @@ public class HomeTest {
       XhtmlMatchers.hasXPath(&quot;/page/text[contains(.,'world')]&quot;)
     );
   }
-}</pre></div>
-<p>And now let's create a test XML document (<tt>src/test/rexsl/xml/index.xml</tt>):</p>
+}
+</pre></div>
+<p>And now, let&#x2019;s create a test XML document (<tt>src/test/rexsl/xml/index.xml</tt>):</p>
+
 <div class="source">
 <pre>&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;?xml-stylesheet href='/xsl/Home.xsl' type='text/xsl' ?&gt;
 &lt;page&gt;
   &lt;text&gt;let's say hello!&lt;/text&gt;
-&lt;/page&gt;</pre></div>
+&lt;/page&gt;
+</pre></div>
 <p>This document will be XSL-transformed by <tt>rexsl-maven-plugin:check</tt> Maven goal and validated by <tt>src/test/rexsl/xhtml/index.groovy</tt>:</p>
+
 <div class="source">
 <pre>import com.rexsl.test.XhtmlMatchers
 import org.hamcrest.Matchers
@@ -346,24 +359,33 @@ Assert.assertThat(rexsl.document, Matchers.containsString('say hello'))
 Assert.assertThat(
     rexsl.document,
     XhtmlMatchers.hasXPath(&quot;//xhtml:div[contains(.,'say hello')]&quot;)
-)</pre></div>
+)
+</pre></div>
 <p>And now the most interesting part, a test script in <tt>src/test/rexsl/scripts/RendersHomePage.groovy</tt> (<tt>rexsl.home</tt> is provided by <tt>rexsl-maven-plugin</tt> executor):</p>
+
 <div class="source">
 <pre>package foo
-import com.rexsl.test.RestTester
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
+import com.rexsl.test.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.UriBuilder
-RestTester.start(rexsl.home)
+new ApacheRequest(rexsl.home)
   .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
   .header(HttpHeaders.USER_AGENT, 'Safari')
-  .get('loading home page')
+  .fetch()
+  .as(RestResponse.class)
   .assertStatus(HttpURLConnection.HTTP_OK)
+  .as(XmlResponse.class)
   .assertXPath(&quot;//xhtml:div[contains(.,'world')]&quot;)
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-address'))
-  .get('loading non-existing URL')
-  .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)</pre></div>
-<p>Now let's create <tt>src/main/webapp/xsl/layout.xsl</tt>:</p>
+new ApacheRequest(rexsl.home)
+  .uri().path('/strange-address').back()
+  .fetch()
+  .as(RestResponse.class)
+  .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
+</pre></div>
+<p>Now let&#x2019;s create <tt>src/main/webapp/xsl/layout.xsl</tt>:</p>
+
 <div class="source">
 <pre>&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;
@@ -383,8 +405,10 @@ RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-address'))
       &lt;/body&gt;
     &lt;/html&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</pre></div>
+&lt;/xsl:stylesheet&gt;
+</pre></div>
 <p>And main page XSL at <tt>src/main/webapp/xsl/Home.xsl</tt>:</p>
+
 <div class="source">
 <pre>&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;
@@ -397,8 +421,10 @@ RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-address'))
   &lt;xsl:template name=&quot;content&quot;&gt;
     &lt;xsl:value-of select=&quot;/page/text&quot; /&gt;
   &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;</pre></div>
+&lt;/xsl:stylesheet&gt;
+</pre></div>
 <p>The last step is to create <tt>src/test/rexsl/xsd/foo.Home.xsd</tt> in order to validate XML output on fly:</p>
+
 <div class="source">
 <pre>&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;xs:schema xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
@@ -409,10 +435,11 @@ RestTester.start(UriBuilder.fromUri(rexsl.home).path('/strange-address'))
       &lt;/xs:all&gt;
     &lt;/xs:complexType&gt;
   &lt;/xs:element&gt;
-&lt;/xs:schema&gt;</pre></div>
-<p>That's it. All you have to do now is to run <tt>mvn package</tt> and deploy your WAR to production server.</p>
+&lt;/xs:schema&gt;
+</pre></div>
+<p>That&#x2019;s it. All you have to do now is to run <tt>mvn package</tt> and deploy your WAR to production server.</p>
 <p>To test the system on your local machine run <tt>mvn package rexsl:run -Drexsl.port=9099</tt> and open <tt>http://localhost:9099</tt> with your favorite browser.</p>
-<p>What's especially cool is that you can can make changes to your <tt>webapp/*</tt> files and they will become available on-fly in web (without restart of the application). Just refresh the page in browser.</p></div>
+<p>What&#x2019;s especially cool is that you can can make changes to your <tt>webapp/*</tt> files and they will become available on-fly in web (without restart of the application). Just refresh the page in browser.</p>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;

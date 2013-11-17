@@ -105,7 +105,7 @@
 <a class="jxr_linenumber" name="95" href="#95">95</a>          <strong class="jxr_keyword">final</strong> File dir = <strong class="jxr_keyword">new</strong> File(env.basedir(), <span class="jxr_string">"src/test/rexsl"</span>);
 <a class="jxr_linenumber" name="96" href="#96">96</a>          <strong class="jxr_keyword">boolean</strong> valid = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="97" href="#97">97</a>          <strong class="jxr_keyword">if</strong> (dir.exists()) {
-<a class="jxr_linenumber" name="98" href="#98">98</a>              <strong class="jxr_keyword">for</strong> (File folder : dir.listFiles()) {
+<a class="jxr_linenumber" name="98" href="#98">98</a>              <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> File folder : dir.listFiles()) {
 <a class="jxr_linenumber" name="99" href="#99">99</a>                  <strong class="jxr_keyword">if</strong> (!RexslFilesCheck.EXTS.containsKey(folder.getName())) {
 <a class="jxr_linenumber" name="100" href="#100">100</a>                     <strong class="jxr_keyword">continue</strong>;
 <a class="jxr_linenumber" name="101" href="#101">101</a>                 }
@@ -124,7 +124,7 @@
 <a class="jxr_linenumber" name="114" href="#114">114</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="115" href="#115">115</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> validate(<strong class="jxr_keyword">final</strong> File folder) {
 <a class="jxr_linenumber" name="116" href="#116">116</a>         <strong class="jxr_keyword">boolean</strong> valid = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="117" href="#117">117</a>         <strong class="jxr_keyword">for</strong> (File file : <strong class="jxr_keyword">this</strong>.getFiles(folder)) {
+<a class="jxr_linenumber" name="117" href="#117">117</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> File file : <strong class="jxr_keyword">this</strong>.getFiles(folder)) {
 <a class="jxr_linenumber" name="118" href="#118">118</a>             <strong class="jxr_keyword">final</strong> String ext = FilenameUtils.getExtension(file.getPath());
 <a class="jxr_linenumber" name="119" href="#119">119</a>             <strong class="jxr_keyword">final</strong> String regex = RexslFilesCheck.EXTS
 <a class="jxr_linenumber" name="120" href="#120">120</a>                 .get(folder.getName()).toString();

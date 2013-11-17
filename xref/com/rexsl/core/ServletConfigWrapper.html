@@ -40,11 +40,11 @@
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">package</strong> com.rexsl.core;
 <a class="jxr_linenumber" name="31" href="#31">31</a>  
 <a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> com.jcabi.log.Logger;
-<a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
-<a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> java.util.Enumeration;
-<a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> java.util.HashSet;
-<a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
-<a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> java.util.Set;
+<a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> java.util.Collection;
+<a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
+<a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> java.util.Enumeration;
+<a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> java.util.HashSet;
+<a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
 <a class="jxr_linenumber" name="38" href="#38">38</a>  <strong class="jxr_keyword">import</strong> javax.servlet.FilterConfig;
 <a class="jxr_linenumber" name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> javax.servlet.ServletConfig;
 <a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> javax.servlet.ServletContext;
@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="68" href="#68">68</a>  <em class="jxr_javadoccomment">     * @param cfg Servlet config</em>
 <a class="jxr_linenumber" name="69" href="#69">69</a>  <em class="jxr_javadoccomment">     * @param props Properties to add to existing params</em>
 <a class="jxr_linenumber" name="70" href="#70">70</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="71" href="#71">71</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../com/rexsl/core/ServletConfigWrapper.html">ServletConfigWrapper</a>(@NotNull <strong class="jxr_keyword">final</strong> ServletConfig cfg,
+<a class="jxr_linenumber" name="71" href="#71">71</a>      <a href="../../../com/rexsl/core/ServletConfigWrapper.html">ServletConfigWrapper</a>(@NotNull <strong class="jxr_keyword">final</strong> ServletConfig cfg,
 <a class="jxr_linenumber" name="72" href="#72">72</a>          @NotNull <strong class="jxr_keyword">final</strong> Properties props) {
 <a class="jxr_linenumber" name="73" href="#73">73</a>          <strong class="jxr_keyword">this</strong>.config = cfg;
 <a class="jxr_linenumber" name="74" href="#74">74</a>          <strong class="jxr_keyword">this</strong>.properties = props;
@@ -102,8 +102,8 @@
 <a class="jxr_linenumber" name="92" href="#92">92</a>      @Override
 <a class="jxr_linenumber" name="93" href="#93">93</a>      @NotNull
 <a class="jxr_linenumber" name="94" href="#94">94</a>      <strong class="jxr_keyword">public</strong> Enumeration&lt;String&gt; getInitParameterNames() {
-<a class="jxr_linenumber" name="95" href="#95">95</a>          <strong class="jxr_keyword">final</strong> Set&lt;String&gt; names = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;();
-<a class="jxr_linenumber" name="96" href="#96">96</a>          <strong class="jxr_keyword">for</strong> (Object name : <strong class="jxr_keyword">this</strong>.properties.keySet()) {
+<a class="jxr_linenumber" name="95" href="#95">95</a>          <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; names = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;(0);
+<a class="jxr_linenumber" name="96" href="#96">96</a>          <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Object name : <strong class="jxr_keyword">this</strong>.properties.keySet()) {
 <a class="jxr_linenumber" name="97" href="#97">97</a>              names.add(name.toString());
 <a class="jxr_linenumber" name="98" href="#98">98</a>          }
 <a class="jxr_linenumber" name="99" href="#99">99</a>          <strong class="jxr_keyword">final</strong> Enumeration&lt;?&gt; encapsulated = <strong class="jxr_keyword">this</strong>.config.getInitParameterNames();

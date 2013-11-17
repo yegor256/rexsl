@@ -145,7 +145,7 @@
 <a class="jxr_linenumber" name="135" href="#135">135</a> <em class="jxr_javadoccomment">     * @return Builder of text</em>
 <a class="jxr_linenumber" name="136" href="#136">136</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="137" href="#137">137</a>     <strong class="jxr_keyword">private</strong> StringBuilder text(<strong class="jxr_keyword">final</strong> HttpServletRequest request) {
-<a class="jxr_linenumber" name="138" href="#138">138</a>         <strong class="jxr_keyword">final</strong> StringBuilder text = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="138" href="#138">138</a>         <strong class="jxr_keyword">final</strong> StringBuilder text = <strong class="jxr_keyword">new</strong> StringBuilder(0);
 <a class="jxr_linenumber" name="139" href="#139">139</a>         text.append(Logger.format(<span class="jxr_string">"date: %s\n"</span>, <strong class="jxr_keyword">new</strong> Date()));
 <a class="jxr_linenumber" name="140" href="#140">140</a>         <strong class="jxr_keyword">this</strong>.append(text, request, <span class="jxr_string">"code"</span>);
 <a class="jxr_linenumber" name="141" href="#141">141</a>         <strong class="jxr_keyword">this</strong>.append(text, request, <span class="jxr_string">"message"</span>);
@@ -231,9 +231,9 @@
 <a class="jxr_linenumber" name="221" href="#221">221</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="222" href="#222">222</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String headers(<strong class="jxr_keyword">final</strong> HttpServletRequest request) {
 <a class="jxr_linenumber" name="223" href="#223">223</a>         <strong class="jxr_keyword">final</strong> StringBuilder text = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="224" href="#224">224</a>         <strong class="jxr_keyword">final</strong> Enumeration&lt;?&gt; headerNames = request.getHeaderNames();
-<a class="jxr_linenumber" name="225" href="#225">225</a>         <strong class="jxr_keyword">while</strong> (headerNames.hasMoreElements()) {
-<a class="jxr_linenumber" name="226" href="#226">226</a>             <strong class="jxr_keyword">final</strong> String header = headerNames.nextElement().toString();
+<a class="jxr_linenumber" name="224" href="#224">224</a>         <strong class="jxr_keyword">final</strong> Enumeration&lt;?&gt; names = request.getHeaderNames();
+<a class="jxr_linenumber" name="225" href="#225">225</a>         <strong class="jxr_keyword">while</strong> (names.hasMoreElements()) {
+<a class="jxr_linenumber" name="226" href="#226">226</a>             <strong class="jxr_keyword">final</strong> String header = names.nextElement().toString();
 <a class="jxr_linenumber" name="227" href="#227">227</a>             text.append(<span class="jxr_string">"  "</span>)
 <a class="jxr_linenumber" name="228" href="#228">228</a>                 .append(header)
 <a class="jxr_linenumber" name="229" href="#229">229</a>                 .append(<span class="jxr_string">": "</span>)

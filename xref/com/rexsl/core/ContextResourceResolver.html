@@ -87,7 +87,7 @@
 <a class="jxr_linenumber" name="77" href="#77">77</a>  <em class="jxr_javadoccomment">     * Constructor.</em>
 <a class="jxr_linenumber" name="78" href="#78">78</a>  <em class="jxr_javadoccomment">     * @param ctx Servlet Context.</em>
 <a class="jxr_linenumber" name="79" href="#79">79</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="80" href="#80">80</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../com/rexsl/core/ContextResourceResolver.html">ContextResourceResolver</a>(@NotNull <strong class="jxr_keyword">final</strong> ServletContext ctx) {
+<a class="jxr_linenumber" name="80" href="#80">80</a>      <a href="../../../com/rexsl/core/ContextResourceResolver.html">ContextResourceResolver</a>(@NotNull <strong class="jxr_keyword">final</strong> ServletContext ctx) {
 <a class="jxr_linenumber" name="81" href="#81">81</a>          <strong class="jxr_keyword">this</strong>.context = ctx;
 <a class="jxr_linenumber" name="82" href="#82">82</a>      }
 <a class="jxr_linenumber" name="83" href="#83">83</a>  
@@ -180,7 +180,7 @@
 <a class="jxr_linenumber" name="170" href="#170">170</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="171" href="#171">171</a>     <strong class="jxr_keyword">private</strong> InputStream absolute(<strong class="jxr_keyword">final</strong> String href, <strong class="jxr_keyword">final</strong> String base)
 <a class="jxr_linenumber" name="172" href="#172">172</a>         <strong class="jxr_keyword">throws</strong> TransformerException {
-<a class="jxr_linenumber" name="173" href="#173">173</a>         URI uri;
+<a class="jxr_linenumber" name="173" href="#173">173</a>         <strong class="jxr_keyword">final</strong> URI uri;
 <a class="jxr_linenumber" name="174" href="#174">174</a>         <strong class="jxr_keyword">if</strong> (base == <strong class="jxr_keyword">null</strong> || base.isEmpty()) {
 <a class="jxr_linenumber" name="175" href="#175">175</a>             uri = UriBuilder.fromUri(href).build();
 <a class="jxr_linenumber" name="176" href="#176">176</a>         } <strong class="jxr_keyword">else</strong> {
@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="212" href="#212">212</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="213" href="#213">213</a>     <strong class="jxr_keyword">private</strong> InputStream fetch(<strong class="jxr_keyword">final</strong> URI uri) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="214" href="#214">214</a>         <strong class="jxr_keyword">final</strong> URLConnection conn = uri.toURL().openConnection();
-<a class="jxr_linenumber" name="215" href="#215">215</a>         InputStream stream;
+<a class="jxr_linenumber" name="215" href="#215">215</a>         <strong class="jxr_keyword">final</strong> InputStream stream;
 <a class="jxr_linenumber" name="216" href="#216">216</a>         <strong class="jxr_keyword">if</strong> (conn instanceof HttpURLConnection) {
 <a class="jxr_linenumber" name="217" href="#217">217</a>             stream = <strong class="jxr_keyword">this</strong>.http(HttpURLConnection.<strong class="jxr_keyword">class</strong>.<strong class="jxr_keyword">cast</strong>(conn));
 <a class="jxr_linenumber" name="218" href="#218">218</a>         } <strong class="jxr_keyword">else</strong> {
@@ -267,7 +267,7 @@
 <a class="jxr_linenumber" name="257" href="#257">257</a> <em class="jxr_javadoccomment">     * @return Absolute local path</em>
 <a class="jxr_linenumber" name="258" href="#258">258</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="259" href="#259">259</a>     <strong class="jxr_keyword">private</strong> String compose(<strong class="jxr_keyword">final</strong> String path, <strong class="jxr_keyword">final</strong> String base) {
-<a class="jxr_linenumber" name="260" href="#260">260</a>         <strong class="jxr_keyword">final</strong> StringBuilder full = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="260" href="#260">260</a>         <strong class="jxr_keyword">final</strong> StringBuilder full = <strong class="jxr_keyword">new</strong> StringBuilder(0);
 <a class="jxr_linenumber" name="261" href="#261">261</a>         <strong class="jxr_keyword">if</strong> (!StringUtils.isEmpty(base) &amp;&amp; path.charAt(0) != '/') {
 <a class="jxr_linenumber" name="262" href="#262">262</a>             full.append(
 <a class="jxr_linenumber" name="263" href="#263">263</a>                 FilenameUtils.getFullPath(URI.create(base).getPath())

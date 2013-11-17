@@ -15,7 +15,7 @@
       <prefix>     * </prefix>
       <body>We support only local resources now. This implementation has to be extended in order to support different formats of URI, incl. "file:...", "http:...", etc.</body>
       <estimate>0</estimate>
-      <lines>85-87</lines>
+      <lines>86-88</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -42,7 +42,7 @@
       <prefix>                        </prefix>
       <body>This test is disabled (although it works fine) because I don't know how to stop its execution. It starts Jetty and stays waiting. There should be some way of canceling it somehow... http://jira.codehaus.org/browse/MINVOKER-132</body>
       <estimate>0</estimate>
-      <lines>457-461</lines>
+      <lines>453-457</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -78,7 +78,7 @@
       <prefix>     * </prefix>
       <body>Move the code above to this method when yui finish migration to Rhino 1.7R3. At the momemnt the implementaiton is just a stub - it validates that the file exists and that's it.</body>
       <estimate>0</estimate>
-      <lines>123-125</lines>
+      <lines>124-126</lines>
       <owner>author</owner>
    </puzzle>
    <puzzle>
@@ -141,7 +141,7 @@
       <prefix>     * </prefix>
       <body>Implement XHTML validation in XhtmlOutputCheck class.</body>
       <estimate>0</estimate>
-      <lines>92-92</lines>
+      <lines>93-93</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -159,7 +159,7 @@
       <prefix> * </prefix>
       <body>Somehow we should specify PORT in the cookie. Without this param the site doesn't work in localhost:9099 in Chrome. Works fine in Safari, but not in Chrome. see http://stackoverflow.com/questions/1612177</body>
       <estimate>0</estimate>
-      <lines>70-72</lines>
+      <lines>71-73</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -168,7 +168,7 @@
       <prefix> * </prefix>
       <body>A new design would be required for this class. &lt;br/&gt; &lt;b&gt;The problems&lt;/b&gt;: &lt;ul&gt; &lt;li&gt;this.content and this.parent are used as flags, not only as data storage variables. &lt;li&gt;there are three different "types" combined in one class: root element (parent == null), node element (content == null), and leaf element. &lt;/ul&gt; &lt;br/&gt; &lt;b&gt;The solution&lt;/b&gt;: A new hierarchy of classes: &lt;br/&gt; &lt;code&gt; interface TreeNode&lt;br/&gt; &lt;br/&gt; abstract AbstractNode implements TreeNode&lt;br/&gt; +name: String&lt;br/&gt; +attributes: ConcurrentMap&lt;String, String&gt;&lt;br/&gt; &lt;br/&gt; abstract SubNode extends AbstractNode&lt;br/&gt; +parent: TreeNode&lt;br/&gt; &lt;br/&gt; InnerNode extends SubNode&lt;br/&gt; +children: List&lt;TreeNode&gt;&lt;br/&gt; &lt;br/&gt; LeafNode extends SubNode&lt;br/&gt; +content: String&lt;br/&gt; &lt;br/&gt; DeadNode implements TreeNode&lt;br/&gt; // this is the node we set as parent in root node&lt;br/&gt; &lt;/code&gt; &lt;br/&gt;</body>
       <estimate>0</estimate>
-      <lines>117-146</lines>
+      <lines>119-148</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -195,7 +195,7 @@
       <prefix>     * </prefix>
       <body>It is impossible to match parameter and body at the same time.</body>
       <estimate>0</estimate>
-      <lines>91-91</lines>
+      <lines>93-93</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -204,25 +204,25 @@
       <prefix>     * </prefix>
       <body>It is impossible to match parameter and body at the same time.</body>
       <estimate>0</estimate>
-      <lines>129-130</lines>
+      <lines>131-132</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
       <ticket>151</ticket>
-      <file>rexsl-test/src/test/java/com/rexsl/test/RestTesterTest.java</file>
+      <file>rexsl-test/src/test/java/com/rexsl/test/BaseRequestTest.java</file>
       <prefix>     * </prefix>
       <body>Is it possible to initialize input variable with InputStream from request without side effects on request? request's parameters retrieve is done lazily and requires InputStream rewinded to it's start</body>
       <estimate>0</estimate>
-      <lines>115-118</lines>
+      <lines>158-161</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
       <ticket>151</ticket>
-      <file>rexsl-test/src/test/java/com/rexsl/test/RestTesterTest.java</file>
+      <file>rexsl-test/src/test/java/com/rexsl/test/BaseRequestTest.java</file>
       <prefix>     * </prefix>
       <body>Is it possible to initialize input variable with InputStream from request without side effects on request? request's parameters retrieve is done lazily and requires InputStream rewinded to it's start</body>
       <estimate>0</estimate>
-      <lines>149-152</lines>
+      <lines>186-189</lines>
       <owner>someone</owner>
    </puzzle>
 </puzzles>

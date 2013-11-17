@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="138" href="#138">138</a>     @Cacheable(lifetime = 1, unit = TimeUnit.SECONDS)
 <a class="jxr_linenumber" name="139" href="#139">139</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/rexsl/page/auth/Identity.html">Identity</a> identity() {
 <a class="jxr_linenumber" name="140" href="#140">140</a>         <a href="../../../../com/rexsl/page/auth/Identity.html">Identity</a> identity = <strong class="jxr_keyword">this</strong>.ofProviders();
-<a class="jxr_linenumber" name="141" href="#141">141</a>         <strong class="jxr_keyword">if</strong> (identity == Identity.ANONYMOUS) {
+<a class="jxr_linenumber" name="141" href="#141">141</a>         <strong class="jxr_keyword">if</strong> (identity.equals(Identity.ANONYMOUS)) {
 <a class="jxr_linenumber" name="142" href="#142">142</a>             identity = <strong class="jxr_keyword">this</strong>.ofCookies();
 <a class="jxr_linenumber" name="143" href="#143">143</a>         }
 <a class="jxr_linenumber" name="144" href="#144">144</a>         <strong class="jxr_keyword">return</strong> identity;
@@ -159,7 +159,7 @@
 <a class="jxr_linenumber" name="149" href="#149">149</a>         @NotNull <strong class="jxr_keyword">final</strong> Response.ResponseBuilder builder) {
 <a class="jxr_linenumber" name="150" href="#150">150</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../com/rexsl/page/auth/Identity.html">Identity</a> identity = <strong class="jxr_keyword">this</strong>.identity();
 <a class="jxr_linenumber" name="151" href="#151">151</a>         <strong class="jxr_keyword">if</strong> (identity.equals(Identity.ANONYMOUS)) {
-<a class="jxr_linenumber" name="152" href="#152">152</a>             <strong class="jxr_keyword">for</strong> (Provider prov : <strong class="jxr_keyword">this</strong>.providers) {
+<a class="jxr_linenumber" name="152" href="#152">152</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Provider prov : <strong class="jxr_keyword">this</strong>.providers) {
 <a class="jxr_linenumber" name="153" href="#153">153</a>                 <strong class="jxr_keyword">if</strong> (prov instanceof Provider.Visible) {
 <a class="jxr_linenumber" name="154" href="#154">154</a>                     page.link(Provider.Visible.<strong class="jxr_keyword">class</strong>.<strong class="jxr_keyword">cast</strong>(prov).link());
 <a class="jxr_linenumber" name="155" href="#155">155</a>                 }
@@ -246,7 +246,7 @@
 <a class="jxr_linenumber" name="236" href="#236">236</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="237" href="#237">237</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../com/rexsl/page/auth/Identity.html">Identity</a> ofProviders() {
 <a class="jxr_linenumber" name="238" href="#238">238</a>         <a href="../../../../com/rexsl/page/auth/Identity.html">Identity</a> identity = Identity.ANONYMOUS;
-<a class="jxr_linenumber" name="239" href="#239">239</a>         <strong class="jxr_keyword">for</strong> (Provider prov : <strong class="jxr_keyword">this</strong>.providers) {
+<a class="jxr_linenumber" name="239" href="#239">239</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Provider prov : <strong class="jxr_keyword">this</strong>.providers) {
 <a class="jxr_linenumber" name="240" href="#240">240</a>             <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="241" href="#241">241</a>                 identity = prov.identity();
 <a class="jxr_linenumber" name="242" href="#242">242</a>             } <strong class="jxr_keyword">catch</strong> (IOException ex) {

@@ -129,7 +129,7 @@
 <a class="jxr_linenumber" name="119" href="#119">119</a>         <strong class="jxr_keyword">this</strong>.tfactory.setURIResolver(<strong class="jxr_keyword">new</strong> <a href="../../../com/rexsl/core/ContextResourceResolver.html">ContextResourceResolver</a>(context));
 <a class="jxr_linenumber" name="120" href="#120">120</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="121" href="#121">121</a>             Manifests.append(context);
-<a class="jxr_linenumber" name="122" href="#122">122</a>         } <strong class="jxr_keyword">catch</strong> (java.io.IOException ex) {
+<a class="jxr_linenumber" name="122" href="#122">122</a>         } <strong class="jxr_keyword">catch</strong> (IOException ex) {
 <a class="jxr_linenumber" name="123" href="#123">123</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(ex);
 <a class="jxr_linenumber" name="124" href="#124">124</a>         }
 <a class="jxr_linenumber" name="125" href="#125">125</a>     }
@@ -235,7 +235,7 @@
 <a class="jxr_linenumber" name="225" href="#225">225</a> <em class="jxr_javadoccomment">     * @checkstyle RedundantThrows (3 lines)</em>
 <a class="jxr_linenumber" name="226" href="#226">226</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="227" href="#227">227</a>     <strong class="jxr_keyword">private</strong> Source stylesheet(<strong class="jxr_keyword">final</strong> String xml) <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="228" href="#228">228</a>         Source stylesheet;
+<a class="jxr_linenumber" name="228" href="#228">228</a>         <strong class="jxr_keyword">final</strong> Source stylesheet;
 <a class="jxr_linenumber" name="229" href="#229">229</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="230" href="#230">230</a>             stylesheet = <strong class="jxr_keyword">this</strong>.tfactory.getAssociatedStylesheet(
 <a class="jxr_linenumber" name="231" href="#231">231</a>                 <strong class="jxr_keyword">this</strong>.source(xml), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>
@@ -276,7 +276,7 @@
 <a class="jxr_linenumber" name="266" href="#266">266</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="267" href="#267">267</a>     <strong class="jxr_keyword">private</strong> Transformer transformer(<strong class="jxr_keyword">final</strong> Source stylesheet)
 <a class="jxr_linenumber" name="268" href="#268">268</a>         <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="269" href="#269">269</a>         Transformer tran;
+<a class="jxr_linenumber" name="269" href="#269">269</a>         <strong class="jxr_keyword">final</strong> Transformer tran;
 <a class="jxr_linenumber" name="270" href="#270">270</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="271" href="#271">271</a>             tran = <strong class="jxr_keyword">this</strong>.tfactory.newTransformer(stylesheet);
 <a class="jxr_linenumber" name="272" href="#272">272</a>         } <strong class="jxr_keyword">catch</strong> (TransformerConfigurationException ex) {
