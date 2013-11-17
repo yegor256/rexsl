@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import com.jcabi.aspects.Immutable;
 import java.net.URI;
+import java.util.Map;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -75,6 +76,15 @@ public interface RequestURI {
     RequestURI queryParam(
         @NotNull(message = "query param name can't be NULL") String name,
         @NotNull(message = "query param value can't be NULL") Object value);
+
+    /**
+     * Add query params.
+     * @param map Map of params to add
+     * @return New alternated URI
+     */
+    @NotNull(message = "request URI is never NULL")
+    RequestURI queryParams(@NotNull(message = "map of params can't be NULL")
+        Map<String, String> map);
 
     /**
      * Add URI path.
