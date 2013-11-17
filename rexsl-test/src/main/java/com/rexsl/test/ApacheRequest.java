@@ -34,6 +34,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
@@ -154,10 +155,19 @@ public final class ApacheRequest implements Request {
 
     /**
      * Public ctor.
+     * @param url The resource to work with
+     */
+    public ApacheRequest(@NotNull(message = "URL can't be NULL")
+        final URL url) {
+        this(url.toString());
+    }
+
+    /**
+     * Public ctor.
      * @param uri The resource to work with
      */
     public ApacheRequest(@NotNull(message = "URI can't be NULL")
-    final URI uri) {
+        final URI uri) {
         this(uri.toString());
     }
 
@@ -166,7 +176,7 @@ public final class ApacheRequest implements Request {
      * @param uri The resource to work with
      */
     public ApacheRequest(@NotNull(message = "URI can't be NULL")
-    final String uri) {
+        final String uri) {
         this.base = new BaseRequest(ApacheRequest.WIRE, uri);
     }
 

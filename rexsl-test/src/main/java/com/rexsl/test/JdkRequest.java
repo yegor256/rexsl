@@ -158,10 +158,19 @@ public final class JdkRequest implements Request {
 
     /**
      * Public ctor.
+     * @param url The resource to work with
+     */
+    public JdkRequest(@NotNull(message = "URL can't be NULL")
+        final URL url) {
+        this(url.toString());
+    }
+
+    /**
+     * Public ctor.
      * @param uri The resource to work with
      */
     public JdkRequest(@NotNull(message = "URI can't be NULL")
-    final URI uri) {
+        final URI uri) {
         this(uri.toString());
     }
 
@@ -170,7 +179,7 @@ public final class JdkRequest implements Request {
      * @param uri The resource to work with
      */
     public JdkRequest(@NotNull(message = "URI can't be NULL")
-    final String uri) {
+        final String uri) {
         this.base = new BaseRequest(JdkRequest.WIRE, uri);
     }
 

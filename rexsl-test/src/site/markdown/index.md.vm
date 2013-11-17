@@ -2,13 +2,17 @@
 
 The module contains a collection of usable tools for testing of
 ReXSL-powered application (or any other RESTful server).
-[`ApacheRequest`](./apidocs-${project.version}/com/rexsl/test/ApacheRequest.html)
+
+[`Request`](./apidocs-${project.version}/com/rexsl/test/Request.html)
+(implemented by
+[`JdkRequest`](./apidocs-${project.version}/com/rexsl/test/JdkRequest.html)
+and [`ApacheRequest`](./apidocs-${project.version}/com/rexsl/test/ApacheRequest.html))
 is a RESTful Java client with a fluent interface:
 
 ```java
 public class Main {
   public void main() {
-    String body = new ApacheRequest("http://www.rexsl.com")
+    String body = new JdkRequest("http://www.rexsl.com")
       .header(HttpHeaders.USER_AGENT, "Safari 4")
       .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
       .fetch()
@@ -30,10 +34,10 @@ against the contract (API) of the server.
 Other important classes in this module:
 
  * [`JaxbConverter`](./apidocs-${project.version}/com/rexsl/test/JaxbConverter.html)
-   - convenient JAXB-to-XML converter
+   convenient JAXB-to-XML converter;
 
- * [`SimpleXml`](./apidocs-${project.version}/com/rexsl/test/SimpleXml.html)
-   - simple object-oriented XML parser
+ * [`XhtmlMatchers`](./apidocs-${project.version}/com/rexsl/test/XhtmlMatchers.html)
+   XML/XHTML Hamcrest matchers.
 
 Include this dependency into your project (or download
 [`rexsl-test-${project.version}.jar`](http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${project.version}/rexsl-test-${project.version}.jar)

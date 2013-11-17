@@ -40,6 +40,12 @@
             <item name="Mock API" href="testapidocs-${project.version}/index.html"/>
             <item name="Release History" href="changes-report.html"/>
         </menu>
+        <menu name="Examples">
+            <item name="Make HTTP Request" href="example-request.html"/>
+            <item name="XML Response" href="example-xml-response.html"/>
+            <item name="JSON Response" href="example-json-response.html"/>
+            <item name="XML/XHTML Matchers" href="example-matchers.html"/>
+        </menu>
         <menu ref="reports"/>
     </body>
 </project>
