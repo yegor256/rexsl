@@ -29,6 +29,7 @@
  */
 package com.rexsl.test;
 
+import com.jcabi.immutable.ArrayMap;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -384,6 +385,23 @@ public final class BaseRequestTest {
             .assertStatus(HttpURLConnection.HTTP_OK);
         req.method(Request.GET).fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
+    }
+
+    /**
+     * BaseRequest can build the right destination URI.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void buildsDestinationUri() throws Exception {
+        MatcherAssert.assertThat(
+            this.request(new URI("http://localhost:88/test/foo"))
+                .uri().path("/bar").queryParam("abb", "776")
+                .queryParams(new ArrayMap<String, String>().with("bba", "669"))
+                .back().uri().get(),
+            Matchers.hasToString(
+                "http://localhost:88/test/foo/bar?abb=776&bba=669"
+            )
+        );
     }
 
 }

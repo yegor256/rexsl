@@ -303,6 +303,22 @@ final class BaseRequest implements Request {
             );
         }
         @Override
+        public RequestURI queryParams(@NotNull(message = "map can't be NULL")
+            final Map<String, String> map) {
+            final UriBuilder uri = UriBuilder.fromUri(this.address);
+            final Object[] values = new Object[map.size()];
+            int idx = 0;
+            for (final Map.Entry<String, String> pair : map.entrySet()) {
+                uri.queryParam(pair.getKey(), String.format("{x%d}", idx));
+                values[idx] = pair.getValue();
+                ++idx;
+            }
+            return new BaseRequest.ApacheURI(
+                this.owner,
+                uri.build(values).toString()
+            );
+        }
+        @Override
         public RequestURI path(
             @NotNull(message = "path can't be NULL") final String segment) {
             return new BaseRequest.ApacheURI(
