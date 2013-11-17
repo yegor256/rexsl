@@ -7,9 +7,8 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl-page - OAuth Authentication for JAX-RS Resources</title>
+        <title>rexsl-page - </title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
-                    <meta name="author" content="Yegor Bugayenko" />
                                                                                                                         
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
                                                                                                                 
@@ -50,12 +49,12 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="apidocs-0.6/index.html" title="API 0.6 (JavaDoc)">API 0.6 (JavaDoc)</a>
+                                                                    <a href="apidocs-0.8/index.html" title="API 0.8 (JavaDoc)">API 0.8 (JavaDoc)</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="testapidocs-0.6/index.html" title="Mock API">Mock API</a>
+                                                                    <a href="testapidocs-0.8/index.html" title="Mock API">Mock API</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -105,7 +104,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
@@ -130,15 +129,15 @@
                                     </ul>
                         <p>
                 
-                20-Oct-2013
-                0.6
+                17-Nov-2013
+                0.8
             </p>
             <article>
-                <!--  --><!-- Copyright (c) 2011-2013, ReXSL.com --><!-- All rights reserved. --><!--  --><!-- Redistribution and use in source and binary forms, with or without --><!-- modification, are permitted provided that the following conditions --><!-- are met: 1) Redistributions of source code must retain the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer. 2) Redistributions in binary form must reproduce the above --><!-- copyright notice, this list of conditions and the following --><!-- disclaimer in the documentation and/or other materials provided --><!-- with the distribution. 3) Neither the name of the ReXSL.com nor --><!-- the names of its contributors may be used to endorse or promote --><!-- products derived from this software without specific prior written --><!-- permission. --><!--  --><!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS --><!-- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT --><!-- NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND --><!-- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL --><!-- THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, --><!-- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES --><!-- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR --><!-- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) --><!-- HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, --><!-- STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) --><!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED --><!-- OF THE POSSIBILITY OF SUCH DAMAGE. --><!--  --><div class="section">
-<h2>OAuth Authentication for JAX-RS Resources<a name="OAuth_Authentication_for_JAX-RS_Resources"></a></h2>
-<p>Authentication in a RESTful API/interface/website can be implemented only by means of <a class="externalLink" href="http://en.wikipedia.org/wiki/HTTP_cookie">HTTP cookies</a>. An authenticated user makes HTTP requests to the server with authentication cookies inside. The cookie shall contain the name of the user in an encrypted format, to prevent a stranger from faking user identity, since encryption method, secret key, and &quot;cryptographic salt&quot; are not disclosed.</p>
+                <h1>OAuth Authentication for JAX-RS Resources</h1>
+<p>Authentication in a RESTful API/interface/website can be implemented only by means of <a class="externalLink" href="http://en.wikipedia.org/wiki/HTTP_cookie">HTTP cookies</a>. An authenticated user makes HTTP requests to the server with authentication cookies inside. The cookie shall contain the name of the user in an encrypted format, to prevent a stranger from faking user identity, since encryption method, secret key, and &#x201c;cryptographic salt&#x201d; are not disclosed.</p>
 <p>Only the server can generate an authentication cookie, when user identity is verified and provided by an authentication provider. The most popular authentication protocol is <a class="externalLink" href="http://oauth.net/">OAuth</a>, used by major providers like <a class="externalLink" href="http://developers.facebook.com/docs/reference/dialogs/oauth/">Facebook</a> and <a class="externalLink" href="https://developers.google.com/accounts/docs/OAuth2">Google</a>.</p>
-<p><a href="./apidocs-0.6/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a> helps to manage OAuth authentication. First, make sure your base JAX-RS resource has a <a href="./apidocs-0.6/com/rexsl/page/Inset.html"><tt>@Inset.Runtime</tt></a>-annotated method that returns an instance of <tt>AuthInset</tt>:</p>
+<p><a href="./apidocs-0.8/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a> helps to manage OAuth authentication. First, make sure your base JAX-RS resource has a <a href="./apidocs-0.8/com/rexsl/page/Inset.html"><tt>@Inset.Runtime</tt></a>-annotated method that returns an instance of <a href="./apidocs-0.8/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a>:</p>
+
 <div class="source">
 <pre>public abstract class BaseRs extends BaseResource {
   @Inset.Runtime
@@ -148,8 +147,10 @@
         .with(new Github(this, &quot;8fe...&quot;, &quot;34b2a...&quot;))
         .with(new Google(this, &quot;7395..&quot;, &quot;7auajs...&quot;));
   }
-}</pre></div>
-<p>Once it's done, every page of your site will be rendered with the following <tt>&lt;link&gt;</tt> elements inside <tt>&lt;links&gt;</tt> group:</p>
+}
+</pre></div>
+<p>Once it&#x2019;s done, every page of your site will be rendered with the following <tt>&lt;link&gt;</tt> elements inside <tt>&lt;links&gt;</tt> group:</p>
+
 <div class="source">
 <pre>&lt;page&gt;
   &lt;links&gt;
@@ -158,9 +159,11 @@
     &lt;link rel=&quot;auth-google&quot; href=&quot;https://accounts.google.com/o/oaut...&quot; /&gt;
     ... other links ...
   &lt;/links&gt;
-&lt;/page&gt;</pre></div>
+&lt;/page&gt;
+</pre></div>
 <p>When one of the links above is clicked, the user will be forwarded to the authentication page of the provider (Facebook, Google, etc.). When authenticated, the user comes back to your website with a secret code generated by the provider. The inset sends an HTTP request to the provider to fetch necessary identity information, like unique ID, full name, and a personal photo.</p>
 <p>Then, the inset redirects the user to the original page, and adds an authentication cookie. Besides that, the page gets this data:</p>
+
 <div class="source">
 <pre>&lt;page&gt;
   &lt;identity&gt;
@@ -169,9 +172,11 @@
     &lt;photo&gt;http://images.facebook.com/...&lt;/photo&gt;
     &lt;token&gt;7PGELH0M-FHS09VC0-...-1L33MJA7&lt;/token&gt;
   &lt;/identity&gt;
-&lt;/page&gt;</pre></div>
+&lt;/page&gt;
+</pre></div>
 <p>Authentication token in <tt>&quot;token&quot;</tt> element is the exact value of <tt>Rexsl-Auth</tt> cookie, which identifies the authenticated user.</p>
 <p>Also, you can get an access to the authenticated identity programmatically:</p>
+
 <div class="source">
 <pre>public final class IndexRs extends BaseRs {
   public String name() {
@@ -181,10 +186,11 @@
       return this.auth().identity().name();
     }
   }
-}</pre></div>
+}
+</pre></div>
 <p>URN of identity is created by authentication providers and consists of namespace ID (<tt>&quot;facebook&quot;</tt> for <a class="externalLink" href="http:://www.facebook.com">Facebook</a>, <tt>&quot;google&quot;</tt> for <a class="externalLink" href="http://www.google.com">Google</a>, <tt>&quot;github&quot;</tt> for <a class="externalLink" href="http://www.github.com">Github</a>, etc.) and namespace specific string with a unique ID of the user, as defined by the provider. You can use this URN as a unique identifier of the user in your system. It is always unique.</p>
 <p>When a user is not authenticated <tt>AuthInset#identity()</tt> method returns <tt>Identity.ANONYMOUS</tt>.</p>
-<p>See also <a href="./inset-http-basic.html">HTTP Basic Authentication</a>.</p></div>
+<p>See also <a href="./inset-http-basic.html">HTTP Basic Authentication</a>.</p>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;
