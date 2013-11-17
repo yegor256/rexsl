@@ -29,6 +29,7 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.aspects.RetryOnFailure;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -47,6 +48,7 @@ public final class DefaultHtmlValidatorITCase {
      * @throws Exception If something goes wrong inside
      */
     @Test
+    @RetryOnFailure(verbose = false)
     public void validatesCssDocument() throws Exception {
         MatcherAssert.assertThat(
             ValidatorBuilder.HTML.validate(
