@@ -121,10 +121,12 @@ public final class ApacheRequest implements Request {
          * @return Body in UTF-8
          * @throws IOException If fails
          */
-        private String consume(final HttpEntity entity) throws IOException {
-            String body = "";
-            if (entity != null) {
-                body = EntityUtils.toString(entity, Charsets.UTF_8);
+        private byte[] consume(final HttpEntity entity) throws IOException {
+            final byte[] body;
+            if (entity == null) {
+                body = new byte[0];
+            } else {
+                body = EntityUtils.toByteArray(entity);
             }
             return body;
         }

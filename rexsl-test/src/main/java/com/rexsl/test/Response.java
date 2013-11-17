@@ -81,12 +81,19 @@ public interface Response {
      * contains any chars that can't be used and should be replaced with
      * a "replacement character", a {@link RuntimeException} will be thrown. If
      * you need to use some other encodings, use
-     * {@link java.net.HttpURLConnection} directly instead of ReXSL.
+     * {@link #binary()} instead.
      *
      * @return The body, as a UTF-8 string
      */
     @NotNull(message = "response body is never NULL")
     String body();
+
+    /**
+     * Raw body as a an array of bytes.
+     * @return The body, as a UTF-8 string
+     */
+    @NotNull(message = "response data is never NULL")
+    byte[] binary();
 
     /**
      * Convert it to another type, by encapsulation.
