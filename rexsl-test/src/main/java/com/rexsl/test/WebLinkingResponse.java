@@ -34,7 +34,6 @@ import com.jcabi.immutable.ArrayMap;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -79,34 +78,6 @@ public final class WebLinkingResponse extends AbstractResponse {
     }
 
     /**
-     * Get link by REL.
-     * @param rel Relation name
-     * @return Link, if found
-     * @throws IOException If fails
-     */
-    @NotNull(message = "link is never NULL")
-    public WebLinkingResponse.Link link(@NotNull(message = "rel can't be NULL")
-        final String rel) throws IOException {
-        WebLinkingResponse.Link link = null;
-        for (final WebLinkingResponse.Link candidate : this.links()) {
-            final String val = candidate.get(WebLinkingResponse.REL);
-            if (val != null && val.equals(rel)) {
-                link = candidate;
-                break;
-            }
-        }
-        if (link == null) {
-            throw new IOException(
-                String.format(
-                    "Link with rel=\"%s\" doesn't exist, use #hasLink()",
-                    rel
-                )
-            );
-        }
-        return link;
-    }
-
-    /**
      * Follow link by REL.
      * @param rel Relation name
      * @return The same object
@@ -115,26 +86,16 @@ public final class WebLinkingResponse extends AbstractResponse {
     @NotNull(message = "response is never NULL")
     public Request follow(@NotNull(message = "rel can't be NULL")
         final String rel) throws IOException {
-        return new RestResponse(this).jump(this.link(rel).uri());
-    }
-
-    /**
-     * Link with this REL exists?
-     * @param rel Relation name
-     * @return TRUE if exists
-     * @throws IOException If fails
-     */
-    public boolean hasLink(@NotNull(message = "rel can't be NULL")
-        final String rel) throws IOException {
-        boolean exists = false;
-        for (final WebLinkingResponse.Link candidate : this.links()) {
-            final String val = candidate.get(WebLinkingResponse.REL);
-            if (val != null && val.equals(rel)) {
-                exists = true;
-                break;
-            }
+        final WebLinkingResponse.Link link = this.links().get(rel);
+        if (link == null) {
+            throw new IOException(
+                String.format(
+                    "Link with rel=\"%s\" doesn't exist, use #hasLink()",
+                    rel
+                )
+            );
         }
-        return exists;
+        return new RestResponse(this).jump(link.uri());
     }
 
     /**
@@ -144,15 +105,20 @@ public final class WebLinkingResponse extends AbstractResponse {
      */
     @NotNull(message = "list of links is never NULL")
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public Collection<WebLinkingResponse.Link> links() throws IOException {
-        final Collection<WebLinkingResponse.Link> links =
-            new LinkedList<WebLinkingResponse.Link>();
+    public Map<String, WebLinkingResponse.Link> links() throws IOException {
+        final ConcurrentMap<String, WebLinkingResponse.Link> links =
+            new ConcurrentHashMap<String, WebLinkingResponse.Link>();
         final Collection<String> headers =
             this.headers().get(WebLinkingResponse.HEADER);
         if (headers != null) {
             for (final String header : headers) {
                 for (final String part : header.split(",")) {
-                    links.add(new WebLinkingResponse.SimpleLink(part.trim()));
+                    final WebLinkingResponse.Link link =
+                        new WebLinkingResponse.SimpleLink(part.trim());
+                    final String rel = link.get(WebLinkingResponse.REL);
+                    if (rel != null) {
+                        links.put(rel, link);
+                    }
                 }
             }
         }

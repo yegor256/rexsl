@@ -60,7 +60,7 @@ public final class WebLinkingResponseTest {
                     .withHeader("Link", header)
                     .mock()
             );
-            final WebLinkingResponse.Link link = response.link("foo");
+            final WebLinkingResponse.Link link = response.links().get("foo");
             MatcherAssert.assertThat(
                 link.uri(),
                 Matchers.hasToString("/hey/foo")
@@ -70,8 +70,8 @@ public final class WebLinkingResponseTest {
                 Matchers.hasKey("title")
             );
             MatcherAssert.assertThat(
-                response.hasLink("another one"),
-                Matchers.is(false)
+                response.links(),
+                Matchers.not(Matchers.hasKey("something else"))
             );
         }
     }
