@@ -33,11 +33,12 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
-import com.rexsl.test.RestTester;
+import com.rexsl.test.JdkRequest;
+import com.rexsl.test.JsonResponse;
+import com.rexsl.test.RestResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.List;
 import javax.json.JsonObject;
 import javax.validation.constraints.NotNull;
@@ -46,7 +47,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Google authentication provider.
@@ -128,6 +128,7 @@ public final class Google implements Provider, Provider.Visible {
             "auth-google",
             UriBuilder
                 .fromUri("https://accounts.google.com/o/oauth2/auth")
+                // @checkstyle MultipleStringLiterals (2 lines)
                 .queryParam("client_id", "{id}")
                 .queryParam("redirect_uri", "{uri}")
                 .queryParam("response_type", "code")
@@ -144,27 +145,24 @@ public final class Google implements Provider, Provider.Visible {
      * Retrieve Google access token.
      * @param code Google "authorization code"
      * @return The token
+     * @throws IOException If fails
      */
-    private String token(final String code) {
-        return RestTester
-            .start(URI.create("https://accounts.google.com/o/oauth2/token"))
+    private String token(final String code) throws IOException {
+        return new JdkRequest("https://accounts.google.com/o/oauth2/token")
+            .body()
+            .formParam("client_id", this.appId)
+            .formParam("redirect_uri", this.resource.uriInfo().getBaseUri())
+            .formParam("client_secret", this.appKey)
+            .formParam("grant_type", "authorization_code")
+            .formParam("code", code)
+            .back()
             .header(
                 HttpHeaders.CONTENT_TYPE,
                 MediaType.APPLICATION_FORM_URLENCODED
             )
-            .post(
-                "getting access_token from Google",
-                String.format(
-                    // @checkstyle LineLength (1 line)
-                    "client_id=%s&redirect_uri=%s&client_secret=%s&grant_type=authorization_code&code=%s",
-                    Google.encode(this.appId),
-                    Google.encode(this.resource.uriInfo().getBaseUri()),
-                    Google.encode(this.appKey),
-                    Google.encode(code)
-                )
-            )
+            .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
-            .getJson()
+            .as(JsonResponse.class).json()
             .readObject()
             // @checkstyle MultipleStringLiterals (1 line)
             .getString("access_token");
@@ -174,17 +172,17 @@ public final class Google implements Provider, Provider.Visible {
      * Get user name from Google, by the code provided.
      * @param token Google access token
      * @return The user found in Google
+     * @throws IOException If fails
      */
-    private Identity fetch(final String token) {
+    private Identity fetch(final String token) throws IOException {
         final URI uri = UriBuilder
             .fromPath("https://www.googleapis.com/oauth2/v1/userinfo")
             .queryParam("alt", "json")
             .queryParam("access_token", "{token}")
             .build(token);
         return this.parse(
-            RestTester.start(uri)
-                .get("fetch user info")
-                .getJson()
+            new JdkRequest(uri).fetch()
+                .as(JsonResponse.class).json()
                 .readObject()
         );
     }
@@ -205,19 +203,6 @@ public final class Google implements Provider, Provider.Visible {
                 )
             )
         );
-    }
-
-    /**
-     * URL encode given text.
-     * @param text The text to encode
-     * @return Encoded
-     */
-    private static String encode(final Object text) {
-        try {
-            return URLEncoder.encode(text.toString(), CharEncoding.UTF_8);
-        } catch (java.io.UnsupportedEncodingException ex) {
-            throw new IllegalStateException(ex);
-        }
     }
 
 }

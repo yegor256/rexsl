@@ -32,7 +32,8 @@ package com.rexsl.maven.utils;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.test.RestTester;
+import com.rexsl.test.ApacheRequest;
+import com.rexsl.test.RestResponse;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import org.hamcrest.Matchers;
@@ -74,12 +75,12 @@ public final class EmbeddedContainerTest {
         final URI home = new URI(
             Logger.format("http://localhost:%d/file.txt", env.port())
         );
-        RestTester.start(home)
-            .get("get test data file")
+        new ApacheRequest(home)
+            .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
             .assertBody(Matchers.containsString("data"));
         container.stop();
-        final String[] messages = new String[] {
+        final String[] messages = {
             "runtime filter initialized",
             "XSLT filter initialized",
             "#doFilter(/file.txt)",

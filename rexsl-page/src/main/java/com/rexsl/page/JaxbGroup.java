@@ -30,12 +30,15 @@
 package com.rexsl.page;
 
 import com.jcabi.log.Logger;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import javassist.ClassPool;
+import javassist.CannotCompileException;
 import javassist.CtClass;
+import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.annotation.Annotation;
@@ -129,8 +132,9 @@ public final class JaxbGroup {
      * @return JAXB-annotated object, just created
      */
     @NotNull
-    public static Object build(@NotNull final Collection<?> grp,
-        @NotNull final String name) {
+    public static Object build(
+        @NotNull(message = "group can't be NULL") final Collection<?> grp,
+        @NotNull(message = "name can't be NULL") final String name) {
         synchronized (JaxbGroup.READY) {
             final String mnemo = JaxbGroup.mnemo(grp.isEmpty(), name);
             if (!JaxbGroup.READY.containsKey(mnemo)) {
@@ -149,7 +153,7 @@ public final class JaxbGroup {
                 throw new IllegalStateException(ex);
             } catch (IllegalAccessException ex) {
                 throw new IllegalStateException(ex);
-            } catch (java.lang.reflect.InvocationTargetException ex) {
+            } catch (InvocationTargetException ex) {
                 throw new IllegalStateException(ex);
             }
         }
@@ -161,9 +165,9 @@ public final class JaxbGroup {
      */
     @XmlAnyElement(lax = true)
     @XmlMixed
-    @NotNull
+    @NotNull(message = "collection is never NULL")
     public Collection<?> getGroup() {
-        return this.group;
+        return Collections.unmodifiableCollection(this.group);
     }
 
     /**
@@ -190,9 +194,8 @@ public final class JaxbGroup {
      */
     private static Class<?> construct(final Collection<Class<?>> types,
         final String name) {
-        final ClassPool pool = ClassPool.getDefault();
         try {
-            final CtClass ctc = pool.getAndRename(
+            final CtClass ctc = PageBuilder.POOL.getAndRename(
                 JaxbGroup.class.getName(),
                 JaxbGroup.mnemo(types.isEmpty(), name)
             );
@@ -214,21 +217,21 @@ public final class JaxbGroup {
                 cls.getName()
             );
             return cls;
-        } catch (javassist.NotFoundException ex) {
+        } catch (NotFoundException ex) {
             throw new IllegalStateException(ex);
-        } catch (javassist.CannotCompileException ex) {
+        } catch (CannotCompileException ex) {
             throw new IllegalStateException(ex);
         }
     }
 
     /**
      * Find all types used in the collection.
-     * @param group The collection
+     * @param grp The collection
      * @return List of types used there
      */
-    private static Collection<Class<?>> types(final Collection<?> group) {
-        final Collection<Class<?>> types = new HashSet<Class<?>>();
-        for (Object element : group) {
+    private static Collection<Class<?>> types(final Collection<?> grp) {
+        final Collection<Class<?>> types = new HashSet<Class<?>>(grp.size());
+        for (final Object element : grp) {
             types.add(element.getClass());
         }
         return types;
@@ -278,7 +281,7 @@ public final class JaxbGroup {
         );
         final ClassMemberValue[] values = new ClassMemberValue[types.size()];
         int pos = 0;
-        for (Class<?> type : types) {
+        for (final Class<?> type : types) {
             values[pos] = new ClassMemberValue(
                 type.getName(),
                 file.getConstPool()

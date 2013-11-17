@@ -33,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -69,14 +70,14 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
      * @param response Servlet response being wrapped.
      * @see XsltFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
      */
-    protected ByteArrayResponseWrapper(
+    ByteArrayResponseWrapper(
         @NotNull final HttpServletResponse response) {
         super(response);
         try {
             this.writer = new PrintWriter(
                 new OutputStreamWriter(this.stream, CharEncoding.UTF_8)
             );
-        } catch (java.io.UnsupportedEncodingException ex) {
+        } catch (UnsupportedEncodingException ex) {
             throw new IllegalStateException(ex);
         }
     }

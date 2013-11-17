@@ -33,6 +33,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.checks.DefaultChecksProvider;
 import com.rexsl.maven.utils.LoggingManager;
+import java.io.IOException;
 import java.util.Collection;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -149,14 +150,18 @@ public final class CheckMojo extends AbstractRexslMojo {
     private void single(final Check chck) throws MojoFailureException {
         Logger.info(this, "%[type]s running...", chck);
         final long start = System.currentTimeMillis();
-        if (!chck.validate(this.env())) {
-            throw new MojoFailureException(
-                Logger.format(
-                    "%s check failed in %[ms]s",
-                    chck.getClass().getName(),
-                    System.currentTimeMillis() - start
-                )
-            );
+        try {
+            if (!chck.validate(this.env())) {
+                throw new MojoFailureException(
+                    Logger.format(
+                        "%s check failed in %[ms]s",
+                        chck.getClass().getName(),
+                        System.currentTimeMillis() - start
+                    )
+                );
+            }
+        } catch (IOException ex) {
+            throw new MojoFailureException("IO failure", ex);
         }
         Logger.info(
             this,

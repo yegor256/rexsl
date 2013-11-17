@@ -29,7 +29,8 @@
  */
 package com.rexsl.foo.scripts
 
-import com.rexsl.test.RestTester
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
@@ -37,15 +38,19 @@ import javax.ws.rs.core.UriBuilder
 def home = UriBuilder.fromUri(System.getProperty('catapult.home')).build()
 
 ['/', '/xsl/Home.xsl', '/css/screen.css', '/robots.txt'].each {
-    RestTester.start(UriBuilder.fromUri(home).path(it))
+    new ApacheRequest(home)
+        .uri().path(it).back()
         .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
         .header(HttpHeaders.USER_AGENT, 'test-1')
-        .get('catapult test')
+        .fetch()
+        .as(RestResponse)
         .assertStatus(HttpURLConnection.HTTP_OK)
 }
 
 ['/non-existing-address', '/css/robots.txt'].each {
-    RestTester.start(UriBuilder.fromUri(home).path(it))
-        .get('fetching non existing page')
+    new ApacheRequest(home)
+        .uri().path(it).back()
+        .fetch()
+        .as(RestResponse)
         .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
 }

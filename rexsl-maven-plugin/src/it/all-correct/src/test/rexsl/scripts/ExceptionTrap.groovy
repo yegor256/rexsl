@@ -29,10 +29,14 @@
  */
 package com.rexsl.foo.scripts
 
-import com.rexsl.test.RestTester
-import javax.ws.rs.core.UriBuilder
+import com.rexsl.test.JdkRequest
+import com.rexsl.test.RestResponse
+import com.rexsl.test.XmlResponse
 
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/trap'))
-    .get('render exception trap')
+new JdkRequest(rexsl.home)
+    .uri().path('/trap').back()
+    .fetch()
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_OK)
+    .as(XmlResponse)
     .assertXPath('//xhtml:pre[contains(.,"exception_type: NULL")]')

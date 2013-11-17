@@ -29,6 +29,7 @@
  */
 package com.rexsl.maven;
 
+import java.io.IOException;
 import org.mockito.Mockito;
 
 /**
@@ -46,8 +47,9 @@ public final class CheckMocker {
 
     /**
      * Public ctor.
+     * @throws IOException If fails
      */
-    public CheckMocker() {
+    public CheckMocker() throws IOException {
         this.withResult(true);
     }
 
@@ -55,8 +57,9 @@ public final class CheckMocker {
      * With this validation result.
      * @param result The result
      * @return This object
+     * @throws IOException If fails
      */
-    public CheckMocker withResult(final boolean result) {
+    public CheckMocker withResult(final boolean result) throws IOException {
         Mockito.doReturn(result).when(this.check)
             .validate(Mockito.any(Environment.class));
         return this;

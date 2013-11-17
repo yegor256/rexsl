@@ -4,8 +4,8 @@
  */
 package ${package}.rexsl.scripts
 
-import com.rexsl.test.RestTester
-import javax.ws.rs.core.UriBuilder
+import com.rexsl.test.JdkRequest
+import com.rexsl.test.RestResponse
 
 [
     '/',
@@ -14,7 +14,9 @@ import javax.ws.rs.core.UriBuilder
     '/xsl/index.xsl',
     '/css/screen.css',
 ].each {
-    RestTester.start(UriBuilder.fromUri(rexsl.home).path(it))
-        .get('hits existing page')
+    new JdkRequest(rexsl.home)
+        .uri().path(it).back()
+        .fetch()
+        .as(RestResponse.class)
         .assertStatus(HttpURLConnection.HTTP_OK)
 }

@@ -1,0 +1,16 @@
+# Start ReXSL Project from Maven Archetype
+
+For a super quick start use
+[rexsl-maven-archetype](./rexsl-maven-archetype/index.html)
+and create your first project just like this:
+
+```
+mvn archetype:generate \
+  -DarchetypeGroupId=com.rexsl \
+  -DarchetypeArtifactId=rexsl-maven-archetype \
+  -DarchetypeVersion=${project.version}
+```
+
+To get better understanding of key components read
+[Quick Start](./start.html) manual.
+

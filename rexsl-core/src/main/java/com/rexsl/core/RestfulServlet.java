@@ -142,7 +142,8 @@ public final class RestfulServlet extends HttpServlet {
                 )
             );
         }
-        for (String name : StringUtils.split(param, RestfulServlet.COMMA)) {
+        for (final String name
+            : StringUtils.split(param, RestfulServlet.COMMA)) {
             final String pkg = name.trim();
             final Pattern ptrn = Pattern.compile(
                 "^([a-z_]{1}[a-z0-9_]*(\\.[a-z_]{1}[a-z0-9_]*)*)$"
@@ -205,7 +206,7 @@ public final class RestfulServlet extends HttpServlet {
         final long start = System.currentTimeMillis();
         this.jersey.service(request, response);
         final long duration = System.currentTimeMillis() - start;
-        if (duration > TimeUnit.SECONDS.toMillis(1)) {
+        if (duration > TimeUnit.SECONDS.toMillis(1L)) {
             Logger.warn(
                 this,
                 "#service(%s %s): %[ms]s is too slow (IP=%s)",
@@ -234,7 +235,7 @@ public final class RestfulServlet extends HttpServlet {
         final java.util.logging.Logger rootLogger =
             java.util.logging.LogManager.getLogManager().getLogger("");
         final Handler[] handlers = rootLogger.getHandlers();
-        for (Handler handler : handlers) {
+        for (final Handler handler : handlers) {
             rootLogger.removeHandler(handler);
         }
         org.slf4j.bridge.SLF4JBridgeHandler.install();

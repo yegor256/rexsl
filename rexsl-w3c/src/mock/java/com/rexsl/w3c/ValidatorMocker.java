@@ -29,6 +29,7 @@
  */
 package com.rexsl.w3c;
 
+import java.io.IOException;
 import org.mockito.Mockito;
 
 /**
@@ -45,8 +46,9 @@ public final class ValidatorMocker {
 
     /**
      * Public ctor.
+     * @throws IOException If fails
      */
-    public ValidatorMocker() {
+    public ValidatorMocker() throws IOException {
         this.withResponse(new ValidationResponseMocker().mock());
     }
 
@@ -54,8 +56,10 @@ public final class ValidatorMocker {
      * With this response.
      * @param resp The response
      * @return This object
+     * @throws IOException If fails
      */
-    public ValidatorMocker withResponse(final ValidationResponse resp) {
+    public ValidatorMocker withResponse(final ValidationResponse resp)
+        throws IOException {
         Mockito.doReturn(resp).when(this.validator)
             .validate(Mockito.anyString());
         return this;

@@ -62,7 +62,7 @@ final class ProductVersion implements Comparable<ProductVersion> {
      * Public ctor.
      * @param text The text of it
      */
-    protected ProductVersion(final String text) {
+    ProductVersion(final String text) {
         this.origin = text;
     }
 
@@ -78,8 +78,8 @@ final class ProductVersion implements Comparable<ProductVersion> {
      */
     private String normalized() {
         final String[] parts = ProductVersion.SEPARATOR.split(this.origin);
-        final StringBuilder bldr = new StringBuilder();
-        for (String part : parts) {
+        final StringBuilder bldr = new StringBuilder(0);
+        for (final String part : parts) {
             bldr.append(Logger.format("%4s.", part));
         }
         return bldr.toString();

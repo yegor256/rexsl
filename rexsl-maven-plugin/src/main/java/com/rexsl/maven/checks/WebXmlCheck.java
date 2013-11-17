@@ -33,17 +33,18 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.test.RestTester;
 import java.io.File;
-import java.net.HttpURLConnection;
-import java.net.URI;
+import java.io.IOException;
+import java.net.URL;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
@@ -76,7 +77,7 @@ final class WebXmlCheck implements Check {
 
     @Override
     @Loggable(Loggable.DEBUG)
-    public boolean validate(@NotNull final Environment env) {
+    public boolean validate(@NotNull final Environment env) throws IOException {
         final File file = new File(
             env.basedir(),
             "src/main/webapp/WEB-INF/web.xml"
@@ -92,8 +93,9 @@ final class WebXmlCheck implements Check {
      * Performs validation of the specified XML file against it's XSD schema.
      * @param file File to be validated.
      * @return If file is valid returns {@code TRUE}
+     * @throws IOException If fails
      */
-    private boolean validate(final File file) {
+    private boolean validate(final File file) throws IOException {
         final DocumentBuilderFactory factory =
             DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -109,7 +111,7 @@ final class WebXmlCheck implements Check {
                 true
             );
             builder = factory.newDocumentBuilder();
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+        } catch (ParserConfigurationException ex) {
             throw new IllegalStateException(ex);
         }
         this.errors.set(0);
@@ -131,9 +133,7 @@ final class WebXmlCheck implements Check {
         );
         try {
             builder.parse(file);
-        } catch (org.xml.sax.SAXException ex) {
-            throw new IllegalStateException(ex);
-        } catch (java.io.IOException ex) {
+        } catch (SAXException ex) {
             throw new IllegalStateException(ex);
         }
         return this.errors.get() == 0;
@@ -161,12 +161,10 @@ final class WebXmlCheck implements Check {
      * @return TRUE if we're offline
      */
     private static boolean offline() {
-        boolean offline;
+        boolean offline = false;
         try {
-            offline = RestTester.start(
-                URI.create("http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd")
-            ).get("validate it").getStatus() != HttpURLConnection.HTTP_OK;
-        } catch (AssertionError ex) {
+            new URL("http://www.google.com").getContent();
+        } catch (IOException ex) {
             offline = true;
         }
         if (offline) {

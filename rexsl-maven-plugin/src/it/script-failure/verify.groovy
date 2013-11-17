@@ -32,4 +32,4 @@
 
 def log = new File(basedir, 'build.log')
 assert log.text.contains('In-container check failed because of:')
-assert log.text.contains('Expected: <404>')
+assert log.text.contains('Expected: HTTP response with status 404')

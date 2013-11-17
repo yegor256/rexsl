@@ -29,12 +29,14 @@
  */
 package com.rexsl.foo.scripts
 
-import com.rexsl.test.RestTester
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
 import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.UriBuilder
 
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/xml/index.xml'))
+new ApacheRequest(rexsl.home)
     .header(HttpHeaders.ACCEPT, 'text/plain,application/xml')
     .header(HttpHeaders.USER_AGENT, 'somebody')
-    .get('reading mocked XML file')
+    .uri().path('/xml/index.xml').back()
+    .fetch()
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)

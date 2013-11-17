@@ -28,13 +28,15 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.rexsl.test.RestTester
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 
-RestTester.start(rexsl.home)
+new ApacheRequest(rexsl.home)
     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
     .header(HttpHeaders.USER_AGENT, 'Safari')
-    .get('load it')
+    .fetch()
+    .as(RestResponse)
     // we should fail here because status code is 200, not 404
     .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)

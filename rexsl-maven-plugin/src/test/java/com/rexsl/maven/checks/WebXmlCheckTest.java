@@ -31,9 +31,8 @@ package com.rexsl.maven.checks;
 
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.test.RestTester;
-import java.net.HttpURLConnection;
-import java.net.URI;
+import java.io.IOException;
+import java.net.URL;
 import org.hamcrest.MatcherAssert;
 import org.junit.Assume;
 import org.junit.Test;
@@ -87,12 +86,10 @@ public final class WebXmlCheckTest {
      * @return TRUE if we're online
      */
     private static boolean online() {
-        boolean online;
+        boolean online = true;
         try {
-            online = RestTester.start(
-                URI.create("http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd")
-            ).get("validate it").getStatus() == HttpURLConnection.HTTP_OK;
-        } catch (AssertionError ex) {
+            new URL("http://www.google.com").getContent();
+        } catch (IOException ex) {
             online = false;
         }
         return online;

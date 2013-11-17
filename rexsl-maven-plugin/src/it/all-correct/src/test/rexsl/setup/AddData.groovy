@@ -29,7 +29,9 @@
  */
 package com.rexsl.foo.setup
 
-import com.rexsl.test.RestTester
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.Request
+import com.rexsl.test.RestResponse
 import com.jcabi.log.Logger
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
@@ -38,20 +40,25 @@ import org.hamcrest.Matchers
 Logger.info(this, 'AddsData script running...')
 
 // let's validate how data were injected in bootstrap
-RestTester.start(rexsl.home)
-    .get('reading start data')
+new ApacheRequest(rexsl.home)
+    .fetch()
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString('bootstrapped'))
 
 // inject new data value
 def value = '\u0443\u0440\u0430'
-RestTester.start(rexsl.home)
+new ApacheRequest(rexsl.home)
     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
-    .post('changing data', 'text=' + URLEncoder.encode(value, 'UTF-8'))
+    .method(Request.POST)
+    .body().formParam('text', value).back()
+    .fetch()
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_OK)
 
 // let's validate that it's there
-RestTester.start(rexsl.home)
-    .get('validating')
+new ApacheRequest(rexsl.home)
+    .fetch()
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_OK)
     .assertBody(Matchers.containsString(value))

@@ -36,6 +36,7 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.BindingBuilder;
 import com.rexsl.maven.utils.EmbeddedContainer;
 import com.rexsl.maven.utils.FileFinder;
+import com.rexsl.maven.utils.GroovyException;
 import com.rexsl.maven.utils.GroovyExecutor;
 import com.rexsl.maven.utils.LoggingManager;
 import java.io.File;
@@ -170,7 +171,7 @@ final class InContainerScriptsCheck implements Check {
         try {
             exec.execute(script);
             valid = true;
-        } catch (com.rexsl.maven.utils.GroovyException ex) {
+        } catch (GroovyException ex) {
             Logger.warn(
                 this,
                 "Test failed (%s): %s",

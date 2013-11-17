@@ -29,47 +29,57 @@
  */
 package com.rexsl.test;
 
-import com.jcabi.aspects.Loggable;
-import java.util.AbstractMap;
+import com.jcabi.aspects.Immutable;
+import java.util.Map;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * HTTP header.
- *
- * <p>Objects of this class are immutable and thread-safe.
+ * Immutable HTTP header.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
+@Immutable
 @ToString
-@EqualsAndHashCode(callSuper = true)
-@Loggable(Loggable.DEBUG)
-final class Header extends AbstractMap.SimpleEntry<String, String> {
+@EqualsAndHashCode
+final class Header implements Map.Entry<String, String> {
 
     /**
-     * Serialization marker.
+     * Key.
      */
-    private static final long serialVersionUID = 0x7526FA78EEA2147AL;
+    private final transient String left;
+
+    /**
+     * Value.
+     */
+    private final transient String right;
 
     /**
      * Public ctor.
      * @param key The name of it
      * @param value The value
      */
-    protected Header(@NotNull final String key, @NotNull final String value) {
-        super(Header.normalized(key), value);
+    Header(final String key, final String value) {
+        this.left = Header.normalized(key);
+        this.right = value;
     }
 
-    /**
-     * This header has the same key?
-     * @param key The key to compare with
-     * @return TRUE if it's the same header
-     */
-    public boolean sameAs(@NotNull final String key) {
-        return this.getKey().equals(Header.normalized(key));
+    @Override
+    public String getKey() {
+        return this.left;
+    }
+
+    @Override
+    public String getValue() {
+        return this.right;
+    }
+
+    @Override
+    public String setValue(final String value) {
+        throw new UnsupportedOperationException("#setValue()");
     }
 
     /**
@@ -78,7 +88,8 @@ final class Header extends AbstractMap.SimpleEntry<String, String> {
      * @return Normalized key
      */
     @NotNull
-    private static String normalized(@NotNull
+    private static String normalized(
+        @NotNull(message = "key can't be NULL")
         @Pattern(regexp = "[a-zA-Z0-9\\-]+") final String key) {
         final char[] chars = key.toCharArray();
         chars[0] = Header.upper(chars[0]);
@@ -96,7 +107,7 @@ final class Header extends AbstractMap.SimpleEntry<String, String> {
      * @return Upper-case char
      */
     private static char upper(final char chr) {
-        char upper;
+        final char upper;
         if (chr >= 'a' && chr <= 'z') {
             upper = (char) (chr - ('a' - 'A'));
         } else {

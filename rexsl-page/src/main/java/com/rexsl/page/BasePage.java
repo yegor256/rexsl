@@ -34,6 +34,8 @@ import com.jcabi.log.Logger;
 import com.rexsl.core.XslResolver;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -122,7 +124,7 @@ import org.w3c.dom.Element;
 @XmlType(name = "com.rexsl.page.BasePage")
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "PMD.ExcessiveImports" })
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "resource")
 @Loggable(Loggable.DEBUG)
@@ -165,11 +167,11 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     @NotNull
     public final Response.ResponseBuilder render() {
         final Response.ResponseBuilder builder = Response.ok();
-        for (Class<? extends Inset> type
+        for (final Class<? extends Inset> type
             : BasePage.defaults(this.resource.getClass())) {
             this.inset(type).render(this, builder);
         }
-        for (Method method : this.resource.getClass().getMethods()) {
+        for (final Method method : this.resource.getClass().getMethods()) {
             if (method.isAnnotationPresent(Inset.Runtime.class)) {
                 this.inset(method).render(this, builder);
             }
@@ -283,8 +285,8 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     public final String getIp() {
         String addr;
         try {
-            addr = java.net.InetAddress.getLocalHost().getHostAddress();
-        } catch (java.net.UnknownHostException ex) {
+            addr = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException ex) {
             Logger.error(this, "#getIp(): %[exception]s", ex);
             addr = "";
         }
@@ -337,7 +339,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
                 );
             }
             insets.addAll(BasePage.defaults(type.getSuperclass()));
-            for (Class<?> iface : type.getInterfaces()) {
+            for (final Class<?> iface : type.getInterfaces()) {
                 insets.addAll(BasePage.defaults(iface));
             }
         }
@@ -373,9 +375,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      */
     private Inset inset(final Method method) {
         try {
-            return Inset.class.cast(
-                method.invoke(this.resource, new Object[] {})
-            );
+            return Inset.class.cast(method.invoke(this.resource));
         } catch (IllegalAccessException ex) {
             throw new IllegalStateException(ex);
         } catch (IllegalArgumentException ex) {

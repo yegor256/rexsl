@@ -28,21 +28,23 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.rexsl.test.RestTester
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.UriBuilder
 import org.junit.Assert
 import org.hamcrest.Matchers
 
 def original = new File('./src/test/rexsl/scripts/MockXml.groovy')
 for (attempt in 0..5) {
-    def body = RestTester.start(UriBuilder.fromUri(rexsl.home).path('/scripts/MockXml.groovy'))
+    def body = new ApacheRequest(rexsl.home)
+        .uri().path('/scripts/MockXml.groovy').back()
         .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
         .header(HttpHeaders.USER_AGENT, 'Chrome')
-        .get()
+        .fetch()
+        .as(RestResponse)
         .assertStatus(HttpURLConnection.HTTP_OK)
         .assertHeader(HttpHeaders.CONTENT_LENGTH, Matchers.equalTo(original.length().toString()))
-        .body
+        .body()
     Assert.assertThat(body.length(), Matchers.equalTo(original.length()))
 }

@@ -1,0 +1,42 @@
+# W3C Validator in Java
+
+It's simple (see [JavaDoc](./apidocs-${project.version}/) for more details):
+
+```java
+public class My {
+  public void main() {
+    String xhtml = "<html><body><p>Hello, world!</p></body></html>";
+    ValidationResponse response = new ValidatorBuilder().html().validate(xhtml);
+    assert response.valid();
+  }
+}
+```
+
+Similar mechanism for CSS:
+
+```java
+public class My {
+  public void main() {
+    String css = "body { font-family: Arial; }";
+    ValidationResponse response = new ValidatorBuilder().css().validate(css);
+    assert response.valid();
+  }
+}
+```
+
+This dependency you add to `pom.xml` (or download
+[`rexsl-w3c.jar`](http://repo1.maven.org/maven2/com/rexsl/rexsl-w3c/${project.version}/)):
+
+```xml
+<dependency>
+  <groupId>com.rexsl</groupId>
+  <artifactId>rexsl-w3c</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```
+
+All events are logged through [slf4j](http://www.slf4j.org/),
+using `"com.rexsl.w3c"` logger.
+If you want to see them, just add proper binding to classpath,
+as explained in [SLF4J manual](http://www.slf4j.org/manual.html).
+

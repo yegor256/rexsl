@@ -39,6 +39,7 @@ import java.net.HttpURLConnection;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -299,7 +300,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      */
     private void assertHeaders(final GrizzlyRequest request,
         final String input) {
-        for (ConcurrentMap.Entry<String, Matcher<String>> entry
+        for (final Map.Entry<String, Matcher<String>> entry
             : this.headerMatchers.entrySet()) {
             MatcherAssert.assertThat(
                 Logger.format(

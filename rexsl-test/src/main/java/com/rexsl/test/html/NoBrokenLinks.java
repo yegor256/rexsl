@@ -29,42 +29,32 @@
  */
 package com.rexsl.test.html;
 
-import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
-import com.rexsl.test.AssertionPolicy;
-import com.rexsl.test.TestResponse;
+import com.rexsl.test.Response;
+import com.rexsl.test.XmlResponse;
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedList;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 
 /**
  * Matches HTTP header against required value.
- *
- * <p>Use it in combination with {@link com.rexsl.test.RestTester},
- * in order to detect possibly
- * broken links in the HTML output, for example:
- *
- * <pre> RestTester.start(new URI("http://www.rexsl.com/"))
- *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
- *   .get("front page of ReXSL.com")
- *   .assertThat(new NoBrokenLinks())</pre>
- *
- * <p>This class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.3.4
  */
 @ToString
-@EqualsAndHashCode(of = "home")
-@Loggable(Loggable.DEBUG)
-public final class NoBrokenLinks implements AssertionPolicy {
+@EqualsAndHashCode(callSuper = false, of = "home")
+public final class NoBrokenLinks extends BaseMatcher<Response> {
 
     /**
      * Home page.
@@ -72,18 +62,50 @@ public final class NoBrokenLinks implements AssertionPolicy {
     private final transient URI home;
 
     /**
+     * List of broken links.
+     */
+    private final transient Collection<URI> broken = new LinkedList<URI>();
+
+    /**
      * Public ctor.
      * @param uri Home page URI, for relative links
      */
     public NoBrokenLinks(final URI uri) {
+        super();
         this.home = uri;
     }
 
     @Override
-    public void assertThat(final TestResponse response) {
-        final Collection<String> links = response.xpath(
-            // @checkstyle LineLength (1 line)
-            "//head/link/@href | //body//a/@href | //body//img/@src | //xhtml:img/@src | //xhtml:a/@href | //xhtml:link/@href"
+    public boolean matches(final Object item) {
+        this.check(Response.class.cast(item));
+        return this.broken.isEmpty();
+    }
+
+    @Override
+    public void describeTo(final Description description) {
+        description.appendText(
+            Logger.format(
+                "%d broken link(s) found: %[list]s",
+                this.broken.size(),
+                this.broken
+            )
+        );
+    }
+
+    /**
+     * Check for validness.
+     * @param response Response to check
+     */
+    private void check(final Response response) {
+        final Collection<String> links = new XmlResponse(response).xml().xpath(
+            StringUtils.join(
+                "//head/link/@href",
+                " | //body//a/@href",
+                " | //body//img/@src",
+                " | //xhtml:img/@src",
+                " | //xhtml:a/@href",
+                " | //xhtml:link/@href"
+            )
         );
         Logger.debug(
             this,
@@ -91,32 +113,18 @@ public final class NoBrokenLinks implements AssertionPolicy {
             links.size(),
             links
         );
-        final Collection<URI> broken = new LinkedList<URI>();
-        for (String link : links) {
-            URI uri;
+        this.broken.clear();
+        for (final String link : links) {
+            final URI uri;
             if (link.isEmpty() || link.charAt(0) != '/') {
                 uri = URI.create(link);
             } else {
                 uri = this.home.resolve(link);
             }
             if (!uri.isAbsolute() || !NoBrokenLinks.isValid(uri)) {
-                broken.add(uri);
+                this.broken.add(uri);
             }
         }
-        MatcherAssert.assertThat(
-            Logger.format(
-                "%d broken link(s) found: %[list]s",
-                broken.size(),
-                broken
-            ),
-            broken,
-            Matchers.empty()
-        );
-    }
-
-    @Override
-    public boolean isRetryNeeded(final int attempt) {
-        return false;
     }
 
     /**
@@ -138,7 +146,7 @@ public final class NoBrokenLinks implements AssertionPolicy {
                     code
                 );
             }
-        } catch (java.net.MalformedURLException ex) {
+        } catch (MalformedURLException ex) {
             Logger.warn(
                 NoBrokenLinks.class,
                 "#isValid('%s'): invalid URL: %s",
@@ -156,12 +164,12 @@ public final class NoBrokenLinks implements AssertionPolicy {
      */
     private static int http(final URL url) {
         int code = HttpURLConnection.HTTP_BAD_REQUEST;
-        HttpURLConnection conn;
         try {
-            conn = HttpURLConnection.class.cast(url.openConnection());
+            final HttpURLConnection conn =
+                HttpURLConnection.class.cast(url.openConnection());
             try {
                 code = conn.getResponseCode();
-            } catch (java.io.IOException ex) {
+            } catch (IOException ex) {
                 Logger.warn(
                     NoBrokenLinks.class,
                     "#http('%s'): can't get response code: %s",
@@ -171,7 +179,7 @@ public final class NoBrokenLinks implements AssertionPolicy {
             } finally {
                 conn.disconnect();
             }
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             Logger.warn(
                 NoBrokenLinks.class,
                 "#http('%s'): can't open connection: %s",

@@ -79,7 +79,7 @@ final class UserAgent {
      *  a header is absent in the HTTP request
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    protected UserAgent(final String text) {
+    UserAgent(final String text) {
         if (text != null) {
             final Matcher matcher = UserAgent.TOKEN.matcher(text);
             while (matcher.find()) {
@@ -95,11 +95,12 @@ final class UserAgent {
     @Override
     public String toString() {
         final StringBuilder text = new StringBuilder();
-        for (Map.Entry<String, ProductVersion> token : this.tokens.entrySet()) {
+        for (final Map.Entry<String, ProductVersion> token
+            : this.tokens.entrySet()) {
             if (text.length() > 0) {
                 text.append("; ");
             }
-            text.append(token.getKey()).append("-").append(token.getValue());
+            text.append(token.getKey()).append('-').append(token.getValue());
         }
         return text.toString();
     }

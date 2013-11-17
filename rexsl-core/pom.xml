@@ -79,15 +79,12 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
-            <!-- JavaMail API 1.4 -->
             <groupId>javax.mail</groupId>
             <artifactId>mailapi</artifactId>
             <version>1.4.3</version>
@@ -126,16 +123,21 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-servlet</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-servlet</artifactId>
+        </dependency>
+        <dependency>
             <!--
-            This one is used to forward Grizzly logging to SLF4J. We need it
+            This one is used to forward Jersey logging to SLF4J. We need it
             in "compile" scope.
             -->
             <groupId>org.slf4j</groupId>
@@ -149,14 +151,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-xml</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

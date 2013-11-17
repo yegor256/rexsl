@@ -1,0 +1,85 @@
+RESTful Java Web Framework on top of JAX-RS, XSL, and JAXB
+
+The idea is simple - to make a
+[RESTful][http://en.wikipedia.org/wiki/Representational_state_transfer)
+XML API available in a browser-friendly
+format renderable with
+[XSL](http://en.wikipedia.org/wiki/XSL) stylesheets.
+With ReXSL you develop your web
+application as a RESTful "web service" while XSL stylesheets transform it
+to an HTML web site.
+
+The diagram explains how components are connected to each other. It is a
+classic
+[Model-view-controller (MVC) pattern](http://en.wikipedia.org/wiki/Model–view–controller),
+where [JAXB](http://en.wikipedia.org/wiki/Java_Architecture_for_XML_Binding)
+[POJOs](http://en.wikipedia.org/wiki/Plain_Old_Java_Object) play a
+role of a Model.
+[JAX-RS](http://en.wikipedia.org/wiki/Java_API_for_RESTful_Web_Services) resources are Controllers.
+Stylesheets with a powerful XSL 2.0 language are Views.
+
+![UML diagram with layers](texry/layers.png)
+
+You should be familiar
+with
+[Java 6](http://www.oracle.com/technetwork/java/javase/overview/index-jsp-136246.html),
+[Groovy](http://groovy.codehaus.org/),
+[Apache Maven](http://maven.apache.org/),
+[XML](http://www.w3.org/XML/),
+[XSL 2.0](http://www.w3.org/TR/xslt20/),
+[XPath 2.0](http://www.w3.org/TR/xpath20/),
+[XML Schema](http://www.w3.org/XML/Schema),
+[JAX-RS 2.0](http://jcp.org/en/jsr/detail?id=311),
+[JAXB 2](http://jaxb.java.net/),
+[Java Servlet API](http://www.oracle.com/technetwork/java/javaee/servlet/index.html),
+[REST](http://en.wikipedia.org/wiki/Representational_State_Transfer),
+[HATEOAS](http://en.wikipedia.org/wiki/HATEOAS),
+[HTTP 1.1](http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol),
+[TDD](http://en.wikipedia.org/wiki/Test-driven_development).
+If any of these technologies are new for you - ReXSL won't work. However, we strongly
+recommend to learn them.
+
+These are the reasons why you should consider ReXSL over other Java web front
+frameworks like
+[JSF](http://en.wikipedia.org/wiki/JavaServer_Faces),
+[JSP](http://en.wikipedia.org/wiki/JavaServer_Pages),
+[Servlets](http://en.wikipedia.org/wiki/Java_Servlet),
+[Wicket](http://wicket.apache.org/),
+[Spring MVC](http://www.springsource.org/),
+[Struts](http://struts.apache.org/),
+[Tapestry](http://tapestry.apache.org/),
+[Cocoon](http://en.wikipedia.org/wiki/Apache_Cocoon),
+[Context Framework](http://www.contextfw.net/),
+and others:
+
+ * Graphic design evolves in parallel with Java classes
+
+ * Web front-end is an API at the same time
+
+ * Static analysis of generated CSS and HTML is build automated
+
+ * Layout is decoupled from data
+
+ * many others... (to be continued)
+
+This article explains how to create a working web application
+using ReXSL in five minutes: [Quick Start Guide](./start.html).
+[s3auth.com](http://www.s3auth.com) is an open source web application
+that is build using ReXSL framework: see its code in
+[github](https://github.com/yegor256/s3auth). Other projects that use
+ReXSL:
+[expinia.com](http://p.expinia.com),
+[netbout.com](http://www.netbout.com)
+(email us to get into this list).
+
+ReXSL pays a lot of attention to unit and integration testing. Actually,
+80% of our code is for helping you to test your application. As soon as
+you understand how ReXSL works (and learn the technologies listed above),
+read this article: [Introduction to ReXSL Testing](./testing.html).
+
+Post us a message in our
+[Google Newsgroup](https://groups.google.com/forum/#!forum/rexsl)
+if you're interested or just
+curious what is it all about. Besides that, don't hesitate to submit a
+ticket to [our Trac](http://trac.rexsl.com/rexsl) when something
+doesn't work or you need more features.

@@ -35,6 +35,7 @@ import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.FileFinder;
 import java.io.File;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -70,18 +71,13 @@ final class LibrariesCheck implements Check {
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     @Loggable(Loggable.DEBUG)
-    public boolean validate(@NotNull final Environment env) {
+    public boolean validate(@NotNull final Environment env) throws IOException {
         final File dir = new File(env.webdir(), "WEB-INF/lib");
         int errors = 0;
         final ConcurrentMap<String, File> classes =
             new ConcurrentHashMap<String, File>();
-        for (File file : new FileFinder(dir, "jar").ordered()) {
-            JarFile jar;
-            try {
-                jar = new JarFile(file);
-            } catch (java.io.IOException ex) {
-                throw new IllegalArgumentException(ex);
-            }
+        for (final File file : new FileFinder(dir, "jar").ordered()) {
+            final JarFile jar = new JarFile(file);
             final Enumeration<JarEntry> entries = jar.entries();
             while (entries.hasMoreElements()) {
                 final JarEntry entry = entries.nextElement();

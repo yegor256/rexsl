@@ -29,6 +29,7 @@
  */
 package com.rexsl.w3c;
 
+import java.io.IOException;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -82,7 +83,8 @@ public interface Validator {
      *
      * @param content The HTML/CSS content to validate
      * @return The response
+     * @throws IOException If fails
      */
-    ValidationResponse validate(@NotNull String content);
+    ValidationResponse validate(@NotNull String content) throws IOException;
 
 }

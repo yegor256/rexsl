@@ -130,13 +130,10 @@ import lombok.ToString;
  *
  * <p>The check starts an embedded Java Servlet container and runs Groovy
  * scripts from {@code src/test/rexsl/scripts}, one by one. Scripts can
- * use {@link com.rexsl.test.RestTester} class to test the application
+ * use {@link com.rexsl.test.ApacheRequest} class (or similar)
+ * to test the application
  * through its RESTful interface. The URI of the running application is
  * supplied in {@code rexsl.home} variable.
- *
- * <h3>JSUnitTestsCheck</h3>
- *
- * <p>TBD...
  *
  * <h3>WebXmlCheck</h3>
  *
@@ -168,7 +165,6 @@ public final class DefaultChecksProvider implements ChecksProvider {
                 "com.rexsl.maven.checks.LibrariesCheck",
                 "com.rexsl.maven.checks.XhtmlOutputCheck",
                 "com.rexsl.maven.checks.InContainerScriptsCheck",
-                "com.rexsl.maven.checks.JSUnitTestsCheck",
                 "com.rexsl.maven.checks.WebXmlCheck"
             )
         );

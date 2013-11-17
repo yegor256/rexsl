@@ -34,6 +34,7 @@ import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
+import java.io.IOException;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -72,7 +73,7 @@ final class CssStaticCheck implements Check {
 
     @Override
     @Loggable(Loggable.DEBUG)
-    public boolean validate(@NotNull final Environment env) {
+    public boolean validate(@NotNull final Environment env) throws IOException {
         final File csslint = new File(
             this.getClass().getResource("/CssLint.class").getFile()
         );
@@ -97,8 +98,6 @@ final class CssStaticCheck implements Check {
                 );
             }
             report = IOUtils.toString(process.getInputStream());
-        } catch (java.io.IOException ex) {
-            throw new IllegalStateException(ex);
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
             throw new IllegalStateException(ex);
@@ -111,7 +110,7 @@ final class CssStaticCheck implements Check {
      *
      * <p>CSSLint report is a plain text document, where every line is a
      * message about one defect. In this method we split this plain text
-     * document into lines and send them one by one to the log. If there are
+     * document into lines and fetch them one by one to the log. If there are
      * no lines in the document we return {@code true}, which means that
      * there are no errors and the CSS document is valid.
      *
@@ -120,7 +119,7 @@ final class CssStaticCheck implements Check {
      */
     private boolean isValid(final String report) {
         final String[] lines = report.split("\n");
-        for (String line : lines) {
+        for (final String line : lines) {
             Logger.warn(this, "%s", line.trim());
         }
         return lines.length == 0;

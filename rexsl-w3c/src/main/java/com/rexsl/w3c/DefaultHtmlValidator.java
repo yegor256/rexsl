@@ -29,8 +29,11 @@
  */
 package com.rexsl.w3c;
 
+import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
-import com.rexsl.test.TestResponse;
+import com.rexsl.test.Request;
+import com.rexsl.test.XmlResponse;
+import java.io.IOException;
 import java.net.URI;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.MediaType;
@@ -44,6 +47,7 @@ import lombok.ToString;
  * @version $Id$
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  */
+@Immutable
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "uri")
 @Loggable(Loggable.DEBUG)
@@ -52,47 +56,35 @@ final class DefaultHtmlValidator extends BaseValidator implements Validator {
     /**
      * The URI to use in W3C.
      */
-    private final transient URI uri;
+    private final transient String uri;
 
     /**
      * Public ctor.
      * @param entry Entry point to use
      */
-    protected DefaultHtmlValidator(@NotNull final URI entry) {
+    DefaultHtmlValidator(@NotNull final URI entry) {
         super();
-        this.uri = entry;
+        this.uri = entry.toString();
     }
 
     @Override
     @NotNull
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    public ValidationResponse validate(@NotNull final String html) {
-        DefaultValidationResponse response;
-        try {
-            final TestResponse soap = this
-                .send(
-                    this.uri,
-                    this.entity("uploaded_file", html, MediaType.TEXT_HTML)
-            )
+    public ValidationResponse validate(@NotNull final String html)
+        throws IOException {
+        final Request req = this.request(
+            this.uri,
+            this.entity("uploaded_file", html, MediaType.TEXT_HTML)
+        );
+        return this.build(
+            req.fetch().as(XmlResponse.class)
                 .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
                 .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
-                .assertThat(
-                    new RetryPolicy(
-                        "/env:Envelope/env:Body/m:markupvalidationresponse"
-                    )
-                )
                 .assertXPath("//m:validity")
                 .assertXPath("//m:checkedby")
                 .assertXPath("//m:doctype")
-                .assertXPath("//m:charset");
-            response = this.build(soap);
-        } catch (AssertionError ex) {
-            response = this.success(ex.getMessage());
-        // @checkstyle IllegalCatchCheck (1 line)
-        } catch (Throwable ex) {
-            response = this.failure(ex);
-        }
-        return response;
+                .assertXPath("//m:charset")
+                .xml()
+        );
     }
 
 }

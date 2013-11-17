@@ -29,19 +29,21 @@
  */
 package com.rexsl.foo.scripts
 
+import com.rexsl.test.ApacheRequest
+import com.rexsl.test.RestResponse
 import java.text.SimpleDateFormat
-import com.rexsl.test.RestTester
 import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.UriBuilder
 import org.hamcrest.Matchers
 
-RestTester.start(UriBuilder.fromUri(rexsl.home).path('/css/screen.css'))
+new ApacheRequest(rexsl.home)
+    .uri().path('/css/screen.css').back()
     .header(HttpHeaders.ACCEPT, 'text/plain,text/css')
     .header(
         HttpHeaders.IF_MODIFIED_SINCE,
         new SimpleDateFormat('EEE, dd MMM yyyy HH:mm:ss zzz', Locale.ENGLISH).format(new Date())
     )
     .header(HttpHeaders.USER_AGENT, 'somebody')
-    .get('getting screen.css')
+    .fetch()
+    .as(RestResponse)
     .assertStatus(HttpURLConnection.HTTP_NOT_MODIFIED)
     .assertBody(Matchers.equalTo(''))

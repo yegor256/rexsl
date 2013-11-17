@@ -33,11 +33,13 @@ import com.jcabi.aspects.Loggable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.w3c.dom.Document;
@@ -324,7 +326,7 @@ public final class JaxbBundle {
     @NotNull
     public JaxbBundle add(@NotNull final JaxbBundle.Group<?> group) {
         JaxbBundle holder = this;
-        for (JaxbBundle bundle : group.bundles()) {
+        for (final JaxbBundle bundle : group.bundles()) {
             holder = holder.add(bundle);
         }
         return holder;
@@ -363,7 +365,7 @@ public final class JaxbBundle {
                     .newDocumentBuilder()
                     .newDocument()
             );
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+        } catch (ParserConfigurationException ex) {
             throw new IllegalStateException(ex);
         }
     }
@@ -375,18 +377,18 @@ public final class JaxbBundle {
      */
     private Element element(final Document doc) {
         final Element element = doc.createElement(this.name);
-        for (ConcurrentMap.Entry<String, String> attr : this.attrs.entrySet()) {
+        for (final Map.Entry<String, String> attr : this.attrs.entrySet()) {
             element.setAttribute(attr.getKey(), attr.getValue());
         }
-        for (JaxbBundle child : this.children) {
+        for (final JaxbBundle child : this.children) {
             element.appendChild(child.element(doc));
         }
-        for (Element child : this.elements) {
+        for (final Element child : this.elements) {
             element.appendChild(doc.importNode(child, true));
         }
         if (!this.links.isEmpty()) {
             final Element lnks = doc.createElement("links");
-            for (Link link : this.links) {
+            for (final Link link : this.links) {
                 final Element lnk = doc.createElement("link");
                 lnk.setAttribute("rel", link.getRel());
                 lnk.setAttribute("href", link.getHref().toString());
@@ -430,7 +432,7 @@ public final class JaxbBundle {
          */
         private Collection<JaxbBundle> bundles() {
             final Collection<JaxbBundle> bundles = new LinkedList<JaxbBundle>();
-            for (T object : this.objects) {
+            for (final T object : this.objects) {
                 bundles.add(this.bundle(object));
             }
             return bundles;

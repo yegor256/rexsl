@@ -36,6 +36,7 @@ import com.rexsl.maven.Environment;
 import com.rexsl.maven.utils.FileFinder;
 import com.rexsl.maven.utils.LoggingManager;
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -78,7 +79,7 @@ final class JSStaticCheck implements Check {
         boolean success = true;
         if (dir.exists()) {
             final Collection<File> files = new FileFinder(dir, "js").random();
-            for (File file : files) {
+            for (final File file : files) {
                 final String name =
                     FilenameUtils.removeExtension(file.getName());
                 LoggingManager.enter(name);
@@ -128,7 +129,7 @@ final class JSStaticCheck implements Check {
         boolean valid = true;
         try {
             FileUtils.readFileToString(file);
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             Logger.error(
                 this,
                 "Failed:\n%[exception]s",
