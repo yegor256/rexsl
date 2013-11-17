@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type='text/xsl' href='puzzles.xsl'?><puzzles>
+   <puzzle>
+      <ticket>262</ticket>
+      <file>src/main/java/com/rexsl/core/ExceptionTrap.java</file>
+      <prefix> * </prefix>
+      <body>This class should be serializable, but it's not. It doesn't restore its state after deserialization. We should create a test for it and then fix the defect.</body>
+      <estimate>0</estimate>
+      <lines>77-79</lines>
+      <owner>someone</owner>
+   </puzzle>
+   <puzzle>
+      <ticket>167</ticket>
+      <file>src/main/java/com/rexsl/core/StaticTemplate.java</file>
+      <prefix>     * </prefix>
+      <body>We support only local resources now. This implementation has to be extended in order to support different formats of URI, incl. "file:...", "http:...", etc.</body>
+      <estimate>0</estimate>
+      <lines>86-88</lines>
+      <owner>someone</owner>
+   </puzzle>
+   <puzzle>
+      <ticket>336</ticket>
+      <file>src/test/java/com/rexsl/core/ContextResourceResolverTest.java</file>
+      <prefix> * </prefix>
+      <body>The majority of tests here are disabled, because YMOCK doesn't work at the moment with this Socket mocking mechanism. As soon as this feature is fixed in YMOCK let's use it here</body>
+      <estimate>0</estimate>
+      <lines>54-56</lines>
+      <owner>someone</owner>
+   </puzzle>
+   <puzzle>
+      <ticket>204</ticket>
+      <file>src/test/java/com/rexsl/core/RestfulServletTest.java</file>
+      <prefix>     * </prefix>
+      <body>This test is disabled because of a defect in Jersey: http://java.net/jira/browse/JERSEY-1128. Once it is resolved we can try to enable the test and see how it works.</body>
+      <estimate>0</estimate>
+      <lines>105-107</lines>
+      <owner>someone</owner>
+   </puzzle>
+</puzzles>
