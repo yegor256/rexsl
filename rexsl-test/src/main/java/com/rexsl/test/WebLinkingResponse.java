@@ -1,0 +1,259 @@
+/**
+ * Copyright (c) 2011-2013, ReXSL.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met: 1) Redistributions of source code must retain the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer. 2) Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3) Neither the name of the ReXSL.com nor
+ * the names of its contributors may be used to endorse or promote
+ * products derived from this software without specific prior written
+ * permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+ * NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.test;
+
+import com.jcabi.aspects.Immutable;
+import com.jcabi.immutable.ArrayMap;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+
+/**
+ * Web Linking response.
+ *
+ * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @version $Id$
+ * @since 0.9
+ * @see <a href="http://tools.ietf.org/html/rfc5988">RFC 5988</>
+ */
+@Immutable
+@EqualsAndHashCode(callSuper = true)
+public final class WebLinkingResponse extends AbstractResponse {
+
+    /**
+     * Header name.
+     */
+    private static final String HEADER = "Link";
+
+    /**
+     * Param name.
+     */
+    private static final String REL = "rel";
+
+    /**
+     * Pattern to match link value.
+     */
+    private static final Pattern PTN = Pattern.compile(
+        "<([^>])>(?:;([a-z]+)=([^;]+))*"
+    );
+
+    /**
+     * Public ctor.
+     * @param resp Response
+     */
+    public WebLinkingResponse(
+        @NotNull(message = "response can't be NULL") final Response resp) {
+        super(resp);
+    }
+
+    /**
+     * Follow link by REL.
+     * @param rel Relation name
+     * @return The same object
+     */
+    @NotNull(message = "response is never NULL")
+    public Request follow(@NotNull(message = "rel can't be NULL")
+        final String rel) throws IOException {
+        WebLinkingResponse.Link link = null;
+        for (final WebLinkingResponse.Link candidate : this.links()) {
+            final String val = candidate.get(WebLinkingResponse.REL);
+            if (val != null && val.equals(rel)) {
+                link = candidate;
+                break;
+            }
+        }
+        if (link == null) {
+            throw new IOException(
+                String.format(
+                    "Link with rel=\"%s\" doesn't exist, use #hasLink()",
+                    rel
+                )
+            );
+        }
+        return new RestResponse(this).jump(link.uri());
+    }
+
+    /**
+     * Link with this REL exists?
+     * @param rel Relation name
+     * @return TRUE if exists
+     */
+    public boolean hasLink(@NotNull(message = "rel can't be NULL")
+        final String rel) throws IOException {
+        boolean exists = false;
+        for (final WebLinkingResponse.Link candidate : this.links()) {
+            final String val = candidate.get(WebLinkingResponse.REL);
+            if (val != null && val.equals(rel)) {
+                exists = true;
+                break;
+            }
+        }
+        return exists;
+    }
+
+    /**
+     * Get all links provided.
+     * @return List of all links found
+     * @throws IOException If fails
+     */
+    @NotNull(message = "list of links is never NULL")
+    public Collection<WebLinkingResponse.Link> links() throws IOException {
+        final Collection<WebLinkingResponse.Link> links =
+            new LinkedList<WebLinkingResponse.Link>();
+        final Map<String, List<String>> headers = this.headers();
+        if (headers.containsKey(WebLinkingResponse.HEADER)) {
+            for (final String header : headers.get(WebLinkingResponse.HEADER)) {
+                links.add(new WebLinkingResponse.SimpleLink(header.trim()));
+            }
+        }
+        return links;
+    }
+
+    /**
+     * Single link.
+     */
+    @Immutable
+    public interface Link extends Map<String, String> {
+        /**
+         * Its URI.
+         * @return URI
+         */
+        URI uri();
+    }
+
+    /**
+     * Implementation of a link.
+     */
+    @Immutable
+    @EqualsAndHashCode
+    private static final class SimpleLink implements WebLinkingResponse.Link {
+        /**
+         * Pattern to match link value.
+         */
+        private static final Pattern PTN = Pattern.compile(
+            "<([^>]+)>\\s*(?:;\\s*([a-z]+)\\s*=\\s*([^;]+))*"
+        );
+        /**
+         * URI encapsulated.
+         */
+        private final transient String addr;
+        /**
+         * Map of link params.
+         */
+        private final transient ArrayMap<String, String> params;
+        /**
+         * Public ctor (parser).
+         * @param text Text to parse
+         * @throws IOException If fails
+         */
+        SimpleLink(final String text) throws IOException {
+            final ConcurrentMap<String, String> args =
+                new ConcurrentHashMap<String, String>();
+            final Matcher matcher = WebLinkingResponse.SimpleLink.PTN
+                .matcher(text);
+            if (!matcher.matches()) {
+                throw new IOException(
+                    String.format(
+                        "Link header value doesn't comply to RFC-5988: \"%s\"",
+                        text
+                    )
+                );
+            }
+            this.addr = matcher.group(1);
+            for (int idx = 1; idx < matcher.groupCount(); idx += 2) {
+                args.put(matcher.group(idx), matcher.group(idx + 1));
+            }
+            this.params = new ArrayMap<String, String>(args);
+        }
+        @Override
+        public URI uri() {
+            return URI.create(this.addr);
+        }
+        @Override
+        public int size() {
+            return this.params.size();
+        }
+        @Override
+        public boolean isEmpty() {
+            return this.params.isEmpty();
+        }
+        @Override
+        public boolean containsKey(final Object key) {
+            return this.params.containsKey(key);
+        }
+        @Override
+        public boolean containsValue(final Object value) {
+            return this.params.containsValue(value);
+        }
+        @Override
+        public String get(final Object key) {
+            return this.params.get(key);
+        }
+        @Override
+        public String put(final String key, final String value) {
+            throw new UnsupportedOperationException("#put()");
+        }
+        @Override
+        public String remove(final Object key) {
+            throw new UnsupportedOperationException("#remove()");
+        }
+        @Override
+        public void putAll(final Map<? extends String, ? extends String> map) {
+            throw new UnsupportedOperationException("#putAll()");
+        }
+        @Override
+        public void clear() {
+            throw new UnsupportedOperationException("#clear()");
+        }
+        @Override
+        public Set<String> keySet() {
+            return this.params.keySet();
+        }
+        @Override
+        public Collection<String> values() {
+            return this.params.values();
+        }
+        @Override
+        public Set<Map.Entry<String, String>> entrySet() {
+            return this.params.entrySet();
+        }
+    }
+
+}
