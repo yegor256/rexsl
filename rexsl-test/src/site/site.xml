@@ -45,6 +45,7 @@
             <item name="XML Response" href="example-xml-response.html"/>
             <item name="JSON Response" href="example-json-response.html"/>
             <item name="XML/XHTML Matchers" href="example-matchers.html"/>
+            <item name="Web Linking Response" href="example-web-linking-response.html"/>
         </menu>
         <menu ref="reports"/>
     </body>

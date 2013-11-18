@@ -189,7 +189,9 @@ public final class RestResponse extends AbstractResponse {
     @NotNull(message = "request is never NULL")
     @SuppressWarnings("PMD.UseConcurrentHashMap")
     public Request jump(@NotNull(message = "URI can't be NULL") final URI uri) {
-        Request req = this.back().uri().set(uri).back();
+        Request req = this.back().uri()
+            .set(this.back().uri().get().resolve(uri))
+            .back();
         final Map<String, List<String>> headers = this.headers();
         if (headers.containsKey(HttpHeaders.SET_COOKIE)) {
             for (final String header : headers.get(HttpHeaders.SET_COOKIE)) {
