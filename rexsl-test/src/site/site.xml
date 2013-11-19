@@ -46,6 +46,7 @@
             <item name="JSON Response" href="example-json-response.html"/>
             <item name="XML/XHTML Matchers" href="example-matchers.html"/>
             <item name="Web Linking Response" href="example-web-linking-response.html"/>
+            <item name="HTTP Request that retries" href="example-retry-request.html"/>
         </menu>
         <menu ref="reports"/>
     </body>

@@ -1,0 +1,15 @@
+# HTTP Request that Retries on Failure
+
+[`RetryRequest`](./apidocs-${project.version}/com/rexsl/test/RetryRequest.html).
+is a decorator of
+[`Request`](./apidocs-${project.version}/com/rexsl/test/Request.html)
+that retries to fetch a response a few times before giving up and
+throwing `IOException`, for example:
+
+```java
+Request request = new RetryRequest(new JdkRequest("http://www.google.com"));
+String body = request.fetch().body();
+```
+
+If it recommended to use this decorator in production, to avoid
+accidental exceptions due to unstable connection.

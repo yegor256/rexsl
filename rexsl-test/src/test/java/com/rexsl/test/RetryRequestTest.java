@@ -61,7 +61,7 @@ public final class RetryRequestTest {
                 Matchers.equalTo("")
             );
         }
-        Mockito.verify(origin, Mockito.times(Tv.THREE)).fetch();
+        Mockito.verify(origin, Mockito.atLeast(Tv.THREE)).fetch();
     }
 
     /**
@@ -85,7 +85,28 @@ public final class RetryRequestTest {
                 Matchers.equalTo("")
             );
         }
-        Mockito.verify(origin, Mockito.times(Tv.THREE)).fetch();
+        Mockito.verify(origin, Mockito.atLeast(Tv.THREE)).fetch();
+    }
+
+    /**
+     * BaseRequest can retry after changes of method.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void retriesOnIoExceptionWithChangedMethod() throws Exception {
+        final Request origin = Mockito.mock(Request.class);
+        Mockito.doReturn(origin).when(origin).method(Mockito.anyString());
+        Mockito.doThrow(new IOException("")).when(origin).fetch();
+        try {
+            new RetryRequest(origin).method(Request.POST).fetch();
+            Assert.fail("exception expected at this point");
+        } catch (IOException ex) {
+            MatcherAssert.assertThat(
+                ex.getMessage(),
+                Matchers.equalTo("")
+            );
+        }
+        Mockito.verify(origin, Mockito.atLeast(Tv.THREE)).fetch();
     }
 
 }
