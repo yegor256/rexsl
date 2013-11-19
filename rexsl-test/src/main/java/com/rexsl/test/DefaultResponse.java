@@ -33,7 +33,6 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
 import com.jcabi.log.Logger;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,12 +92,11 @@ final class DefaultResponse implements Response {
      * @param reason HTTP reason phrase
      * @param headers HTTP headers
      * @param body Body of HTTP response
-     * @throws IOException If some data are not valid
      * @checkstyle ParameterNumber (5 lines)
      */
     DefaultResponse(final Request request, final int status,
         final String reason, final Array<Map.Entry<String, String>> headers,
-        final byte[] body) throws IOException {
+        final byte[] body) {
         this.req = request;
         this.code = status;
         this.phrase = reason;

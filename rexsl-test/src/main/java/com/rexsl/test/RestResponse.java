@@ -55,6 +55,7 @@ import org.hamcrest.Matchers;
  */
 @Immutable
 @EqualsAndHashCode(callSuper = true)
+@SuppressWarnings("PMD.TooManyMethods")
 public final class RestResponse extends AbstractResponse {
 
     /**
@@ -71,7 +72,7 @@ public final class RestResponse extends AbstractResponse {
      * @param matcher The matcher to use
      * @return The same object
      */
-    @NotNull(message = "response is never NULL")
+    @NotNull(message = "new response is never NULL")
     public RestResponse assertThat(
         @NotNull(message = "matcher can't be NULL")
         final Matcher<Response> matcher) {
@@ -179,6 +180,21 @@ public final class RestResponse extends AbstractResponse {
             values, matcher
         );
         return this;
+    }
+
+    /**
+     * Verifies HTTP header against provided matcher, and throws
+     * {@link AssertionError} in case of mismatch.
+     * @param name Name of the header to match
+     * @param value The value to expect in one of the headers
+     * @return This object
+     * @since 0.9
+     */
+    @NotNull(message = "response is never NULL")
+    public RestResponse assertHeader(
+        @NotNull(message = "header name can't be NULL") final String name,
+        @NotNull(message = "header value can't be NULL") final String value) {
+        return this.assertHeader(name, Matchers.hasItems(value));
     }
 
     /**
