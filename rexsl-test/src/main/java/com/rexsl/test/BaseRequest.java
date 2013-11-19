@@ -101,14 +101,6 @@ final class BaseRequest implements Request {
     /**
      * Public ctor.
      * @param wre Wire
-     */
-    BaseRequest(final Wire wre) {
-        this(wre, "#", new Array<Header>(), Request.GET, "");
-    }
-
-    /**
-     * Public ctor.
-     * @param wre Wire
      * @param uri The resource to work with
      */
     BaseRequest(final Wire wre, final String uri) {
