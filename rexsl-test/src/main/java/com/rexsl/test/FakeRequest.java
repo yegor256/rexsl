@@ -77,7 +77,8 @@ public final class FakeRequest implements Request {
                     FakeRequest.this.content
                 );
             }
-        }
+        },
+        "http://localhost/"
     );
 
     /**
