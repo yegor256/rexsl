@@ -53,9 +53,18 @@ import javax.validation.constraints.NotNull;
  *   .as(JsonResponse.class)
  *   .json().getJsonObject().getString("name");</pre>
  *
+ * <p>Since version 0.9 it is recommended to use {@link RetryRequest}
+ * wrapper to avoid accidental {@link IOException} when connection is weak
+ * or unstable, for example:
+ *
+ * <pre> String name = new RetryRequest(
+ *   new JdkRequest("https://www.google.com")
+ * ).fetch().body();</pre>
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8
+ * @see JdkRequest, ApacheRequest, RetryRequest
  */
 @Immutable
 public interface Request {
