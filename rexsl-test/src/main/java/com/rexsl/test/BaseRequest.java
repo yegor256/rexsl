@@ -246,7 +246,7 @@ final class BaseRequest implements Request {
     }
 
     /**
-     * Apache URI.
+     * Base URI.
      */
     @Immutable
     @EqualsAndHashCode(of = "address")
@@ -256,7 +256,7 @@ final class BaseRequest implements Request {
          */
         private final transient String address;
         /**
-         * Apache request encapsulated.
+         * Base request encapsulated.
          */
         private final transient BaseRequest owner;
         /**
@@ -341,7 +341,7 @@ final class BaseRequest implements Request {
     }
 
     /**
-     * Apache URI.
+     * Base URI.
      */
     @Immutable
     @EqualsAndHashCode(of = "text")
@@ -351,7 +351,7 @@ final class BaseRequest implements Request {
          */
         private final transient String text;
         /**
-         * Apache request encapsulated.
+         * Base request encapsulated.
          */
         private final transient BaseRequest owner;
         /**
