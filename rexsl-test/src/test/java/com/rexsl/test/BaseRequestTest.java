@@ -397,9 +397,10 @@ public final class BaseRequestTest {
             this.request(new URI("http://localhost:88/test/foo"))
                 .uri().path("/bar").queryParam("abb", "776")
                 .queryParams(new ArrayMap<String, String>().with("bba", "669"))
+                .userInfo("hey:\u20ac")
                 .back().uri().get(),
             Matchers.hasToString(
-                "http://localhost:88/test/foo/bar?abb=776&bba=669"
+                "http://hey:%E2%82%AC@localhost:88/test/foo/bar?abb=776&bba=669"
             )
         );
     }

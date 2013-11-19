@@ -94,4 +94,12 @@ public interface RequestURI {
     @NotNull(message = "request URI is never NULL")
     RequestURI path(@NotNull(message = "path can't be NULL") String segment);
 
+    /**
+     * Set user info.
+     * @param info User info part to set
+     * @return New alternated URI
+     */
+    @NotNull(message = "new request URI is never NULL")
+    RequestURI userInfo(@NotNull(message = "info can't be NULL") String info);
+
 }

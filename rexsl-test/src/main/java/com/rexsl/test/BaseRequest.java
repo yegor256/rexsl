@@ -129,7 +129,7 @@ final class BaseRequest implements Request {
     @Override
     @NotNull
     public RequestURI uri() {
-        return new BaseRequest.ApacheURI(this, this.home);
+        return new BaseURI(this, this.home);
     }
 
     @Override
@@ -147,7 +147,7 @@ final class BaseRequest implements Request {
 
     @Override
     public RequestBody body() {
-        return new BaseRequest.ApacheBody(this, this.content);
+        return new BaseBody(this, this.content);
     }
 
     @Override
@@ -250,7 +250,7 @@ final class BaseRequest implements Request {
      */
     @Immutable
     @EqualsAndHashCode(of = "address")
-    private static final class ApacheURI implements RequestURI {
+    private static final class BaseURI implements RequestURI {
         /**
          * URI encapsulated.
          */
@@ -264,7 +264,7 @@ final class BaseRequest implements Request {
          * @param req Request
          * @param uri The URI to start with
          */
-        public ApacheURI(final BaseRequest req, final String uri) {
+        public BaseURI(final BaseRequest req, final String uri) {
             this.owner = req;
             this.address = uri;
         }
@@ -289,13 +289,13 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI set(@NotNull(message = "URI can't be NULL")
             final URI uri) {
-            return new BaseRequest.ApacheURI(this.owner, uri.toString());
+            return new BaseURI(this.owner, uri.toString());
         }
         @Override
         public RequestURI queryParam(
             @NotNull(message = "param name can't be NULL") final String name,
             @NotNull(message = "value can't be NULL") final Object value) {
-            return new BaseRequest.ApacheURI(
+            return new BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .queryParam(name, "{value}")
@@ -313,7 +313,7 @@ final class BaseRequest implements Request {
                 values[idx] = pair.getValue();
                 ++idx;
             }
-            return new BaseRequest.ApacheURI(
+            return new BaseURI(
                 this.owner,
                 uri.build(values).toString()
             );
@@ -321,10 +321,20 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI path(
             @NotNull(message = "path can't be NULL") final String segment) {
-            return new BaseRequest.ApacheURI(
+            return new BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .path(segment)
+                    .build().toString()
+            );
+        }
+        @Override
+        public RequestURI userInfo(
+            @NotNull(message = "info can't be NULL") final String info) {
+            return new BaseURI(
+                this.owner,
+                UriBuilder.fromUri(this.address)
+                    .userInfo(info)
                     .build().toString()
             );
         }
@@ -335,7 +345,7 @@ final class BaseRequest implements Request {
      */
     @Immutable
     @EqualsAndHashCode(of = "text")
-    private static final class ApacheBody implements RequestBody {
+    private static final class BaseBody implements RequestBody {
         /**
          * Content encapsulated.
          */
@@ -349,7 +359,7 @@ final class BaseRequest implements Request {
          * @param req Request
          * @param txt Text to encapsulate
          */
-        public ApacheBody(final BaseRequest req, final String txt) {
+        public BaseBody(final BaseRequest req, final String txt) {
             this.owner = req;
             this.text = txt;
         }
@@ -374,14 +384,14 @@ final class BaseRequest implements Request {
         @Override
         public RequestBody set(@NotNull(message = "content can't be NULL")
             final String txt) {
-            return new BaseRequest.ApacheBody(this.owner, txt);
+            return new BaseBody(this.owner, txt);
         }
         @Override
         public RequestBody formParam(
             @NotNull(message = "name can't be NULL") final String name,
             @NotNull(message = "value can't be NULL") final Object value) {
             try {
-                return new BaseRequest.ApacheBody(
+                return new BaseBody(
                     this.owner,
                     new StringBuilder(this.text)
                         .append(name)
