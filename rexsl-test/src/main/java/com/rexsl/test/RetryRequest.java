@@ -42,13 +42,25 @@ import lombok.EqualsAndHashCode;
 /**
  * A {@link Request} that retries to fetch in case of an {@link IOException}.
  *
+ * <p>It is recommended to use {@link RetryRequest}
+ * wrapper to avoid accidental {@link IOException} when connection is weak
+ * or unstable, for example:
+ *
+ * <pre> String name = new RetryRequest(
+ *   new JdkRequest("https://www.google.com")
+ * ).fetch().body();</pre>
+ *
+ * <p>This class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.9
+ * @see JdkRequest
  */
 @Immutable
 @EqualsAndHashCode(of = "origin")
 @Loggable(Loggable.DEBUG)
+@SuppressWarnings("PMD.TooManyMethods")
 public final class RetryRequest implements Request {
 
     /**
@@ -71,12 +83,12 @@ public final class RetryRequest implements Request {
 
     @Override
     public RequestURI uri() {
-        return new RetryRequest.RetryURI(this, this.origin.uri());
+        return new RetryRequest.RetryURI(this.origin);
     }
 
     @Override
     public RequestBody body() {
-        return new RetryRequest.RetryBody(this, this.origin.body());
+        return new RetryRequest.RetryBody(this.origin);
     }
 
     @Override
@@ -92,7 +104,7 @@ public final class RetryRequest implements Request {
     @Override
     @RetryOnFailure(
         attempts = Tv.THREE,
-        delay = 50,
+        delay = Tv.HUNDRED,
         unit = TimeUnit.MILLISECONDS,
         verbose = false,
         randomize = true,
@@ -106,65 +118,59 @@ public final class RetryRequest implements Request {
      * Retry URI.
      */
     @Immutable
-    @EqualsAndHashCode(of = { "origin", "owner" })
+    @EqualsAndHashCode(of = "request")
     private static final class RetryURI implements RequestURI {
-        /**
-         * Origin URI encapsulated.
-         */
-        private final transient RequestURI origin;
         /**
          * Origin request encapsulated.
          */
-        private final transient Request owner;
+        private final transient Request request;
         /**
          * Public ctor.
          * @param req Request
-         * @param uri The URI to start with
          */
-        public RetryURI(final Request req, final RequestURI uri) {
-            this.owner = req;
-            this.origin = uri;
+        public RetryURI(final Request req) {
+            this.request = req;
         }
         @Override
         public String toString() {
-            return this.origin.toString();
+            return this.request.uri().toString();
         }
         @Override
         public Request back() {
-            return this.owner.uri().set(this.get()).back();
+            return new RetryRequest(this.request);
         }
         @Override
         public URI get() {
-            return this.origin.get();
+            return this.request.uri().get();
         }
         @Override
         public RequestURI set(final URI uri) {
             return new RetryRequest.RetryURI(
-                this.owner, this.origin.set(uri)
+                this.request.uri().set(uri).back()
             );
         }
         @Override
         public RequestURI queryParam(final String name, final Object value) {
             return new RetryRequest.RetryURI(
-                this.owner, this.origin.queryParam(name, value)
+                this.request.uri().queryParam(name, value).back()
             );
         }
         @Override
         public RequestURI queryParams(final Map<String, String> map) {
             return new RetryRequest.RetryURI(
-                this.owner, this.origin.queryParams(map)
+                this.request.uri().queryParams(map).back()
             );
         }
         @Override
         public RequestURI path(final String segment) {
             return new RetryRequest.RetryURI(
-                this.owner, this.origin.path(segment)
+                this.request.uri().path(segment).back()
             );
         }
         @Override
         public RequestURI userInfo(final String info) {
             return new RetryRequest.RetryURI(
-                this.owner, this.origin.userInfo(info)
+                this.request.uri().userInfo(info).back()
             );
         }
     }
@@ -173,47 +179,41 @@ public final class RetryRequest implements Request {
      * Retry Body.
      */
     @Immutable
-    @EqualsAndHashCode(of = { "origin", "owner" })
+    @EqualsAndHashCode(of = "request")
     private static final class RetryBody implements RequestBody {
-        /**
-         * Original body.
-         */
-        private final transient RequestBody origin;
         /**
          * Original request encapsulated.
          */
-        private final transient Request owner;
+        private final transient Request request;
         /**
          * Public ctor.
          * @param req Request
-         * @param body Original body
          */
-        public RetryBody(final Request req, final RequestBody body) {
-            this.owner = req;
-            this.origin = body;
+        public RetryBody(final Request req) {
+            this.request = req;
         }
         @Override
         public String toString() {
-            return this.origin.toString();
+            return this.request.body().toString();
         }
         @Override
         public Request back() {
-            return this.owner.body().set(this.get()).back();
+            return new RetryRequest(this.request);
         }
         @Override
         public String get() {
-            return this.origin.get();
+            return this.request.body().get();
         }
         @Override
         public RequestBody set(final String txt) {
             return new RetryRequest.RetryBody(
-                this.owner, this.origin.set(txt)
+                this.request.body().set(txt).back()
             );
         }
         @Override
         public RequestBody formParam(final String name, final Object value) {
             return new RetryRequest.RetryBody(
-                this.owner, this.origin.formParam(name, value)
+                this.request.body().formParam(name, value).back()
             );
         }
     }

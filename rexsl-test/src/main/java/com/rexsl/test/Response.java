@@ -37,9 +37,18 @@ import javax.validation.constraints.NotNull;
 /**
  * RESTful response returned by {@link Request#fetch()}.
  *
+ * <p>You can get this response from one of implementations of {@link Request}:
+ *
+ * <pre> Response response = new RetryRequest(
+ *   new JdkRequest("https://www.google.com")
+ * ).fetch();</pre>
+ *
+ * <p>Instances of this interface are immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8
+ * @see JdkRequest
  */
 @Immutable
 public interface Response {

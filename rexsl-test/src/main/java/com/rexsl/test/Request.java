@@ -61,10 +61,14 @@ import javax.validation.constraints.NotNull;
  *   new JdkRequest("https://www.google.com")
  * ).fetch().body();</pre>
  *
+ * <p>Instances of this interface are immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8
- * @see JdkRequest, ApacheRequest, RetryRequest
+ * @see JdkRequest
+ * @see ApacheRequest
+ * @see RetryRequest
  */
 @Immutable
 public interface Request {

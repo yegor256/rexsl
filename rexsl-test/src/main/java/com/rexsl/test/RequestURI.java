@@ -37,6 +37,8 @@ import javax.validation.constraints.NotNull;
 /**
  * Request URI.
  *
+ * <p>Instances of this interface are immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8
