@@ -1,7 +1,7 @@
-RESTful Java Web Framework on top of JAX-RS, XSL, and JAXB
+# RESTful Java Web Framework
 
 The idea is simple - to make a
-[RESTful][http://en.wikipedia.org/wiki/Representational_state_transfer)
+[RESTful](http://en.wikipedia.org/wiki/Representational_state_transfer)
 XML API available in a browser-friendly
 format renderable with
 [XSL](http://en.wikipedia.org/wiki/XSL) stylesheets.
