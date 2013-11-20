@@ -45,6 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -116,6 +117,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
                 request.getInputStream(),
                 Charsets.UTF_8
             );
+            request.setCharacterEncoding(CharEncoding.UTF_8);
             this.assertMethod(request, input);
             this.assertRequestUri(request);
             this.assertParams(request, input);

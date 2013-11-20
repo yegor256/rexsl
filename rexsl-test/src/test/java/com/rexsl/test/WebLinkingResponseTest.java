@@ -81,13 +81,10 @@ public final class WebLinkingResponseTest {
     @Test
     public void followsLinksInHeaders() throws Exception {
         final WebLinkingResponse response = new WebLinkingResponse(
-            new FakeRequest()
-                .withHeader(
-                    "Link",
-                    "</a>; rel=\"first\", <http://localhost/o>; rel=\"second\""
-                )
-                .uri().set(new URI("http://localhost/test")).back()
-                .fetch()
+            new FakeRequest().withHeader(
+                "Link",
+                "</a>; rel=\"first\", <http://localhost/o>; rel=\"second\""
+            ).uri().set(new URI("http://localhost/test")).back().fetch()
         );
         MatcherAssert.assertThat(
             response.follow("first").uri().get(),

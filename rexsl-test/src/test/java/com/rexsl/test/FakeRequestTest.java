@@ -90,7 +90,7 @@ public final class FakeRequestTest {
                 .uri().set(new URI("http://google.com")).back()
                 .fetch().back()
                 .uri().get().toString(),
-            Matchers.endsWith("google.com")
+            Matchers.containsString("google.com")
         );
     }
 

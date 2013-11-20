@@ -37,7 +37,6 @@ import com.jcabi.manifests.Manifests;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -201,13 +200,13 @@ final class BaseRequest implements Request {
                             Base64.encodeBase64String(
                                 Logger.format(
                                     "%s:%s",
-                                    URLDecoder.decode(
+                                    URLEncoder.encode(
                                         parts[0], CharEncoding.UTF_8
                                     ),
-                                    URLDecoder.decode(
+                                    URLEncoder.encode(
                                         parts[1], CharEncoding.UTF_8
                                     )
-                                ).getBytes()
+                                ).getBytes(Charsets.UTF_8)
                             )
                         )
                     )
@@ -264,6 +263,7 @@ final class BaseRequest implements Request {
      * @param bytes Bytes to print
      * @return Text, with ASCII symbols only
      */
+    @SuppressWarnings("PMD.DefaultPackage")
     static String print(final byte[] bytes) {
         final StringBuilder text = new StringBuilder(0);
         for (final byte chr : bytes) {
