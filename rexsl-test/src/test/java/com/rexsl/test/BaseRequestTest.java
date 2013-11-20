@@ -344,7 +344,7 @@ public final class BaseRequestTest {
     public void sendsBasicAuthenticationHeader() throws Exception {
         final ContainerMocker container = new ContainerMocker().expectHeader(
             HttpHeaders.AUTHORIZATION,
-            Matchers.equalTo("Basic dXNlcjqAgA==")
+            Matchers.equalTo("Basic dXNlcjolRTIlODIlQUMlRTIlODIlQUM=")
         ).mock();
         final URI uri = UriBuilder.fromUri(container.home())
             .userInfo("user:\u20ac\u20ac").build();
