@@ -99,13 +99,13 @@ public final class BaseRequestTest {
         final ContainerMocker container = new ContainerMocker()
             .expectRequestUri(Matchers.containsString("helloall"))
             .expectMethod(Matchers.equalTo(Request.GET))
-            .returnBody("hello!!".getBytes(CharEncoding.UTF_8))
+            .returnBody("\u20ac! hello!".getBytes(CharEncoding.UTF_8))
             .mock();
         this.request(container.home())
             .uri().path("/helloall").back()
             .method(Request.GET)
             .fetch().as(RestResponse.class)
-            .assertBody(Matchers.containsString("!!"))
+            .assertBody(Matchers.containsString("\u20ac!"))
             .assertBody(Matchers.containsString("hello!"))
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
@@ -139,7 +139,7 @@ public final class BaseRequestTest {
     @Test
     public void sendsTextWithGetParameters() throws Exception {
         final String name = "qparam";
-        final String value = "some value of this param &^%*;'\"";
+        final String value = "some value of this param &^%*;'\"\u20ac\"";
         final ContainerMocker container = new ContainerMocker()
             .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(Request.GET))
@@ -165,7 +165,7 @@ public final class BaseRequestTest {
     @org.junit.Ignore
     public void sendsTextWithPostRequestMatchParam() throws Exception {
         final String name = "postparam";
-        final String value = "some random value of this param \"&^%*;'\"";
+        final String value = "some random value of \u20ac param \"&^%*;'\"";
         final ContainerMocker container = new ContainerMocker()
             .expectParam(name, Matchers.equalTo(value))
             .expectMethod(Matchers.equalTo(Request.POST))
@@ -192,7 +192,7 @@ public final class BaseRequestTest {
     @Test
     @org.junit.Ignore
     public void sendsTextWithPostRequestMatchBody() throws Exception {
-        final String value = "some body value with \"&^%*;'\"";
+        final String value = "\u20ac some body value with \"&^%*;'\"";
         final ContainerMocker container = new ContainerMocker()
             .expectBody(Matchers.containsString("with"))
             .expectMethod(Matchers.equalTo(Request.POST))
@@ -235,12 +235,12 @@ public final class BaseRequestTest {
     public void assertsHttpResponseBody() throws Exception {
         final ContainerMocker container = new ContainerMocker()
             .expectMethod(Matchers.equalTo(Request.GET))
-            .returnBody("some text")
+            .returnBody("some text \u20ac")
             .mock();
         this.request(container.home())
             .method(Request.GET)
             .fetch().as(RestResponse.class)
-            .assertBody(Matchers.containsString("some"))
+            .assertBody(Matchers.containsString("text \u20ac"))
             .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
@@ -344,10 +344,10 @@ public final class BaseRequestTest {
     public void sendsBasicAuthenticationHeader() throws Exception {
         final ContainerMocker container = new ContainerMocker().expectHeader(
             HttpHeaders.AUTHORIZATION,
-            Matchers.equalTo("Basic dXNlcjpwd2Q=")
+            Matchers.equalTo("Basic dXNlcjqAgA==")
         ).mock();
         final URI uri = UriBuilder.fromUri(container.home())
-            .userInfo("user:pwd").build();
+            .userInfo("user:\u20ac\u20ac").build();
         this.request(uri)
             .method(Request.GET)
             .uri().path("/abcde").back()

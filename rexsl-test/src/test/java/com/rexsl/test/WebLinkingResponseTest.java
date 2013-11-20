@@ -56,9 +56,7 @@ public final class WebLinkingResponseTest {
         };
         for (final String header : headers) {
             final WebLinkingResponse response = new WebLinkingResponse(
-                new ResponseMocker()
-                    .withHeader("Link", header)
-                    .mock()
+                new FakeRequest().withHeader("Link", header).fetch()
             );
             final WebLinkingResponse.Link link = response.links().get("foo");
             MatcherAssert.assertThat(
@@ -83,13 +81,13 @@ public final class WebLinkingResponseTest {
     @Test
     public void followsLinksInHeaders() throws Exception {
         final WebLinkingResponse response = new WebLinkingResponse(
-            new ResponseMocker()
-                .with(new JdkRequest("http://localhost/test"))
+            new FakeRequest()
                 .withHeader(
                     "Link",
                     "</a>; rel=\"first\", <http://localhost/o>; rel=\"second\""
                 )
-                .mock()
+                .uri().set(new URI("http://localhost/test")).back()
+                .fetch()
         );
         MatcherAssert.assertThat(
             response.follow("first").uri().get(),

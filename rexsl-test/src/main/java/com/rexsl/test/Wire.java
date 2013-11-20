@@ -57,7 +57,7 @@ interface Wire {
      * @checkstyle ParameterNumber (6 lines)
      */
     Response send(Request req, String home, String method,
-        Collection<Map.Entry<String, String>> headers, String content)
+        Collection<Map.Entry<String, String>> headers, byte[] content)
         throws IOException;
 
 }

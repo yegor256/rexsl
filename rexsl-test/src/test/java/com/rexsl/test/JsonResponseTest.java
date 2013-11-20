@@ -46,9 +46,9 @@ public final class JsonResponseTest {
      */
     @Test
     public void readsJsonDocument() throws Exception {
-        final Response resp = new ResponseMocker()
+        final Response resp = new FakeRequest()
             .withBody("{\"foo-foo\":2, \"bar\":\"hello!\"}")
-            .mock();
+            .fetch();
         final JsonResponse response = new JsonResponse(resp);
         MatcherAssert.assertThat(
             response.json().readObject().getInt("foo-foo"),

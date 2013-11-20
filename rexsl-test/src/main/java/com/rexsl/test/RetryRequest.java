@@ -211,6 +211,12 @@ public final class RetryRequest implements Request {
             );
         }
         @Override
+        public RequestBody set(final byte[] txt) {
+            return new RetryRequest.RetryBody(
+                this.request.body().set(txt).back()
+            );
+        }
+        @Override
         public RequestBody formParam(final String name, final Object value) {
             return new RetryRequest.RetryBody(
                 this.request.body().formParam(name, value).back()

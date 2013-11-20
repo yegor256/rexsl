@@ -51,9 +51,9 @@ public final class XmlResponseTest {
     @Test
     public void findsDocumentNodesWithXpath() throws Exception {
         final XmlResponse response = new XmlResponse(
-            new ResponseMocker()
+            new FakeRequest()
                 .withBody("<r><a>\u0443\u0440\u0430!</a><a>B</a></r>")
-                .mock()
+                .fetch()
         );
         MatcherAssert.assertThat(
             response.xml().xpath("//a/text()"),
@@ -71,9 +71,9 @@ public final class XmlResponseTest {
      */
     @Test
     public void assertsWithXpath() throws Exception {
-        final Response resp = new ResponseMocker()
+        final Response resp = new FakeRequest()
             .withBody("<x a='1'><!-- hi --><y>\u0443\u0440\u0430!</y></x>")
-            .mock();
+            .fetch();
         new XmlResponse(resp)
             .assertXPath("//y[.='\u0443\u0440\u0430!']")
             .assertXPath("/x/@a")
@@ -87,12 +87,12 @@ public final class XmlResponseTest {
      */
     @Test
     public void assertsWithXpathAndNamespaces() throws Exception {
-        final Response resp = new ResponseMocker().withBody(
+        final Response resp = new FakeRequest().withBody(
             StringUtils.join(
                 "<html xmlns='http://www.w3.org/1999/xhtml'>",
                 "<div>\u0443\u0440\u0430!</div></html>"
             )
-        ).mock();
+        ).fetch();
         new XmlResponse(resp)
             .assertXPath("/xhtml:html/xhtml:div")
             .assertXPath("//xhtml:div[.='\u0443\u0440\u0430!']");
@@ -105,9 +105,9 @@ public final class XmlResponseTest {
     @Test
     public void assertsWithXpathWithCustomNamespace() throws Exception {
         final XmlResponse response = new XmlResponse(
-            new ResponseMocker()
+            new FakeRequest()
                 .withBody("<a xmlns='urn:foo'><b>yes!</b></a>")
-                .mock()
+                .fetch()
         ).registerNs("foo", "urn:foo");
         final XML xml = response.xml();
         MatcherAssert.assertThat(
@@ -127,9 +127,9 @@ public final class XmlResponseTest {
     @Test
     public void findsDocumentNodesWithXpathAndReturnsThem() throws Exception {
         final XmlResponse response = new XmlResponse(
-            new ResponseMocker()
+            new FakeRequest()
                 .withBody("<root><a><x>1</x></a><a><x>2</x></a></root>")
-                .mock()
+                .fetch()
         );
         MatcherAssert.assertThat(
             response.xml().nodes("//a"),

@@ -50,7 +50,7 @@ public final class RestResponseTest {
     @Test(expected = AssertionError.class)
     public void assertsHttpStatusCode() throws Exception {
         new RestResponse(
-            new ResponseMocker().withStatus(HttpURLConnection.HTTP_OK).mock()
+            new FakeRequest().withStatus(HttpURLConnection.HTTP_OK).fetch()
         ).assertStatus(HttpURLConnection.HTTP_NOT_FOUND);
     }
 
@@ -61,13 +61,13 @@ public final class RestResponseTest {
     @Test
     public void retrievesCookieByName() throws Exception {
         final RestResponse response = new RestResponse(
-            new ResponseMocker()
+            new FakeRequest()
                 .withBody("<hello/>")
                 .withHeader(
                     HttpHeaders.SET_COOKIE,
                     "cookie1=foo1;Path=/;Comment=\"\", bar=1;"
                 )
-                .mock()
+                .fetch()
         );
         MatcherAssert.assertThat(
             response.cookie("cookie1"),
@@ -92,11 +92,11 @@ public final class RestResponseTest {
             )
             .mock();
         final RestResponse response = new RestResponse(
-            new ResponseMocker()
+            new FakeRequest()
                 .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom; path=/")
                 .withHeader(HttpHeaders.LOCATION, container.home().toString())
-                .with(new ApacheRequest(container.home()))
-                .mock()
+                .uri().set(container.home()).back()
+                .fetch()
         );
         response.follow()
             .fetch().as(RestResponse.class)
@@ -117,12 +117,12 @@ public final class RestResponseTest {
             )
             .mock();
         final RestResponse response = new RestResponse(
-            new ResponseMocker()
+            new FakeRequest()
                 .withHeader(HttpHeaders.SET_COOKIE, "first=A; path=/")
                 .withHeader(HttpHeaders.SET_COOKIE, "second=; path=/")
                 .withHeader(HttpHeaders.LOCATION, container.home().toString())
-                .with(new ApacheRequest(container.home()))
-                .mock()
+                .uri().set(container.home()).back()
+                .fetch()
         );
         response.follow()
             .fetch().as(RestResponse.class)
@@ -137,9 +137,9 @@ public final class RestResponseTest {
     public void jumpsToRelativeUrls() throws Exception {
         MatcherAssert.assertThat(
             new RestResponse(
-                new ResponseMocker()
-                    .with(new JdkRequest("http://locahost:888/tt"))
-                    .mock()
+                new FakeRequest()
+                    .uri().set(new URI("http://locahost:888/tt")).back()
+                    .fetch()
             ).jump(new URI("/foo/bar?hey")).uri().get(),
             Matchers.hasToString("http://locahost:888/foo/bar?hey")
         );

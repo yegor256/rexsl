@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Implementation of {@link Request} that always returns the same
@@ -68,7 +69,7 @@ public final class FakeRequest implements Request {
             public Response send(final Request req, final String home,
                 final String method,
                 final Collection<Map.Entry<String, String>> headers,
-                final String text) {
+                final byte[] text) {
                 return new DefaultResponse(
                     FakeRequest.this,
                     FakeRequest.this.code,
@@ -129,8 +130,7 @@ public final class FakeRequest implements Request {
         this.code = status;
         this.phrase = reason;
         this.hdrs = new Array<Map.Entry<String, String>>(headers);
-        this.content = new byte[body.length];
-        System.arraycopy(body, 0, this.content, 0, body.length);
+        this.content = ArrayUtils.clone(body);
     }
 
     @Override
@@ -212,15 +212,24 @@ public final class FakeRequest implements Request {
      */
     public FakeRequest withBody(final String text) {
         try {
-            return new FakeRequest(
-                this.code,
-                this.phrase,
-                this.hdrs,
-                text.getBytes("UTF-8")
-            );
+            return this.withBody(text.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException ex) {
             throw new IllegalStateException(ex);
         }
+    }
+
+    /**
+     * Make a similar request, with the provided body.
+     * @param body Body
+     * @return New request
+     */
+    public FakeRequest withBody(final byte[] body) {
+        return new FakeRequest(
+            this.code,
+            this.phrase,
+            this.hdrs,
+            body
+        );
     }
 
 }

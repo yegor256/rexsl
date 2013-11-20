@@ -42,6 +42,7 @@ import java.util.concurrent.ConcurrentMap;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.io.Charsets;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -101,8 +102,7 @@ final class DefaultResponse implements Response {
         this.code = status;
         this.phrase = reason;
         this.hdrs = headers;
-        this.content = new byte[body.length];
-        System.arraycopy(body, 0, this.content, 0, body.length);
+        this.content = ArrayUtils.clone(body);
     }
 
     @Override
@@ -154,9 +154,7 @@ final class DefaultResponse implements Response {
 
     @Override
     public byte[] binary() {
-        final byte[] bytes = new byte[this.content.length];
-        System.arraycopy(this.content, 0, bytes, 0, this.content.length);
-        return bytes;
+        return ArrayUtils.clone(this.content);
     }
     /**
      * {@inheritDoc}
@@ -200,7 +198,7 @@ final class DefaultResponse implements Response {
         if (this.content.length == 0) {
             text.append("<<empty response body>>");
         } else {
-            text.append(this.content);
+            text.append(BaseRequest.print(this.content));
         }
         return text.toString();
     }
