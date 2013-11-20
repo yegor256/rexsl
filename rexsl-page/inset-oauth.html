@@ -49,12 +49,12 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="apidocs-0.8/index.html" title="API 0.8 (JavaDoc)">API 0.8 (JavaDoc)</a>
+                                                                    <a href="apidocs-0.9/index.html" title="API 0.9 (JavaDoc)">API 0.9 (JavaDoc)</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="testapidocs-0.8/index.html" title="Mock API">Mock API</a>
+                                                                    <a href="testapidocs-0.9/index.html" title="Mock API">Mock API</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -129,14 +129,14 @@
                                     </ul>
                         <p>
                 
-                17-Nov-2013
-                0.8
+                20-Nov-2013
+                0.9
             </p>
             <article>
                 <h1>OAuth Authentication for JAX-RS Resources</h1>
 <p>Authentication in a RESTful API/interface/website can be implemented only by means of <a class="externalLink" href="http://en.wikipedia.org/wiki/HTTP_cookie">HTTP cookies</a>. An authenticated user makes HTTP requests to the server with authentication cookies inside. The cookie shall contain the name of the user in an encrypted format, to prevent a stranger from faking user identity, since encryption method, secret key, and &#x201c;cryptographic salt&#x201d; are not disclosed.</p>
 <p>Only the server can generate an authentication cookie, when user identity is verified and provided by an authentication provider. The most popular authentication protocol is <a class="externalLink" href="http://oauth.net/">OAuth</a>, used by major providers like <a class="externalLink" href="http://developers.facebook.com/docs/reference/dialogs/oauth/">Facebook</a> and <a class="externalLink" href="https://developers.google.com/accounts/docs/OAuth2">Google</a>.</p>
-<p><a href="./apidocs-0.8/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a> helps to manage OAuth authentication. First, make sure your base JAX-RS resource has a <a href="./apidocs-0.8/com/rexsl/page/Inset.html"><tt>@Inset.Runtime</tt></a>-annotated method that returns an instance of <a href="./apidocs-0.8/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a>:</p>
+<p><a href="./apidocs-0.9/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a> helps to manage OAuth authentication. First, make sure your base JAX-RS resource has a <a href="./apidocs-0.9/com/rexsl/page/Inset.html"><tt>@Inset.Runtime</tt></a>-annotated method that returns an instance of <a href="./apidocs-0.9/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a>:</p>
 
 <div class="source">
 <pre>public abstract class BaseRs extends BaseResource {
