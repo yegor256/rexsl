@@ -29,7 +29,7 @@
  */
 package com.rexsl.test.html;
 
-import com.rexsl.test.ResponseMocker;
+import com.rexsl.test.FakeRequest;
 import java.net.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;
@@ -50,13 +50,13 @@ public final class NoBrokenLinksTest {
     @Test
     public void findsBrokenLinksInHtml() throws Exception {
         MatcherAssert.assertThat(
-            new ResponseMocker().withBody(
+            new FakeRequest().withBody(
                 StringUtils.join(
                     "<html><head>",
                     "<link rel='stylesheet' href='http://broken.rexsl.com'/>",
                     "</head></html>"
                 )
-            ).mock(),
+            ).fetch(),
             Matchers.not(
                 new NoBrokenLinks(new URI("http://www.google.com/"))
             )
@@ -70,9 +70,9 @@ public final class NoBrokenLinksTest {
     @Test
     public void findsEmptyLinksInHtml() throws Exception {
         MatcherAssert.assertThat(
-            new ResponseMocker().withBody(
+            new FakeRequest().withBody(
                 "<html><head><link rel='stylesheet' href=''/></head></html>"
-            ).mock(),
+            ).fetch(),
             Matchers.not(
                 new NoBrokenLinks(new URI("http://www.facebook.com/"))
             )
@@ -86,13 +86,13 @@ public final class NoBrokenLinksTest {
     @Test
     public void findsBrLinksInHtmlWithNamespace() throws Exception {
         MatcherAssert.assertThat(
-            new ResponseMocker().withBody(
+            new FakeRequest().withBody(
                 StringUtils.join(
                     "<html xmlns='http://www.w3.org/1999/xhtml' >",
                     "<head><link rel='stylesheet' href='/broken-link'/>",
                     "</head> </html>"
                 )
-            ).mock(),
+            ).fetch(),
             Matchers.not(
                 new NoBrokenLinks(new URI("http://www.rexsl.com/rexsl-test"))
             )
@@ -106,14 +106,14 @@ public final class NoBrokenLinksTest {
     @Test
     public void passesWithoutBrokenLinks() throws Exception {
         MatcherAssert.assertThat(
-            new ResponseMocker().withBody(
+            new FakeRequest().withBody(
                 StringUtils.join(
                     "<html xmlns='http://www.w3.org/1999/xhtml'>",
                     "<body><a href='/index.html'/>",
                     "<a href='http://img.rexsl.com/logo.png'/>",
                     "</body></html>"
                 )
-            ).mock(),
+            ).fetch(),
             new NoBrokenLinks(new URI("http://www.rexsl.com/"))
         );
     }
@@ -125,7 +125,7 @@ public final class NoBrokenLinksTest {
     @Test(expected = IllegalArgumentException.class)
     public void throwsWhenHtmlIsBroken() throws Exception {
         MatcherAssert.assertThat(
-            new ResponseMocker().withBody("not HTML at all").mock(),
+            new FakeRequest().withBody("not HTML at all").fetch(),
             new NoBrokenLinks(new URI("#"))
         );
     }

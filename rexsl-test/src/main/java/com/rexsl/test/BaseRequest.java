@@ -47,7 +47,10 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.CharUtils;
 
 /**
  * Implementation of {@link Request}.
@@ -96,7 +99,7 @@ final class BaseRequest implements Request {
     /**
      * Body to use.
      */
-    private final transient String content;
+    private final transient byte[] content;
 
     /**
      * Public ctor.
@@ -104,7 +107,11 @@ final class BaseRequest implements Request {
      * @param uri The resource to work with
      */
     BaseRequest(final Wire wre, final String uri) {
-        this(wre, uri, new Array<Header>(), Request.GET, "");
+        this(
+            wre, uri,
+            new Array<Header>(),
+            Request.GET, ArrayUtils.EMPTY_BYTE_ARRAY
+        );
     }
 
     /**
@@ -118,18 +125,18 @@ final class BaseRequest implements Request {
      */
     BaseRequest(final Wire wre, final String uri,
         final Iterable<Header> headers,
-        final String method, final String body) {
+        final String method, final byte[] body) {
         this.wire = wre;
         this.home = uri;
         this.hdrs = new Array<Header>(headers);
         this.mtd = method;
-        this.content = body;
+        this.content = ArrayUtils.clone(body);
     }
 
     @Override
     @NotNull
     public RequestURI uri() {
-        return new BaseURI(this, this.home);
+        return new BaseRequest.BaseURI(this, this.home);
     }
 
     @Override
@@ -147,7 +154,7 @@ final class BaseRequest implements Request {
 
     @Override
     public RequestBody body() {
-        return new BaseBody(this, this.content);
+        return new BaseRequest.BaseBody(this, this.content);
     }
 
     @Override
@@ -237,10 +244,27 @@ final class BaseRequest implements Request {
             );
         }
         text.append('\n');
-        if (this.content.isEmpty()) {
+        if (this.content.length == 0) {
             text.append("<<empty request body>>");
         } else {
-            text.append(this.content);
+            text.append(BaseRequest.print(this.content));
+        }
+        return text.toString();
+    }
+
+    /**
+     * Safely print byte array.
+     * @param bytes Bytes to print
+     * @return Text, with ASCII symbols only
+     */
+    static String print(final byte[] bytes) {
+        final StringBuilder text = new StringBuilder(0);
+        for (final byte chr : bytes) {
+            if (CharUtils.isAscii((char) chr)) {
+                text.append((char) chr);
+            } else {
+                text.append(String.format("\\u%04x", chr));
+            }
         }
         return text.toString();
     }
@@ -289,13 +313,13 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI set(@NotNull(message = "URI can't be NULL")
             final URI uri) {
-            return new BaseURI(this.owner, uri.toString());
+            return new BaseRequest.BaseURI(this.owner, uri.toString());
         }
         @Override
         public RequestURI queryParam(
             @NotNull(message = "param name can't be NULL") final String name,
             @NotNull(message = "value can't be NULL") final Object value) {
-            return new BaseURI(
+            return new BaseRequest.BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .queryParam(name, "{value}")
@@ -313,7 +337,7 @@ final class BaseRequest implements Request {
                 values[idx] = pair.getValue();
                 ++idx;
             }
-            return new BaseURI(
+            return new BaseRequest.BaseURI(
                 this.owner,
                 uri.build(values).toString()
             );
@@ -321,7 +345,7 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI path(
             @NotNull(message = "path can't be NULL") final String segment) {
-            return new BaseURI(
+            return new BaseRequest.BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .path(segment)
@@ -331,7 +355,7 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI userInfo(
             @NotNull(message = "info can't be NULL") final String info) {
-            return new BaseURI(
+            return new BaseRequest.BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .userInfo(info)
@@ -349,7 +373,7 @@ final class BaseRequest implements Request {
         /**
          * Content encapsulated.
          */
-        private final transient String text;
+        private final transient byte[] text;
         /**
          * Base request encapsulated.
          */
@@ -357,15 +381,15 @@ final class BaseRequest implements Request {
         /**
          * Public ctor.
          * @param req Request
-         * @param txt Text to encapsulate
+         * @param body Text to encapsulate
          */
-        public BaseBody(final BaseRequest req, final String txt) {
+        public BaseBody(final BaseRequest req, final byte[] body) {
             this.owner = req;
-            this.text = txt;
+            this.text = ArrayUtils.clone(body);
         }
         @Override
         public String toString() {
-            return this.text;
+            return BaseRequest.print(this.text);
         }
         @Override
         public Request back() {
@@ -379,21 +403,26 @@ final class BaseRequest implements Request {
         }
         @Override
         public String get() {
-            return this.text;
+            return new String(this.text, Charsets.UTF_8);
         }
         @Override
         public RequestBody set(@NotNull(message = "content can't be NULL")
             final String txt) {
-            return new BaseBody(this.owner, txt);
+            return this.set(txt.getBytes(Charsets.UTF_8));
+        }
+        @Override
+        public RequestBody set(@NotNull(message = "body can't be NULL")
+            final byte[] txt) {
+            return new BaseRequest.BaseBody(this.owner, txt);
         }
         @Override
         public RequestBody formParam(
             @NotNull(message = "name can't be NULL") final String name,
             @NotNull(message = "value can't be NULL") final Object value) {
             try {
-                return new BaseBody(
+                return new BaseRequest.BaseBody(
                     this.owner,
-                    new StringBuilder(this.text)
+                    new StringBuilder(this.get())
                         .append(name)
                         .append('=')
                         .append(
@@ -403,6 +432,7 @@ final class BaseRequest implements Request {
                         )
                         .append('&')
                         .toString()
+                        .getBytes(Charsets.UTF_8)
                 );
             } catch (UnsupportedEncodingException ex) {
                 throw new IllegalStateException(ex);

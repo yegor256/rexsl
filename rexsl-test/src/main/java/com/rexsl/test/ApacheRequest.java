@@ -40,11 +40,10 @@ import java.util.LinkedList;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.io.Charsets;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
@@ -77,7 +76,7 @@ public final class ApacheRequest implements Request {
         public Response send(final Request req, final String home,
             final String method,
             final Collection<Map.Entry<String, String>> headers,
-            final String content) throws IOException {
+            final byte[] content) throws IOException {
             final CloseableHttpResponse response =
                 HttpClients.createDefault().execute(
                     this.httpRequest(home, method, headers, content)
@@ -102,7 +101,7 @@ public final class ApacheRequest implements Request {
         public HttpEntityEnclosingRequestBase httpRequest(final String home,
             final String method,
             final Collection<Map.Entry<String, String>> headers,
-            final String content) {
+            final byte[] content) {
             final HttpEntityEnclosingRequestBase req =
                 new HttpEntityEnclosingRequestBase() {
                     @Override
@@ -112,7 +111,7 @@ public final class ApacheRequest implements Request {
                 };
             final URI uri = URI.create(home);
             req.setURI(uri);
-            req.setEntity(new StringEntity(content, Charsets.UTF_8));
+            req.setEntity(new ByteArrayEntity(content));
             for (final Map.Entry<String, String> header : headers) {
                 req.addHeader(header.getKey(), header.getValue());
             }

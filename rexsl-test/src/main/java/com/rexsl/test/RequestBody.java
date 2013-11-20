@@ -67,6 +67,14 @@ public interface RequestBody {
     RequestBody set(@NotNull(message = "body can't be NULL") String body);
 
     /**
+     * Set byte array content.
+     * @param body Body content
+     * @return New alternated body
+     */
+    @NotNull(message = "body is never NULL")
+    RequestBody set(@NotNull(message = "body can't be NULL") byte[] body);
+
+    /**
      * Add form param.
      * @param name Query param name
      * @param value Value of the query param to set

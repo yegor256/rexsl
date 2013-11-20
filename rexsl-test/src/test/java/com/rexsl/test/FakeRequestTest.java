@@ -30,8 +30,10 @@
 package com.rexsl.test;
 
 import java.net.HttpURLConnection;
+import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -59,6 +61,21 @@ public final class FakeRequestTest {
             .assertStatus(HttpURLConnection.HTTP_OK)
             .assertHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN)
             .assertBody(Matchers.containsString("are you?"));
+    }
+
+    /**
+     * FakeRequest can change URI.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void changesUri() throws Exception {
+        MatcherAssert.assertThat(
+            new JdkRequest("http://igm.com")
+                .uri().set(new URI("http://google.com")).back()
+                .fetch().back()
+                .uri().get().toString(),
+            Matchers.endsWith("google.com")
+        );
     }
 
 }

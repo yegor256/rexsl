@@ -36,6 +36,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.util.concurrent.Callable;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -189,9 +190,7 @@ public final class ContainerMocker {
             new Callable<byte[]>() {
                 @Override
                 public byte[] call() {
-                    final byte[] bytes = new byte[body.length];
-                    System.arraycopy(body, 0, bytes, 0, body.length);
-                    return bytes;
+                    return ArrayUtils.clone(body);
                 }
             }
         );

@@ -34,7 +34,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -74,7 +74,7 @@ public final class JdkRequest implements Request {
         public Response send(final Request req, final String home,
             final String method,
             final Collection<Map.Entry<String, String>> headers,
-            final String content) throws IOException {
+            final byte[] content) throws IOException {
             final HttpURLConnection conn = HttpURLConnection.class.cast(
                 new URL(home).openConnection()
             );
@@ -86,9 +86,7 @@ public final class JdkRequest implements Request {
                 if (method.equals(Request.POST) || method.equals(Request.PUT)
                     || method.equals(Request.PATCH)) {
                     conn.setDoOutput(true);
-                    final OutputStreamWriter output = new OutputStreamWriter(
-                        conn.getOutputStream()
-                    );
+                    final OutputStream output = conn.getOutputStream();
                     try {
                         output.write(content);
                     } finally {

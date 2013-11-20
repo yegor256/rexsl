@@ -205,6 +205,7 @@ public final class RestResponse extends AbstractResponse {
     @NotNull(message = "request is never NULL")
     @SuppressWarnings("PMD.UseConcurrentHashMap")
     public Request jump(@NotNull(message = "URI can't be NULL") final URI uri) {
+        System.out.println(this.back().uri());
         Request req = this.back().uri()
             .set(this.back().uri().get().resolve(uri))
             .back();
