@@ -49,12 +49,12 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="apidocs-0.8/index.html" title="API 0.8 (JavaDoc)">API 0.8 (JavaDoc)</a>
+                                                                    <a href="apidocs-0.9/index.html" title="API 0.9 (JavaDoc)">API 0.9 (JavaDoc)</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="testapidocs-0.8/index.html" title="Mock API">Mock API</a>
+                                                                    <a href="testapidocs-0.9/index.html" title="Mock API">Mock API</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -85,6 +85,16 @@
                                     </li>
                                                                                         <li>
                                                                     <a href="example-matchers.html" title="XML/XHTML Matchers">XML/XHTML Matchers</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                                                    <a href="example-web-linking-response.html" title="Web Linking Response">Web Linking Response</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                                        <li>
+                                                                    <a href="example-retry-request.html" title="HTTP Request that retries">HTTP Request that retries</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -136,12 +146,12 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="apidocs-0.8/index.html" title="JavaDocs">JavaDocs</a>
+                                                                    <a href="apidocs-0.9/index.html" title="JavaDocs">JavaDocs</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="testapidocs-0.8/index.html" title="Test JavaDocs">Test JavaDocs</a>
+                                                                    <a href="testapidocs-0.9/index.html" title="Test JavaDocs">Test JavaDocs</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -186,8 +196,8 @@
                                     </ul>
                         <p>
                 
-                17-Nov-2013
-                0.8
+                20-Nov-2013
+                0.9
             </p>
             <article>
                 <script type="text/javascript">
@@ -221,12 +231,12 @@ function toggleDisplay(elementId) {
 <th>Success Rate</th>
 <th>Time</th></tr>
 <tr class="b">
-<td>66</td>
+<td>77</td>
 <td>0</td>
 <td>0</td>
-<td>4</td>
-<td>93.939%</td>
-<td>6.934</td></tr></table><br />
+<td>6</td>
+<td>92.208%</td>
+<td>13.165</td></tr></table><br />
 <p>Note: failures are anticipated and checked for with assertions while errors are unanticipated.</p><br /></div>
 <div class="section">
 <h2>Package List<a name="Package_List"></a></h2><a name="Package_List"></a>
@@ -242,12 +252,12 @@ function toggleDisplay(elementId) {
 <th>Time</th></tr>
 <tr class="b">
 <td><a href="#com.rexsl.test">com.rexsl.test</a></td>
-<td>61</td>
+<td>72</td>
 <td>0</td>
 <td>0</td>
-<td>4</td>
-<td>93.443%</td>
-<td>5.849</td></tr>
+<td>6</td>
+<td>91.667%</td>
+<td>12.801</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.test.html">com.rexsl.test.html</a></td>
 <td>5</td>
@@ -255,7 +265,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>1.085</td></tr></table><br />
+<td>0.364</td></tr></table><br />
 <p>Note: package statistics are not computed recursively, they only sum up all of its testsuites numbers.</p>
 <div class="section">
 <h3>com.rexsl.test<a name="com.rexsl.test"></a></h3><a name="com.rexsl.test"></a>
@@ -272,12 +282,12 @@ function toggleDisplay(elementId) {
 <tr class="b">
 <td><a href="#com.rexsl.testBaseRequestTest"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.testBaseRequestTest">BaseRequestTest</a></td>
-<td>30</td>
+<td>32</td>
 <td>0</td>
 <td>0</td>
 <td>4</td>
-<td>86.667%</td>
-<td>4.835</td></tr>
+<td>87.5%</td>
+<td>8.453</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.testDefaultResponseTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.testDefaultResponseTest">DefaultResponseTest</a></td>
@@ -286,8 +296,17 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.035</td></tr>
+<td>0.006</td></tr>
 <tr class="b">
+<td><a href="#com.rexsl.testFakeRequestTest"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.testFakeRequestTest">FakeRequestTest</a></td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>33.333%</td>
+<td>0.013</td></tr>
+<tr class="a">
 <td><a href="#com.rexsl.testHeaderTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.testHeaderTest">HeaderTest</a></td>
 <td>1</td>
@@ -295,8 +314,8 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0</td></tr>
-<tr class="a">
+<td>0.012</td></tr>
+<tr class="b">
 <td><a href="#com.rexsl.testJaxbConverterTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.testJaxbConverterTest">JaxbConverterTest</a></td>
 <td>5</td>
@@ -304,8 +323,8 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.237</td></tr>
-<tr class="b">
+<td>0.166</td></tr>
+<tr class="a">
 <td><a href="#com.rexsl.testJsonResponseTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.testJsonResponseTest">JsonResponseTest</a></td>
 <td>1</td>
@@ -313,16 +332,25 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.153</td></tr>
-<tr class="a">
+<td>0.041</td></tr>
+<tr class="b">
 <td><a href="#com.rexsl.testRestResponseTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.testRestResponseTest">RestResponseTest</a></td>
-<td>4</td>
+<td>5</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.062</td></tr>
+<td>0.11</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.testRetryRequestTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.testRetryRequestTest">RetryRequestTest</a></td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>3.091</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.testStringSourceTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.testStringSourceTest">StringSourceTest</a></td>
@@ -331,8 +359,17 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.031</td></tr>
+<td>0.019</td></tr>
 <tr class="a">
+<td><a href="#com.rexsl.testWebLinkingResponseTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.testWebLinkingResponseTest">WebLinkingResponseTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.035</td></tr>
+<tr class="b">
 <td><a href="#com.rexsl.testXhtmlMatchersTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.testXhtmlMatchersTest">XhtmlMatchersTest</a></td>
 <td>12</td>
@@ -340,8 +377,8 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.448</td></tr>
-<tr class="b">
+<td>0.721</td></tr>
+<tr class="a">
 <td><a href="#com.rexsl.testXmlResponseTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.testXmlResponseTest">XmlResponseTest</a></td>
 <td>5</td>
@@ -349,7 +386,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.048</td></tr></table></div>
+<td>0.134</td></tr></table></div>
 <div class="section">
 <h3>com.rexsl.test.html<a name="com.rexsl.test.html"></a></h3><a name="com.rexsl.test.html"></a>
 <table border="1" class="bodyTable">
@@ -370,7 +407,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>1.085</td></tr></table></div><br /></div>
+<td>0.364</td></tr></table></div><br /></div>
 <div class="section">
 <h2>Test Cases<a name="Test_Cases"></a></h2><a name="Test_Cases"></a>
 <p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p>
@@ -378,124 +415,66 @@ function toggleDisplay(elementId) {
 <h3>BaseRequestTest<a name="BaseRequestTest"></a></h3><a name="com.rexsl.testBaseRequestTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
-<td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchBody[0]"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
-<td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchBody[0]">sendsTextWithPostRequestMatchBody[0]</a>
-<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchBody[0]&apos;);"><span style="display:inline;" id="com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchBody[0]off"> + </span><span style="display:none;" id="com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchBody[0]on"> - </span>[ Detail ]</a></div></td>
-<td>0</td></tr>
-<tr class="b">
-<td></td>
-<td>skipped</td>
-<td></td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>assertsHttpResponseBody[0]</td>
-<td>0.655</td></tr>
-<tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>sendsHttpRequestAndProcessesHttpResponse[0]</td>
-<td>0.64</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>assertsHttpStatus[0]</td>
-<td>0.621</td></tr>
+<td>1.106</td></tr>
 <tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>continuesOnConnectionError[0]</td>
-<td>0.661</td></tr>
-<tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>sendsHttpRequestAndProcessesHttpResponse[1]</td>
-<td>0.624</td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>assertsResponseBodyWithXpathQuery[0]</td>
-<td>0.367</td></tr>
+<td>0.61</td></tr>
 <tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>sendsBasicAuthenticationHeader[0]</td>
-<td>0.043</td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>acceptsUnicodeInPlainText[0]</td>
-<td>0.014</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>mockedUrlIsInCorrectFormat[0]</td>
-<td>0.028</td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>sendsTextWithGetParameters[0]</td>
-<td>0.073</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>assertsHttpHeaders[0]</td>
-<td>0.043</td></tr>
-<tr class="b">
-<td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchParam[0]"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
-<td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchParam[0]">sendsTextWithPostRequestMatchParam[0]</a>
-<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchParam[0]&apos;);"><span style="display:inline;" id="com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchParam[0]off"> + </span><span style="display:none;" id="com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchParam[0]on"> - </span>[ Detail ]</a></div></td>
-<td>0</td></tr>
-<tr class="a">
-<td></td>
-<td>skipped</td>
-<td></td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>acceptsUnicodeInXml[0]</td>
-<td>0.323</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>sendsHttpRequestWithHeaders[0]</td>
-<td>0.064</td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>sendsIdenticalHttpRequestTwice[0]</td>
-<td>0.084</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>continuesOnConnectionError[1]</td>
-<td>0.003</td></tr>
-<tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>assertsHttpStatus[1]</td>
-<td>0.017</td></tr>
+<td>0.598</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>continuesOnConnectionError[1]</td>
+<td>0.474</td></tr>
 <tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>continuesOnConnectionError[0]</td>
+<td>0.92</td></tr>
+<tr class="b">
 <td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchBody[1]"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchBody[1]">sendsTextWithPostRequestMatchBody[1]</a>
 <div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchBody[1]&apos;);"><span style="display:inline;" id="com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchBody[1]off"> + </span><span style="display:none;" id="com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchBody[1]on"> - </span>[ Detail ]</a></div></td>
 <td>0</td></tr>
-<tr class="b">
+<tr class="a">
 <td></td>
 <td>skipped</td>
 <td></td></tr>
-<tr class="a">
+<tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>assertsHttpResponseBody[1]</td>
-<td>0.013</td></tr>
+<td>0.161</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsDestinationUri[1]</td>
+<td>0.061</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>assertsResponseBodyWithXpathQuery[1]</td>
-<td>0.25</td></tr>
+<td>1.106</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>sendsBasicAuthenticationHeader[1]</td>
-<td>0.02</td></tr>
+<td>0.117</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>acceptsUnicodeInPlainText[1]</td>
-<td>0.021</td></tr>
+<td>0.056</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>mockedUrlIsInCorrectFormat[1]</td>
-<td>0.009</td></tr>
+<td>0.018</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>sendsTextWithGetParameters[1]</td>
-<td>0.048</td></tr>
+<td>0.056</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>assertsHttpHeaders[1]</td>
-<td>0.009</td></tr>
+<td>0.183</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchParam[1]"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchParam[1]">sendsTextWithPostRequestMatchParam[1]</a>
@@ -508,190 +487,323 @@ function toggleDisplay(elementId) {
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>acceptsUnicodeInXml[1]</td>
-<td>0.18</td></tr>
+<td>0.865</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>sendsHttpRequestWithHeaders[1]</td>
-<td>0.009</td></tr>
+<td>0.124</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>sendsIdenticalHttpRequestTwice[1]</td>
-<td>0.016</td></tr></table></div>
+<td>0.086</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>assertsHttpStatus[0]</td>
+<td>0.132</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchBody[0]"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchBody[0]">sendsTextWithPostRequestMatchBody[0]</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchBody[0]&apos;);"><span style="display:inline;" id="com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchBody[0]off"> + </span><span style="display:none;" id="com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchBody[0]on"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="a">
+<td></td>
+<td>skipped</td>
+<td></td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>assertsHttpResponseBody[0]</td>
+<td>0.086</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsDestinationUri[0]</td>
+<td>0.026</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>assertsResponseBodyWithXpathQuery[0]</td>
+<td>0.584</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>sendsBasicAuthenticationHeader[0]</td>
+<td>0.118</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>acceptsUnicodeInPlainText[0]</td>
+<td>0.073</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>mockedUrlIsInCorrectFormat[0]</td>
+<td>0.003</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>sendsTextWithGetParameters[0]</td>
+<td>0.051</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>assertsHttpHeaders[0]</td>
+<td>0.088</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchParam[0]"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchParam[0]">sendsTextWithPostRequestMatchParam[0]</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchParam[0]&apos;);"><span style="display:inline;" id="com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchParam[0]off"> + </span><span style="display:none;" id="com_rexsl_test_BaseRequestTest_sendsTextWithPostRequestMatchParam[0]on"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="a">
+<td></td>
+<td>skipped</td>
+<td></td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>acceptsUnicodeInXml[0]</td>
+<td>0.423</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>sendsHttpRequestWithHeaders[0]</td>
+<td>0.089</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>sendsIdenticalHttpRequestTwice[0]</td>
+<td>0.239</td></tr></table></div>
 <div class="section">
 <h3>DefaultResponseTest<a name="DefaultResponseTest"></a></h3><a name="com.rexsl.testDefaultResponseTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsWhenEntityIsNotAUnicodeString</td>
-<td>0.035</td></tr></table></div>
+<td>0.006</td></tr></table></div>
+<div class="section">
+<h3>FakeRequestTest<a name="FakeRequestTest"></a></h3><a name="com.rexsl.testFakeRequestTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><a href="#com.rexsl.test.FakeRequestTest.changesUri"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.test.FakeRequestTest.changesUri">changesUri</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_test_FakeRequestTest_changesUri&apos;);"><span style="display:inline;" id="com_rexsl_test_FakeRequestTest_changesUrioff"> + </span><span style="display:none;" id="com_rexsl_test_FakeRequestTest_changesUrion"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped</td>
+<td></td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>changesUriInResponse</td>
+<td>0.013</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.test.FakeRequestTest.sendsHttpRequestAndProcessesHttpResponse"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.test.FakeRequestTest.sendsHttpRequestAndProcessesHttpResponse">sendsHttpRequestAndProcessesHttpResponse</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_test_FakeRequestTest_sendsHttpRequestAndProcessesHttpResponse&apos;);"><span style="display:inline;" id="com_rexsl_test_FakeRequestTest_sendsHttpRequestAndProcessesHttpResponseoff"> + </span><span style="display:none;" id="com_rexsl_test_FakeRequestTest_sendsHttpRequestAndProcessesHttpResponseon"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="a">
+<td></td>
+<td>skipped</td>
+<td></td></tr></table></div>
 <div class="section">
 <h3>HeaderTest<a name="HeaderTest"></a></h3><a name="com.rexsl.testHeaderTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>normalizesHeaderKey</td>
-<td>0</td></tr></table></div>
+<td>0.012</td></tr></table></div>
 <div class="section">
 <h3>JaxbConverterTest<a name="JaxbConverterTest"></a></h3><a name="com.rexsl.testJaxbConverterTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsObjectToSourceRenderableAsText</td>
-<td>0.064</td></tr>
+<td>0.054</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsNonRootObject</td>
-<td>0.057</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>convertsAnObjectThatHasOthersInjected</td>
-<td>0.047</td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>convertsNonRootObjectWithNamespace</td>
-<td>0.032</td></tr>
+<td>0.007</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsJaxbObjectToXml</td>
-<td>0.037</td></tr></table></div>
+<td>0.038</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsNonRootObjectWithNamespace</td>
+<td>0.037</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsAnObjectThatHasOthersInjected</td>
+<td>0.03</td></tr></table></div>
 <div class="section">
 <h3>JsonResponseTest<a name="JsonResponseTest"></a></h3><a name="com.rexsl.testJsonResponseTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>readsJsonDocument</td>
-<td>0.153</td></tr></table></div>
+<td>0.041</td></tr></table></div>
 <div class="section">
 <h3>RestResponseTest<a name="RestResponseTest"></a></h3><a name="com.rexsl.testRestResponseTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>avoidsTransferringOfEmptyCookiesOnFollow</td>
-<td>0.025</td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>transfersCookiesOnFollow</td>
-<td>0.023</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>assertsHttpStatusCode</td>
-<td>0.003</td></tr>
+<td>0.047</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>retrievesCookieByName</td>
-<td>0.011</td></tr></table></div>
+<td>0.026</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>transfersCookiesOnFollow</td>
+<td>0.016</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>jumpsToRelativeUrls</td>
+<td>0.005</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>assertsHttpStatusCode</td>
+<td>0.016</td></tr></table></div>
+<div class="section">
+<h3>RetryRequestTest<a name="RetryRequestTest"></a></h3><a name="com.rexsl.testRetryRequestTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>retriesOnIoExceptionWithChangedBody</td>
+<td>1.267</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>retriesOnIoExceptionWithChangedMethod</td>
+<td>0.887</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>retriesOnIoException</td>
+<td>0.937</td></tr></table></div>
 <div class="section">
 <h3>StringSourceTest<a name="StringSourceTest"></a></h3><a name="com.rexsl.testStringSourceTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>formatsIncomingXmlDocument</td>
-<td>0.007</td></tr>
+<td>0.001</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>formatIncomingNode</td>
-<td>0.024</td></tr></table></div>
+<td>0.018</td></tr></table></div>
+<div class="section">
+<h3>WebLinkingResponseTest<a name="WebLinkingResponseTest"></a></h3><a name="com.rexsl.testWebLinkingResponseTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>followsLinksInHeaders</td>
+<td>0.015</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>parsesLinksInHeaders</td>
+<td>0.02</td></tr></table></div>
 <div class="section">
 <h3>XhtmlMatchersTest<a name="XhtmlMatchersTest"></a></h3><a name="com.rexsl.testXhtmlMatchersTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>matchesInputStreamAndReader</td>
-<td>0.022</td></tr>
+<td>0.017</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsTextToXmlWithUnicode</td>
-<td>0.085</td></tr>
+<td>0.008</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>convertsTextToXml</td>
-<td>0.023</td></tr>
+<td>matchesWithGenericType</td>
+<td>0.017</td></tr>
 <tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsTextToXml</td>
+<td>0.007</td></tr>
+<tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>doesntMatch</td>
 <td>0.003</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>matchesWithCustomNamespace</td>
-<td>0.004</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>matchesWithGenericType</td>
-<td>0.034</td></tr>
+<td>matchesWithCustomNamespace</td>
+<td>0.005</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>preservesProcessingInstructions</td>
-<td>0.026</td></tr>
+<td>0.004</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>processesDocumentsWithDoctype</td>
-<td>0.051</td></tr>
+<td>0.192</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>hasXPaths</td>
-<td>0.013</td></tr>
+<td>0.174</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsNodeToXml</td>
-<td>0.044</td></tr>
+<td>0.004</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>matchesAfterJaxbConverter</td>
-<td>0.132</td></tr>
+<td>0.28</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>matchesPlainString</td>
-<td>0.011</td></tr></table></div>
+<td>0.01</td></tr></table></div>
 <div class="section">
 <h3>XmlResponseTest<a name="XmlResponseTest"></a></h3><a name="com.rexsl.testXmlResponseTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>assertsWithXpath</td>
-<td>0.02</td></tr>
+<td>0.056</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>assertsWithXpathWithCustomNamespace</td>
-<td>0.006</td></tr>
+<td>0.014</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>findsDocumentNodesWithXpathAndReturnsThem</td>
-<td>0.006</td></tr>
+<td>0.01</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>assertsWithXpathAndNamespaces</td>
-<td>0.011</td></tr>
+<td>0.029</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>findsDocumentNodesWithXpath</td>
-<td>0.005</td></tr></table></div>
+<td>0.025</td></tr></table></div>
 <div class="section">
 <h3>NoBrokenLinksTest<a name="NoBrokenLinksTest"></a></h3><a name="com.rexsl.test.htmlNoBrokenLinksTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>passesWithoutBrokenLinks</td>
+<td>0.184</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>findsEmptyLinksInHtml</td>
+<td>0.065</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>findsBrokenLinksInHtml</td>
-<td>0.169</td></tr>
+<td>0.029</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsWhenHtmlIsBroken</td>
-<td>0.139</td></tr>
+<td>0.005</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>findsBrLinksInHtmlWithNamespace</td>
-<td>0.382</td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>passesWithoutBrokenLinks</td>
-<td>0.258</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>findsEmptyLinksInHtml</td>
-<td>0.137</td></tr></table></div><br /></div>
+<td>0.081</td></tr></table></div><br /></div>
 <div class="section">
 <h2>Failure Details<a name="Failure_Details"></a></h2><a name="Failure_Details"></a>
 <p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
 <table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><a name="com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchBody1"></a>sendsTextWithPostRequestMatchBody[1]</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped: skipped</td></tr>
+<tr class="a">
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><a name="com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchParam1"></a>sendsTextWithPostRequestMatchParam[1]</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped: skipped</td></tr>
 <tr class="a">
 <td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td><a name="com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchBody0"></a>sendsTextWithPostRequestMatchBody[0]</td></tr>
@@ -706,13 +818,13 @@ function toggleDisplay(elementId) {
 <td>skipped: skipped</td></tr>
 <tr class="a">
 <td><img src="images/icon_warning_sml.gif" alt="" /></td>
-<td><a name="com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchBody1"></a>sendsTextWithPostRequestMatchBody[1]</td></tr>
+<td><a name="com.rexsl.test.FakeRequestTest.changesUri"></a>changesUri</td></tr>
 <tr class="b">
 <td></td>
 <td>skipped: skipped</td></tr>
 <tr class="a">
 <td><img src="images/icon_warning_sml.gif" alt="" /></td>
-<td><a name="com.rexsl.test.BaseRequestTest.sendsTextWithPostRequestMatchParam1"></a>sendsTextWithPostRequestMatchParam[1]</td></tr>
+<td><a name="com.rexsl.test.FakeRequestTest.sendsHttpRequestAndProcessesHttpResponse"></a>sendsHttpRequestAndProcessesHttpResponse</td></tr>
 <tr class="b">
 <td></td>
 <td>skipped: skipped</td></tr></table><br /></div>
