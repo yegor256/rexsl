@@ -42,7 +42,7 @@
       <prefix>                        </prefix>
       <body>This test is disabled (although it works fine) because I don't know how to stop its execution. It starts Jetty and stays waiting. There should be some way of canceling it somehow... http://jira.codehaus.org/browse/MINVOKER-132</body>
       <estimate>0</estimate>
-      <lines>453-457</lines>
+      <lines>449-453</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -195,7 +195,7 @@
       <prefix>     * </prefix>
       <body>It is impossible to match parameter and body at the same time.</body>
       <estimate>0</estimate>
-      <lines>93-93</lines>
+      <lines>94-94</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -204,7 +204,7 @@
       <prefix>     * </prefix>
       <body>It is impossible to match parameter and body at the same time.</body>
       <estimate>0</estimate>
-      <lines>131-132</lines>
+      <lines>132-133</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -213,7 +213,7 @@
       <prefix>     * </prefix>
       <body>Is it possible to initialize input variable with InputStream from request without side effects on request? request's parameters retrieve is done lazily and requires InputStream rewinded to it's start</body>
       <estimate>0</estimate>
-      <lines>158-161</lines>
+      <lines>159-162</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -222,7 +222,7 @@
       <prefix>     * </prefix>
       <body>Is it possible to initialize input variable with InputStream from request without side effects on request? request's parameters retrieve is done lazily and requires InputStream rewinded to it's start</body>
       <estimate>0</estimate>
-      <lines>186-189</lines>
+      <lines>187-190</lines>
       <owner>someone</owner>
    </puzzle>
 </puzzles>

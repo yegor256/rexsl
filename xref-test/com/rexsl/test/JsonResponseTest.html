@@ -56,9 +56,9 @@
 <a class="jxr_linenumber" name="46" href="#46">46</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="47" href="#47">47</a>      @Test
 <a class="jxr_linenumber" name="48" href="#48">48</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> readsJsonDocument() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="49" href="#49">49</a>          <strong class="jxr_keyword">final</strong> Response resp = <strong class="jxr_keyword">new</strong> ResponseMocker()
+<a class="jxr_linenumber" name="49" href="#49">49</a>          <strong class="jxr_keyword">final</strong> Response resp = <strong class="jxr_keyword">new</strong> FakeRequest()
 <a class="jxr_linenumber" name="50" href="#50">50</a>              .withBody(<span class="jxr_string">"{\&quot;foo-foo\&quot;:2, \&quot;bar\&quot;:\&quot;hello!\&quot;}"</span>)
-<a class="jxr_linenumber" name="51" href="#51">51</a>              .mock();
+<a class="jxr_linenumber" name="51" href="#51">51</a>              .fetch();
 <a class="jxr_linenumber" name="52" href="#52">52</a>          <strong class="jxr_keyword">final</strong> JsonResponse response = <strong class="jxr_keyword">new</strong> JsonResponse(resp);
 <a class="jxr_linenumber" name="53" href="#53">53</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="54" href="#54">54</a>              response.json().readObject().getInt(<span class="jxr_string">"foo-foo"</span>),
