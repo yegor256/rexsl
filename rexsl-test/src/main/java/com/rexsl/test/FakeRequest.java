@@ -33,13 +33,13 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
@@ -71,7 +71,7 @@ public final class FakeRequest implements Request {
                 final Collection<Map.Entry<String, String>> headers,
                 final byte[] text) {
                 return new DefaultResponse(
-                    FakeRequest.this,
+                    req,
                     FakeRequest.this.code,
                     FakeRequest.this.phrase,
                     FakeRequest.this.hdrs,
@@ -79,7 +79,7 @@ public final class FakeRequest implements Request {
                 );
             }
         },
-        "http://localhost/"
+        "http://localhost:12345/see-FakeRequest-class"
     );
 
     /**
@@ -110,7 +110,7 @@ public final class FakeRequest implements Request {
             HttpURLConnection.HTTP_OK,
             "OK",
             Collections.<Map.Entry<String, String>>emptyList(),
-            new byte[0]
+            ArrayUtils.EMPTY_BYTE_ARRAY
         );
     }
 
@@ -131,6 +131,11 @@ public final class FakeRequest implements Request {
         this.phrase = reason;
         this.hdrs = new Array<Map.Entry<String, String>>(headers);
         this.content = ArrayUtils.clone(body);
+    }
+
+    @Override
+    public String toString() {
+        return this.base.toString();
     }
 
     @Override
@@ -211,11 +216,7 @@ public final class FakeRequest implements Request {
      * @return New request
      */
     public FakeRequest withBody(final String text) {
-        try {
-            return this.withBody(text.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException ex) {
-            throw new IllegalStateException(ex);
-        }
+        return this.withBody(text.getBytes(Charsets.UTF_8));
     }
 
     /**

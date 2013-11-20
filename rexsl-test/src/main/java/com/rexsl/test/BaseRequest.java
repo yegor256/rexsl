@@ -127,7 +127,11 @@ final class BaseRequest implements Request {
         final Iterable<Header> headers,
         final String method, final byte[] body) {
         this.wire = wre;
-        this.home = uri;
+        URI addr = URI.create(uri);
+        if (addr.getPath().isEmpty()) {
+            addr = UriBuilder.fromUri(addr).path("/").build();
+        }
+        this.home = addr.toString();
         this.hdrs = new Array<Header>(headers);
         this.mtd = method;
         this.content = ArrayUtils.clone(body);
@@ -230,10 +234,13 @@ final class BaseRequest implements Request {
 
     @Override
     public String toString() {
+        final URI uri = URI.create(this.home);
         final StringBuilder text = new StringBuilder("HTTP/1.1 ")
             .append(this.mtd).append(' ')
-            .append(URI.create(this.home).getPath())
-            .append('\n');
+            .append(uri.getPath())
+            .append(" (")
+            .append(uri.getHost())
+            .append(")\n");
         for (final Map.Entry<String, String> header : this.hdrs) {
             text.append(
                 Logger.format(
@@ -274,6 +281,7 @@ final class BaseRequest implements Request {
      */
     @Immutable
     @EqualsAndHashCode(of = "address")
+    @Loggable(Loggable.DEBUG)
     private static final class BaseURI implements RequestURI {
         /**
          * URI encapsulated.
@@ -369,6 +377,7 @@ final class BaseRequest implements Request {
      */
     @Immutable
     @EqualsAndHashCode(of = "text")
+    @Loggable(Loggable.DEBUG)
     private static final class BaseBody implements RequestBody {
         /**
          * Content encapsulated.

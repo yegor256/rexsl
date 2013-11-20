@@ -394,13 +394,13 @@ public final class BaseRequestTest {
     @Test
     public void buildsDestinationUri() throws Exception {
         MatcherAssert.assertThat(
-            this.request(new URI("http://localhost:88/test/foo"))
-                .uri().path("/bar").queryParam("abb", "776")
-                .queryParams(new ArrayMap<String, String>().with("bba", "669"))
+            this.request(new URI("http://localhost:88/t/f"))
+                .uri().path("/bar").queryParam("u1", "\u20ac")
+                .queryParams(new ArrayMap<String, String>().with("u2", ""))
                 .userInfo("hey:\u20ac")
                 .back().uri().get(),
             Matchers.hasToString(
-                "http://hey:%E2%82%AC@localhost:88/test/foo/bar?abb=776&bba=669"
+                "http://hey:%E2%82%AC@localhost:88/t/f/bar?u1=%E2%82%AC&u2="
             )
         );
     }

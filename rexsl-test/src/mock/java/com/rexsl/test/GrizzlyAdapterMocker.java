@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
@@ -111,13 +112,16 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
     public void service(final GrizzlyRequest request,
         final GrizzlyResponse response) {
         try {
-            final String input = IOUtils.toString(request.getInputStream());
+            final String input = IOUtils.toString(
+                request.getInputStream(),
+                Charsets.UTF_8
+            );
             this.assertMethod(request, input);
             this.assertRequestUri(request);
             this.assertParams(request, input);
             this.assertBody(request, input);
             this.assertHeaders(request, input);
-            for (ConcurrentMap.Entry<String, String> entry
+            for (final Map.Entry<String, String> entry
                 : this.headers.entrySet()) {
                 response.addHeader(entry.getKey(), entry.getValue());
             }
@@ -256,7 +260,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      */
     private void assertParams(final GrizzlyRequest request,
         final String input) {
-        for (ConcurrentMap.Entry<String, Matcher<String>> entry
+        for (final Map.Entry<String, Matcher<String>> entry
             : this.paramMatchers.entrySet()) {
             MatcherAssert.assertThat(
                 Logger.format(
@@ -322,13 +326,13 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private String asText(final GrizzlyRequest request, final String input) {
-        final StringBuilder builder = new StringBuilder();
-        builder.append(request.getMethod())
-            .append(" ")
+        final StringBuilder builder = new StringBuilder(0)
+            .append(request.getMethod())
+            .append(' ')
             .append(request.getRequestURI())
-            .append("  ")
+            .append(' ')
             .append(request.getProtocol())
-            .append("\n");
+            .append('\n');
         final Enumeration<?> names = request.getHeaderNames();
         while (names.hasMoreElements()) {
             final String name = names.nextElement().toString();
@@ -358,8 +362,11 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         final Throwable failure) {
         response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
         final PrintStream stream = new PrintStream(response.getStream());
-        stream.print(Logger.format("%[exception]s", failure));
-        stream.close();
+        try {
+            stream.print(Logger.format("%[exception]s", failure));
+        } finally {
+            stream.close();
+        }
     }
 
 }
