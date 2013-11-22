@@ -29,7 +29,6 @@
  */
 package com.rexsl.w3c;
 
-import com.rexsl.test.ContainerMocker;
 import java.net.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;

@@ -66,7 +66,7 @@ import org.apache.commons.lang3.Validate;
 public final class FlashInset implements Inset {
 
     /**
-     * Header name.
+     * ImmutableHeader name.
      */
     private static final String HEADER = "X-Rexsl-Flash";
 

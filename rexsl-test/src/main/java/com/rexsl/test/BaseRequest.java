@@ -41,6 +41,8 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriBuilder;
@@ -139,7 +141,7 @@ final class BaseRequest implements Request {
     @Override
     @NotNull
     public RequestURI uri() {
-        return new BaseRequest.BaseURI(this, this.home);
+        return new BaseURI(this, this.home);
     }
 
     @Override
@@ -149,7 +151,7 @@ final class BaseRequest implements Request {
         return new BaseRequest(
             this.wire,
             this.home,
-            this.hdrs.with(new Header(name, value.toString())),
+            this.hdrs.with(new ImmutableHeader(name, value.toString())),
             this.mtd,
             this.content
         );
@@ -160,7 +162,7 @@ final class BaseRequest implements Request {
         @NotNull(message = "header name can't be NULL") final String name) {
         final Collection<Map.Entry<String, String>> headers =
             new LinkedList<Map.Entry<String, String>>();
-        final String key = Header.normalized(name);
+        final String key = ImmutableHeader.normalize(name);
         for (final Map.Entry<String, String> header : this.hdrs) {
             if (!header.getKey().equals(key)) {
                 headers.add(header);
@@ -193,50 +195,10 @@ final class BaseRequest implements Request {
     }
 
     @Override
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Response fetch() throws IOException {
         final long start = System.currentTimeMillis();
-        final Collection<Map.Entry<String, String>> headers =
-            new LinkedList<Map.Entry<String, String>>();
-        boolean agent = false;
-        for (final Map.Entry<String, String> header : this.hdrs) {
-            headers.add(new Header(header.getKey(), header.getValue()));
-            if (header.getKey().equals(HttpHeaders.USER_AGENT)) {
-                agent = true;
-            }
-        }
-        if (!agent) {
-            headers.add(new Header(HttpHeaders.USER_AGENT, BaseRequest.AGENT));
-        }
-        final String info = URI.create(this.home).getUserInfo();
-        if (info != null) {
-            final String[] parts = info.split(":", 2);
-            try {
-                headers.add(
-                    new Header(
-                        HttpHeaders.AUTHORIZATION,
-                        Logger.format(
-                            "Basic %s",
-                            Base64.encodeBase64String(
-                                Logger.format(
-                                    "%s:%s",
-                                    URLEncoder.encode(
-                                        parts[0], CharEncoding.UTF_8
-                                    ),
-                                    URLEncoder.encode(
-                                        parts[1], CharEncoding.UTF_8
-                                    )
-                                ).getBytes(Charsets.UTF_8)
-                            )
-                        )
-                    )
-                );
-            } catch (UnsupportedEncodingException ex) {
-                throw new IllegalStateException(ex);
-            }
-        }
         final Response response = this.wire.send(
-            this, this.home, this.mtd, headers, this.content
+            this, this.home, this.mtd, this.headers(), this.content
         );
         if (Logger.isDebugEnabled(this)) {
             Logger.debug(
@@ -320,6 +282,69 @@ final class BaseRequest implements Request {
     }
 
     /**
+     * Create headers for the request.
+     * @return Headers
+     */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    private Collection<Map.Entry<String, String>> headers() {
+        final Collection<Map.Entry<String, String>> headers =
+            new LinkedList<Map.Entry<String, String>>();
+        final ConcurrentMap<String, String> cookies =
+            new ConcurrentHashMap<String, String>();
+        boolean agent = false;
+        for (final Map.Entry<String, String> header : this.hdrs) {
+            if (header.getKey().equals(HttpHeaders.COOKIE)) {
+                final String[] parts = header.getValue().split("=", 2);
+                cookies.put(parts[0], parts[1]);
+                continue;
+            }
+            headers.add(new ImmutableHeader(header.getKey(), header.getValue()));
+            if (header.getKey().equals(HttpHeaders.USER_AGENT)) {
+                agent = true;
+            }
+        }
+        if (!agent) {
+            headers.add(new ImmutableHeader(HttpHeaders.USER_AGENT, BaseRequest.AGENT));
+        }
+        for (final Map.Entry<String, String> cookie : cookies.entrySet()) {
+            headers.add(
+                new ImmutableHeader(
+                    HttpHeaders.COOKIE,
+                    String.format("%s=%s", cookie.getKey(), cookie.getValue())
+                )
+            );
+        }
+        final String info = URI.create(this.home).getUserInfo();
+        if (info != null) {
+            final String[] parts = info.split(":", 2);
+            try {
+                headers.add(
+                    new ImmutableHeader(
+                        HttpHeaders.AUTHORIZATION,
+                        Logger.format(
+                            "Basic %s",
+                            Base64.encodeBase64String(
+                                Logger.format(
+                                    "%s:%s",
+                                    URLEncoder.encode(
+                                        parts[0], CharEncoding.UTF_8
+                                    ),
+                                    URLEncoder.encode(
+                                        parts[1], CharEncoding.UTF_8
+                                    )
+                                ).getBytes(Charsets.UTF_8)
+                            )
+                        )
+                    )
+                );
+            } catch (UnsupportedEncodingException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
+        return headers;
+    }
+
+    /**
      * Base URI.
      */
     @Immutable
@@ -364,13 +389,13 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI set(@NotNull(message = "URI can't be NULL")
             final URI uri) {
-            return new BaseRequest.BaseURI(this.owner, uri.toString());
+            return new BaseURI(this.owner, uri.toString());
         }
         @Override
         public RequestURI queryParam(
             @NotNull(message = "param name can't be NULL") final String name,
             @NotNull(message = "value can't be NULL") final Object value) {
-            return new BaseRequest.BaseURI(
+            return new BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .queryParam(name, "{value}")
@@ -388,7 +413,7 @@ final class BaseRequest implements Request {
                 values[idx] = pair.getValue();
                 ++idx;
             }
-            return new BaseRequest.BaseURI(
+            return new BaseURI(
                 this.owner,
                 uri.build(values).toString()
             );
@@ -396,7 +421,7 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI path(
             @NotNull(message = "path can't be NULL") final String segment) {
-            return new BaseRequest.BaseURI(
+            return new BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .path(segment)
@@ -406,7 +431,7 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI userInfo(
             @NotNull(message = "info can't be NULL") final String info) {
-            return new BaseRequest.BaseURI(
+            return new BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .userInfo(info)

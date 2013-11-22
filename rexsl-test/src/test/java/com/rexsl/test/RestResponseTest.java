@@ -29,6 +29,10 @@
  */
 package com.rexsl.test;
 
+import com.rexsl.test.mock.MkAnswer;
+import com.rexsl.test.mock.MkContainer;
+import com.rexsl.test.mock.MkGrizzlyContainer;
+import com.rexsl.test.mock.MkQuery;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
@@ -84,13 +88,10 @@ public final class RestResponseTest {
      */
     @Test
     public void transfersCookiesOnFollow() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .expectHeader(
-                HttpHeaders.COOKIE,
-                Matchers.containsString("alpha=boom2")
-            )
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer()
+            .next(new MkAnswer.Simple(""))
+            .next(new MkAnswer.Simple(""))
+            .start();
         final RestResponse response = new RestResponse(
             new FakeRequest()
                 .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom1; path=/")
@@ -103,6 +104,15 @@ public final class RestResponseTest {
         response.follow()
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
+        container.stop();
+        final MkQuery query = container.take();
+        MatcherAssert.assertThat(
+            query.headers(),
+            Matchers.hasEntry(
+                Matchers.equalTo(HttpHeaders.COOKIE),
+                Matchers.<String>everyItem(Matchers.equalTo("alpha=boom2"))
+            )
+        );
     }
 
     /**
@@ -111,13 +121,10 @@ public final class RestResponseTest {
      */
     @Test
     public void avoidsTransferringOfEmptyCookiesOnFollow() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .expectHeader(
-                HttpHeaders.COOKIE,
-                Matchers.not(Matchers.containsString("second"))
-            )
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer()
+            .next(new MkAnswer.Simple(""))
+            .next(new MkAnswer.Simple(""))
+            .start();
         final RestResponse response = new RestResponse(
             new FakeRequest()
                 .withHeader(HttpHeaders.SET_COOKIE, "first=A; path=/")
@@ -129,6 +136,17 @@ public final class RestResponseTest {
         response.follow()
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
+        container.stop();
+        final MkQuery query = container.take();
+        MatcherAssert.assertThat(
+            query.headers(),
+            Matchers.hasEntry(
+                Matchers.equalTo(HttpHeaders.COOKIE),
+                Matchers.not(
+                    Matchers.hasItem(Matchers.containsString("second"))
+                )
+            )
+        );
     }
 
     /**

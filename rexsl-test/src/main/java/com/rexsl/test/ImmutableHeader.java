@@ -41,11 +41,12 @@ import lombok.ToString;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.10
  */
 @Immutable
 @ToString
 @EqualsAndHashCode
-final class Header implements Map.Entry<String, String> {
+public final class ImmutableHeader implements Map.Entry<String, String> {
 
     /**
      * Key.
@@ -62,8 +63,8 @@ final class Header implements Map.Entry<String, String> {
      * @param key The name of it
      * @param value The value
      */
-    Header(final String key, final String value) {
-        this.left = Header.normalized(key);
+    public ImmutableHeader(final String key, final String value) {
+        this.left = ImmutableHeader.normalize(key);
         this.right = value;
     }
 
@@ -88,14 +89,14 @@ final class Header implements Map.Entry<String, String> {
      * @return Normalized key
      */
     @NotNull
-    public static String normalized(
+    public static String normalize(
         @NotNull(message = "key can't be NULL")
         @Pattern(regexp = "[a-zA-Z0-9\\-]+") final String key) {
         final char[] chars = key.toCharArray();
-        chars[0] = Header.upper(chars[0]);
+        chars[0] = ImmutableHeader.upper(chars[0]);
         for (int pos = 1; pos < chars.length; ++pos) {
             if (chars[pos - 1] == '-') {
-                chars[pos] = Header.upper(chars[pos]);
+                chars[pos] = ImmutableHeader.upper(chars[pos]);
             }
         }
         return new String(chars);

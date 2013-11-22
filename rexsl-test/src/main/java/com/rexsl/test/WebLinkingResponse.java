@@ -61,7 +61,7 @@ import org.apache.commons.lang3.StringUtils;
 public final class WebLinkingResponse extends AbstractResponse {
 
     /**
-     * Header name.
+     * ImmutableHeader name.
      */
     private static final String HEADER = "Link";
 

@@ -116,7 +116,7 @@ public final class JdkRequest implements Request {
         }
         /**
          * Get headers from response.
-         * @param fields Header fields
+         * @param fields ImmutableHeader fields
          * @return Headers
          */
         private Array<Map.Entry<String, String>> headers(
@@ -129,7 +129,7 @@ public final class JdkRequest implements Request {
                     continue;
                 }
                 for (final String value : field.getValue()) {
-                    headers.add(new Header(field.getKey(), value));
+                    headers.add(new ImmutableHeader(field.getKey(), value));
                 }
             }
             return new Array<Map.Entry<String, String>>(headers);

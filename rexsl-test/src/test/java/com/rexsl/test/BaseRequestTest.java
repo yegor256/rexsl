@@ -30,9 +30,14 @@
 package com.rexsl.test;
 
 import com.jcabi.immutable.ArrayMap;
+import com.rexsl.test.mock.MkAnswer;
+import com.rexsl.test.mock.MkContainer;
+import com.rexsl.test.mock.MkGrizzlyContainer;
+import com.rexsl.test.mock.MkQuery;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Collection;
@@ -96,11 +101,9 @@ public final class BaseRequestTest {
      */
     @Test
     public void sendsHttpRequestAndProcessesHttpResponse() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .expectRequestUri(Matchers.containsString("helloall"))
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .returnBody("\u20ac! hello!".getBytes(CharEncoding.UTF_8))
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("\u20ac! hello!")
+        ).start();
         this.request(container.home())
             .uri().path("/helloall").back()
             .method(Request.GET)
@@ -108,6 +111,16 @@ public final class BaseRequestTest {
             .assertBody(Matchers.containsString("\u20ac!"))
             .assertBody(Matchers.containsString("hello!"))
             .assertStatus(HttpURLConnection.HTTP_OK);
+        final MkQuery query = container.take();
+        MatcherAssert.assertThat(
+            query.uri(),
+            Matchers.hasToString(Matchers.containsString("helloall"))
+        );
+        MatcherAssert.assertThat(
+            query.method(),
+            Matchers.equalTo(Request.GET)
+        );
+        container.stop();
     }
 
     /**
@@ -116,20 +129,30 @@ public final class BaseRequestTest {
      */
     @Test
     public void sendsHttpRequestWithHeaders() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .expectHeader(HttpHeaders.ACCEPT, Matchers.containsString("*"))
-            .expectHeader(
-                HttpHeaders.USER_AGENT,
-                Matchers.containsString("ReXSL")
-            )
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("")
+        ).start();
         this.request(container.home())
             .uri().path("/foo1").back()
             .method(Request.GET)
             .header(HttpHeaders.ACCEPT, "*/*")
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
+        final MkQuery query = container.take();
+        MatcherAssert.assertThat(
+            query.headers(),
+            Matchers.allOf(
+                Matchers.hasEntry(
+                    Matchers.equalTo(HttpHeaders.ACCEPT),
+                    Matchers.hasItem(Matchers.containsString("*"))
+                ),
+                Matchers.hasEntry(
+                    Matchers.equalTo(HttpHeaders.USER_AGENT),
+                    Matchers.hasItem(Matchers.containsString("ReXSL"))
+                )
+            )
+        );
+        container.stop();
     }
 
     /**
@@ -138,65 +161,61 @@ public final class BaseRequestTest {
      */
     @Test
     public void sendsTextWithGetParameters() throws Exception {
-        final String name = "qparam";
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("")
+        ).start();
         final String value = "some value of this param &^%*;'\"\u20ac\"";
-        final ContainerMocker container = new ContainerMocker()
-            .expectParam(name, Matchers.equalTo(value))
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .expectHeader(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
-            .mock();
         this.request(container.home())
-            .uri().queryParam(name, value).back()
+            .uri().queryParam("q", value).back()
             .method(Request.GET)
             .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
+        final MkQuery query = container.take();
+        MatcherAssert.assertThat(
+            query.uri().getQuery(),
+            Matchers.endsWith(value)
+        );
+        container.stop();
     }
 
     /**
      * BaseRequest can fetch body with HTTP POST request.
      * @throws Exception If something goes wrong inside
-     * @todo #151 Is it possible to initialize input variable with
-     *  InputStream from request without side effects on request?
-     *  request's parameters retrieve is done lazily and requires
-     *  InputStream rewinded to it's start
      */
     @Test
-    @org.junit.Ignore
     public void sendsTextWithPostRequestMatchParam() throws Exception {
-        final String name = "postparam";
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("")
+        ).start();
         final String value = "some random value of \u20ac param \"&^%*;'\"";
-        final ContainerMocker container = new ContainerMocker()
-            .expectParam(name, Matchers.equalTo(value))
-            .expectMethod(Matchers.equalTo(Request.POST))
-            .mock();
         this.request(container.home())
             .method(Request.POST)
-            .body().formParam(name, value).back()
+            .body().formParam("p", value).back()
             .header(
                 HttpHeaders.CONTENT_TYPE,
                 MediaType.APPLICATION_FORM_URLENCODED
             )
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
+        final MkQuery query = container.take();
+        MatcherAssert.assertThat(
+            URLDecoder.decode(query.body(), CharEncoding.UTF_8),
+            Matchers.containsString(value)
+        );
+        container.stop();
     }
 
     /**
      * BaseRequest can fetch body with HTTP POST request.
      * @throws Exception If something goes wrong inside
-     * @todo #151 Is it possible to initialize input variable with
-     *  InputStream from request without side effects on request?
-     *  request's parameters retrieve is done lazily and requires
-     *  InputStream rewinded to it's start
      */
     @Test
-    @org.junit.Ignore
     public void sendsTextWithPostRequestMatchBody() throws Exception {
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("")
+        ).start();
         final String value = "\u20ac some body value with \"&^%*;'\"";
-        final ContainerMocker container = new ContainerMocker()
-            .expectBody(Matchers.containsString("with"))
-            .expectMethod(Matchers.equalTo(Request.POST))
-            .mock();
         this.request(container.home())
             .method(Request.POST)
             .header(
@@ -206,6 +225,12 @@ public final class BaseRequestTest {
             .body().set(URLEncoder.encode(value, CharEncoding.UTF_8)).back()
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
+        final MkQuery query = container.take();
+        MatcherAssert.assertThat(
+            URLDecoder.decode(query.body(), CharEncoding.UTF_8),
+            Matchers.containsString(value)
+        );
+        container.stop();
     }
 
     /**
@@ -214,10 +239,9 @@ public final class BaseRequestTest {
      */
     @Test
     public void assertsHttpStatus() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .returnStatus(HttpURLConnection.HTTP_NOT_FOUND)
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple(HttpURLConnection.HTTP_NOT_FOUND, "")
+        ).start();
         this.request(container.home())
             .method(Request.GET)
             .fetch().as(RestResponse.class)
@@ -225,6 +249,7 @@ public final class BaseRequestTest {
             .assertStatus(
                 Matchers.equalTo(HttpURLConnection.HTTP_NOT_FOUND)
             );
+        container.stop();
     }
 
     /**
@@ -233,15 +258,15 @@ public final class BaseRequestTest {
      */
     @Test
     public void assertsHttpResponseBody() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .returnBody("some text \u20ac")
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("some text \u20ac")
+        ).start();
         this.request(container.home())
             .method(Request.GET)
             .fetch().as(RestResponse.class)
             .assertBody(Matchers.containsString("text \u20ac"))
             .assertStatus(HttpURLConnection.HTTP_OK);
+        container.stop();
     }
 
     /**
@@ -250,10 +275,11 @@ public final class BaseRequestTest {
      */
     @Test
     public void assertsHttpHeaders() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .returnHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN)
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("").withHeader(
+                HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN
+            )
+        ).start();
         this.request(container.home())
             .method(Request.GET)
             .fetch().as(RestResponse.class)
@@ -268,6 +294,7 @@ public final class BaseRequestTest {
                     Matchers.containsString(MediaType.TEXT_PLAIN)
                 )
             );
+        container.stop();
     }
 
     /**
@@ -276,16 +303,16 @@ public final class BaseRequestTest {
      */
     @Test
     public void assertsResponseBodyWithXpathQuery() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .returnBody("<root><a>\u0443\u0440\u0430!</a></root>")
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("<root><a>\u0443\u0440\u0430!</a></root>")
+        ).start();
         this.request(container.home())
             .method(Request.GET)
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
             .as(XmlResponse.class)
             .assertXPath("/root/a[contains(.,'!')]");
+        container.stop();
     }
 
     /**
@@ -294,7 +321,11 @@ public final class BaseRequestTest {
      */
     @Test
     public void mockedUrlIsInCorrectFormat() throws Exception {
-        final URI uri = new ContainerMocker().mock().home();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("")
+        ).start();
+        container.stop();
+        final URI uri = container.home();
         MatcherAssert.assertThat(
             uri.toString().matches("^http://localhost:\\d+/$"),
             Matchers.describedAs(uri.toString(), Matchers.is(true))
@@ -307,16 +338,18 @@ public final class BaseRequestTest {
      */
     @Test
     public void acceptsUnicodeInPlainText() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .returnHeader(HttpHeaders.CONTENT_TYPE, "text/plain;charset=utf-8")
-            .returnBody("\u0443\u0440\u0430!")
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("\u0443\u0440\u0430!").withHeader(
+                HttpHeaders.CONTENT_TYPE, "text/plain;charset=utf-8"
+            )
+        ).start();
         this.request(container.home())
             .method(Request.GET)
             .uri().path("/abcdefff").back()
             .fetch().as(RestResponse.class)
             .assertBody(Matchers.containsString("\u0443\u0440\u0430"))
             .assertBody(Matchers.containsString("!"));
+        container.stop();
     }
 
     /**
@@ -325,15 +358,17 @@ public final class BaseRequestTest {
      */
     @Test
     public void acceptsUnicodeInXml() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .returnHeader(HttpHeaders.CONTENT_TYPE, "text/xml;charset=utf-8")
-            .returnBody("<text>\u0443\u0440\u0430!</text>")
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("<text>\u0443\u0440\u0430!</text>").withHeader(
+                HttpHeaders.CONTENT_TYPE, "text/xml;charset=utf-8"
+            )
+        ).start();
         this.request(container.home())
             .method(Request.GET)
             .uri().path("/barbar").back()
             .fetch().as(XmlResponse.class)
             .assertXPath("/text[contains(.,'\u0443\u0440\u0430')]");
+        container.stop();
     }
 
     /**
@@ -342,10 +377,9 @@ public final class BaseRequestTest {
      */
     @Test
     public void sendsBasicAuthenticationHeader() throws Exception {
-        final ContainerMocker container = new ContainerMocker().expectHeader(
-            HttpHeaders.AUTHORIZATION,
-            Matchers.equalTo("Basic dXNlcjolRTIlODIlQUMlRTIlODIlQUM=")
-        ).mock();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("")
+        ).start();
         final URI uri = UriBuilder.fromUri(container.home())
             .userInfo("user:\u20ac\u20ac").build();
         this.request(uri)
@@ -353,6 +387,15 @@ public final class BaseRequestTest {
             .uri().path("/abcde").back()
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
+        container.stop();
+        final MkQuery query = container.take();
+        MatcherAssert.assertThat(
+            query.headers(),
+            Matchers.hasEntry(
+                Matchers.equalTo(HttpHeaders.AUTHORIZATION),
+                Matchers.hasItem("Basic dXNlcjolRTIlODIlQUMlRTIlODIlQUM=")
+            )
+        );
     }
 
     /**
@@ -373,11 +416,13 @@ public final class BaseRequestTest {
      */
     @Test
     public void sendsIdenticalHttpRequestTwice() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .expectHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML)
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer()
+            .next(new MkAnswer.Simple(""))
+            .next(new MkAnswer.Simple(""))
+            .next(new MkAnswer.Simple(""))
+            .start();
         final Request req = this.request(container.home())
-            .uri().path("/foo").back()
+            .uri().path("/foo-X").back()
             .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_XML);
         req.method(Request.GET).fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
@@ -385,6 +430,11 @@ public final class BaseRequestTest {
             .assertStatus(HttpURLConnection.HTTP_OK);
         req.method(Request.GET).fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK);
+        container.stop();
+        MatcherAssert.assertThat(
+            container.take().uri().toString(),
+            Matchers.endsWith("foo-X")
+        );
     }
 
     /**
@@ -394,13 +444,15 @@ public final class BaseRequestTest {
      */
     @Test
     public void doesntRedirectWithoutRequest() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .returnStatus(HttpURLConnection.HTTP_SEE_OTHER)
-            .returnHeader(HttpHeaders.LOCATION, "http://www.google.com")
-            .mock();
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("")
+                .withStatus(HttpURLConnection.HTTP_SEE_OTHER)
+                .withHeader(HttpHeaders.LOCATION, "http://www.google.com")
+        ).start();
         this.request(container.home())
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_SEE_OTHER);
+        container.stop();
     }
 
     /**

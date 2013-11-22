@@ -29,7 +29,6 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.test.ContainerMocker;
 import com.rexsl.test.Request;
 import com.rexsl.test.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;

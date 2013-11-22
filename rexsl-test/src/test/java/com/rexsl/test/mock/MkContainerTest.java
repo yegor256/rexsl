@@ -27,42 +27,41 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.w3c;
+package com.rexsl.test.mock;
 
-import java.net.URI;
-import org.apache.commons.lang3.StringUtils;
+import com.rexsl.test.JdkRequest;
+import com.rexsl.test.Request;
+import com.rexsl.test.RestResponse;
+import java.net.HttpURLConnection;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link DefaultHtmlValidator}.
+ * Test case for {@link MkContainer}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-public final class DefaultHtmlValidatorTest {
+public final class MkContainerTest {
 
     /**
-     * DefaultHtmlValidator can validate HTML document.
+     * MkContainer can return required answers.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void validatesHtmlDocument() throws Exception {
-        final URI uri = new ContainerMocker().returnBody(
-            StringUtils.join(
-                "<env:Envelope",
-                " xmlns:env='http://www.w3.org/2003/05/soap-envelope'>",
-                "<env:Body><m:markupvalidationresponse",
-                " xmlns:m='http://www.w3.org/2005/10/markup-validator'>",
-                "<m:validity>true</m:validity>",
-                "<m:checkedby>W3C</m:checkedby>",
-                "<m:doctype>text/html</m:doctype>",
-                "<m:charset>UTF-8</m:charset>",
-                "</m:markupvalidationresponse></env:Body></env:Envelope>"
-            )
-        ).mock().home();
-        final Validator validator = new DefaultHtmlValidator(uri);
-        final ValidationResponse response = validator.validate("<html/>");
-        MatcherAssert.assertThat(response.toString(), response.valid());
+    public void worksAsServletContainer() throws Exception {
+        final MkContainer container = new MkGrizzlyContainer()
+            .next(new MkAnswer.Simple(HttpURLConnection.HTTP_OK, "works fine!"))
+            .start();
+        new JdkRequest(container.home())
+            .fetch().as(RestResponse.class)
+            .assertStatus(200)
+            .assertBody(Matchers.startsWith("works"));
+        MatcherAssert.assertThat(
+            container.take().method(),
+            Matchers.equalTo(Request.GET)
+        );
+        container.stop();
     }
 
 }

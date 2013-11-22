@@ -27,42 +27,32 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.w3c;
+package com.rexsl.test;
 
-import java.net.URI;
-import org.apache.commons.lang3.StringUtils;
+import java.util.Map;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link DefaultHtmlValidator}.
+ * Test case for {@link ImmutableHeader}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-public final class DefaultHtmlValidatorTest {
+public final class ImmutableHeaderTest {
 
     /**
-     * DefaultHtmlValidator can validate HTML document.
+     * ImmutableHeader can normalize headers.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void validatesHtmlDocument() throws Exception {
-        final URI uri = new ContainerMocker().returnBody(
-            StringUtils.join(
-                "<env:Envelope",
-                " xmlns:env='http://www.w3.org/2003/05/soap-envelope'>",
-                "<env:Body><m:markupvalidationresponse",
-                " xmlns:m='http://www.w3.org/2005/10/markup-validator'>",
-                "<m:validity>true</m:validity>",
-                "<m:checkedby>W3C</m:checkedby>",
-                "<m:doctype>text/html</m:doctype>",
-                "<m:charset>UTF-8</m:charset>",
-                "</m:markupvalidationresponse></env:Body></env:Envelope>"
-            )
-        ).mock().home();
-        final Validator validator = new DefaultHtmlValidator(uri);
-        final ValidationResponse response = validator.validate("<html/>");
-        MatcherAssert.assertThat(response.toString(), response.valid());
+    public void normalizesHeaderKey() throws Exception {
+        final Map.Entry<String, String> header =
+            new ImmutableHeader("content-type", "text/plain");
+        MatcherAssert.assertThat(
+            header.getKey(),
+            Matchers.equalTo("Content-Type")
+        );
     }
 
 }
