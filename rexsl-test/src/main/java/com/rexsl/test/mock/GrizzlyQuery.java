@@ -55,9 +55,24 @@ import org.apache.commons.lang3.CharEncoding;
 @Immutable
 final class GrizzlyQuery implements MkQuery {
 
+    /**
+     * HTTP request method.
+     */
     private final transient String mtd;
+
+    /**
+     * HTTP request content.
+     */
     private final transient byte[] content;
+
+    /**
+     * HTTP request URI.
+     */
     private final transient String home;
+
+    /**
+     * HTTP request headers.
+     */
     private final transient ArrayMap<String, List<String>> hdrs;
 
     /**
@@ -66,23 +81,9 @@ final class GrizzlyQuery implements MkQuery {
      */
     GrizzlyQuery(final GrizzlyRequest request) throws IOException {
         request.setCharacterEncoding(CharEncoding.UTF_8);
-        this.home = request.getDecodedRequestURI();
+        this.home = GrizzlyQuery.uri(request);
         this.mtd = request.getMethod();
-        final ConcurrentMap<String, List<String>> headers =
-            new ConcurrentHashMap<String, List<String>>(0);
-        final Enumeration<?> names = request.getHeaderNames();
-        while (names.hasMoreElements()) {
-            final String name = ImmutableHeader.normalize(
-                names.nextElement().toString()
-            );
-            final List<String> list = new LinkedList<String>();
-            final Enumeration<?> values = request.getHeaders(name);
-            while (values.hasMoreElements()) {
-                list.add(values.nextElement().toString());
-            }
-            headers.put(name, list);
-        }
-        this.hdrs = new ArrayMap<String, List<String>>(headers);
+        this.hdrs = GrizzlyQuery.headers(request);
         this.content = IOUtils.toByteArray(request.getInputStream());
     }
 
@@ -105,4 +106,43 @@ final class GrizzlyQuery implements MkQuery {
     public String body() {
         return new String(this.content, Charsets.UTF_8);
     }
+
+    /**
+     * Fetch URI from the request.
+     * @param request Request
+     * @return URI
+     */
+    private static String uri(final GrizzlyRequest request) {
+        final StringBuilder uri = new StringBuilder(request.getRequestURI());
+        final String query = request.getQueryString();
+        if (!query.isEmpty()) {
+            uri.append('?').append(query);
+        }
+        return uri.toString();
+    }
+
+    /**
+     * Fetch headers from the request.
+     * @param request Request
+     * @return Headers
+     */
+    private static ArrayMap<String, List<String>> headers(
+        final GrizzlyRequest request) {
+        final ConcurrentMap<String, List<String>> headers =
+            new ConcurrentHashMap<String, List<String>>(0);
+        final Enumeration<?> names = request.getHeaderNames();
+        while (names.hasMoreElements()) {
+            final String name = ImmutableHeader.normalize(
+                names.nextElement().toString()
+            );
+            final List<String> list = new LinkedList<String>();
+            final Enumeration<?> values = request.getHeaders(name);
+            while (values.hasMoreElements()) {
+                list.add(values.nextElement().toString());
+            }
+            headers.put(name, list);
+        }
+        return new ArrayMap<String, List<String>>(headers);
+    }
+
 }

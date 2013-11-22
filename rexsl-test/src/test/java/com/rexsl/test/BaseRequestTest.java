@@ -173,8 +173,8 @@ public final class BaseRequestTest {
             .assertStatus(HttpURLConnection.HTTP_OK);
         final MkQuery query = container.take();
         MatcherAssert.assertThat(
-            query.uri().getQuery(),
-            Matchers.endsWith(value)
+            URLDecoder.decode(query.uri().toString(), CharEncoding.UTF_8),
+            Matchers.endsWith("\"€\"")
         );
         container.stop();
     }
