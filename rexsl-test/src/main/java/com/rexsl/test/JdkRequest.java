@@ -38,6 +38,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -75,9 +76,16 @@ public final class JdkRequest implements Request {
             final String method,
             final Collection<Map.Entry<String, String>> headers,
             final byte[] content) throws IOException {
-            final HttpURLConnection conn = HttpURLConnection.class.cast(
-                new URL(home).openConnection()
-            );
+            final URLConnection raw = new URL(home).openConnection();
+            if (!(raw instanceof HttpURLConnection)) {
+                throw new IOException(
+                    String.format(
+                        "'%s' opens %s instead of expected HttpURLConnection",
+                        home, raw.getClass().getName()
+                    )
+                );
+            }
+            final HttpURLConnection conn = HttpURLConnection.class.cast(raw);
             try {
                 conn.setRequestMethod(method);
                 for (final Map.Entry<String, String> header : headers) {
