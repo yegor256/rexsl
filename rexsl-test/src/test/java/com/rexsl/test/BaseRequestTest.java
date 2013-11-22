@@ -388,6 +388,22 @@ public final class BaseRequestTest {
     }
 
     /**
+     * BaseRequest can return redirect status (without redirecting).
+     * @throws Exception If something goes wrong inside
+     * @since 0.10
+     */
+    @Test
+    public void doesntRedirectWithoutRequest() throws Exception {
+        final ContainerMocker container = new ContainerMocker()
+            .returnStatus(HttpURLConnection.HTTP_SEE_OTHER)
+            .returnHeader(HttpHeaders.LOCATION, "http://www.google.com")
+            .mock();
+        this.request(container.home())
+            .fetch().as(RestResponse.class)
+            .assertStatus(HttpURLConnection.HTTP_SEE_OTHER);
+    }
+
+    /**
      * BaseRequest can build the right destination URI.
      * @throws Exception If something goes wrong inside
      */

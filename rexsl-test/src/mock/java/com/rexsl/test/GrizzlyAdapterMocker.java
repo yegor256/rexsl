@@ -246,7 +246,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
         if (this.methodMatcher != null) {
             MatcherAssert.assertThat(
                 Logger.format(
-                    "HTTP method matches provided matcher in:%s",
+                    "HTTP method matches provided matcher in:\n%s",
                     this.asText(request, input)
                 ),
                 request.getMethod(),
@@ -266,7 +266,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
             : this.paramMatchers.entrySet()) {
             MatcherAssert.assertThat(
                 Logger.format(
-                    "Param '%s' matches specified matcher in:%s",
+                    "Param '%s' matches specified matcher in:\n%s",
                     entry.getKey(),
                     this.asText(request, input)
                 ),
@@ -287,7 +287,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
             try {
                 MatcherAssert.assertThat(
                     Logger.format(
-                        "Body matches provided matcher in:%s",
+                        "Body matches provided matcher in:\n%s",
                         this.asText(request, input)
                     ),
                     IOUtils.toString(request.getInputStream()),
@@ -310,7 +310,7 @@ public final class GrizzlyAdapterMocker extends GrizzlyAdapter {
             : this.headerMatchers.entrySet()) {
             MatcherAssert.assertThat(
                 Logger.format(
-                    "Header '%s' matches specified matcher in:%s",
+                    "Header '%s' matches specified matcher in:\n%s",
                     entry.getKey(),
                     this.asText(request, input)
                 ),
