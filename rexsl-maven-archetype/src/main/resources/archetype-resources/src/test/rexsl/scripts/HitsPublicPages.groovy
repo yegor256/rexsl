@@ -4,8 +4,8 @@
  */
 package ${package}.rexsl.scripts
 
-import com.rexsl.test.JdkRequest
-import com.rexsl.test.RestResponse
+import com.rexsl.test.request.JdkRequest
+import com.rexsl.test.response.RestResponse
 
 [
     '/',

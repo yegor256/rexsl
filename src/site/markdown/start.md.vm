@@ -233,12 +233,12 @@ script in `src/test/rexsl/scripts/RendersHomePage.groovy`
 
 ```
 package foo
-import com.rexsl.test.ApacheRequest
-import com.rexsl.test.RestResponse
-import com.rexsl.test.XmlResponse
+import com.rexsl.test.request.JdkRequest
+import com.rexsl.test.response.RestResponse
+import com.rexsl.test.response.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
-new ApacheRequest(rexsl.home)
+new JdkRequest(rexsl.home)
   .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
   .header(HttpHeaders.USER_AGENT, 'Safari')
   .fetch()
@@ -246,7 +246,7 @@ new ApacheRequest(rexsl.home)
   .assertStatus(HttpURLConnection.HTTP_OK)
   .as(XmlResponse.class)
   .assertXPath("//xhtml:div[contains(.,'world')]")
-new ApacheRequest(rexsl.home)
+new JdkRequest(rexsl.home)
   .uri().path('/strange-address').back()
   .fetch()
   .as(RestResponse.class)

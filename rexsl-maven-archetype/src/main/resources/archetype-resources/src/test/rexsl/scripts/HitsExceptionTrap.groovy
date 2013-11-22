@@ -4,9 +4,9 @@
  */
 package ${package}.rexsl.scripts
 
-import com.rexsl.test.ApacheRequest
-import com.rexsl.test.RestResponse
-import com.rexsl.test.XmlResponse
+import com.rexsl.test.request.ApacheRequest
+import com.rexsl.test.response.RestResponse
+import com.rexsl.test.response.XmlResponse
 
 new ApacheRequest(rexsl.home)
     .uri().path('/trap').back()
