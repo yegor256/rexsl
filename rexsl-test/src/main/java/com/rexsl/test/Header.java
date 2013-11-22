@@ -88,7 +88,7 @@ final class Header implements Map.Entry<String, String> {
      * @return Normalized key
      */
     @NotNull
-    private static String normalized(
+    public static String normalized(
         @NotNull(message = "key can't be NULL")
         @Pattern(regexp = "[a-zA-Z0-9\\-]+") final String key) {
         final char[] chars = key.toCharArray();

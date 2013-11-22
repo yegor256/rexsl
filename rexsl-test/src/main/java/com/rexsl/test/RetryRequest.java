@@ -97,6 +97,11 @@ public final class RetryRequest implements Request {
     }
 
     @Override
+    public Request reset(final String name) {
+        return new RetryRequest(this.origin.reset(name));
+    }
+
+    @Override
     public Request method(final String method) {
         return new RetryRequest(this.origin.method(method));
     }

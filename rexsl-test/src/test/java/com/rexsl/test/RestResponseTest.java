@@ -88,14 +88,16 @@ public final class RestResponseTest {
             .expectMethod(Matchers.equalTo(Request.GET))
             .expectHeader(
                 HttpHeaders.COOKIE,
-                Matchers.containsString("alpha=boom")
+                Matchers.containsString("alpha=boom2")
             )
             .mock();
         final RestResponse response = new RestResponse(
             new FakeRequest()
-                .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom; path=/")
+                .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom1; path=/")
+                .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom2; path=/")
                 .withHeader(HttpHeaders.LOCATION, container.home().toString())
                 .uri().set(container.home()).back()
+                .header(HttpHeaders.COOKIE, "alpha=boom5")
                 .fetch()
         );
         response.follow()

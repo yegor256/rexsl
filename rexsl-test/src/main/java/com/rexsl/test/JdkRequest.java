@@ -205,6 +205,12 @@ public final class JdkRequest implements Request {
     }
 
     @Override
+    public Request reset(
+        @NotNull(message = "header name can't be NULL") final String name) {
+        return this.base.reset(name);
+    }
+
+    @Override
     public RequestBody body() {
         return this.base.body();
     }

@@ -93,7 +93,7 @@ final class BaseRequest implements Request {
     /**
      * Headers.
      */
-    private final transient Array<Header> hdrs;
+    private final transient Array<Map.Entry<String, String>> hdrs;
 
     /**
      * Body to use.
@@ -108,7 +108,7 @@ final class BaseRequest implements Request {
     BaseRequest(final Wire wre, final String uri) {
         this(
             wre, uri,
-            new Array<Header>(),
+            new Array<Map.Entry<String, String>>(),
             Request.GET, ArrayUtils.EMPTY_BYTE_ARRAY
         );
     }
@@ -123,7 +123,7 @@ final class BaseRequest implements Request {
      * @checkstyle ParameterNumber (5 lines)
      */
     BaseRequest(final Wire wre, final String uri,
-        final Iterable<Header> headers,
+        final Iterable<Map.Entry<String, String>> headers,
         final String method, final byte[] body) {
         this.wire = wre;
         URI addr = URI.create(uri);
@@ -131,7 +131,7 @@ final class BaseRequest implements Request {
             addr = UriBuilder.fromUri(addr).path("/").build();
         }
         this.home = addr.toString();
-        this.hdrs = new Array<Header>(headers);
+        this.hdrs = new Array<Map.Entry<String, String>>(headers);
         this.mtd = method;
         this.content = ArrayUtils.clone(body);
     }
@@ -150,6 +150,26 @@ final class BaseRequest implements Request {
             this.wire,
             this.home,
             this.hdrs.with(new Header(name, value.toString())),
+            this.mtd,
+            this.content
+        );
+    }
+
+    @Override
+    public Request reset(
+        @NotNull(message = "header name can't be NULL") final String name) {
+        final Collection<Map.Entry<String, String>> headers =
+            new LinkedList<Map.Entry<String, String>>();
+        final String key = Header.normalized(name);
+        for (final Map.Entry<String, String> header : this.hdrs) {
+            if (!header.getKey().equals(key)) {
+                headers.add(header);
+            }
+        }
+        return new BaseRequest(
+            this.wire,
+            this.home,
+            headers,
             this.mtd,
             this.content
         );
