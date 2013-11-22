@@ -55,7 +55,7 @@ import lombok.ToString;
 @Immutable
 @ToString
 @EqualsAndHashCode(of = "origin")
-public final class CookieCompressingWire implements Wire {
+public final class CookieOptimizingWire implements Wire {
 
     /**
      * Original wire.
@@ -66,8 +66,8 @@ public final class CookieCompressingWire implements Wire {
      * Public ctor.
      * @param wire Original wire
      */
-    public CookieCompressingWire(@NotNull(message = "wire can't be NULL")
-        final Wire wire) {
+    public CookieOptimizingWire(@NotNull(message = "wire can't be NULL")
+                                final Wire wire) {
         this.origin = wire;
     }
 

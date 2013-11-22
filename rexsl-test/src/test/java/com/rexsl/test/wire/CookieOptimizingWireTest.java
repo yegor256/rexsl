@@ -42,14 +42,14 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link CookieCompressingWire}.
+ * Test case for {@link CookieOptimizingWire}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-public final class CookieCompressingWireTest {
+public final class CookieOptimizingWireTest {
 
     /**
-     * CookieCompressingWire can transfer cookies.
+     * CookieOptimizingWire can transfer cookies.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -60,7 +60,7 @@ public final class CookieCompressingWireTest {
                 .withHeader(HttpHeaders.LOCATION, "/")
         ).next(new MkAnswer.Simple("")).start();
         new JdkRequest(container.home())
-            .through(CookieCompressingWire.class)
+            .through(CookieOptimizingWire.class)
             .header(HttpHeaders.COOKIE, "alpha=boom5")
             .fetch()
             .as(RestResponse.class)
@@ -84,7 +84,7 @@ public final class CookieCompressingWireTest {
     }
 
     /**
-     * CookieCompressingWire can avoid transferring of empty cookies.
+     * CookieOptimizingWire can avoid transferring of empty cookies.
      * @throws Exception If something goes wrong inside
      */
     @Test
@@ -96,7 +96,7 @@ public final class CookieCompressingWireTest {
                 .withHeader(HttpHeaders.LOCATION, "/a")
         ).next(new MkAnswer.Simple("")).start();
         new JdkRequest(container.home())
-            .through(CookieCompressingWire.class)
+            .through(CookieOptimizingWire.class)
             .fetch()
             .as(RestResponse.class)
             .follow()
