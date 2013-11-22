@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,38 +27,39 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.foo.setup
+package com.rexsl.test.request;
 
-import com.rexsl.test.request.ApacheRequest
-import com.rexsl.test.Request
-import com.rexsl.test.response.RestResponse
-import com.jcabi.log.Logger
-import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.MediaType
-import org.hamcrest.Matchers
+import com.jcabi.immutable.ArrayMap;
+import com.rexsl.test.Wire;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.mockito.Mockito;
 
-Logger.info(this, 'AddsData script running...')
+/**
+ * Test case for {@link BaseRequest}.
+ * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @version $Id$
+ */
+public final class BaseRequestTest {
 
-// let's validate how data were injected in bootstrap
-new ApacheRequest(rexsl.home)
-    .fetch()
-    .as(RestResponse)
-    .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertBody(Matchers.containsString('bootstrapped'))
+    /**
+     * BaseRequest can build the right destination URI.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void buildsDestinationUri() throws Exception {
+        final Wire wire = Mockito.mock(Wire.class);
+        MatcherAssert.assertThat(
+            new BaseRequest(wire, "http://localhost:88/t/f")
+                .uri().path("/bar").queryParam("u1", "\u20ac")
+                .queryParams(new ArrayMap<String, String>().with("u2", ""))
+                .userInfo("hey:\u20ac")
+                .back().uri().get(),
+            Matchers.hasToString(
+                "http://hey:%E2%82%AC@localhost:88/t/f/bar?u1=%E2%82%AC&u2="
+            )
+        );
+    }
 
-// inject new data value
-def value = '\u0443\u0440\u0430'
-new ApacheRequest(rexsl.home)
-    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
-    .method(Request.POST)
-    .body().formParam('text', value).back()
-    .fetch()
-    .as(RestResponse)
-    .assertStatus(HttpURLConnection.HTTP_OK)
-
-// let's validate that it's there
-new ApacheRequest(rexsl.home)
-    .fetch()
-    .as(RestResponse)
-    .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertBody(Matchers.containsString(value))
+}

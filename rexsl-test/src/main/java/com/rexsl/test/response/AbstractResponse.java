@@ -27,37 +27,82 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.response;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.Test;
+import com.jcabi.aspects.Immutable;
+import com.rexsl.test.Request;
+import com.rexsl.test.Response;
+import java.util.List;
+import java.util.Map;
+import lombok.EqualsAndHashCode;
 
 /**
- * Test case for {@link JsonResponse}.
+ * Abstract response.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.8
  */
-public final class JsonResponseTest {
+@Immutable
+@EqualsAndHashCode(of = "response")
+abstract class AbstractResponse implements Response {
 
     /**
-     * JsonResponse can read and return a JSON document.
-     * @throws Exception If something goes wrong inside
+     * Encapsulated response.
      */
-    @Test
-    public void readsJsonDocument() throws Exception {
-        final Response resp = new FakeRequest()
-            .withBody("{\"foo-foo\":2, \"bar\":\"hello!\"}")
-            .fetch();
-        final JsonResponse response = new JsonResponse(resp);
-        MatcherAssert.assertThat(
-            response.json().readObject().getInt("foo-foo"),
-            Matchers.equalTo(2)
-        );
-        MatcherAssert.assertThat(
-            response.json().readObject().getString("bar"),
-            Matchers.equalTo("hello!")
-        );
+    private final transient Response response;
+
+    /**
+     * Ctor.
+     * @param resp Response
+     */
+    AbstractResponse(final Response resp) {
+        this.response = resp;
+    }
+
+    @Override
+    public String toString() {
+        return this.response.toString();
+    }
+
+    @Override
+    public Request back() {
+        return this.response.back();
+    }
+
+    @Override
+    public int status() {
+        return this.response.status();
+    }
+
+    @Override
+    public String reason() {
+        return this.response.reason();
+    }
+
+    @Override
+    public Map<String, List<String>> headers() {
+        return this.response.headers();
+    }
+
+    @Override
+    public String body() {
+        return this.response.body();
+    }
+
+    @Override
+    public byte[] binary() {
+        return this.response.binary();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @checkstyle MethodName (4 lines)
+     */
+    @Override
+    @SuppressWarnings("PMD.ShortMethodName")
+    public <T> T as(final Class<T> type) {
+        return this.response.as(type);
     }
 
 }

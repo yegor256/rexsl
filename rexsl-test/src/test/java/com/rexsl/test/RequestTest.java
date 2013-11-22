@@ -29,11 +29,16 @@
  */
 package com.rexsl.test;
 
-import com.jcabi.immutable.ArrayMap;
 import com.rexsl.test.mock.MkAnswer;
 import com.rexsl.test.mock.MkContainer;
 import com.rexsl.test.mock.MkGrizzlyContainer;
 import com.rexsl.test.mock.MkQuery;
+import com.rexsl.test.request.ApacheRequest;
+import com.rexsl.test.request.JdkRequest;
+import com.rexsl.test.response.RestResponse;
+import com.rexsl.test.response.XmlResponse;
+import com.rexsl.test.wire.BasicAuthWire;
+import com.rexsl.test.wire.UserAgentWire;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -52,13 +57,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 /**
- * Test case for {@link BaseRequest} and its children.
+ * Test case for {@link Request} and its implementations.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @SuppressWarnings("PMD.TooManyMethods")
 @RunWith(Parameterized.class)
-public final class BaseRequestTest {
+public final class RequestTest {
 
     /**
      * Type of request.
@@ -69,7 +74,7 @@ public final class BaseRequestTest {
      * Public ctor.
      * @param req Request type
      */
-    public BaseRequestTest(final Class<? extends Request> req) {
+    public RequestTest(final Class<? extends Request> req) {
         this.type = req;
     }
 
@@ -80,8 +85,8 @@ public final class BaseRequestTest {
     @Parameterized.Parameters
     public static Collection<Object[]> primeNumbers() {
         return Arrays.asList(
-            new Object[] {ApacheRequest.class},
-            new Object[] {JdkRequest.class}
+            new Object[]{ApacheRequest.class},
+            new Object[]{JdkRequest.class}
         );
     }
 
@@ -133,6 +138,7 @@ public final class BaseRequestTest {
             new MkAnswer.Simple("")
         ).start();
         this.request(container.home())
+            .through(UserAgentWire.class)
             .uri().path("/foo1").back()
             .method(Request.GET)
             .header(HttpHeaders.ACCEPT, "*/*")
@@ -383,6 +389,7 @@ public final class BaseRequestTest {
         final URI uri = UriBuilder.fromUri(container.home())
             .userInfo("user:\u20ac\u20ac").build();
         this.request(uri)
+            .through(BasicAuthWire.class)
             .method(Request.GET)
             .uri().path("/abcde").back()
             .fetch().as(RestResponse.class)
@@ -453,24 +460,6 @@ public final class BaseRequestTest {
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_SEE_OTHER);
         container.stop();
-    }
-
-    /**
-     * BaseRequest can build the right destination URI.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void buildsDestinationUri() throws Exception {
-        MatcherAssert.assertThat(
-            this.request(new URI("http://localhost:88/t/f"))
-                .uri().path("/bar").queryParam("u1", "\u20ac")
-                .queryParams(new ArrayMap<String, String>().with("u2", ""))
-                .userInfo("hey:\u20ac")
-                .back().uri().get(),
-            Matchers.hasToString(
-                "http://hey:%E2%82%AC@localhost:88/t/f/bar?u1=%E2%82%AC&u2="
-            )
-        );
     }
 
 }

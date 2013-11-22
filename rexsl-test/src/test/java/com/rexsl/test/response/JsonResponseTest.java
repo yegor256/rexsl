@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,38 +27,39 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.foo.setup
+package com.rexsl.test.response;
 
-import com.rexsl.test.request.ApacheRequest
-import com.rexsl.test.Request
-import com.rexsl.test.response.RestResponse
-import com.jcabi.log.Logger
-import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.MediaType
-import org.hamcrest.Matchers
+import com.rexsl.test.Response;
+import com.rexsl.test.request.FakeRequest;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
-Logger.info(this, 'AddsData script running...')
+/**
+ * Test case for {@link JsonResponse}.
+ * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @version $Id$
+ */
+public final class JsonResponseTest {
 
-// let's validate how data were injected in bootstrap
-new ApacheRequest(rexsl.home)
-    .fetch()
-    .as(RestResponse)
-    .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertBody(Matchers.containsString('bootstrapped'))
+    /**
+     * JsonResponse can read and return a JSON document.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void readsJsonDocument() throws Exception {
+        final Response resp = new FakeRequest()
+            .withBody("{\"foo-foo\":2, \"bar\":\"hello!\"}")
+            .fetch();
+        final JsonResponse response = new JsonResponse(resp);
+        MatcherAssert.assertThat(
+            response.json().readObject().getInt("foo-foo"),
+            Matchers.equalTo(2)
+        );
+        MatcherAssert.assertThat(
+            response.json().readObject().getString("bar"),
+            Matchers.equalTo("hello!")
+        );
+    }
 
-// inject new data value
-def value = '\u0443\u0440\u0430'
-new ApacheRequest(rexsl.home)
-    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
-    .method(Request.POST)
-    .body().formParam('text', value).back()
-    .fetch()
-    .as(RestResponse)
-    .assertStatus(HttpURLConnection.HTTP_OK)
-
-// let's validate that it's there
-new ApacheRequest(rexsl.home)
-    .fetch()
-    .as(RestResponse)
-    .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertBody(Matchers.containsString(value))
+}

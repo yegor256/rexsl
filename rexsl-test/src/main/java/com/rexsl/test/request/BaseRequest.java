@@ -27,27 +27,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.request;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
 import com.jcabi.log.Logger;
-import com.jcabi.manifests.Manifests;
+import com.rexsl.test.ImmutableHeader;
+import com.rexsl.test.Request;
+import com.rexsl.test.RequestBody;
+import com.rexsl.test.RequestURI;
+import com.rexsl.test.Response;
+import com.rexsl.test.Wire;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.CharEncoding;
@@ -60,22 +62,14 @@ import org.apache.commons.lang3.CharUtils;
  * @version $Id$
  * @since 0.8
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
+ * @see Request
+ * @see Response
  */
 @Immutable
 @EqualsAndHashCode(of = { "home", "mtd", "hdrs", "content" })
 @Loggable(Loggable.DEBUG)
 @SuppressWarnings("PMD.TooManyMethods")
 final class BaseRequest implements Request {
-
-    /**
-     * Default user agent.
-     */
-    private static final String AGENT = String.format(
-        "ReXSL-%s/%s Java/%s",
-        Manifests.read("ReXSL-Version"),
-        Manifests.read("ReXSL-Build"),
-        System.getProperty("java.version")
-    );
 
     /**
      * Wire to use.
@@ -141,7 +135,7 @@ final class BaseRequest implements Request {
     @Override
     @NotNull
     public RequestURI uri() {
-        return new BaseURI(this, this.home);
+        return new BaseRequest.BaseURI(this, this.home);
     }
 
     @Override
@@ -198,7 +192,8 @@ final class BaseRequest implements Request {
     public Response fetch() throws IOException {
         final long start = System.currentTimeMillis();
         final Response response = this.wire.send(
-            this, this.home, this.mtd, this.headers(), this.content
+            this, this.home, this.mtd,
+            this.hdrs, this.content
         );
         if (Logger.isDebugEnabled(this)) {
             Logger.debug(
@@ -223,6 +218,29 @@ final class BaseRequest implements Request {
             this.home
         );
         return response;
+    }
+
+    @Override
+    public <T extends Wire> Request through(final Class<T> type) {
+        try {
+            return new BaseRequest(
+                type.getDeclaredConstructor(Wire.class).newInstance(
+                    this.wire
+                ),
+                this.home,
+                this.hdrs,
+                this.mtd,
+                this.content
+            );
+        } catch (InstantiationException ex) {
+            throw new IllegalStateException(ex);
+        } catch (IllegalAccessException ex) {
+            throw new IllegalStateException(ex);
+        } catch (InvocationTargetException ex) {
+            throw new IllegalStateException(ex);
+        } catch (NoSuchMethodException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     @Override
@@ -282,69 +300,6 @@ final class BaseRequest implements Request {
     }
 
     /**
-     * Create headers for the request.
-     * @return Headers
-     */
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    private Collection<Map.Entry<String, String>> headers() {
-        final Collection<Map.Entry<String, String>> headers =
-            new LinkedList<Map.Entry<String, String>>();
-        final ConcurrentMap<String, String> cookies =
-            new ConcurrentHashMap<String, String>();
-        boolean agent = false;
-        for (final Map.Entry<String, String> header : this.hdrs) {
-            if (header.getKey().equals(HttpHeaders.COOKIE)) {
-                final String[] parts = header.getValue().split("=", 2);
-                cookies.put(parts[0], parts[1]);
-                continue;
-            }
-            headers.add(new ImmutableHeader(header.getKey(), header.getValue()));
-            if (header.getKey().equals(HttpHeaders.USER_AGENT)) {
-                agent = true;
-            }
-        }
-        if (!agent) {
-            headers.add(new ImmutableHeader(HttpHeaders.USER_AGENT, BaseRequest.AGENT));
-        }
-        for (final Map.Entry<String, String> cookie : cookies.entrySet()) {
-            headers.add(
-                new ImmutableHeader(
-                    HttpHeaders.COOKIE,
-                    String.format("%s=%s", cookie.getKey(), cookie.getValue())
-                )
-            );
-        }
-        final String info = URI.create(this.home).getUserInfo();
-        if (info != null) {
-            final String[] parts = info.split(":", 2);
-            try {
-                headers.add(
-                    new ImmutableHeader(
-                        HttpHeaders.AUTHORIZATION,
-                        Logger.format(
-                            "Basic %s",
-                            Base64.encodeBase64String(
-                                Logger.format(
-                                    "%s:%s",
-                                    URLEncoder.encode(
-                                        parts[0], CharEncoding.UTF_8
-                                    ),
-                                    URLEncoder.encode(
-                                        parts[1], CharEncoding.UTF_8
-                                    )
-                                ).getBytes(Charsets.UTF_8)
-                            )
-                        )
-                    )
-                );
-            } catch (UnsupportedEncodingException ex) {
-                throw new IllegalStateException(ex);
-            }
-        }
-        return headers;
-    }
-
-    /**
      * Base URI.
      */
     @Immutable
@@ -389,13 +344,13 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI set(@NotNull(message = "URI can't be NULL")
             final URI uri) {
-            return new BaseURI(this.owner, uri.toString());
+            return new BaseRequest.BaseURI(this.owner, uri.toString());
         }
         @Override
         public RequestURI queryParam(
             @NotNull(message = "param name can't be NULL") final String name,
             @NotNull(message = "value can't be NULL") final Object value) {
-            return new BaseURI(
+            return new BaseRequest.BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .queryParam(name, "{value}")
@@ -413,7 +368,7 @@ final class BaseRequest implements Request {
                 values[idx] = pair.getValue();
                 ++idx;
             }
-            return new BaseURI(
+            return new BaseRequest.BaseURI(
                 this.owner,
                 uri.build(values).toString()
             );
@@ -421,7 +376,7 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI path(
             @NotNull(message = "path can't be NULL") final String segment) {
-            return new BaseURI(
+            return new BaseRequest.BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .path(segment)
@@ -431,7 +386,7 @@ final class BaseRequest implements Request {
         @Override
         public RequestURI userInfo(
             @NotNull(message = "info can't be NULL") final String info) {
-            return new BaseURI(
+            return new BaseRequest.BaseURI(
                 this.owner,
                 UriBuilder.fromUri(this.address)
                     .userInfo(info)

@@ -27,80 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
-
-import com.jcabi.aspects.Immutable;
-import java.util.List;
-import java.util.Map;
-import lombok.EqualsAndHashCode;
 
 /**
- * Abstract response.
+ * Responses, tests.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.8
+ * @since 0.10
  */
-@Immutable
-@EqualsAndHashCode(of = "response")
-abstract class AbstractResponse implements Response {
-
-    /**
-     * Encapsulated response.
-     */
-    private final transient Response response;
-
-    /**
-     * Ctor.
-     * @param resp Response
-     */
-    AbstractResponse(final Response resp) {
-        this.response = resp;
-    }
-
-    @Override
-    public String toString() {
-        return this.response.toString();
-    }
-
-    @Override
-    public Request back() {
-        return this.response.back();
-    }
-
-    @Override
-    public int status() {
-        return this.response.status();
-    }
-
-    @Override
-    public String reason() {
-        return this.response.reason();
-    }
-
-    @Override
-    public Map<String, List<String>> headers() {
-        return this.response.headers();
-    }
-
-    @Override
-    public String body() {
-        return this.response.body();
-    }
-
-    @Override
-    public byte[] binary() {
-        return this.response.binary();
-    }
-
-    /**
-     * {@inheritDoc}
-     * @checkstyle MethodName (4 lines)
-     */
-    @Override
-    @SuppressWarnings("PMD.ShortMethodName")
-    public <T> T as(final Class<T> type) {
-        return this.response.as(type);
-    }
-
-}
+package com.rexsl.test.response;

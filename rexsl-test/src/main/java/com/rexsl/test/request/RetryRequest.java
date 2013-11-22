@@ -27,12 +27,17 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.request;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.aspects.RetryOnFailure;
 import com.jcabi.aspects.Tv;
+import com.rexsl.test.Request;
+import com.rexsl.test.RequestBody;
+import com.rexsl.test.RequestURI;
+import com.rexsl.test.Response;
+import com.rexsl.test.Wire;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
@@ -40,7 +45,8 @@ import java.util.concurrent.TimeUnit;
 import lombok.EqualsAndHashCode;
 
 /**
- * A {@link Request} that retries to fetch in case of an {@link IOException}.
+ * A {@link com.rexsl.test.Request} that retries to fetch
+ * in case of an {@link IOException}.
  *
  * <p>It is recommended to use {@link RetryRequest}
  * wrapper to avoid accidental {@link IOException} when connection is weak
@@ -55,7 +61,7 @@ import lombok.EqualsAndHashCode;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.9
- * @see JdkRequest
+ * @see com.rexsl.test.request.JdkRequest
  */
 @Immutable
 @EqualsAndHashCode(of = "origin")
@@ -117,6 +123,11 @@ public final class RetryRequest implements Request {
     )
     public Response fetch() throws IOException {
         return this.origin.fetch();
+    }
+
+    @Override
+    public <T extends Wire> Request through(final Class<T> type) {
+        return new RetryRequest(this.origin.through(type));
     }
 
     /**

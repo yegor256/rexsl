@@ -27,11 +27,17 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.request;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
+import com.rexsl.test.ImmutableHeader;
+import com.rexsl.test.Request;
+import com.rexsl.test.RequestBody;
+import com.rexsl.test.RequestURI;
+import com.rexsl.test.Response;
+import com.rexsl.test.Wire;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -226,6 +232,11 @@ public final class JdkRequest implements Request {
     @Override
     public Response fetch() throws IOException {
         return this.base.fetch();
+    }
+
+    @Override
+    public <T extends Wire> Request through(final Class<T> type) {
+        return this.base.through(type);
     }
 
 }

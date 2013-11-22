@@ -27,11 +27,17 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.request;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
+import com.rexsl.test.ImmutableHeader;
+import com.rexsl.test.Request;
+import com.rexsl.test.RequestBody;
+import com.rexsl.test.RequestURI;
+import com.rexsl.test.Response;
+import com.rexsl.test.Wire;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -40,6 +46,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -49,7 +56,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 /**
- * Implementation of {@link Request}, based on Apache HTTP client.
+ * Implementation of {@link Request},
+ * based on Apache HTTP client.
  *
  * <p>The class is immutable and thread-safe.
  *
@@ -145,12 +153,16 @@ public final class ApacheRequest implements Request {
          * @return Body in UTF-8
          */
         @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-        private Array<Map.Entry<String, String>> headers(
-            final org.apache.http.Header... list) {
+        private Array<Map.Entry<String, String>> headers(final Header... list) {
             final Collection<Map.Entry<String, String>> headers =
                 new LinkedList<Map.Entry<String, String>>();
-            for (final org.apache.http.Header header : list) {
-                headers.add(new ImmutableHeader(header.getName(), header.getValue()));
+            for (final Header header : list) {
+                headers.add(
+                    new ImmutableHeader(
+                        header.getName(),
+                        header.getValue()
+                    )
+                );
             }
             return new Array<Map.Entry<String, String>>(headers);
         }
@@ -221,6 +233,11 @@ public final class ApacheRequest implements Request {
     @Override
     public Response fetch() throws IOException {
         return this.base.fetch();
+    }
+
+    @Override
+    public <T extends Wire> Request through(final Class<T> type) {
+        return this.base.through(type);
     }
 
 }

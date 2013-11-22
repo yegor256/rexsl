@@ -27,72 +27,70 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.request;
 
+import com.rexsl.test.Request;
+import com.rexsl.test.response.RestResponse;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link WebLinkingResponse}.
+ * Test case for {@link FakeRequest}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.9
- * @checkstyle MultipleStringLiterals (500 lines)
  */
-public final class WebLinkingResponseTest {
+public final class FakeRequestTest {
 
     /**
-     * WebLinkingResponse can recognize Links in headers.
+     * FakeRequest can fetch a fake response.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public void parsesLinksInHeaders() throws Exception {
-        final String[] headers = {
-            "</hey/foo>; title=\"Hi!\"; rel=foo",
-            "</hey/foo>; title=\"\u20ac\"; rel=\"foo\"; media=\"text/xml\"",
-        };
-        for (final String header : headers) {
-            final WebLinkingResponse response = new WebLinkingResponse(
-                new FakeRequest().withHeader("Link", header).fetch()
-            );
-            final WebLinkingResponse.Link link = response.links().get("foo");
-            MatcherAssert.assertThat(
-                link.uri(),
-                Matchers.hasToString("/hey/foo")
-            );
-            MatcherAssert.assertThat(
-                link,
-                Matchers.hasKey("title")
-            );
-            MatcherAssert.assertThat(
-                response.links(),
-                Matchers.not(Matchers.hasKey("something else"))
-            );
-        }
+    public void sendsHttpRequestAndProcessesHttpResponse() throws Exception {
+        new FakeRequest()
+            .withStatus(HttpURLConnection.HTTP_OK)
+            .withReason("OK")
+            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN)
+            .withBody("how are you?")
+            .uri().path("/helloall").back()
+            .method(Request.POST)
+            .fetch().as(RestResponse.class)
+            .assertStatus(HttpURLConnection.HTTP_OK)
+            .assertHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN)
+            .assertBody(Matchers.containsString("are you?"));
     }
 
     /**
-     * WebLinkingResponse can follow a link.
+     * FakeRequest can change URI.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void followsLinksInHeaders() throws Exception {
-        final WebLinkingResponse response = new WebLinkingResponse(
-            new FakeRequest().withHeader(
-                "Link",
-                "</a>; rel=\"first\", <http://localhost/o>; rel=\"second\""
-            ).uri().set(new URI("http://localhost/test")).back().fetch()
-        );
+    public void changesUri() throws Exception {
         MatcherAssert.assertThat(
-            response.follow("first").uri().get(),
-            Matchers.equalTo(new URI("http://localhost/a"))
+            new FakeRequest()
+                .uri().set(new URI("http://facebook.com")).back()
+                .uri().get().toString(),
+            Matchers.endsWith("facebook.com/")
         );
+    }
+
+    /**
+     * FakeRequest can change URI in response.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void changesUriInResponse() throws Exception {
         MatcherAssert.assertThat(
-            response.follow("second").uri().get(),
-            Matchers.equalTo(new URI("http://localhost/o"))
+            new FakeRequest()
+                .uri().set(new URI("http://google.com")).back()
+                .fetch().back()
+                .uri().get().toString(),
+            Matchers.containsString("google.com")
         );
     }
 

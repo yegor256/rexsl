@@ -27,12 +27,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.response;
 
-import com.rexsl.test.mock.MkAnswer;
-import com.rexsl.test.mock.MkContainer;
-import com.rexsl.test.mock.MkGrizzlyContainer;
-import com.rexsl.test.mock.MkQuery;
+import com.rexsl.test.request.FakeRequest;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
@@ -78,73 +75,6 @@ public final class RestResponseTest {
             Matchers.allOf(
                 Matchers.hasProperty("value", Matchers.equalTo("foo1")),
                 Matchers.hasProperty("path", Matchers.equalTo("/"))
-            )
-        );
-    }
-
-    /**
-     * RestResponse can transfer cookies.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void transfersCookiesOnFollow() throws Exception {
-        final MkContainer container = new MkGrizzlyContainer()
-            .next(new MkAnswer.Simple(""))
-            .next(new MkAnswer.Simple(""))
-            .start();
-        final RestResponse response = new RestResponse(
-            new FakeRequest()
-                .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom1; path=/")
-                .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom2; path=/")
-                .withHeader(HttpHeaders.LOCATION, container.home().toString())
-                .uri().set(container.home()).back()
-                .header(HttpHeaders.COOKIE, "alpha=boom5")
-                .fetch()
-        );
-        response.follow()
-            .fetch().as(RestResponse.class)
-            .assertStatus(HttpURLConnection.HTTP_OK);
-        container.stop();
-        final MkQuery query = container.take();
-        MatcherAssert.assertThat(
-            query.headers(),
-            Matchers.hasEntry(
-                Matchers.equalTo(HttpHeaders.COOKIE),
-                Matchers.<String>everyItem(Matchers.equalTo("alpha=boom2"))
-            )
-        );
-    }
-
-    /**
-     * RestResponse can avoid transferring of empty cookies.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void avoidsTransferringOfEmptyCookiesOnFollow() throws Exception {
-        final MkContainer container = new MkGrizzlyContainer()
-            .next(new MkAnswer.Simple(""))
-            .next(new MkAnswer.Simple(""))
-            .start();
-        final RestResponse response = new RestResponse(
-            new FakeRequest()
-                .withHeader(HttpHeaders.SET_COOKIE, "first=A; path=/")
-                .withHeader(HttpHeaders.SET_COOKIE, "second=; path=/")
-                .withHeader(HttpHeaders.LOCATION, container.home().toString())
-                .uri().set(container.home()).back()
-                .fetch()
-        );
-        response.follow()
-            .fetch().as(RestResponse.class)
-            .assertStatus(HttpURLConnection.HTTP_OK);
-        container.stop();
-        final MkQuery query = container.take();
-        MatcherAssert.assertThat(
-            query.headers(),
-            Matchers.hasEntry(
-                Matchers.equalTo(HttpHeaders.COOKIE),
-                Matchers.not(
-                    Matchers.hasItem(Matchers.containsString("second"))
-                )
             )
         );
     }

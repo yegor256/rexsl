@@ -53,7 +53,8 @@ import javax.validation.constraints.NotNull;
  *   .as(JsonResponse.class)
  *   .json().getJsonObject().getString("name");</pre>
  *
- * <p>Since version 0.9 it is recommended to use {@link RetryRequest}
+ * <p>Since version 0.9 it is recommended to use
+ * {@link com.rexsl.test.request.RetryRequest}
  * wrapper to avoid accidental {@link IOException} when connection is weak
  * or unstable, for example:
  *
@@ -66,9 +67,9 @@ import javax.validation.constraints.NotNull;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8
- * @see JdkRequest
- * @see ApacheRequest
- * @see RetryRequest
+ * @see com.rexsl.test.request.JdkRequest
+ * @see com.rexsl.test.request.ApacheRequest
+ * @see com.rexsl.test.request.RetryRequest
  */
 @Immutable
 public interface Request {
@@ -156,5 +157,14 @@ public interface Request {
      * @throws IOException If fails to fetch HTTP request
      */
     Response fetch() throws IOException;
+
+    /**
+     * Send it through a decorating {@link Wire}.
+     * @param type Type of wire to use
+     * @param <T> Type to use
+     * @return New request with a wire decorated
+     * @since 0.10
+     */
+    <T extends Wire> Request through(Class<T> type);
 
 }

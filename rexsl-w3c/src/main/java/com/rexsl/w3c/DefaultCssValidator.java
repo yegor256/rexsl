@@ -32,7 +32,7 @@ package com.rexsl.w3c;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.rexsl.test.Request;
-import com.rexsl.test.XmlResponse;
+import com.rexsl.test.response.XmlResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.util.regex.Pattern;

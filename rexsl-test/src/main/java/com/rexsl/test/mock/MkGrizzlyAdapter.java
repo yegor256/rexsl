@@ -38,6 +38,7 @@ import java.net.HttpURLConnection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.apache.commons.io.Charsets;
+import org.apache.http.HttpHeaders;
 
 /**
  * Mocker of Java Servlet container.
@@ -71,6 +72,14 @@ public final class MkGrizzlyAdapter extends GrizzlyAdapter {
                     response.addHeader(name, value);
                 }
             }
+            response.addHeader(
+                HttpHeaders.SERVER,
+                String.format(
+                    "%s query #%d, %d answers left",
+                    this.getClass().getName(),
+                    this.queries.size(), this.answers.size()
+                )
+            );
             response.setStatus(answer.status());
             final byte[] body = answer.body().getBytes(Charsets.UTF_8);
             response.getStream().write(body);

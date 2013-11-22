@@ -27,10 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.response;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.immutable.ArrayMap;
+import com.rexsl.test.Request;
+import com.rexsl.test.Response;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;

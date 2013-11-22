@@ -33,7 +33,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import com.jcabi.xml.XML;
-import com.rexsl.test.JdkRequest;
+import com.rexsl.test.request.JdkRequest;
 import com.rexsl.test.Request;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
