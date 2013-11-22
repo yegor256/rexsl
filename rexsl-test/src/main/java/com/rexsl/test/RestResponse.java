@@ -174,7 +174,7 @@ public final class RestResponse extends AbstractResponse {
         }
         MatcherAssert.assertThat(
             String.format(
-                "HTTP header %s is not valid:\n%s",
+                "HTTP header '%s' is not valid:\n%s",
                 name, this
             ),
             values, matcher
