@@ -124,7 +124,7 @@ public interface Request {
 
     /**
      * Set request header.
-     * @param name Header name
+     * @param name ImmutableHeader name
      * @param value Value of the header to set
      * @return New alternated request
      */
@@ -135,7 +135,7 @@ public interface Request {
 
     /**
      * Remove all headers with this name.
-     * @param name Header name
+     * @param name ImmutableHeader name
      * @return New alternated request
      * @since 0.10
      */

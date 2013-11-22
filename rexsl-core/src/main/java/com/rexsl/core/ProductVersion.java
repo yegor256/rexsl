@@ -72,7 +72,7 @@ final class ProductVersion implements Comparable<ProductVersion> {
     }
 
     /**
-     * Get normalized version.
+     * Get normalize version.
      * @return Normalized text
      * @see <a href="http://stackoverflow.com/questions/198431">prototype</a>
      */

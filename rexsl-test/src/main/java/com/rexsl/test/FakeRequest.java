@@ -211,7 +211,7 @@ public final class FakeRequest implements Request {
         return new FakeRequest(
             this.code,
             this.phrase,
-            this.hdrs.with(new Header(name, value)),
+            this.hdrs.with(new ImmutableHeader(name, value)),
             this.content
         );
     }

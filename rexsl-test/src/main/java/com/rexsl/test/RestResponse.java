@@ -211,7 +211,6 @@ public final class RestResponse extends AbstractResponse {
             .back();
         final Map<String, List<String>> headers = this.headers();
         if (headers.containsKey(HttpHeaders.SET_COOKIE)) {
-            req = req.reset(HttpHeaders.COOKIE);
             final Map<String, String> cookies = new HashMap<String, String>();
             for (final String header : headers.get(HttpHeaders.SET_COOKIE)) {
                 for (final HttpCookie cookie : HttpCookie.parse(header)) {

@@ -27,32 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
-
-import java.util.Map;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.Test;
 
 /**
- * Test case for {@link Header}.
+ * Mock of Servlet Container, tests.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.10
  */
-public final class HeaderTest {
-
-    /**
-     * Header can normalize headers.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void normalizesHeaderKey() throws Exception {
-        final Map.Entry<String, String> header =
-            new Header("content-type", "text/plain");
-        MatcherAssert.assertThat(
-            header.getKey(),
-            Matchers.equalTo("Content-Type")
-        );
-    }
-
-}
+package com.rexsl.test.mock;

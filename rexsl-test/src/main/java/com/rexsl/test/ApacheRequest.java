@@ -150,7 +150,7 @@ public final class ApacheRequest implements Request {
             final Collection<Map.Entry<String, String>> headers =
                 new LinkedList<Map.Entry<String, String>>();
             for (final org.apache.http.Header header : list) {
-                headers.add(new Header(header.getName(), header.getValue()));
+                headers.add(new ImmutableHeader(header.getName(), header.getValue()));
             }
             return new Array<Map.Entry<String, String>>(headers);
         }

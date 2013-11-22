@@ -27,42 +27,78 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.w3c;
+package com.rexsl.test.mock;
 
+import java.io.IOException;
 import java.net.URI;
-import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.MatcherAssert;
-import org.junit.Test;
 
 /**
- * Test case for {@link DefaultHtmlValidator}.
+ * Mock version of Java Servlet container.
+ *
+ * <p>A convenient tool to test your application classes against a web
+ * service. For example:
+ *
+ * <pre> MkContainer container = new MkGrizzlyContainer()
+ *   .next(new MkAnswer.Simple(200, "works fine!"))
+ *   .start();
+ * new JdkRequest(container.home())
+ *   .header("Accept", "text/xml")
+ *   .fetch().as(RestResponse.class)
+ *   .assertStatus(200)
+ *   .assertBody(Matchers.equalTo("works fine!"));
+ * MatcherAssert.assertThat(
+ *   container.take().method(),
+ *   Matchers.equalTo("GET")
+ * );
+ * container.stop();</pre>
+ *
+ * <p>Keep in mind that container automatically reserves a new free TCP port
+ * and works until JVM is shut down. The only way to stop it is to call
+ * {@link #stop()}.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.10
  */
-public final class DefaultHtmlValidatorTest {
+public interface MkContainer {
 
     /**
-     * DefaultHtmlValidator can validate HTML document.
-     * @throws Exception If something goes wrong inside
+     * Give this answer on the next request.
+     * @param answer Next answer to give
+     * @return This object
      */
-    @Test
-    public void validatesHtmlDocument() throws Exception {
-        final URI uri = new ContainerMocker().returnBody(
-            StringUtils.join(
-                "<env:Envelope",
-                " xmlns:env='http://www.w3.org/2003/05/soap-envelope'>",
-                "<env:Body><m:markupvalidationresponse",
-                " xmlns:m='http://www.w3.org/2005/10/markup-validator'>",
-                "<m:validity>true</m:validity>",
-                "<m:checkedby>W3C</m:checkedby>",
-                "<m:doctype>text/html</m:doctype>",
-                "<m:charset>UTF-8</m:charset>",
-                "</m:markupvalidationresponse></env:Body></env:Envelope>"
-            )
-        ).mock().home();
-        final Validator validator = new DefaultHtmlValidator(uri);
-        final ValidationResponse response = validator.validate("<html/>");
-        MatcherAssert.assertThat(response.toString(), response.valid());
-    }
+    MkContainer next(MkAnswer answer);
+
+    /**
+     * Get the oldest request received.
+     * @return Request received
+     */
+    MkQuery take();
+
+    /**
+     * Start it on the first available TCP port.
+     * @return This object
+     * @throws IOException If fails
+     */
+    MkContainer start() throws IOException;
+
+    /**
+     * Start it on a provided port.
+     * @param prt The port where it should start listening
+     * @return This object
+     * @throws IOException If fails
+     */
+    MkContainer start(int prt) throws IOException;
+
+    /**
+     * Stop container.
+     */
+    void stop();
+
+    /**
+     * Get its home.
+     * @return URI of the started container
+     */
+    URI home();
 
 }

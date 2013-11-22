@@ -27,11 +27,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.test.mock;
+
+import com.jcabi.aspects.Immutable;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Test package, mockers.
+ * Mock HTTP query/request.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.10
  */
-package com.rexsl.test;
+@Immutable
+public interface MkQuery {
+
+    /**
+     * URI.
+     * @return URI
+     */
+    URI uri();
+
+    /**
+     * HTTP method.
+     * @return Method
+     */
+    String method();
+
+    /**
+     * Headers.
+     * @return Headers
+     */
+    Map<String, List<String>> headers();
+
+    /**
+     * HTTP request body.
+     * @return Body
+     */
+    String body();
+
+}
