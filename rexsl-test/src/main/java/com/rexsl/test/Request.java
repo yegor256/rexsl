@@ -137,6 +137,7 @@ public interface Request {
      * Remove all headers with this name.
      * @param name Header name
      * @return New alternated request
+     * @since 0.10
      */
     @NotNull(message = "alternated request is never NULL")
     Request reset(@NotNull(message = "header name can't be NULL") String name);
