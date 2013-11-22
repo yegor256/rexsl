@@ -40,9 +40,9 @@ public class RuntimeExceptionStub {
 This is how we may test it from `WhatIfRuntimeException.groovy`:
 
 ```
-import com.rexsl.test.ApacheRequest
-import com.rexsl.test.RestResponse
-new ApacheRequest(rexsl.home)
+import com.rexsl.test.request.JdkRequest
+import com.rexsl.test.response.RestResponse
+new JdkRequest(rexsl.home)
   .fetch()
   .as(RestResponse.class)
   .assertStatus(HttpURLConnection.HTTP_OK)
