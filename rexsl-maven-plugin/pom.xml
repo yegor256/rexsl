@@ -142,13 +142,6 @@
         </dependency>
         <dependency>
             <groupId>com.rexsl</groupId>
-            <artifactId>rexsl-test</artifactId>
-            <version>${project.version}</version>
-            <classifier>mock</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.rexsl</groupId>
             <artifactId>rexsl-w3c</artifactId>
             <version>${project.version}</version>
             <exclusions>

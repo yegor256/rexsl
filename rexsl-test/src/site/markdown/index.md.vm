@@ -53,20 +53,10 @@ and add to classpath):
 ```
 
 This RESTful Java client module also contains a very useful Mocking tool in
-[`ContainerMocker`](./testapidocs-${project.version}/com/rexsl/test/ContainerMocker.html).
-To use it you should include this dependencies into your project
-(or download
-[`rexsl-test-${project.version}-mock.jar`](http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${project.version}/rexsl-test-${project.version}-mock.jar)
-and add to classpath):
+[`MkContainer`](./apidocs-${project.version}/com/rexsl/test/mock/MkContainer.html).
+To use it you should add this dependency to your `pom.xml`:
 
 ```
-<dependency>
-  <groupId>com.rexsl</groupId>
-  <artifactId>rexsl-test</artifactId>
-  <version>${project.version}</version>
-  <classifier>mock</classifier>
-  <scope>test</scope>
-</dependency>
 <dependency>
   <groupId>com.sun.grizzly</groupId>
   <artifactId>grizzly-servlet-webserver</artifactId>

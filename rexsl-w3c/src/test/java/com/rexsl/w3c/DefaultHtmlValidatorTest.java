@@ -29,7 +29,9 @@
  */
 package com.rexsl.w3c;
 
-import java.net.URI;
+import com.rexsl.test.mock.MkAnswer;
+import com.rexsl.test.mock.MkContainer;
+import com.rexsl.test.mock.MkGrizzlyContainer;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -47,21 +49,24 @@ public final class DefaultHtmlValidatorTest {
      */
     @Test
     public void validatesHtmlDocument() throws Exception {
-        final URI uri = new ContainerMocker().returnBody(
-            StringUtils.join(
-                "<env:Envelope",
-                " xmlns:env='http://www.w3.org/2003/05/soap-envelope'>",
-                "<env:Body><m:markupvalidationresponse",
-                " xmlns:m='http://www.w3.org/2005/10/markup-validator'>",
-                "<m:validity>true</m:validity>",
-                "<m:checkedby>W3C</m:checkedby>",
-                "<m:doctype>text/html</m:doctype>",
-                "<m:charset>UTF-8</m:charset>",
-                "</m:markupvalidationresponse></env:Body></env:Envelope>"
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple(
+                StringUtils.join(
+                    "<env:Envelope",
+                    " xmlns:env='http://www.w3.org/2003/05/soap-envelope'>",
+                    "<env:Body><m:markupvalidationresponse",
+                    " xmlns:m='http://www.w3.org/2005/10/markup-validator'>",
+                    "<m:validity>true</m:validity>",
+                    "<m:checkedby>W3C</m:checkedby>",
+                    "<m:doctype>text/html</m:doctype>",
+                    "<m:charset>UTF-8</m:charset>",
+                    "</m:markupvalidationresponse></env:Body></env:Envelope>"
+                )
             )
-        ).mock().home();
-        final Validator validator = new DefaultHtmlValidator(uri);
+        ).start();
+        final Validator validator = new DefaultHtmlValidator(container.home());
         final ValidationResponse response = validator.validate("<html/>");
+        container.stop();
         MatcherAssert.assertThat(response.toString(), response.valid());
     }
 
