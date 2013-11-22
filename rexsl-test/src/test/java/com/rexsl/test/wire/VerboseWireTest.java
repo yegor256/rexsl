@@ -27,59 +27,40 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.w3c;
+package com.rexsl.test.wire;
 
 import com.rexsl.test.mock.MkAnswer;
 import com.rexsl.test.mock.MkContainer;
 import com.rexsl.test.mock.MkGrizzlyContainer;
-import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.MatcherAssert;
+import com.rexsl.test.request.JdkRequest;
+import com.rexsl.test.response.RestResponse;
+import java.net.HttpURLConnection;
+import javax.ws.rs.core.HttpHeaders;
 import org.junit.Test;
 
 /**
- * Test case for {@link DefaultCssValidator}.
+ * Test case for {@link VerboseWire}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-public final class DefaultCssValidatorTest {
+public final class VerboseWireTest {
 
     /**
-     * DefaultCssValidator can validate CSS document.
+     * VerboseWire can log requests.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void validatesCssDocument() throws Exception {
+    public void logsRequest() throws Exception {
         final MkContainer container = new MkGrizzlyContainer().next(
-            new MkAnswer.Simple(
-                StringUtils.join(
-                    "<env:Envelope",
-                    " xmlns:env='http://www.w3.org/2003/05/soap-envelope'>",
-                    "<env:Body><m:cssvalidationresponse",
-                    " xmlns:m='http://www.w3.org/2005/07/css-validator'>",
-                    "<m:validity>true</m:validity>",
-                    "<m:checkedby>W3C</m:checkedby>",
-                    "</m:cssvalidationresponse></env:Body></env:Envelope>"
-                )
-            )
+            new MkAnswer.Simple("")
         ).start();
-        final Validator validator = new DefaultCssValidator(container.home());
-        final ValidationResponse response = validator.validate("* { }");
+        new JdkRequest(container.home())
+            .through(VerboseWire.class)
+            .header(HttpHeaders.USER_AGENT, "it's me")
+            .fetch()
+            .as(RestResponse.class)
+            .assertStatus(HttpURLConnection.HTTP_OK);
         container.stop();
-        MatcherAssert.assertThat(response.toString(), response.valid());
-    }
-
-    /**
-     * DefaultCssValidator can ignore the entire document.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void ignoresEntireDocument() throws Exception {
-        final Validator validator = ValidatorBuilder.CSS;
-        final ValidationResponse response = validator.validate(
-            // @checkstyle RegexpSingleline (1 line)
-            "/* hey */\n\n/* JIGSAW IGNORE: .. */\n\n* { abc: cde }\n"
-        );
-        MatcherAssert.assertThat(response.toString(), response.valid());
     }
 
 }
