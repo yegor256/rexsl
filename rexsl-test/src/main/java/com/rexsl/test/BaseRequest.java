@@ -218,6 +218,14 @@ final class BaseRequest implements Request {
         final Response response = this.wire.send(
             this, this.home, this.mtd, headers, this.content
         );
+        if (Logger.isDebugEnabled(this)) {
+            Logger.debug(
+                this, "#fetch(%s %s):\nHTTP Request:\n%s\nHTTP Response:\n%s",
+                this.mtd, this.home,
+                BaseRequest.indent(this.toString()),
+                BaseRequest.indent(response.toString())
+            );
+        }
         Logger.info(
             this,
             "#fetch(%s %s): completed in %[ms]s [%d %s]: %s",
@@ -274,6 +282,17 @@ final class BaseRequest implements Request {
             }
         }
         return text.toString();
+    }
+
+    /**
+     * Indent provided text.
+     * @param text Text to indent
+     * @return Indented text
+     */
+    private static String indent(final String text) {
+        return new StringBuilder("  ")
+            .append(text.replaceAll("(\n|\n\r)", "$1  "))
+            .toString();
     }
 
     /**
