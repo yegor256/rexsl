@@ -219,10 +219,14 @@ public final class RestResponse extends AbstractResponse {
                 }
             }
             for (final Map.Entry<String, String> cookie : cookies.entrySet()) {
-                req = req.header(
-                    HttpHeaders.COOKIE,
-                    String.format("%s=%s", cookie.getKey(), cookie.getValue())
-                );
+                if (!cookie.getValue().isEmpty()) {
+                    req = req.header(
+                        HttpHeaders.COOKIE,
+                        String.format(
+                            "%s=%s", cookie.getKey(), cookie.getValue()
+                        )
+                    );
+                }
             }
         }
         return req;
