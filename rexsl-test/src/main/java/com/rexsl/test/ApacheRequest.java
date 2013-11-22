@@ -41,6 +41,7 @@ import java.util.Map;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.entity.ByteArrayEntity;
@@ -110,6 +111,12 @@ public final class ApacheRequest implements Request {
                     }
                 };
             final URI uri = URI.create(home);
+            req.setConfig(
+                RequestConfig.custom()
+                    .setCircularRedirectsAllowed(false)
+                    .setRedirectsEnabled(false)
+                    .build()
+            );
             req.setURI(uri);
             req.setEntity(new ByteArrayEntity(content));
             for (final Map.Entry<String, String> header : headers) {

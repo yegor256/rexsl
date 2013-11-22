@@ -88,6 +88,8 @@ public final class JdkRequest implements Request {
             final HttpURLConnection conn = HttpURLConnection.class.cast(raw);
             try {
                 conn.setRequestMethod(method);
+                conn.setUseCaches(false);
+                conn.setInstanceFollowRedirects(false);
                 for (final Map.Entry<String, String> header : headers) {
                     conn.setRequestProperty(header.getKey(), header.getValue());
                 }
