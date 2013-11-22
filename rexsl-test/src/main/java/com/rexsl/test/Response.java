@@ -48,7 +48,7 @@ import javax.validation.constraints.NotNull;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8
- * @see JdkRequest
+ * @see com.rexsl.test.request.JdkRequest
  */
 @Immutable
 public interface Response {

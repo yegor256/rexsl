@@ -39,11 +39,11 @@ import java.util.Map;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.8
+ * @since 0.9
  * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @Immutable
-interface Wire {
+public interface Wire {
 
     /**
      * Send request and return response.

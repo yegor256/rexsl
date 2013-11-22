@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,38 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.foo.setup
 
-import com.rexsl.test.request.ApacheRequest
-import com.rexsl.test.Request
-import com.rexsl.test.response.RestResponse
-import com.jcabi.log.Logger
-import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.MediaType
-import org.hamcrest.Matchers
-
-Logger.info(this, 'AddsData script running...')
-
-// let's validate how data were injected in bootstrap
-new ApacheRequest(rexsl.home)
-    .fetch()
-    .as(RestResponse)
-    .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertBody(Matchers.containsString('bootstrapped'))
-
-// inject new data value
-def value = '\u0443\u0440\u0430'
-new ApacheRequest(rexsl.home)
-    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
-    .method(Request.POST)
-    .body().formParam('text', value).back()
-    .fetch()
-    .as(RestResponse)
-    .assertStatus(HttpURLConnection.HTTP_OK)
-
-// let's validate that it's there
-new ApacheRequest(rexsl.home)
-    .fetch()
-    .as(RestResponse)
-    .assertStatus(HttpURLConnection.HTTP_OK)
-    .assertBody(Matchers.containsString(value))
+/**
+ * Requests.
+ *
+ * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @version $Id$
+ * @since 0.10
+ */
+package com.rexsl.test.request;

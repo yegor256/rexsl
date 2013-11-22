@@ -29,6 +29,10 @@
  */
 package com.rexsl.test;
 
+import com.rexsl.test.request.ApacheRequest;
+import com.rexsl.test.request.JdkRequest;
+import com.rexsl.test.response.RestResponse;
+import com.rexsl.test.response.XmlResponse;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Arrays;
@@ -38,12 +42,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 /**
- * Integration case for {@link ApacheRequest}.
+ * Integration case for {@link com.rexsl.test.request.ApacheRequest}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
 @RunWith(Parameterized.class)
-public final class BaseRequestITCase {
+public final class RequestITCase {
 
     /**
      * Type of request.
@@ -54,7 +58,7 @@ public final class BaseRequestITCase {
      * Public ctor.
      * @param req Request type
      */
-    public BaseRequestITCase(final Class<? extends Request> req) {
+    public RequestITCase(final Class<? extends Request> req) {
         this.type = req;
     }
 

@@ -78,6 +78,7 @@ final class GrizzlyQuery implements MkQuery {
     /**
      * Ctor.
      * @param request Grizzly request
+     * @throws IOException If fails
      */
     GrizzlyQuery(final GrizzlyRequest request) throws IOException {
         request.setCharacterEncoding(CharEncoding.UTF_8);
@@ -115,7 +116,7 @@ final class GrizzlyQuery implements MkQuery {
     private static String uri(final GrizzlyRequest request) {
         final StringBuilder uri = new StringBuilder(request.getRequestURI());
         final String query = request.getQueryString();
-        if (!query.isEmpty()) {
+        if (query != null && !query.isEmpty()) {
             uri.append('?').append(query);
         }
         return uri.toString();
@@ -126,6 +127,7 @@ final class GrizzlyQuery implements MkQuery {
      * @param request Request
      * @return Headers
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private static ArrayMap<String, List<String>> headers(
         final GrizzlyRequest request) {
         final ConcurrentMap<String, List<String>> headers =

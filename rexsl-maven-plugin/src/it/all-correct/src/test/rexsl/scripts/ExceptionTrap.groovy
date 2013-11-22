@@ -29,9 +29,9 @@
  */
 package com.rexsl.foo.scripts
 
-import com.rexsl.test.JdkRequest
-import com.rexsl.test.RestResponse
-import com.rexsl.test.XmlResponse
+import com.rexsl.test.request.JdkRequest
+import com.rexsl.test.response.RestResponse
+import com.rexsl.test.response.XmlResponse
 
 new JdkRequest(rexsl.home)
     .uri().path('/trap').back()

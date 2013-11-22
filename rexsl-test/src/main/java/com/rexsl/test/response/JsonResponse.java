@@ -27,35 +27,59 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
+package com.rexsl.test.response;
 
-import com.jcabi.immutable.Array;
-import java.net.HttpURLConnection;
-import java.util.Map;
-import org.junit.Test;
-import org.mockito.Mockito;
+import com.jcabi.aspects.Immutable;
+import com.rexsl.test.Response;
+import java.io.StringReader;
+import javax.json.Json;
+import javax.json.JsonReader;
+import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 
 /**
- * Test case for {@link DefaultResponse}.
+ * JSON response.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.8
  */
-public final class DefaultResponseTest {
+@Immutable
+@EqualsAndHashCode(callSuper = true)
+public final class JsonResponse extends AbstractResponse {
 
     /**
-     * DefaultResponse can throw when entity is not a Unicode text.
-     * @throws Exception If something goes wrong inside
+     * Public ctor.
+     * @param resp Response
      */
-    @Test(expected = RuntimeException.class)
-    public void throwsWhenEntityIsNotAUnicodeString() throws Exception {
-        new DefaultResponse(
-            Mockito.mock(Request.class),
-            HttpURLConnection.HTTP_OK,
-            "some text",
-            new Array<Map.Entry<String, String>>(),
-            // @checkstyle MagicNumber (1 line)
-            new byte[]{(byte) 0xC0, (byte) 0xC0}
-        ).body();
+    public JsonResponse(@NotNull(message = "response can't be NULL")
+        final Response resp) {
+        super(resp);
+    }
+
+    /**
+     * Verifies the JSON data against the element identifier argument,
+     * and throws {@link AssertionError} in case of mismatch.
+     * @param element Element in the JSON data of this object
+     * @return This object
+     */
+    @NotNull(message = "JSON response is never NULL")
+    public JsonResponse assertJson(
+        @NotNull(message = "JSON query can't be NULL")
+        final String element) {
+        throw new UnsupportedOperationException(
+            // @checkstyle LineLength (1 line)
+            "assertJson() is not implemented yet, since we are not sure which JSON query standard to use"
+        );
+    }
+
+    /**
+     * Read body as JSON.
+     * @return Json reader
+     */
+    @NotNull(message = "JSON reader is never NULL")
+    public JsonReader json() {
+        return Json.createReader(new StringReader(this.body()));
     }
 
 }

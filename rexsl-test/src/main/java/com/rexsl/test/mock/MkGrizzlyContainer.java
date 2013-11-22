@@ -78,7 +78,7 @@ public final class MkGrizzlyContainer implements MkContainer {
 
     @Override
     public MkContainer start() throws IOException {
-        return this.start(MkGrizzlyContainer.port());
+        return this.start(MkGrizzlyContainer.reserve());
     }
 
     @Override
@@ -86,7 +86,7 @@ public final class MkGrizzlyContainer implements MkContainer {
         if (this.port != 0) {
             throw new IllegalStateException(
                 String.format(
-                    "container is already listening on port %d", this.port
+                    "container is already listening on reserve %d", this.port
                 )
             );
         }
@@ -94,14 +94,14 @@ public final class MkGrizzlyContainer implements MkContainer {
         this.gws = new GrizzlyWebServer(this.port);
         this.gws.addGrizzlyAdapter(this.adapter, new String[] {"/"});
         this.gws.start();
-        Logger.info(this, "started on port #%s", prt);
+        Logger.info(this, "started on reserve #%s", prt);
         return this;
     }
 
     @Override
     public void stop() {
         this.gws.stop();
-        Logger.info(this, "stopped on port #%s", this.port);
+        Logger.info(this, "stopped on reserve #%s", this.port);
         this.port = 0;
     }
 
@@ -117,7 +117,7 @@ public final class MkGrizzlyContainer implements MkContainer {
      * @return Reserved TCP port
      * @throws IOException If fails
      */
-    private static int port() throws IOException {
+    private static int reserve() throws IOException {
         int reserved;
         final ServerSocket socket = new ServerSocket(0);
         try {

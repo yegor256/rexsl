@@ -27,64 +27,85 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.w3c;
+package com.rexsl.test.wire;
 
 import com.jcabi.aspects.Immutable;
-import com.jcabi.aspects.Loggable;
+import com.jcabi.manifests.Manifests;
+import com.rexsl.test.ImmutableHeader;
 import com.rexsl.test.Request;
-import com.rexsl.test.response.XmlResponse;
+import com.rexsl.test.Response;
+import com.rexsl.test.Wire;
 import java.io.IOException;
-import java.net.URI;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.HttpHeaders;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Implementation of (X)HTML validator.
+ * Wire with default user agent.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
+ * @since 0.10
  */
 @Immutable
 @ToString
-@EqualsAndHashCode(callSuper = false, of = "uri")
-@Loggable(Loggable.DEBUG)
-final class DefaultHtmlValidator extends BaseValidator implements Validator {
+@EqualsAndHashCode(of = "origin")
+public final class UserAgentWire implements Wire {
 
     /**
-     * The URI to use in W3C.
+     * Default user agent.
      */
-    private final transient String uri;
+    private static final String AGENT = String.format(
+        "ReXSL-%s/%s Java/%s",
+        Manifests.read("ReXSL-Version"),
+        Manifests.read("ReXSL-Build"),
+        System.getProperty("java.version")
+    );
+
+    /**
+     * Original wire.
+     */
+    private final transient Wire origin;
 
     /**
      * Public ctor.
-     * @param entry Entry point to use
+     * @param wire Original wire
      */
-    DefaultHtmlValidator(@NotNull final URI entry) {
-        super();
-        this.uri = entry.toString();
+    public UserAgentWire(@NotNull(message = "wire can't be NULL")
+        final Wire wire) {
+        this.origin = wire;
     }
 
+    /**
+     * {@inheritDoc}
+     * @checkstyle ParameterNumber (7 lines)
+     */
     @Override
-    @NotNull
-    public ValidationResponse validate(@NotNull final String html)
-        throws IOException {
-        final Request req = this.request(
-            this.uri,
-            this.entity("uploaded_file", html, MediaType.TEXT_HTML)
-        );
-        return this.build(
-            req.fetch().as(XmlResponse.class)
-                .registerNs("env", "http://www.w3.org/2003/05/soap-envelope")
-                .registerNs("m", "http://www.w3.org/2005/10/markup-validator")
-                .assertXPath("//m:validity")
-                .assertXPath("//m:checkedby")
-                .assertXPath("//m:doctype")
-                .assertXPath("//m:charset")
-                .xml()
-        );
+    public Response send(final Request req, final String home,
+        final String method,
+        final Collection<Map.Entry<String, String>> headers,
+        final byte[] content) throws IOException {
+        final Collection<Map.Entry<String, String>> hdrs =
+            new LinkedList<Map.Entry<String, String>>();
+        boolean agent = false;
+        for (final Map.Entry<String, String> header : headers) {
+            hdrs.add(header);
+            if (header.getKey().equals(HttpHeaders.USER_AGENT)) {
+                agent = true;
+            }
+        }
+        if (!agent) {
+            hdrs.add(
+                new ImmutableHeader(
+                    HttpHeaders.USER_AGENT,
+                    UserAgentWire.AGENT
+                )
+            );
+        }
+        return this.origin.send(req, home, method, hdrs, content);
     }
-
 }

@@ -27,58 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.test;
-
-import com.jcabi.aspects.Immutable;
-import java.io.StringReader;
-import javax.json.Json;
-import javax.json.JsonReader;
-import javax.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
 
 /**
- * JSON response.
+ * Wires.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.8
+ * @since 0.10
  */
-@Immutable
-@EqualsAndHashCode(callSuper = true)
-public final class JsonResponse extends AbstractResponse {
-
-    /**
-     * Public ctor.
-     * @param resp Response
-     */
-    public JsonResponse(@NotNull(message = "response can't be NULL")
-        final Response resp) {
-        super(resp);
-    }
-
-    /**
-     * Verifies the JSON data against the element identifier argument,
-     * and throws {@link AssertionError} in case of mismatch.
-     * @param element Element in the JSON data of this object
-     * @return This object
-     */
-    @NotNull(message = "JSON response is never NULL")
-    public JsonResponse assertJson(
-        @NotNull(message = "JSON query can't be NULL")
-        final String element) {
-        throw new UnsupportedOperationException(
-            // @checkstyle LineLength (1 line)
-            "assertJson() is not implemented yet, since we are not sure which JSON query standard to use"
-        );
-    }
-
-    /**
-     * Read body as JSON.
-     * @return Json reader
-     */
-    @NotNull(message = "JSON reader is never NULL")
-    public JsonReader json() {
-        return Json.createReader(new StringReader(this.body()));
-    }
-
-}
+package com.rexsl.test.wire;

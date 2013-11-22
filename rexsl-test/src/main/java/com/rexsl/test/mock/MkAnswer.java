@@ -68,7 +68,7 @@ public interface MkAnswer {
     Map<String, List<String>> headers();
 
     /**
-     * HTTP response body
+     * HTTP response body.
      * @return The body, as a UTF-8 string
      */
     @NotNull(message = "response body is never NULL")

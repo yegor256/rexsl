@@ -29,9 +29,9 @@
  */
 package com.rexsl.test.mock;
 
-import com.rexsl.test.JdkRequest;
 import com.rexsl.test.Request;
-import com.rexsl.test.RestResponse;
+import com.rexsl.test.request.JdkRequest;
+import com.rexsl.test.response.RestResponse;
 import java.net.HttpURLConnection;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -55,7 +55,7 @@ public final class MkContainerTest {
             .start();
         new JdkRequest(container.home())
             .fetch().as(RestResponse.class)
-            .assertStatus(200)
+            .assertStatus(HttpURLConnection.HTTP_OK)
             .assertBody(Matchers.startsWith("works"));
         MatcherAssert.assertThat(
             container.take().method(),

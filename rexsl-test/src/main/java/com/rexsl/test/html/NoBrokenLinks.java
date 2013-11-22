@@ -31,7 +31,7 @@ package com.rexsl.test.html;
 
 import com.jcabi.log.Logger;
 import com.rexsl.test.Response;
-import com.rexsl.test.XmlResponse;
+import com.rexsl.test.response.XmlResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
