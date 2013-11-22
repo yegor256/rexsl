@@ -240,9 +240,13 @@ final class BaseRequest implements Request {
         );
         if (Logger.isDebugEnabled(this)) {
             Logger.debug(
-                this, "#fetch(%s %s):\nHTTP Request:\n%s\nHTTP Response:\n%s",
+                this,
+                // @checkstyle LineLength (1 line)
+                "#fetch(%s %s):\nHTTP Request (%s):\n%s\nHTTP Response (%s):\n%s",
                 this.mtd, this.home,
+                this.wire.getClass().getName(),
                 BaseRequest.indent(this.toString()),
+                response.getClass().getName(),
                 BaseRequest.indent(response.toString())
             );
         }
