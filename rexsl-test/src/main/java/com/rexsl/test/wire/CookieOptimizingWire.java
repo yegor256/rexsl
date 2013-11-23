@@ -52,6 +52,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.10
+ * @see <a href="http://tools.ietf.org/html/rfc2965">RFC 2965 "HTTP State Management Mechanism"</a>
  */
 @Immutable
 @ToString
@@ -95,24 +96,23 @@ public final class CookieOptimizingWire implements Wire {
             }
             hdrs.add(header);
         }
-        for (final Map.Entry<String, String> cookie : cookies.entrySet()) {
+        if (!cookies.isEmpty()) {
+            final StringBuilder text = new StringBuilder(0);
+            for (final Map.Entry<String, String> cookie : cookies.entrySet()) {
+                if (text.length() > 0) {
+                    text.append("; ");
+                }
+                text.append(cookie.getKey())
+                    .append('=')
+                    .append(cookie.getValue());
+            }
             hdrs.add(
-                CookieOptimizingWire.cookie(cookie.getKey(), cookie.getValue())
+                new ImmutableHeader(
+                    HttpHeaders.COOKIE,
+                    text.toString()
+                )
             );
         }
         return this.origin.send(req, home, method, hdrs, content);
-    }
-    /**
-     * Make cookie header.
-     * @param name Cookie name
-     * @param value Cookie value
-     * @return Header
-     */
-    private static Map.Entry<String, String> cookie(final String name,
-        final String value) {
-        return new ImmutableHeader(
-            HttpHeaders.COOKIE,
-            String.format("%s=%s", name, value)
-        );
     }
 }

@@ -56,10 +56,13 @@ public final class CookieOptimizingWireTest {
     public void transfersCookiesOnFollow() throws Exception {
         final MkContainer container = new MkGrizzlyContainer().next(
             new MkAnswer.Simple("")
+                .withHeader(HttpHeaders.SET_COOKIE, "beta=something; path=/")
                 .withHeader(HttpHeaders.SET_COOKIE, "alpha=boom1; path=/")
+                .withHeader(HttpHeaders.SET_COOKIE, "gamma=something; path=/")
                 .withHeader(HttpHeaders.LOCATION, "/")
         ).next(new MkAnswer.Simple("")).start();
         new JdkRequest(container.home())
+            .through(VerboseWire.class)
             .through(CookieOptimizingWire.class)
             .header(HttpHeaders.COOKIE, "alpha=boom5")
             .fetch()
@@ -78,7 +81,13 @@ public final class CookieOptimizingWireTest {
             query.headers(),
             Matchers.hasEntry(
                 Matchers.equalTo(HttpHeaders.COOKIE),
-                Matchers.<String>everyItem(Matchers.equalTo("alpha=boom1"))
+                Matchers.<String>everyItem(
+                    Matchers.allOf(
+                        Matchers.containsString("beta=something"),
+                        Matchers.containsString("gamma=something"),
+                        Matchers.containsString("alpha=boom1")
+                    )
+                )
             )
         );
     }
@@ -93,9 +102,11 @@ public final class CookieOptimizingWireTest {
             new MkAnswer.Simple("")
                 .withHeader(HttpHeaders.SET_COOKIE, "first=A; path=/")
                 .withHeader(HttpHeaders.SET_COOKIE, "second=; path=/")
+                .withHeader(HttpHeaders.SET_COOKIE, "third=B; path=/")
                 .withHeader(HttpHeaders.LOCATION, "/a")
         ).next(new MkAnswer.Simple("")).start();
         new JdkRequest(container.home())
+            .through(VerboseWire.class)
             .through(CookieOptimizingWire.class)
             .fetch()
             .as(RestResponse.class)
@@ -114,8 +125,12 @@ public final class CookieOptimizingWireTest {
             query.headers(),
             Matchers.hasEntry(
                 Matchers.equalTo(HttpHeaders.COOKIE),
-                Matchers.not(
-                    Matchers.hasItem(Matchers.containsString("second"))
+                Matchers.hasItem(
+                    Matchers.allOf(
+                        Matchers.containsString("first=A"),
+                        Matchers.containsString("third=B"),
+                        Matchers.not(Matchers.containsString("second"))
+                    )
                 )
             )
         );
