@@ -36,7 +36,6 @@ import com.rexsl.test.Response;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
@@ -213,18 +212,12 @@ public final class RestResponse extends AbstractResponse {
             .back();
         final Map<String, List<String>> headers = this.headers();
         if (headers.containsKey(HttpHeaders.SET_COOKIE)) {
-            final Map<String, String> cookies = new HashMap<String, String>();
             for (final String header : headers.get(HttpHeaders.SET_COOKIE)) {
                 for (final HttpCookie cookie : HttpCookie.parse(header)) {
-                    cookies.put(cookie.getName(), cookie.getValue());
-                }
-            }
-            for (final Map.Entry<String, String> cookie : cookies.entrySet()) {
-                if (!cookie.getValue().isEmpty()) {
                     req = req.header(
                         HttpHeaders.COOKIE,
                         String.format(
-                            "%s=%s", cookie.getKey(), cookie.getValue()
+                            "%s=%s", cookie.getName(), cookie.getValue()
                         )
                     );
                 }
