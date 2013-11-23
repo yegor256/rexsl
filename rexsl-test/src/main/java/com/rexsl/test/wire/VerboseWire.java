@@ -32,6 +32,7 @@ package com.rexsl.test.wire;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.log.Logger;
 import com.rexsl.test.Request;
+import com.rexsl.test.RequestBody;
 import com.rexsl.test.Response;
 import com.rexsl.test.Wire;
 import java.io.IOException;
@@ -40,7 +41,6 @@ import java.util.Map;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.io.Charsets;
 
 /**
  * Verbose wire.
@@ -87,7 +87,7 @@ public final class VerboseWire implements Wire {
                 .append(header.getValue())
                 .append('\n');
         }
-        text.append('\n').append(new String(content, Charsets.UTF_8));
+        text.append('\n').append(RequestBody.Printable.toString(content));
         Logger.info(
             this,
             "#send(%s %s):\nHTTP Request (%s):\n%s\nHTTP Response (%s):\n%s",

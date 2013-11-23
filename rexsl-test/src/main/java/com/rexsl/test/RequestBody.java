@@ -32,6 +32,7 @@ package com.rexsl.test;
 import com.jcabi.aspects.Immutable;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.CharUtils;
 
 /**
@@ -116,12 +117,15 @@ public interface RequestBody {
          */
         public static String toString(final byte[] bytes) {
             final StringBuilder text = new StringBuilder(0);
-            if (bytes.length > 0) {
-                for (final byte chr : bytes) {
-                    if (CharUtils.isAscii((char) chr)) {
-                        text.append((char) chr);
+            final char[] chrs = new String(bytes, Charsets.UTF_8).toCharArray();
+            if (chrs.length > 0) {
+                for (final char chr : chrs) {
+                    if (CharUtils.isAscii(chr)) {
+                        text.append(chr);
                     } else {
-                        text.append(String.format("\\u%04x", chr));
+                        text.append("\\u").append(
+                            Integer.toHexString((int) chr)
+                        );
                     }
                 }
             } else {
