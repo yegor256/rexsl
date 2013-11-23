@@ -86,7 +86,8 @@ public final class MkGrizzlyContainer implements MkContainer {
         if (this.port != 0) {
             throw new IllegalStateException(
                 String.format(
-                    "container is already listening on reserve %d", this.port
+                    "already listening on port %d, use #stop() first",
+                    this.port
                 )
             );
         }
@@ -94,14 +95,14 @@ public final class MkGrizzlyContainer implements MkContainer {
         this.gws = new GrizzlyWebServer(this.port);
         this.gws.addGrizzlyAdapter(this.adapter, new String[] {"/"});
         this.gws.start();
-        Logger.info(this, "started on reserve #%s", prt);
+        Logger.info(this, "started on port #%s", prt);
         return this;
     }
 
     @Override
     public void stop() {
         this.gws.stop();
-        Logger.info(this, "stopped on reserve #%s", this.port);
+        Logger.info(this, "stopped on port #%s", this.port);
         this.port = 0;
     }
 

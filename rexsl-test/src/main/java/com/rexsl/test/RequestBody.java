@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import com.jcabi.aspects.Immutable;
 import javax.validation.constraints.NotNull;
+import org.apache.commons.lang3.CharUtils;
 
 /**
  * Request body.
@@ -84,5 +85,32 @@ public interface RequestBody {
     RequestBody formParam(
         @NotNull(message = "form param name can't be NULL") String name,
         @NotNull(message = "form param value can't be NULL") Object value);
+
+    /**
+     * Printer of byte array.
+     */
+    @Immutable
+    final class Printable {
+        /**
+         * Safely print byte array.
+         * @param bytes Bytes to print
+         * @return Text, with ASCII symbols only
+         */
+        public static String toString(final byte[] bytes) {
+            final StringBuilder text = new StringBuilder(0);
+            if (bytes.length > 0) {
+                for (final byte chr : bytes) {
+                    if (CharUtils.isAscii((char) chr)) {
+                        text.append((char) chr);
+                    } else {
+                        text.append(String.format("\\u%04x", chr));
+                    }
+                }
+            } else {
+                text.append("<<empty>>");
+            }
+            return text.toString();
+        }
+    }
 
 }

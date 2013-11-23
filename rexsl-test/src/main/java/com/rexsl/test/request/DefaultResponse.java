@@ -34,6 +34,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
 import com.jcabi.log.Logger;
 import com.rexsl.test.Request;
+import com.rexsl.test.RequestBody;
 import com.rexsl.test.Response;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
@@ -196,13 +197,9 @@ final class DefaultResponse implements Response {
                 )
             );
         }
-        text.append('\n');
-        if (this.content.length == 0) {
-            text.append("<<empty response body>>");
-        } else {
-            text.append(BaseRequest.print(this.content));
-        }
-        return text.toString();
+        return text.append('\n')
+            .append(RequestBody.Printable.toString(this.content))
+            .toString();
     }
 
 }
