@@ -29,10 +29,12 @@
  */
 package com.rexsl.maven.checks;
 
-import com.rexsl.test.Request;
 import com.rexsl.test.XhtmlMatchers;
+import com.rexsl.test.mock.MkAnswer;
+import com.rexsl.test.mock.MkContainer;
+import com.rexsl.test.mock.MkGrizzlyContainer;
+import javax.xml.transform.URIResolver;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -48,10 +50,10 @@ public final class RuntimeResolverTest {
      */
     @Test
     public void resolvesSourceByUrl() throws Exception {
-        final ContainerMocker container = new ContainerMocker()
-            .returnBody("<doc><test/></doc>")
-            .mock();
-        final RuntimeResolver resolver = new RuntimeResolver(container.home());
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("<doc><test/></doc>")
+        ).start();
+        final URIResolver resolver = new RuntimeResolver(container.home());
         MatcherAssert.assertThat(
             resolver.resolve("/", ""),
             XhtmlMatchers.hasXPath("/doc/test")
@@ -66,22 +68,19 @@ public final class RuntimeResolverTest {
     @Test
     public void resolvesSourceByUrlWithBase() throws Exception {
         final String css = "/css/test.css";
-        final ContainerMocker container = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .expectRequestUri(Matchers.equalTo(css))
-            .returnBody("<test/>")
-            .mock();
-        final ContainerMocker reserve = new ContainerMocker()
-            .expectMethod(Matchers.equalTo(Request.GET))
-            .expectRequestUri(Matchers.equalTo(css))
-            .returnBody("<doc/>")
-            .mock();
-        final RuntimeResolver resolver = new RuntimeResolver(container.home());
+        final MkContainer container = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("<test/>")
+        ).start();
+        final MkContainer reserve = new MkGrizzlyContainer().next(
+            new MkAnswer.Simple("<doc/>")
+        ).start();
+        final URIResolver resolver = new RuntimeResolver(container.home());
         MatcherAssert.assertThat(
             resolver.resolve(css, reserve.home().toString()),
             XhtmlMatchers.hasXPath("/doc")
         );
         container.stop();
+        reserve.stop();
     }
 
 }

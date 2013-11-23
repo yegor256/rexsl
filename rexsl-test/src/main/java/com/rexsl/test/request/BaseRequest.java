@@ -53,7 +53,6 @@ import lombok.EqualsAndHashCode;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.CharEncoding;
-import org.apache.commons.lang3.CharUtils;
 
 /**
  * Implementation of {@link Request}.
@@ -249,31 +248,9 @@ final class BaseRequest implements Request {
                 )
             );
         }
-        text.append('\n');
-        if (this.content.length == 0) {
-            text.append("<<empty request body>>");
-        } else {
-            text.append(BaseRequest.print(this.content));
-        }
-        return text.toString();
-    }
-
-    /**
-     * Safely print byte array.
-     * @param bytes Bytes to print
-     * @return Text, with ASCII symbols only
-     */
-    @SuppressWarnings("PMD.DefaultPackage")
-    static String print(final byte[] bytes) {
-        final StringBuilder text = new StringBuilder(0);
-        for (final byte chr : bytes) {
-            if (CharUtils.isAscii((char) chr)) {
-                text.append((char) chr);
-            } else {
-                text.append(String.format("\\u%04x", chr));
-            }
-        }
-        return text.toString();
+        return text.append('\n')
+            .append(RequestBody.Printable.toString(this.content))
+            .toString();
     }
 
     /**
@@ -398,7 +375,7 @@ final class BaseRequest implements Request {
         }
         @Override
         public String toString() {
-            return BaseRequest.print(this.text);
+            return RequestBody.Printable.toString(this.text);
         }
         @Override
         public Request back() {

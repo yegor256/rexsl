@@ -63,7 +63,7 @@ final class StringSource extends DOMSource {
      * Public ctor.
      * @param text The content of the document
      */
-    protected StringSource(@NotNull final String text) {
+    StringSource(@NotNull final String text) {
         super();
         this.xml = text;
         super.setNode(new XMLDocument(text).node());
@@ -73,7 +73,7 @@ final class StringSource extends DOMSource {
      * Public ctor.
      * @param node The node
      */
-    protected StringSource(@NotNull final Node node) {
+    StringSource(@NotNull final Node node) {
         super();
         final StringWriter writer = new StringWriter();
         try {
@@ -106,7 +106,7 @@ final class StringSource extends DOMSource {
                 buf.append(
                     Integer.toHexString(chr).toUpperCase(Locale.ENGLISH)
                 );
-                buf.append(";");
+                buf.append(';');
             } else {
                 buf.append(chr);
             }

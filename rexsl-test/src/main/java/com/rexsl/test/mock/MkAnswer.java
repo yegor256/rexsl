@@ -34,6 +34,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.immutable.Array;
 import com.jcabi.log.Logger;
 import com.rexsl.test.ImmutableHeader;
+import com.rexsl.test.RequestBody;
 import java.net.HttpURLConnection;
 import java.util.LinkedList;
 import java.util.List;
@@ -156,7 +157,9 @@ public interface MkAnswer {
                     )
                 );
             }
-            return text.append('\n').append(this.body()).toString();
+            return text.append('\n')
+                .append(RequestBody.Printable.toString(this.content))
+                .toString();
         }
         /**
          * Make a copy of this answer, with an extra header.
