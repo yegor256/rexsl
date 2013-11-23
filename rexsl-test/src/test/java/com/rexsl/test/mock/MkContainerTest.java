@@ -33,6 +33,7 @@ import com.rexsl.test.Request;
 import com.rexsl.test.request.JdkRequest;
 import com.rexsl.test.response.RestResponse;
 import java.net.HttpURLConnection;
+import javax.ws.rs.core.MediaType;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -57,11 +58,38 @@ public final class MkContainerTest {
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
             .assertBody(Matchers.startsWith("works"));
+        container.stop();
+        final MkQuery query = container.take();
         MatcherAssert.assertThat(
-            container.take().method(),
+            query.method(),
             Matchers.equalTo(Request.GET)
         );
+    }
+
+    /**
+     * MkContainer can understand duplicate headers.
+     * @throws Exception If something goes wrong inside
+     * @todo #1 Grizzly container doesn't understand same-name
+     *  headers, or we don't fetch them correctly from GrizzlyRequest
+     */
+    @Test
+    @org.junit.Ignore
+    public void understandsDuplicateHeaders() throws Exception {
+        final MkContainer container = new MkGrizzlyContainer()
+            .next(new MkAnswer.Simple(""))
+            .start();
+        final String header = "X-Something";
+        new JdkRequest(container.home())
+            .header(header, MediaType.TEXT_HTML)
+            .header(header, MediaType.TEXT_XML)
+            .fetch().as(RestResponse.class)
+            .assertStatus(HttpURLConnection.HTTP_OK);
         container.stop();
+        final MkQuery query = container.take();
+        MatcherAssert.assertThat(
+            query.headers().get(header),
+            Matchers.hasSize(2)
+        );
     }
 
 }

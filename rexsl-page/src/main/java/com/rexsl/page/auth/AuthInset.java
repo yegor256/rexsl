@@ -287,6 +287,12 @@ public final class AuthInset implements Inset {
                     ex
                 );
             }
+        } else {
+            Logger.debug(
+                this, "cookie '%s' not found among %[list]s",
+                AuthInset.AUTH_COOKIE,
+                this.resource.httpHeaders().getCookies().keySet()
+            );
         }
         return identity;
     }
