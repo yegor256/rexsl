@@ -108,6 +108,7 @@ public final class CookieOptimizingWireTest {
         new JdkRequest(container.home())
             .through(VerboseWire.class)
             .through(CookieOptimizingWire.class)
+            .header(HttpHeaders.COOKIE, "second=initial-value")
             .fetch()
             .as(RestResponse.class)
             .follow()
