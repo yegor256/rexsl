@@ -30,6 +30,7 @@
 package com.rexsl.test;
 
 import com.jcabi.aspects.Immutable;
+import java.util.Map;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.CharUtils;
 
@@ -87,10 +88,27 @@ public interface RequestBody {
         @NotNull(message = "form param value can't be NULL") Object value);
 
     /**
+     * Add form params.
+     * @param params Map of params
+     * @return New alternated body
+     * @since 0.10
+     */
+    @NotNull(message = "alternated body is never NULL")
+    RequestBody formParams(
+        @NotNull(message = "map of params can't be NULL")
+        Map<String, String> params);
+
+    /**
      * Printer of byte array.
      */
     @Immutable
     final class Printable {
+        /**
+         * Utility class.
+         */
+        private Printable() {
+            // intentionally empty
+        }
         /**
          * Safely print byte array.
          * @param bytes Bytes to print
