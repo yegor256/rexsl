@@ -91,9 +91,7 @@ public final class CookieOptimizingWire implements Wire {
                 final String[] parts = StringUtils.splitPreserveAllTokens(
                     header.getValue(), "=", 2
                 );
-                if (!parts[1].isEmpty()) {
-                    cookies.put(parts[0], parts[1]);
-                }
+                cookies.put(parts[0], parts[1]);
                 continue;
             }
             hdrs.add(header);
@@ -101,6 +99,9 @@ public final class CookieOptimizingWire implements Wire {
         if (!cookies.isEmpty()) {
             final StringBuilder text = new StringBuilder(0);
             for (final Map.Entry<String, String> cookie : cookies.entrySet()) {
+                if (cookie.getValue().isEmpty()) {
+                    continue;
+                }
                 if (text.length() > 0) {
                     text.append("; ");
                 }
