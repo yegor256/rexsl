@@ -227,7 +227,6 @@
                 <groupId>com.sun.grizzly</groupId>
                 <artifactId>grizzly-servlet-webserver</artifactId>
                 <version>1.9.59</version>
-                <scope>test</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>javax.servlet</groupId>

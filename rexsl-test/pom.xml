@@ -105,6 +105,7 @@
             <groupId>com.sun.grizzly</groupId>
             <artifactId>grizzly-servlet-webserver</artifactId>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
@@ -120,12 +121,14 @@
             <groupId>net.sourceforge.saxon</groupId>
             <artifactId>saxon</artifactId>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.saxon</groupId>
             <artifactId>saxon</artifactId>
             <scope>provided</scope>
             <classifier>dom</classifier>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
@@ -152,12 +155,14 @@
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
-            <scope>test</scope>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <scope>test</scope>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
     <build>
@@ -182,4 +187,26 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>qulice</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.ning.maven.plugins</groupId>
+                        <artifactId>maven-duplicate-finder-plugin</artifactId>
+                        <configuration>
+                            <ignoredDependencies combine.children="append">
+                                <dependency>
+                                    <groupId>com.sun.grizzly</groupId>
+                                    <artifactId>grizzly-servlet-webserver</artifactId>
+                                    <version>1.9.59</version>
+                                </dependency>
+                            </ignoredDependencies>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
