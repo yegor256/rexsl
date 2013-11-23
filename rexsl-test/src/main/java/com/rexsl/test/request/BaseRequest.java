@@ -424,6 +424,16 @@ final class BaseRequest implements Request {
                 throw new IllegalStateException(ex);
             }
         }
+        @Override
+        public RequestBody formParams(
+            @NotNull(message = "map of params can't be NULL")
+            final Map<String, String> params) {
+            RequestBody body = this;
+            for (final Map.Entry<String, String> param : params.entrySet()) {
+                body = body.formParam(param.getKey(), param.getValue());
+            }
+            return body;
+        }
     }
 
 }

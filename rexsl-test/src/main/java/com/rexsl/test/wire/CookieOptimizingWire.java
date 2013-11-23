@@ -44,6 +44,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Wire that compresses cookies before sending.
@@ -67,7 +68,7 @@ public final class CookieOptimizingWire implements Wire {
      * @param wire Original wire
      */
     public CookieOptimizingWire(@NotNull(message = "wire can't be NULL")
-                                final Wire wire) {
+        final Wire wire) {
         this.origin = wire;
     }
 
@@ -76,7 +77,6 @@ public final class CookieOptimizingWire implements Wire {
      * @checkstyle ParameterNumber (7 lines)
      */
     @Override
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Response send(final Request req, final String home,
         final String method,
         final Collection<Map.Entry<String, String>> headers,
@@ -87,7 +87,9 @@ public final class CookieOptimizingWire implements Wire {
             new ConcurrentHashMap<String, String>();
         for (final Map.Entry<String, String> header : headers) {
             if (header.getKey().equals(HttpHeaders.COOKIE)) {
-                final String[] parts = header.getValue().split("=", 2);
+                final String[] parts = StringUtils.split(
+                    header.getValue(), "=", 2
+                );
                 cookies.put(parts[0], parts[1]);
                 continue;
             }
@@ -95,12 +97,22 @@ public final class CookieOptimizingWire implements Wire {
         }
         for (final Map.Entry<String, String> cookie : cookies.entrySet()) {
             hdrs.add(
-                new ImmutableHeader(
-                    HttpHeaders.COOKIE,
-                    String.format("%s=%s", cookie.getKey(), cookie.getValue())
-                )
+                CookieOptimizingWire.cookie(cookie.getKey(), cookie.getValue())
             );
         }
         return this.origin.send(req, home, method, hdrs, content);
+    }
+    /**
+     * Make cookie header.
+     * @param name Cookie name
+     * @param value Cookie value
+     * @return Header
+     */
+    private static Map.Entry<String, String> cookie(final String name,
+        final String value) {
+        return new ImmutableHeader(
+            HttpHeaders.COOKIE,
+            String.format("%s=%s", name, value)
+        );
     }
 }

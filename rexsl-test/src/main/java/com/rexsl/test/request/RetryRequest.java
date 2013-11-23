@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.EqualsAndHashCode;
 
 /**
- * A {@link com.rexsl.test.Request} that retries to fetch
+ * A {@link Request} that retries to fetch
  * in case of an {@link IOException}.
  *
  * <p>It is recommended to use {@link RetryRequest}
@@ -236,6 +236,12 @@ public final class RetryRequest implements Request {
         public RequestBody formParam(final String name, final Object value) {
             return new RetryRequest.RetryBody(
                 this.request.body().formParam(name, value).back()
+            );
+        }
+        @Override
+        public RequestBody formParams(final Map<String, String> params) {
+            return new RetryRequest.RetryBody(
+                this.request.body().formParams(params).back()
             );
         }
     }

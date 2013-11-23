@@ -61,37 +61,37 @@ abstract class AbstractResponse implements Response {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return this.response.toString();
     }
 
     @Override
-    public Request back() {
+    public final Request back() {
         return this.response.back();
     }
 
     @Override
-    public int status() {
+    public final int status() {
         return this.response.status();
     }
 
     @Override
-    public String reason() {
+    public final String reason() {
         return this.response.reason();
     }
 
     @Override
-    public Map<String, List<String>> headers() {
+    public final Map<String, List<String>> headers() {
         return this.response.headers();
     }
 
     @Override
-    public String body() {
+    public final String body() {
         return this.response.body();
     }
 
     @Override
-    public byte[] binary() {
+    public final byte[] binary() {
         return this.response.binary();
     }
 
@@ -101,7 +101,7 @@ abstract class AbstractResponse implements Response {
      */
     @Override
     @SuppressWarnings("PMD.ShortMethodName")
-    public <T> T as(final Class<T> type) {
+    public final <T> T as(final Class<T> type) {
         return this.response.as(type);
     }
 
