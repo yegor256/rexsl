@@ -32,6 +32,7 @@ package com.rexsl.test.mock;
 import com.rexsl.test.Request;
 import com.rexsl.test.request.JdkRequest;
 import com.rexsl.test.response.RestResponse;
+import com.rexsl.test.wire.VerboseWire;
 import java.net.HttpURLConnection;
 import javax.ws.rs.core.MediaType;
 import org.hamcrest.MatcherAssert;
@@ -80,6 +81,7 @@ public final class MkContainerTest {
             .start();
         final String header = "X-Something";
         new JdkRequest(container.home())
+            .through(VerboseWire.class)
             .header(header, MediaType.TEXT_HTML)
             .header(header, MediaType.TEXT_XML)
             .fetch().as(RestResponse.class)

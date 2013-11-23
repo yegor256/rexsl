@@ -88,10 +88,12 @@ public final class CookieOptimizingWire implements Wire {
             new ConcurrentHashMap<String, String>();
         for (final Map.Entry<String, String> header : headers) {
             if (header.getKey().equals(HttpHeaders.COOKIE)) {
-                final String[] parts = StringUtils.split(
+                final String[] parts = StringUtils.splitPreserveAllTokens(
                     header.getValue(), "=", 2
                 );
-                cookies.put(parts[0], parts[1]);
+                if (!parts[1].isEmpty()) {
+                    cookies.put(parts[0], parts[1]);
+                }
                 continue;
             }
             hdrs.add(header);
