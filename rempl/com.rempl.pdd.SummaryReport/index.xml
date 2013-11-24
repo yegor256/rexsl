@@ -6,7 +6,7 @@
       <prefix> * </prefix>
       <body>This class should be serializable, but it's not. It doesn't restore its state after deserialization. We should create a test for it and then fix the defect.</body>
       <estimate>0</estimate>
-      <lines>77-79</lines>
+      <lines>78-80</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -42,7 +42,7 @@
       <prefix>                        </prefix>
       <body>This test is disabled (although it works fine) because I don't know how to stop its execution. It starts Jetty and stays waiting. There should be some way of canceling it somehow... http://jira.codehaus.org/browse/MINVOKER-132</body>
       <estimate>0</estimate>
-      <lines>449-453</lines>
+      <lines>443-447</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -190,39 +190,12 @@
       <owner>someone</owner>
    </puzzle>
    <puzzle>
-      <ticket>150</ticket>
-      <file>rexsl-test/src/mock/java/com/rexsl/test/ContainerMocker.java</file>
+      <ticket>1</ticket>
+      <file>rexsl-test/src/test/java/com/rexsl/test/mock/MkContainerTest.java</file>
       <prefix>     * </prefix>
-      <body>It is impossible to match parameter and body at the same time.</body>
+      <body>Grizzly container doesn't understand same-name headers, or we don't fetch them correctly from GrizzlyRequest</body>
       <estimate>0</estimate>
-      <lines>94-94</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>150</ticket>
-      <file>rexsl-test/src/mock/java/com/rexsl/test/ContainerMocker.java</file>
-      <prefix>     * </prefix>
-      <body>It is impossible to match parameter and body at the same time.</body>
-      <estimate>0</estimate>
-      <lines>132-133</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>151</ticket>
-      <file>rexsl-test/src/test/java/com/rexsl/test/BaseRequestTest.java</file>
-      <prefix>     * </prefix>
-      <body>Is it possible to initialize input variable with InputStream from request without side effects on request? request's parameters retrieve is done lazily and requires InputStream rewinded to it's start</body>
-      <estimate>0</estimate>
-      <lines>159-162</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>151</ticket>
-      <file>rexsl-test/src/test/java/com/rexsl/test/BaseRequestTest.java</file>
-      <prefix>     * </prefix>
-      <body>Is it possible to initialize input variable with InputStream from request without side effects on request? request's parameters retrieve is done lazily and requires InputStream rewinded to it's start</body>
-      <estimate>0</estimate>
-      <lines>187-190</lines>
+      <lines>73-74</lines>
       <owner>someone</owner>
    </puzzle>
 </puzzles>

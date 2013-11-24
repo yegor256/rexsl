@@ -46,8 +46,8 @@
 <a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> com.restfb.types.User;
 <a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> com.rexsl.page.Link;
 <a class="jxr_linenumber" name="38" href="#38">38</a>  <strong class="jxr_keyword">import</strong> com.rexsl.page.Resource;
-<a class="jxr_linenumber" name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.JdkRequest;
-<a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.RestResponse;
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.request.JdkRequest;
+<a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.response.RestResponse;
 <a class="jxr_linenumber" name="41" href="#41">41</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" name="42" href="#42">42</a>  <strong class="jxr_keyword">import</strong> java.net.HttpURLConnection;
 <a class="jxr_linenumber" name="43" href="#43">43</a>  <strong class="jxr_keyword">import</strong> java.net.URI;
@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="163" href="#163">163</a>                 <strong class="jxr_keyword">this</strong>.appKey,
 <a class="jxr_linenumber" name="164" href="#164">164</a>                 code
 <a class="jxr_linenumber" name="165" href="#165">165</a>             );
-<a class="jxr_linenumber" name="166" href="#166">166</a>         <strong class="jxr_keyword">final</strong> String response = <strong class="jxr_keyword">new</strong> <a href="../../../../com/rexsl/test/JdkRequest.html">JdkRequest</a>(uri)
+<a class="jxr_linenumber" name="166" href="#166">166</a>         <strong class="jxr_keyword">final</strong> String response = <strong class="jxr_keyword">new</strong> <a href="../../../../com/rexsl/test/request/JdkRequest.html">JdkRequest</a>(uri)
 <a class="jxr_linenumber" name="167" href="#167">167</a>             .fetch().as(RestResponse.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="168" href="#168">168</a>             .assertStatus(HttpURLConnection.HTTP_OK)
 <a class="jxr_linenumber" name="169" href="#169">169</a>             .body();

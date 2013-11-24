@@ -43,8 +43,8 @@
 <a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> com.jcabi.log.Logger;
 <a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> com.jcabi.manifests.Manifests;
 <a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> com.jcabi.xml.XML;
-<a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.JdkRequest;
-<a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.Request;
+<a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.Request;
+<a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.request.JdkRequest;
 <a class="jxr_linenumber" name="38" href="#38">38</a>  <strong class="jxr_keyword">import</strong> java.io.ByteArrayOutputStream;
 <a class="jxr_linenumber" name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> java.net.URI;
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="83" href="#83">83</a>  <em class="jxr_javadoccomment">     * @return The response</em>
 <a class="jxr_linenumber" name="84" href="#84">84</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="85" href="#85">85</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../com/rexsl/test/Request.html">Request</a> request(<strong class="jxr_keyword">final</strong> String uri, <strong class="jxr_keyword">final</strong> String entity) {
-<a class="jxr_linenumber" name="86" href="#86">86</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/rexsl/test/JdkRequest.html">JdkRequest</a>(uri)
+<a class="jxr_linenumber" name="86" href="#86">86</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/rexsl/test/request/JdkRequest.html">JdkRequest</a>(uri)
 <a class="jxr_linenumber" name="87" href="#87">87</a>              .method(Request.POST)
 <a class="jxr_linenumber" name="88" href="#88">88</a>              .body().set(entity).back()
 <a class="jxr_linenumber" name="89" href="#89">89</a>              .header(HttpHeaders.USER_AGENT, BaseValidator.USER_AGENT)
