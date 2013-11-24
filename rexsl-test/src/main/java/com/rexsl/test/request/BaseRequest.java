@@ -55,7 +55,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.CharEncoding;
 
 /**
- * Implementation of {@link Request}.
+ * Base implementation of {@link Request}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$

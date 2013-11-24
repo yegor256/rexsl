@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  *
@@ -28,29 +26,64 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package com.rexsl.test.wire;
+
+import com.jcabi.aspects.Immutable;
+import com.jcabi.aspects.RetryOnFailure;
+import com.jcabi.aspects.Tv;
+import com.rexsl.test.Request;
+import com.rexsl.test.Response;
+import com.rexsl.test.Wire;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+/**
+ * Wire that retries a few times before giving up and throwing exception.
  *
+ * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0     http://maven.apache.org/xsd/decoration-1.0.0.xsd" name="rexsl-test">
-    <body>
-        <menu ref="parent"/>
-        <menu name="Overview">
-            <item name="RESTful Client" href="index.html"/>
-            <item name="API ${project.version} (JavaDoc)" href="apidocs-${project.version}/index.html"/>
-            <item name="Mock API" href="testapidocs-${project.version}/index.html"/>
-            <item name="Release History" href="changes-report.html"/>
-        </menu>
-        <menu name="HTTP Client">
-            <item name="Make HTTP Request" href="example-request.html"/>
-            <item name="XML Response" href="example-xml-response.html"/>
-            <item name="JSON Response" href="example-json-response.html"/>
-            <item name="XML/XHTML Matchers" href="example-matchers.html"/>
-            <item name="Web Linking Response" href="example-web-linking-response.html"/>
-            <item name="HTTP Request that retries" href="example-retry-request.html"/>
-        </menu>
-        <menu name="Mock Servlet Container">
-            <item name="HTTP client unit testing" href="example-mock-container.html"/>
-        </menu>
-        <menu ref="reports"/>
-    </body>
-</project>
+ * @since 0.10
+ */
+@Immutable
+@ToString
+@EqualsAndHashCode(of = "origin")
+public final class RetryWire implements Wire {
+
+    /**
+     * Original wire.
+     */
+    private final transient Wire origin;
+
+    /**
+     * Public ctor.
+     * @param wire Original wire
+     */
+    public RetryWire(@NotNull(message = "wire can't be NULL")
+        final Wire wire) {
+        this.origin = wire;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @checkstyle ParameterNumber (13 lines)
+     */
+    @Override
+    @RetryOnFailure(
+        attempts = Tv.FIVE,
+        delay = 1,
+        unit = TimeUnit.SECONDS,
+        verbose = false
+    )
+    public Response send(final Request req, final String home,
+        final String method,
+        final Collection<Map.Entry<String, String>> headers,
+        final byte[] content) throws IOException {
+        return this.origin.send(req, home, method, headers, content);
+    }
+}
