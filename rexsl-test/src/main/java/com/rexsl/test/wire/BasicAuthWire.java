@@ -101,9 +101,15 @@ public final class BasicAuthWire implements Wire {
         final byte[] content) throws IOException {
         final Collection<Map.Entry<String, String>> hdrs =
             new LinkedList<Map.Entry<String, String>>();
-        hdrs.addAll(headers);
+        boolean absent = true;
+        for (final Map.Entry<String, String> header : headers) {
+            if (header.getKey().equals(HttpHeaders.AUTHORIZATION)) {
+                absent = false;
+            }
+            hdrs.add(header);
+        }
         final String info = URI.create(home).getUserInfo();
-        if (info != null) {
+        if (absent && info != null) {
             final String[] parts = info.split(":", 2);
             try {
                 hdrs.add(
