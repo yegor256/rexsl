@@ -6,7 +6,7 @@
       <prefix> * </prefix>
       <body>This class should be serializable, but it's not. It doesn't restore its state after deserialization. We should create a test for it and then fix the defect.</body>
       <estimate>0</estimate>
-      <lines>77-79</lines>
+      <lines>78-80</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
