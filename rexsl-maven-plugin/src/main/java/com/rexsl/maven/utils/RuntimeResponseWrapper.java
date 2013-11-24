@@ -47,7 +47,6 @@ import javax.validation.constraints.NotNull;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
- * @see RuntimeFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
  */
 public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
 
@@ -75,7 +74,6 @@ public final class RuntimeResponseWrapper extends HttpServletResponseWrapper {
     /**
      * Public ctor.
      * @param response Servlet response being wrapped.
-     * @see RuntimeFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
      */
     public RuntimeResponseWrapper(@NotNull final HttpServletResponse response) {
         super(response);

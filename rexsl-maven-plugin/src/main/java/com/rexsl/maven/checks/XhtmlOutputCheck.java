@@ -49,7 +49,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -138,7 +137,7 @@ final class XhtmlOutputCheck implements Check {
             final EmbeddedContainer container = EmbeddedContainer.start(env);
             final Collection<File> files = new FileFinder(dir, "xml").random();
             try {
-                for (File xml : files) {
+                for (final File xml : files) {
                     final String name =
                         FilenameUtils.removeExtension(xml.getName());
                     if (!name.matches(this.test)) {
@@ -237,7 +236,7 @@ final class XhtmlOutputCheck implements Check {
                 xml,
                 StringEscapeUtils.escapeJava(xhtml).replace("\\n", "\n")
             );
-            final Set<Defect> defects = new HashSet<Defect>(0);
+            final Collection<Defect> defects = new HashSet<Defect>(0);
             defects.addAll(response.errors());
             defects.addAll(response.warnings());
             for (final Defect defect : defects) {

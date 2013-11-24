@@ -48,7 +48,6 @@ import org.apache.commons.lang3.CharEncoding;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
- * @see XsltFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
  */
 @ToString
 @EqualsAndHashCode(callSuper = false, of = { "stream", "writer" })
@@ -68,7 +67,6 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
     /**
      * Public ctor.
      * @param response Servlet response being wrapped.
-     * @see XsltFilter#doFilter(ServletRequest,ServletResponse,FilterChain)
      */
     ByteArrayResponseWrapper(
         @NotNull final HttpServletResponse response) {

@@ -37,7 +37,6 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import javax.validation.constraints.NotNull;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
 
 /**
@@ -72,10 +71,10 @@ final class CssPacker extends AbstractPacker {
             try {
                 new CssCompressor(input).compress(output, -1);
             } finally {
-                IOUtils.closeQuietly(output);
+                output.close();
             }
         } finally {
-            IOUtils.closeQuietly(input);
+            input.close();
         }
     }
 }

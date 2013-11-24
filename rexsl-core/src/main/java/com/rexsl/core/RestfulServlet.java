@@ -35,11 +35,12 @@ import com.jcabi.manifests.Manifests;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Handler;
+import java.util.logging.LogManager;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.FilterConfig;
@@ -52,6 +53,7 @@ import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  * The only and the main servlet from ReXSL framework.
@@ -131,7 +133,7 @@ public final class RestfulServlet extends HttpServlet {
     @Override
     public void init(@NotNull final ServletConfig config)
         throws ServletException {
-        final Set<String> packages = new HashSet<String>();
+        final Collection<String> packages = new HashSet<String>(0);
         packages.add(this.getClass().getPackage().getName());
         final String param = config.getInitParameter(RestfulServlet.PACKAGES);
         if (param == null) {
@@ -232,13 +234,13 @@ public final class RestfulServlet extends HttpServlet {
      * @see #init(ServletConfig)
      */
     private void reconfigureJUL() {
-        final java.util.logging.Logger rootLogger =
-            java.util.logging.LogManager.getLogManager().getLogger("");
-        final Handler[] handlers = rootLogger.getHandlers();
+        final java.util.logging.Logger root =
+            LogManager.getLogManager().getLogger("");
+        final Handler[] handlers = root.getHandlers();
         for (final Handler handler : handlers) {
-            rootLogger.removeHandler(handler);
+            root.removeHandler(handler);
         }
-        org.slf4j.bridge.SLF4JBridgeHandler.install();
+        SLF4JBridgeHandler.install();
         Logger.debug(this, "#julToSlf4j(): JUL forwarded to SLF4j");
     }
 

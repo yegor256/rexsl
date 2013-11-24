@@ -89,7 +89,7 @@ final class CssStaticCheck implements Check {
             "--format=compact"
         );
         builder.directory(csslint.getParentFile());
-        String report;
+        final String report;
         try {
             final Process process = builder.start();
             if (process.waitFor() != 0) {

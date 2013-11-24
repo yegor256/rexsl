@@ -31,10 +31,11 @@ package com.rexsl.maven.utils;
 
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
+import java.io.IOException;
 import java.net.ServerSocket;
 
 /**
- * Reservers a new TPC port.
+ * Reserves a new TPC port.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
@@ -55,7 +56,7 @@ public final class PortReserver {
             } finally {
                 socket.close();
             }
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalStateException("Failed to reserve port", ex);
         }
         Logger.info(this, "Port reserved: %d", port);

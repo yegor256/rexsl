@@ -109,7 +109,7 @@ final class WebappFilesCheck implements Check {
      */
     private boolean validate(final File basedir, final File dir) {
         boolean valid = true;
-        for (File file : this.getFiles(dir)) {
+        for (final File file : this.getFiles(dir)) {
             boolean found = false;
             File current = file.getParentFile();
             while (!current.equals(basedir) && !found) {

@@ -30,8 +30,9 @@
 package com.rexsl.core;
 
 import com.jcabi.aspects.Loggable;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.EqualsAndHashCode;
@@ -60,9 +61,8 @@ final class UserAgent {
     /**
      * List of tokens found in {@code User-Agent} HTTP header.
      */
-    @SuppressWarnings("PMD.UseConcurrentHashMap")
-    private final transient Map<String, ProductVersion> tokens =
-        new HashMap<String, ProductVersion>(0);
+    private final transient ConcurrentMap<String, ProductVersion> tokens =
+        new ConcurrentHashMap<String, ProductVersion>(0);
 
     /**
      * Public ctor.
@@ -72,7 +72,7 @@ final class UserAgent {
      * it and assume that the header is empty (user agent is not specified).
      * Such a mechanism is required for a unification of user agent
      * manipulations in {@link PageAnalyzer}. That class should have an instance
-     * of {@link UserAgent} no matter what. That's why we accept
+     * of {@code UserAgent} no matter what. That's why we accept
      * {@code NULL} here.
      *
      * @param text The text of HTTP header or {@code NULL} if such
@@ -94,7 +94,7 @@ final class UserAgent {
 
     @Override
     public String toString() {
-        final StringBuilder text = new StringBuilder();
+        final StringBuilder text = new StringBuilder(0);
         for (final Map.Entry<String, ProductVersion> token
             : this.tokens.entrySet()) {
             if (text.length() > 0) {

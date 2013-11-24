@@ -33,7 +33,6 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.log.Logger;
 import java.util.regex.Pattern;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
  * Product version.
@@ -43,7 +42,6 @@ import lombok.ToString;
  * @see <a href="http://tools.ietf.org/html/rfc2616#section-3.8">RFC-2616</a>
  */
 @EqualsAndHashCode(of = "origin")
-@ToString(of = "origin")
 @Immutable
 final class ProductVersion implements Comparable<ProductVersion> {
 
@@ -69,6 +67,11 @@ final class ProductVersion implements Comparable<ProductVersion> {
     @Override
     public int compareTo(final ProductVersion ver) {
         return this.normalized().compareTo(ver.normalized());
+    }
+
+    @Override
+    public String toString() {
+        return this.origin;
     }
 
     /**

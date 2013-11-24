@@ -34,8 +34,11 @@ import java.io.IOException;
 import java.io.Reader;
 import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -44,11 +47,11 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Packager of XSL files.
@@ -103,7 +106,7 @@ final class XslPacker extends AbstractPacker {
             }
             this.transform(dest, document);
         } finally {
-            IOUtils.closeQuietly(input);
+            input.close();
         }
     }
 
@@ -123,9 +126,9 @@ final class XslPacker extends AbstractPacker {
                 new DOMSource(document),
                 new StreamResult(dest)
             );
-        } catch (javax.xml.transform.TransformerConfigurationException ex) {
+        } catch (TransformerConfigurationException ex) {
             throw new IllegalStateException(ex);
-        } catch (javax.xml.transform.TransformerException ex) {
+        } catch (TransformerException ex) {
             throw new IllegalStateException(ex);
         }
     }
@@ -142,9 +145,9 @@ final class XslPacker extends AbstractPacker {
             document = XslPacker.DFACTORY
                 .newDocumentBuilder()
                 .parse(new InputSource(input));
-        } catch (javax.xml.parsers.ParserConfigurationException ex) {
+        } catch (ParserConfigurationException ex) {
             throw new IllegalStateException(ex);
-        } catch (org.xml.sax.SAXException ex) {
+        } catch (SAXException ex) {
             throw new IllegalStateException(ex);
         }
         return document;

@@ -61,11 +61,11 @@ public final class RuntimeListener implements ServletContextListener {
                 new BindingBuilder(env).build()
             );
             final FileFinder finder = new FileFinder(dir, "groovy");
-            for (File script : finder.ordered()) {
+            for (final File script : finder.ordered()) {
                 Logger.info(this, "Running '%s'...", script);
                 try {
                     exec.execute(script);
-                } catch (com.rexsl.maven.utils.GroovyException ex) {
+                } catch (GroovyException ex) {
                     throw new IllegalStateException(ex);
                 }
                 ++counter;

@@ -68,7 +68,7 @@ public final class PackersProvider {
      */
     @Loggable(Loggable.DEBUG)
     public Set<Packer> all() {
-        final Set<Packer> packers = new LinkedHashSet<Packer>();
+        final Set<Packer> packers = new LinkedHashSet<Packer>(0);
         packers.add(new CssPacker());
         packers.add(new JsPacker());
         packers.add(new XslPacker());

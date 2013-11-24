@@ -1,0 +1,15 @@
+# How to narrow down test scope?
+
+You can tell `rexsl-maven-plugin` to run only one
+check, for example:
+
+```
+mvn install -Drexsl.check=XhtmlOutputCheck
+```
+
+Moreover, you can pick just one specific test:
+
+```
+mvn install -Drexsl.check=XhtmlOutputCheck -Drexsl.test=FooTest
+```
+
