@@ -49,6 +49,25 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Wire that compresses cookies before sending.
  *
+ * <p>This wire compresses all provided {@code Cookie} headers into one
+ * and removes empty cookies, for example:
+ *
+ * <pre> String html = new JdkRequest("http://goggle.com")
+ *   .through(CookieOptimizingWire.class)
+ *   .header(HttpHeaders.Cookie, "alpha=test")
+ *   .header(HttpHeaders.Cookie, "beta=")
+ *   .header(HttpHeaders.Cookie, "gamma=foo")
+ *   .fetch()
+ *   .body();</pre>
+ *
+ * <p>An actual HTTP request will be sent with just one {@code Cookie}
+ * header with a value {@code alpha=test; gamma=foo}.
+ *
+ * <p>It is highly recommended to use this wire decorator when you're
+ * working with cookies.
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.10

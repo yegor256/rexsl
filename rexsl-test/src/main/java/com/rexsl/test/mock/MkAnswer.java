@@ -77,6 +77,8 @@ public interface MkAnswer {
 
     /**
      * Simple implementation.
+     *
+     * <p>The class is immutable and thread-safe.
      */
     @Immutable
     @EqualsAndHashCode(of = { "code", "hdrs", "content" })

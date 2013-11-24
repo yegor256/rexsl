@@ -40,6 +40,19 @@ import lombok.EqualsAndHashCode;
 /**
  * JSON response.
  *
+ * <p>This response decorator is able to parse HTTP response body as
+ * a JSON document and manipulate with it afterwords, for example:
+ *
+ * <pre> String name = new JdkRequest("http://my.example.com")
+ *   .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+ *   .fetch()
+ *   .as(JsonResponse.class)
+ *   .json()
+ *   .readObject()
+ *   .getString("name");</pre>
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8

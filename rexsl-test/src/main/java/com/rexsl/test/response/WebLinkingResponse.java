@@ -50,12 +50,23 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Web Linking response.
  *
+ * <p>This response decorator is able to understand and parse {@code Link}
+ * HTTP header according to
+ * <a href="http://tools.ietf.org/html/rfc5988">RFC 5988 "Web Linking"</a>,
+ * for example:
+ *
+ * <pre> String name = new JdkRequest("http://my.example.com")
+ *   .fetch()
+ *   .as(WebLinkingResponse.class)
+ *   .follow("next")
+ *   .fetch();</pre>
+ *
  * <p>The class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.9
- * @see <a href="http://tools.ietf.org/html/rfc5988">RFC 5988</a>
+ * @see <a href="http://tools.ietf.org/html/rfc5988">RFC 5988 "Web Linking"</a>
  */
 @Immutable
 @EqualsAndHashCode(callSuper = true)

@@ -35,6 +35,7 @@ import com.rexsl.test.ImmutableHeader;
 import com.sun.grizzly.tcp.http11.GrizzlyRequest;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -100,7 +101,7 @@ final class GrizzlyQuery implements MkQuery {
 
     @Override
     public Map<String, List<String>> headers() {
-        return this.hdrs;
+        return Collections.unmodifiableMap(this.hdrs);
     }
 
     @Override
@@ -127,24 +128,35 @@ final class GrizzlyQuery implements MkQuery {
      * @param request Request
      * @return Headers
      */
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private static ArrayMap<String, List<String>> headers(
         final GrizzlyRequest request) {
         final ConcurrentMap<String, List<String>> headers =
             new ConcurrentHashMap<String, List<String>>(0);
         final Enumeration<?> names = request.getHeaderNames();
         while (names.hasMoreElements()) {
-            final String name = ImmutableHeader.normalize(
-                names.nextElement().toString()
+            final String name = names.nextElement().toString();
+            headers.put(
+                ImmutableHeader.normalize(name),
+                GrizzlyQuery.headers(request, name)
             );
-            final List<String> list = new LinkedList<String>();
-            final Enumeration<?> values = request.getHeaders(name);
-            while (values.hasMoreElements()) {
-                list.add(values.nextElement().toString());
-            }
-            headers.put(name, list);
         }
         return new ArrayMap<String, List<String>>(headers);
+    }
+
+    /**
+     * Get headers by name.
+     * @param request Grizzly request
+     * @param name Name of header
+     * @return List of values
+     */
+    private static List<String> headers(
+        final GrizzlyRequest request, final String name) {
+        final List<String> list = new LinkedList<String>();
+        final Enumeration<?> values = request.getHeaders(name);
+        while (values.hasMoreElements()) {
+            list.add(values.nextElement().toString());
+        }
+        return list;
     }
 
 }

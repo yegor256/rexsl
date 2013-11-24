@@ -37,7 +37,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Request URI.
  *
- * <p>Instance of this interface is returned by {@link Request.uri()},
+ * <p>Instance of this interface is returned by {@link Request#uri()},
  * and can be modified using one of the methods below. When modification
  * is done, method {@code back()} returns a modified instance of
  * {@link Request}, for example:

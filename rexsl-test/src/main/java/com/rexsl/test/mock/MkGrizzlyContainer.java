@@ -38,12 +38,13 @@ import java.net.URI;
 import lombok.EqualsAndHashCode;
 
 /**
- * Implementaiton of {@link MkContainer} based on Grizzly Server.
+ * Implementation of {@link MkContainer} based on Grizzly Server.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.10
  * @see MkContainer
+ * @see <a href="http://www.rexsl.com/rexsl-test/example-mock-servlet.html">Examples</a>
  */
 @EqualsAndHashCode(of = { "adapter", "gws", "port" })
 @Loggable(Loggable.DEBUG)

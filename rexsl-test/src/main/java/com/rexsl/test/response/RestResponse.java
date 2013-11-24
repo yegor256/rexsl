@@ -51,6 +51,23 @@ import org.hamcrest.Matchers;
 /**
  * REST response.
  *
+ * <p>This response decorator is able to make basic assertions on
+ * HTTP response and manipulate with it afterwords, for example:
+ *
+ * <pre> String name = new JdkRequest("http://my.example.com")
+ *   .fetch()
+ *   .as(RestResponse.class)
+ *   .assertStatus(200)
+ *   .assertBody(Matchers.containsString("hello, world!"))
+ *   .assertHeader("Content-Type", Matchers.hasItem("text/plain"))
+ *   .jump(URI.create("/users"))
+ *   .fetch();</pre>
+ *
+ * <p>Method {@link #jump(URI)} creates a new instance of class
+ * {@link Request} with all cookies transferred from the current one.
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8

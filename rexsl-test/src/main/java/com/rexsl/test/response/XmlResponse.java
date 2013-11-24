@@ -47,6 +47,34 @@ import org.hamcrest.MatcherAssert;
 /**
  * XML response.
  *
+ * <p>This response decorator is able to parse HTTP response body as
+ * an XML document and manipulate with it afterwords, for example:
+ *
+ * <pre> String name = new JdkRequest("http://my.example.com")
+ *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
+ *   .fetch()
+ *   .as(XmlResponse.class)
+ *   .assertXPath("/user/name")
+ *   .xml()
+ *   .xpath("/user/name/text()")
+ *   .get(0);</pre>
+ *
+ * <p>In <a href="http://en.wikipedia.org/wiki/HATEOAS">HATEOAS</a>
+ * responses it is convenient to use this decorator's
+ * method {@link #rel(String)}
+ * in order to follow the link provided in {@code &lt;link&gt;} XML element,
+ * for example:
+ *
+ * <pre> String data = new JdkRequest("http://my.example.com")
+ *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_XML)
+ *   .fetch()
+ *   .as(XmlResponse.class)
+ *   .rel("/user/links/link[@rel='next']/@href")
+ *   .fetch()
+ *   .body();</pre>
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8

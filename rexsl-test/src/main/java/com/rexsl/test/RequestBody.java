@@ -38,7 +38,7 @@ import org.apache.commons.lang3.CharUtils;
 /**
  * Request body.
  *
- * <p>Instance of this interface is returned by {@link Request.body()},
+ * <p>Instance of this interface is returned by {@link Request#body()},
  * and can be modified using one of the methods below. When modification
  * is done, method {@code back()} returns a modified instance of
  * {@link Request}, for example:
