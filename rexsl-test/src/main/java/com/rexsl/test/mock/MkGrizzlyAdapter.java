@@ -42,11 +42,12 @@ import org.apache.http.HttpHeaders;
 
 /**
  * Mocker of Java Servlet container.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.10
  */
-public final class MkGrizzlyAdapter extends GrizzlyAdapter {
+final class MkGrizzlyAdapter extends GrizzlyAdapter {
 
     /**
      * Queries received.
@@ -75,7 +76,7 @@ public final class MkGrizzlyAdapter extends GrizzlyAdapter {
             response.addHeader(
                 HttpHeaders.SERVER,
                 String.format(
-                    "%s query #%d, %d answers left",
+                    "%s query #%d, %d answer(s) left",
                     this.getClass().getName(),
                     this.queries.size(), this.answers.size()
                 )

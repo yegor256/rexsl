@@ -45,6 +45,17 @@ import lombok.ToString;
 /**
  * Verbose wire.
  *
+ * <p>This wire makes HTTP request and response details visible in
+ * log (we're using SLF4J logging facility), for example:
+ *
+ * <pre> String html = new JdkRequest("http://goggle.com")
+ *   .through(VerboseWire.class)
+ *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_PLAIN)
+ *   .fetch()
+ *   .body();</pre>
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.10

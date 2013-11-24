@@ -47,6 +47,22 @@ import lombok.ToString;
 /**
  * Wire with default user agent.
  *
+ * <p>This wire adds an extra HTTP header {@code User-Agent} to the request,
+ * if it's not yet provided, for example:
+ *
+ * <pre> String html = new JdkRequest("http://goggle.com")
+ *   .through(UserAgentWire.class)
+ *   .fetch()
+ *   .body();</pre>
+ *
+ * <p>An actual HTTP request will be sent with {@code User-Agent}
+ * header with a value {@code ReXSL-0.1/abcdef0 Java/1.6} (for example). It
+ * is recommended to use this wire decorator when you're working with
+ * third party RESTful services, to properly identify yourself and avoid
+ * troubles.
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.10
@@ -92,14 +108,14 @@ public final class UserAgentWire implements Wire {
         final byte[] content) throws IOException {
         final Collection<Map.Entry<String, String>> hdrs =
             new LinkedList<Map.Entry<String, String>>();
-        boolean agent = false;
+        boolean absent = true;
         for (final Map.Entry<String, String> header : headers) {
             hdrs.add(header);
             if (header.getKey().equals(HttpHeaders.USER_AGENT)) {
-                agent = true;
+                absent = false;
             }
         }
-        if (!agent) {
+        if (absent) {
             hdrs.add(
                 new ImmutableHeader(
                     HttpHeaders.USER_AGENT,

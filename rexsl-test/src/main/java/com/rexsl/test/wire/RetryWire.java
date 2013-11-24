@@ -46,6 +46,17 @@ import lombok.ToString;
 /**
  * Wire that retries a few times before giving up and throwing exception.
  *
+ * <p>This wire retries again (at least three times) if an original one throws
+ * {@link IOException}:
+ *
+ * <pre> String html = new JdkRequest("http://goggle.com")
+ *   .through(RetryWire.class)
+ *   .header(HttpHeaders.ACCEPT, MediaType.TEXT_PLAIN)
+ *   .fetch()
+ *   .body();</pre>
+ *
+ * <p>The class is immutable and thread-safe.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.10

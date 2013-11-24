@@ -31,6 +31,14 @@
 /**
  * Requests.
  *
+ * <p>This package contains implementations of class {@link Request}.
+ * The most popular and easy to use it {@link JdkRequest}.
+ *
+ * <p>However, in some situations {@link JdkRequest} falls short and
+ * {@link ApacheRequest} should be used instead. For example,
+ * {@link JdkRequest} doesn't support {@code PATCH} HTTP method due to
+ * a bug in HttpURLConnection.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.10
