@@ -3,7 +3,7 @@
 When your HTTP
 [`Response`](./apidocs-${project.version}/com/rexsl/test/Response.html)
 contains a JSON document, it is convenient to use
-[`JsonResponse`](./apidocs-${project.version}/com/rexsl/test/JsonResponse.html)
+[`JsonResponse`](./apidocs-${project.version}/com/rexsl/test/response/JsonResponse.html)
 decorator to manipulate it, for example:
 
 ```java
@@ -14,7 +14,7 @@ String name = new JdkRequest("http://my.example.com")
   .readJsonObject().getString("name");
 ```
 
-Method [`JsonResponse#json()`](./apidocs-${project.version}/com/rexsl/test/JsonResponse.html)
+Method [`JsonResponse#json()`](./apidocs-${project.version}/com/rexsl/test/response/JsonResponse.html)
 converts HTTP body to an instance of class
 [`JsonReader`](http://docs.oracle.com/javaee/7/api/javax/json/JsonReader.html).
 
@@ -36,5 +36,5 @@ Don't forget to add these two dependencies to your classpath:
 ```
 
 Read also about
-[`RestResponse`](./apidocs-${project.version}/com/rexsl/test/RestResponse.html),
+[`RestResponse`](./apidocs-${project.version}/com/rexsl/test/response/RestResponse.html),
 which helps you to manage default HTTP response concepts.

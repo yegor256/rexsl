@@ -3,7 +3,7 @@
 When your HTTP
 [`Response`](./apidocs-${project.version}/com/rexsl/test/Response.html)
 contains an XML document, it is convenient to use
-[`XmlResponse`](./apidocs-${project.version}/com/rexsl/test/XmlResponse.html)
+[`XmlResponse`](./apidocs-${project.version}/com/rexsl/test/response/XmlResponse.html)
 decorator to manipulate it, for example:
 
 ```java
@@ -31,5 +31,5 @@ Don't forget to add this dependency to your classpath:
 ```
 
 Read also about
-[`RestResponse`](./apidocs-${project.version}/com/rexsl/test/RestResponse.html),
+[`RestResponse`](./apidocs-${project.version}/com/rexsl/test/response/RestResponse.html),
 which helps you to manage default HTTP response concepts.

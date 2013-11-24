@@ -4,11 +4,11 @@ There is one interface
 [`Request`](./apidocs-${project.version}/com/rexsl/test/Request.html)
 that represents an HTTP request. There are a few implementations
 of the interface, and the most popular and easy to use is
-[`JdkRequest`](./apidocs-${project.version}/com/rexsl/test/JdkRequest.html).
+[`JdkRequest`](./apidocs-${project.version}/com/rexsl/test/request/JdkRequest.html).
 It makes a request using native JDK class
 [`java.net.HttpURLConnection`](http://docs.oracle.com/javase/7/docs/api/java/net/HttpURLConnection.html).
 
-First, make an instance of [`JdkRequest`](./apidocs-${project.version}/com/rexsl/test/JdkRequest.html),
+First, make an instance of [`JdkRequest`](./apidocs-${project.version}/com/rexsl/test/request/JdkRequest.html),
 providing target URI as the first and the only constructor argument
 (`String`, `URI`, and `URL` types are accepted):
 
@@ -67,7 +67,7 @@ response with a new custom decorator, that implements more methods, suitable
 for a particular use case.
 
 The simpliest decorator is
-[`RestResponse`](./apidocs-${project.version}/com/rexsl/test/RestResponse.html).
+[`RestResponse`](./apidocs-${project.version}/com/rexsl/test/response/RestResponse.html).
 It helps you to make assertions on the response and follow redirects,
 for example:
 
@@ -83,7 +83,7 @@ String page = new JdkRequest("http://my.example.com")
   .body();
 ```
 
-[`RestResponse`](./apidocs-${project.version}/com/rexsl/test/RestResponse.html)
+[`RestResponse`](./apidocs-${project.version}/com/rexsl/test/response/RestResponse.html)
 also helps you to retrieve cookies from a response:
 
 ```java
