@@ -37,6 +37,19 @@ import javax.validation.constraints.NotNull;
 /**
  * Request URI.
  *
+ * <p>Instance of this interface is returned by {@link Request.uri()},
+ * and can be modified using one of the methods below. When modification
+ * is done, method {@code back()} returns a modified instance of
+ * {@link Request}, for example:
+ *
+ * <pre> new JdkRequest("http://my.example.com")
+ *   .header("Accept", "application/json")
+ *   .uri()
+ *   .path("/users")
+ *   .queryParam("name", "Jeff Lebowski")
+ *   .back() // returns a modified instance of Request
+ *   .fetch()</pre>
+ *
  * <p>Instances of this interface are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)

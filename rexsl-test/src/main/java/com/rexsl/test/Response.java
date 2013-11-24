@@ -39,9 +39,9 @@ import javax.validation.constraints.NotNull;
  *
  * <p>You can get this response from one of implementations of {@link Request}:
  *
- * <pre> Response response = new RetryRequest(
- *   new JdkRequest("https://www.google.com")
- * ).fetch();</pre>
+ * <pre> Response response = new JdkRequest("https://www.google.com")
+ *   .header("Accept", "text/html")
+ *   .fetch();</pre>
  *
  * <p>Instances of this interface are immutable and thread-safe.
  *
