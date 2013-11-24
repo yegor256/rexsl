@@ -6,7 +6,7 @@
       <prefix>                        </prefix>
       <body>This test is disabled (although it works fine) because I don't know how to stop its execution. It starts Jetty and stays waiting. There should be some way of canceling it somehow... http://jira.codehaus.org/browse/MINVOKER-132</body>
       <estimate>0</estimate>
-      <lines>449-453</lines>
+      <lines>443-447</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>

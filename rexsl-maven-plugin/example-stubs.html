@@ -71,7 +71,17 @@
                                                                 </ul>
                                     </li>
                             <li>
-                    Examples
+                    Usage Examples
+                                            <ul>
+                                                                            <li>
+                                                                    <a href="example-narrow.html" title="Narrow down test scope">Narrow down test scope</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                </ul>
+                                    </li>
+                            <li>
+                    Test Examples
                                             <ul>
                                                                             <li>
                                                                     <a href="example-setup.html" title="Setup scripts">Setup scripts</a>
@@ -129,8 +139,8 @@
                                     </ul>
                         <p>
                 
-                20-Nov-2013
-                0.9
+                24-Nov-2013
+                0.10
             </p>
             <article>
                 <h1>How to add extra functionality during tests?</h1>
@@ -167,9 +177,9 @@ public class RuntimeExceptionStub {
 <p>This is how we may test it from <tt>WhatIfRuntimeException.groovy</tt>:</p>
 
 <div class="source">
-<pre>import com.rexsl.test.ApacheRequest
-import com.rexsl.test.RestResponse
-new ApacheRequest(rexsl.home)
+<pre>import com.rexsl.test.request.JdkRequest
+import com.rexsl.test.response.RestResponse
+new JdkRequest(rexsl.home)
   .fetch()
   .as(RestResponse.class)
   .assertStatus(HttpURLConnection.HTTP_OK)
