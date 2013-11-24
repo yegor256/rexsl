@@ -93,7 +93,9 @@ final class ContextResourceResolver implements URIResolver {
             source = this.local(href, base);
         } catch (TransformerException ex) {
             try {
-                source = this.source(this.absolute(href, base));
+                source = ContextResourceResolver.source(
+                    ContextResourceResolver.absolute(href, base)
+                );
                 source.setSystemId(href);
             } catch (TransformerException exp) {
                 throw new TransformerException(ex.getMessage(), exp);
@@ -107,7 +109,7 @@ final class ContextResourceResolver implements URIResolver {
      * @return The source created from the stream.
      * @throws TransformerException If a problem happens inside.
      */
-    private Source source(final InputStream stream)
+    private static Source source(final InputStream stream)
         throws TransformerException {
         final Source source;
         try {
@@ -145,7 +147,7 @@ final class ContextResourceResolver implements URIResolver {
                 String.format("'%s' is not a local path", path)
             );
         }
-        final String abs = this.compose(path, base);
+        final String abs = ContextResourceResolver.compose(path, base);
         final InputStream stream = this.context.getResourceAsStream(abs);
         if (stream == null) {
             throw new TransformerException(
@@ -156,7 +158,7 @@ final class ContextResourceResolver implements URIResolver {
                 )
             );
         }
-        final Source source = this.source(stream);
+        final Source source = ContextResourceResolver.source(stream);
         source.setSystemId(abs);
         return source;
     }
@@ -168,7 +170,7 @@ final class ContextResourceResolver implements URIResolver {
      * @return The stream found
      * @throws TransformerException If not found
      */
-    private InputStream absolute(final String href, final String base)
+    private static InputStream absolute(final String href, final String base)
         throws TransformerException {
         final URI uri;
         if (base == null || base.isEmpty()) {
@@ -192,7 +194,7 @@ final class ContextResourceResolver implements URIResolver {
             );
         }
         try {
-            return this.fetch(uri);
+            return ContextResourceResolver.fetch(uri);
         } catch (IOException ex) {
             throw new TransformerException(
                 String.format(
@@ -210,11 +212,13 @@ final class ContextResourceResolver implements URIResolver {
      * @return The stream opened
      * @throws IOException If some problem happens
      */
-    private InputStream fetch(final URI uri) throws IOException {
+    private static InputStream fetch(final URI uri) throws IOException {
         final URLConnection conn = uri.toURL().openConnection();
         final InputStream stream;
         if (conn instanceof HttpURLConnection) {
-            stream = this.http(HttpURLConnection.class.cast(conn));
+            stream = ContextResourceResolver.http(
+                HttpURLConnection.class.cast(conn)
+            );
         } else {
             stream = conn.getInputStream();
         }
@@ -227,7 +231,8 @@ final class ContextResourceResolver implements URIResolver {
      * @return The stream opened
      * @throws IOException If some problem happens
      */
-    private InputStream http(final HttpURLConnection conn) throws IOException {
+    private static InputStream http(final HttpURLConnection conn)
+        throws IOException {
         InputStream stream;
         try {
             conn.connect();
@@ -256,7 +261,7 @@ final class ContextResourceResolver implements URIResolver {
      * @param base Base
      * @return Absolute local path
      */
-    private String compose(final String path, final String base) {
+    private static String compose(final String path, final String base) {
         final StringBuilder full = new StringBuilder(0);
         if (!StringUtils.isEmpty(base) && path.charAt(0) != '/') {
             full.append(

@@ -64,7 +64,7 @@ public final class RuntimeFilter implements Filter {
     /**
      * Folders where we read files in runtime.
      */
-    private final transient List<File> folders = new ArrayList<File>();
+    private final transient List<File> folders = new ArrayList<File>(0);
 
     @Override
     @Loggable(Loggable.DEBUG)
@@ -81,7 +81,7 @@ public final class RuntimeFilter implements Filter {
     @Loggable(Loggable.DEBUG)
     public void doFilter(final ServletRequest request,
         final ServletResponse response, final FilterChain chain)
-        throws java.io.IOException, javax.servlet.ServletException {
+        throws IOException, ServletException {
         if (request instanceof HttpServletRequest
             && response instanceof HttpServletResponse) {
             Logger.debug(
@@ -105,7 +105,7 @@ public final class RuntimeFilter implements Filter {
     public void init(final FilterConfig config) {
         final String param = config.getServletContext()
             .getInitParameter(RuntimeFilter.FOLDERS);
-        for (String name : StringUtils.split(param, ";")) {
+        for (final String name : StringUtils.split(param, ";")) {
             this.folders.add(new File(name));
             Logger.debug(
                 this,
@@ -170,7 +170,7 @@ public final class RuntimeFilter implements Filter {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private byte[] fetch(final String path) throws IOException {
         byte[] content = null;
-        for (File dir : this.folders) {
+        for (final File dir : this.folders) {
             final File file = new File(dir, path);
             if (file.isDirectory()) {
                 continue;

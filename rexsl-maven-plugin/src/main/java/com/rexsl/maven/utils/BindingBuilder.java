@@ -34,6 +34,7 @@ import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import groovy.lang.Binding;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.validation.constraints.NotNull;
@@ -57,10 +58,10 @@ public final class BindingBuilder {
      * @param env The environment
      */
     public BindingBuilder(@NotNull final Environment env) {
-        URI home;
+        final URI home;
         try {
             home = new URI(Logger.format("http://localhost:%d/", env.port()));
-        } catch (java.net.URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }
         this.props.put("home", home);

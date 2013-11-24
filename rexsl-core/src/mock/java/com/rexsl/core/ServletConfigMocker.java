@@ -52,7 +52,7 @@ public final class ServletConfigMocker {
     /**
      * Params.
      */
-    private final transient List<String> params = new ArrayList<String>();
+    private final transient List<String> params = new ArrayList<String>(0);
 
     /**
      * Public ctor.

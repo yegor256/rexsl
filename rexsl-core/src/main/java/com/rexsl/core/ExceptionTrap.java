@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -200,7 +201,7 @@ public final class ExceptionTrap extends HttpServlet {
      * @param suffix The suffix of java attribute
      */
     private void append(final StringBuilder text,
-        final HttpServletRequest request, final String suffix) {
+        final ServletRequest request, final String suffix) {
         Object attr = request.getAttribute(
             Logger.format("javax.servlet.error.%s", suffix)
         );
@@ -220,7 +221,7 @@ public final class ExceptionTrap extends HttpServlet {
      * @return Text with headers
      */
     private static String headers(final HttpServletRequest request) {
-        final StringBuilder text = new StringBuilder();
+        final StringBuilder text = new StringBuilder(0);
         final Enumeration<?> names = request.getHeaderNames();
         while (names.hasMoreElements()) {
             final String header = names.nextElement().toString();

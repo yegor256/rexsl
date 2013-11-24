@@ -59,7 +59,8 @@ abstract class AbstractPacker implements Packer {
         );
         final File destdir = this.dir(env);
         if (srcdir.exists()) {
-            for (File src : new FileFinder(srcdir, this.extension()).random()) {
+            for (final File src
+                : new FileFinder(srcdir, this.extension()).random()) {
                 final File dest = new File(destdir, src.getName());
                 try {
                     this.pack(filter.filter(src), dest);

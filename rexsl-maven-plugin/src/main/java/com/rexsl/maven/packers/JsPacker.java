@@ -37,7 +37,6 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import javax.validation.constraints.NotNull;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
 
 /**
@@ -73,10 +72,10 @@ final class JsPacker extends AbstractPacker {
                 new JavaScriptCompressor(input, new YuiReporter())
                     .compress(output, -1, true, false, false, false);
             } finally {
-                IOUtils.closeQuietly(output);
+                output.close();
             }
         } finally {
-            IOUtils.closeQuietly(input);
+            input.close();
         }
     }
 }

@@ -190,13 +190,13 @@ public final class DefaultChecksProvider implements ChecksProvider {
     @Override
     @Loggable(Loggable.DEBUG)
     public Collection<Check> all() {
-        final Set<Check> all = new LinkedHashSet<Check>();
-        for (String name : this.checks) {
+        final Set<Check> all = new LinkedHashSet<Check>(0);
+        for (final String name : this.checks) {
             try {
                 all.add(this.build(name));
             } catch (InvalidCheckException ex) {
                 Logger.info(this, "Can't find %s, available checks:", name);
-                for (String check : DefaultChecksProvider.NAMES) {
+                for (final String check : DefaultChecksProvider.NAMES) {
                     Logger.info(this, "  %s", check);
                 }
                 throw new IllegalArgumentException(
@@ -235,7 +235,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
      */
     private Check build(final String name)
         throws DefaultChecksProvider.InvalidCheckException {
-        String cname;
+        final String cname;
         if (name.contains(".")) {
             cname = name;
         } else {
@@ -245,7 +245,7 @@ public final class DefaultChecksProvider implements ChecksProvider {
                 name
             );
         }
-        Check check;
+        final Check check;
         try {
             check = Check.class.cast(Class.forName(cname).newInstance());
         } catch (ClassNotFoundException ex) {

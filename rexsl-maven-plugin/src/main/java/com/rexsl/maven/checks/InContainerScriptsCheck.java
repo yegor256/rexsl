@@ -126,8 +126,8 @@ final class InContainerScriptsCheck implements Check {
     private boolean run(final File dir, final Environment env) {
         boolean success = true;
         final FileFinder finder = new FileFinder(dir, "groovy");
-        final Set<String> failed = new LinkedHashSet<String>();
-        for (File script : finder.random()) {
+        final Set<String> failed = new LinkedHashSet<String>(0);
+        for (final File script : finder.random()) {
             final String name = FilenameUtils.removeExtension(script.getName());
             if (!name.matches(this.test) && !name.contains(this.test)) {
                 Logger.info(this, "Ignored '%s'", script);

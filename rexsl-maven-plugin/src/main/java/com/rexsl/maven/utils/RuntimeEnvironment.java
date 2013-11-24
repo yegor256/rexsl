@@ -76,7 +76,7 @@ final class RuntimeEnvironment implements Environment {
      * Public ctor.
      * @param ctx Context
      */
-    public RuntimeEnvironment(@NotNull final ServletContext ctx) {
+    RuntimeEnvironment(@NotNull final ServletContext ctx) {
         this.context = ctx;
     }
 

@@ -250,7 +250,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo
         final Properties before = new Properties();
         before.putAll(System.getProperties());
         if (this.systemPropertyVariables != null) {
-            for (Map.Entry<String, String> var
+            for (final Map.Entry<String, String> var
                 : this.systemPropertyVariables.entrySet()) {
                 if (var.getValue() == null) {
                     Logger.warn(

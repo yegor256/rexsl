@@ -38,8 +38,10 @@ import java.security.Permission;
 import java.security.Policy;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.servlet.DispatcherType;
@@ -104,7 +106,7 @@ public final class EmbeddedContainer {
                 EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR)
             );
         }
-        for (ConcurrentMap.Entry<String, String> entry
+        for (final Map.Entry<String, String> entry
             : EmbeddedContainer.params(env).entrySet()) {
             ctx.setInitParameter(entry.getKey(), entry.getValue());
         }
@@ -142,8 +144,8 @@ public final class EmbeddedContainer {
      * @param env Environment
      * @return The params
      */
-    private static ConcurrentMap<String, String> params(final Environment env) {
-        final List<String> folders = new ArrayList<String>(0);
+    private static Map<String, String> params(final Environment env) {
+        final Collection<String> folders = new ArrayList<String>(0);
         folders.add(new File(env.basedir(), "src/main/webapp").getPath());
         folders.add(new File(env.basedir(), "src/test/rexsl").getPath());
         final ConcurrentMap<String, String> params =
@@ -183,11 +185,11 @@ public final class EmbeddedContainer {
                 new BindingBuilder(env).build()
             );
             final FileFinder finder = new FileFinder(dir, "groovy");
-            for (File script : finder.ordered()) {
+            for (final File script : finder.ordered()) {
                 Logger.info(EmbeddedContainer.class, "Running '%s'...", script);
                 try {
                     exec.execute(script);
-                } catch (com.rexsl.maven.utils.GroovyException ex) {
+                } catch (GroovyException ex) {
                     throw new IllegalStateException(ex);
                 }
             }
@@ -208,7 +210,7 @@ public final class EmbeddedContainer {
      */
     private static String testClasspath(final Environment env) {
         final List<String> urls = new ArrayList<String>(0);
-        for (File path : env.classpath(true)) {
+        for (final File path : env.classpath(true)) {
             if (path.isDirectory()) {
                 urls.add(Logger.format("%s/", path.getAbsolutePath()));
             } else {

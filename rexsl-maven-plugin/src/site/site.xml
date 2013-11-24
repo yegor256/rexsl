@@ -41,7 +41,10 @@
             <item name="FAQ" href="faq.html"/>
             <item name="Release History" href="changes-report.html"/>
         </menu>
-        <menu name="Examples">
+        <menu name="Usage Examples">
+            <item name="Narrow down test scope" href="example-narrow.html"/>
+        </menu>
+        <menu name="Test Examples">
             <item name="Setup scripts" href="example-setup.html"/>
             <item name="Test stubs" href="example-stubs.html"/>
             <item name="Bootstrap" href="example-bootstrap.html"/>

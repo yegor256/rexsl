@@ -35,6 +35,8 @@ import com.rexsl.maven.Environment;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
@@ -121,13 +123,13 @@ public final class GroovyExecutor {
      * @return New instance of {@link GroovyScriptEngine}
      */
     private GroovyScriptEngine gse(final File file) {
-        GroovyScriptEngine gse;
+        final GroovyScriptEngine gse;
         try {
             gse = new GroovyScriptEngine(
                 new String[] {file.getParent()},
                 this.classloader
             );
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalArgumentException(
                 Logger.format("IOException: %[exception]s", ex),
                 ex
@@ -145,10 +147,10 @@ public final class GroovyExecutor {
         final Collection<File> files = env.classpath(false);
         final URL[] urls = new URL[files.size()];
         int pos = 0;
-        for (File file : files) {
+        for (final File file : files) {
             try {
                 urls[pos] = file.toURI().toURL();
-            } catch (java.net.MalformedURLException ex) {
+            } catch (MalformedURLException ex) {
                 throw new IllegalArgumentException(ex);
             }
             ++pos;

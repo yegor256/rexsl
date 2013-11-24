@@ -76,7 +76,7 @@ public final class GroovyException extends Exception {
      * @return Compiled text
      */
     private static String toText(final String cause, final Object... args) {
-        String text;
+        final String text;
         if (args.length > 0) {
             text = Logger.format(cause, args);
         } else {

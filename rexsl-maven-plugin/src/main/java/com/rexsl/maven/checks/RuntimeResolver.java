@@ -69,7 +69,7 @@ final class RuntimeResolver implements URIResolver {
      * Public ctor.
      * @param uri The home page of the site
      */
-    protected RuntimeResolver(@NotNull final URI uri) {
+    RuntimeResolver(@NotNull final URI uri) {
         this.home = UriBuilder.fromUri(uri).path("/").build();
     }
 
@@ -78,9 +78,9 @@ final class RuntimeResolver implements URIResolver {
     public Source resolve(@NotNull final String href, final String base)
         throws TransformerException {
         final URL url = this.url(href, base);
-        Source src;
+        final Source src;
         try {
-            src = this.fetch(url);
+            src = RuntimeResolver.fetch(url);
         } catch (IOException ex) {
             throw new TransformerException(
                 String.format("failed to fetch '%s' at base '%s'", href, base),
@@ -104,7 +104,7 @@ final class RuntimeResolver implements URIResolver {
      */
     private URL url(final String href, final String base)
         throws TransformerException {
-        URL url;
+        final URL url;
         final String abs = String.format(
             "%s%s", this.home, StringUtils.stripStart(href, "/ ")
         );
@@ -139,7 +139,7 @@ final class RuntimeResolver implements URIResolver {
      * @return The source
      * @throws IOException If some IO problem inside
      */
-    private Source fetch(final URL url) throws IOException {
+    private static Source fetch(final URL url) throws IOException {
         final URLConnection conn = url.openConnection();
         final Source src;
         try {
