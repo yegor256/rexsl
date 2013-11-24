@@ -49,12 +49,12 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="apidocs-0.9/index.html" title="API 0.9 (JavaDoc)">API 0.9 (JavaDoc)</a>
+                                                                    <a href="apidocs-0.10/index.html" title="API 0.10 (JavaDoc)">API 0.10 (JavaDoc)</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="testapidocs-0.9/index.html" title="Mock API">Mock API</a>
+                                                                    <a href="testapidocs-0.10/index.html" title="Mock API">Mock API</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -66,7 +66,7 @@
                                                                 </ul>
                                     </li>
                             <li>
-                    Examples
+                    HTTP Client
                                             <ul>
                                                                             <li>
                                                                     <a href="example-request.html" title="Make HTTP Request">Make HTTP Request</a>
@@ -102,6 +102,16 @@
                                                                 </ul>
                                     </li>
                             <li>
+                    Mock Servlet Container
+                                            <ul>
+                                                                            <li>
+                                                                    <a href="example-mock-container.html" title="HTTP client unit testing">HTTP client unit testing</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                </ul>
+                                    </li>
+                            <li>
                     Project Documentation
                                             <ul>
                                                                             <li>
@@ -109,7 +119,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
@@ -134,16 +144,18 @@
                                     </ul>
                         <p>
                 
-                20-Nov-2013
-                0.9
+                24-Nov-2013
+                0.10
             </p>
             <article>
                 <h1>HTTP Request that Retries on Failure</h1>
-<p><a href="./apidocs-0.9/com/rexsl/test/RetryRequest.html"><tt>RetryRequest</tt></a>. is a decorator of <a href="./apidocs-0.9/com/rexsl/test/Request.html"><tt>Request</tt></a> that retries to fetch a response a few times before giving up and throwing <tt>IOException</tt>, for example:</p>
+<p><a href="./apidocs-0.10/com/rexsl/test/wire/RetryWire.html"><tt>RetryWire</tt></a>. is a decorator of <a href="./apidocs-0.10/com/rexsl/test/Wire.html"><tt>Wire</tt></a> that retries to fetch a response a few times before giving up and throwing <tt>IOException</tt>, for example:</p>
 
 <div class="source">
-<pre>Request request = new RetryRequest(new JdkRequest(&quot;http://www.google.com&quot;));
-String body = request.fetch().body();
+<pre>String body = new JdkRequest(&quot;http://www.google.com&quot;)
+  .through(RetryWire.class);
+  .fetch()
+  .body();
 </pre></div>
 <p>If it recommended to use this decorator in production, to avoid accidental exceptions due to unstable connection.</p>
             </article>

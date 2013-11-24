@@ -49,12 +49,12 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="apidocs-0.9/index.html" title="API 0.9 (JavaDoc)">API 0.9 (JavaDoc)</a>
+                                                                    <a href="apidocs-0.10/index.html" title="API 0.10 (JavaDoc)">API 0.10 (JavaDoc)</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="testapidocs-0.9/index.html" title="Mock API">Mock API</a>
+                                                                    <a href="testapidocs-0.10/index.html" title="Mock API">Mock API</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -66,7 +66,7 @@
                                                                 </ul>
                                     </li>
                             <li>
-                    Examples
+                    HTTP Client
                                             <ul>
                                                                             <li>
                                                                     <a href="example-request.html" title="Make HTTP Request">Make HTTP Request</a>
@@ -102,6 +102,16 @@
                                                                 </ul>
                                     </li>
                             <li>
+                    Mock Servlet Container
+                                            <ul>
+                                                                            <li>
+                                                                    <a href="example-mock-container.html" title="HTTP client unit testing">HTTP client unit testing</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                </ul>
+                                    </li>
+                            <li>
                     Project Documentation
                                             <ul>
                                                                             <li>
@@ -109,7 +119,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
@@ -134,12 +144,12 @@
                                     </ul>
                         <p>
                 
-                20-Nov-2013
-                0.9
+                24-Nov-2013
+                0.10
             </p>
             <article>
                 <h1>Managing XML Responses</h1>
-<p>When your HTTP <a href="./apidocs-0.9/com/rexsl/test/Response.html"><tt>Response</tt></a> contains an XML document, it is convenient to use <a href="./apidocs-0.9/com/rexsl/test/XmlResponse.html"><tt>XmlResponse</tt></a> decorator to manipulate it, for example:</p>
+<p>When your HTTP <a href="./apidocs-0.10/com/rexsl/test/Response.html"><tt>Response</tt></a> contains an XML document, it is convenient to use <a href="./apidocs-0.10/com/rexsl/test/response/XmlResponse.html"><tt>XmlResponse</tt></a> decorator to manipulate it, for example:</p>
 
 <div class="source">
 <pre>String name = new JdkRequest(&quot;http://my.example.com&quot;)
@@ -149,7 +159,7 @@
   .xml() // convert HTTP body to com.jcabi.xml.XML
   .xpath(&quot;/data/name/text()&quot;).get(0);
 </pre></div>
-<p>Method <a href="./apidocs-0.9/com/rexsl/test/XmlResponse.html"><tt>XmlResponse#xml()</tt></a> converts HTTP body to an instance of class <a class="externalLink" href="http://xml.jcabi.com/apidocs-0.6/com/jcabi/xml/XML.html"><tt>XML</tt></a> from <a class="externalLink" href="http://xml.jcabi.com">jcabi-xml</a> project.</p>
+<p>Method <a href="./apidocs-0.10/com/rexsl/test/XmlResponse.html"><tt>XmlResponse#xml()</tt></a> converts HTTP body to an instance of class <a class="externalLink" href="http://xml.jcabi.com/apidocs-0.6/com/jcabi/xml/XML.html"><tt>XML</tt></a> from <a class="externalLink" href="http://xml.jcabi.com">jcabi-xml</a> project.</p>
 <p>Don&#x2019;t forget to add this dependency to your classpath:</p>
 
 <div class="source">
@@ -159,7 +169,7 @@
   &lt;version&gt;0.6&lt;/version&gt;
 &lt;/dependency&gt;
 </pre></div>
-<p>Read also about <a href="./apidocs-0.9/com/rexsl/test/RestResponse.html"><tt>RestResponse</tt></a>, which helps you to manage default HTTP response concepts.</p>
+<p>Read also about <a href="./apidocs-0.10/com/rexsl/test/response/RestResponse.html"><tt>RestResponse</tt></a>, which helps you to manage default HTTP response concepts.</p>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;

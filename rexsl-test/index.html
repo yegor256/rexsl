@@ -50,12 +50,12 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="apidocs-0.9/index.html" title="API 0.9 (JavaDoc)">API 0.9 (JavaDoc)</a>
+                                                                    <a href="apidocs-0.10/index.html" title="API 0.10 (JavaDoc)">API 0.10 (JavaDoc)</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="testapidocs-0.9/index.html" title="Mock API">Mock API</a>
+                                                                    <a href="testapidocs-0.10/index.html" title="Mock API">Mock API</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -67,7 +67,7 @@
                                                                 </ul>
                                     </li>
                             <li>
-                    Examples
+                    HTTP Client
                                             <ul>
                                                                             <li>
                                                                     <a href="example-request.html" title="Make HTTP Request">Make HTTP Request</a>
@@ -102,6 +102,16 @@
                                                                 </ul>
                                     </li>
                             <li>
+                    Mock Servlet Container
+                                            <ul>
+                                                                            <li>
+                                                                    <a href="example-mock-container.html" title="HTTP client unit testing">HTTP client unit testing</a>
+                                                                                                                        <ul>
+                                                    </ul>
+                                    </li>
+                                                                </ul>
+                                    </li>
+                            <li>
                     Project Documentation
                                             <ul>
                                                                             <li>
@@ -109,7 +119,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
                                                                                         <li>
                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
                                                                 </ul>
                                     </li>
                     </ul>
@@ -134,18 +144,19 @@
                                     </ul>
                         <p>
                 
-                20-Nov-2013
-                0.9
+                24-Nov-2013
+                0.10
             </p>
             <article>
                 <h1>RESTful Java Client</h1>
 <p>The module contains a collection of usable tools for testing of ReXSL-powered application (or any other RESTful server).</p>
-<p><a href="./apidocs-0.9/com/rexsl/test/Request.html"><tt>Request</tt></a> (implemented by <a href="./apidocs-0.9/com/rexsl/test/JdkRequest.html"><tt>JdkRequest</tt></a> and <a href="./apidocs-0.9/com/rexsl/test/ApacheRequest.html"><tt>ApacheRequest</tt></a>) is a RESTful Java client with a fluent interface:</p>
+<p><a href="./apidocs-0.10/com/rexsl/test/Request.html"><tt>Request</tt></a> (implemented by <a href="./apidocs-0.10/com/rexsl/test/request/JdkRequest.html"><tt>JdkRequest</tt></a> and <a href="./apidocs-0.10/com/rexsl/test/request/ApacheRequest.html"><tt>ApacheRequest</tt></a>) is a RESTful Java client with a fluent interface:</p>
 
 <div class="source">
 <pre>public class Main {
   public void main() {
     String body = new JdkRequest(&quot;http://www.rexsl.com&quot;)
+      .through(RetryWire.class)
       .header(HttpHeaders.USER_AGENT, &quot;Safari 4&quot;)
       .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
       .fetch()
@@ -164,35 +175,21 @@
 <ul>
   
 <li>
-<p><a href="./apidocs-0.9/com/rexsl/test/JaxbConverter.html"><tt>JaxbConverter</tt></a>  convenient JAXB-to-XML converter;</p></li>
+<p><a href="./apidocs-0.10/com/rexsl/test/JaxbConverter.html"><tt>JaxbConverter</tt></a>  &#x2014; convenient JAXB-to-XML converter;</p></li>
   
 <li>
-<p><a href="./apidocs-0.9/com/rexsl/test/XhtmlMatchers.html"><tt>XhtmlMatchers</tt></a>  XML/XHTML Hamcrest matchers.</p></li>
+<p><a href="./apidocs-0.10/com/rexsl/test/XhtmlMatchers.html"><tt>XhtmlMatchers</tt></a>  &#x2014; XML/XHTML Hamcrest matchers.</p></li>
+  
+<li>
+<p><a href="./apidocs-0.10/com/rexsl/test/mock/MkContainer.html"><tt>MkContainer</tt></a>  &#x2014; mock servlet container.</p></li>
 </ul>
-<p>Include this dependency into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-test/0.9/rexsl-test-0.9.jar"><tt>rexsl-test-0.9.jar</tt></a> and add to classpath):</p>
+<p>Include this dependency into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-test/0.10/rexsl-test-0.10.jar"><tt>rexsl-test-0.10.jar</tt></a> and add to classpath):</p>
 
 <div class="source">
 <pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-test&lt;/artifactId&gt;
-  &lt;version&gt;0.9&lt;/version&gt;
-  &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-</pre></div>
-<p>This RESTful Java client module also contains a very useful Mocking tool in <a href="./testapidocs-0.9/com/rexsl/test/ContainerMocker.html"><tt>ContainerMocker</tt></a>. To use it you should include this dependencies into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-test/0.9/rexsl-test-0.9-mock.jar"><tt>rexsl-test-0.9-mock.jar</tt></a> and add to classpath):</p>
-
-<div class="source">
-<pre>&lt;dependency&gt;
-  &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
-  &lt;artifactId&gt;rexsl-test&lt;/artifactId&gt;
-  &lt;version&gt;0.9&lt;/version&gt;
-  &lt;classifier&gt;mock&lt;/classifier&gt;
-  &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-  &lt;groupId&gt;com.sun.grizzly&lt;/groupId&gt;
-  &lt;artifactId&gt;grizzly-servlet-webserver&lt;/artifactId&gt;
-  &lt;version&gt;1.9.10&lt;/version&gt;
+  &lt;version&gt;0.10&lt;/version&gt;
   &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;
 </pre></div>
