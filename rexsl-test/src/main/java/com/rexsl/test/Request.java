@@ -53,14 +53,15 @@ import javax.validation.constraints.NotNull;
  *   .as(JsonResponse.class)
  *   .json().getJsonObject().getString("name");</pre>
  *
- * <p>Since version 0.9 it is recommended to use
- * {@link com.rexsl.test.request.RetryRequest}
- * wrapper to avoid accidental {@link IOException} when connection is weak
+ * <p>Since version 0.10 it is recommended to use
+ * {@link com.rexsl.test.wire.RetryWire}
+ * decorator to avoid accidental {@link IOException} when connection is weak
  * or unstable, for example:
  *
- * <pre> String name = new RetryRequest(
- *   new JdkRequest("https://www.google.com")
- * ).fetch().body();</pre>
+ * <pre> String body = new JdkRequest("https://www.google.com")
+ *   .through(RetryWire.class)
+ *   .fetch()
+ *   .body();</pre>
  *
  * <p>Instances of this interface are immutable and thread-safe.
  *
@@ -69,7 +70,6 @@ import javax.validation.constraints.NotNull;
  * @since 0.8
  * @see com.rexsl.test.request.JdkRequest
  * @see com.rexsl.test.request.ApacheRequest
- * @see com.rexsl.test.request.RetryRequest
  */
 @Immutable
 public interface Request {

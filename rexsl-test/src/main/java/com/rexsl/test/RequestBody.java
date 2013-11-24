@@ -38,6 +38,20 @@ import org.apache.commons.lang3.CharUtils;
 /**
  * Request body.
  *
+ * <p>Instance of this interface is returned by {@link Request.body()},
+ * and can be modified using one of the methods below. When modification
+ * is done, method {@code back()} returns a modified instance of
+ * {@link Request}, for example:
+ *
+ * <pre> new JdkRequest("http://my.example.com")
+ *   .header("Content-Type", "application/x-www-form-urlencoded")
+ *   .body()
+ *   .formParam("name", "Jeff Lebowski")
+ *   .formParam("age", "37")
+ *   .formParam("employment", "none")
+ *   .back() // returns a modified instance of Request
+ *   .fetch()</pre>
+ *
  * <p>Instances of this interface are immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)

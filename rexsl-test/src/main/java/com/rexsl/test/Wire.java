@@ -37,10 +37,23 @@ import java.util.Map;
 /**
  * Wire.
  *
+ * <p>An instance of this interface can be used in
+ * {@link Request.through(Class)} to decorate an existing {@code wire},
+ * for example:
+ *
+ * <pre> String html = new JdkRequest("http://google.com")
+ *   .through(VerboseWire.class)
+ *   .through(RetryWire.class)
+ *   .header("Accept", "text/html")
+ *   .fetch()
+ *   .body();</pre>
+ *
+ * <p>Every {@code Wire} decorator passed to {@code through()} method
+ * wraps a previously existing one.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.9
- * @checkstyle ClassDataAbstractionCoupling (500 lines)
  */
 @Immutable
 public interface Wire {
