@@ -33,6 +33,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
+import com.rexsl.test.Request;
 import com.rexsl.test.request.JdkRequest;
 import com.rexsl.test.response.JsonResponse;
 import com.rexsl.test.response.RestResponse;
@@ -160,6 +161,7 @@ public final class Google implements Provider, Provider.Visible {
                 HttpHeaders.CONTENT_TYPE,
                 MediaType.APPLICATION_FORM_URLENCODED
             )
+            .method(Request.POST)
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_OK)
             .as(JsonResponse.class).json()
