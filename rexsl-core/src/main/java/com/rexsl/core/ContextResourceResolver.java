@@ -142,7 +142,8 @@ final class ContextResourceResolver implements URIResolver {
      */
     private Source local(final String path, final String base)
         throws TransformerException {
-        if (path.charAt(0) != '/' && path.charAt(0) != '.') {
+        if (path.charAt(0) != '/' && path.charAt(0) != '.'
+            && path.charAt(0) != '\\') {
             throw new TransformerException(
                 String.format("'%s' is not a local path", path)
             );
@@ -263,7 +264,8 @@ final class ContextResourceResolver implements URIResolver {
      */
     private static String compose(final String path, final String base) {
         final StringBuilder full = new StringBuilder(0);
-        if (!StringUtils.isEmpty(base) && path.charAt(0) != '/') {
+        if (!StringUtils.isEmpty(base) && path.charAt(0) != '/'
+            && path.charAt(0) != '\\') {
             full.append(
                 FilenameUtils.getFullPath(URI.create(base).getPath())
             ).append('/');
@@ -271,6 +273,7 @@ final class ContextResourceResolver implements URIResolver {
         full.append(URI.create(path).getPath());
         return URI.create(
             FilenameUtils.normalizeNoEndSeparator(full.toString())
+                .replace(System.getProperty("file.separator"), "/")
         ).getPath();
     }
 
