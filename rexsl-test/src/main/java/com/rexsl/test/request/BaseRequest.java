@@ -196,13 +196,13 @@ final class BaseRequest implements Request {
         );
         Logger.info(
             this,
-            "#fetch(%s %s): completed in %[ms]s [%d %s]: %s",
+            "#fetch(%s %s %s): [%d %s] in %[ms]s",
             this.mtd,
+            this.home,
             URI.create(this.home).getPath(),
-            System.currentTimeMillis() - start,
             response.status(),
             response.reason(),
-            this.home
+            System.currentTimeMillis() - start
         );
         return response;
     }
