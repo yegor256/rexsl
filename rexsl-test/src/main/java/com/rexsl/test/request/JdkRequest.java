@@ -56,6 +56,11 @@ import org.apache.commons.io.IOUtils;
 /**
  * Implementation of {@link Request}, based on JDK.
  *
+ * <p>This implementation will be enough in most situations. However,
+ * sometimes you may need better tuning or an ability to fetch custom
+ * HTTP methods (JDK doesn't support PATCH, for example). In this case,
+ * use {@link ApacheRequest}.
+ *
  * <p>The class is immutable and thread-safe.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)

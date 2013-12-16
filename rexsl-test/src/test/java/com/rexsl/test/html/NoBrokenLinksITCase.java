@@ -53,7 +53,7 @@ public final class NoBrokenLinksITCase {
             new FakeRequest().withBody(
                 StringUtils.join(
                     "<html><head>",
-                    "<link rel='stylesheet' href='http://broken.rexsl.com'/>",
+                    "<link rel='stylesheet' href='http://localhost:7878'/>",
                     "</head></html>"
                 )
             ).fetch(),
