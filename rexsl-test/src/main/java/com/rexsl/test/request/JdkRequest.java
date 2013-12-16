@@ -235,8 +235,9 @@ public final class JdkRequest implements Request {
     }
 
     @Override
-    public <T extends Wire> Request through(final Class<T> type) {
-        return this.base.through(type);
+    public <T extends Wire> Request through(final Class<T> type,
+        final Object... args) {
+        return this.base.through(type, args);
     }
 
 }
