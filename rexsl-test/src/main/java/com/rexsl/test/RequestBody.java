@@ -31,6 +31,7 @@ package com.rexsl.test;
 
 import com.jcabi.aspects.Immutable;
 import java.util.Map;
+import javax.json.JsonStructure;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.CharUtils;
@@ -82,6 +83,16 @@ public interface RequestBody {
      */
     @NotNull(message = "body is never NULL")
     RequestBody set(@NotNull(message = "body can't be NULL") String body);
+
+    /**
+     * Set JSON content.
+     * @param json JSON object
+     * @return New alternated body
+     * @since 0.11
+     */
+    @NotNull(message = "body is never NULL")
+    RequestBody set(@NotNull(message = "JSON structure can't be NULL")
+        JsonStructure json);
 
     /**
      * Set byte array content.

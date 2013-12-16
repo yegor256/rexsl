@@ -40,6 +40,7 @@ import com.rexsl.test.RequestURI;
 import com.rexsl.test.Response;
 import com.rexsl.test.Wire;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -48,6 +49,8 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
+import javax.json.Json;
+import javax.json.JsonStructure;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
@@ -415,6 +418,13 @@ final class BaseRequest implements Request {
         public RequestBody set(@NotNull(message = "content can't be NULL")
             final String txt) {
             return this.set(txt.getBytes(Charsets.UTF_8));
+        }
+        @Override
+        public RequestBody set(@NotNull(message = "JSON can't be NULL")
+            final JsonStructure json) {
+            final StringWriter writer = new StringWriter();
+            Json.createWriter(writer).write(json);
+            return this.set(writer.toString());
         }
         @Override
         public RequestBody set(@NotNull(message = "body can't be NULL")

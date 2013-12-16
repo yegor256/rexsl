@@ -31,6 +31,7 @@ package com.rexsl.test.request;
 
 import com.jcabi.immutable.ArrayMap;
 import com.rexsl.test.Wire;
+import javax.json.Json;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -59,6 +60,21 @@ public final class BaseRequestTest {
             Matchers.hasToString(
                 "http://hey:%E2%82%AC@localhost:88/t/f/bar?u1=%E2%82%AC&u2="
             )
+        );
+    }
+
+    /**
+     * BaseRequest can set body to JSON.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test
+    public void printsJsonInBody() throws Exception {
+        final Wire wire = Mockito.mock(Wire.class);
+        MatcherAssert.assertThat(
+            new BaseRequest(wire, "http://localhost:88/x").body().set(
+                Json.createObjectBuilder().add("foo", "test 1").build()
+            ).get(),
+            Matchers.equalTo("{\"foo\":\"test 1\"}")
         );
     }
 
