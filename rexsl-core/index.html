@@ -50,12 +50,12 @@
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="apidocs-0.10/index.html" title="API 0.10 (JavaDoc)">API 0.10 (JavaDoc)</a>
+                                                                    <a href="apidocs-0.11/index.html" title="API 0.11 (JavaDoc)">API 0.11 (JavaDoc)</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
                                                                                         <li>
-                                                                    <a href="testapidocs-0.10/index.html" title="Mock API">Mock API</a>
+                                                                    <a href="testapidocs-0.11/index.html" title="Mock API">Mock API</a>
                                                                                                                         <ul>
                                                     </ul>
                                     </li>
@@ -109,12 +109,12 @@
                                     </ul>
                         <p>
                 
-                24-Nov-2013
-                0.10
+                16-Dec-2013
+                0.11
             </p>
             <article>
                 <h1>ReXSL core module</h1>
-<p>There are two classes that you should use in your project (both of them are always mandatory): <a href="./apidocs-0.10/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> and <a href="./apidocs-0.10/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a>. Use them in <tt>WEB-INF/web.xml</tt>:</p>
+<p>There are two classes that you should use in your project (both of them are always mandatory): <a href="./apidocs-0.11/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> and <a href="./apidocs-0.11/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a>. Use them in <tt>WEB-INF/web.xml</tt>:</p>
 
 <div class="source">
 <pre>&lt;filter&gt;
@@ -140,21 +140,21 @@
   &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
 &lt;/servlet-mapping&gt;
 </pre></div>
-<p><a href="./apidocs-0.10/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> is responsible for handling of JAX-RS requests and converting your JAXB annotated classes into XML documents.</p>
-<p><a href="./apidocs-0.10/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a> is converting XML output documents into XHTML when necessary.</p>
-<p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-core/0.10/rexsl-core-0.10.jar"><tt>rexsl-core-0.10.jar</tt></a> and add it to classpath):</p>
+<p><a href="./apidocs-0.11/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> is responsible for handling of JAX-RS requests and converting your JAXB annotated classes into XML documents.</p>
+<p><a href="./apidocs-0.11/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a> is converting XML output documents into XHTML when necessary.</p>
+<p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-core/0.11/rexsl-core-0.11.jar"><tt>rexsl-core-0.11.jar</tt></a> and add it to classpath):</p>
 
 <div class="source">
 <pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-core&lt;/artifactId&gt;
-  &lt;version&gt;0.10&lt;/version&gt;
+  &lt;version&gt;0.11&lt;/version&gt;
 &lt;/dependency&gt;
 </pre></div>
 <p>Also take a look at <a href="../rexsl-page/index.html">rexsl-page</a>, which helps to build RESTful XML pages.</p>
-<p><a href="./apidocs-0.10/com/rexsl/core/annotations/Stylesheet.html"><tt>Stylesheet</tt></a> annotation enables re-configuration of XSL stylesheet name for a JAXB-annotated object.</p>
-<p><a href="./apidocs-0.10/com/rexsl/core/annotations/Schema.html"><tt>Schema</tt></a> annotation lets you set the name of XML Schema of a JAXB-annotated object.</p>
-<p><a href="./apidocs-0.10/com/rexsl/core/ExceptionTrap.html"><tt>ExceptionTrap</tt></a> servlet helps you to catch all uncaught exceptions and manage them gracefully, showing some information to your end-users.</p>
+<p><a href="./apidocs-0.11/com/rexsl/core/annotations/Stylesheet.html"><tt>Stylesheet</tt></a> annotation enables re-configuration of XSL stylesheet name for a JAXB-annotated object.</p>
+<p><a href="./apidocs-0.11/com/rexsl/core/annotations/Schema.html"><tt>Schema</tt></a> annotation lets you set the name of XML Schema of a JAXB-annotated object.</p>
+<p><a href="./apidocs-0.11/com/rexsl/core/ExceptionTrap.html"><tt>ExceptionTrap</tt></a> servlet helps you to catch all uncaught exceptions and manage them gracefully, showing some information to your end-users.</p>
             </article>
             <p style="margin-bottom: 3em; margin-top: 2em;">
                 Copyright &#169;
