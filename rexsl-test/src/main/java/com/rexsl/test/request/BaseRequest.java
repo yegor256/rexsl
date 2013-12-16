@@ -41,6 +41,7 @@ import com.rexsl.test.Response;
 import com.rexsl.test.Wire;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -194,12 +195,14 @@ final class BaseRequest implements Request {
             this, this.home, this.mtd,
             this.hdrs, this.content
         );
+        final URI uri = URI.create(this.home);
         Logger.info(
             this,
-            "#fetch(%s %s %s): [%d %s] in %[ms]s",
+            "#fetch(%s %s:%d %s): [%d %s] in %[ms]s",
             this.mtd,
-            this.home,
-            URI.create(this.home).getPath(),
+            uri.getHost(),
+            uri.getPort(),
+            uri.getPath(),
             response.status(),
             response.reason(),
             System.currentTimeMillis() - start
@@ -208,26 +211,43 @@ final class BaseRequest implements Request {
     }
 
     @Override
-    public <T extends Wire> Request through(final Class<T> type) {
-        try {
-            return new BaseRequest(
-                type.getDeclaredConstructor(Wire.class).newInstance(
-                    this.wire
-                ),
-                this.home,
-                this.hdrs,
-                this.mtd,
-                this.content
+    public <T extends Wire> Request through(final Class<T> type,
+        final Object... args) {
+        Constructor<?> ctor = null;
+        for (final Constructor<?> opt : type.getDeclaredConstructors()) {
+            if (opt.getParameterTypes().length == args.length + 1) {
+                ctor = opt;
+                break;
+            }
+        }
+        if (ctor == null) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "class %s doesn't have a ctor with %d argument(s)",
+                    type.getName(), args.length
+                )
             );
+        }
+        final Object[] params = new Object[args.length + 1];
+        params[0] = this.wire;
+        System.arraycopy(args, 0, params, 1, args.length);
+        final Wire decorated;
+        try {
+            decorated = Wire.class.cast(ctor.newInstance(params));
         } catch (InstantiationException ex) {
             throw new IllegalStateException(ex);
         } catch (IllegalAccessException ex) {
             throw new IllegalStateException(ex);
         } catch (InvocationTargetException ex) {
             throw new IllegalStateException(ex);
-        } catch (NoSuchMethodException ex) {
-            throw new IllegalStateException(ex);
         }
+        return new BaseRequest(
+            decorated,
+            this.home,
+            this.hdrs,
+            this.mtd,
+            this.content
+        );
     }
 
     @Override

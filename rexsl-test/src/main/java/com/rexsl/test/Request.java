@@ -161,10 +161,11 @@ public interface Request {
     /**
      * Send it through a decorating {@link Wire}.
      * @param type Type of wire to use
+     * @param args Optional arguments for the wire constructor
      * @param <T> Type to use
      * @return New request with a wire decorated
      * @since 0.10
      */
-    <T extends Wire> Request through(Class<T> type);
+    <T extends Wire> Request through(Class<T> type, Object... args);
 
 }
