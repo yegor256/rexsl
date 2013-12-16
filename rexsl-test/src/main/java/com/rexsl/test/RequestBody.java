@@ -99,7 +99,7 @@ public interface RequestBody {
      * @param body Body content
      * @return New alternated body
      */
-    @NotNull(message = "body is never NULL")
+    @NotNull(message = "modified body is never NULL")
     RequestBody set(@NotNull(message = "body can't be NULL") byte[] body);
 
     /**
@@ -108,7 +108,7 @@ public interface RequestBody {
      * @param value Value of the query param to set
      * @return New alternated body
      */
-    @NotNull(message = "body is never NULL")
+    @NotNull(message = "alternated body is never NULL")
     RequestBody formParam(
         @NotNull(message = "form param name can't be NULL") String name,
         @NotNull(message = "form param value can't be NULL") Object value);

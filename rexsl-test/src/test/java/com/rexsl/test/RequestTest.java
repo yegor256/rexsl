@@ -39,7 +39,6 @@ import com.rexsl.test.response.RestResponse;
 import com.rexsl.test.response.XmlResponse;
 import com.rexsl.test.wire.BasicAuthWire;
 import com.rexsl.test.wire.UserAgentWire;
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URLDecoder;
