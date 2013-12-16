@@ -152,139 +152,142 @@
 <a class="jxr_linenumber" name="142" href="#142">142</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="143" href="#143">143</a>     <strong class="jxr_keyword">private</strong> Source local(<strong class="jxr_keyword">final</strong> String path, <strong class="jxr_keyword">final</strong> String base)
 <a class="jxr_linenumber" name="144" href="#144">144</a>         <strong class="jxr_keyword">throws</strong> TransformerException {
-<a class="jxr_linenumber" name="145" href="#145">145</a>         <strong class="jxr_keyword">if</strong> (path.charAt(0) != '/' &amp;&amp; path.charAt(0) != '.') {
-<a class="jxr_linenumber" name="146" href="#146">146</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
-<a class="jxr_linenumber" name="147" href="#147">147</a>                 String.format(<span class="jxr_string">"'%s' is not a local path"</span>, path)
-<a class="jxr_linenumber" name="148" href="#148">148</a>             );
-<a class="jxr_linenumber" name="149" href="#149">149</a>         }
-<a class="jxr_linenumber" name="150" href="#150">150</a>         <strong class="jxr_keyword">final</strong> String abs = ContextResourceResolver.compose(path, base);
-<a class="jxr_linenumber" name="151" href="#151">151</a>         <strong class="jxr_keyword">final</strong> InputStream stream = <strong class="jxr_keyword">this</strong>.context.getResourceAsStream(abs);
-<a class="jxr_linenumber" name="152" href="#152">152</a>         <strong class="jxr_keyword">if</strong> (stream == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="153" href="#153">153</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
-<a class="jxr_linenumber" name="154" href="#154">154</a>                 Logger.format(
-<a class="jxr_linenumber" name="155" href="#155">155</a>                     <em class="jxr_comment">// @checkstyle LineLength (1 line)</em>
-<a class="jxr_linenumber" name="156" href="#156">156</a>                     <span class="jxr_string">"local resource '%s' not found by %[type]s, abs='%s', realPath='%s'"</span>,
-<a class="jxr_linenumber" name="157" href="#157">157</a>                     path, <strong class="jxr_keyword">this</strong>.context, abs, <strong class="jxr_keyword">this</strong>.context.getRealPath(abs)
-<a class="jxr_linenumber" name="158" href="#158">158</a>                 )
-<a class="jxr_linenumber" name="159" href="#159">159</a>             );
-<a class="jxr_linenumber" name="160" href="#160">160</a>         }
-<a class="jxr_linenumber" name="161" href="#161">161</a>         <strong class="jxr_keyword">final</strong> Source source = ContextResourceResolver.source(stream);
-<a class="jxr_linenumber" name="162" href="#162">162</a>         source.setSystemId(abs);
-<a class="jxr_linenumber" name="163" href="#163">163</a>         <strong class="jxr_keyword">return</strong> source;
-<a class="jxr_linenumber" name="164" href="#164">164</a>     }
-<a class="jxr_linenumber" name="165" href="#165">165</a> 
-<a class="jxr_linenumber" name="166" href="#166">166</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="167" href="#167">167</a> <em class="jxr_javadoccomment">     * Try to find and return a resource, which is absolute.</em>
-<a class="jxr_linenumber" name="168" href="#168">168</a> <em class="jxr_javadoccomment">     * @param href HREF provided by the client</em>
-<a class="jxr_linenumber" name="169" href="#169">169</a> <em class="jxr_javadoccomment">     * @param base Base</em>
-<a class="jxr_linenumber" name="170" href="#170">170</a> <em class="jxr_javadoccomment">     * @return The stream found</em>
-<a class="jxr_linenumber" name="171" href="#171">171</a> <em class="jxr_javadoccomment">     * @throws TransformerException If not found</em>
-<a class="jxr_linenumber" name="172" href="#172">172</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="173" href="#173">173</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> InputStream absolute(<strong class="jxr_keyword">final</strong> String href, <strong class="jxr_keyword">final</strong> String base)
-<a class="jxr_linenumber" name="174" href="#174">174</a>         <strong class="jxr_keyword">throws</strong> TransformerException {
-<a class="jxr_linenumber" name="175" href="#175">175</a>         <strong class="jxr_keyword">final</strong> URI uri;
-<a class="jxr_linenumber" name="176" href="#176">176</a>         <strong class="jxr_keyword">if</strong> (base == <strong class="jxr_keyword">null</strong> || base.isEmpty()) {
-<a class="jxr_linenumber" name="177" href="#177">177</a>             uri = UriBuilder.fromUri(href).build();
-<a class="jxr_linenumber" name="178" href="#178">178</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="179" href="#179">179</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="180" href="#180">180</a>                 uri = <strong class="jxr_keyword">new</strong> URL(<strong class="jxr_keyword">new</strong> URL(base), href).toURI();
-<a class="jxr_linenumber" name="181" href="#181">181</a>             } <strong class="jxr_keyword">catch</strong> (MalformedURLException ex) {
-<a class="jxr_linenumber" name="182" href="#182">182</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(ex);
-<a class="jxr_linenumber" name="183" href="#183">183</a>             } <strong class="jxr_keyword">catch</strong> (URISyntaxException ex) {
-<a class="jxr_linenumber" name="184" href="#184">184</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(ex);
-<a class="jxr_linenumber" name="185" href="#185">185</a>             }
-<a class="jxr_linenumber" name="186" href="#186">186</a>         }
-<a class="jxr_linenumber" name="187" href="#187">187</a>         <strong class="jxr_keyword">if</strong> (!uri.isAbsolute()) {
-<a class="jxr_linenumber" name="188" href="#188">188</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
-<a class="jxr_linenumber" name="189" href="#189">189</a>                 String.format(
-<a class="jxr_linenumber" name="190" href="#190">190</a>                     <em class="jxr_comment">// @checkstyle LineLength (1 line)</em>
-<a class="jxr_linenumber" name="191" href="#191">191</a>                     <span class="jxr_string">"Non-absolute URI '%s' can't be resolved, href='%s', base='%s'"</span>,
-<a class="jxr_linenumber" name="192" href="#192">192</a>                     uri, href, base
-<a class="jxr_linenumber" name="193" href="#193">193</a>                 )
-<a class="jxr_linenumber" name="194" href="#194">194</a>             );
-<a class="jxr_linenumber" name="195" href="#195">195</a>         }
-<a class="jxr_linenumber" name="196" href="#196">196</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="197" href="#197">197</a>             <strong class="jxr_keyword">return</strong> ContextResourceResolver.fetch(uri);
-<a class="jxr_linenumber" name="198" href="#198">198</a>         } <strong class="jxr_keyword">catch</strong> (IOException ex) {
-<a class="jxr_linenumber" name="199" href="#199">199</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
-<a class="jxr_linenumber" name="200" href="#200">200</a>                 String.format(
-<a class="jxr_linenumber" name="201" href="#201">201</a>                     <span class="jxr_string">"failed to fetch absolute URI '%s', href='%s', base='%s'"</span>,
-<a class="jxr_linenumber" name="202" href="#202">202</a>                     href, base, uri
-<a class="jxr_linenumber" name="203" href="#203">203</a>                 ),
-<a class="jxr_linenumber" name="204" href="#204">204</a>                 ex
-<a class="jxr_linenumber" name="205" href="#205">205</a>             );
-<a class="jxr_linenumber" name="206" href="#206">206</a>         }
-<a class="jxr_linenumber" name="207" href="#207">207</a>     }
-<a class="jxr_linenumber" name="208" href="#208">208</a> 
-<a class="jxr_linenumber" name="209" href="#209">209</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="210" href="#210">210</a> <em class="jxr_javadoccomment">     * Load HTTP stream from URI.</em>
-<a class="jxr_linenumber" name="211" href="#211">211</a> <em class="jxr_javadoccomment">     * @param uri The URI to load from</em>
-<a class="jxr_linenumber" name="212" href="#212">212</a> <em class="jxr_javadoccomment">     * @return The stream opened</em>
-<a class="jxr_linenumber" name="213" href="#213">213</a> <em class="jxr_javadoccomment">     * @throws IOException If some problem happens</em>
-<a class="jxr_linenumber" name="214" href="#214">214</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="215" href="#215">215</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> InputStream fetch(<strong class="jxr_keyword">final</strong> URI uri) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="216" href="#216">216</a>         <strong class="jxr_keyword">final</strong> URLConnection conn = uri.toURL().openConnection();
-<a class="jxr_linenumber" name="217" href="#217">217</a>         <strong class="jxr_keyword">final</strong> InputStream stream;
-<a class="jxr_linenumber" name="218" href="#218">218</a>         <strong class="jxr_keyword">if</strong> (conn instanceof HttpURLConnection) {
-<a class="jxr_linenumber" name="219" href="#219">219</a>             stream = ContextResourceResolver.http(
-<a class="jxr_linenumber" name="220" href="#220">220</a>                 HttpURLConnection.<strong class="jxr_keyword">class</strong>.<strong class="jxr_keyword">cast</strong>(conn)
-<a class="jxr_linenumber" name="221" href="#221">221</a>             );
-<a class="jxr_linenumber" name="222" href="#222">222</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="223" href="#223">223</a>             stream = conn.getInputStream();
-<a class="jxr_linenumber" name="224" href="#224">224</a>         }
-<a class="jxr_linenumber" name="225" href="#225">225</a>         <strong class="jxr_keyword">return</strong> stream;
-<a class="jxr_linenumber" name="226" href="#226">226</a>     }
-<a class="jxr_linenumber" name="227" href="#227">227</a> 
-<a class="jxr_linenumber" name="228" href="#228">228</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="229" href="#229">229</a> <em class="jxr_javadoccomment">     * Fetch stream from HTTP connection.</em>
-<a class="jxr_linenumber" name="230" href="#230">230</a> <em class="jxr_javadoccomment">     * @param conn The connection to fetch from</em>
-<a class="jxr_linenumber" name="231" href="#231">231</a> <em class="jxr_javadoccomment">     * @return The stream opened</em>
-<a class="jxr_linenumber" name="232" href="#232">232</a> <em class="jxr_javadoccomment">     * @throws IOException If some problem happens</em>
-<a class="jxr_linenumber" name="233" href="#233">233</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="234" href="#234">234</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> InputStream http(<strong class="jxr_keyword">final</strong> HttpURLConnection conn)
-<a class="jxr_linenumber" name="235" href="#235">235</a>         <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="236" href="#236">236</a>         InputStream stream;
-<a class="jxr_linenumber" name="237" href="#237">237</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="238" href="#238">238</a>             conn.connect();
-<a class="jxr_linenumber" name="239" href="#239">239</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> code = conn.getResponseCode();
-<a class="jxr_linenumber" name="240" href="#240">240</a>             <strong class="jxr_keyword">if</strong> (code != HttpURLConnection.HTTP_OK) {
-<a class="jxr_linenumber" name="241" href="#241">241</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(
-<a class="jxr_linenumber" name="242" href="#242">242</a>                     Logger.format(
-<a class="jxr_linenumber" name="243" href="#243">243</a>                         <span class="jxr_string">"Invalid HTTP response code %d at '%s'"</span>,
-<a class="jxr_linenumber" name="244" href="#244">244</a>                         code, conn.getURL()
-<a class="jxr_linenumber" name="245" href="#245">245</a>                     )
-<a class="jxr_linenumber" name="246" href="#246">246</a>                 );
-<a class="jxr_linenumber" name="247" href="#247">247</a>             }
-<a class="jxr_linenumber" name="248" href="#248">248</a>             stream = IOUtils.toInputStream(
-<a class="jxr_linenumber" name="249" href="#249">249</a>                 IOUtils.toString(conn.getInputStream(), CharEncoding.UTF_8),
-<a class="jxr_linenumber" name="250" href="#250">250</a>                 CharEncoding.UTF_8
-<a class="jxr_linenumber" name="251" href="#251">251</a>             );
-<a class="jxr_linenumber" name="252" href="#252">252</a>         } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="253" href="#253">253</a>             conn.disconnect();
-<a class="jxr_linenumber" name="254" href="#254">254</a>         }
-<a class="jxr_linenumber" name="255" href="#255">255</a>         <strong class="jxr_keyword">return</strong> stream;
-<a class="jxr_linenumber" name="256" href="#256">256</a>     }
-<a class="jxr_linenumber" name="257" href="#257">257</a> 
-<a class="jxr_linenumber" name="258" href="#258">258</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="259" href="#259">259</a> <em class="jxr_javadoccomment">     * Compose a local path from path component and base.</em>
-<a class="jxr_linenumber" name="260" href="#260">260</a> <em class="jxr_javadoccomment">     * @param path Path</em>
-<a class="jxr_linenumber" name="261" href="#261">261</a> <em class="jxr_javadoccomment">     * @param base Base</em>
-<a class="jxr_linenumber" name="262" href="#262">262</a> <em class="jxr_javadoccomment">     * @return Absolute local path</em>
-<a class="jxr_linenumber" name="263" href="#263">263</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="264" href="#264">264</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String compose(<strong class="jxr_keyword">final</strong> String path, <strong class="jxr_keyword">final</strong> String base) {
-<a class="jxr_linenumber" name="265" href="#265">265</a>         <strong class="jxr_keyword">final</strong> StringBuilder full = <strong class="jxr_keyword">new</strong> StringBuilder(0);
-<a class="jxr_linenumber" name="266" href="#266">266</a>         <strong class="jxr_keyword">if</strong> (!StringUtils.isEmpty(base) &amp;&amp; path.charAt(0) != '/') {
-<a class="jxr_linenumber" name="267" href="#267">267</a>             full.append(
-<a class="jxr_linenumber" name="268" href="#268">268</a>                 FilenameUtils.getFullPath(URI.create(base).getPath())
-<a class="jxr_linenumber" name="269" href="#269">269</a>             ).append('/');
-<a class="jxr_linenumber" name="270" href="#270">270</a>         }
-<a class="jxr_linenumber" name="271" href="#271">271</a>         full.append(URI.create(path).getPath());
-<a class="jxr_linenumber" name="272" href="#272">272</a>         <strong class="jxr_keyword">return</strong> URI.create(
-<a class="jxr_linenumber" name="273" href="#273">273</a>             FilenameUtils.normalizeNoEndSeparator(full.toString())
-<a class="jxr_linenumber" name="274" href="#274">274</a>         ).getPath();
-<a class="jxr_linenumber" name="275" href="#275">275</a>     }
-<a class="jxr_linenumber" name="276" href="#276">276</a> 
-<a class="jxr_linenumber" name="277" href="#277">277</a> }
+<a class="jxr_linenumber" name="145" href="#145">145</a>         <strong class="jxr_keyword">if</strong> (path.charAt(0) != '/' &amp;&amp; path.charAt(0) != '.'
+<a class="jxr_linenumber" name="146" href="#146">146</a>             &amp;&amp; path.charAt(0) != '&#92;&#92;') {
+<a class="jxr_linenumber" name="147" href="#147">147</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
+<a class="jxr_linenumber" name="148" href="#148">148</a>                 String.format(<span class="jxr_string">"'%s' is not a local path"</span>, path)
+<a class="jxr_linenumber" name="149" href="#149">149</a>             );
+<a class="jxr_linenumber" name="150" href="#150">150</a>         }
+<a class="jxr_linenumber" name="151" href="#151">151</a>         <strong class="jxr_keyword">final</strong> String abs = ContextResourceResolver.compose(path, base);
+<a class="jxr_linenumber" name="152" href="#152">152</a>         <strong class="jxr_keyword">final</strong> InputStream stream = <strong class="jxr_keyword">this</strong>.context.getResourceAsStream(abs);
+<a class="jxr_linenumber" name="153" href="#153">153</a>         <strong class="jxr_keyword">if</strong> (stream == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="154" href="#154">154</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
+<a class="jxr_linenumber" name="155" href="#155">155</a>                 Logger.format(
+<a class="jxr_linenumber" name="156" href="#156">156</a>                     <em class="jxr_comment">// @checkstyle LineLength (1 line)</em>
+<a class="jxr_linenumber" name="157" href="#157">157</a>                     <span class="jxr_string">"local resource '%s' not found by %[type]s, abs='%s', realPath='%s'"</span>,
+<a class="jxr_linenumber" name="158" href="#158">158</a>                     path, <strong class="jxr_keyword">this</strong>.context, abs, <strong class="jxr_keyword">this</strong>.context.getRealPath(abs)
+<a class="jxr_linenumber" name="159" href="#159">159</a>                 )
+<a class="jxr_linenumber" name="160" href="#160">160</a>             );
+<a class="jxr_linenumber" name="161" href="#161">161</a>         }
+<a class="jxr_linenumber" name="162" href="#162">162</a>         <strong class="jxr_keyword">final</strong> Source source = ContextResourceResolver.source(stream);
+<a class="jxr_linenumber" name="163" href="#163">163</a>         source.setSystemId(abs);
+<a class="jxr_linenumber" name="164" href="#164">164</a>         <strong class="jxr_keyword">return</strong> source;
+<a class="jxr_linenumber" name="165" href="#165">165</a>     }
+<a class="jxr_linenumber" name="166" href="#166">166</a> 
+<a class="jxr_linenumber" name="167" href="#167">167</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="168" href="#168">168</a> <em class="jxr_javadoccomment">     * Try to find and return a resource, which is absolute.</em>
+<a class="jxr_linenumber" name="169" href="#169">169</a> <em class="jxr_javadoccomment">     * @param href HREF provided by the client</em>
+<a class="jxr_linenumber" name="170" href="#170">170</a> <em class="jxr_javadoccomment">     * @param base Base</em>
+<a class="jxr_linenumber" name="171" href="#171">171</a> <em class="jxr_javadoccomment">     * @return The stream found</em>
+<a class="jxr_linenumber" name="172" href="#172">172</a> <em class="jxr_javadoccomment">     * @throws TransformerException If not found</em>
+<a class="jxr_linenumber" name="173" href="#173">173</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="174" href="#174">174</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> InputStream absolute(<strong class="jxr_keyword">final</strong> String href, <strong class="jxr_keyword">final</strong> String base)
+<a class="jxr_linenumber" name="175" href="#175">175</a>         <strong class="jxr_keyword">throws</strong> TransformerException {
+<a class="jxr_linenumber" name="176" href="#176">176</a>         <strong class="jxr_keyword">final</strong> URI uri;
+<a class="jxr_linenumber" name="177" href="#177">177</a>         <strong class="jxr_keyword">if</strong> (base == <strong class="jxr_keyword">null</strong> || base.isEmpty()) {
+<a class="jxr_linenumber" name="178" href="#178">178</a>             uri = UriBuilder.fromUri(href).build();
+<a class="jxr_linenumber" name="179" href="#179">179</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="180" href="#180">180</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="181" href="#181">181</a>                 uri = <strong class="jxr_keyword">new</strong> URL(<strong class="jxr_keyword">new</strong> URL(base), href).toURI();
+<a class="jxr_linenumber" name="182" href="#182">182</a>             } <strong class="jxr_keyword">catch</strong> (MalformedURLException ex) {
+<a class="jxr_linenumber" name="183" href="#183">183</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(ex);
+<a class="jxr_linenumber" name="184" href="#184">184</a>             } <strong class="jxr_keyword">catch</strong> (URISyntaxException ex) {
+<a class="jxr_linenumber" name="185" href="#185">185</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(ex);
+<a class="jxr_linenumber" name="186" href="#186">186</a>             }
+<a class="jxr_linenumber" name="187" href="#187">187</a>         }
+<a class="jxr_linenumber" name="188" href="#188">188</a>         <strong class="jxr_keyword">if</strong> (!uri.isAbsolute()) {
+<a class="jxr_linenumber" name="189" href="#189">189</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
+<a class="jxr_linenumber" name="190" href="#190">190</a>                 String.format(
+<a class="jxr_linenumber" name="191" href="#191">191</a>                     <em class="jxr_comment">// @checkstyle LineLength (1 line)</em>
+<a class="jxr_linenumber" name="192" href="#192">192</a>                     <span class="jxr_string">"Non-absolute URI '%s' can't be resolved, href='%s', base='%s'"</span>,
+<a class="jxr_linenumber" name="193" href="#193">193</a>                     uri, href, base
+<a class="jxr_linenumber" name="194" href="#194">194</a>                 )
+<a class="jxr_linenumber" name="195" href="#195">195</a>             );
+<a class="jxr_linenumber" name="196" href="#196">196</a>         }
+<a class="jxr_linenumber" name="197" href="#197">197</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="198" href="#198">198</a>             <strong class="jxr_keyword">return</strong> ContextResourceResolver.fetch(uri);
+<a class="jxr_linenumber" name="199" href="#199">199</a>         } <strong class="jxr_keyword">catch</strong> (IOException ex) {
+<a class="jxr_linenumber" name="200" href="#200">200</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
+<a class="jxr_linenumber" name="201" href="#201">201</a>                 String.format(
+<a class="jxr_linenumber" name="202" href="#202">202</a>                     <span class="jxr_string">"failed to fetch absolute URI '%s', href='%s', base='%s'"</span>,
+<a class="jxr_linenumber" name="203" href="#203">203</a>                     href, base, uri
+<a class="jxr_linenumber" name="204" href="#204">204</a>                 ),
+<a class="jxr_linenumber" name="205" href="#205">205</a>                 ex
+<a class="jxr_linenumber" name="206" href="#206">206</a>             );
+<a class="jxr_linenumber" name="207" href="#207">207</a>         }
+<a class="jxr_linenumber" name="208" href="#208">208</a>     }
+<a class="jxr_linenumber" name="209" href="#209">209</a> 
+<a class="jxr_linenumber" name="210" href="#210">210</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="211" href="#211">211</a> <em class="jxr_javadoccomment">     * Load HTTP stream from URI.</em>
+<a class="jxr_linenumber" name="212" href="#212">212</a> <em class="jxr_javadoccomment">     * @param uri The URI to load from</em>
+<a class="jxr_linenumber" name="213" href="#213">213</a> <em class="jxr_javadoccomment">     * @return The stream opened</em>
+<a class="jxr_linenumber" name="214" href="#214">214</a> <em class="jxr_javadoccomment">     * @throws IOException If some problem happens</em>
+<a class="jxr_linenumber" name="215" href="#215">215</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="216" href="#216">216</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> InputStream fetch(<strong class="jxr_keyword">final</strong> URI uri) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="217" href="#217">217</a>         <strong class="jxr_keyword">final</strong> URLConnection conn = uri.toURL().openConnection();
+<a class="jxr_linenumber" name="218" href="#218">218</a>         <strong class="jxr_keyword">final</strong> InputStream stream;
+<a class="jxr_linenumber" name="219" href="#219">219</a>         <strong class="jxr_keyword">if</strong> (conn instanceof HttpURLConnection) {
+<a class="jxr_linenumber" name="220" href="#220">220</a>             stream = ContextResourceResolver.http(
+<a class="jxr_linenumber" name="221" href="#221">221</a>                 HttpURLConnection.<strong class="jxr_keyword">class</strong>.<strong class="jxr_keyword">cast</strong>(conn)
+<a class="jxr_linenumber" name="222" href="#222">222</a>             );
+<a class="jxr_linenumber" name="223" href="#223">223</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="224" href="#224">224</a>             stream = conn.getInputStream();
+<a class="jxr_linenumber" name="225" href="#225">225</a>         }
+<a class="jxr_linenumber" name="226" href="#226">226</a>         <strong class="jxr_keyword">return</strong> stream;
+<a class="jxr_linenumber" name="227" href="#227">227</a>     }
+<a class="jxr_linenumber" name="228" href="#228">228</a> 
+<a class="jxr_linenumber" name="229" href="#229">229</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="230" href="#230">230</a> <em class="jxr_javadoccomment">     * Fetch stream from HTTP connection.</em>
+<a class="jxr_linenumber" name="231" href="#231">231</a> <em class="jxr_javadoccomment">     * @param conn The connection to fetch from</em>
+<a class="jxr_linenumber" name="232" href="#232">232</a> <em class="jxr_javadoccomment">     * @return The stream opened</em>
+<a class="jxr_linenumber" name="233" href="#233">233</a> <em class="jxr_javadoccomment">     * @throws IOException If some problem happens</em>
+<a class="jxr_linenumber" name="234" href="#234">234</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="235" href="#235">235</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> InputStream http(<strong class="jxr_keyword">final</strong> HttpURLConnection conn)
+<a class="jxr_linenumber" name="236" href="#236">236</a>         <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="237" href="#237">237</a>         InputStream stream;
+<a class="jxr_linenumber" name="238" href="#238">238</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="239" href="#239">239</a>             conn.connect();
+<a class="jxr_linenumber" name="240" href="#240">240</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> code = conn.getResponseCode();
+<a class="jxr_linenumber" name="241" href="#241">241</a>             <strong class="jxr_keyword">if</strong> (code != HttpURLConnection.HTTP_OK) {
+<a class="jxr_linenumber" name="242" href="#242">242</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(
+<a class="jxr_linenumber" name="243" href="#243">243</a>                     Logger.format(
+<a class="jxr_linenumber" name="244" href="#244">244</a>                         <span class="jxr_string">"Invalid HTTP response code %d at '%s'"</span>,
+<a class="jxr_linenumber" name="245" href="#245">245</a>                         code, conn.getURL()
+<a class="jxr_linenumber" name="246" href="#246">246</a>                     )
+<a class="jxr_linenumber" name="247" href="#247">247</a>                 );
+<a class="jxr_linenumber" name="248" href="#248">248</a>             }
+<a class="jxr_linenumber" name="249" href="#249">249</a>             stream = IOUtils.toInputStream(
+<a class="jxr_linenumber" name="250" href="#250">250</a>                 IOUtils.toString(conn.getInputStream(), CharEncoding.UTF_8),
+<a class="jxr_linenumber" name="251" href="#251">251</a>                 CharEncoding.UTF_8
+<a class="jxr_linenumber" name="252" href="#252">252</a>             );
+<a class="jxr_linenumber" name="253" href="#253">253</a>         } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="254" href="#254">254</a>             conn.disconnect();
+<a class="jxr_linenumber" name="255" href="#255">255</a>         }
+<a class="jxr_linenumber" name="256" href="#256">256</a>         <strong class="jxr_keyword">return</strong> stream;
+<a class="jxr_linenumber" name="257" href="#257">257</a>     }
+<a class="jxr_linenumber" name="258" href="#258">258</a> 
+<a class="jxr_linenumber" name="259" href="#259">259</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="260" href="#260">260</a> <em class="jxr_javadoccomment">     * Compose a local path from path component and base.</em>
+<a class="jxr_linenumber" name="261" href="#261">261</a> <em class="jxr_javadoccomment">     * @param path Path</em>
+<a class="jxr_linenumber" name="262" href="#262">262</a> <em class="jxr_javadoccomment">     * @param base Base</em>
+<a class="jxr_linenumber" name="263" href="#263">263</a> <em class="jxr_javadoccomment">     * @return Absolute local path</em>
+<a class="jxr_linenumber" name="264" href="#264">264</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="265" href="#265">265</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String compose(<strong class="jxr_keyword">final</strong> String path, <strong class="jxr_keyword">final</strong> String base) {
+<a class="jxr_linenumber" name="266" href="#266">266</a>         <strong class="jxr_keyword">final</strong> StringBuilder full = <strong class="jxr_keyword">new</strong> StringBuilder(0);
+<a class="jxr_linenumber" name="267" href="#267">267</a>         <strong class="jxr_keyword">if</strong> (!StringUtils.isEmpty(base) &amp;&amp; path.charAt(0) != '/'
+<a class="jxr_linenumber" name="268" href="#268">268</a>             &amp;&amp; path.charAt(0) != '&#92;&#92;') {
+<a class="jxr_linenumber" name="269" href="#269">269</a>             full.append(
+<a class="jxr_linenumber" name="270" href="#270">270</a>                 FilenameUtils.getFullPath(URI.create(base).getPath())
+<a class="jxr_linenumber" name="271" href="#271">271</a>             ).append('/');
+<a class="jxr_linenumber" name="272" href="#272">272</a>         }
+<a class="jxr_linenumber" name="273" href="#273">273</a>         full.append(URI.create(path).getPath());
+<a class="jxr_linenumber" name="274" href="#274">274</a>         <strong class="jxr_keyword">return</strong> URI.create(
+<a class="jxr_linenumber" name="275" href="#275">275</a>             FilenameUtils.normalizeNoEndSeparator(full.toString())
+<a class="jxr_linenumber" name="276" href="#276">276</a>                 .replace(System.getProperty(<span class="jxr_string">"file.separator"</span>), <span class="jxr_string">"/"</span>)
+<a class="jxr_linenumber" name="277" href="#277">277</a>         ).getPath();
+<a class="jxr_linenumber" name="278" href="#278">278</a>     }
+<a class="jxr_linenumber" name="279" href="#279">279</a> 
+<a class="jxr_linenumber" name="280" href="#280">280</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
