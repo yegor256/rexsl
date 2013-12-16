@@ -37,76 +37,29 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Test case for {@link NoBrokenLinks}.
+ * Integration case for {@link NoBrokenLinks}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
-public final class NoBrokenLinksTest {
+public final class NoBrokenLinksITCase {
 
     /**
-     * NoBrokenLinks can find empty links in HTML.
+     * NoBrokenLinks can find broken links in HTML.
      * @throws Exception If something goes wrong inside
      */
     @Test
-    public void findsEmptyLinksInHtml() throws Exception {
-        MatcherAssert.assertThat(
-            new FakeRequest().withBody(
-                "<html><head><link rel='stylesheet' href=''/></head></html>"
-            ).fetch(),
-            Matchers.not(
-                new NoBrokenLinks(new URI("http://www.facebook.com/"))
-            )
-        );
-    }
-
-    /**
-     * NoBrokenLinks can find empty links in HTML.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void findsBrLinksInHtmlWithNamespace() throws Exception {
+    public void findsBrokenLinksInHtml() throws Exception {
         MatcherAssert.assertThat(
             new FakeRequest().withBody(
                 StringUtils.join(
-                    "<html xmlns='http://www.w3.org/1999/xhtml' >",
-                    "<head><link rel='stylesheet' href='/broken-link'/>",
-                    "</head> </html>"
+                    "<html><head>",
+                    "<link rel='stylesheet' href='http://broken.rexsl.com'/>",
+                    "</head></html>"
                 )
             ).fetch(),
             Matchers.not(
-                new NoBrokenLinks(new URI("http://www.rexsl.com/rexsl-test"))
+                new NoBrokenLinks(new URI("http://www.google.com/"))
             )
-        );
-    }
-
-    /**
-     * NoBrokenLinks can pass withou broken links in HTML.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test
-    public void passesWithoutBrokenLinks() throws Exception {
-        MatcherAssert.assertThat(
-            new FakeRequest().withBody(
-                StringUtils.join(
-                    "<html xmlns='http://www.w3.org/1999/xhtml'>",
-                    "<body><a href='/index.html'/>",
-                    "<a href='http://img.rexsl.com/logo.png'/>",
-                    "</body></html>"
-                )
-            ).fetch(),
-            new NoBrokenLinks(new URI("http://www.rexsl.com/"))
-        );
-    }
-
-    /**
-     * NoBrokenLinks can throw for a broken HTML.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void throwsWhenHtmlIsBroken() throws Exception {
-        MatcherAssert.assertThat(
-            new FakeRequest().withBody("not HTML at all").fetch(),
-            new NoBrokenLinks(new URI("#"))
         );
     }
 

@@ -406,18 +406,6 @@ public final class RequestTest {
     }
 
     /**
-     * BaseRequest can throw a correct exception on connection error.
-     * @throws Exception If something goes wrong inside
-     */
-    @Test(expected = IOException.class)
-    public void continuesOnConnectionError() throws Exception {
-        this.request(new URI("http://absent-1.rexsl.com/"))
-            .method(Request.GET)
-            .fetch().as(RestResponse.class)
-            .assertStatus(HttpURLConnection.HTTP_OK);
-    }
-
-    /**
      * BaseRequest can fetch GET request twice.
      * @throws Exception If something goes wrong inside
      */

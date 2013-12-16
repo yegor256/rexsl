@@ -33,6 +33,7 @@ import com.rexsl.test.request.ApacheRequest;
 import com.rexsl.test.request.JdkRequest;
 import com.rexsl.test.response.RestResponse;
 import com.rexsl.test.response.XmlResponse;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Arrays;
@@ -106,6 +107,18 @@ public final class RequestITCase {
         this.request(new URI("http://www.rexsl.com/file-not-found.txt"))
             .fetch().as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_NOT_FOUND);
+    }
+
+    /**
+     * BaseRequest can throw a correct exception on connection error.
+     * @throws Exception If something goes wrong inside
+     */
+    @Test(expected = IOException.class)
+    public void continuesOnConnectionError() throws Exception {
+        this.request(new URI("http://absent-1.rexsl.com/"))
+            .method(Request.GET)
+            .fetch().as(RestResponse.class)
+            .assertStatus(HttpURLConnection.HTTP_OK);
     }
 
 }
