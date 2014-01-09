@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="87" href="#87">87</a>              <strong class="jxr_keyword">final</strong> Collection&lt;Map.Entry&lt;String, String&gt;&gt; headers,
 <a class="jxr_linenumber" name="88" href="#88">88</a>              <strong class="jxr_keyword">final</strong> byte[] content) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="89" href="#89">89</a>              <strong class="jxr_keyword">final</strong> CloseableHttpResponse response =
-<a class="jxr_linenumber" name="90" href="#90">90</a>                  HttpClients.createDefault().execute(
+<a class="jxr_linenumber" name="90" href="#90">90</a>                  HttpClients.createSystem().execute(
 <a class="jxr_linenumber" name="91" href="#91">91</a>                      <strong class="jxr_keyword">this</strong>.httpRequest(home, method, headers, content)
 <a class="jxr_linenumber" name="92" href="#92">92</a>                  );
 <a class="jxr_linenumber" name="93" href="#93">93</a>              <strong class="jxr_keyword">try</strong> {
