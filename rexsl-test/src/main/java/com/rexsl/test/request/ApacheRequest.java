@@ -87,7 +87,7 @@ public final class ApacheRequest implements Request {
             final Collection<Map.Entry<String, String>> headers,
             final byte[] content) throws IOException {
             final CloseableHttpResponse response =
-                HttpClients.createDefault().execute(
+                HttpClients.createSystem().execute(
                     this.httpRequest(home, method, headers, content)
                 );
             try {
