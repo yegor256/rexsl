@@ -29,23 +29,18 @@
  */
 package com.rexsl.maven;
 
-import com.jcabi.aspects.Loggable;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Set;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+
+import com.jcabi.aether.MavenClasspath;
+import com.jcabi.aspects.Loggable;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
-import org.apache.maven.shared.dependency.graph.DependencyNode;
 import org.apache.maven.shared.dependency.graph.internal.DefaultDependencyGraphBuilder;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
@@ -163,78 +158,26 @@ public final class MavenEnvironment implements Environment {
     @Loggable(Loggable.DEBUG)
     public Set<File> classpath(final boolean tonly) {
         final Collection<String> scopes;
-        final Set<File> files = new HashSet<File>();
+        if (tonly) {
+            scopes = Collections.singletonList(MavenEnvironment.TEST_SCOPE);
+        } else {
+            scopes = Arrays.asList(
+                MavenEnvironment.TEST_SCOPE,
+                "compile",
+                "provided",
+                "runtime",
+                "system"
+            );
+        }
         try {
-            if (tonly) {
-                scopes = Collections.singletonList(MavenEnvironment.TEST_SCOPE);
-                for (String path : this.project.getTestClasspathElements()) {
-                    files.add(new File(path));
-                }
-            } else {
-                scopes = Arrays.asList(
-                    MavenEnvironment.TEST_SCOPE,
-                    "compile",
-                    "provided",
-                    "runtime",
-                    "system"
-                );
-                for (String path : this.project.getCompileClasspathElements()) {
-                    files.add(new File(path));
-                }
-                for (String path : this.project.getTestClasspathElements()) {
-                    files.add(new File(path));
-                }
-            }
-            final DependencyGraphBuilder builder =
+            return new MavenClasspath(
                 (DefaultDependencyGraphBuilder) this.container.lookup(
                     DependencyGraphBuilder.class.getCanonicalName()
-                );
-            final DependencyNode node = builder.buildDependencyGraph(
-                this.project,
-                new ArtifactFilter() {
-                    @Override
-                    public boolean include(final Artifact artifact) {
-                        return scopes.contains(artifact.getScope());
-                    }
-                }
-            );
-            files.addAll(this.dependencies(node, scopes));
-        } catch (DependencyGraphBuilderException ex) {
-            throw new IllegalStateException(ex);
+                ),
+                this.session, scopes);
         } catch (ComponentLookupException ex) {
             throw new IllegalStateException(ex);
-        } catch (DependencyResolutionRequiredException ex) {
-            throw new IllegalStateException(ex);
         }
-        return files;
-    }
-
-    /**
-     * Retrieve dependencies for from given node and scope.
-     * @param node Node to traverse.
-     * @param scps Scopes to use.
-     * @return Collection of dependency files.
-     */
-    private Collection<File> dependencies(final DependencyNode node,
-        final Collection<String> scps) {
-        final Artifact artifact = node.getArtifact();
-        final Collection<File> files = new LinkedList<File>();
-        if ((artifact.getScope() == null)
-            || scps.contains(artifact.getScope())) {
-            if (artifact.getScope() == null) {
-                files.add(artifact.getFile());
-            } else {
-                files.add(
-                    this.session.getLocalRepository().find(artifact).getFile()
-                );
-            }
-            for (DependencyNode child : node.getChildren()) {
-                if (child.getArtifact().compareTo(node.getArtifact()) != 0) {
-                    files.addAll(this.dependencies(child, scps));
-                }
-            }
-        }
-        return files;
     }
 
     @Override
