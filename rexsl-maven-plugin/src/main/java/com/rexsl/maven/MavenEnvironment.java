@@ -29,15 +29,14 @@
  */
 package com.rexsl.maven;
 
+import com.jcabi.aether.MavenClasspath;
+import com.jcabi.aspects.Loggable;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.Set;
-
-import com.jcabi.aether.MavenClasspath;
-import com.jcabi.aspects.Loggable;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
