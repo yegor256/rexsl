@@ -29,15 +29,20 @@
  */
 package com.rexsl.maven;
 
-import com.jcabi.aether.Classpath;
+import com.jcabi.aether.MavenClasspath;
 import com.jcabi.aspects.Loggable;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.Set;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
-import org.sonatype.aether.util.artifact.JavaScopes;
+import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
+import org.apache.maven.shared.dependency.graph.internal.DefaultDependencyGraphBuilder;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 /**
  * Environment proxy, between Maven plugin and checks.
@@ -54,6 +59,11 @@ public final class MavenEnvironment implements Environment {
     public static final String WEBAPP_DIR = "webappDirectory";
 
     /**
+     * Maven test scope name.
+     */
+    public static final String TEST_SCOPE = "test";
+
+    /**
      * The project, from Maven plugin.
      */
     private final transient MavenProject project;
@@ -62,11 +72,6 @@ public final class MavenEnvironment implements Environment {
      * The list of properties from Maven plugin.
      */
     private final transient Properties properties;
-
-    /**
-     * Location of local repo.
-     */
-    private transient String localRepo;
 
     /**
      * Shall we use runtime filtering?
@@ -79,13 +84,30 @@ public final class MavenEnvironment implements Environment {
     private transient int iport;
 
     /**
+     * Container.
+     */
+    private final transient PlexusContainer container;
+
+    /**
+     * The current repository/network configuration of Maven.
+     */
+    private final transient MavenSession session;
+
+    /**
      * Ctor.
      * @param prj Maven project
+     * @param sess Maven session
+     * @param cntnr Plexus container
      * @param props Properties
+     * @checkstyle ParameterNumberCheck (4 lines)
      */
-    public MavenEnvironment(final MavenProject prj,
-        final Properties props) {
+    public MavenEnvironment(
+        final MavenProject prj, final MavenSession sess,
+        final PlexusContainer cntnr, final Properties props
+    ) {
         this.project = prj;
+        this.session = sess;
+        this.container = cntnr;
         this.properties = props;
     }
 
@@ -105,15 +127,6 @@ public final class MavenEnvironment implements Environment {
     @Loggable(Loggable.DEBUG)
     public void setRuntimeFiltering(final boolean filtering) {
         this.runtimeFiltering = filtering;
-    }
-
-    /**
-     * Set location of local repository.
-     * @param dir The directory of the repository
-     */
-    @Loggable(Loggable.DEBUG)
-    public void setLocalRepository(final String dir) {
-        this.localRepo = dir;
     }
 
     @Override
@@ -143,24 +156,31 @@ public final class MavenEnvironment implements Environment {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     @Loggable(Loggable.DEBUG)
     public Set<File> classpath(final boolean tonly) {
-        Collection<String> scopes;
+        final Collection<String> scopes;
         if (tonly) {
-            scopes = Arrays.asList(JavaScopes.TEST);
+            scopes = Collections.singletonList(MavenEnvironment.TEST_SCOPE);
         } else {
             scopes = Arrays.asList(
-                JavaScopes.TEST,
-                JavaScopes.COMPILE,
-                JavaScopes.PROVIDED,
-                JavaScopes.RUNTIME,
-                JavaScopes.SYSTEM
+                MavenEnvironment.TEST_SCOPE,
+                "compile",
+                "provided",
+                "runtime",
+                "system"
             );
         }
-        return new Classpath(this.project, new File(this.localRepo), scopes);
+        try {
+            return new MavenClasspath(
+                (DefaultDependencyGraphBuilder) this.container.lookup(
+                    DependencyGraphBuilder.class.getCanonicalName()
+                ),
+                this.session, scopes);
+        } catch (ComponentLookupException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     @Override
     public boolean useRuntimeFiltering() {
         return this.runtimeFiltering;
     }
-
 }

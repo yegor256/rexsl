@@ -31,7 +31,9 @@ package com.rexsl.maven;
 
 import java.io.File;
 import java.util.Properties;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.PlexusContainer;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -57,7 +59,10 @@ public final class MavenEnvironmentTest {
         final File webdir = Mockito.mock(File.class);
         Mockito.doReturn("some-dir").when(webdir).getPath();
         props.setProperty("webappDirectory", webdir.getPath());
-        final Environment env = new MavenEnvironment(project, props);
+        final Environment env = new MavenEnvironment(
+            project, Mockito.mock(MavenSession.class),
+            Mockito.mock(PlexusContainer.class), props
+        );
         MatcherAssert.assertThat(env.basedir(), Matchers.equalTo(basedir));
         MatcherAssert.assertThat(
             env.webdir().getPath(),
@@ -73,7 +78,9 @@ public final class MavenEnvironmentTest {
     public void classloaderIsBuilt() throws Exception {
         final MavenProject project = Mockito.mock(MavenProject.class);
         final Properties props = new Properties();
-        new MavenEnvironment(project, props);
+        new MavenEnvironment(
+            project, Mockito.mock(MavenSession.class),
+            Mockito.mock(PlexusContainer.class), props
+        );
     }
-
 }
