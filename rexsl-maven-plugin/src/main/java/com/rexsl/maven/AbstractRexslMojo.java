@@ -40,6 +40,11 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.PlexusConstants;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.context.Context;
+import org.codehaus.plexus.context.ContextException;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.slf4j.impl.StaticLoggerBinder;
 
 /**
@@ -60,7 +65,8 @@ import org.slf4j.impl.StaticLoggerBinder;
  * @version $Id$
  * @see <a href="http://www.slf4j.org/manual.html">SLF4J manual</a>
  */
-public abstract class AbstractRexslMojo extends AbstractMojo {
+public abstract class AbstractRexslMojo extends AbstractMojo
+    implements Contextualizable {
 
     /**
      * Maven project, to be injected by Maven itself.
@@ -73,6 +79,11 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
      */
     @Component
     private transient MavenSession session;
+
+    /**
+     * Container.
+     */
+    private transient PlexusContainer container;
 
     /**
      * Shall we skip execution?
@@ -200,12 +211,9 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
             MavenEnvironment.WEBAPP_DIR,
             this.webappDirectory
         );
-        this.environment = new MavenEnvironment(this.project(), properties);
-        if (this.session != null) {
-            this.environment.setLocalRepository(
-                this.session.getLocalRepository().getBasedir()
-            );
-        }
+        this.environment = new MavenEnvironment(
+            this.project(), this.session, this.container, properties
+        );
         if (this.port == null) {
             this.environment.setPort(new PortReserver().port());
         } else {
@@ -264,4 +272,13 @@ public abstract class AbstractRexslMojo extends AbstractMojo {
         return before;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final void contextualize(final Context context)
+        throws ContextException {
+        this.container = (PlexusContainer) context
+            .get(PlexusConstants.PLEXUS_KEY);
+    }
 }
