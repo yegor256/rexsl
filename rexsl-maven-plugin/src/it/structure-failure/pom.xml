@@ -45,11 +45,6 @@
     <name>structure-failure</name>
     <properties>
         <catapult.warName>${project.build.finalName}-catapult</catapult.warName>
-        <!--
-        @todo #89 If you change this path to something different from
-         "/" there will be many problems with paths of XSL and CSS files.
-         It's definitely a defect and should be fixed.
-        -->
         <catapult.context>/</catapult.context>
     </properties>
     <dependencies>
