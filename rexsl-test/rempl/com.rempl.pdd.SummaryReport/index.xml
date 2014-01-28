@@ -9,13 +9,4 @@
       <lines>114-114</lines>
       <owner>someone</owner>
    </puzzle>
-   <puzzle>
-      <ticket>1</ticket>
-      <file>src/test/java/com/rexsl/test/mock/MkContainerTest.java</file>
-      <prefix>     * </prefix>
-      <body>Grizzly container doesn't understand same-name headers, or we don't fetch them correctly from GrizzlyRequest</body>
-      <estimate>0</estimate>
-      <lines>73-74</lines>
-      <owner>someone</owner>
-   </puzzle>
 </puzzles>
