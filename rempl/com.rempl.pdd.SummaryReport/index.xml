@@ -42,23 +42,14 @@
       <prefix>                        </prefix>
       <body>This test is disabled (although it works fine) because I don't know how to stop its execution. It starts Jetty and stays waiting. There should be some way of canceling it somehow... http://jira.codehaus.org/browse/MINVOKER-132</body>
       <estimate>0</estimate>
-      <lines>443-447</lines>
+      <lines>457-461</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
       <ticket>89</ticket>
       <file>rexsl-maven-plugin/src/it/all-correct/pom.xml</file>
       <prefix>        </prefix>
-      <body>If you change this path to something different from "/" there will be many problems with paths of XSL and CSS files. It's definitely a defect and should be fixed.</body>
-      <estimate>0</estimate>
-      <lines>49-51</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>89</ticket>
-      <file>rexsl-maven-plugin/src/it/structure-failure/pom.xml</file>
-      <prefix>        </prefix>
-      <body>If you change this path to something different from "/" there will be many problems with paths of XSL and CSS files. It's definitely a defect and should be fixed.</body>
+      <body>If you change this path to something different from "/" there will be many problems with paths of XSL and CSS files. It's definitely a defect and should be fixed here somehow.</body>
       <estimate>0</estimate>
       <lines>49-51</lines>
       <owner>someone</owner>
@@ -187,15 +178,6 @@
       <body>This "unchecked" warning should be removed somehow</body>
       <estimate>0</estimate>
       <lines>114-114</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>1</ticket>
-      <file>rexsl-test/src/test/java/com/rexsl/test/mock/MkContainerTest.java</file>
-      <prefix>     * </prefix>
-      <body>Grizzly container doesn't understand same-name headers, or we don't fetch them correctly from GrizzlyRequest</body>
-      <estimate>0</estimate>
-      <lines>73-74</lines>
       <owner>someone</owner>
    </puzzle>
 </puzzles>

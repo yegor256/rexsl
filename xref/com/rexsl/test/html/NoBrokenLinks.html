@@ -39,9 +39,9 @@
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">package</strong> com.rexsl.test.html;
 <a class="jxr_linenumber" name="31" href="#31">31</a>  
-<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> com.jcabi.log.Logger;
-<a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.Response;
-<a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> com.rexsl.test.response.XmlResponse;
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> com.jcabi.http.Response;
+<a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> com.jcabi.http.response.XmlResponse;
+<a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> com.jcabi.log.Logger;
 <a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> java.net.HttpURLConnection;
 <a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> java.net.MalformedURLException;
@@ -106,8 +106,8 @@
 <a class="jxr_linenumber" name="96" href="#96">96</a>  <em class="jxr_javadoccomment">     * Check for validness.</em>
 <a class="jxr_linenumber" name="97" href="#97">97</a>  <em class="jxr_javadoccomment">     * @param response Response to check</em>
 <a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="99" href="#99">99</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> check(<strong class="jxr_keyword">final</strong> <a href="../../../../com/rexsl/test/Response.html">Response</a> response) {
-<a class="jxr_linenumber" name="100" href="#100">100</a>         <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; links = <strong class="jxr_keyword">new</strong> <a href="../../../../com/rexsl/test/response/XmlResponse.html">XmlResponse</a>(response).xml().xpath(
+<a class="jxr_linenumber" name="99" href="#99">99</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> check(<strong class="jxr_keyword">final</strong> Response response) {
+<a class="jxr_linenumber" name="100" href="#100">100</a>         <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; links = <strong class="jxr_keyword">new</strong> XmlResponse(response).xml().xpath(
 <a class="jxr_linenumber" name="101" href="#101">101</a>             StringUtils.join(
 <a class="jxr_linenumber" name="102" href="#102">102</a>                 <span class="jxr_string">"//head/link/@href"</span>,
 <a class="jxr_linenumber" name="103" href="#103">103</a>                 <span class="jxr_string">" | //body//a/@href"</span>,
