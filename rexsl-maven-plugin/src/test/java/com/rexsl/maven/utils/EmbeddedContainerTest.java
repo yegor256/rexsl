@@ -29,11 +29,11 @@
  */
 package com.rexsl.maven.utils;
 
+import com.jcabi.http.request.ApacheRequest;
+import com.jcabi.http.response.RestResponse;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Environment;
 import com.rexsl.maven.EnvironmentMocker;
-import com.rexsl.test.request.ApacheRequest;
-import com.rexsl.test.response.RestResponse;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import org.hamcrest.Matchers;

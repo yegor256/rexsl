@@ -28,8 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.rexsl.test.request.ApacheRequest
-import com.rexsl.test.response.RestResponse
+import com.jcabi.http.request.ApacheRequest
+import com.jcabi.http.response.RestResponse
 import java.text.SimpleDateFormat
 import javax.ws.rs.core.HttpHeaders
 import org.hamcrest.Matchers

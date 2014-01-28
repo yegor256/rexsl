@@ -29,8 +29,8 @@
  */
 package com.rexsl.foo.scripts
 
-import com.rexsl.test.request.ApacheRequest
-import com.rexsl.test.response.XmlResponse
+import com.jcabi.http.request.ApacheRequest
+import com.jcabi.http.response.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 

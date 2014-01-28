@@ -30,11 +30,11 @@
 package com.rexsl.w3c;
 
 import com.jcabi.aspects.Loggable;
+import com.jcabi.http.Request;
+import com.jcabi.http.request.JdkRequest;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import com.jcabi.xml.XML;
-import com.rexsl.test.Request;
-import com.rexsl.test.request.JdkRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;

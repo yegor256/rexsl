@@ -30,13 +30,13 @@
 package com.rexsl.page.auth;
 
 import com.jcabi.aspects.Loggable;
+import com.jcabi.http.Request;
+import com.jcabi.http.request.JdkRequest;
+import com.jcabi.http.response.JsonResponse;
+import com.jcabi.http.response.RestResponse;
 import com.jcabi.urn.URN;
 import com.rexsl.page.Link;
 import com.rexsl.page.Resource;
-import com.rexsl.test.Request;
-import com.rexsl.test.request.JdkRequest;
-import com.rexsl.test.response.JsonResponse;
-import com.rexsl.test.response.RestResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;

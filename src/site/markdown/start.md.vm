@@ -233,9 +233,9 @@ script in `src/test/rexsl/scripts/RendersHomePage.groovy`
 
 ```
 package foo
-import com.rexsl.test.request.JdkRequest
-import com.rexsl.test.response.RestResponse
-import com.rexsl.test.response.XmlResponse
+import com.jcabi.http.request.JdkRequest
+import com.jcabi.http.response.RestResponse
+import com.jcabi.http.response.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 new JdkRequest(rexsl.home)

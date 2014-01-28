@@ -130,7 +130,7 @@ import lombok.ToString;
  *
  * <p>The check starts an embedded Java Servlet container and runs Groovy
  * scripts from {@code src/test/rexsl/scripts}, one by one. Scripts can
- * use {@link com.rexsl.test.request.ApacheRequest} class (or similar)
+ * use {@link com.jcabi.http.request.ApacheRequest} class (or similar)
  * to test the application
  * through its RESTful interface. The URI of the running application is
  * supplied in {@code rexsl.home} variable.

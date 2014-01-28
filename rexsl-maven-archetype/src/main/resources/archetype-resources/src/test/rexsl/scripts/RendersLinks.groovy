@@ -5,9 +5,9 @@
 package ${package}.rexsl.scripts
 
 import com.jcabi.manifests.Manifests
-import com.rexsl.test.request.ApacheRequest
-import com.rexsl.test.response.RestResponse
-import com.rexsl.test.response.XmlResponse
+import com.jcabi.http.request.ApacheRequest
+import com.jcabi.http.response.RestResponse
+import com.jcabi.http.response.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 

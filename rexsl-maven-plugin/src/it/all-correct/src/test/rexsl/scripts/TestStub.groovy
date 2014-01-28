@@ -29,8 +29,8 @@
  */
 package com.rexsl.foo.scripts
 
-import com.rexsl.test.request.ApacheRequest
-import com.rexsl.test.response.RestResponse
+import com.jcabi.http.request.ApacheRequest
+import com.jcabi.http.response.RestResponse
 import org.hamcrest.Matchers
 
 // This URL (/stub) is not available in production version of the system,

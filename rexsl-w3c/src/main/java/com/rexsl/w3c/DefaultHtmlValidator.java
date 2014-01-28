@@ -31,8 +31,8 @@ package com.rexsl.w3c;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
-import com.rexsl.test.Request;
-import com.rexsl.test.response.XmlResponse;
+import com.jcabi.http.Request;
+import com.jcabi.http.response.XmlResponse;
 import java.io.IOException;
 import java.net.URI;
 import javax.validation.constraints.NotNull;

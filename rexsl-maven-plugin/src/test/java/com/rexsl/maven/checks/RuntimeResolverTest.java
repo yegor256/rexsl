@@ -29,10 +29,10 @@
  */
 package com.rexsl.maven.checks;
 
+import com.jcabi.http.mock.MkAnswer;
+import com.jcabi.http.mock.MkContainer;
+import com.jcabi.http.mock.MkGrizzlyContainer;
 import com.rexsl.test.XhtmlMatchers;
-import com.rexsl.test.mock.MkAnswer;
-import com.rexsl.test.mock.MkContainer;
-import com.rexsl.test.mock.MkGrizzlyContainer;
 import javax.xml.transform.URIResolver;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;

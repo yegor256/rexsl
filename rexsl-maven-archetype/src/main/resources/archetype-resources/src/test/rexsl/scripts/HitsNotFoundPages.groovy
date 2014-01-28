@@ -4,9 +4,9 @@
  */
 package ${package}.rexsl.scripts
 
-import com.rexsl.test.request.JdkRequest
-import com.rexsl.test.response.RestResponse
-import com.rexsl.test.response.XmlResponse
+import com.jcabi.http.request.JdkRequest
+import com.jcabi.http.response.RestResponse
+import com.jcabi.http.response.XmlResponse
 
 [
     '/page-doesnt-exist',

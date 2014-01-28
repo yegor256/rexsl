@@ -29,7 +29,7 @@
  */
 
 /**
- * Test package, tests for it.
+ * RESTful client, for tests (but not only).
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$

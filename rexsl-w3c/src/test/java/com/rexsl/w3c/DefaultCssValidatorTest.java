@@ -29,9 +29,9 @@
  */
 package com.rexsl.w3c;
 
-import com.rexsl.test.mock.MkAnswer;
-import com.rexsl.test.mock.MkContainer;
-import com.rexsl.test.mock.MkGrizzlyContainer;
+import com.jcabi.http.mock.MkAnswer;
+import com.jcabi.http.mock.MkContainer;
+import com.jcabi.http.mock.MkGrizzlyContainer;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;

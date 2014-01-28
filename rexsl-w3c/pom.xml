@@ -50,6 +50,11 @@
             <groupId>com.rexsl</groupId>
             <artifactId>rexsl-test</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-http</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

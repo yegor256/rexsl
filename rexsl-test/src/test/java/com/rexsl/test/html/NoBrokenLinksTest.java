@@ -29,7 +29,7 @@
  */
 package com.rexsl.test.html;
 
-import com.rexsl.test.request.FakeRequest;
+import com.jcabi.http.request.FakeRequest;
 import java.net.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.MatcherAssert;

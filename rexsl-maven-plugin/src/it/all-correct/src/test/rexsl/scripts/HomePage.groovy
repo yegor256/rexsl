@@ -30,9 +30,9 @@
 package com.rexsl.foo.scripts
 
 import com.jcabi.log.Logger
-import com.rexsl.test.request.ApacheRequest
-import com.rexsl.test.response.RestResponse
-import com.rexsl.test.response.XmlResponse
+import com.jcabi.http.request.ApacheRequest
+import com.jcabi.http.response.RestResponse
+import com.jcabi.http.response.XmlResponse
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import org.hamcrest.MatcherAssert

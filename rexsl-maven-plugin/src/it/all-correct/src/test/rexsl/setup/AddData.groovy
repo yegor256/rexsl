@@ -29,9 +29,9 @@
  */
 package com.rexsl.foo.setup
 
-import com.rexsl.test.request.ApacheRequest
-import com.rexsl.test.Request
-import com.rexsl.test.response.RestResponse
+import com.jcabi.http.request.ApacheRequest
+import com.jcabi.http.Request
+import com.jcabi.http.response.RestResponse
 import com.jcabi.log.Logger
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType

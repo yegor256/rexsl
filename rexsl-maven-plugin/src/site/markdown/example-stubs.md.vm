@@ -40,8 +40,8 @@ public class RuntimeExceptionStub {
 This is how we may test it from `WhatIfRuntimeException.groovy`:
 
 ```
-import com.rexsl.test.request.JdkRequest
-import com.rexsl.test.response.RestResponse
+import com.jcabi.http.request.JdkRequest
+import com.jcabi.http.response.RestResponse
 new JdkRequest(rexsl.home)
   .fetch()
   .as(RestResponse.class)
