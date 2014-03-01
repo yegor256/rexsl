@@ -120,56 +120,40 @@ public class BaseResource implements Resource {
     @Override
     @NotNull
     public final Providers providers() {
-        if (this.iproviders == null) {
-            throw new IllegalStateException(
-                Logger.format(
-                    "%[type]s#providers was never injected by JAX-RS",
-                    this
-                )
-            );
-        }
+        this.assertNotNull(
+            this.iproviders,
+            "%[type]s#providers was never injected by JAX-RS"
+        );
         return this.iproviders;
     }
 
     @Override
     @NotNull
     public final HttpHeaders httpHeaders() {
-        if (this.ihttpHeaders.get() == null) {
-            throw new IllegalStateException(
-                Logger.format(
-                    "%[type]s#httpHeaders was never injected by JAX-RS",
-                    this
-                )
-            );
-        }
+        this.assertNotNull(
+            this.ihttpHeaders.get(),
+            "%[type]s#httpHeaders was never injected by JAX-RS"
+        );
         return this.ihttpHeaders.get();
     }
 
     @Override
     @NotNull
     public final UriInfo uriInfo() {
-        if (this.iuriInfo == null) {
-            throw new IllegalStateException(
-                Logger.format(
-                    "%[type]s#uriInfo was never injected by JAX-RS",
-                    this
-                )
-            );
-        }
+        this.assertNotNull(
+            this.iuriInfo,
+            "%[type]s#uriInfo was never injected by JAX-RS"
+        );
         return this.iuriInfo;
     }
 
     @Override
     @NotNull
     public final HttpServletRequest httpServletRequest() {
-        if (this.ihttpRequest == null) {
-            throw new IllegalStateException(
-                Logger.format(
-                    "%[type]s#httpRequest was never injected by JAX-RS",
-                    this
-                )
-            );
-        }
+        this.assertNotNull(
+            this.ihttpRequest,
+            "%[type]s#httpRequest was never injected by JAX-RS"
+        );
         return this.ihttpRequest;
     }
 
@@ -180,14 +164,10 @@ public class BaseResource implements Resource {
     @Override
     @NotNull
     public final SecurityContext securityContext() {
-        if (this.security == null) {
-            throw new IllegalStateException(
-                Logger.format(
-                    "%[type]s#securityContext was never injected by JAX-RS",
-                    this
-                )
-            );
-        }
+        this.assertNotNull(
+            this.security,
+            "%[type]s#securityContext was never injected by JAX-RS"
+        );
         return this.security;
     }
 
@@ -198,14 +178,10 @@ public class BaseResource implements Resource {
     @Override
     @NotNull
     public final ServletContext servletContext() {
-        if (this.srvltContext == null) {
-            throw new IllegalStateException(
-                Logger.format(
-                    "%[type]s#servletContext was never injected by JAX-RS",
-                    this
-                )
-            );
-        }
+        this.assertNotNull(
+            this.srvltContext,
+            "%[type]s#servletContext was never injected by JAX-RS"
+        );
         return this.srvltContext;
     }
 
@@ -285,7 +261,7 @@ public class BaseResource implements Resource {
     private boolean needsForwarding() {
         boolean needs = false;
         Class<?> type = this.getClass();
-        while (!type.equals(Object.class)) {
+        while (type != null && !type.equals(Object.class)) {
             if (type.isAnnotationPresent(Resource.Forwarded.class)) {
                 needs = true;
                 break;
@@ -295,4 +271,16 @@ public class BaseResource implements Resource {
         return needs;
     }
 
+    /**
+     * Asserts that an object is not <code>null</code> and throws
+     * IllegalStateException if the object is <code>null</code>.
+     * @param object The object to check
+     * @param message The exception message to use if the assertion fails
+     * @since 0.12
+     */
+    private void assertNotNull(final Object object, final String message) {
+        if (object == null) {
+            throw new IllegalStateException(Logger.format(message, this));
+        }
+    }
 }
