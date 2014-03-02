@@ -16,6 +16,7 @@
                                             <link rel="stylesheet" href="./css/highlight.css" />
         <script src="./js/jquery-1.8.3.min.js"></script>
         <script src="./js/highlight-7.3.min.js"></script>
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
@@ -24,444 +25,234 @@
                             hljs.highlightBlock(element);
                         }
                     );
+                    $(".menu-button").click(
+                        function() {
+                            if ($("#here-goes-menu").attr("class") == "menu-off") {
+                                $("#menu").clone().attr("class", "mobile-menu").appendTo("#here-goes-menu");
+                                $("#here-goes-menu").attr("class", "menu-on");
+                            } else {
+                                $(".mobile-menu").hide();
+                                $("#here-goes-menu").attr("class", "menu-off");
+                            }
+                        }
+                    );
                 }
             );
         </script>
+        <style>
+            @import url("./css/wide.css") (min-width: 1200px) and (max-width:5000px);
+            @import url("./css/900-1199.css") (min-width: 900px) and (max-width:1199px);
+            @import url("./css/600-899.css") (min-width: 600px) and (max-width:899px);
+            @import url("./css/100-599.css") (min-width: 100px) and (max-width:599px);
+        </style>
     </head>
-    <body>
+    <body style="background: url('./images/background.png') fixed;">
+                <div class="page">
+            <div class="menu-section">
                 <ul id="menu">
-                                                    <li>
-                    Parent Project
-                                            <ul>
-                                                                            <li>
-                                                                    <a href="../index.html" title="rexsl">rexsl</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                            <li>
-                    Overview
-                                            <ul>
-                                                                            <li>
-                                                                    <a href="index.html" title="Introduction">Introduction</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="usage.html" title="Usage">Usage</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="plugin-info.html" title="Goals">Goals</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="faq.html" title="FAQ">FAQ</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="changes-report.html" title="Release History">Release History</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                            <li>
-                    Usage Examples
-                                            <ul>
-                                                                            <li>
-                                                                    <a href="example-narrow.html" title="Narrow down test scope">Narrow down test scope</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                            <li>
-                    Test Examples
-                                            <ul>
-                                                                            <li>
-                                                                    <a href="example-setup.html" title="Setup scripts">Setup scripts</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="example-stubs.html" title="Test stubs">Test stubs</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="example-bootstrap.html" title="Bootstrap">Bootstrap</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="example-selenium.html" title="Selenium">Selenium</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                            <li>
-                    Project Documentation
-                                            <ul>
-                                                                            <li>
-                                                                    <a href="project-info.html" title="Project Information">Project Information</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
-                                                                                        <li>
-                                                                    <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <ul>
-                                                                            <li>
-                                                                    <a href="rempl.html" title="REMPL">REMPL</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="surefire-report.html" title="Surefire Report">Surefire Report</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="changelog.html" title="Change Log">Change Log</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="dev-activity.html" title="Developer Activity">Developer Activity</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                            <strong>                        <a href="file-activity.html" title="File Activity">File Activity</a>
+                                                                                    <li>
+                            Parent Project
+                                                            <ul>
+                                                                                                    <li>
+                                                                                    <a href="../index.html" title="rexsl">rexsl</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                            <li>
+                            Overview
+                                                            <ul>
+                                                                                                    <li>
+                                                                                    <a href="index.html" title="Introduction">Introduction</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="usage.html" title="Usage">Usage</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="plugin-info.html" title="Goals">Goals</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="faq.html" title="FAQ">FAQ</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                            <li>
+                            Usage Examples
+                                                            <ul>
+                                                                                                    <li>
+                                                                                    <a href="example-narrow.html" title="Narrow down test scope">Narrow down test scope</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                            <li>
+                            Test Examples
+                                                            <ul>
+                                                                                                    <li>
+                                                                                    <a href="example-setup.html" title="Setup scripts">Setup scripts</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="example-stubs.html" title="Test stubs">Test stubs</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="example-bootstrap.html" title="Bootstrap">Bootstrap</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="example-selenium.html" title="Selenium">Selenium</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                            <li>
+                            Project Documentation
+                                                            <ul>
+                                                                                                    <li>
+                                                                                    <a href="project-info.html" title="Project Information">Project Information</a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </li>
+                                                                                                                        <li>
+                                                                                    <a href="project-reports.html" title="Project Reports">Project Reports</a>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <ul>
+                                                                                                    <li>
+                                                                                    <a href="rempl.html" title="REMPL">REMPL</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="surefire-report.html" title="Surefire Report">Surefire Report</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="changelog.html" title="Change Log">Change Log</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="dev-activity.html" title="Developer Activity">Developer Activity</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                            <strong>                        <a href="file-activity.html" title="File Activity">File Activity</a>
         </strong>
-                                                                                                                <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="dependency-updates-report.html" title="Dependency Updates Report">Dependency Updates Report</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="plugin-updates-report.html" title="Plugin Updates Report">Plugin Updates Report</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="apidocs-0.10/index.html" title="JavaDocs">JavaDocs</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="testapidocs-0.10/index.html" title="Test JavaDocs">Test JavaDocs</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="cobertura/index.html" title="Cobertura Test Coverage">Cobertura Test Coverage</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="plugin-info.html" title="Plugin Documentation">Plugin Documentation</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="github-report.html" title="GitHub Report">GitHub Report</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="changes-report.html" title="Changes Report">Changes Report</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                    </ul>
-        <div id="content">
-                            <a href="https://github.com/yegor256/rexsl/rexsl-maven-plugin">
-                    <img style="position: absolute; top: 0; right: 0; border: 0; width: 100px; height: 100px;"
-                        src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
-                        alt="Fork me on GitHub" />
-                </a>
-                        <a href="../" title="home page of ReXSL.com">
-                <img src="http://img.rexsl.com/logo.png"
-                    alt="ReXSL"
-                                            width="200"
-                                                                height="45"
-                                    />
-            </a>
-                            <ul id="breadcrumbs">
-                                            <li>                        <a href=".." title="rexsl.com">rexsl.com</a>
-        </li>
-                                            <li>                                    <a href="./" title="rexsl-maven-plugin">rexsl-maven-plugin</a>
-        </li>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="dependency-updates-report.html" title="Dependency Updates Report">Dependency Updates Report</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="plugin-updates-report.html" title="Plugin Updates Report">Plugin Updates Report</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="apidocs-0.12/index.html" title="JavaDocs">JavaDocs</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="testapidocs-0.12/index.html" title="Test JavaDocs">Test JavaDocs</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="cobertura/index.html" title="Cobertura Test Coverage">Cobertura Test Coverage</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="plugin-info.html" title="Plugin Documentation">Plugin Documentation</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="github-report.html" title="GitHub Report">GitHub Report</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li>
+                                                                                    <a href="changes-report.html" title="Changes Report">Changes Report</a>
+                                                                                                                                                                        <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
                                     </ul>
-                        <p>
-                
-                24-Nov-2013
-                0.10
-            </p>
-            <article>
-                <div class="section">
+            </div>
+            <div id="right-side">
+                <div id="content">
+                    <i class="menu-button fa fa-align-justify"></i>
+                    <div class="logo-section">
+                        <a href="../" title="home page of ReXSL.com">
+                            <img src="http://img.rexsl.com/logo.png"
+                                alt="ReXSL"
+                                                                    width="200"
+                                                                                                    height="45"
+                                                            />
+                        </a>
+                    </div>
+                    <div class="date">
+                        <div class="date-numbers">
+                            
+                            02-Mar-2014
+                            0.12
+                        </div>
+                                                                    </div>
+                    <div id="here-goes-menu"></div>
+                    <article>
+                        <div class="section">
+                            <div class="section">
 <h2>File Activity Report<a name="File_Activity_Report"></a></h2>
 <div class="section">
-<h3>Changes between 2013-10-25 and 2013-11-25<a name="Changes_between_2013-10-25_and_2013-11-25"></a></h3>
-<p>Total commits: 29<br />Total number of files changed: 77</p>
+<h3>Changes between 2014-01-31 and 2014-03-03<a name="Changes_between_2014-01-31_and_2014-03-03"></a></h3>
+<p>Total commits: 0<br />Total number of files changed: 0</p>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Filename</th>
-<th>Number of Times Changed</th></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/pom.xml">rexsl-maven-plugin/<b>pom.xml</b></a> </td>
-<td>19</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/ExceptionTrap.groovy">rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/<b>ExceptionTrap.groovy</b></a> </td>
-<td>5</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/DefaultChecksProvider.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>DefaultChecksProvider.java</b></a> </td>
-<td>5</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/Catapult.groovy">rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/<b>Catapult.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/HomePage.groovy">rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/<b>HomePage.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/IfModifiedSince.groovy">rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/<b>IfModifiedSince.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/MockXmlIsAbsent.groovy">rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/<b>MockXmlIsAbsent.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/SetupWorks.groovy">rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/<b>SetupWorks.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/TestStub.groovy">rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/scripts/<b>TestStub.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/setup/AddData.groovy">rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/setup/<b>AddData.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/run-all-correct/src/test/rexsl/setup/IfModifiedSince.groovy">rexsl-maven-plugin/src/it/run-all-correct/src/test/rexsl/setup/<b>IfModifiedSince.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/run-all-correct/src/test/rexsl/setup/MockXml.groovy">rexsl-maven-plugin/src/it/run-all-correct/src/test/rexsl/setup/<b>MockXml.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/script-failure/src/test/rexsl/scripts/HomePage.groovy">rexsl-maven-plugin/src/it/script-failure/src/test/rexsl/scripts/<b>HomePage.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/xsd-failure/src/test/rexsl/scripts/SimpleScenario.groovy">rexsl-maven-plugin/src/it/xsd-failure/src/test/rexsl/scripts/<b>SimpleScenario.groovy</b></a> </td>
-<td>4</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/WebXmlCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>WebXmlCheck.java</b></a> </td>
-<td>4</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/RuntimeResolverTest.java">rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/<b>RuntimeResolverTest.java</b></a> </td>
-<td>4</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/CssStaticCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>CssStaticCheck.java</b></a> </td>
-<td>3</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/XhtmlOutputCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>XhtmlOutputCheck.java</b></a> </td>
-<td>3</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/java/com/rexsl/maven/utils/EmbeddedContainerTest.java">rexsl-maven-plugin/src/test/java/com/rexsl/maven/utils/<b>EmbeddedContainerTest.java</b></a> </td>
-<td>3</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/InContainerScriptsCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>InContainerScriptsCheck.java</b></a> </td>
-<td>2</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/WebappFilesCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>WebappFilesCheck.java</b></a> </td>
-<td>2</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/all-correct/pom.xml">rexsl-maven-plugin/src/it/all-correct/<b>pom.xml</b></a> </td>
-<td>2</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/AbstractRexslMojo.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/<b>AbstractRexslMojo.java</b></a> </td>
-<td>2</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/Check.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/<b>Check.java</b></a> </td>
-<td>2</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/JigsawCssCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>JigsawCssCheck.java</b></a> </td>
-<td>2</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/apt/example-stubs.apt.vm">rexsl-maven-plugin/src/site/apt/<b>example-stubs.apt.vm</b></a> </td>
-<td>2</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/markdown/example-stubs.md.vm">rexsl-maven-plugin/src/site/markdown/<b>example-stubs.md.vm</b></a> </td>
-<td>2</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/CheckMojo.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/<b>CheckMojo.java</b></a> </td>
-<td>2</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/WebXmlCheckTest.java">rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/<b>WebXmlCheckTest.java</b></a> </td>
-<td>2</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/resources/com/rexsl/maven/scriptTestFailed.js">rexsl-maven-plugin/src/test/resources/com/rexsl/maven/<b>scriptTestFailed.js</b></a> </td>
-<td>2</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/resources/com/rexsl/maven/scriptTestOK.js">rexsl-maven-plugin/src/test/resources/com/rexsl/maven/<b>scriptTestOK.js</b></a> </td>
-<td>2</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/BinaryFilesCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>BinaryFilesCheck.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/FilesStructureCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>FilesStructureCheck.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/JSStaticCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>JSStaticCheck.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/LibrariesCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>LibrariesCheck.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/RexslFilesCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>RexslFilesCheck.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/RuntimeResolver.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>RuntimeResolver.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/AbstractPacker.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/<b>AbstractPacker.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/CssPacker.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/<b>CssPacker.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/JsPacker.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/<b>JsPacker.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/PackersProvider.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/<b>PackersProvider.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/XslPacker.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/<b>XslPacker.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/BindingBuilder.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/<b>BindingBuilder.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/EmbeddedContainer.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/<b>EmbeddedContainer.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/GroovyException.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/<b>GroovyException.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/GroovyExecutor.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/<b>GroovyExecutor.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/PortReserver.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/<b>PortReserver.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/RuntimeEnvironment.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/<b>RuntimeEnvironment.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/RuntimeFilter.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/<b>RuntimeFilter.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/RuntimeListener.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/<b>RuntimeListener.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/RuntimeResponseWrapper.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/<b>RuntimeResponseWrapper.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/markdown/example-narrow.md.vm">rexsl-maven-plugin/src/site/markdown/<b>example-narrow.md.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/site.xml">rexsl-maven-plugin/src/site/<b>site.xml</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/script-failure/verify.groovy">rexsl-maven-plugin/src/it/script-failure/<b>verify.groovy</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/js/scriptTestOK.js">rexsl-maven-plugin/src/it/all-correct/src/test/rexsl/js/<b>scriptTestOK.js</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/ChecksProvider.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/<b>ChecksProvider.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/PackageMojo.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/<b>PackageMojo.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/java/com/rexsl/maven/CheckMojoTest.java">rexsl-maven-plugin/src/test/java/com/rexsl/maven/<b>CheckMojoTest.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/DefaultChecksProviderTest.java">rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/<b>DefaultChecksProviderTest.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/apt/example-bootstrap.apt.vm">rexsl-maven-plugin/src/site/apt/<b>example-bootstrap.apt.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/apt/example-selenium.apt.vm">rexsl-maven-plugin/src/site/apt/<b>example-selenium.apt.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/apt/example-setup.apt.vm">rexsl-maven-plugin/src/site/apt/<b>example-setup.apt.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/apt/index.apt.vm">rexsl-maven-plugin/src/site/apt/<b>index.apt.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/apt/usage.apt.vm">rexsl-maven-plugin/src/site/apt/<b>usage.apt.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/markdown/example-bootstrap.md.vm">rexsl-maven-plugin/src/site/markdown/<b>example-bootstrap.md.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/markdown/example-selenium.md.vm">rexsl-maven-plugin/src/site/markdown/<b>example-selenium.md.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/markdown/example-setup.md.vm">rexsl-maven-plugin/src/site/markdown/<b>example-setup.md.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/markdown/index.md.vm">rexsl-maven-plugin/src/site/markdown/<b>index.md.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/site/markdown/usage.md.vm">rexsl-maven-plugin/src/site/markdown/<b>usage.md.vm</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/JSUnitTestsCheck.java">rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/<b>JSUnitTestsCheck.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/resources/com/rexsl/maven/checks/rhinoUnitUtil.js">rexsl-maven-plugin/src/main/resources/com/rexsl/maven/checks/<b>rhinoUnitUtil.js</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/main/resources/com/rexsl/maven/checks/rhinoUnitWrapper.js">rexsl-maven-plugin/src/main/resources/com/rexsl/maven/checks/<b>rhinoUnitWrapper.js</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/mock/java/com/rexsl/maven/CheckMocker.java">rexsl-maven-plugin/src/mock/java/com/rexsl/maven/<b>CheckMocker.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/InContainerScriptsCheckTest.java">rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/<b>InContainerScriptsCheckTest.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/JSUnitTestsCheckTest.java">rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/<b>JSUnitTestsCheckTest.java</b></a> </td>
-<td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/XhtmlOutputCheckTest.java">rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/<b>XhtmlOutputCheckTest.java</b></a> </td>
-<td>1</td></tr>
-<tr class="b">
-<td><a class="externalLink" href="https://github.com/yegor256/rexsl/rexsl-maven-plugin/src/test/resources/com/rexsl/maven/script.js">rexsl-maven-plugin/src/test/resources/com/rexsl/maven/<b>script.js</b></a> </td>
-<td>1</td></tr></table></div></div>
-            </article>
-            <p style="margin-bottom: 3em; margin-top: 2em;">
-                Copyright &#169;
-                                                    2011-2013
-                                ReXSL.com, All Rights Reserved.
-                <a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.
-            </p>
-            <a href="http://maven.apache.org" title="site is built by Apache Maven"
-                style='position: absolute; bottom: 1em; right: 1em;'>
-                <img src='images/built-by-maven.png' style='width: 50px; height: 17px;'
-                    alt='site is built by Apache Maven'/>
-            </a>
+<th>Number of Times Changed</th></tr></table></div></div>
+                        </div>
+                    </article>
+                    <img class="maven-mobile" src="./images/built-by-maven.png"
+                        alt="built by maven" style="float:right" width="80"/>
+                </div>
+                <div class="legal-notes">
+                    <div class="copyright">
+                        Copyright &#169;
+                                                                            2011-2014
+                                                <br/>
+                        ReXSL.com, All Rights Reserved.
+                        <br/>
+                        <a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>
