@@ -33,18 +33,14 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.utils.FileFilterUtil;
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.AndFileFilter;
-import org.apache.commons.io.filefilter.HiddenFileFilter;
-import org.apache.commons.io.filefilter.NameFileFilter;
-import org.apache.commons.io.filefilter.NotFileFilter;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
@@ -114,7 +110,8 @@ final class RexslFilesCheck implements Check {
      */
     private boolean validate(final File folder) {
         boolean valid = true;
-        for (final File file : this.getFiles(folder)) {
+        final Collection<File> files = FileFilterUtil.getFiles(folder);
+        for (final File file : files) {
             final String ext = FilenameUtils.getExtension(file.getPath());
             final String regex = RexslFilesCheck.EXTS
                 .get(folder.getName()).toString();
@@ -130,21 +127,4 @@ final class RexslFilesCheck implements Check {
         }
         return valid;
     }
-
-    /**
-     * Get files, recursively.
-     * @param dir The directory to read from
-     * @return Collection of files
-     */
-    private Collection<File> getFiles(final File dir) {
-        return FileUtils.listFiles(
-            dir,
-            HiddenFileFilter.VISIBLE,
-            new AndFileFilter(
-                HiddenFileFilter.VISIBLE,
-                new NotFileFilter(new NameFileFilter(".svn"))
-            )
-        );
-    }
-
 }

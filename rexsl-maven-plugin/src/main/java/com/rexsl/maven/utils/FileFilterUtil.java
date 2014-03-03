@@ -27,30 +27,52 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.maven;
+package com.rexsl.maven.utils;
 
-import java.io.IOException;
-import javax.validation.constraints.NotNull;
+import java.io.File;
+import java.util.Collection;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.AndFileFilter;
+import org.apache.commons.io.filefilter.HiddenFileFilter;
+import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
 
 /**
- * Single check to be executed by CheckMojo.
+ * Utility class for working with file filters.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @author Evgeniy Nyavro (e.nyavro@gmail.com)
+ * @author Simon Njenga
  * @version $Id$
  */
-public interface Check {
+public final class FileFilterUtil {
 
     /**
-     * Set scope.
-     * @param scope Scope specification
+     * The Version Control System currently in use. It is recommended to change
+     * this to either ".git", ".svn", "CVS" e.t.c in case another one is in use
      */
-    void setScope(@NotNull String scope);
+    public static final String VERSION_CONTROL = ".git";
 
     /**
-     * Perform all validations and return whether everything is fine or not.
-     * @param env Envirorment
-     * @return Everything is fine?
-     * @throws IOException If fails
+     * Suppresses the default constructor to ensure non-instantiability.
      */
-    boolean validate(@NotNull Environment env) throws IOException;
+    private FileFilterUtil() {
+        // intentionally empty
+    }
+
+    /**
+     * Get files, recursively while ignoring/excluding GIT directories.
+     * @param dir The directory to read from
+     * @return Collection of files
+     * @see #VERSION_CONTROL
+     */
+    public static Collection<File> getFiles(final File dir) {
+        return FileUtils.listFiles(
+            dir,
+            HiddenFileFilter.VISIBLE,
+            new AndFileFilter(
+                HiddenFileFilter.VISIBLE,
+                new NotFileFilter(new NameFileFilter(VERSION_CONTROL))
+            )
+        );
+    }
 }

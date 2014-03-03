@@ -65,6 +65,7 @@ import lombok.ToString;
  * <p>The class is mutable and NOT thread-safe.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @author Simon Njenga
  * @version $Id$
  * @since 0.3.7
  * @see BasePage

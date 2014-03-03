@@ -33,17 +33,13 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
+import com.rexsl.maven.utils.FileFilterUtil;
 import java.io.File;
 import java.util.Collection;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.AndFileFilter;
-import org.apache.commons.io.filefilter.HiddenFileFilter;
-import org.apache.commons.io.filefilter.NameFileFilter;
-import org.apache.commons.io.filefilter.NotFileFilter;
 
 /**
  * Checks that all files are text ones.
@@ -70,16 +66,9 @@ final class BinaryFilesCheck implements Check {
     @Override
     @Loggable(Loggable.DEBUG)
     public boolean validate(@NotNull final Environment env) {
-        final File dir = new File(env.basedir(), "src/main/webapp");
-        final Collection<File> files = FileUtils.listFiles(
-            dir,
-            HiddenFileFilter.VISIBLE,
-            new AndFileFilter(
-                HiddenFileFilter.VISIBLE,
-                new NotFileFilter(new NameFileFilter(".svn"))
-            )
-        );
         boolean valid = true;
+        final File dir = new File(env.basedir(), "src/main/webapp");
+        final Collection<File> files = FileFilterUtil.getFiles(dir);
         for (final File file : files) {
             final String path = file.getAbsolutePath()
                 .substring(dir.getAbsolutePath().length() + 1);
