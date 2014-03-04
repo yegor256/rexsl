@@ -33,7 +33,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.utils.FileFilterUtil;
+import com.rexsl.maven.utils.Sources;
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
@@ -105,7 +105,7 @@ final class WebappFilesCheck implements Check {
      */
     private boolean validate(final File basedir, final File dir) {
         boolean valid = true;
-        final Collection<File> files = FileFilterUtil.getFiles(dir);
+        final Collection<File> files = Sources.getFiles(dir);
         for (final File file : files) {
             boolean found = false;
             File current = file.getParentFile();

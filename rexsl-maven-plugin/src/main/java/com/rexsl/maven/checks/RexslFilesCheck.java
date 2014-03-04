@@ -33,7 +33,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.utils.FileFilterUtil;
+import com.rexsl.maven.utils.Sources;
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
@@ -110,7 +110,7 @@ final class RexslFilesCheck implements Check {
      */
     private boolean validate(final File folder) {
         boolean valid = true;
-        final Collection<File> files = FileFilterUtil.getFiles(folder);
+        final Collection<File> files = Sources.getFiles(folder);
         for (final File file : files) {
             final String ext = FilenameUtils.getExtension(file.getPath());
             final String regex = RexslFilesCheck.EXTS

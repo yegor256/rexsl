@@ -33,7 +33,7 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
-import com.rexsl.maven.utils.FileFilterUtil;
+import com.rexsl.maven.utils.Sources;
 import java.io.File;
 import java.util.Collection;
 import javax.validation.constraints.NotNull;
@@ -68,7 +68,7 @@ final class BinaryFilesCheck implements Check {
     public boolean validate(@NotNull final Environment env) {
         boolean valid = true;
         final File dir = new File(env.basedir(), "src/main/webapp");
-        final Collection<File> files = FileFilterUtil.getFiles(dir);
+        final Collection<File> files = Sources.getFiles(dir);
         for (final File file : files) {
             final String path = file.getAbsolutePath()
                 .substring(dir.getAbsolutePath().length() + 1);
