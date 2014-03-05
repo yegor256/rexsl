@@ -31,6 +31,7 @@ package com.rexsl.maven.utils;
 
 import java.io.File;
 import java.util.Collection;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
@@ -53,21 +54,27 @@ public final class Sources {
     public static final String VERSION_CONTROL = ".git";
 
     /**
-     * Suppresses the default constructor to ensure non-instantiability.
+     * File directories.
      */
-    private Sources() {
-        // intentionally empty
+    @NotNull
+    private final transient File directories;
+
+    /**
+     * Public ctor.
+     * @param dir The file directory to read from
+     */
+    public Sources(@NotNull final File dir) {
+        this.directories = dir;
     }
 
     /**
      * Get files, recursively while ignoring/excluding GIT directories.
-     * @param dir The directory to read from
      * @return Collection of files
      * @see #VERSION_CONTROL
      */
-    public static Collection<File> getFiles(final File dir) {
+    public Collection<File> files() {
         return FileUtils.listFiles(
-            dir,
+            this.directories,
             HiddenFileFilter.VISIBLE,
             new AndFileFilter(
                 HiddenFileFilter.VISIBLE,

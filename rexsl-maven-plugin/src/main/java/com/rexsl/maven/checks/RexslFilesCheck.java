@@ -110,7 +110,7 @@ final class RexslFilesCheck implements Check {
      */
     private boolean validate(final File folder) {
         boolean valid = true;
-        final Collection<File> files = Sources.getFiles(folder);
+        final Collection<File> files = new Sources(folder).files();
         for (final File file : files) {
             final String ext = FilenameUtils.getExtension(file.getPath());
             final String regex = RexslFilesCheck.EXTS

@@ -105,7 +105,7 @@ final class WebappFilesCheck implements Check {
      */
     private boolean validate(final File basedir, final File dir) {
         boolean valid = true;
-        final Collection<File> files = Sources.getFiles(dir);
+        final Collection<File> files = new Sources(dir).files();
         for (final File file : files) {
             boolean found = false;
             File current = file.getParentFile();

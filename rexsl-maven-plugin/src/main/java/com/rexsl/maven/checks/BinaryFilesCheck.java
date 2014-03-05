@@ -68,7 +68,7 @@ final class BinaryFilesCheck implements Check {
     public boolean validate(@NotNull final Environment env) {
         boolean valid = true;
         final File dir = new File(env.basedir(), "src/main/webapp");
-        final Collection<File> files = Sources.getFiles(dir);
+        final Collection<File> files = new Sources(dir).files();
         for (final File file : files) {
             final String path = file.getAbsolutePath()
                 .substring(dir.getAbsolutePath().length() + 1);
