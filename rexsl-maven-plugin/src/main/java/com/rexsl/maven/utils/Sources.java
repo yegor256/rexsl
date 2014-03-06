@@ -39,7 +39,7 @@ import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.NotFileFilter;
 
 /**
- * Utility class for working with file filters.
+ * Convenience class for working with file filters.
  *
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
  * @author Simon Njenga
@@ -51,7 +51,7 @@ public final class Sources {
      * The Version Control System currently in use. It is recommended to change
      * this to either ".git", ".svn", "CVS" e.t.c in case another one is in use
      */
-    public static final String VERSION_CONTROL = ".git";
+    private static final String VERSION_CONTROL = ".git";
 
     /**
      * File directories.
