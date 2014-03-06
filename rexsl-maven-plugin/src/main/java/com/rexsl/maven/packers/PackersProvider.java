@@ -65,12 +65,14 @@ public final class PackersProvider {
     /**
      * Get full collection of packers.
      * @return List of packers
+     * @todo #751 When new JsPacker is ready, add it to the packers list
+     *  and enable tests in JsPackerTest. Current packer uses YuiCompressor
+     *  which uses old Rhino dependency that has problems with CssLint.js.
      */
     @Loggable(Loggable.DEBUG)
     public Set<Packer> all() {
         final Set<Packer> packers = new LinkedHashSet<Packer>(0);
         packers.add(new CssPacker());
-        packers.add(new JsPacker());
         packers.add(new XslPacker());
         return packers;
     }
