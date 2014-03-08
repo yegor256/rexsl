@@ -27,12 +27,59 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.rexsl.maven.utils;
+
+import java.io.File;
+import java.util.Collection;
+import javax.validation.constraints.NotNull;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.AndFileFilter;
+import org.apache.commons.io.filefilter.HiddenFileFilter;
+import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
 
 /**
- * Authentication, tests.
+ * Convenience class for working with file filters.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @author Evgeniy Nyavro (e.nyavro@gmail.com)
+ * @author Simon Njenga
  * @version $Id$
- * @since 0.4.7
  */
-package com.rexsl.page.auth;
+public final class Sources {
+
+    /**
+     * The Version Control System currently in use. It is recommended to change
+     * this to either ".git", ".svn", "CVS" e.t.c in case another one is in use
+     */
+    private static final String VERSION_CONTROL = ".git";
+
+    /**
+     * File directories.
+     */
+    @NotNull
+    private final transient File directories;
+
+    /**
+     * Public ctor.
+     * @param dir The file directory to read from
+     */
+    public Sources(@NotNull final File dir) {
+        this.directories = dir;
+    }
+
+    /**
+     * Get files, recursively while ignoring/excluding GIT directories.
+     * @return Collection of files
+     * @see #VERSION_CONTROL
+     */
+    public Collection<File> files() {
+        return FileUtils.listFiles(
+            this.directories,
+            HiddenFileFilter.VISIBLE,
+            new AndFileFilter(
+                HiddenFileFilter.VISIBLE,
+                new NotFileFilter(new NameFileFilter(VERSION_CONTROL))
+            )
+        );
+    }
+}
