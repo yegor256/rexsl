@@ -58,7 +58,7 @@
             <item name="Introduction" href="index.html"/>
             <item name="Quick Start" href="start.html"/>
             <item name="Testing" href="testing.html"/>
-            <item name="Release History" href="changes-report.html"/>
+            <item name="Release History" href="https://github.com/yegor256/rexsl/releases"/>
         </menu>
         <menu name="Examples">
             <item name="Start from archetype" href="example-archetype.html"/>
