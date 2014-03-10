@@ -17,6 +17,7 @@
         <script src="./js/jquery-1.8.3.min.js"></script>
         <script src="./js/highlight-7.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+        <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
@@ -39,14 +40,8 @@
                 }
             );
         </script>
-        <style>
-            @import url("./css/wide.css") (min-width: 1200px) and (max-width:5000px);
-            @import url("./css/900-1199.css") (min-width: 900px) and (max-width:1199px);
-            @import url("./css/600-899.css") (min-width: 600px) and (max-width:899px);
-            @import url("./css/100-599.css") (min-width: 100px) and (max-width:599px);
-        </style>
     </head>
-    <body style="background: url('./images/background.png') fixed;">
+    <body>
                 <div class="page">
             <div class="menu-section">
                 <ul id="menu">
@@ -70,17 +65,17 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.12/index.html" title="API 0.12 (JavaDoc)">API 0.12 (JavaDoc)</a>
+                                                                                    <a href="apidocs-0.13/index.html" title="API 0.13 (JavaDoc)">API 0.13 (JavaDoc)</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="testapidocs-0.12/index.html" title="Mock API">Mock API</a>
+                                                                                    <a href="testapidocs-0.13/index.html" title="Mock API">Mock API</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                    <a href="https://github.com/yegor256/rexsl/releases" title="Release History">Release History</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -123,16 +118,16 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
+                            <strong>0.13</strong>
                             
-                            02-Mar-2014
-                            0.12
+                            10-Mar-2014
                         </div>
                                                                     </div>
-                    <div id="here-goes-menu"></div>
+                    <div id="here-goes-menu" class="menu-off"></div>
                     <article>
                         <div class="section">
                             <h1>ReXSL core module</h1>
-<p>There are two classes that you should use in your project (both of them are always mandatory): <a href="./apidocs-0.12/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> and <a href="./apidocs-0.12/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a>. Use them in <tt>WEB-INF/web.xml</tt>:</p>
+<p>There are two classes that you should use in your project (both of them are always mandatory): <a href="./apidocs-0.13/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> and <a href="./apidocs-0.13/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a>. Use them in <tt>WEB-INF/web.xml</tt>:</p>
 
 <div class="source">
 <pre>&lt;filter&gt;
@@ -158,21 +153,21 @@
   &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
 &lt;/servlet-mapping&gt;
 </pre></div>
-<p><a href="./apidocs-0.12/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> is responsible for handling of JAX-RS requests and converting your JAXB annotated classes into XML documents.</p>
-<p><a href="./apidocs-0.12/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a> is converting XML output documents into XHTML when necessary.</p>
-<p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-core/0.12/rexsl-core-0.12.jar"><tt>rexsl-core-0.12.jar</tt></a> and add it to classpath):</p>
+<p><a href="./apidocs-0.13/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> is responsible for handling of JAX-RS requests and converting your JAXB annotated classes into XML documents.</p>
+<p><a href="./apidocs-0.13/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a> is converting XML output documents into XHTML when necessary.</p>
+<p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-core/0.13/rexsl-core-0.13.jar"><tt>rexsl-core-0.13.jar</tt></a> and add it to classpath):</p>
 
 <div class="source">
 <pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-core&lt;/artifactId&gt;
-  &lt;version&gt;0.12&lt;/version&gt;
+  &lt;version&gt;0.13&lt;/version&gt;
 &lt;/dependency&gt;
 </pre></div>
 <p>Also take a look at <a href="../rexsl-page/index.html">rexsl-page</a>, which helps to build RESTful XML pages.</p>
-<p><a href="./apidocs-0.12/com/rexsl/core/annotations/Stylesheet.html"><tt>Stylesheet</tt></a> annotation enables re-configuration of XSL stylesheet name for a JAXB-annotated object.</p>
-<p><a href="./apidocs-0.12/com/rexsl/core/annotations/Schema.html"><tt>Schema</tt></a> annotation lets you set the name of XML Schema of a JAXB-annotated object.</p>
-<p><a href="./apidocs-0.12/com/rexsl/core/ExceptionTrap.html"><tt>ExceptionTrap</tt></a> servlet helps you to catch all uncaught exceptions and manage them gracefully, showing some information to your end-users.</p>
+<p><a href="./apidocs-0.13/com/rexsl/core/annotations/Stylesheet.html"><tt>Stylesheet</tt></a> annotation enables re-configuration of XSL stylesheet name for a JAXB-annotated object.</p>
+<p><a href="./apidocs-0.13/com/rexsl/core/annotations/Schema.html"><tt>Schema</tt></a> annotation lets you set the name of XML Schema of a JAXB-annotated object.</p>
+<p><a href="./apidocs-0.13/com/rexsl/core/ExceptionTrap.html"><tt>ExceptionTrap</tt></a> servlet helps you to catch all uncaught exceptions and manage them gracefully, showing some information to your end-users.</p>
                         </div>
                     </article>
                     <img class="maven-mobile" src="./images/built-by-maven.png"
