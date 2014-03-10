@@ -17,6 +17,7 @@
         <script src="./js/jquery-1.8.3.min.js"></script>
         <script src="./js/highlight-7.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+        <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
@@ -39,14 +40,8 @@
                 }
             );
         </script>
-        <style>
-            @import url("./css/wide.css") (min-width: 1200px) and (max-width:5000px);
-            @import url("./css/900-1199.css") (min-width: 900px) and (max-width:1199px);
-            @import url("./css/600-899.css") (min-width: 600px) and (max-width:899px);
-            @import url("./css/100-599.css") (min-width: 100px) and (max-width:599px);
-        </style>
     </head>
-    <body style="background: url('./images/background.png') fixed;">
+    <body>
                 <div class="page">
             <div class="menu-section">
                 <ul id="menu">
@@ -69,62 +64,22 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.12/index.html" title="API 0.12 (JavaDoc)">API 0.12 (JavaDoc)</a>
+                                                                                    <a href="apidocs-0.13/index.html" title="API 0.13 (JavaDoc)">API 0.13 (JavaDoc)</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="testapidocs-0.12/index.html" title="Mock API">Mock API</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
-                                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                    <a href="https://github.com/yegor256/rexsl/releases" title="Release History">Release History</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                         </ul>
                                                     </li>
                                             <li>
-                            HTTP Client
+                            Examples
                                                             <ul>
                                                                                                     <li>
-                                                                                    <a href="example-request.html" title="Make HTTP Request">Make HTTP Request</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
-                                                                                    <a href="example-xml-response.html" title="XML Response">XML Response</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
-                                                                                    <a href="example-json-response.html" title="JSON Response">JSON Response</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
                                                                                     <a href="example-matchers.html" title="XML/XHTML Matchers">XML/XHTML Matchers</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
-                                                                                    <a href="example-web-linking-response.html" title="Web Linking Response">Web Linking Response</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
-                                                                                    <a href="example-retry-request.html" title="HTTP Request that retries">HTTP Request that retries</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                        </ul>
-                                                    </li>
-                                            <li>
-                            Mock Servlet Container
-                                                            <ul>
-                                                                                                    <li>
-                                                                                    <a href="example-mock-container.html" title="HTTP client unit testing">HTTP client unit testing</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -176,7 +131,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.12/index.html" title="JavaDocs">JavaDocs</a>
+                                                                                    <a href="apidocs-0.13/index.html" title="JavaDocs">JavaDocs</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -215,12 +170,12 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
+                            <strong>0.13</strong>
                             
-                            02-Mar-2014
-                            0.12
+                            10-Mar-2014
                         </div>
                                                                     </div>
-                    <div id="here-goes-menu"></div>
+                    <div id="here-goes-menu" class="menu-off"></div>
                     <article>
                         <div class="section">
                             <script type="text/javascript">
@@ -243,7 +198,8 @@ function toggleDisplay(elementId) {
 <div class="section">
 <h2>Surefire Report<a name="Surefire_Report"></a></h2></div>
 <div class="section">
-<h2>Summary<a name="Summary"></a></h2><a name="Summary"></a><br />
+<h2>Summary<a name="Summary"></a></h2><a name="Summary"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
 <table border="1" class="bodyTable">
 <tr class="a">
 <th>Tests</th>
@@ -253,13 +209,209 @@ function toggleDisplay(elementId) {
 <th>Success Rate</th>
 <th>Time</th></tr>
 <tr class="b">
+<td>23</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
-<td>0</td>
-<td>0%</td>
-<td>0</td></tr></table><br />
+<td>100%</td>
+<td>11.272</td></tr></table><br />
 <p>Note: failures are anticipated and checked for with assertions while errors are unanticipated.</p><br /></div>
+<div class="section">
+<h2>Package List<a name="Package_List"></a></h2><a name="Package_List"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
+<table border="1" class="bodyTable">
+<tr class="a">
+<th>Package</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.test">com.rexsl.test</a></td>
+<td>19</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>8.349</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.test.html">com.rexsl.test.html</a></td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>2.923</td></tr></table><br />
+<p>Note: package statistics are not computed recursively, they only sum up all of its testsuites numbers.</p>
+<div class="section">
+<h3>com.rexsl.test<a name="com.rexsl.test"></a></h3><a name="com.rexsl.test"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.testJaxbConverterTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.testJaxbConverterTest">JaxbConverterTest</a></td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>2.224</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.testStringSourceTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.testStringSourceTest">StringSourceTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.848</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.testXhtmlMatchersTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.testXhtmlMatchersTest">XhtmlMatchersTest</a></td>
+<td>12</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>5.277</td></tr></table></div>
+<div class="section">
+<h3>com.rexsl.test.html<a name="com.rexsl.test.html"></a></h3><a name="com.rexsl.test.html"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.test.htmlNoBrokenLinksTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.test.htmlNoBrokenLinksTest">NoBrokenLinksTest</a></td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>2.923</td></tr></table></div><br /></div>
+<div class="section">
+<h2>Test Cases<a name="Test_Cases"></a></h2><a name="Test_Cases"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p>
+<div class="section">
+<h3>JaxbConverterTest<a name="JaxbConverterTest"></a></h3><a name="com.rexsl.testJaxbConverterTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsNonRootObject</td>
+<td>0.435</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsNonRootObjectWithNamespace</td>
+<td>0.429</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsAnObjectThatHasOthersInjected</td>
+<td>0.471</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsObjectToSourceRenderableAsText</td>
+<td>0.418</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsJaxbObjectToXml</td>
+<td>0.471</td></tr></table></div>
+<div class="section">
+<h3>StringSourceTest<a name="StringSourceTest"></a></h3><a name="com.rexsl.testStringSourceTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>formatsIncomingXmlDocument</td>
+<td>0.419</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>formatIncomingNode</td>
+<td>0.429</td></tr></table></div>
+<div class="section">
+<h3>XhtmlMatchersTest<a name="XhtmlMatchersTest"></a></h3><a name="com.rexsl.testXhtmlMatchersTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsTextToXml</td>
+<td>0.422</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>doesntMatch</td>
+<td>0.429</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>matchesWithCustomNamespace</td>
+<td>0.428</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>preservesProcessingInstructions</td>
+<td>0.471</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>processesDocumentsWithDoctype</td>
+<td>0.484</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>matchesPlainString</td>
+<td>0.469</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>matchesAfterJaxbConverter</td>
+<td>0.469</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>matchesInputStreamAndReader</td>
+<td>0.468</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsTextToXmlWithUnicode</td>
+<td>0.428</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsNodeToXml</td>
+<td>0.325</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>matchesWithGenericType</td>
+<td>0.415</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>hasXPaths</td>
+<td>0.469</td></tr></table></div>
+<div class="section">
+<h3>NoBrokenLinksTest<a name="NoBrokenLinksTest"></a></h3><a name="com.rexsl.test.htmlNoBrokenLinksTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>findsEmptyLinksInHtml</td>
+<td>0.433</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>findsBrLinksInHtmlWithNamespace</td>
+<td>0.944</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>throwsWhenHtmlIsBroken</td>
+<td>0.405</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>passesWithoutBrokenLinks</td>
+<td>1.141</td></tr></table></div><br /></div>
                         </div>
                     </article>
                     <img class="maven-mobile" src="./images/built-by-maven.png"

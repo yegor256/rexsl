@@ -17,6 +17,7 @@
         <script src="./js/jquery-1.8.3.min.js"></script>
         <script src="./js/highlight-7.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+        <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
@@ -39,14 +40,8 @@
                 }
             );
         </script>
-        <style>
-            @import url("./css/wide.css") (min-width: 1200px) and (max-width:5000px);
-            @import url("./css/900-1199.css") (min-width: 900px) and (max-width:1199px);
-            @import url("./css/600-899.css") (min-width: 600px) and (max-width:899px);
-            @import url("./css/100-599.css") (min-width: 100px) and (max-width:599px);
-        </style>
     </head>
-    <body style="background: url('./images/background.png') fixed;">
+    <body>
                 <div class="page">
             <div class="menu-section">
                 <ul id="menu">
@@ -70,62 +65,22 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.12/index.html" title="API 0.12 (JavaDoc)">API 0.12 (JavaDoc)</a>
+                                                                                    <a href="apidocs-0.13/index.html" title="API 0.13 (JavaDoc)">API 0.13 (JavaDoc)</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="testapidocs-0.12/index.html" title="Mock API">Mock API</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
-                                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                    <a href="https://github.com/yegor256/rexsl/releases" title="Release History">Release History</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                         </ul>
                                                     </li>
                                             <li>
-                            HTTP Client
+                            Examples
                                                             <ul>
                                                                                                     <li>
-                                                                                    <a href="example-request.html" title="Make HTTP Request">Make HTTP Request</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
-                                                                                    <a href="example-xml-response.html" title="XML Response">XML Response</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
-                                                                                    <a href="example-json-response.html" title="JSON Response">JSON Response</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
                                                                                     <a href="example-matchers.html" title="XML/XHTML Matchers">XML/XHTML Matchers</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
-                                                                                    <a href="example-web-linking-response.html" title="Web Linking Response">Web Linking Response</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
-                                                                                    <a href="example-retry-request.html" title="HTTP Request that retries">HTTP Request that retries</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                        </ul>
-                                                    </li>
-                                            <li>
-                            Mock Servlet Container
-                                                            <ul>
-                                                                                                    <li>
-                                                                                    <a href="example-mock-container.html" title="HTTP client unit testing">HTTP client unit testing</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -158,17 +113,17 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
+                            <strong>0.13</strong>
                             
-                            02-Mar-2014
-                            0.12
+                            10-Mar-2014
                         </div>
                                                                     </div>
-                    <div id="here-goes-menu"></div>
+                    <div id="here-goes-menu" class="menu-off"></div>
                     <article>
                         <div class="section">
                             <h1>RESTful Java Client</h1>
 <p>The module contains a collection of usable tools for testing of ReXSL-powered application (or any other RESTful server).</p>
-<p><a href="./apidocs-0.12/com/rexsl/test/Request.html"><tt>Request</tt></a> (implemented by <a href="./apidocs-0.12/com/rexsl/test/request/JdkRequest.html"><tt>JdkRequest</tt></a> and <a href="./apidocs-0.12/com/rexsl/test/request/ApacheRequest.html"><tt>ApacheRequest</tt></a>) is a RESTful Java client with a fluent interface:</p>
+<p><a href="./apidocs-0.13/com/rexsl/test/Request.html"><tt>Request</tt></a> (implemented by <a href="./apidocs-0.13/com/rexsl/test/request/JdkRequest.html"><tt>JdkRequest</tt></a> and <a href="./apidocs-0.13/com/rexsl/test/request/ApacheRequest.html"><tt>ApacheRequest</tt></a>) is a RESTful Java client with a fluent interface:</p>
 
 <div class="source">
 <pre>public class Main {
@@ -193,21 +148,21 @@
 <ul>
   
 <li>
-<p><a href="./apidocs-0.12/com/rexsl/test/JaxbConverter.html"><tt>JaxbConverter</tt></a>  &#x2014; convenient JAXB-to-XML converter;</p></li>
+<p><a href="./apidocs-0.13/com/rexsl/test/JaxbConverter.html"><tt>JaxbConverter</tt></a>  &#x2014; convenient JAXB-to-XML converter;</p></li>
   
 <li>
-<p><a href="./apidocs-0.12/com/rexsl/test/XhtmlMatchers.html"><tt>XhtmlMatchers</tt></a>  &#x2014; XML/XHTML Hamcrest matchers.</p></li>
+<p><a href="./apidocs-0.13/com/rexsl/test/XhtmlMatchers.html"><tt>XhtmlMatchers</tt></a>  &#x2014; XML/XHTML Hamcrest matchers.</p></li>
   
 <li>
-<p><a href="./apidocs-0.12/com/rexsl/test/mock/MkContainer.html"><tt>MkContainer</tt></a>  &#x2014; mock servlet container.</p></li>
+<p><a href="./apidocs-0.13/com/rexsl/test/mock/MkContainer.html"><tt>MkContainer</tt></a>  &#x2014; mock servlet container.</p></li>
 </ul>
-<p>Include this dependency into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-test/0.12/rexsl-test-0.12.jar"><tt>rexsl-test-0.12.jar</tt></a> and add to classpath):</p>
+<p>Include this dependency into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-test/0.13/rexsl-test-0.13.jar"><tt>rexsl-test-0.13.jar</tt></a> and add to classpath):</p>
 
 <div class="source">
 <pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-test&lt;/artifactId&gt;
-  &lt;version&gt;0.12&lt;/version&gt;
+  &lt;version&gt;0.13&lt;/version&gt;
   &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;
 </pre></div>
