@@ -17,6 +17,7 @@
         <script src="./js/jquery-1.8.3.min.js"></script>
         <script src="./js/highlight-7.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+        <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
@@ -39,14 +40,8 @@
                 }
             );
         </script>
-        <style>
-            @import url("./css/wide.css") (min-width: 1200px) and (max-width:5000px);
-            @import url("./css/900-1199.css") (min-width: 900px) and (max-width:1199px);
-            @import url("./css/600-899.css") (min-width: 600px) and (max-width:899px);
-            @import url("./css/100-599.css") (min-width: 100px) and (max-width:599px);
-        </style>
     </head>
-    <body style="background: url('./images/background.png') fixed;">
+    <body>
                 <div class="page">
             <div class="menu-section">
                 <ul id="menu">
@@ -70,17 +65,17 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.12/index.html" title="API 0.12 (JavaDoc)">API 0.12 (JavaDoc)</a>
+                                                                                    <a href="apidocs-0.13/index.html" title="API 0.13 (JavaDoc)">API 0.13 (JavaDoc)</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="testapidocs-0.12/index.html" title="Mock API">Mock API</a>
+                                                                                    <a href="testapidocs-0.13/index.html" title="Mock API">Mock API</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                    <a href="https://github.com/yegor256/rexsl/releases" title="Release History">Release History</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -113,16 +108,16 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
+                            <strong>0.13</strong>
                             
-                            02-Mar-2014
-                            0.12
+                            10-Mar-2014
                         </div>
                                                                     </div>
-                    <div id="here-goes-menu"></div>
+                    <div id="here-goes-menu" class="menu-off"></div>
                     <article>
                         <div class="section">
                             <h1>W3C Validator in Java</h1>
-<p>It&#x2019;s simple (see <a href="./apidocs-0.12/">JavaDoc</a> for more details):</p>
+<p>It&#x2019;s simple (see <a href="./apidocs-0.13/">JavaDoc</a> for more details):</p>
 
 <div class="source">
 <pre>public class My {
@@ -144,13 +139,13 @@
   }
 }
 </pre></div>
-<p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-w3c/0.12/"><tt>rexsl-w3c.jar</tt></a>):</p>
+<p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-w3c/0.13/"><tt>rexsl-w3c.jar</tt></a>):</p>
 
 <div class="source">
 <pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-w3c&lt;/artifactId&gt;
-  &lt;version&gt;0.12&lt;/version&gt;
+  &lt;version&gt;0.13&lt;/version&gt;
 &lt;/dependency&gt;
 </pre></div>
 <p>All events are logged through <a class="externalLink" href="http://www.slf4j.org/">slf4j</a>, using <tt>&quot;com.rexsl.w3c&quot;</tt> logger. If you want to see them, just add proper binding to classpath, as explained in <a class="externalLink" href="http://www.slf4j.org/manual.html">SLF4J manual</a>.</p>
