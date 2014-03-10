@@ -17,6 +17,7 @@
         <script src="./js/jquery-1.8.3.min.js"></script>
         <script src="./js/highlight-7.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+        <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
@@ -39,14 +40,8 @@
                 }
             );
         </script>
-        <style>
-            @import url("./css/wide.css") (min-width: 1200px) and (max-width:5000px);
-            @import url("./css/900-1199.css") (min-width: 900px) and (max-width:1199px);
-            @import url("./css/600-899.css") (min-width: 600px) and (max-width:899px);
-            @import url("./css/100-599.css") (min-width: 100px) and (max-width:599px);
-        </style>
     </head>
-    <body style="background: url('./images/background.png') fixed;">
+    <body>
                 <div class="page">
             <div class="menu-section">
                 <ul id="menu">
@@ -84,7 +79,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                    <a href="https://github.com/yegor256/rexsl/releases" title="Release History">Release History</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -171,12 +166,12 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.12/index.html" title="JavaDocs">JavaDocs</a>
+                                                                                    <a href="apidocs-0.13/index.html" title="JavaDocs">JavaDocs</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="testapidocs-0.12/index.html" title="Test JavaDocs">Test JavaDocs</a>
+                                                                                    <a href="testapidocs-0.13/index.html" title="Test JavaDocs">Test JavaDocs</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -220,12 +215,12 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
+                            <strong>0.13</strong>
                             
-                            02-Mar-2014
-                            0.12
+                            10-Mar-2014
                         </div>
                                                                     </div>
-                    <div id="here-goes-menu"></div>
+                    <div id="here-goes-menu" class="menu-off"></div>
                     <article>
                         <div class="section">
                             <div class="section">
@@ -235,11 +230,11 @@
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td># of dependencies using the latest version available</td>
-<td>52</td></tr>
+<td>53</td></tr>
 <tr class="b">
 <td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td># of dependencies where the next version available is smaller than an incremental version update</td>
-<td>2</td></tr>
+<td>1</td></tr>
 <tr class="a">
 <td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td># of dependencies where the next version available is an incremental version update</td>
@@ -247,11 +242,11 @@
 <tr class="b">
 <td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td># of dependencies where the next version available is a minor version update</td>
-<td>5</td></tr>
+<td>7</td></tr>
 <tr class="a">
 <td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td># of dependencies where the next version available is a major version update</td>
-<td>6</td></tr></table>
+<td>5</td></tr></table>
 <div class="section">
 <h3>Dependency Management<a name="Dependency_Management"></a></h3>
 <table border="0" class="bodyTable">
@@ -304,7 +299,7 @@
 <td></td>
 <td></td></tr>
 <tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td>com.jcabi</td>
 <td>jcabi-dynamo</td>
 <td>0.9.1</td>
@@ -313,22 +308,22 @@
 <td>jar</td>
 <td></td>
 <td></td>
-<td></td>
+<td><b>0.10</b></td>
 <td></td></tr>
 <tr class="a">
-<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>com.jcabi</td>
 <td>jcabi-http</td>
-<td>1.0</td>
+<td>1.2</td>
 <td></td>
 <td></td>
 <td>jar</td>
 <td></td>
 <td></td>
-<td><b>1.1</b></td>
+<td></td>
 <td></td></tr>
 <tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td>com.jcabi</td>
 <td>jcabi-immutable</td>
 <td>1.0</td>
@@ -337,7 +332,7 @@
 <td>jar</td>
 <td></td>
 <td></td>
-<td></td>
+<td><b>1.1</b></td>
 <td></td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
@@ -352,7 +347,7 @@
 <td></td>
 <td></td></tr>
 <tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td>com.jcabi</td>
 <td>jcabi-log</td>
 <td>0.12.1</td>
@@ -360,7 +355,7 @@
 <td></td>
 <td>jar</td>
 <td></td>
-<td></td>
+<td><b>0.12.2</b></td>
 <td></td>
 <td></td></tr>
 <tr class="a">
@@ -424,15 +419,15 @@
 <td></td>
 <td></td></tr>
 <tr class="b">
-<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>com.jcabi</td>
 <td>jcabi-xml</td>
-<td>0.7.7</td>
+<td>0.7.8</td>
 <td></td>
 <td></td>
 <td>jar</td>
 <td></td>
-<td><b>0.7.8</b></td>
+<td></td>
 <td></td>
 <td></td></tr>
 <tr class="a">
@@ -688,7 +683,7 @@
 <td></td>
 <td></td></tr>
 <tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td>org.apache.commons</td>
 <td>commons-lang3</td>
 <td>3.2.1</td>
@@ -697,7 +692,7 @@
 <td>jar</td>
 <td></td>
 <td></td>
-<td></td>
+<td><b>3.3</b></td>
 <td></td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
@@ -844,17 +839,17 @@
 <td></td>
 <td></td></tr>
 <tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td>org.hibernate</td>
 <td>hibernate-validator</td>
-<td>5.1.0.CR1</td>
+<td>5.0.3.Final</td>
 <td></td>
 <td></td>
 <td>jar</td>
 <td></td>
 <td></td>
 <td></td>
-<td></td></tr>
+<td><b>5.1.0.Alpha1</b></td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>org.mockito</td>
@@ -868,7 +863,7 @@
 <td></td>
 <td></td></tr>
 <tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td>org.projectlombok</td>
 <td>lombok</td>
 <td>1.12.4</td>
@@ -876,7 +871,7 @@
 <td></td>
 <td>jar</td>
 <td></td>
-<td></td>
+<td><b>1.12.6</b></td>
 <td></td>
 <td></td></tr>
 <tr class="b">
@@ -934,7 +929,7 @@
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>com.rexsl</td>
 <td>rexsl-core</td>
-<td>0.12</td>
+<td>0.13</td>
 <td>provided</td>
 <td></td>
 <td>jar</td>
@@ -946,7 +941,7 @@
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>com.rexsl</td>
 <td>rexsl-test</td>
-<td>0.12</td>
+<td>0.13</td>
 <td>compile</td>
 <td></td>
 <td>jar</td>
@@ -958,7 +953,7 @@
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>com.rexsl</td>
 <td>rexsl-w3c</td>
-<td>0.12</td>
+<td>0.13</td>
 <td>compile</td>
 <td></td>
 <td>jar</td>
@@ -1051,17 +1046,17 @@
 <td></td>
 <td></td></tr>
 <tr class="b">
-<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>org.apache.maven.plugin-testing</td>
 <td>maven-plugin-testing-harness</td>
-<td>2.1</td>
+<td>3.1.0</td>
 <td>test</td>
 <td></td>
 <td>jar</td>
 <td></td>
 <td></td>
 <td></td>
-<td><b>3.0.0</b></td></tr>
+<td></td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>org.apache.maven.plugin-tools</td>
@@ -1087,15 +1082,15 @@
 <td></td>
 <td></td></tr>
 <tr class="a">
-<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>org.codehaus.groovy</td>
 <td>groovy-all</td>
-<td>2.2.0-rc-3</td>
+<td>2.2.2</td>
 <td>compile</td>
 <td></td>
 <td>jar</td>
-<td><b>2.2.0</b></td>
-<td><b>2.2.1</b></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td></tr>
 <tr class="b">
@@ -1147,17 +1142,17 @@
 <td></td>
 <td></td></tr>
 <tr class="b">
-<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>org.hibernate</td>
 <td>hibernate-core</td>
-<td>4.3.0.Beta5</td>
+<td>4.3.4.Final</td>
 <td>runtime</td>
 <td></td>
 <td>jar</td>
 <td></td>
 <td></td>
 <td></td>
-<td><b>4.3.0.CR1</b></td></tr>
+<td></td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>org.sonatype.aether</td>
@@ -1183,18 +1178,30 @@
 <td></td>
 <td></td></tr>
 <tr class="a">
-<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>org.sonatype.sisu</td>
 <td>sisu-inject-plexus</td>
-<td>2.5.0</td>
+<td>2.5.3</td>
 <td>runtime</td>
 <td></td>
 <td>jar</td>
 <td></td>
-<td><b>2.5.1</b></td>
+<td></td>
 <td></td>
 <td></td></tr>
 <tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>rhino</td>
+<td>js</td>
+<td>1.7R2</td>
+<td>compile</td>
+<td></td>
+<td>jar</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td></tr>
+<tr class="a">
 <th>Status</th>
 <th>Group Id</th>
 <th>Artifact Id</th>
@@ -1212,25 +1219,25 @@
 <div class="section">
 <h3>com.google.guava:guava<a name="com.google.guava:guava"></a></h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th width="80%">Status</th>
 <td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
-<tr class="b">
+<tr class="a">
 <th width="80%">Group Id</th>
 <td>com.google.guava</td></tr>
-<tr class="a">
+<tr class="b">
 <th width="80%">Artifact Id</th>
 <td>guava</td></tr>
-<tr class="b">
+<tr class="a">
 <th width="80%">Current Version</th>
 <td>16.0.1</td></tr>
-<tr class="a">
+<tr class="b">
 <th width="80%">Scope</th>
 <td></td></tr>
-<tr class="b">
+<tr class="a">
 <th width="80%">Classifier</th>
 <td></td></tr>
-<tr class="a">
+<tr class="b">
 <th width="80%">Type</th>
 <td>jar</td></tr></table></div>
 <div class="section">
@@ -1286,7 +1293,7 @@
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
+<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer minor version available. Minor updates are sometimes passive.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>com.jcabi</td></tr>
@@ -1304,13 +1311,16 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr></table></div>
+<td>jar</td></tr>
+<tr class="b">
+<th width="80%">Newer versions</th>
+<td><b>0.10</b>&#160;<i>Next Minor</i></td></tr></table></div>
 <div class="section">
 <h3>com.jcabi:jcabi-http<a name="com.jcabi:jcabi-http"></a></h3>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer minor version available. Minor updates are sometimes passive.</td></tr>
+<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>com.jcabi</td></tr>
@@ -1319,7 +1329,7 @@
 <td>jcabi-http</td></tr>
 <tr class="b">
 <th width="80%">Current Version</th>
-<td>1.0</td></tr>
+<td>1.2</td></tr>
 <tr class="a">
 <th width="80%">Scope</th>
 <td></td></tr>
@@ -1328,16 +1338,13 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr>
-<tr class="b">
-<th width="80%">Newer versions</th>
-<td><b>1.1</b>&#160;<i>Next Minor</i></td></tr></table></div>
+<td>jar</td></tr></table></div>
 <div class="section">
 <h3>com.jcabi:jcabi-immutable<a name="com.jcabi:jcabi-immutable"></a></h3>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
+<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer minor version available. Minor updates are sometimes passive.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>com.jcabi</td></tr>
@@ -1355,7 +1362,10 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr></table></div>
+<td>jar</td></tr>
+<tr class="b">
+<th width="80%">Newer versions</th>
+<td><b>1.1</b>&#160;<i>Next Minor</i></td></tr></table></div>
 <div class="section">
 <h3>com.jcabi:jcabi-jdbc<a name="com.jcabi:jcabi-jdbc"></a></h3>
 <table border="0" class="bodyTable">
@@ -1385,7 +1395,7 @@
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
+<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer incremental version available. Incremental updates are typically passive.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>com.jcabi</td></tr>
@@ -1403,7 +1413,10 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr></table></div>
+<td>jar</td></tr>
+<tr class="b">
+<th width="80%">Newer versions</th>
+<td><b>0.12.2</b>&#160;<i>Next Incremental</i></td></tr></table></div>
 <div class="section">
 <h3>com.jcabi:jcabi-manifests<a name="com.jcabi:jcabi-manifests"></a></h3>
 <table border="0" class="bodyTable">
@@ -1529,7 +1542,7 @@
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer incremental version available. Incremental updates are typically passive.</td></tr>
+<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>com.jcabi</td></tr>
@@ -1538,7 +1551,7 @@
 <td>jcabi-xml</td></tr>
 <tr class="b">
 <th width="80%">Current Version</th>
-<td>0.7.7</td></tr>
+<td>0.7.8</td></tr>
 <tr class="a">
 <th width="80%">Scope</th>
 <td></td></tr>
@@ -1547,10 +1560,7 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr>
-<tr class="b">
-<th width="80%">Newer versions</th>
-<td><b>0.7.8</b>&#160;<i>Next Incremental</i></td></tr></table></div>
+<td>jar</td></tr></table></div>
 <div class="section">
 <h3>com.rexsl:rexsl-core<a name="com.rexsl:rexsl-core"></a></h3>
 <table border="0" class="bodyTable">
@@ -1565,7 +1575,7 @@
 <td>rexsl-core</td></tr>
 <tr class="b">
 <th width="80%">Current Version</th>
-<td>0.12</td></tr>
+<td>0.13</td></tr>
 <tr class="a">
 <th width="80%">Scope</th>
 <td>provided</td></tr>
@@ -1589,7 +1599,7 @@
 <td>rexsl-test</td></tr>
 <tr class="b">
 <th width="80%">Current Version</th>
-<td>0.12</td></tr>
+<td>0.13</td></tr>
 <tr class="a">
 <th width="80%">Scope</th>
 <td>compile</td></tr>
@@ -1613,7 +1623,7 @@
 <td>rexsl-w3c</td></tr>
 <tr class="b">
 <th width="80%">Current Version</th>
-<td>0.12</td></tr>
+<td>0.13</td></tr>
 <tr class="a">
 <th width="80%">Scope</th>
 <td>compile</td></tr>
@@ -2201,7 +2211,7 @@
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
+<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer minor version available. Minor updates are sometimes passive.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>org.apache.commons</td></tr>
@@ -2219,7 +2229,10 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr></table></div>
+<td>jar</td></tr>
+<tr class="b">
+<th width="80%">Newer versions</th>
+<td><b>3.3</b>&#160;<i>Next Minor</i></td></tr></table></div>
 <div class="section">
 <h3>org.apache.commons:commons-math3<a name="org.apache.commons:commons-math3"></a></h3>
 <table border="0" class="bodyTable">
@@ -2462,7 +2475,7 @@
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer major version available. Major updates are rarely passive.</td></tr>
+<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>org.apache.maven.plugin-testing</td></tr>
@@ -2471,7 +2484,7 @@
 <td>maven-plugin-testing-harness</td></tr>
 <tr class="b">
 <th width="80%">Current Version</th>
-<td>2.1</td></tr>
+<td>3.1.0</td></tr>
 <tr class="a">
 <th width="80%">Scope</th>
 <td>test</td></tr>
@@ -2480,10 +2493,7 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr>
-<tr class="b">
-<th width="80%">Newer versions</th>
-<td><b>3.0.0</b>&#160;<i>Next Major</i><br /><b>3.1.0</b>&#160;<i>Latest Major</i></td></tr></table></div>
+<td>jar</td></tr></table></div>
 <div class="section">
 <h3>org.apache.maven.plugin-tools:maven-plugin-annotations<a name="org.apache.maven.plugin-tools:maven-plugin-annotations"></a></h3>
 <table border="0" class="bodyTable">
@@ -2633,7 +2643,7 @@
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer version available.</td></tr>
+<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>org.codehaus.groovy</td></tr>
@@ -2642,7 +2652,7 @@
 <td>groovy-all</td></tr>
 <tr class="b">
 <th width="80%">Current Version</th>
-<td>2.2.0-rc-3</td></tr>
+<td>2.2.2</td></tr>
 <tr class="a">
 <th width="80%">Scope</th>
 <td>compile</td></tr>
@@ -2651,10 +2661,7 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr>
-<tr class="b">
-<th width="80%">Newer versions</th>
-<td><b>2.2.0</b>&#160;<i>Next Version</i><br /><b>2.2.1</b>&#160;<i>Next Incremental</i><br /><b>2.2.2</b>&#160;<i>Latest Incremental</i></td></tr></table></div>
+<td>jar</td></tr></table></div>
 <div class="section">
 <h3>org.codehaus.plexus:plexus-container-default<a name="org.codehaus.plexus:plexus-container-default"></a></h3>
 <table border="0" class="bodyTable">
@@ -2858,7 +2865,7 @@
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer major version available. Major updates are rarely passive.</td></tr>
+<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>org.hibernate</td></tr>
@@ -2867,7 +2874,7 @@
 <td>hibernate-core</td></tr>
 <tr class="b">
 <th width="80%">Current Version</th>
-<td>4.3.0.Beta5</td></tr>
+<td>4.3.4.Final</td></tr>
 <tr class="a">
 <th width="80%">Scope</th>
 <td>runtime</td></tr>
@@ -2876,16 +2883,13 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr>
-<tr class="b">
-<th width="80%">Newer versions</th>
-<td><b>4.3.0.CR1</b>&#160;<i>Next Major</i><br />4.3.0.CR2<br />4.3.0.Final<br />4.3.1.Final<br />4.3.2.Final<br /><b>4.3.3.Final</b>&#160;<i>Latest Major</i></td></tr></table></div>
+<td>jar</td></tr></table></div>
 <div class="section">
 <h3>org.hibernate:hibernate-validator<a name="org.hibernate:hibernate-validator"></a></h3>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
+<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer major version available. Major updates are rarely passive.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>org.hibernate</td></tr>
@@ -2894,7 +2898,7 @@
 <td>hibernate-validator</td></tr>
 <tr class="b">
 <th width="80%">Current Version</th>
-<td>5.1.0.CR1</td></tr>
+<td>5.0.3.Final</td></tr>
 <tr class="a">
 <th width="80%">Scope</th>
 <td></td></tr>
@@ -2903,7 +2907,10 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr></table></div>
+<td>jar</td></tr>
+<tr class="b">
+<th width="80%">Newer versions</th>
+<td><b>5.1.0.Alpha1</b>&#160;<i>Next Major</i><br />5.1.0.Beta1<br />5.1.0.CR1<br /><b>5.1.0.Final</b>&#160;<i>Latest Major</i></td></tr></table></div>
 <div class="section">
 <h3>org.mockito:mockito-core<a name="org.mockito:mockito-core"></a></h3>
 <table border="0" class="bodyTable">
@@ -2933,7 +2940,7 @@
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
+<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer incremental version available. Incremental updates are typically passive.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>org.projectlombok</td></tr>
@@ -2951,7 +2958,10 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr></table></div>
+<td>jar</td></tr>
+<tr class="b">
+<th width="80%">Newer versions</th>
+<td><b>1.12.6</b>&#160;<i>Next Incremental</i></td></tr></table></div>
 <div class="section">
 <h3>org.slf4j:slf4j-log4j12<a name="org.slf4j:slf4j-log4j12"></a></h3>
 <table border="0" class="bodyTable">
@@ -3029,7 +3039,7 @@
 <table border="0" class="bodyTable">
 <tr class="a">
 <th width="80%">Status</th>
-<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer incremental version available. Incremental updates are typically passive.</td></tr>
+<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
 <tr class="b">
 <th width="80%">Group Id</th>
 <td>org.sonatype.sisu</td></tr>
@@ -3038,7 +3048,7 @@
 <td>sisu-inject-plexus</td></tr>
 <tr class="b">
 <th width="80%">Current Version</th>
-<td>2.5.0</td></tr>
+<td>2.5.3</td></tr>
 <tr class="a">
 <th width="80%">Scope</th>
 <td>runtime</td></tr>
@@ -3047,10 +3057,31 @@
 <td></td></tr>
 <tr class="a">
 <th width="80%">Type</th>
-<td>jar</td></tr>
+<td>jar</td></tr></table></div>
+<div class="section">
+<h3>rhino:js<a name="rhino:js"></a></h3>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th width="80%">Status</th>
+<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
 <tr class="b">
-<th width="80%">Newer versions</th>
-<td><b>2.5.1</b>&#160;<i>Next Incremental</i><br />2.5.2<br /><b>2.5.3</b>&#160;<i>Latest Incremental</i></td></tr></table></div>
+<th width="80%">Group Id</th>
+<td>rhino</td></tr>
+<tr class="a">
+<th width="80%">Artifact Id</th>
+<td>js</td></tr>
+<tr class="b">
+<th width="80%">Current Version</th>
+<td>1.7R2</td></tr>
+<tr class="a">
+<th width="80%">Scope</th>
+<td>compile</td></tr>
+<tr class="b">
+<th width="80%">Classifier</th>
+<td></td></tr>
+<tr class="a">
+<th width="80%">Type</th>
+<td>jar</td></tr></table></div>
 <div class="section">
 <h3>xml-apis:xml-apis<a name="xml-apis:xml-apis"></a></h3>
 <table border="0" class="bodyTable">

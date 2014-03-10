@@ -17,6 +17,7 @@
         <script src="./js/jquery-1.8.3.min.js"></script>
         <script src="./js/highlight-7.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+        <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
@@ -39,14 +40,8 @@
                 }
             );
         </script>
-        <style>
-            @import url("./css/wide.css") (min-width: 1200px) and (max-width:5000px);
-            @import url("./css/900-1199.css") (min-width: 900px) and (max-width:1199px);
-            @import url("./css/600-899.css") (min-width: 600px) and (max-width:899px);
-            @import url("./css/100-599.css") (min-width: 100px) and (max-width:599px);
-        </style>
     </head>
-    <body style="background: url('./images/background.png') fixed;">
+    <body>
                 <div class="page">
             <div class="menu-section">
                 <ul id="menu">
@@ -84,7 +79,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                    <a href="https://github.com/yegor256/rexsl/releases" title="Release History">Release History</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -171,12 +166,12 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.12/index.html" title="JavaDocs">JavaDocs</a>
+                                                                                    <a href="apidocs-0.13/index.html" title="JavaDocs">JavaDocs</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="testapidocs-0.12/index.html" title="Test JavaDocs">Test JavaDocs</a>
+                                                                                    <a href="testapidocs-0.13/index.html" title="Test JavaDocs">Test JavaDocs</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -220,12 +215,12 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
+                            <strong>0.13</strong>
                             
-                            02-Mar-2014
-                            0.12
+                            10-Mar-2014
                         </div>
                                                                     </div>
-                    <div id="here-goes-menu"></div>
+                    <div id="here-goes-menu" class="menu-off"></div>
                     <article>
                         <div class="section">
                             <script type="text/javascript">
@@ -248,7 +243,8 @@ function toggleDisplay(elementId) {
 <div class="section">
 <h2>Surefire Report<a name="Surefire_Report"></a></h2></div>
 <div class="section">
-<h2>Summary<a name="Summary"></a></h2><a name="Summary"></a><br />
+<h2>Summary<a name="Summary"></a></h2><a name="Summary"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
 <table border="1" class="bodyTable">
 <tr class="a">
 <th>Tests</th>
@@ -258,13 +254,812 @@ function toggleDisplay(elementId) {
 <th>Success Rate</th>
 <th>Time</th></tr>
 <tr class="b">
+<td>52</td>
+<td>2</td>
+<td>0</td>
+<td>5</td>
+<td>86.538%</td>
+<td>55.669</td></tr></table><br />
+<p>Note: failures are anticipated and checked for with assertions while errors are unanticipated.</p><br /></div>
+<div class="section">
+<h2>Package List<a name="Package_List"></a></h2><a name="Package_List"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
+<table border="1" class="bodyTable">
+<tr class="a">
+<th>Package</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.utils">com.rexsl.maven.utils</a></td>
+<td>11</td>
 <td>0</td>
 <td>0</td>
+<td>2</td>
+<td>81.818%</td>
+<td>4.877</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.packers">com.rexsl.maven.packers</a></td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>66.667%</td>
+<td>1.291</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.checks">com.rexsl.maven.checks</a></td>
+<td>27</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>85.185%</td>
+<td>45.739</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven">com.rexsl.maven</a></td>
+<td>11</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>3.762</td></tr></table><br />
+<p>Note: package statistics are not computed recursively, they only sum up all of its testsuites numbers.</p>
+<div class="section">
+<h3>com.rexsl.maven.utils<a name="com.rexsl.maven.utils"></a></h3><a name="com.rexsl.maven.utils"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.utilsBindingBuilderTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.utilsBindingBuilderTest">BindingBuilderTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.872</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.utilsEmbeddedContainerTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.utilsEmbeddedContainerTest">EmbeddedContainerTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>1.637</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.utilsFileFinderTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.utilsFileFinderTest">FileFinderTest</a></td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.054</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.utilsGroovyExceptionTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.utilsGroovyExceptionTest">GroovyExceptionTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.01</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.utilsGroovyExecutorTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.utilsGroovyExecutorTest">GroovyExecutorTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>2.296</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.utilsLoggingManagerTest"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.utilsLoggingManagerTest">LoggingManagerTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0%</td>
+<td>0</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.utilsPortReserverTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.utilsPortReserverTest">PortReserverTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.008</td></tr></table></div>
+<div class="section">
+<h3>com.rexsl.maven.packers<a name="com.rexsl.maven.packers"></a></h3><a name="com.rexsl.maven.packers"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.packersCssPackerTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.packersCssPackerTest">CssPackerTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.371</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.packersJsPackerTest"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.packersJsPackerTest">JsPackerTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0%</td>
+<td>0</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.packersXslPackerTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.packersXslPackerTest">XslPackerTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.92</td></tr></table></div>
+<div class="section">
+<h3>com.rexsl.maven.checks<a name="com.rexsl.maven.checks"></a></h3><a name="com.rexsl.maven.checks"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.checksBinaryFilesCheckTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksBinaryFilesCheckTest">BinaryFilesCheckTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.631</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.checksCssStaticCheckTest"><img src="images/icon_error_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksCssStaticCheckTest">CssStaticCheckTest</a></td>
+<td>2</td>
+<td>2</td>
 <td>0</td>
 <td>0</td>
 <td>0%</td>
-<td>0</td></tr></table><br />
-<p>Note: failures are anticipated and checked for with assertions while errors are unanticipated.</p><br /></div>
+<td>0.554</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.checksDefaultChecksProviderTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksDefaultChecksProviderTest">DefaultChecksProviderTest</a></td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.361</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.checksInContainerScriptsCheckTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksInContainerScriptsCheckTest">InContainerScriptsCheckTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>2.15</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.checksJSStaticCheckTest"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksJSStaticCheckTest">JSStaticCheckTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>50%</td>
+<td>0.04</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.checksJigsawCssCheckTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksJigsawCssCheckTest">JigsawCssCheckTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.063</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.checksRexslFilesCheckTest"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksRexslFilesCheckTest">RexslFilesCheckTest</a></td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>75%</td>
+<td>0.027</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.checksRuntimeResolverTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksRuntimeResolverTest">RuntimeResolverTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>3.622</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.checksWebXmlCheckTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksWebXmlCheckTest">WebXmlCheckTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>32.011</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.checksWebappFilesCheckTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksWebappFilesCheckTest">WebappFilesCheckTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.678</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.checksXhtmlOutputCheckTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checksXhtmlOutputCheckTest">XhtmlOutputCheckTest</a></td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>5.602</td></tr></table></div>
+<div class="section">
+<h3>com.rexsl.maven<a name="com.rexsl.maven"></a></h3><a name="com.rexsl.maven"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.mavenCheckMojoTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.mavenCheckMojoTest">CheckMojoTest</a></td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>1.334</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.mavenMavenEnvironmentTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.mavenMavenEnvironmentTest">MavenEnvironmentTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.578</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.mavenPackageMojoTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.mavenPackageMojoTest">PackageMojoTest</a></td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>1.536</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.mavenRunMojoTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.mavenRunMojoTest">RunMojoTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.314</td></tr></table></div><br /></div>
+<div class="section">
+<h2>Test Cases<a name="Test_Cases"></a></h2><a name="Test_Cases"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p>
+<div class="section">
+<h3>CheckMojoTest<a name="CheckMojoTest"></a></h3><a name="com.rexsl.mavenCheckMojoTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>skipOptionCancelsExecution</td>
+<td>0.355</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>rejectsNonWarPackaging</td>
+<td>0.289</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>restoresSystemPropertiesAfterExecution</td>
+<td>0.336</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>onePositiveCheckIsExecuted</td>
+<td>0.354</td></tr></table></div>
+<div class="section">
+<h3>MavenEnvironmentTest<a name="MavenEnvironmentTest"></a></h3><a name="com.rexsl.mavenMavenEnvironmentTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>returnsStaticProperties</td>
+<td>0.291</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>classloaderIsBuilt</td>
+<td>0.287</td></tr></table></div>
+<div class="section">
+<h3>PackageMojoTest<a name="PackageMojoTest"></a></h3><a name="com.rexsl.mavenPackageMojoTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>canFilterMetaCommands</td>
+<td>0.691</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>packsArtifactsNormally</td>
+<td>0.556</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>testNonWarPackaging</td>
+<td>0.289</td></tr></table></div>
+<div class="section">
+<h3>RunMojoTest<a name="RunMojoTest"></a></h3><a name="com.rexsl.mavenRunMojoTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>testEndlessWaitingCycle</td>
+<td>0.025</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>rejectsNonWarPackaging</td>
+<td>0.289</td></tr></table></div>
+<div class="section">
+<h3>BinaryFilesCheckTest<a name="BinaryFilesCheckTest"></a></h3><a name="com.rexsl.maven.checksBinaryFilesCheckTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesTextFile</td>
+<td>0.312</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesIncorrectFileTypes</td>
+<td>0.319</td></tr></table></div>
+<div class="section">
+<h3>CssStaticCheckTest<a name="CssStaticCheckTest"></a></h3><a name="com.rexsl.maven.checksCssStaticCheckTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><a href="#com.rexsl.maven.checks.CssStaticCheckTest.validatesCorrectCssFile"><img src="images/icon_error_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checks.CssStaticCheckTest.validatesCorrectCssFile">validatesCorrectCssFile</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_maven_checks_CssStaticCheckTest_validatesCorrectCssFile&apos;);"><span style="display:inline;" id="com_rexsl_maven_checks_CssStaticCheckTest_validatesCorrectCssFileoff"> + </span><span style="display:none;" id="com_rexsl_maven_checks_CssStaticCheckTest_validatesCorrectCssFileon"> - </span>[ Detail ]</a></div></td>
+<td>0.277</td></tr>
+<tr class="b">
+<td></td>
+<td>Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: net/sourceforge/cobertura/coveragedata/HasBeenInstrumented
+ at java.lang.ClassLoader.defineClass1(Native Method)
+ at java.lang.ClassLoader.defineClass(ClassLoader.java:800)
+ at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+ at java.net.URLClassLoader.defineClass(URLClassLoader.java:449)
+ at java.net.URLClassLoader.access$100(URLClassLoader.java:71)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+ at java.security.AccessController.doPrivileged(Native Method)
+ at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+ at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+ at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)
+Caused by: java.lang.ClassNotFoundException: net.sourceforge.cobertura.coveragedata.HasBeenInstrumented
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:366)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+ at java.security.AccessController.doPrivileged(Native Method)
+ at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+ at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+ ... 13 more
+</td>
+<td></td></tr>
+<tr class="a">
+<td></td>
+<td>
+<div id="com_rexsl_maven_checks_CssStaticCheckTest_validatesCorrectCssFileerror" style="display:none;">
+<div>
+<pre>java.lang.IllegalStateException: Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: net/sourceforge/cobertura/coveragedata/HasBeenInstrumentedat java.lang.ClassLoader.defineClass1(Native Method)at java.lang.ClassLoader.defineClass(ClassLoader.java:800)at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)at java.net.URLClassLoader.defineClass(URLClassLoader.java:449)at java.net.URLClassLoader.access$100(URLClassLoader.java:71)at java.net.URLClassLoader$1.run(URLClassLoader.java:361)at java.net.URLClassLoader$1.run(URLClassLoader.java:355)at java.security.AccessController.doPrivileged(Native Method)at java.net.URLClassLoader.findClass(URLClassLoader.java:354)at java.lang.ClassLoader.loadClass(ClassLoader.java:425)at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)at java.lang.ClassLoader.loadClass(ClassLoader.java:358)at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)Caused by: java.lang.ClassNotFoundException: net.sourceforge.cobertura.coveragedata.HasBeenInstrumentedat java.net.URLClassLoader$1.run(URLClassLoader.java:366)at java.net.URLClassLoader$1.run(URLClassLoader.java:355)at java.security.AccessController.doPrivileged(Native Method)at java.net.URLClassLoader.findClass(URLClassLoader.java:354)at java.lang.ClassLoader.loadClass(ClassLoader.java:425)at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)at java.lang.ClassLoader.loadClass(ClassLoader.java:358)... 13 moreat com.rexsl.maven.checks.CssStaticCheck.validate_aroundBody2(CssStaticCheck.java:107)at com.rexsl.maven.checks.CssStaticCheck$AjcClosure3.run(CssStaticCheck.java:1)at org.aspectj.runtime.reflect.JoinPointImpl.proceed(JoinPointImpl.java:149)at com.jcabi.aspects.aj.MethodLogger.wrap(MethodLogger.java:204)at com.jcabi.aspects.aj.MethodLogger.ajc$inlineAccessMethod$com_jcabi_aspects_aj_MethodLogger$com_jcabi_aspects_aj_MethodLogger$wrap(MethodLogger.java:1)at com.jcabi.aspects.aj.MethodLogger.wrapMethod(MethodLogger.java:160)at com.rexsl.maven.checks.CssStaticCheck.validate(CssStaticCheck.java:81)at com.rexsl.maven.checks.CssStaticCheckTest.validatesCorrectCssFile(CssStaticCheckTest.java:55)</pre></div></div></td>
+<td></td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.maven.checks.CssStaticCheckTest.validatesIncorrectCssFile"><img src="images/icon_error_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checks.CssStaticCheckTest.validatesIncorrectCssFile">validatesIncorrectCssFile</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_maven_checks_CssStaticCheckTest_validatesIncorrectCssFile&apos;);"><span style="display:inline;" id="com_rexsl_maven_checks_CssStaticCheckTest_validatesIncorrectCssFileoff"> + </span><span style="display:none;" id="com_rexsl_maven_checks_CssStaticCheckTest_validatesIncorrectCssFileon"> - </span>[ Detail ]</a></div></td>
+<td>0.277</td></tr>
+<tr class="a">
+<td></td>
+<td>Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: net/sourceforge/cobertura/coveragedata/HasBeenInstrumented
+ at java.lang.ClassLoader.defineClass1(Native Method)
+ at java.lang.ClassLoader.defineClass(ClassLoader.java:800)
+ at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+ at java.net.URLClassLoader.defineClass(URLClassLoader.java:449)
+ at java.net.URLClassLoader.access$100(URLClassLoader.java:71)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+ at java.security.AccessController.doPrivileged(Native Method)
+ at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+ at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+ at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)
+Caused by: java.lang.ClassNotFoundException: net.sourceforge.cobertura.coveragedata.HasBeenInstrumented
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:366)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+ at java.security.AccessController.doPrivileged(Native Method)
+ at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+ at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+ ... 13 more
+</td>
+<td></td></tr>
+<tr class="b">
+<td></td>
+<td>
+<div id="com_rexsl_maven_checks_CssStaticCheckTest_validatesIncorrectCssFileerror" style="display:none;">
+<div>
+<pre>java.lang.IllegalStateException: Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: net/sourceforge/cobertura/coveragedata/HasBeenInstrumentedat java.lang.ClassLoader.defineClass1(Native Method)at java.lang.ClassLoader.defineClass(ClassLoader.java:800)at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)at java.net.URLClassLoader.defineClass(URLClassLoader.java:449)at java.net.URLClassLoader.access$100(URLClassLoader.java:71)at java.net.URLClassLoader$1.run(URLClassLoader.java:361)at java.net.URLClassLoader$1.run(URLClassLoader.java:355)at java.security.AccessController.doPrivileged(Native Method)at java.net.URLClassLoader.findClass(URLClassLoader.java:354)at java.lang.ClassLoader.loadClass(ClassLoader.java:425)at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)at java.lang.ClassLoader.loadClass(ClassLoader.java:358)at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)Caused by: java.lang.ClassNotFoundException: net.sourceforge.cobertura.coveragedata.HasBeenInstrumentedat java.net.URLClassLoader$1.run(URLClassLoader.java:366)at java.net.URLClassLoader$1.run(URLClassLoader.java:355)at java.security.AccessController.doPrivileged(Native Method)at java.net.URLClassLoader.findClass(URLClassLoader.java:354)at java.lang.ClassLoader.loadClass(ClassLoader.java:425)at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)at java.lang.ClassLoader.loadClass(ClassLoader.java:358)... 13 moreat com.rexsl.maven.checks.CssStaticCheck.validate_aroundBody2(CssStaticCheck.java:107)at com.rexsl.maven.checks.CssStaticCheck$AjcClosure3.run(CssStaticCheck.java:1)at org.aspectj.runtime.reflect.JoinPointImpl.proceed(JoinPointImpl.java:149)at com.jcabi.aspects.aj.MethodLogger.wrap(MethodLogger.java:204)at com.jcabi.aspects.aj.MethodLogger.ajc$inlineAccessMethod$com_jcabi_aspects_aj_MethodLogger$com_jcabi_aspects_aj_MethodLogger$wrap(MethodLogger.java:1)at com.jcabi.aspects.aj.MethodLogger.wrapMethod(MethodLogger.java:160)at com.rexsl.maven.checks.CssStaticCheck.validate(CssStaticCheck.java:81)at com.rexsl.maven.checks.CssStaticCheckTest.validatesIncorrectCssFile(CssStaticCheckTest.java:71)</pre></div></div></td>
+<td></td></tr></table></div>
+<div class="section">
+<h3>DefaultChecksProviderTest<a name="DefaultChecksProviderTest"></a></h3><a name="com.rexsl.maven.checksDefaultChecksProviderTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>retrievesSpecifiedCheck</td>
+<td>0.175</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>retrievesSetOfChecks</td>
+<td>0.174</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>setCheck</td>
+<td>0.012</td></tr></table></div>
+<div class="section">
+<h3>InContainerScriptsCheckTest<a name="InContainerScriptsCheckTest"></a></h3><a name="com.rexsl.maven.checksInContainerScriptsCheckTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>checksOnlyMatchingTests</td>
+<td>1.076</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesCorrectProjectWithNoExceptions</td>
+<td>1.074</td></tr></table></div>
+<div class="section">
+<h3>JSStaticCheckTest<a name="JSStaticCheckTest"></a></h3><a name="com.rexsl.maven.checksJSStaticCheckTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><a href="#com.rexsl.maven.checks.JSStaticCheckTest.validatesIncorrectJSFile"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checks.JSStaticCheckTest.validatesIncorrectJSFile">validatesIncorrectJSFile</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_maven_checks_JSStaticCheckTest_validatesIncorrectJSFile&apos;);"><span style="display:inline;" id="com_rexsl_maven_checks_JSStaticCheckTest_validatesIncorrectJSFileoff"> + </span><span style="display:none;" id="com_rexsl_maven_checks_JSStaticCheckTest_validatesIncorrectJSFileon"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped</td>
+<td></td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesCorrectJSFile</td>
+<td>0.04</td></tr></table></div>
+<div class="section">
+<h3>JigsawCssCheckTest<a name="JigsawCssCheckTest"></a></h3><a name="com.rexsl.maven.checksJigsawCssCheckTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesCorrectCssFile</td>
+<td>0.019</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesIncorrectCssFile</td>
+<td>0.044</td></tr></table></div>
+<div class="section">
+<h3>RexslFilesCheckTest<a name="RexslFilesCheckTest"></a></h3><a name="com.rexsl.maven.checksRexslFilesCheckTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><a href="#com.rexsl.maven.checks.RexslFilesCheckTest.validatesIncorrectFolder"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.checks.RexslFilesCheckTest.validatesIncorrectFolder">validatesIncorrectFolder</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_maven_checks_RexslFilesCheckTest_validatesIncorrectFolder&apos;);"><span style="display:inline;" id="com_rexsl_maven_checks_RexslFilesCheckTest_validatesIncorrectFolderoff"> + </span><span style="display:none;" id="com_rexsl_maven_checks_RexslFilesCheckTest_validatesIncorrectFolderon"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped</td>
+<td></td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesIncorrecStructure</td>
+<td>0.011</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesFileTypes</td>
+<td>0.008</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesIncorrectFileTypes</td>
+<td>0.008</td></tr></table></div>
+<div class="section">
+<h3>RuntimeResolverTest<a name="RuntimeResolverTest"></a></h3><a name="com.rexsl.maven.checksRuntimeResolverTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>resolvesSourceByUrlWithBase</td>
+<td>1.812</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>resolvesSourceByUrl</td>
+<td>1.81</td></tr></table></div>
+<div class="section">
+<h3>WebXmlCheckTest<a name="WebXmlCheckTest"></a></h3><a name="com.rexsl.maven.checksWebXmlCheckTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesIncorrectWebXmlFile</td>
+<td>15.928</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesCorrectWebXmlFile</td>
+<td>16.083</td></tr></table></div>
+<div class="section">
+<h3>WebappFilesCheckTest<a name="WebappFilesCheckTest"></a></h3><a name="com.rexsl.maven.checksWebappFilesCheckTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesIncorrectFileTypes</td>
+<td>0.339</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesFileTypes</td>
+<td>0.339</td></tr></table></div>
+<div class="section">
+<h3>XhtmlOutputCheckTest<a name="XhtmlOutputCheckTest"></a></h3><a name="com.rexsl.maven.checksXhtmlOutputCheckTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>checksOnlyMatchingTests</td>
+<td>1.561</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesPositiveSituation</td>
+<td>1.56</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesWithMissedLayoutFile</td>
+<td>1.004</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>validatesIncorrectXhtml</td>
+<td>1.477</td></tr></table></div>
+<div class="section">
+<h3>CssPackerTest<a name="CssPackerTest"></a></h3><a name="com.rexsl.maven.packersCssPackerTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>packsCssFiles</td>
+<td>0.371</td></tr></table></div>
+<div class="section">
+<h3>JsPackerTest<a name="JsPackerTest"></a></h3><a name="com.rexsl.maven.packersJsPackerTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><a href="#com.rexsl.maven.packers.JsPackerTest.packsJavascriptFile"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.packers.JsPackerTest.packsJavascriptFile">packsJavascriptFile</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_maven_packers_JsPackerTest_packsJavascriptFile&apos;);"><span style="display:inline;" id="com_rexsl_maven_packers_JsPackerTest_packsJavascriptFileoff"> + </span><span style="display:none;" id="com_rexsl_maven_packers_JsPackerTest_packsJavascriptFileon"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped</td>
+<td></td></tr></table></div>
+<div class="section">
+<h3>XslPackerTest<a name="XslPackerTest"></a></h3><a name="com.rexsl.maven.packersXslPackerTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>packsXslFile</td>
+<td>0.92</td></tr></table></div>
+<div class="section">
+<h3>BindingBuilderTest<a name="BindingBuilderTest"></a></h3><a name="com.rexsl.maven.utilsBindingBuilderTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsBindingWithProperties</td>
+<td>0.872</td></tr></table></div>
+<div class="section">
+<h3>EmbeddedContainerTest<a name="EmbeddedContainerTest"></a></h3><a name="com.rexsl.maven.utilsEmbeddedContainerTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>testEmbeddedDeployment</td>
+<td>1.637</td></tr></table></div>
+<div class="section">
+<h3>FileFinderTest<a name="FileFinderTest"></a></h3><a name="com.rexsl.maven.utilsFileFinderTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>testOrdered</td>
+<td>0.019</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>testCertainType</td>
+<td>0.015</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>testRandom</td>
+<td>0.02</td></tr></table></div>
+<div class="section">
+<h3>GroovyExceptionTest<a name="GroovyExceptionTest"></a></h3><a name="com.rexsl.maven.utilsGroovyExceptionTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>instantiatedWithString</td>
+<td>0.01</td></tr></table></div>
+<div class="section">
+<h3>GroovyExecutorTest<a name="GroovyExecutorTest"></a></h3><a name="com.rexsl.maven.utilsGroovyExecutorTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>worksWithSpecifiedClassloader</td>
+<td>1.148</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>executesSimpleGroovyScript</td>
+<td>1.148</td></tr></table></div>
+<div class="section">
+<h3>LoggingManagerTest<a name="LoggingManagerTest"></a></h3><a name="com.rexsl.maven.utilsLoggingManagerTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><a href="#com.rexsl.maven.utils.LoggingManagerTest.enter"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.utils.LoggingManagerTest.enter">enter</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_maven_utils_LoggingManagerTest_enter&apos;);"><span style="display:inline;" id="com_rexsl_maven_utils_LoggingManagerTest_enteroff"> + </span><span style="display:none;" id="com_rexsl_maven_utils_LoggingManagerTest_enteron"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped</td>
+<td></td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.maven.utils.LoggingManagerTest.leave"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.maven.utils.LoggingManagerTest.leave">leave</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_maven_utils_LoggingManagerTest_leave&apos;);"><span style="display:inline;" id="com_rexsl_maven_utils_LoggingManagerTest_leaveoff"> + </span><span style="display:none;" id="com_rexsl_maven_utils_LoggingManagerTest_leaveon"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped</td>
+<td></td></tr></table></div>
+<div class="section">
+<h3>PortReserverTest<a name="PortReserverTest"></a></h3><a name="com.rexsl.maven.utilsPortReserverTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>canReserverTcpPort</td>
+<td>0.008</td></tr></table></div><br /></div>
+<div class="section">
+<h2>Failure Details<a name="Failure_Details"></a></h2><a name="Failure_Details"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_error_sml.gif" alt="" /></td>
+<td><a name="com.rexsl.maven.checks.CssStaticCheckTest.validatesCorrectCssFile"></a>validatesCorrectCssFile</td></tr>
+<tr class="b">
+<td></td>
+<td>java.lang.IllegalStateException: Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: net/sourceforge/cobertura/coveragedata/HasBeenInstrumented
+ at java.lang.ClassLoader.defineClass1(Native Method)
+ at java.lang.ClassLoader.defineClass(ClassLoader.java:800)
+ at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+ at java.net.URLClassLoader.defineClass(URLClassLoader.java:449)
+ at java.net.URLClassLoader.access$100(URLClassLoader.java:71)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+ at java.security.AccessController.doPrivileged(Native Method)
+ at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+ at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+ at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)
+Caused by: java.lang.ClassNotFoundException: net.sourceforge.cobertura.coveragedata.HasBeenInstrumented
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:366)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+ at java.security.AccessController.doPrivileged(Native Method)
+ at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+ at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+ ... 13 more
+</td></tr>                                                                                                                        
+<tr class="a">
+<td></td>
+<td>
+<div id="validatesCorrectCssFileerror">com.rexsl.maven.checks.CssStaticCheckTest:55</div></td></tr>
+<tr class="b">
+<td><img src="images/icon_error_sml.gif" alt="" /></td>
+<td><a name="com.rexsl.maven.checks.CssStaticCheckTest.validatesIncorrectCssFile"></a>validatesIncorrectCssFile</td></tr>
+<tr class="a">
+<td></td>
+<td>java.lang.IllegalStateException: Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: net/sourceforge/cobertura/coveragedata/HasBeenInstrumented
+ at java.lang.ClassLoader.defineClass1(Native Method)
+ at java.lang.ClassLoader.defineClass(ClassLoader.java:800)
+ at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+ at java.net.URLClassLoader.defineClass(URLClassLoader.java:449)
+ at java.net.URLClassLoader.access$100(URLClassLoader.java:71)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+ at java.security.AccessController.doPrivileged(Native Method)
+ at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+ at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+ at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)
+Caused by: java.lang.ClassNotFoundException: net.sourceforge.cobertura.coveragedata.HasBeenInstrumented
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:366)
+ at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+ at java.security.AccessController.doPrivileged(Native Method)
+ at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+ at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+ at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+ ... 13 more
+</td></tr>                                                                                                                        
+<tr class="b">
+<td></td>
+<td>
+<div id="validatesIncorrectCssFileerror">com.rexsl.maven.checks.CssStaticCheckTest:71</div></td></tr>
+<tr class="a">
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><a name="com.rexsl.maven.checks.JSStaticCheckTest.validatesIncorrectJSFile"></a>validatesIncorrectJSFile</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped: skipped</td></tr>
+<tr class="a">
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><a name="com.rexsl.maven.checks.RexslFilesCheckTest.validatesIncorrectFolder"></a>validatesIncorrectFolder</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped: skipped</td></tr>
+<tr class="a">
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><a name="com.rexsl.maven.packers.JsPackerTest.packsJavascriptFile"></a>packsJavascriptFile</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped: skipped</td></tr>
+<tr class="a">
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><a name="com.rexsl.maven.utils.LoggingManagerTest.enter"></a>enter</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped: skipped</td></tr>
+<tr class="a">
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><a name="com.rexsl.maven.utils.LoggingManagerTest.leave"></a>leave</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped: skipped</td></tr></table><br /></div>
                         </div>
                     </article>
                     <img class="maven-mobile" src="./images/built-by-maven.png"

@@ -18,6 +18,7 @@
         <script src="./js/jquery-1.8.3.min.js"></script>
         <script src="./js/highlight-7.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+        <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
@@ -40,14 +41,8 @@
                 }
             );
         </script>
-        <style>
-            @import url("./css/wide.css") (min-width: 1200px) and (max-width:5000px);
-            @import url("./css/900-1199.css") (min-width: 900px) and (max-width:1199px);
-            @import url("./css/600-899.css") (min-width: 600px) and (max-width:899px);
-            @import url("./css/100-599.css") (min-width: 100px) and (max-width:599px);
-        </style>
     </head>
-    <body style="background: url('./images/background.png') fixed;">
+    <body>
                 <div class="page">
             <div class="menu-section">
                 <ul id="menu">
@@ -85,7 +80,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                    <a href="https://github.com/yegor256/rexsl/releases" title="Release History">Release History</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -153,12 +148,12 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
+                            <strong>0.13</strong>
                             
-                            02-Mar-2014
-                            0.12
+                            10-Mar-2014
                         </div>
                                                                     </div>
-                    <div id="here-goes-menu"></div>
+                    <div id="here-goes-menu" class="menu-off"></div>
                     <article>
                         <div class="section">
                             
@@ -168,7 +163,7 @@
       
 <p><b>Full name</b>:</p>
       
-<p>com.rexsl:rexsl-maven-plugin:0.12:check</p>
+<p>com.rexsl:rexsl-maven-plugin:0.13:check</p>
       
 <p><b>Description</b>:</p>
       
@@ -234,23 +229,12 @@ available checks, for example: <tt>mvn rexsl:check
             
 <td><tt>boolean</tt></td>
             
-<td><tt>-</tt></td>
-            
-<td>Shall we skip execution?<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>rexsl.skip</tt>.</td>
-          </tr>
-          
-<tr class="a">
-            
-<td><b><a href="#skipTests">skipTests</a></b></td>
-            
-<td><tt>boolean</tt></td>
-            
 <td><tt>0.3.8</tt></td>
             
 <td>Skip all tests.<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>skipTests</tt>.</td>
           </tr>
           
-<tr class="b">
+<tr class="a">
             
 <td><b><a href="#systemPropertyVariables">systemPropertyVariables</a></b></td>
             
@@ -277,7 +261,7 @@ for example you want to reconfigure LOG4J just for the tests:</p>
 </pre></div><br /></td>
           </tr>
           
-<tr class="a">
+<tr class="b">
             
 <td><b><a href="#test">test</a></b></td>
             
@@ -289,7 +273,7 @@ for example you want to reconfigure LOG4J just for the tests:</p>
 <tt>xml</tt>, etc.) to be executed during test.<br /><b>Default value is</b>: <tt>.*</tt>.<br /><b>User property is</b>: <tt>rexsl.test</tt>.</td>
           </tr>
           
-<tr class="b">
+<tr class="a">
             
 <td><b><a href="#webappDirectory">webappDirectory</a></b></td>
             
@@ -337,20 +321,6 @@ available checks, for example: <tt>mvn rexsl:check
 <li><b>User Property</b>: <tt>rexsl.port</tt></li>
         </ul><hr />
 <p><b><a name="skip">skip</a>:</b></p>
-        
-<div>Shall we skip execution?</div>
-        
-<ul>
-          
-<li><b>Type</b>: <tt>boolean</tt></li>
-          
-<li><b>Required</b>: <tt>No</tt></li>
-          
-<li><b>User Property</b>: <tt>rexsl.skip</tt></li>
-          
-<li><b>Default</b>: <tt>false</tt></li>
-        </ul><hr />
-<p><b><a name="skipTests">skipTests</a>:</b></p>
         
 <div>Skip all tests.</div>
         
