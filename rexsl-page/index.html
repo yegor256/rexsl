@@ -17,6 +17,7 @@
         <script src="./js/jquery-1.8.3.min.js"></script>
         <script src="./js/highlight-7.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+        <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
@@ -39,14 +40,8 @@
                 }
             );
         </script>
-        <style>
-            @import url("./css/wide.css") (min-width: 1200px) and (max-width:5000px);
-            @import url("./css/900-1199.css") (min-width: 900px) and (max-width:1199px);
-            @import url("./css/600-899.css") (min-width: 600px) and (max-width:899px);
-            @import url("./css/100-599.css") (min-width: 100px) and (max-width:599px);
-        </style>
     </head>
-    <body style="background: url('./images/background.png') fixed;">
+    <body>
                 <div class="page">
             <div class="menu-section">
                 <ul id="menu">
@@ -70,17 +65,17 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.12/index.html" title="API 0.12 (JavaDoc)">API 0.12 (JavaDoc)</a>
+                                                                                    <a href="apidocs-0.13/index.html" title="API 0.13 (JavaDoc)">API 0.13 (JavaDoc)</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="testapidocs-0.12/index.html" title="Mock API">Mock API</a>
+                                                                                    <a href="testapidocs-0.13/index.html" title="Mock API">Mock API</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                    <a href="https://github.com/yegor256/rexsl/releases" title="Release History">Release History</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -124,7 +119,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </li>
                                                                                                                         <li>
                                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </li>
                                                                                         </ul>
                                                     </li>
                                     </ul>
@@ -143,12 +138,12 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
+                            <strong>0.13</strong>
                             
-                            02-Mar-2014
-                            0.12
+                            10-Mar-2014
                         </div>
                                                                     </div>
-                    <div id="here-goes-menu"></div>
+                    <div id="here-goes-menu" class="menu-off"></div>
                     <article>
                         <div class="section">
                             <h1>RESTful XML Page Modeler</h1>
@@ -176,24 +171,24 @@ public class MainRs {
   &lt;score&gt;123&lt;/score&gt;
 &lt;/page&gt;
 </pre></div>
-<p>Isn&#x2019;t it neat? :) Start reading from <a href="./apidocs-0.12/com/rexsl/page/PageBuilder.html"><tt>PageBuilder</tt></a>.</p>
+<p>Isn&#x2019;t it neat? :) Start reading from <a href="./apidocs-0.13/com/rexsl/page/PageBuilder.html"><tt>PageBuilder</tt></a>.</p>
 <p>Since version 0.4.8 you can use &#x201c;insets&#x201d;, which implement basic functionalities required by most web applications, including <a href="./inset-flash.html">flash messages</a>, <a href="./inset-links.html">default HATEOAS links</a>, <a href="./inset-version.html">version data</a>, and <a href="./inset-oauth.html">OAuth authentication</a>.</p>
-<p>Include this dependency into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-page/0.12/rexsl-page-0.12.jar"><tt>rexsl-page-0.12.jar</tt></a> and add to classpath):</p>
+<p>Include this dependency into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-page/0.13/rexsl-page-0.13.jar"><tt>rexsl-page-0.13.jar</tt></a> and add to classpath):</p>
 
 <div class="source">
 <pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-page&lt;/artifactId&gt;
-  &lt;version&gt;0.12&lt;/version&gt;
+  &lt;version&gt;0.13&lt;/version&gt;
 &lt;/dependency&gt;
 </pre></div>
-<p>This module also contains a few mockers. To use it you should include this dependencies into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-page/0.12/rexsl-page-0.12-mock.jar"><tt>rexsl-page-0.12-mock.jar</tt></a> and add to classpath):</p>
+<p>This module also contains a few mockers. To use it you should include this dependencies into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-page/0.13/rexsl-page-0.13-mock.jar"><tt>rexsl-page-0.13-mock.jar</tt></a> and add to classpath):</p>
 
 <div class="source">
 <pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-page&lt;/artifactId&gt;
-  &lt;version&gt;0.12&lt;/version&gt;
+  &lt;version&gt;0.13&lt;/version&gt;
   &lt;classifier&gt;mock&lt;/classifier&gt;
   &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;

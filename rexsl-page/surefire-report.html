@@ -17,6 +17,7 @@
         <script src="./js/jquery-1.8.3.min.js"></script>
         <script src="./js/highlight-7.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+        <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
@@ -39,14 +40,8 @@
                 }
             );
         </script>
-        <style>
-            @import url("./css/wide.css") (min-width: 1200px) and (max-width:5000px);
-            @import url("./css/900-1199.css") (min-width: 900px) and (max-width:1199px);
-            @import url("./css/600-899.css") (min-width: 600px) and (max-width:899px);
-            @import url("./css/100-599.css") (min-width: 100px) and (max-width:599px);
-        </style>
     </head>
-    <body style="background: url('./images/background.png') fixed;">
+    <body>
                 <div class="page">
             <div class="menu-section">
                 <ul id="menu">
@@ -69,17 +64,17 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.12/index.html" title="API 0.12 (JavaDoc)">API 0.12 (JavaDoc)</a>
+                                                                                    <a href="apidocs-0.13/index.html" title="API 0.13 (JavaDoc)">API 0.13 (JavaDoc)</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="testapidocs-0.12/index.html" title="Mock API">Mock API</a>
+                                                                                    <a href="testapidocs-0.13/index.html" title="Mock API">Mock API</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="changes-report.html" title="Release History">Release History</a>
+                                                                                    <a href="https://github.com/yegor256/rexsl/releases" title="Release History">Release History</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -123,13 +118,8 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </li>
                                                                                                                         <li>
                                                                                     <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <ul>
                                                                                                     <li>
-                                                                                    <a href="rempl.html" title="REMPL">REMPL</a>
-                                                                                                                                                                        <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li>
                                                             <strong>                        <a href="surefire-report.html" title="Surefire Report">Surefire Report</a>
         </strong>
                                                                                                                                                                 <ul>
@@ -161,12 +151,12 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.12/index.html" title="JavaDocs">JavaDocs</a>
+                                                                                    <a href="apidocs-0.13/index.html" title="JavaDocs">JavaDocs</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="testapidocs-0.12/index.html" title="Test JavaDocs">Test JavaDocs</a>
+                                                                                    <a href="testapidocs-0.13/index.html" title="Test JavaDocs">Test JavaDocs</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -205,12 +195,12 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
+                            <strong>0.13</strong>
                             
-                            02-Mar-2014
-                            0.12
+                            10-Mar-2014
                         </div>
                                                                     </div>
-                    <div id="here-goes-menu"></div>
+                    <div id="here-goes-menu" class="menu-off"></div>
                     <article>
                         <div class="section">
                             <script type="text/javascript">
@@ -233,7 +223,8 @@ function toggleDisplay(elementId) {
 <div class="section">
 <h2>Surefire Report<a name="Surefire_Report"></a></h2></div>
 <div class="section">
-<h2>Summary<a name="Summary"></a></h2><a name="Summary"></a><br />
+<h2>Summary<a name="Summary"></a></h2><a name="Summary"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
 <table border="1" class="bodyTable">
 <tr class="a">
 <th>Tests</th>
@@ -243,13 +234,516 @@ function toggleDisplay(elementId) {
 <th>Success Rate</th>
 <th>Time</th></tr>
 <tr class="b">
+<td>52</td>
 <td>0</td>
 <td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0%</td>
-<td>0</td></tr></table><br />
+<td>1</td>
+<td>98.077%</td>
+<td>15.952</td></tr></table><br />
 <p>Note: failures are anticipated and checked for with assertions while errors are unanticipated.</p><br /></div>
+<div class="section">
+<h2>Package List<a name="Package_List"></a></h2><a name="Package_List"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
+<table border="1" class="bodyTable">
+<tr class="a">
+<th>Package</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.page">com.rexsl.page</a></td>
+<td>27</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>9.285</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.page.inset">com.rexsl.page.inset</a></td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>85.714%</td>
+<td>2.139</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.page.auth">com.rexsl.page.auth</a></td>
+<td>18</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>4.528</td></tr></table><br />
+<p>Note: package statistics are not computed recursively, they only sum up all of its testsuites numbers.</p>
+<div class="section">
+<h3>com.rexsl.page<a name="com.rexsl.page"></a></h3><a name="com.rexsl.page"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.pageBasePageTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.pageBasePageTest">BasePageTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>1.844</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.pageBaseResourceTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.pageBaseResourceTest">BaseResourceTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.604</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.pageCookieBuilderTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.pageCookieBuilderTest">CookieBuilderTest</a></td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>1.255</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.pageForwardedUriInfoTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.pageForwardedUriInfoTest">ForwardedUriInfoTest</a></td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.684</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.pageJaxbBundleTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.pageJaxbBundleTest">JaxbBundleTest</a></td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>2.362</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.pageJaxbGroupTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.pageJaxbGroupTest">JaxbGroupTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.83</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.pageLinkTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.pageLinkTest">LinkTest</a></td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.676</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.pagePageBuilderTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.pagePageBuilderTest">PageBuilderTest</a></td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>1.03</td></tr></table></div>
+<div class="section">
+<h3>com.rexsl.page.inset<a name="com.rexsl.page.inset"></a></h3><a name="com.rexsl.page.inset"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.page.insetFlashInsetTest"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.page.insetFlashInsetTest">FlashInsetTest</a></td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>80%</td>
+<td>0.69</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.page.insetLinksInsetTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.page.insetLinksInsetTest">LinksInsetTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.911</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.page.insetVersionInsetTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.page.insetVersionInsetTest">VersionInsetTest</a></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.538</td></tr></table></div>
+<div class="section">
+<h3>com.rexsl.page.auth<a name="com.rexsl.page.auth"></a></h3><a name="com.rexsl.page.auth"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<th></th>
+<th>Class</th>
+<th>Tests</th>
+<th>Errors </th>
+<th>Failures</th>
+<th>Skipped</th>
+<th>Success Rate</th>
+<th>Time</th></tr>
+<tr class="b">
+<td><a href="#com.rexsl.page.authAuthInsetTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.page.authAuthInsetTest">AuthInsetTest</a></td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>2.338</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.page.authEncryptedTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.page.authEncryptedTest">EncryptedTest</a></td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.05</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.page.authFacebookTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.page.authFacebookTest">FacebookTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.044</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.page.authGithubTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.page.authGithubTest">GithubTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.615</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.page.authGoogleTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.page.authGoogleTest">GoogleTest</a></td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.615</td></tr>
+<tr class="a">
+<td><a href="#com.rexsl.page.authHttpBasicTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.page.authHttpBasicTest">HttpBasicTest</a></td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>100%</td>
+<td>0.866</td></tr></table></div><br /></div>
+<div class="section">
+<h2>Test Cases<a name="Test_Cases"></a></h2><a name="Test_Cases"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p>
+<div class="section">
+<h3>BasePageTest<a name="BasePageTest"></a></h3><a name="com.rexsl.pageBasePageTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsToXmlWithoutLinks</td>
+<td>0.917</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsToXml</td>
+<td>0.927</td></tr></table></div>
+<div class="section">
+<h3>BaseResourceTest<a name="BaseResourceTest"></a></h3><a name="com.rexsl.pageBaseResourceTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>forwardsUriInfo</td>
+<td>0.304</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>setsAndReturnsContextElements</td>
+<td>0.3</td></tr></table></div>
+<div class="section">
+<h3>CookieBuilderTest<a name="CookieBuilderTest"></a></h3><a name="com.rexsl.pageCookieBuilderTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsCookieDeletionRequest</td>
+<td>0.287</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>acceptsValidValues</td>
+<td>0.304</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsCookieWithBrokenInputUri</td>
+<td>0.304</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>rejectsInvalidValues</td>
+<td>0.304</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsCorrectCookie</td>
+<td>0.056</td></tr></table></div>
+<div class="section">
+<h3>ForwardedUriInfoTest<a name="ForwardedUriInfoTest"></a></h3><a name="com.rexsl.pageForwardedUriInfoTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>forwardsUriCorrectlyWithOfficialForwarder</td>
+<td>0.246</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>forwardsUriCorrectlyWithXForwarder</td>
+<td>0.248</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>throwsForNullUriInfo</td>
+<td>0.19</td></tr></table></div>
+<div class="section">
+<h3>JaxbBundleTest<a name="JaxbBundleTest"></a></h3><a name="com.rexsl.pageJaxbBundleTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsGroupsToXml</td>
+<td>0.413</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsLinksToXml</td>
+<td>0.365</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsItselfToXmlThroughJaxb</td>
+<td>0.624</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsSimpleDataToXml</td>
+<td>0.337</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>appendsDomElements</td>
+<td>0.323</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsKidBundlesToXml</td>
+<td>0.3</td></tr></table></div>
+<div class="section">
+<h3>JaxbGroupTest<a name="JaxbGroupTest"></a></h3><a name="com.rexsl.pageJaxbGroupTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsItselfToXml</td>
+<td>0.42</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsItselfToXmlWhenEmpty</td>
+<td>0.41</td></tr></table></div>
+<div class="section">
+<h3>LinkTest<a name="LinkTest"></a></h3><a name="com.rexsl.pageLinkTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsToXml</td>
+<td>0.352</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsCleanUri</td>
+<td>0.11</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>attachesToResource</td>
+<td>0.111</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>attachesToResourceWithComplexUri</td>
+<td>0.103</td></tr></table></div>
+<div class="section">
+<h3>PageBuilderTest<a name="PageBuilderTest"></a></h3><a name="com.rexsl.pagePageBuilderTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>addsCorrectAnnotations</td>
+<td>0.218</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsJaxbPageFromBareClass</td>
+<td>0.203</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsJaxbPageConvertableToXml</td>
+<td>0.609</td></tr></table></div>
+<div class="section">
+<h3>AuthInsetTest<a name="AuthInsetTest"></a></h3><a name="com.rexsl.page.authAuthInsetTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>encryptsIdentityToText</td>
+<td>0.314</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>readsCookieAndAddsHttpHeader</td>
+<td>0.911</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>authenticatesWithRedirectingProvider</td>
+<td>0.391</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>doestRenderWhenCookieIsAbsent</td>
+<td>0.636</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsUniqueIdentitiesAlways</td>
+<td>0.086</td></tr></table></div>
+<div class="section">
+<h3>EncryptedTest<a name="EncryptedTest"></a></h3><a name="com.rexsl.page.authEncryptedTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>throwsOnEmptyInput</td>
+<td>0.01</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>throwsOnNullInput</td>
+<td>0.017</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>throwsOnBrokenInput</td>
+<td>0.001</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>convertsToTextAndBack</td>
+<td>0.022</td></tr></table></div>
+<div class="section">
+<h3>FacebookTest<a name="FacebookTest"></a></h3><a name="com.rexsl.page.authFacebookTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>doestRenderWhenCookieIsAbsent</td>
+<td>0.024</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>generatesLink</td>
+<td>0.02</td></tr></table></div>
+<div class="section">
+<h3>GithubTest<a name="GithubTest"></a></h3><a name="com.rexsl.page.authGithubTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>doestRenderWhenCookieIsAbsent</td>
+<td>0.3</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>generatesLink</td>
+<td>0.315</td></tr></table></div>
+<div class="section">
+<h3>GoogleTest<a name="GoogleTest"></a></h3><a name="com.rexsl.page.authGoogleTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>generatesLink</td>
+<td>0.315</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>doestRenderWhenCookieIsAbsent</td>
+<td>0.3</td></tr></table></div>
+<div class="section">
+<h3>HttpBasicTest<a name="HttpBasicTest"></a></h3><a name="com.rexsl.page.authHttpBasicTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>gracefullyHandlesEmptyParts</td>
+<td>0.289</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>authenticatesWhenHeaderIsPresent</td>
+<td>0.287</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>doestRenderWhenHeaderIsAbsent</td>
+<td>0.29</td></tr></table></div>
+<div class="section">
+<h3>FlashInsetTest<a name="FlashInsetTest"></a></h3><a name="com.rexsl.page.insetFlashInsetTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsRedirectingException</td>
+<td>0.064</td></tr>
+<tr class="b">
+<td><a href="#com.rexsl.page.inset.FlashInsetTest.rendersCookieAndAddsHttpHeader"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
+<td><a href="#com.rexsl.page.inset.FlashInsetTest.rendersCookieAndAddsHttpHeader">rendersCookieAndAddsHttpHeader</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_page_inset_FlashInsetTest_rendersCookieAndAddsHttpHeader&apos;);"><span style="display:inline;" id="com_rexsl_page_inset_FlashInsetTest_rendersCookieAndAddsHttpHeaderoff"> + </span><span style="display:none;" id="com_rexsl_page_inset_FlashInsetTest_rendersCookieAndAddsHttpHeaderon"> - </span>[ Detail ]</a></div></td>
+<td>0</td></tr>
+<tr class="a">
+<td></td>
+<td>skipped</td>
+<td></td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsSevereForwardingException</td>
+<td>0.057</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>buildsForwardingException</td>
+<td>0.044</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>doestRenderWhenCookieIsAbsent</td>
+<td>0.525</td></tr></table></div>
+<div class="section">
+<h3>LinksInsetTest<a name="LinksInsetTest"></a></h3><a name="com.rexsl.page.insetLinksInsetTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>rendersPageToXml</td>
+<td>0.911</td></tr></table></div>
+<div class="section">
+<h3>VersionInsetTest<a name="VersionInsetTest"></a></h3><a name="com.rexsl.page.insetVersionInsetTest"></a>
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>rendersPageToXml</td>
+<td>0.538</td></tr></table></div><br /></div>
+<div class="section">
+<h2>Failure Details<a name="Failure_Details"></a></h2><a name="Failure_Details"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_warning_sml.gif" alt="" /></td>
+<td><a name="com.rexsl.page.inset.FlashInsetTest.rendersCookieAndAddsHttpHeader"></a>rendersCookieAndAddsHttpHeader</td></tr>
+<tr class="b">
+<td></td>
+<td>skipped: skipped</td></tr></table><br /></div>
                         </div>
                     </article>
                     <img class="maven-mobile" src="./images/built-by-maven.png"
