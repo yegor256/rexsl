@@ -131,7 +131,7 @@ public final class PackageMojo extends AbstractRexslMojo {
         }
         final long start = System.currentTimeMillis();
         final Set<Packer> packers = new PackersProvider().all();
-        for (Packer packer : packers) {
+        for (final Packer packer : packers) {
             packer.pack(this.env(), filter);
         }
         Logger.info(

@@ -35,7 +35,7 @@ import com.rexsl.core.annotations.Stylesheet;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.LinkedList;
 import javassist.CannotCompileException;
 import javassist.ClassClassPath;
@@ -280,13 +280,18 @@ public final class PageBuilder {
         final AttributeInfo originals =
             parent.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
         if (originals != null) {
-            final AnnotationsAttribute attrib = AnnotationsAttribute.class.cast(
-                originals.copy(
-                    dest.getClassFile().getConstPool(),
-                    new HashMap<Object, Object>(0)
+            final AttributeInfo info = originals.copy(
+                dest.getClassFile().getConstPool(),
+                Collections.emptyMap()
+            );
+            if (!(info instanceof AnnotationsAttribute)) {
+                throw new IllegalStateException("internal error");
+            }
+            result.addAll(
+                Arrays.asList(
+                    AnnotationsAttribute.class.cast(info).getAnnotations()
                 )
             );
-            result.addAll(Arrays.asList(attrib.getAnnotations()));
         }
         return result;
     }

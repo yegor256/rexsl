@@ -64,7 +64,7 @@ public final class FileFinderTest {
         final FileFinder finder = new FileFinder(directory, "groovy");
         final Collection<File> files = finder.ordered();
         String previous = "";
-        for (File file : files) {
+        for (final File file : files) {
             final String name = file.getName();
             final int result = name.compareTo(previous);
             MatcherAssert.assertThat(
@@ -118,7 +118,7 @@ public final class FileFinderTest {
         final File directory = environment.basedir();
         final Collection<File> files =
             new FileFinder(directory, "css").ordered();
-        for (File file : files) {
+        for (final File file : files) {
             MatcherAssert.assertThat(
                 "file type",
                 file.getName(),
@@ -134,7 +134,7 @@ public final class FileFinderTest {
      */
     private String namesHash(final Collection<File> files) {
         final StringBuilder builder = new StringBuilder();
-        for (File file : files) {
+        for (final File file : files) {
             builder.append(file.getName());
         }
         return builder.toString();

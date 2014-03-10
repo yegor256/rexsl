@@ -74,9 +74,9 @@ public final class MavenEnvironment implements Environment {
     private final transient Properties properties;
 
     /**
-     * Shall we use runtime filtering?
+     * Shall we use runtime filtr?
      */
-    private transient boolean runtimeFiltering;
+    private transient boolean filtr;
 
     /**
      * Port number.
@@ -121,12 +121,12 @@ public final class MavenEnvironment implements Environment {
     }
 
     /**
-     * Shall we do runtime filtering?
+     * Shall we do runtime filtr?
      * @param filtering Shall we?
      */
     @Loggable(Loggable.DEBUG)
     public void setRuntimeFiltering(final boolean filtering) {
-        this.runtimeFiltering = filtering;
+        this.filtr = filtering;
     }
 
     @Override
@@ -173,7 +173,8 @@ public final class MavenEnvironment implements Environment {
                 (DefaultDependencyGraphBuilder) this.container.lookup(
                     DependencyGraphBuilder.class.getCanonicalName()
                 ),
-                this.session, scopes);
+                this.session, scopes
+            );
         } catch (ComponentLookupException ex) {
             throw new IllegalStateException(ex);
         }
@@ -181,6 +182,6 @@ public final class MavenEnvironment implements Environment {
 
     @Override
     public boolean useRuntimeFiltering() {
-        return this.runtimeFiltering;
+        return this.filtr;
     }
 }

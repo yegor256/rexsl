@@ -43,7 +43,6 @@ import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.CharEncoding;
@@ -57,7 +56,6 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
  * @version $Id$
  */
 @ToString
-@EqualsAndHashCode
 @Loggable(Loggable.DEBUG)
 class BaseValidator {
 

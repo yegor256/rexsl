@@ -43,10 +43,8 @@ import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
@@ -93,9 +91,9 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
  * @since 0.2
  */
 @ToString
-@EqualsAndHashCode(callSuper = false, of = "jersey")
+@EqualsAndHashCode(callSuper = true)
 @Loggable(Loggable.DEBUG)
-public final class RestfulServlet extends HttpServlet {
+public final class RestfulServlet extends ServletContainer {
 
     /**
      * Name of servlet init param.
@@ -121,12 +119,6 @@ public final class RestfulServlet extends HttpServlet {
     private static final String COMMA = ",";
 
     /**
-     * Jersey servlet.
-     */
-    @NotNull
-    private ServletContainer jersey = new ServletContainer();
-
-    /**
      * {@inheritDoc}
      * @checkstyle RedundantThrows (4 lines)
      */
@@ -148,7 +140,7 @@ public final class RestfulServlet extends HttpServlet {
             : StringUtils.split(param, RestfulServlet.COMMA)) {
             final String pkg = name.trim();
             final Pattern ptrn = Pattern.compile(
-                "^([a-z_]{1}[a-z0-9_]*(\\.[a-z_]{1}[a-z0-9_]*)*)$"
+                "^([a-z_][a-z0-9_]*(\\.[a-z_][a-z0-9_]*)*)$"
             );
             final Matcher match = ptrn.matcher(pkg);
             if (!match.matches()) {
@@ -175,25 +167,7 @@ public final class RestfulServlet extends HttpServlet {
             StringUtils.join(packages, RestfulServlet.COMMA)
         );
         this.reconfigureJUL();
-        final FilterConfig cfg = new ServletConfigWrapper(config, props);
-        this.jersey.init(cfg);
-    }
-
-    /**
-     * Get jersey servlet, before serialization.
-     * @return The servlet
-     */
-    @NotNull
-    public ServletContainer getJersey() {
-        return this.jersey;
-    }
-
-    /**
-     * Set jersey servlet, after de-serialization.
-     * @param servlet The servlet to set
-     */
-    public void setJersey(@NotNull final ServletContainer servlet) {
-        this.jersey = servlet;
+        super.init(new ServletConfigWrapper(config, props));
     }
 
     /**
@@ -202,11 +176,11 @@ public final class RestfulServlet extends HttpServlet {
      * @checkstyle RedundantThrows (5 lines)
      */
     @Override
-    protected void service(final HttpServletRequest request,
+    public void service(final HttpServletRequest request,
         final HttpServletResponse response)
         throws ServletException, IOException {
         final long start = System.currentTimeMillis();
-        this.jersey.service(request, response);
+        super.service(request, response);
         final long duration = System.currentTimeMillis() - start;
         if (duration > TimeUnit.SECONDS.toMillis(1L)) {
             Logger.warn(

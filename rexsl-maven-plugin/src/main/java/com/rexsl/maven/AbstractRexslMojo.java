@@ -93,6 +93,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo
 
     /**
      * Webapp directory.
+     * @checkstyle MemberNameCheck (10 lines)
      */
     @Parameter(
         property = "rexsl.webappDirectory",
@@ -125,6 +126,7 @@ public abstract class AbstractRexslMojo extends AbstractMojo
      * &lt;/plugin&gt;</pre>
      *
      * @since 0.3
+     * @checkstyle MemberNameCheck (10 lines)
      */
     @SuppressWarnings("PMD.LongVariable")
     @Parameter

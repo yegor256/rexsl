@@ -69,7 +69,7 @@ import org.xml.sax.SAXException;
  * @since 0.2
  */
 @ToString
-@EqualsAndHashCode(of = { "xsdFolder", "classes", "context" })
+@EqualsAndHashCode(of = { "folder", "classes", "context" })
 @Provider
 @Produces({ MediaType.APPLICATION_XML, MediaType.TEXT_XML })
 @Loggable(Loggable.DEBUG)
@@ -85,7 +85,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * Folder with XSD files.
      * @see #setServletContext(ServletContext)
      */
-    private transient File xsdFolder;
+    private transient File folder;
 
     /**
      * Classes to process.
@@ -111,12 +111,12 @@ public final class XslResolver implements ContextResolver<Marshaller> {
     public void setServletContext(@NotNull final ServletContext ctx) {
         final String name = ctx.getInitParameter(XslResolver.XSD_FOLDER);
         if (name != null) {
-            this.xsdFolder = new File(name);
+            this.folder = new File(name);
             Logger.debug(
                 this,
                 "#setServletContext(%s): XSD folder set to '%s'",
                 ctx.getClass().getName(),
-                this.xsdFolder
+                this.folder
             );
         }
     }
@@ -152,7 +152,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
         } catch (JAXBException ex) {
             throw new IllegalStateException(ex);
         }
-        if (this.xsdFolder == null) {
+        if (this.folder == null) {
             Logger.debug(
                 this,
                 "#getContext(%s): marshaller created (no XSD validator)",
@@ -253,7 +253,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 type.getName()
             );
         } else {
-            final File xsd = new File(this.xsdFolder, name);
+            final File xsd = new File(this.folder, name);
             if (xsd.exists()) {
                 final SchemaFactory factory = SchemaFactory.newInstance(
                     XMLConstants.W3C_XML_SCHEMA_NS_URI

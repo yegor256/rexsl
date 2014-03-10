@@ -122,7 +122,7 @@ public final class MultivaluedMapMocker
     @Override
     public boolean containsValue(final Object value) {
         boolean contains = false;
-        for (Set<String> list : this.map.values()) {
+        for (final Set<String> list : this.map.values()) {
             if (list.contains(value.toString())) {
                 contains = true;
                 break;
@@ -167,7 +167,7 @@ public final class MultivaluedMapMocker
     public Collection<List<String>> values() {
         final Collection<List<String>> values =
             new LinkedList<List<String>>();
-        for (Set<String> list : this.map.values()) {
+        for (final Set<String> list : this.map.values()) {
             values.add(new ArrayList<String>(list));
         }
         return values;
@@ -178,7 +178,7 @@ public final class MultivaluedMapMocker
     public Set<Entry<String, List<String>>> entrySet() {
         final Set<Entry<String, List<String>>> entries =
             new HashSet<Entry<String, List<String>>>();
-        for (Map.Entry<String, Set<String>> entry : this.map.entrySet()) {
+        for (final Map.Entry<String, Set<String>> entry : this.map.entrySet()) {
             entries.add(
                 new AbstractMap.SimpleEntry<String, List<String>>(
                     entry.getKey(),

@@ -61,7 +61,7 @@ final class RootArtifact {
      * @param artifact The artifact
      * @param excl Exclusions
      */
-    public RootArtifact(@NotNull final Artifact artifact,
+    RootArtifact(@NotNull final Artifact artifact,
         @NotNull final List<Exclusion> excl) {
         this.art = artifact;
         this.exclusions = excl;
@@ -95,7 +95,7 @@ final class RootArtifact {
     @Loggable(Loggable.DEBUG)
     public boolean excluded(@NotNull final Artifact artifact) {
         boolean excluded = false;
-        for (Exclusion exclusion : this.exclusions) {
+        for (final Exclusion exclusion : this.exclusions) {
             if (exclusion.getArtifactId().equals(artifact.getArtifactId())
                 && exclusion.getGroupId().equals(artifact.getGroupId())) {
                 excluded = true;
