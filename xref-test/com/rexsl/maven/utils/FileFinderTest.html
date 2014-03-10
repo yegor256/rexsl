@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="64" href="#64">64</a>          <strong class="jxr_keyword">final</strong> FileFinder finder = <strong class="jxr_keyword">new</strong> FileFinder(directory, <span class="jxr_string">"groovy"</span>);
 <a class="jxr_linenumber" name="65" href="#65">65</a>          <strong class="jxr_keyword">final</strong> Collection&lt;File&gt; files = finder.ordered();
 <a class="jxr_linenumber" name="66" href="#66">66</a>          String previous = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="67" href="#67">67</a>          <strong class="jxr_keyword">for</strong> (File file : files) {
+<a class="jxr_linenumber" name="67" href="#67">67</a>          <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> File file : files) {
 <a class="jxr_linenumber" name="68" href="#68">68</a>              <strong class="jxr_keyword">final</strong> String name = file.getName();
 <a class="jxr_linenumber" name="69" href="#69">69</a>              <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> result = name.compareTo(previous);
 <a class="jxr_linenumber" name="70" href="#70">70</a>              MatcherAssert.assertThat(
@@ -128,7 +128,7 @@
 <a class="jxr_linenumber" name="118" href="#118">118</a>         <strong class="jxr_keyword">final</strong> File directory = environment.basedir();
 <a class="jxr_linenumber" name="119" href="#119">119</a>         <strong class="jxr_keyword">final</strong> Collection&lt;File&gt; files =
 <a class="jxr_linenumber" name="120" href="#120">120</a>             <strong class="jxr_keyword">new</strong> FileFinder(directory, <span class="jxr_string">"css"</span>).ordered();
-<a class="jxr_linenumber" name="121" href="#121">121</a>         <strong class="jxr_keyword">for</strong> (File file : files) {
+<a class="jxr_linenumber" name="121" href="#121">121</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> File file : files) {
 <a class="jxr_linenumber" name="122" href="#122">122</a>             MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="123" href="#123">123</a>                 <span class="jxr_string">"file type"</span>,
 <a class="jxr_linenumber" name="124" href="#124">124</a>                 file.getName(),
@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="134" href="#134">134</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="135" href="#135">135</a>     <strong class="jxr_keyword">private</strong> String namesHash(<strong class="jxr_keyword">final</strong> Collection&lt;File&gt; files) {
 <a class="jxr_linenumber" name="136" href="#136">136</a>         <strong class="jxr_keyword">final</strong> StringBuilder builder = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="137" href="#137">137</a>         <strong class="jxr_keyword">for</strong> (File file : files) {
+<a class="jxr_linenumber" name="137" href="#137">137</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> File file : files) {
 <a class="jxr_linenumber" name="138" href="#138">138</a>             builder.append(file.getName());
 <a class="jxr_linenumber" name="139" href="#139">139</a>         }
 <a class="jxr_linenumber" name="140" href="#140">140</a>         <strong class="jxr_keyword">return</strong> builder.toString();

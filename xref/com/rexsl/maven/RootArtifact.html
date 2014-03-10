@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="61" href="#61">61</a>  <em class="jxr_javadoccomment">     * @param artifact The artifact</em>
 <a class="jxr_linenumber" name="62" href="#62">62</a>  <em class="jxr_javadoccomment">     * @param excl Exclusions</em>
 <a class="jxr_linenumber" name="63" href="#63">63</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="64" href="#64">64</a>      <strong class="jxr_keyword">public</strong> <a href="../../../com/rexsl/maven/RootArtifact.html">RootArtifact</a>(@NotNull <strong class="jxr_keyword">final</strong> Artifact artifact,
+<a class="jxr_linenumber" name="64" href="#64">64</a>      <a href="../../../com/rexsl/maven/RootArtifact.html">RootArtifact</a>(@NotNull <strong class="jxr_keyword">final</strong> Artifact artifact,
 <a class="jxr_linenumber" name="65" href="#65">65</a>          @NotNull <strong class="jxr_keyword">final</strong> List&lt;Exclusion&gt; excl) {
 <a class="jxr_linenumber" name="66" href="#66">66</a>          <strong class="jxr_keyword">this</strong>.art = artifact;
 <a class="jxr_linenumber" name="67" href="#67">67</a>          <strong class="jxr_keyword">this</strong>.exclusions = excl;
@@ -105,7 +105,7 @@
 <a class="jxr_linenumber" name="95" href="#95">95</a>      @Loggable(Loggable.DEBUG)
 <a class="jxr_linenumber" name="96" href="#96">96</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> excluded(@NotNull <strong class="jxr_keyword">final</strong> Artifact artifact) {
 <a class="jxr_linenumber" name="97" href="#97">97</a>          <strong class="jxr_keyword">boolean</strong> excluded = false;
-<a class="jxr_linenumber" name="98" href="#98">98</a>          <strong class="jxr_keyword">for</strong> (Exclusion exclusion : <strong class="jxr_keyword">this</strong>.exclusions) {
+<a class="jxr_linenumber" name="98" href="#98">98</a>          <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Exclusion exclusion : <strong class="jxr_keyword">this</strong>.exclusions) {
 <a class="jxr_linenumber" name="99" href="#99">99</a>              <strong class="jxr_keyword">if</strong> (exclusion.getArtifactId().equals(artifact.getArtifactId())
 <a class="jxr_linenumber" name="100" href="#100">100</a>                 &amp;&amp; exclusion.getGroupId().equals(artifact.getGroupId())) {
 <a class="jxr_linenumber" name="101" href="#101">101</a>                 excluded = <strong class="jxr_keyword">true</strong>;

@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment"> * @see &lt;a href="https://developers.google.com/accounts/docs/OAuth2"&gt;Google OAuth&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="60" href="#60">60</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="61" href="#61">61</a>  @ToString
-<a class="jxr_linenumber" name="62" href="#62">62</a>  @EqualsAndHashCode(of = { <span class="jxr_string">"appId"</span>, <span class="jxr_string">"appKey"</span> })
+<a class="jxr_linenumber" name="62" href="#62">62</a>  @EqualsAndHashCode(of = { <span class="jxr_string">"app"</span>, <span class="jxr_string">"secret"</span> })
 <a class="jxr_linenumber" name="63" href="#63">63</a>  @Loggable(Loggable.DEBUG)
 <a class="jxr_linenumber" name="64" href="#64">64</a>  @Provider.Redirect
 <a class="jxr_linenumber" name="65" href="#65">65</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/rexsl/page/auth/Google.html">Google</a> <strong class="jxr_keyword">implements</strong> Provider, Provider.Visible {
@@ -92,12 +92,12 @@
 <a class="jxr_linenumber" name="82" href="#82">82</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="83" href="#83">83</a>  <em class="jxr_javadoccomment">     * Facebook ID.</em>
 <a class="jxr_linenumber" name="84" href="#84">84</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="85" href="#85">85</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">transient</strong> String appId;
+<a class="jxr_linenumber" name="85" href="#85">85</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">transient</strong> String app;
 <a class="jxr_linenumber" name="86" href="#86">86</a>  
 <a class="jxr_linenumber" name="87" href="#87">87</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="88" href="#88">88</a>  <em class="jxr_javadoccomment">     * Facebook secret key.</em>
 <a class="jxr_linenumber" name="89" href="#89">89</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="90" href="#90">90</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">transient</strong> String appKey;
+<a class="jxr_linenumber" name="90" href="#90">90</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">transient</strong> String secret;
 <a class="jxr_linenumber" name="91" href="#91">91</a>  
 <a class="jxr_linenumber" name="92" href="#92">92</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="93" href="#93">93</a>  <em class="jxr_javadoccomment">     * Public ctor.</em>
@@ -108,8 +108,8 @@
 <a class="jxr_linenumber" name="98" href="#98">98</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../com/rexsl/page/auth/Google.html">Google</a>(@NotNull <strong class="jxr_keyword">final</strong> <a href="../../../../com/rexsl/page/Resource.html">Resource</a> res,
 <a class="jxr_linenumber" name="99" href="#99">99</a>          @NotNull <strong class="jxr_keyword">final</strong> String aid, @NotNull <strong class="jxr_keyword">final</strong> String key) {
 <a class="jxr_linenumber" name="100" href="#100">100</a>         <strong class="jxr_keyword">this</strong>.resource = res;
-<a class="jxr_linenumber" name="101" href="#101">101</a>         <strong class="jxr_keyword">this</strong>.appId = aid;
-<a class="jxr_linenumber" name="102" href="#102">102</a>         <strong class="jxr_keyword">this</strong>.appKey = key;
+<a class="jxr_linenumber" name="101" href="#101">101</a>         <strong class="jxr_keyword">this</strong>.app = aid;
+<a class="jxr_linenumber" name="102" href="#102">102</a>         <strong class="jxr_keyword">this</strong>.secret = key;
 <a class="jxr_linenumber" name="103" href="#103">103</a>     }
 <a class="jxr_linenumber" name="104" href="#104">104</a> 
 <a class="jxr_linenumber" name="105" href="#105">105</a>     @Override
@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="138" href="#138">138</a>                     <span class="jxr_string">"scope"</span>,
 <a class="jxr_linenumber" name="139" href="#139">139</a>                     <span class="jxr_string">"https://www.googleapis.com/auth/userinfo.profile"</span>
 <a class="jxr_linenumber" name="140" href="#140">140</a>                 )
-<a class="jxr_linenumber" name="141" href="#141">141</a>                 .build(<strong class="jxr_keyword">this</strong>.appId, <strong class="jxr_keyword">this</strong>.resource.uriInfo().getBaseUri())
+<a class="jxr_linenumber" name="141" href="#141">141</a>                 .build(<strong class="jxr_keyword">this</strong>.app, <strong class="jxr_keyword">this</strong>.resource.uriInfo().getBaseUri())
 <a class="jxr_linenumber" name="142" href="#142">142</a>         );
 <a class="jxr_linenumber" name="143" href="#143">143</a>     }
 <a class="jxr_linenumber" name="144" href="#144">144</a> 
@@ -161,9 +161,9 @@
 <a class="jxr_linenumber" name="151" href="#151">151</a>     <strong class="jxr_keyword">private</strong> String token(<strong class="jxr_keyword">final</strong> String code) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="152" href="#152">152</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JdkRequest(<span class="jxr_string">"https://accounts.google.com/o/oauth2/token"</span>)
 <a class="jxr_linenumber" name="153" href="#153">153</a>             .body()
-<a class="jxr_linenumber" name="154" href="#154">154</a>             .formParam(<span class="jxr_string">"client_id"</span>, <strong class="jxr_keyword">this</strong>.appId)
+<a class="jxr_linenumber" name="154" href="#154">154</a>             .formParam(<span class="jxr_string">"client_id"</span>, <strong class="jxr_keyword">this</strong>.app)
 <a class="jxr_linenumber" name="155" href="#155">155</a>             .formParam(<span class="jxr_string">"redirect_uri"</span>, <strong class="jxr_keyword">this</strong>.resource.uriInfo().getBaseUri())
-<a class="jxr_linenumber" name="156" href="#156">156</a>             .formParam(<span class="jxr_string">"client_secret"</span>, <strong class="jxr_keyword">this</strong>.appKey)
+<a class="jxr_linenumber" name="156" href="#156">156</a>             .formParam(<span class="jxr_string">"client_secret"</span>, <strong class="jxr_keyword">this</strong>.secret)
 <a class="jxr_linenumber" name="157" href="#157">157</a>             .formParam(<span class="jxr_string">"grant_type"</span>, <span class="jxr_string">"authorization_code"</span>)
 <a class="jxr_linenumber" name="158" href="#158">158</a>             .formParam(<span class="jxr_string">"code"</span>, code)
 <a class="jxr_linenumber" name="159" href="#159">159</a>             .back()

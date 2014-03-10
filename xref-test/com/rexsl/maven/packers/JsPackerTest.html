@@ -46,39 +46,41 @@
 <a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.io.FileUtils;
 <a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> org.hamcrest.MatcherAssert;
 <a class="jxr_linenumber" name="38" href="#38">38</a>  <strong class="jxr_keyword">import</strong> org.hamcrest.Matchers;
-<a class="jxr_linenumber" name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
-<a class="jxr_linenumber" name="40" href="#40">40</a>  
-<a class="jxr_linenumber" name="41" href="#41">41</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="42" href="#42">42</a>  <em class="jxr_javadoccomment"> * Test case for {@link JsPacker}.</em>
-<a class="jxr_linenumber" name="43" href="#43">43</a>  <em class="jxr_javadoccomment"> * @author Yegor Bugayenko (yegor@tpc2.com)</em>
-<a class="jxr_linenumber" name="44" href="#44">44</a>  <em class="jxr_javadoccomment"> * @version $Id$</em>
-<a class="jxr_linenumber" name="45" href="#45">45</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="46" href="#46">46</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/rexsl/maven/packers/JsPackerTest.html">JsPackerTest</a> {
-<a class="jxr_linenumber" name="47" href="#47">47</a>  
-<a class="jxr_linenumber" name="48" href="#48">48</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="49" href="#49">49</a>  <em class="jxr_javadoccomment">     * JsPacker can pack Javascript files.</em>
-<a class="jxr_linenumber" name="50" href="#50">50</a>  <em class="jxr_javadoccomment">     * @throws Exception If something goes wrong inside</em>
-<a class="jxr_linenumber" name="51" href="#51">51</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="52" href="#52">52</a>      @Test
-<a class="jxr_linenumber" name="53" href="#53">53</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> packsJavascriptFile() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="54" href="#54">54</a>          <strong class="jxr_keyword">final</strong> Environment env = <strong class="jxr_keyword">new</strong> EnvironmentMocker()
-<a class="jxr_linenumber" name="55" href="#55">55</a>              .withTextFile(
-<a class="jxr_linenumber" name="56" href="#56">56</a>                  <span class="jxr_string">"src/main/webapp/js/simple.js"</span>,
-<a class="jxr_linenumber" name="57" href="#57">57</a>                  <em class="jxr_comment">// @checkstyle LineLength (1 line)</em>
-<a class="jxr_linenumber" name="58" href="#58">58</a>                  <span class="jxr_string">"function sum(num) {var i, sum = 0; for (i = 1; i &lt;= num; i++) {sum += i;}}"</span>
-<a class="jxr_linenumber" name="59" href="#59">59</a>          ).mock();
-<a class="jxr_linenumber" name="60" href="#60">60</a>          <strong class="jxr_keyword">final</strong> File dest = <strong class="jxr_keyword">new</strong> File(env.webdir(), <span class="jxr_string">"js/simple.js"</span>);
-<a class="jxr_linenumber" name="61" href="#61">61</a>          <strong class="jxr_keyword">new</strong> JsPacker().pack(env, <strong class="jxr_keyword">new</strong> FilterMocker().mock());
-<a class="jxr_linenumber" name="62" href="#62">62</a>          MatcherAssert.assertThat(<span class="jxr_string">"packed file created"</span>, dest.exists());
-<a class="jxr_linenumber" name="63" href="#63">63</a>          MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="64" href="#64">64</a>              FileUtils.readFileToString(dest),
-<a class="jxr_linenumber" name="65" href="#65">65</a>              Matchers.equalTo(
-<a class="jxr_linenumber" name="66" href="#66">66</a>                  <span class="jxr_string">"function sum(a){var b,c=0;for(b=1;b&lt;=a;b++){c+=b}};"</span>
-<a class="jxr_linenumber" name="67" href="#67">67</a>              )
-<a class="jxr_linenumber" name="68" href="#68">68</a>          );
-<a class="jxr_linenumber" name="69" href="#69">69</a>      }
-<a class="jxr_linenumber" name="70" href="#70">70</a>  
-<a class="jxr_linenumber" name="71" href="#71">71</a>  }
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> org.junit.Ignore;
+<a class="jxr_linenumber" name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="41" href="#41">41</a>  
+<a class="jxr_linenumber" name="42" href="#42">42</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="43" href="#43">43</a>  <em class="jxr_javadoccomment"> * Test case for {@link JsPacker}.</em>
+<a class="jxr_linenumber" name="44" href="#44">44</a>  <em class="jxr_javadoccomment"> * @author Yegor Bugayenko (yegor@tpc2.com)</em>
+<a class="jxr_linenumber" name="45" href="#45">45</a>  <em class="jxr_javadoccomment"> * @version $Id$</em>
+<a class="jxr_linenumber" name="46" href="#46">46</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="47" href="#47">47</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/rexsl/maven/packers/JsPackerTest.html">JsPackerTest</a> {
+<a class="jxr_linenumber" name="48" href="#48">48</a>  
+<a class="jxr_linenumber" name="49" href="#49">49</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="50" href="#50">50</a>  <em class="jxr_javadoccomment">     * JsPacker can pack Javascript files.</em>
+<a class="jxr_linenumber" name="51" href="#51">51</a>  <em class="jxr_javadoccomment">     * @throws Exception If something goes wrong inside</em>
+<a class="jxr_linenumber" name="52" href="#52">52</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="53" href="#53">53</a>      @Test
+<a class="jxr_linenumber" name="54" href="#54">54</a>      @Ignore
+<a class="jxr_linenumber" name="55" href="#55">55</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> packsJavascriptFile() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="56" href="#56">56</a>          <strong class="jxr_keyword">final</strong> Environment env = <strong class="jxr_keyword">new</strong> EnvironmentMocker()
+<a class="jxr_linenumber" name="57" href="#57">57</a>              .withTextFile(
+<a class="jxr_linenumber" name="58" href="#58">58</a>                  <span class="jxr_string">"src/main/webapp/js/simple.js"</span>,
+<a class="jxr_linenumber" name="59" href="#59">59</a>                  <em class="jxr_comment">// @checkstyle LineLength (1 line)</em>
+<a class="jxr_linenumber" name="60" href="#60">60</a>                  <span class="jxr_string">"function sum(num) {var i, sum = 0; for (i = 1; i &lt;= num; i++) {sum += i;}}"</span>
+<a class="jxr_linenumber" name="61" href="#61">61</a>          ).mock();
+<a class="jxr_linenumber" name="62" href="#62">62</a>          <strong class="jxr_keyword">final</strong> File dest = <strong class="jxr_keyword">new</strong> File(env.webdir(), <span class="jxr_string">"js/simple.js"</span>);
+<a class="jxr_linenumber" name="63" href="#63">63</a>          <strong class="jxr_keyword">new</strong> JsPacker().pack(env, <strong class="jxr_keyword">new</strong> FilterMocker().mock());
+<a class="jxr_linenumber" name="64" href="#64">64</a>          MatcherAssert.assertThat(<span class="jxr_string">"packed file created"</span>, dest.exists());
+<a class="jxr_linenumber" name="65" href="#65">65</a>          MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="66" href="#66">66</a>              FileUtils.readFileToString(dest),
+<a class="jxr_linenumber" name="67" href="#67">67</a>              Matchers.equalTo(
+<a class="jxr_linenumber" name="68" href="#68">68</a>                  <span class="jxr_string">"function sum(a){var b,c=0;for(b=1;b&lt;=a;b++){c+=b}};"</span>
+<a class="jxr_linenumber" name="69" href="#69">69</a>              )
+<a class="jxr_linenumber" name="70" href="#70">70</a>          );
+<a class="jxr_linenumber" name="71" href="#71">71</a>      }
+<a class="jxr_linenumber" name="72" href="#72">72</a>  
+<a class="jxr_linenumber" name="73" href="#73">73</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
