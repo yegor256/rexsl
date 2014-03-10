@@ -63,7 +63,7 @@ import javax.ws.rs.core.Response;
  *
  * <p>For every new page methods {@code version()} and {@code supplementary()}
  * will be called. Returned insets will be used to help in page rendering.
- * Their {@link #render(BasePage,Response.ResponseBuilder)} methods will be
+ * Their {@code render(BasePage,Response.ResponseBuilder)} methods will be
  * used to extend the JAXB page and the JAX-RS response.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
@@ -75,11 +75,11 @@ public interface Inset {
 
     /**
      * Annotates a method of JAX-RS resource that returns an instance
-     * of {@link Inset}.
+     * of {@code Inset}.
      *
      * <p>The method will be called automatically for every page rendered. The
-     * returned {@link Inset} will be used to render the page. If an annotated
-     * method returns an object, which is not a instance of {@link Inset} a
+     * returned {@code Inset} will be used to render the page. If an annotated
+     * method returns an object, which is not a instance of {@code Inset} a
      * runtime exception will be thrown.
      */
     @Documented
