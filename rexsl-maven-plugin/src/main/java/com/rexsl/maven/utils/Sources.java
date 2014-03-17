@@ -49,7 +49,11 @@ public final class Sources {
 
     /**
      * The Version Control System currently in use. It is recommended to change
-     * this to either ".git", ".svn", "CVS" e.t.c in case another one is in use
+     * this to either ".git", ".svn", "CVS" e.t.c to the one in use.
+     * Changing this value also requires an additional change to be be done at
+     * {@link BinaryFilesCheckTest#validatesTextFile()} so as to prevent Unit
+     * tests from failing. Either of the following values is to be substituted
+     * accordingly ".git/index", ".svn/entries", "CVS/Entries" e.t.c
      */
     private static final String VERSION_CONTROL = ".git";
 
