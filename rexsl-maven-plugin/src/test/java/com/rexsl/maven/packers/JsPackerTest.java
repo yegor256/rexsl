@@ -36,6 +36,7 @@ import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -50,6 +51,7 @@ public final class JsPackerTest {
      * @throws Exception If something goes wrong inside
      */
     @Test
+    @Ignore
     public void packsJavascriptFile() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withTextFile(

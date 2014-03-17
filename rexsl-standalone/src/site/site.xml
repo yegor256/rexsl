@@ -37,7 +37,7 @@
         <menu name="Overview">
             <item name="Introduction" href="index.html"/>
             <item name="API ${project.version} (JavaDoc)" href="apidocs-${project.version}/index.html"/>
-            <item name="Release History" href="changes-report.html"/>
+            <item name="Release History" href="https://github.com/yegor256/rexsl/releases"/>
         </menu>
         <menu ref="reports"/>
     </body>

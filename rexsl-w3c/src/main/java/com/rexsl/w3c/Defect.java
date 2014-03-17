@@ -44,7 +44,7 @@ import lombok.EqualsAndHashCode;
  * @see <a href="http://validator.w3.org/docs/api.html">W3C API</a>
  * @checkstyle LineLength (2 lines)
  */
-@EqualsAndHashCode(of = { "iline", "icolumn", "isource", "iexplanation", "imessageId", "imessage" })
+@EqualsAndHashCode(of = { "iline", "icolumn", "isource", "iexplanation", "msg", "imessage" })
 @Loggable(Loggable.DEBUG)
 public final class Defect {
 
@@ -74,7 +74,7 @@ public final class Defect {
      * Message id.
      */
     @NotNull
-    private final transient String imessageId;
+    private final transient String msg;
 
     /**
      * The message.
@@ -99,7 +99,7 @@ public final class Defect {
         this.icolumn = column;
         this.isource = source.trim();
         this.iexplanation = explanation.trim();
-        this.imessageId = mid.trim();
+        this.msg = mid.trim();
         this.imessage = message.trim();
     }
 
@@ -111,7 +111,7 @@ public final class Defect {
             this.icolumn,
             this.isource,
             this.iexplanation,
-            this.imessageId,
+            this.msg,
             this.imessage
         );
     }
@@ -156,7 +156,7 @@ public final class Defect {
      */
     @NotNull
     public String messageId() {
-        return this.imessageId;
+        return this.msg;
     }
 
     /**

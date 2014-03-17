@@ -163,7 +163,7 @@ final class JigsawCssCheck implements Check {
                     defect.explanation()
                 );
             }
-            if (!response.valid() && valid) {
+            if (!response.valid()) {
                 Logger.error(
                     this,
                     "%s contains invalid CSS (see errors above):\n%s",

@@ -37,19 +37,10 @@
         <menu name="Overview">
             <item name="RESTful Client" href="index.html"/>
             <item name="API ${project.version} (JavaDoc)" href="apidocs-${project.version}/index.html"/>
-            <item name="Mock API" href="testapidocs-${project.version}/index.html"/>
-            <item name="Release History" href="changes-report.html"/>
+            <item name="Release History" href="https://github.com/yegor256/rexsl/releases"/>
         </menu>
-        <menu name="HTTP Client">
-            <item name="Make HTTP Request" href="example-request.html"/>
-            <item name="XML Response" href="example-xml-response.html"/>
-            <item name="JSON Response" href="example-json-response.html"/>
+        <menu name="Examples">
             <item name="XML/XHTML Matchers" href="example-matchers.html"/>
-            <item name="Web Linking Response" href="example-web-linking-response.html"/>
-            <item name="HTTP Request that retries" href="example-retry-request.html"/>
-        </menu>
-        <menu name="Mock Servlet Container">
-            <item name="HTTP client unit testing" href="example-mock-container.html"/>
         </menu>
         <menu ref="reports"/>
     </body>

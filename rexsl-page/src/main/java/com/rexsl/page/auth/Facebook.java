@@ -57,7 +57,7 @@ import lombok.ToString;
  * @see <a href="http://developers.facebook.com/docs/reference/dialogs/oauth/">Facebook OAuth</a>
  */
 @ToString
-@EqualsAndHashCode(of = { "appId", "appKey" })
+@EqualsAndHashCode(of = { "app", "key" })
 @Loggable(Loggable.DEBUG)
 @Provider.Redirect
 public final class Facebook implements Provider, Provider.Visible {
@@ -75,24 +75,24 @@ public final class Facebook implements Provider, Provider.Visible {
     /**
      * Facebook ID.
      */
-    private final transient String appId;
+    private final transient String app;
 
     /**
      * Facebook secret key.
      */
-    private final transient String appKey;
+    private final transient String key;
 
     /**
      * Public ctor.
      * @param res Resource
      * @param aid Application id
-     * @param key Application secret key
+     * @param secret Application secret key
      */
     public Facebook(@NotNull final Resource res,
-        @NotNull final String aid, @NotNull final String key) {
+        @NotNull final String aid, @NotNull final String secret) {
         this.resource = res;
-        this.appId = aid;
-        this.appKey = key;
+        this.app = aid;
+        this.key = secret;
     }
 
     @Override
@@ -129,7 +129,7 @@ public final class Facebook implements Provider, Provider.Visible {
                 // @checkstyle MultipleStringLiterals (2 lines)
                 .queryParam("client_id", "{client_id}")
                 .queryParam("redirect_uri", "{redirect_uri}")
-                .build(this.appId, this.redirectUri())
+                .build(this.app, this.redirectUri())
         );
     }
 
@@ -158,9 +158,9 @@ public final class Facebook implements Provider, Provider.Visible {
             .queryParam("client_secret", "{secret}")
             .queryParam("code", "{code}")
             .build(
-                this.appId,
+                this.app,
                 this.redirectUri(),
-                this.appKey,
+                this.key,
                 code
             );
         final String response = new JdkRequest(uri)

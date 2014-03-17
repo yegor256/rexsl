@@ -29,15 +29,19 @@
  */
 package com.rexsl.maven.checks;
 
+import com.google.common.collect.Sets;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
 import com.rexsl.maven.Environment;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -81,7 +85,14 @@ final class CssStaticCheck implements Check {
             "java",
             "-classpath",
             StringUtils.join(
-                env.classpath(false),
+                Sets.union(
+                    env.classpath(false),
+                    Sets.newHashSet(
+                        // @checkstyle MultipleStringLiterals (1 line)
+                        new File("."),
+                        this.jar(org.mozilla.javascript.Script.class)
+                    )
+                ),
                 System.getProperty("path.separator")
             ),
             "CssLint",
@@ -106,6 +117,40 @@ final class CssStaticCheck implements Check {
     }
 
     /**
+     * Get address of our JAR or directory.
+     * @param resource Name of resource
+     * @return The file
+     */
+    private File jar(final Class<?> resource) {
+        final String name = resource.getName()
+            // @checkstyle MultipleStringLiterals (1 line)
+            .replace(".", System.getProperty("file.separator"));
+        final URL res = this.getClass().getResource(
+            String.format("/%s.class", name)
+        );
+        if (res == null) {
+            throw new IllegalStateException(
+                String.format(
+                    "can't find JAR for %s",
+                    name
+                )
+            );
+        }
+        final String path = res.getFile().replaceAll("\\!.*$", "");
+        File file;
+        if ("jar".equals(FilenameUtils.getExtension(path))) {
+            file = new File(URI.create(path).getPath());
+        } else {
+            file = new File(path).getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile();
+        }
+        Logger.debug(this, "#jar(%s): found at %s", resource.getName(), file);
+        return file;
+    }
+
+    /**
      * Validate the report from CSSLint.
      *
      * <p>CSSLint report is a plain text document, where every line is a
@@ -118,11 +163,17 @@ final class CssStaticCheck implements Check {
      * @return True if it's valid (no errors)
      */
     private boolean isValid(final String report) {
-        final String[] lines = report.split("\n");
-        for (final String line : lines) {
-            Logger.warn(this, "%s", line.trim());
+        final boolean valid;
+        if (report.contains("Lint Free!")) {
+            valid = true;
+        } else {
+            final String[] lines = report.split("\n");
+            for (final String line : lines) {
+                Logger.warn(this, "%s", line.trim());
+            }
+            valid = lines.length == 0;
         }
-        return lines.length == 0;
+        return valid;
     }
 
 }

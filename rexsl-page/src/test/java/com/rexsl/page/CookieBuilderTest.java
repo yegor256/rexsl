@@ -51,12 +51,12 @@ public final class CookieBuilderTest {
     @Test
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void acceptsValidValues() throws Exception {
-        final String[] texts = new String[] {
+        final String[] texts = {
             "",
             "text",
             "some-text-to-accept(!)",
         };
-        for (String text : texts) {
+        for (final String text : texts) {
             new CookieBuilder(new URI("http://localhost/bar"))
                 .name("some-name-of-cookie")
                 .value(text)
@@ -71,12 +71,12 @@ public final class CookieBuilderTest {
     @Test
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void rejectsInvalidValues() throws Exception {
-        final String[] texts = new String[] {
+        final String[] texts = {
             " ",
             ";",
             "\\ backslash is not allowed",
         };
-        for (String text : texts) {
+        for (final String text : texts) {
             try {
                 new CookieBuilder(new URI("http://localhost/foo"))
                     .name("some-name")

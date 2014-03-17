@@ -1,48 +1,13 @@
 # RESTful Java Client
 
 The module contains a collection of usable tools for testing of
-ReXSL-powered application (or any other RESTful server).
-
-[`Request`](./apidocs-${project.version}/com/rexsl/test/Request.html)
-(implemented by
-[`JdkRequest`](./apidocs-${project.version}/com/rexsl/test/request/JdkRequest.html)
-and [`ApacheRequest`](./apidocs-${project.version}/com/rexsl/test/request/ApacheRequest.html))
-is a RESTful Java client with a fluent interface:
-
-```java
-public class Main {
-  public void main() {
-    String body = new JdkRequest("http://www.rexsl.com")
-      .through(RetryWire.class)
-      .header(HttpHeaders.USER_AGENT, "Safari 4")
-      .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
-      .fetch()
-      .as(RestResponse.class)
-      .assertStatus(HttpURLConnection.HTTP_OK)
-      .assertBody(Matchers.containsString("ReXSL"))
-      .as(XmlResponse.class)
-      .assertXPath("//xhtml:body")
-      .body();
-  }
-}
-```
-
-The beauty of this RESTful Java client (comparing to others) is that it
-retrieves data and makes test assertions at the same time. Your integration
-tests will automatically validate your RESTful client
-against the contract (API) of the server.
-
-Other important classes in this module:
+ReXSL-powered application (or any other RESTful server):
 
  * [`JaxbConverter`](./apidocs-${project.version}/com/rexsl/test/JaxbConverter.html)
    &mdash; convenient JAXB-to-XML converter;
 
  * [`XhtmlMatchers`](./apidocs-${project.version}/com/rexsl/test/XhtmlMatchers.html)
    &mdash; XML/XHTML Hamcrest matchers.
-
- * [`MkContainer`](./apidocs-${project.version}/com/rexsl/test/mock/MkContainer.html)
-   &mdash; mock servlet container.
-
 
 Include this dependency into your project (or download
 [`rexsl-test-${project.version}.jar`](http://repo1.maven.org/maven2/com/rexsl/rexsl-test/${project.version}/rexsl-test-${project.version}.jar)

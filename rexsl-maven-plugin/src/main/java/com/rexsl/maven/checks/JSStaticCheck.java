@@ -29,6 +29,8 @@
  */
 package com.rexsl.maven.checks;
 
+import com.googlecode.jslint4java.Issue;
+import com.googlecode.jslint4java.JSLintBuilder;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.Check;
@@ -38,6 +40,7 @@ import com.rexsl.maven.utils.LoggingManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -104,31 +107,23 @@ final class JSStaticCheck implements Check {
 
     /**
      * Check one JavaScrip file for validity.
-     *
-     * <pre>
-     * final JSLint lint = new JSLintBuilder().fromDefault();
-     * final List<Issue> issues = lint.lint("systemId", jScript)
-     *     .getIssues();
-     * for (Issue issue : issues) {
-     *    Logger.warn(
-     *        this,
-     *        "%s\n",
-     *        issue.toString()
-     *    );
-     * }
-     * return issues.size()==0;
-     * </pre>
-     *
      * @param file Script file to check
      * @return Is script valid?
-     * @todo #112! Move the code above to this method when yui finish migration
-     *  to Rhino 1.7R3. At the momemnt the implementaiton is just a stub - it
-     *  validates that the file exists and that's it.
      */
     private boolean isValid(final File file) {
-        boolean valid = true;
+        boolean valid;
         try {
-            FileUtils.readFileToString(file);
+            final List<Issue> issues = new JSLintBuilder().fromDefault()
+                .lint("systemId", FileUtils.readFileToString(file))
+                .getIssues();
+            for (final Issue issue : issues) {
+                Logger.warn(
+                    this,
+                    "%s\n",
+                    issue.toString()
+                );
+            }
+            valid = issues.isEmpty();
         } catch (IOException ex) {
             Logger.error(
                 this,

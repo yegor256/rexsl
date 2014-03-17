@@ -57,7 +57,7 @@ public final class CheckMojo extends AbstractRexslMojo {
      * @since 0.3.8
      */
     @Parameter(property = "skipTests", defaultValue = "false")
-    private transient boolean skipTests;
+    private transient boolean skip;
 
     /**
      * Regular expression that determines tests ({@code groovy},
@@ -120,10 +120,10 @@ public final class CheckMojo extends AbstractRexslMojo {
         }
         final Collection<Check> checks = this.provider.all();
         for (final Check chck : checks) {
-            if (this.skipTests) {
+            if (this.skip) {
                 Logger.warn(
                     this,
-                    "%[type]s skipped because of skipTests",
+                    "%[type]s skipped because of skip",
                     chck
                 );
                 continue;

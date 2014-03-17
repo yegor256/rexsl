@@ -165,8 +165,9 @@ public final class HttpHeadersMocker {
                     final Collection<String> hdrs =
                         HttpHeadersMocker.this.headers.get(HttpHeaders.COOKIE);
                     if (hdrs != null) {
-                        for (String header : hdrs) {
-                            for (HttpCookie cookie : HttpCookie.parse(header)) {
+                        for (final String header : hdrs) {
+                            for (final HttpCookie cookie
+                                : HttpCookie.parse(header)) {
                                 cookies.put(
                                     cookie.getName(),
                                     new Cookie(

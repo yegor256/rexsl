@@ -88,18 +88,18 @@ public class BaseResource implements Resource {
     /**
      * URI info, injected by JAX-RS implementation.
      */
-    private transient UriInfo iuriInfo;
+    private transient UriInfo uri;
 
     /**
      * Http headers, injected by JAX-RS implementation.
      */
-    private final transient AtomicReference<HttpHeaders> ihttpHeaders =
+    private final transient AtomicReference<HttpHeaders> hdrs =
         new AtomicReference<HttpHeaders>();
 
     /**
      * HTTP servlet request, injected by JAX-RS implementation.
      */
-    private transient HttpServletRequest ihttpRequest;
+    private transient HttpServletRequest req;
 
     /**
      * Security context.
@@ -111,7 +111,7 @@ public class BaseResource implements Resource {
      * Servlet context.
      * @since 0.4.9
      */
-    private transient ServletContext srvltContext;
+    private transient ServletContext ctx;
 
     @Override
     public final long started() {
@@ -132,30 +132,51 @@ public class BaseResource implements Resource {
     @NotNull
     public final HttpHeaders httpHeaders() {
         this.assertNotNull(
+<<<<<<< HEAD
             this.ihttpHeaders.get(),
             "%[type]s#httpHeaders was never injected by JAX-RS"
         );
         return this.ihttpHeaders.get();
+=======
+            this.hdrs.get(),
+            "%[type]s#httpHeaders was never injected by JAX-RS"
+        );
+        return this.hdrs.get();
+>>>>>>> 05d09318d78a87d13984b332fb8f96fbc20be7ff
     }
 
     @Override
     @NotNull
     public final UriInfo uriInfo() {
         this.assertNotNull(
+<<<<<<< HEAD
             this.iuriInfo,
             "%[type]s#uriInfo was never injected by JAX-RS"
         );
         return this.iuriInfo;
+=======
+            this.uri,
+            "%[type]s#uriInfo was never injected by JAX-RS"
+        );
+        return this.uri;
+>>>>>>> 05d09318d78a87d13984b332fb8f96fbc20be7ff
     }
 
     @Override
     @NotNull
     public final HttpServletRequest httpServletRequest() {
         this.assertNotNull(
+<<<<<<< HEAD
             this.ihttpRequest,
             "%[type]s#httpRequest was never injected by JAX-RS"
         );
         return this.ihttpRequest;
+=======
+            this.req,
+            "%[type]s#httpRequest was never injected by JAX-RS"
+        );
+        return this.req;
+>>>>>>> 05d09318d78a87d13984b332fb8f96fbc20be7ff
     }
 
     /**
@@ -180,10 +201,17 @@ public class BaseResource implements Resource {
     @NotNull
     public final ServletContext servletContext() {
         this.assertNotNull(
+<<<<<<< HEAD
             this.srvltContext,
             "%[type]s#servletContext was never injected by JAX-RS"
         );
         return this.srvltContext;
+=======
+            this.ctx,
+            "%[type]s#servletContext was never injected by JAX-RS"
+        );
+        return this.ctx;
+>>>>>>> 05d09318d78a87d13984b332fb8f96fbc20be7ff
     }
 
     /**
@@ -194,9 +222,9 @@ public class BaseResource implements Resource {
     @Context
     public final void setUriInfo(@NotNull final UriInfo info) {
         if (this.needsForwarding()) {
-            this.iuriInfo = new ForwardedUriInfo(info, this.ihttpHeaders);
+            this.uri = new ForwardedUriInfo(info, this.hdrs);
         } else {
-            this.iuriInfo = info;
+            this.uri = info;
         }
     }
 
@@ -213,11 +241,11 @@ public class BaseResource implements Resource {
     /**
      * Set HttpHeaders. Should be called by JAX-RS implementation
      * because of {@code @Context} annotation.
-     * @param hdrs List of headers
+     * @param headers List of headers
      */
     @Context
-    public final void setHttpHeaders(@NotNull final HttpHeaders hdrs) {
-        this.ihttpHeaders.set(hdrs);
+    public final void setHttpHeaders(@NotNull final HttpHeaders headers) {
+        this.hdrs.set(headers);
     }
 
     /**
@@ -228,7 +256,7 @@ public class BaseResource implements Resource {
     @Context
     public final void setHttpServletRequest(
         @NotNull final HttpServletRequest request) {
-        this.ihttpRequest = request;
+        this.req = request;
     }
 
     /**
@@ -252,7 +280,7 @@ public class BaseResource implements Resource {
     @Context
     public final void setServletContext(
         @NotNull final ServletContext context) {
-        this.srvltContext = context;
+        this.ctx = context;
     }
 
     /**

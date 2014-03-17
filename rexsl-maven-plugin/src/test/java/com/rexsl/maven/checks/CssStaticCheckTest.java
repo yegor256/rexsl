@@ -45,13 +45,8 @@ public final class CssStaticCheckTest {
     /**
      * CssStaticCheck can validate correct CSS file.
      * @throws Exception If something goes wrong
-     * @todo #105 The validation doesn't work. CSSLint, for some reason,
-     *  returns incorrect report when being executed from Maven. When the same
-     *  file is executed from command line it works correctly. I don't know
-     *  why it's happening.
      */
     @Test
-    @org.junit.Ignore
     public void validatesCorrectCssFile() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withDefaultClasspath()
@@ -68,7 +63,6 @@ public final class CssStaticCheckTest {
      * @throws Exception If something goes wrong
      */
     @Test
-    @org.junit.Ignore
     public void validatesIncorrectCssFile() throws Exception {
         final Environment env = new EnvironmentMocker()
             .withDefaultClasspath()

@@ -121,7 +121,7 @@ public final class JaxbGroup {
      * Protected ctor, for on-fly instantiating (you're not supposed to use it).
      * @param grp Group of elements
      */
-    protected JaxbGroup(final Collection<?> grp) {
+    JaxbGroup(final Collection<?> grp) {
         this.group = grp;
     }
 
@@ -135,7 +135,7 @@ public final class JaxbGroup {
     public static Object build(
         @NotNull(message = "group can't be NULL") final Collection<?> grp,
         @NotNull(message = "name can't be NULL") final String name) {
-        synchronized (JaxbGroup.READY) {
+        synchronized (JaxbGroup.class) {
             final String mnemo = JaxbGroup.mnemo(grp.isEmpty(), name);
             if (!JaxbGroup.READY.containsKey(mnemo)) {
                 JaxbGroup.READY.put(
@@ -201,8 +201,10 @@ public final class JaxbGroup {
             );
             final ClassFile file = ctc.getClassFile();
             final AnnotationsAttribute attribute =
-                (AnnotationsAttribute) file.getAttribute(
-                    AnnotationsAttribute.visibleTag
+                AnnotationsAttribute.class.cast(
+                    file.getAttribute(
+                        AnnotationsAttribute.visibleTag
+                    )
                 );
             attribute.addAnnotation(JaxbGroup.xmlRootElement(file, name));
             if (!types.isEmpty()) {

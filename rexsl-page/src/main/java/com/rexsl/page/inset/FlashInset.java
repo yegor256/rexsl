@@ -159,7 +159,8 @@ public final class FlashInset implements Inset {
                 .cookie(
                     new FlashInset.Flash(
                         uri, message, level,
-                        System.currentTimeMillis() - this.resource.started())
+                        System.currentTimeMillis() - this.resource.started()
+                    )
                 )
                 .header(FlashInset.HEADER, message)
                 .entity(message)

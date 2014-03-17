@@ -39,7 +39,7 @@
             <item name="Usage" href="usage.html"/>
             <item name="Goals" href="plugin-info.html"/>
             <item name="FAQ" href="faq.html"/>
-            <item name="Release History" href="changes-report.html"/>
+            <item name="Release History" href="https://github.com/yegor256/rexsl/releases"/>
         </menu>
         <menu name="Usage Examples">
             <item name="Narrow down test scope" href="example-narrow.html"/>

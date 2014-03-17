@@ -46,6 +46,8 @@ import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -88,7 +90,7 @@ final class Encrypted implements Identity {
      * @param idn The identity to encapsulate
      * @param secret Secret key for encryption
      */
-    protected Encrypted(@NotNull final Identity idn,
+    Encrypted(@NotNull final Identity idn,
         @NotNull final String secret) {
         this.identity = idn;
         this.key = secret;
@@ -115,19 +117,21 @@ final class Encrypted implements Identity {
      */
     public String cookie() {
         final ByteArrayOutputStream data = new ByteArrayOutputStream();
+        final DataOutputStream stream = new DataOutputStream(data);
         try {
-            final DataOutputStream stream = new DataOutputStream(data);
             stream.writeUTF(this.urn().toString());
             stream.writeUTF(this.name());
             stream.writeUTF(this.photo().toString());
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalArgumentException(ex);
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
         return StringUtils.join(
             Encrypted.CODER.encodeToString(
                 Encrypted.xor(
                     Encrypted.salt(data.toByteArray()),
-                    this.key.getBytes()
+                    this.key.getBytes(Charsets.UTF_8)
                 )
             ).split("(?<=\\G.{8})"),
             "-"
@@ -137,11 +141,11 @@ final class Encrypted implements Identity {
     /**
      * Decrypt.
      * @param txt The text to decrypt
-     * @param key Encryption key
+     * @param ekey Encryption key
      * @return Instance of the class
      * @throws Encrypted.DecryptionException If can't decrypt
      */
-    public static Encrypted parse(final String txt, final String key)
+    public static Encrypted parse(final String txt, final String ekey)
         throws Encrypted.DecryptionException {
         if (txt == null) {
             throw new Encrypted.DecryptionException("text can't be NULL");
@@ -149,7 +153,9 @@ final class Encrypted implements Identity {
         final byte[] bytes = Encrypted.CODER.decode(txt.replaceAll("- ", ""));
         final DataInputStream stream = new DataInputStream(
             new ByteArrayInputStream(
-                Encrypted.unsalt(Encrypted.xor(bytes, key.getBytes()))
+                Encrypted.unsalt(
+                    Encrypted.xor(bytes, ekey.getBytes(Charsets.UTF_8))
+                )
             )
         );
         try {
@@ -158,12 +164,14 @@ final class Encrypted implements Identity {
             final String photo = stream.readUTF();
             return new Encrypted(
                 new Identity.Simple(urn, name, URI.create(photo)),
-                key
+                ekey
             );
         } catch (URISyntaxException ex) {
             throw new Encrypted.DecryptionException(ex);
         } catch (IOException ex) {
             throw new Encrypted.DecryptionException(ex);
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
     }
 
@@ -178,7 +186,7 @@ final class Encrypted implements Identity {
         final byte[] output = new byte[text.length + size + 2];
         output[0] = size;
         byte sum = 0;
-        for (int idx = 0; idx < size; ++idx) {
+        for (int idx = 0; idx < (int) size; ++idx) {
             output[idx + 1] = (byte) Encrypted.RND.nextInt();
             sum += output[idx + 1];
         }

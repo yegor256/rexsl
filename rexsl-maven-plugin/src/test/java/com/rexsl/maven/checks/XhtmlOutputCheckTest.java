@@ -90,9 +90,7 @@ public final class XhtmlOutputCheckTest {
     /**
      * XhtmlOutputCheck can validate incorrect XHTML.
      * @throws Exception If something goes wrong
-     * @todo #11 Implement XHTML validation in XhtmlOutputCheck class.
      */
-    @org.junit.Ignore
     @Test
     public void validatesIncorrectXhtml() throws Exception {
         final Environment env = new EnvironmentMocker()

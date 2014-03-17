@@ -33,6 +33,7 @@ import com.google.common.io.Files;
 import com.jcabi.log.Logger;
 import com.rexsl.maven.utils.PortReserver;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
@@ -64,14 +65,24 @@ public final class EnvironmentMocker {
         final File temp = Files.createTempDir();
         try {
             FileUtils.forceDeleteOnExit(temp);
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalStateException(ex);
         }
         this.basedir = new File(temp, "basedir");
-        this.basedir.mkdirs();
+        if (this.basedir.mkdirs()) {
+            Logger.info(
+                EnvironmentMocker.class,
+                "created basedir %s", this.basedir
+            );
+        }
         Mockito.doReturn(this.basedir).when(this.env).basedir();
         final File webdir = new File(this.basedir, "target/webdir");
-        webdir.mkdirs();
+        if (webdir.mkdirs()) {
+            Logger.info(
+                EnvironmentMocker.class,
+                "created dirs for %s", webdir
+            );
+        }
         Mockito.doReturn(webdir).when(this.env).webdir();
         Mockito.doReturn(new PortReserver().port()).when(this.env).port();
     }
@@ -100,7 +111,7 @@ public final class EnvironmentMocker {
         }
         try {
             return this.withTextFile(name, IOUtils.toString(stream));
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalStateException(ex);
         } finally {
             IOUtils.closeQuietly(stream);
@@ -115,10 +126,12 @@ public final class EnvironmentMocker {
      */
     public EnvironmentMocker withTextFile(final String name, final String txt) {
         final File dest = new File(this.basedir, name);
-        dest.getParentFile().mkdirs();
+        if (dest.getParentFile().mkdirs()) {
+            Logger.info(this, "created dir %s", dest.getParentFile());
+        }
         try {
             FileUtils.writeStringToFile(dest, txt);
-        } catch (java.io.IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalStateException(ex);
         }
         return this;
@@ -131,7 +144,9 @@ public final class EnvironmentMocker {
      */
     public EnvironmentMocker withFolder(final String name) {
         final File dest = new File(this.basedir, name);
-        dest.mkdirs();
+        if (dest.mkdirs()) {
+            Logger.info(this, "created directory %s", dest);
+        }
         return this;
     }
 
@@ -141,8 +156,8 @@ public final class EnvironmentMocker {
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public EnvironmentMocker withDefaultClasspath() {
-        final Set<File> files = new HashSet<File>();
-        for (String file : System.getProperty("java.class.path")
+        final Set<File> files = new HashSet<File>(0);
+        for (final String file : System.getProperty("java.class.path")
             .split(System.getProperty("path.separator"))) {
             files.add(new File(file));
         }

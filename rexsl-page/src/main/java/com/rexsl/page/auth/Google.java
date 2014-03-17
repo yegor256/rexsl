@@ -59,7 +59,7 @@ import lombok.ToString;
  * @see <a href="https://developers.google.com/accounts/docs/OAuth2">Google OAuth</a>
  */
 @ToString
-@EqualsAndHashCode(of = { "appId", "appKey" })
+@EqualsAndHashCode(of = { "app", "secret" })
 @Loggable(Loggable.DEBUG)
 @Provider.Redirect
 public final class Google implements Provider, Provider.Visible {
@@ -82,12 +82,12 @@ public final class Google implements Provider, Provider.Visible {
     /**
      * Facebook ID.
      */
-    private final transient String appId;
+    private final transient String app;
 
     /**
      * Facebook secret key.
      */
-    private final transient String appKey;
+    private final transient String secret;
 
     /**
      * Public ctor.
@@ -98,8 +98,8 @@ public final class Google implements Provider, Provider.Visible {
     public Google(@NotNull final Resource res,
         @NotNull final String aid, @NotNull final String key) {
         this.resource = res;
-        this.appId = aid;
-        this.appKey = key;
+        this.app = aid;
+        this.secret = key;
     }
 
     @Override
@@ -138,7 +138,7 @@ public final class Google implements Provider, Provider.Visible {
                     "scope",
                     "https://www.googleapis.com/auth/userinfo.profile"
                 )
-                .build(this.appId, this.resource.uriInfo().getBaseUri())
+                .build(this.app, this.resource.uriInfo().getBaseUri())
         );
     }
 
@@ -151,9 +151,9 @@ public final class Google implements Provider, Provider.Visible {
     private String token(final String code) throws IOException {
         return new JdkRequest("https://accounts.google.com/o/oauth2/token")
             .body()
-            .formParam("client_id", this.appId)
+            .formParam("client_id", this.app)
             .formParam("redirect_uri", this.resource.uriInfo().getBaseUri())
-            .formParam("client_secret", this.appKey)
+            .formParam("client_secret", this.secret)
             .formParam("grant_type", "authorization_code")
             .formParam("code", code)
             .back()

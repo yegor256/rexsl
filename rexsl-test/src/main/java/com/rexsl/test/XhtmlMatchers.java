@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import javax.validation.constraints.NotNull;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Source;
@@ -179,9 +179,9 @@ public final class XhtmlMatchers {
      */
     @NotNull
     public static <T> Matcher<T> hasXPaths(final String...xpaths) {
-        final List<Matcher<? super T>> list =
+        final Collection<Matcher<? super T>> list =
             new ArrayList<Matcher<? super T>>(xpaths.length);
-        for (String xpath : xpaths) {
+        for (final String xpath : xpaths) {
             list.add(XhtmlMatchers.<T>hasXPath(xpath));
         }
         return Matchers.allOf(list);
