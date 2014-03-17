@@ -83,23 +83,20 @@ final class StaticTemplate implements Template {
      * Load template from URI.
      * @param uri The URI to load from
      * @return The text just loaded
-     * @todo #167 We support only local resources now. This implementation
-     *  has to be extended in order to support different formats of URI, incl.
-     *  "file:...", "http:...", etc.
      */
     private static String load(final URI uri) {
         String txt;
-        final InputStream stream = StaticTemplate.class
-            .getResourceAsStream(uri.toString());
         try {
-            if (stream == null) {
-                txt = Logger.format(
-                    "%s\nresource '%s' not found",
-                    StaticTemplate.MARKER,
-                    uri
-                );
+            if (uri.isAbsolute()) {
+                txt = IOUtils.toString(uri);
             } else {
-                txt = IOUtils.toString(stream);
+                final InputStream stream = StaticTemplate.class
+                    .getResourceAsStream(uri.toString());
+                try {
+                    txt = IOUtils.toString(stream);
+                } finally {
+                    IOUtils.closeQuietly(stream);
+                }
             }
         } catch (IOException ex) {
             txt = Logger.format(
@@ -108,13 +105,10 @@ final class StaticTemplate implements Template {
                 uri,
                 ex
             );
-        } finally {
-            IOUtils.closeQuietly(stream);
         }
         if (!txt.contains(StaticTemplate.MARKER)) {
             txt = Logger.format("%s\n%s", StaticTemplate.MARKER, txt);
         }
         return txt;
     }
-
 }
