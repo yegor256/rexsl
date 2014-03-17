@@ -132,51 +132,30 @@ public class BaseResource implements Resource {
     @NotNull
     public final HttpHeaders httpHeaders() {
         this.assertNotNull(
-<<<<<<< HEAD
-            this.ihttpHeaders.get(),
-            "%[type]s#httpHeaders was never injected by JAX-RS"
-        );
-        return this.ihttpHeaders.get();
-=======
             this.hdrs.get(),
             "%[type]s#httpHeaders was never injected by JAX-RS"
         );
         return this.hdrs.get();
->>>>>>> 05d09318d78a87d13984b332fb8f96fbc20be7ff
     }
 
     @Override
     @NotNull
     public final UriInfo uriInfo() {
         this.assertNotNull(
-<<<<<<< HEAD
-            this.iuriInfo,
-            "%[type]s#uriInfo was never injected by JAX-RS"
-        );
-        return this.iuriInfo;
-=======
             this.uri,
             "%[type]s#uriInfo was never injected by JAX-RS"
         );
         return this.uri;
->>>>>>> 05d09318d78a87d13984b332fb8f96fbc20be7ff
     }
 
     @Override
     @NotNull
     public final HttpServletRequest httpServletRequest() {
         this.assertNotNull(
-<<<<<<< HEAD
-            this.ihttpRequest,
-            "%[type]s#httpRequest was never injected by JAX-RS"
-        );
-        return this.ihttpRequest;
-=======
             this.req,
             "%[type]s#httpRequest was never injected by JAX-RS"
         );
         return this.req;
->>>>>>> 05d09318d78a87d13984b332fb8f96fbc20be7ff
     }
 
     /**
@@ -201,17 +180,10 @@ public class BaseResource implements Resource {
     @NotNull
     public final ServletContext servletContext() {
         this.assertNotNull(
-<<<<<<< HEAD
-            this.srvltContext,
-            "%[type]s#servletContext was never injected by JAX-RS"
-        );
-        return this.srvltContext;
-=======
             this.ctx,
             "%[type]s#servletContext was never injected by JAX-RS"
         );
         return this.ctx;
->>>>>>> 05d09318d78a87d13984b332fb8f96fbc20be7ff
     }
 
     /**
