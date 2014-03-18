@@ -80,8 +80,11 @@ final class StringSource extends DOMSource {
             final Transformer transformer =
                 TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(
-                OutputKeys.OMIT_XML_DECLARATION,
-                "yes"
+                // @checkstyle MultipleStringLiteralsCheck (1 line)
+                OutputKeys.OMIT_XML_DECLARATION, "yes"
+            );
+            transformer.setOutputProperty(
+                OutputKeys.INDENT, "yes"
             );
             transformer.transform(
                 new DOMSource(node),
@@ -91,7 +94,7 @@ final class StringSource extends DOMSource {
             throw new IllegalStateException(ex);
         }
         this.xml = writer.toString();
-        super.setNode(node);
+        this.setNode(node);
     }
 
     @Override

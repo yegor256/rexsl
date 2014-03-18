@@ -76,7 +76,14 @@ public final class StringSourceTest {
         );
         MatcherAssert.assertThat(
             new StringSource(node).toString(),
-            XhtmlMatchers.hasXPath("/nodeName/a")
+            Matchers.equalTo(
+                StringUtils.join(
+                    "<nodeName><?some instruction?>",
+                    "<!--comment-->",
+                    "<a>withText</a>\n   <a/>\n   <a withArg=\"value\"/>\n",
+                    "</nodeName>"
+                )
+            )
         );
     }
 

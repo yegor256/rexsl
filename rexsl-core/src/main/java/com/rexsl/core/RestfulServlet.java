@@ -167,7 +167,7 @@ public final class RestfulServlet extends ServletContainer {
             StringUtils.join(packages, RestfulServlet.COMMA)
         );
         this.reconfigureJUL();
-        super.init(new ServletConfigWrapper(config, props));
+        this.init(new ServletConfigWrapper(config, props));
     }
 
     /**
