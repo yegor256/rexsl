@@ -114,13 +114,11 @@
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-maven-slf4j</artifactId>
         </dependency>
-        <!--
         <dependency>
             <artifactId>jslint4java</artifactId>
             <groupId>com.googlecode.jslint4java</groupId>
             <version>2.0.2</version>
         </dependency>
-        -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -359,9 +357,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>rhino</groupId>
-            <artifactId>js</artifactId>
-            <version>1.7R2</version>
+            <groupId>org.mozilla</groupId>
+            <artifactId>rhino</artifactId>
+            <version>1.7R3</version>
         </dependency>
         <dependency>
             <!-- CSS and JS compressor -->
