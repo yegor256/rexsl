@@ -31,7 +31,9 @@ package com.rexsl.maven;
 
 import com.jcabi.log.Logger;
 import com.rexsl.maven.utils.EmbeddedContainer;
-import org.apache.maven.plugin.MojoFailureException;
+import java.util.concurrent.TimeUnit;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Run WAR as a web server to enable interactive testing of a web application.
@@ -46,13 +48,15 @@ import org.apache.maven.plugin.MojoFailureException;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @goal run
- * @threadSafe
  */
+@Mojo(
+    name = "run", defaultPhase = LifecyclePhase.INTEGRATION_TEST,
+    threadSafe = true
+)
 public final class RunMojo extends AbstractRexslMojo {
 
     @Override
-    protected void run() throws MojoFailureException {
+    protected void run() {
         this.env().setRuntimeFiltering(true);
         final EmbeddedContainer container = EmbeddedContainer.start(this.env());
         Logger.info(
@@ -63,9 +67,8 @@ public final class RunMojo extends AbstractRexslMojo {
         Logger.info(this, "Press Ctrl-C to stop...");
         while (true) {
             try {
-                // @checkstyle MagicNumber (1 line)
-                Thread.sleep(1000);
-            } catch (java.lang.InterruptedException ex) {
+                TimeUnit.SECONDS.sleep(1L);
+            } catch (InterruptedException ex) {
                 container.stop();
                 Thread.currentThread().interrupt();
             }
