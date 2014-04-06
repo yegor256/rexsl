@@ -46,12 +46,18 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode(of = "message")
 @Immutable
+@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 final class AlertTemplate implements Template {
+
+    /**
+     * Serialization ID.
+     */
+    private static final long serialVersionUID = 8646608907463647576L;
 
     /**
      * The message to show.
      */
-    private final transient String message;
+    private final String message;
 
     /**
      * Public ctor.
@@ -71,5 +77,4 @@ final class AlertTemplate implements Template {
             defect
         );
     }
-
 }
