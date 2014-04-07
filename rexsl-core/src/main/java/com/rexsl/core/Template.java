@@ -31,6 +31,7 @@ package com.rexsl.core;
 
 import com.jcabi.aspects.Immutable;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * HTML building template.
@@ -40,7 +41,7 @@ import java.io.IOException;
  * @since 0.3.6
  */
 @Immutable
-interface Template {
+interface Template extends Serializable {
 
     /**
      * Render this defect to HTML, in UTF-8.

@@ -29,6 +29,10 @@
  */
 package com.rexsl.core;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.servlet.ServletConfig;
@@ -44,8 +48,14 @@ import org.mockito.Mockito;
  * Test case for {@link ExceptionTrap}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 public final class ExceptionTrapTest {
+
+    /**
+     * Code start.
+     */
+    private static final String CODE_START = "code: ";
 
     /**
      * ExceptionTrap can render page with exception.
@@ -56,16 +66,9 @@ public final class ExceptionTrapTest {
         final ServletConfig config = new ServletConfigMocker().mock();
         final HttpServlet servlet = new ExceptionTrap();
         servlet.init(config);
-        final HttpServletRequest request =
-            new HttpServletRequestMocker().mock();
-        final HttpServletResponse response =
-            Mockito.mock(HttpServletResponse.class);
-        final StringWriter writer = new StringWriter();
-        Mockito.doReturn(new PrintWriter(writer)).when(response).getWriter();
-        servlet.service(request, response);
         MatcherAssert.assertThat(
-            writer.toString(),
-            Matchers.containsString("code: ")
+            this.request(servlet),
+            Matchers.containsString(ExceptionTrapTest.CODE_START)
         );
     }
 
@@ -96,4 +99,47 @@ public final class ExceptionTrapTest {
         );
     }
 
+    /**
+     * ExceptionTrap should serialize itself correctly.
+     * @throws Exception in case of error.
+     */
+    @Test
+    public void serializesItself() throws Exception {
+        final ExceptionTrap before = new ExceptionTrap();
+        final ServletConfig config = new ServletConfigMocker().mock();
+        before.init(config);
+        MatcherAssert.assertThat(
+            this.request(before),
+            Matchers.containsString(ExceptionTrapTest.CODE_START)
+        );
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final ObjectOutputStream ostream = new ObjectOutputStream(out);
+        ostream.writeObject(before);
+        ostream.close();
+        final ExceptionTrap after = (ExceptionTrap) new ObjectInputStream(
+            new ByteArrayInputStream(out.toByteArray())
+        ).readObject();
+        after.init(config);
+        MatcherAssert.assertThat(
+            this.request(after),
+            Matchers.containsString(ExceptionTrapTest.CODE_START)
+        );
+    }
+
+    /**
+     * Make a request to servlet and return the response.
+     * @param servlet Servlet to make the request.
+     * @return Response text.
+     * @throws Exception In case of error.
+     */
+    private String request(final HttpServlet servlet) throws Exception {
+        final HttpServletRequest request =
+            new HttpServletRequestMocker().mock();
+        final HttpServletResponse response =
+            Mockito.mock(HttpServletResponse.class);
+        final StringWriter writer = new StringWriter();
+        Mockito.doReturn(new PrintWriter(writer)).when(response).getWriter();
+        servlet.service(request, response);
+        return writer.toString();
+    }
 }
