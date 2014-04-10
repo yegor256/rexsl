@@ -130,10 +130,10 @@
 <a class="jxr_linenumber" name="120" href="#120">120</a>         <strong class="jxr_keyword">final</strong> Class&lt;?&gt;[] classes = <strong class="jxr_keyword">new</strong> Class&lt;?&gt;[deps.length + 1];
 <a class="jxr_linenumber" name="121" href="#121">121</a>         classes[0] = object.getClass();
 <a class="jxr_linenumber" name="122" href="#122">122</a>         System.arraycopy(deps, 0, classes, 1, deps.length);
-<a class="jxr_linenumber" name="123" href="#123">123</a>         JAXBContext ctx;
+<a class="jxr_linenumber" name="123" href="#123">123</a>         <strong class="jxr_keyword">final</strong> JAXBContext ctx;
 <a class="jxr_linenumber" name="124" href="#124">124</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="125" href="#125">125</a>             ctx = JAXBContext.newInstance(classes);
-<a class="jxr_linenumber" name="126" href="#126">126</a>         } <strong class="jxr_keyword">catch</strong> (javax.xml.bind.JAXBException ex) {
+<a class="jxr_linenumber" name="126" href="#126">126</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> JAXBException ex) {
 <a class="jxr_linenumber" name="127" href="#127">127</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(ex);
 <a class="jxr_linenumber" name="128" href="#128">128</a>         }
 <a class="jxr_linenumber" name="129" href="#129">129</a>         <strong class="jxr_keyword">final</strong> JAXBIntrospector intro = ctx.createJAXBIntrospector();
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="139" href="#139">139</a>         <strong class="jxr_keyword">final</strong> StringWriter writer = <strong class="jxr_keyword">new</strong> StringWriter();
 <a class="jxr_linenumber" name="140" href="#140">140</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="141" href="#141">141</a>             mrsh.marshal(subject, writer);
-<a class="jxr_linenumber" name="142" href="#142">142</a>         } <strong class="jxr_keyword">catch</strong> (javax.xml.bind.JAXBException ex) {
+<a class="jxr_linenumber" name="142" href="#142">142</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> JAXBException ex) {
 <a class="jxr_linenumber" name="143" href="#143">143</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> AssertionError(ex);
 <a class="jxr_linenumber" name="144" href="#144">144</a>         }
 <a class="jxr_linenumber" name="145" href="#145">145</a>         <strong class="jxr_keyword">final</strong> String xml = writer.toString();

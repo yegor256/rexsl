@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type='text/xsl' href='puzzles.xsl'?><puzzles>
    <puzzle>
-      <ticket>262</ticket>
-      <file>rexsl-core/src/main/java/com/rexsl/core/ExceptionTrap.java</file>
-      <prefix> * </prefix>
-      <body>This class should be serializable, but it's not. It doesn't restore its state after deserialization. We should create a test for it and then fix the defect.</body>
-      <estimate>0</estimate>
-      <lines>78-80</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>167</ticket>
-      <file>rexsl-core/src/main/java/com/rexsl/core/StaticTemplate.java</file>
-      <prefix>     * </prefix>
-      <body>We support only local resources now. This implementation has to be extended in order to support different formats of URI, incl. "file:...", "http:...", etc.</body>
-      <estimate>0</estimate>
-      <lines>86-88</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
       <ticket>336</ticket>
       <file>rexsl-core/src/test/java/com/rexsl/core/ContextResourceResolverTest.java</file>
       <prefix> * </prefix>
@@ -37,12 +19,21 @@
       <owner>someone</owner>
    </puzzle>
    <puzzle>
+      <ticket>760</ticket>
+      <file>rexsl-core/src/test/java/com/rexsl/core/StaticTemplateTest.java</file>
+      <prefix>     * </prefix>
+      <body>Add a correct test for http schema - need to create a template file that will be always available on the web.</body>
+      <estimate>0</estimate>
+      <lines>92-93</lines>
+      <owner>someone</owner>
+   </puzzle>
+   <puzzle>
       <ticket>26</ticket>
       <file>rexsl-maven-plugin/pom.xml</file>
       <prefix>                        </prefix>
       <body>This test is disabled (although it works fine) because I don't know how to stop its execution. It starts Jetty and stays waiting. There should be some way of canceling it somehow... http://jira.codehaus.org/browse/MINVOKER-132</body>
       <estimate>0</estimate>
-      <lines>462-466</lines>
+      <lines>460-464</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
@@ -62,15 +53,6 @@
       <estimate>0</estimate>
       <lines>146-147</lines>
       <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>112</ticket>
-      <file>rexsl-maven-plugin/src/main/java/com/rexsl/maven/checks/JSStaticCheck.java</file>
-      <prefix>     * </prefix>
-      <body>Move the code above to this method when yui finish migration to Rhino 1.7R3. At the momemnt the implementaiton is just a stub - it validates that the file exists and that's it.</body>
-      <estimate>0</estimate>
-      <lines>124-126</lines>
-      <owner>author</owner>
    </puzzle>
    <puzzle>
       <ticket>751</ticket>
@@ -106,24 +88,6 @@
       <body>This test is not implemented yet, but has to be implemented somehow. We should create a new thread and wait there for RunMojo execution termination.</body>
       <estimate>0</estimate>
       <lines>59-61</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>57</ticket>
-      <file>rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/JSStaticCheckTest.java</file>
-      <prefix> * </prefix>
-      <body>Implement JS stylesheet validation and enable all test methods in this class.</body>
-      <estimate>0</estimate>
-      <lines>42-43</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>171</ticket>
-      <file>rexsl-maven-plugin/src/test/java/com/rexsl/maven/checks/RexslFilesCheckTest.java</file>
-      <prefix>     * </prefix>
-      <body>This test is IGNORED because I don't think that we should prohibit users to create custom directories here. Let's just focus on file types.</body>
-      <estimate>0</estimate>
-      <lines>84-86</lines>
       <owner>someone</owner>
    </puzzle>
    <puzzle>
