@@ -120,10 +120,10 @@ public final class JaxbConverter {
         final Class<?>[] classes = new Class<?>[deps.length + 1];
         classes[0] = object.getClass();
         System.arraycopy(deps, 0, classes, 1, deps.length);
-        JAXBContext ctx;
+        final JAXBContext ctx;
         try {
             ctx = JAXBContext.newInstance(classes);
-        } catch (javax.xml.bind.JAXBException ex) {
+        } catch (final JAXBException ex) {
             throw new IllegalArgumentException(ex);
         }
         final JAXBIntrospector intro = ctx.createJAXBIntrospector();
@@ -139,7 +139,7 @@ public final class JaxbConverter {
         final StringWriter writer = new StringWriter();
         try {
             mrsh.marshal(subject, writer);
-        } catch (final javax.xml.bind.JAXBException ex) {
+        } catch (final JAXBException ex) {
             throw new AssertionError(ex);
         }
         final String xml = writer.toString();

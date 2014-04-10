@@ -90,7 +90,7 @@ final class StringSource extends DOMSource {
                 new DOMSource(node),
                 new StreamResult(writer)
             );
-        } catch (TransformerException ex) {
+        } catch (final TransformerException ex) {
             throw new IllegalStateException(ex);
         }
         this.xml = writer.toString();
