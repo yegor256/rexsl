@@ -68,19 +68,17 @@ import lombok.ToString;
  *
  * <p>The template of "service not available" web page is configured with
  * the only one {@code init-params}. The template should be available in
- * classpath as a plain text file (preferrably in HTML) and shall contain
+ * classpath as a plain text file (preferably in HTML) and shall contain
  * {@code &#36;&#123;text&#125;} text, which will be replaced with
  * a full description of exception just thrown and caught.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.4.2
- * @todo #262 This class should be serializable, but it's not. It doesn't
- *  restore its state after deserialization. We should create a test for it
- *  and then fix the defect.
  */
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "template")
+@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 public final class ExceptionTrap extends HttpServlet {
 
     /**
@@ -91,7 +89,7 @@ public final class ExceptionTrap extends HttpServlet {
     /**
      * The template.
      */
-    private transient Template template;
+    private Template template;
 
     /**
      * {@inheritDoc}
@@ -233,5 +231,4 @@ public final class ExceptionTrap extends HttpServlet {
         }
         return text.toString();
     }
-
 }

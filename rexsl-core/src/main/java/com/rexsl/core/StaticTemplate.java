@@ -50,7 +50,12 @@ import org.apache.commons.lang3.StringEscapeUtils;
 @ToString
 @EqualsAndHashCode(of = "text")
 @Immutable
+@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 final class StaticTemplate implements Template {
+    /**
+     * Serialization ID.
+     */
+    private static final long serialVersionUID = -6527941531697627384L;
 
     /**
      * Marker to replace with text.
@@ -60,7 +65,7 @@ final class StaticTemplate implements Template {
     /**
      * Text.
      */
-    private final transient String text;
+    private final String text;
 
     /**
      * Public ctor.
