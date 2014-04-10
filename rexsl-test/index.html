@@ -59,13 +59,13 @@
                             Overview
                                                             <ul>
                                                                                                     <li>
-                                                            <strong>                        <a href="index.html" title="RESTful Client">RESTful Client</a>
+                                                            <strong>                        <a href="index.html" title="Introduction">Introduction</a>
         </strong>
                                                                                                                                                                 <ul>
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-0.13/index.html" title="API 0.13 (JavaDoc)">API 0.13 (JavaDoc)</a>
+                                                                                    <a href="apidocs-0.13.3/index.html" title="API 0.13.3 (JavaDoc)">API 0.13.3 (JavaDoc)</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -113,56 +113,32 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
-                            <strong>0.13</strong>
+                            <strong>0.13.3</strong>
                             
-                            10-Mar-2014
+                            10-Apr-2014
                         </div>
                                                                     </div>
                     <div id="here-goes-menu" class="menu-off"></div>
                     <article>
                         <div class="section">
-                            <h1>RESTful Java Client</h1>
-<p>The module contains a collection of usable tools for testing of ReXSL-powered application (or any other RESTful server).</p>
-<p><a href="./apidocs-0.13/com/rexsl/test/Request.html"><tt>Request</tt></a> (implemented by <a href="./apidocs-0.13/com/rexsl/test/request/JdkRequest.html"><tt>JdkRequest</tt></a> and <a href="./apidocs-0.13/com/rexsl/test/request/ApacheRequest.html"><tt>ApacheRequest</tt></a>) is a RESTful Java client with a fluent interface:</p>
-
-<div class="source">
-<pre>public class Main {
-  public void main() {
-    String body = new JdkRequest(&quot;http://www.rexsl.com&quot;)
-      .through(RetryWire.class)
-      .header(HttpHeaders.USER_AGENT, &quot;Safari 4&quot;)
-      .header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)
-      .fetch()
-      .as(RestResponse.class)
-      .assertStatus(HttpURLConnection.HTTP_OK)
-      .assertBody(Matchers.containsString(&quot;ReXSL&quot;))
-      .as(XmlResponse.class)
-      .assertXPath(&quot;//xhtml:body&quot;)
-      .body();
-  }
-}
-</pre></div>
-<p>The beauty of this RESTful Java client (comparing to others) is that it retrieves data and makes test assertions at the same time. Your integration tests will automatically validate your RESTful client against the contract (API) of the server.</p>
-<p>Other important classes in this module:</p>
+                            <h1>XHTML/XML test tools</h1>
+<p>The module contains a collection of usable tools for testing of ReXSL-powered application (or any other RESTful server):</p>
 
 <ul>
   
 <li>
-<p><a href="./apidocs-0.13/com/rexsl/test/JaxbConverter.html"><tt>JaxbConverter</tt></a>  &#x2014; convenient JAXB-to-XML converter;</p></li>
+<p><a href="./apidocs-0.13.3/com/rexsl/test/JaxbConverter.html"><tt>JaxbConverter</tt></a>  &#x2014; convenient JAXB-to-XML converter;</p></li>
   
 <li>
-<p><a href="./apidocs-0.13/com/rexsl/test/XhtmlMatchers.html"><tt>XhtmlMatchers</tt></a>  &#x2014; XML/XHTML Hamcrest matchers.</p></li>
-  
-<li>
-<p><a href="./apidocs-0.13/com/rexsl/test/mock/MkContainer.html"><tt>MkContainer</tt></a>  &#x2014; mock servlet container.</p></li>
+<p><a href="./apidocs-0.13.3/com/rexsl/test/XhtmlMatchers.html"><tt>XhtmlMatchers</tt></a>  &#x2014; XML/XHTML Hamcrest matchers.</p></li>
 </ul>
-<p>Include this dependency into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-test/0.13/rexsl-test-0.13.jar"><tt>rexsl-test-0.13.jar</tt></a> and add to classpath):</p>
+<p>Include this dependency into your project (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-test/0.13.3/rexsl-test-0.13.3.jar"><tt>rexsl-test-0.13.3.jar</tt></a> and add to classpath):</p>
 
 <div class="source">
 <pre>&lt;dependency&gt;
   &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
   &lt;artifactId&gt;rexsl-test&lt;/artifactId&gt;
-  &lt;version&gt;0.13&lt;/version&gt;
+  &lt;version&gt;0.13.3&lt;/version&gt;
   &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;
 </pre></div>
