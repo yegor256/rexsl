@@ -139,7 +139,7 @@ public final class JaxbConverter {
         final StringWriter writer = new StringWriter();
         try {
             mrsh.marshal(subject, writer);
-        } catch (javax.xml.bind.JAXBException ex) {
+        } catch (final javax.xml.bind.JAXBException ex) {
             throw new AssertionError(ex);
         }
         final String xml = writer.toString();
