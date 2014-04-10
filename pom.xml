@@ -41,7 +41,7 @@
     <parent>
         <groupId>com.jcabi</groupId>
         <artifactId>parent</artifactId>
-        <version>0.17</version>
+        <version>0.18.1</version>
     </parent>
     <groupId>com.rexsl</groupId>
     <artifactId>rexsl</artifactId>
@@ -139,7 +139,7 @@
             <dependency>
                 <groupId>com.jcabi</groupId>
                 <artifactId>jcabi-http</artifactId>
-                <version>1.2</version>
+                <version>1.3</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.rexsl</groupId>
