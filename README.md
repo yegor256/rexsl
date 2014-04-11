@@ -1,5 +1,7 @@
 <img src="http://img.rexsl.com/logo-200x45.png" />
 
+[![Build Status](https://travis-ci.org/yegor256/rexsl.svg?branch=master)](https://travis-ci.org/yegor256/rexsl)
+
 The idea is simple - to make a RESTful XML API available in a browser-friendly
 format renderable with XSL stylesheets. With ReXSL you develop your web
 application as a RESTful "web service" while XSL stylesheets transform it to an HTML web site.
