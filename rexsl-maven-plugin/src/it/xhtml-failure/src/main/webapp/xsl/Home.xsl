@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
  *
- * Copyright (c) 2011, ReXSL.com
+ * Copyright (c) 2014, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2013, ReXSL.com
+ * Copyright (c) 2011-2014, ReXSL.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,5 +53,4 @@ public interface Check {
      * @throws IOException If fails
      */
     boolean validate(@NotNull Environment env) throws IOException;
-
 }

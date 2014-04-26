@@ -29,44 +29,61 @@
  */
 package com.rexsl.maven.utils;
 
-import com.jcabi.aspects.Loggable;
+import java.io.File;
+import java.util.Collection;
 import javax.validation.constraints.NotNull;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.AndFileFilter;
+import org.apache.commons.io.filefilter.HiddenFileFilter;
+import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
 
 /**
- * Logging configuration aware.Manages logging to alternate appenders depending
- * on scope/subscope at runtime.
+ * Convenience class for working with file filters.
  *
  * @author Evgeniy Nyavro (e.nyavro@gmail.com)
+ * @author Simon Njenga
  * @version $Id$
- * @todo #342 Implement appender scope change
  */
-public final class LoggingManager {
+public final class Sources {
 
     /**
-     * Private ctor to prevent instance creation.
+     * The Version Control System currently in use. It is recommended to change
+     * this to either ".git", ".svn", "CVS" e.t.c to the one in use.
+     * Changing this value also requires an additional change to be be done at
+     * {@link BinaryFilesCheckTest#validatesTextFile()} so as to prevent Unit
+     * tests from failing. Either of the following values is to be substituted
+     * accordingly ".git/index", ".svn/entries", "CVS/Entries" e.t.c
      */
-    private LoggingManager() {
-        // intentionally empty
+    private static final String VERSION_CONTROL = ".git";
+
+    /**
+     * File directories.
+     */
+    @NotNull
+    private final transient File directories;
+
+    /**
+     * Public ctor.
+     * @param dir The file directory to read from
+     */
+    public Sources(@NotNull final File dir) {
+        this.directories = dir;
     }
 
     /**
-     * Enters logging scope.
-     * If additional appender configured, method should set appender's new
-     * output filename and apply changes
-     * @param name Scope name.
+     * Get files, recursively while ignoring/excluding GIT directories.
+     * @return Collection of files
+     * @see #VERSION_CONTROL
      */
-    @Loggable(Loggable.DEBUG)
-    public static void enter(@NotNull final String name) {
-        // intentionally empty
-    }
-
-    /**
-     * Leaves scope if any presents.
-     * If additional appender configured and the scope is entered, method
-     * should pop the last scope, and restore previous appender filename
-     */
-    @Loggable(Loggable.DEBUG)
-    public static void leave() {
-        // intentionally empty
+    public Collection<File> files() {
+        return FileUtils.listFiles(
+            this.directories,
+            HiddenFileFilter.VISIBLE,
+            new AndFileFilter(
+                HiddenFileFilter.VISIBLE,
+                new NotFileFilter(new NameFileFilter(VERSION_CONTROL))
+            )
+        );
     }
 }
