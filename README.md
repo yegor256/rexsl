@@ -8,12 +8,8 @@ application as a RESTful "web service" while XSL stylesheets transform it to an 
 
 Read more at [www.rexsl.com](http://www.rexsl.com).
 
-For example, these sites use ReXSL:
-[s3auth.com](http://www.s3auth.com),
-[expinia.com](http://p.expinia.com),
-[netbout.com](http://www.netbout.com),
-[rultor.com](http://www.rultor.com),
-[bibrarian.com](http://www.bibrarian.com).
+For example, this site uses ReXSL:
+[s3auth.com](http://www.s3auth.com).
 
 ## How to contribute
 
@@ -29,6 +25,4 @@ $ mvn clean install -Pqulice
 ## Got questions?
 
 If you have questions or general suggestions, don't hesitate to submit
-a new [Github issue](https://github.com/yegor256/rexsl/issues/new),
-or a question to our
-[Google Group](https://groups.google.com/forum/#!forum/rexsl).
+a new [Github issue](https://github.com/yegor256/rexsl/issues/new).
