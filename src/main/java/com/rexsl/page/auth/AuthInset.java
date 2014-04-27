@@ -168,7 +168,7 @@ public final class AuthInset implements Inset {
             );
             page.link(
                 new Link(
-                    "auth-logout",
+                    "rexsl:logout",
                     this.resource.uriInfo().getRequestUriBuilder()
                         .clone()
                         .queryParam(AuthInset.LOGOUT_FLAG, true)

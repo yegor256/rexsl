@@ -123,7 +123,7 @@ public final class Facebook implements Provider, Provider.Visible {
     @Override
     public Link link() {
         return new Link(
-            "auth-facebook",
+            "rexsl:facebook",
             UriBuilder
                 .fromUri("https://www.facebook.com/dialog/oauth")
                 // @checkstyle MultipleStringLiterals (2 lines)

@@ -118,7 +118,7 @@ public final class Github implements Provider, Provider.Visible {
     @Override
     public Link link() {
         return new Link(
-            "auth-github",
+            "rexsl:github",
             UriBuilder
                 .fromUri("https://github.com/login/oauth/authorize")
                 // @checkstyle MultipleStringLiterals (2 lines)

@@ -126,7 +126,7 @@ public final class Google implements Provider, Provider.Visible {
     @Override
     public Link link() {
         return new Link(
-            "auth-google",
+            "rexsl:google",
             UriBuilder
                 .fromUri("https://accounts.google.com/o/oauth2/auth")
                 // @checkstyle MultipleStringLiterals (2 lines)

@@ -40,9 +40,9 @@ following `<link>` elements inside `<links>` group:
 ```
 <page>
   <links>
-    <link rel="auth-facebook" href="https://www.facebook.com/dial..." />
-    <link rel="auth-github" href="https://github.com/login/oauth/au..." />
-    <link rel="auth-google" href="https://accounts.google.com/o/oaut..." />
+    <link rel="rexsl:facebook" href="https://www.facebook.com/dial..." />
+    <link rel="rexsl:github" href="https://github.com/login/oauth/au..." />
+    <link rel="rexsl:google" href="https://accounts.google.com/o/oaut..." />
     ... other links ...
   </links>
 </page>
