@@ -30,7 +30,6 @@
 package com.rexsl.core;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -97,10 +96,10 @@ final class ByteArrayResponseWrapper extends HttpServletResponseWrapper {
 
     @Override
     @NotNull
-    public ServletOutputStream getOutputStream() throws IOException {
+    public ServletOutputStream getOutputStream() {
         return new ServletOutputStream() {
             @Override
-            public void write(final int part) throws IOException {
+            public void write(final int part) {
                 ByteArrayResponseWrapper.this.stream.write(part);
             }
         };
