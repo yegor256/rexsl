@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<?xml-stylesheet href='/xsl/Home.xsl' type='text/xsl' ?>
-<page>
-    <text>hello, world! :)</text>
-    <img src="angry.gif" alt="angry" xmlns="http://www.w3.org/1999/xhtml"/>
-</page>

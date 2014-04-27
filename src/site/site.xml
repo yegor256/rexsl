@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <!--
- *
  * Copyright (c) 2011-2013, ReXSL.com
  * All rights reserved.
  *
@@ -28,14 +27,12 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * @version $Id$
  -->
 <project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0     http://maven.apache.org/xsd/decoration-1.0.0.xsd" name="rexsl">
     <skin>
         <groupId>com.jcabi</groupId>
         <artifactId>jcabi-maven-skin</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </skin>
     <googleAnalyticsAccountId>UA-1963507-22</googleAnalyticsAccountId>
     <bannerLeft>
@@ -60,10 +57,13 @@
             <item name="Testing" href="testing.html"/>
             <item name="Release History" href="https://github.com/yegor256/rexsl/releases"/>
         </menu>
-        <menu name="Examples">
-            <item name="Start from archetype" href="example-archetype.html"/>
+        <menu name="Insets">
+            <item name="Flash messages" href="inset-flash.html"/>
+            <item name="Package versioning" href="inset-version.html"/>
+            <item name="Default links" href="inset-links.html"/>
+            <item name="OAuth authentication" href="inset-oauth.html"/>
+            <item name="HTTP Basic authentication" href="inset-http-basic.html"/>
         </menu>
-        <menu ref="modules"/>
         <menu ref="reports"/>
     </body>
 </project>
