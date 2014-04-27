@@ -1,6 +1,12 @@
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-test/src/mock/java/com/rexsl/test/ContainerMocker.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-test/src/mock/java/com/rexsl/test/TestClientMocker.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-test/src/mock/java/com/rexsl/test/package-info.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-test/src/mock/java/com/rexsl/test/TestResponseMocker.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-test/src/mock/java/com/rexsl/test/ClientResponseMocker.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-test/src/mock/java/com/rexsl/test/GrizzlyAdapterMocker.java'
+<html>
+  <head>
+    <title>redirect</title>
+  </head>
+  <body>
+    <p>
+      Hey, glad to see you here! A few days ago 
+      rexsl-test module migrated to <a href="http://http.jcabi.com/">http.jcabi.com</a> (fluent HTTP client)
+      and <a href="http://matchers.jcabi.com">matchers.jcabi.com</a> (XHTML matchers).
+    </p>
+  </body>
+</html>
