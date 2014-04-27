@@ -29,12 +29,12 @@
  */
 package com.rexsl.page.inset;
 
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
 import com.rexsl.page.BasePage;
 import com.rexsl.page.Inset;
 import com.rexsl.page.mock.BasePageMocker;
 import com.rexsl.page.mock.ResourceMocker;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
 import javax.ws.rs.core.Response;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;

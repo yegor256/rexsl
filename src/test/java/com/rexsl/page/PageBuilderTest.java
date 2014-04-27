@@ -29,11 +29,11 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
 import com.rexsl.core.annotations.Stylesheet;
 import com.rexsl.page.mock.BasePageMocker;
 import com.rexsl.page.mock.ResourceMocker;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.hamcrest.MatcherAssert;

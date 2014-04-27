@@ -29,8 +29,8 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import com.rexsl.mock.ServletContextMocker;
-import com.rexsl.test.XhtmlMatchers;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;

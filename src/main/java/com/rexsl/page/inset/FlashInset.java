@@ -356,7 +356,7 @@ public final class FlashInset implements Inset {
                     String.format("%s:%d:%s", level, msec, message)
                         .getBytes(CharEncoding.UTF_8)
                 );
-            } catch (UnsupportedEncodingException ex) {
+            } catch (final UnsupportedEncodingException ex) {
                 throw new IllegalStateException(ex);
             }
         }
@@ -371,7 +371,7 @@ public final class FlashInset implements Inset {
                     Base64.decodeBase64(text),
                     CharEncoding.UTF_8
                 );
-            } catch (UnsupportedEncodingException ex) {
+            } catch (final UnsupportedEncodingException ex) {
                 throw new IllegalStateException(ex);
             }
         }

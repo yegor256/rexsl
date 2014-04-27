@@ -163,9 +163,9 @@ public final class ResourceMocker {
         final T rest;
         try {
             rest = type.newInstance();
-        } catch (InstantiationException ex) {
+        } catch (final InstantiationException ex) {
             throw new IllegalArgumentException(ex);
-        } catch (IllegalAccessException ex) {
+        } catch (final IllegalAccessException ex) {
             throw new IllegalArgumentException(ex);
         }
         rest.setHttpHeaders(this.resource.httpHeaders());

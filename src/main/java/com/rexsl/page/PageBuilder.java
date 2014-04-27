@@ -173,9 +173,9 @@ public final class PageBuilder {
         final T page;
         try {
             page = base.cast(this.createOrFind(base).newInstance());
-        } catch (InstantiationException ex) {
+        } catch (final InstantiationException ex) {
             throw new IllegalStateException(ex);
-        } catch (IllegalAccessException ex) {
+        } catch (final IllegalAccessException ex) {
             throw new IllegalStateException(ex);
         }
         return page;
@@ -200,7 +200,7 @@ public final class PageBuilder {
             } else {
                 try {
                     cls = Class.forName(name);
-                } catch (ClassNotFoundException ex) {
+                } catch (final ClassNotFoundException ex) {
                     throw new IllegalStateException(ex);
                 }
                 final Stylesheet sheet = cls.getAnnotation(Stylesheet.class);
@@ -260,9 +260,9 @@ public final class PageBuilder {
             }
             file.addAttribute(attribute);
             return ctc.toClass();
-        } catch (NotFoundException ex) {
+        } catch (final NotFoundException ex) {
             throw new IllegalStateException(ex);
-        } catch (CannotCompileException ex) {
+        } catch (final CannotCompileException ex) {
             throw new IllegalStateException(ex);
         }
     }

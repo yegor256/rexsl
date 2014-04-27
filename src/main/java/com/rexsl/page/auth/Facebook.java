@@ -204,7 +204,7 @@ public final class Facebook implements Provider, Provider.Visible {
         try {
             return new DefaultFacebookClient(token)
                 .fetchObject("me", User.class);
-        } catch (FacebookException ex) {
+        } catch (final FacebookException ex) {
             throw new IllegalArgumentException(ex);
         }
     }

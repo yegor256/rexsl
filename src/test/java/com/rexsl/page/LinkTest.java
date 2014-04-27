@@ -29,10 +29,10 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
 import com.rexsl.mock.UriInfoMocker;
 import com.rexsl.page.mock.ResourceMocker;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
 import java.net.URI;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;

@@ -29,12 +29,12 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import com.rexsl.mock.FilterChainMocker;
 import com.rexsl.mock.FilterConfigMocker;
 import com.rexsl.mock.HttpServletRequestMocker;
 import com.rexsl.mock.HttpServletResponseMocker;
 import com.rexsl.mock.ServletContextMocker;
-import com.rexsl.test.XhtmlMatchers;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;

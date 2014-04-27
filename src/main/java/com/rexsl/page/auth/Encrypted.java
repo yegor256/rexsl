@@ -122,7 +122,7 @@ final class Encrypted implements Identity {
             stream.writeUTF(this.urn().toString());
             stream.writeUTF(this.name());
             stream.writeUTF(this.photo().toString());
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             throw new IllegalArgumentException(ex);
         } finally {
             IOUtils.closeQuietly(stream);
@@ -166,9 +166,9 @@ final class Encrypted implements Identity {
                 new Identity.Simple(urn, name, URI.create(photo)),
                 ekey
             );
-        } catch (URISyntaxException ex) {
+        } catch (final URISyntaxException ex) {
             throw new Encrypted.DecryptionException(ex);
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             throw new Encrypted.DecryptionException(ex);
         } finally {
             IOUtils.closeQuietly(stream);

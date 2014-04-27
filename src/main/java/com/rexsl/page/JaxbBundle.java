@@ -365,7 +365,7 @@ public final class JaxbBundle {
                     .newDocumentBuilder()
                     .newDocument()
             );
-        } catch (ParserConfigurationException ex) {
+        } catch (final ParserConfigurationException ex) {
             throw new IllegalStateException(ex);
         }
     }

@@ -239,7 +239,7 @@ public final class AuthInset implements Inset {
         for (final Provider prov : this.providers) {
             try {
                 identity = prov.identity();
-            } catch (IOException ex) {
+            } catch (final IOException ex) {
                 throw new IllegalStateException(ex);
             }
             if (identity.equals(Identity.ANONYMOUS)) {
@@ -277,7 +277,7 @@ public final class AuthInset implements Inset {
                 identity = new Identity.Simple(
                     Encrypted.parse(cookie, this.key)
                 );
-            } catch (Encrypted.DecryptionException ex) {
+            } catch (final Encrypted.DecryptionException ex) {
                 Logger.warn(
                     this,
                     "Failed to decrypt '%s' from '%s' to '%s': %[exception]s",

@@ -62,7 +62,7 @@ public final class HttpServletResponseMocker {
     public HttpServletResponseMocker() {
         try {
             Mockito.doReturn(this.stream).when(this.response).getOutputStream();
-        } catch (java.io.IOException ex) {
+        } catch (final java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
         Mockito.doAnswer(

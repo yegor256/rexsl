@@ -29,14 +29,14 @@
  */
 package com.rexsl.page.inset;
 
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
 import com.rexsl.mock.HttpHeadersMocker;
 import com.rexsl.page.BasePage;
 import com.rexsl.page.Inset;
 import com.rexsl.page.Resource;
 import com.rexsl.page.mock.BasePageMocker;
 import com.rexsl.page.mock.ResourceMocker;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.util.logging.Level;

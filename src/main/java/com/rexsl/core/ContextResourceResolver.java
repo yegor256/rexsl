@@ -91,13 +91,13 @@ final class ContextResourceResolver implements URIResolver {
         Source source;
         try {
             source = this.local(href, base);
-        } catch (TransformerException ex) {
+        } catch (final TransformerException ex) {
             try {
                 source = ContextResourceResolver.source(
                     ContextResourceResolver.absolute(href, base)
                 );
                 source.setSystemId(href);
-            } catch (TransformerException exp) {
+            } catch (final TransformerException exp) {
                 throw new TransformerException(ex.getMessage(), exp);
             }
         }
@@ -124,9 +124,9 @@ final class ContextResourceResolver implements URIResolver {
                     )
                 )
             );
-        } catch (UnsupportedEncodingException ex) {
+        } catch (final UnsupportedEncodingException ex) {
             throw new TransformerException(ex);
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             throw new TransformerException(ex);
         } finally {
             IOUtils.closeQuietly(stream);
@@ -179,9 +179,9 @@ final class ContextResourceResolver implements URIResolver {
         } else {
             try {
                 uri = new URL(new URL(base), href).toURI();
-            } catch (MalformedURLException ex) {
+            } catch (final MalformedURLException ex) {
                 throw new TransformerException(ex);
-            } catch (URISyntaxException ex) {
+            } catch (final URISyntaxException ex) {
                 throw new TransformerException(ex);
             }
         }
@@ -196,7 +196,7 @@ final class ContextResourceResolver implements URIResolver {
         }
         try {
             return ContextResourceResolver.fetch(uri);
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             throw new TransformerException(
                 String.format(
                     "failed to fetch absolute URI '%s', href='%s', base='%s'",

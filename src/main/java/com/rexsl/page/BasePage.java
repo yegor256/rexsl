@@ -286,7 +286,7 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
         String addr;
         try {
             addr = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException ex) {
+        } catch (final UnknownHostException ex) {
             Logger.error(this, "#getIp(): %[exception]s", ex);
             addr = "";
         }
@@ -355,15 +355,15 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
         try {
             return type.getConstructor(Resource.class)
                 .newInstance(this.resource);
-        } catch (InstantiationException ex) {
+        } catch (final InstantiationException ex) {
             throw new IllegalStateException(ex);
-        } catch (IllegalAccessException ex) {
+        } catch (final IllegalAccessException ex) {
             throw new IllegalStateException(ex);
-        } catch (InvocationTargetException ex) {
+        } catch (final InvocationTargetException ex) {
             throw new IllegalStateException(ex);
-        } catch (NoSuchMethodException ex) {
+        } catch (final NoSuchMethodException ex) {
             throw new IllegalStateException(ex);
-        } catch (SecurityException ex) {
+        } catch (final SecurityException ex) {
             throw new IllegalStateException(ex);
         }
     }
@@ -376,11 +376,11 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     private Inset inset(final Method method) {
         try {
             return Inset.class.cast(method.invoke(this.resource));
-        } catch (IllegalAccessException ex) {
+        } catch (final IllegalAccessException ex) {
             throw new IllegalStateException(ex);
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             throw new IllegalStateException(ex);
-        } catch (InvocationTargetException ex) {
+        } catch (final InvocationTargetException ex) {
             throw new IllegalStateException(ex);
         }
     }

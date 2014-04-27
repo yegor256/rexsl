@@ -147,13 +147,13 @@ public final class JaxbGroup {
                 return JaxbGroup.READY.get(mnemo)
                     .getDeclaredConstructor(Collection.class)
                     .newInstance(grp);
-            } catch (NoSuchMethodException ex) {
+            } catch (final NoSuchMethodException ex) {
                 throw new IllegalStateException(ex);
-            } catch (InstantiationException ex) {
+            } catch (final InstantiationException ex) {
                 throw new IllegalStateException(ex);
-            } catch (IllegalAccessException ex) {
+            } catch (final IllegalAccessException ex) {
                 throw new IllegalStateException(ex);
-            } catch (InvocationTargetException ex) {
+            } catch (final InvocationTargetException ex) {
                 throw new IllegalStateException(ex);
             }
         }
@@ -219,9 +219,9 @@ public final class JaxbGroup {
                 cls.getName()
             );
             return cls;
-        } catch (NotFoundException ex) {
+        } catch (final NotFoundException ex) {
             throw new IllegalStateException(ex);
-        } catch (CannotCompileException ex) {
+        } catch (final CannotCompileException ex) {
             throw new IllegalStateException(ex);
         }
     }

@@ -29,10 +29,10 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
 import com.rexsl.page.mock.BasePageMocker;
 import com.rexsl.page.mock.ResourceMocker;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
 import java.util.Arrays;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.hamcrest.MatcherAssert;

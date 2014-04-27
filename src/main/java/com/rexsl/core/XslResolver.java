@@ -149,7 +149,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 StringEscapeUtils.escapeXml11(this.stylesheet(type))
             );
             mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
-        } catch (JAXBException ex) {
+        } catch (final JAXBException ex) {
             throw new IllegalStateException(ex);
         }
         if (this.folder == null) {
@@ -184,7 +184,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                         this.classes.size(),
                         this.stylesheet(cls)
                     );
-                } catch (JAXBException ex) {
+                } catch (final JAXBException ex) {
                     throw new IllegalStateException(ex);
                 }
             }
@@ -227,7 +227,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                             stylesheet
                         )
                     ).toString();
-                } catch (MalformedURLException ex) {
+                } catch (final MalformedURLException ex) {
                     throw new IllegalStateException(ex);
                 }
             }
@@ -260,7 +260,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 );
                 try {
                     mrsh.setSchema(factory.newSchema(xsd));
-                } catch (SAXException ex) {
+                } catch (final SAXException ex) {
                     throw new IllegalStateException(
                         Logger.format(
                             "Failed to use XSD schema from '%s' for class '%s'",
@@ -272,7 +272,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                 }
                 try {
                     mrsh.setEventHandler(new XsdEventHandler());
-                } catch (JAXBException ex) {
+                } catch (final JAXBException ex) {
                     throw new IllegalStateException(ex);
                 }
                 Logger.debug(

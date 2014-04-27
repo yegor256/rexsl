@@ -29,9 +29,9 @@
  */
 package com.rexsl.core;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import com.rexsl.core.annotations.Stylesheet;
 import com.rexsl.mock.HttpServletRequestMocker;
-import com.rexsl.test.XhtmlMatchers;
 import java.io.StringWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;

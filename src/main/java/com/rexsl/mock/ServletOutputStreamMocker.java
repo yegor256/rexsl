@@ -102,7 +102,7 @@ public final class ServletOutputStreamMocker {
                 .write(
                     (byte[]) Mockito.any(), Mockito.anyInt(), Mockito.anyInt()
                 );
-        } catch (java.io.IOException ex) {
+        } catch (final java.io.IOException ex) {
             throw new IllegalStateException(ex);
         }
         Mockito.doAnswer(

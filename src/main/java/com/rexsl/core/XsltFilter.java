@@ -111,15 +111,14 @@ public final class XsltFilter implements Filter {
             Logger.warn(
                 this,
                 // @checkstyle LineLength (1 line)
-                "Be aware that Saxon implementation of %s is replaced with %[type]s, which may lead to unexpected problems",
-                this.tfactory,
-                TransformerFactory.class.getName()
+                "Be aware that Saxon implementation of %s is replaced with %s, which may lead to unexpected problems",
+                this.tfactory, TransformerFactory.class.getName()
             );
         }
         this.tfactory.setURIResolver(new ContextResourceResolver(context));
         try {
             Manifests.append(context);
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             throw new IllegalStateException(ex);
         }
     }
@@ -195,7 +194,7 @@ public final class XsltFilter implements Filter {
                 this.source(xml),
                 new StreamResult(writer)
             );
-        } catch (TransformerException ex) {
+        } catch (final TransformerException ex) {
             throw new ServletException(
                 Logger.format(
                     "Failed to transform XML to XHTML: '%s'",
@@ -230,7 +229,7 @@ public final class XsltFilter implements Filter {
             stylesheet = this.tfactory.getAssociatedStylesheet(
                 this.source(xml), null, null, null
             );
-        } catch (TransformerConfigurationException ex) {
+        } catch (final TransformerConfigurationException ex) {
             throw new ServletException(
                 Logger.format(
                     "Failed to configure XSL transformer: '%[text]s'",
@@ -269,7 +268,7 @@ public final class XsltFilter implements Filter {
         final Transformer tran;
         try {
             tran = this.tfactory.newTransformer(stylesheet);
-        } catch (TransformerConfigurationException ex) {
+        } catch (final TransformerConfigurationException ex) {
             throw new ServletException(
                 Logger.format(
                     "Failed to create an XSL transformer for '%s'",

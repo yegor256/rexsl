@@ -134,7 +134,7 @@ public final class HttpServletRequestMocker {
             Mockito.doReturn(
                 new BufferedReader(new StringReader(body))
             ).when(this.request).getReader();
-        } catch (java.io.IOException ex) {
+        } catch (final java.io.IOException ex) {
             throw new IllegalArgumentException(ex);
         }
         Mockito.doReturn(-1).when(this.request).getContentLength();

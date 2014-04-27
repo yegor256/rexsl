@@ -8,8 +8,8 @@ by Steve Freeman and Nat Pryce, Addison-Wesley Professional, October 2009.
 
 We created two supplementary classes that help you to test
 your JAXB Model:
-[JaxbConverter](./rexsl-test/apidocs-${project.version}/com/rexsl/test/JaxbConverter.html) and
-[XhtmlMatchers](./rexsl-test/apidocs-${project.version}/com/rexsl/test/XhtmlMatchers.html)
+[JaxbConverter](./rexsl-test/apidocs-${project.version}/com.jcabi.matchers/JaxbConverter.html) and
+[XhtmlMatchers](./rexsl-test/apidocs-${project.version}/com.jcabi.matchers/XhtmlMatchers.html)
 (read their JavaDocs for more details).
 
 Interesting part is integration and catapult testing.

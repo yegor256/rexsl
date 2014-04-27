@@ -29,12 +29,12 @@
  */
 package com.rexsl.page;
 
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
 import com.rexsl.mock.HttpHeadersMocker;
 import com.rexsl.mock.UriInfoMocker;
 import com.rexsl.page.inset.FlashInset;
 import com.rexsl.page.inset.LinksInset;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
 import javax.ws.rs.core.SecurityContext;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hamcrest.MatcherAssert;

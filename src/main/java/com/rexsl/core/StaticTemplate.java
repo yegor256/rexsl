@@ -103,7 +103,7 @@ final class StaticTemplate implements Template {
                     IOUtils.closeQuietly(stream);
                 }
             }
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             txt = Logger.format(
                 "%s\nfailed to load '%s': %[exception]s",
                 StaticTemplate.MARKER,

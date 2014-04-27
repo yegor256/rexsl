@@ -80,9 +80,9 @@ public final class FilterChainMocker {
                     Mockito.any(HttpServletRequest.class),
                     Mockito.any(HttpServletResponse.class)
                 );
-        } catch (java.io.IOException ex) {
+        } catch (final java.io.IOException ex) {
             throw new IllegalStateException(ex);
-        } catch (javax.servlet.ServletException ex) {
+        } catch (final javax.servlet.ServletException ex) {
             throw new IllegalStateException(ex);
         }
         return this;
@@ -110,9 +110,9 @@ public final class FilterChainMocker {
                     Mockito.any(HttpServletRequest.class),
                     Mockito.any(HttpServletResponse.class)
                 );
-        } catch (java.io.IOException ex) {
+        } catch (final java.io.IOException ex) {
             throw new IllegalStateException(ex);
-        } catch (javax.servlet.ServletException ex) {
+        } catch (final javax.servlet.ServletException ex) {
             throw new IllegalStateException(ex);
         }
         return this;

@@ -30,6 +30,8 @@
 package com.rexsl.page.auth;
 
 import com.jcabi.aspects.Tv;
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.urn.URN;
 import com.rexsl.mock.HttpHeadersMocker;
 import com.rexsl.page.BasePage;
@@ -38,8 +40,6 @@ import com.rexsl.page.Resource;
 import com.rexsl.page.auth.mock.IdentityMocker;
 import com.rexsl.page.mock.BasePageMocker;
 import com.rexsl.page.mock.ResourceMocker;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
 import java.io.IOException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;

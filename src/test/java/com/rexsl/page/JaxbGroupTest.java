@@ -29,8 +29,8 @@
  */
 package com.rexsl.page;
 
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Arrays;
 import java.util.Collections;
 import javax.xml.bind.annotation.XmlElement;

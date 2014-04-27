@@ -188,8 +188,8 @@ Now, let's unit-test our data class in `src/test/java/foo/HomeTest.java`:
 
 ```
 package foo;
-import com.rexsl.test.JaxbConverter;
-import com.rexsl.test.XhtmlMatchers;
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
 import org.junit.Test;
 public class HomeTest {
   @Test
@@ -217,7 +217,7 @@ This document will be XSL-transformed by `rexsl-maven-plugin:check`
 Maven goal and validated by `src/test/rexsl/xhtml/index.groovy`:
 
 ```java
-import com.rexsl.test.XhtmlMatchers
+import com.jcabi.matchers.XhtmlMatchers
 import org.hamcrest.Matchers
 import org.junit.Assert
 Assert.assertThat(rexsl.document, Matchers.containsString('say hello'))

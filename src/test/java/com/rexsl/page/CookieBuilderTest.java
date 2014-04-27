@@ -83,7 +83,7 @@ public final class CookieBuilderTest {
                     .value(text)
                     .build();
                 Assert.fail("Exception expected here");
-            } catch (IllegalArgumentException ex) {
+            } catch (final IllegalArgumentException ex) {
                 assert ex != null;
             }
         }

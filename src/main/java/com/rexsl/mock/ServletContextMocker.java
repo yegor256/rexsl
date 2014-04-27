@@ -60,7 +60,7 @@ public final class ServletContextMocker {
         InputStream stream;
         try {
             stream = IOUtils.toInputStream(content, CharEncoding.UTF_8);
-        } catch (java.io.IOException ex) {
+        } catch (final java.io.IOException ex) {
             throw new IllegalArgumentException(ex);
         }
         Mockito.doReturn(stream).when(this.context).getResourceAsStream(name);

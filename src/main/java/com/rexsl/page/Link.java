@@ -335,7 +335,7 @@ public final class Link {
                 query.length() == 0 ? null : query.toString(),
                 base.getFragment()
             );
-        } catch (URISyntaxException ex) {
+        } catch (final URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }
     }
