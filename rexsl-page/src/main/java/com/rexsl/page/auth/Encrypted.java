@@ -185,7 +185,7 @@ final class Encrypted implements Identity {
         final byte size = (byte) Encrypted.RND.nextInt(Tv.TEN);
         final byte[] output = new byte[text.length + size + 2];
         output[0] = size;
-        byte sum = 0;
+        byte sum = (byte) 0;
         for (int idx = 0; idx < (int) size; ++idx) {
             output[idx + 1] = (byte) Encrypted.RND.nextInt();
             sum += output[idx + 1];
@@ -206,11 +206,16 @@ final class Encrypted implements Identity {
         if (text.length == 0) {
             throw new Encrypted.DecryptionException("empty input");
         }
-        final byte size = text[0];
+        final int size = text[0];
         if (text.length < size + 2) {
-            throw new Encrypted.DecryptionException("not enough bytes");
+            throw new Encrypted.DecryptionException(
+                String.format(
+                    "not enough bytes, text length is %d while %d required",
+                    text.length, size + 2
+                )
+            );
         }
-        byte sum = 0;
+        byte sum = (byte) 0;
         for (int idx = 0; idx < size; ++idx) {
             sum += text[idx + 1];
         }

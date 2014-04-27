@@ -1,3 +1,0 @@
-ReXSL-Version: 1.0-SNAPSHOT
-ReXSL-Build: 1234
-ReXSL-Date: 14 Nov 2013
