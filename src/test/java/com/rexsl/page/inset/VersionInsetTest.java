@@ -30,9 +30,9 @@
 package com.rexsl.page.inset;
 
 import com.rexsl.page.BasePage;
-import com.rexsl.page.BasePageMocker;
 import com.rexsl.page.Inset;
-import com.rexsl.page.ResourceMocker;
+import com.rexsl.page.mock.BasePageMocker;
+import com.rexsl.page.mock.ResourceMocker;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
 import javax.ws.rs.core.Response;

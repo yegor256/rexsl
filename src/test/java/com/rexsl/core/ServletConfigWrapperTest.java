@@ -31,6 +31,7 @@ package com.rexsl.core;
 
 import java.util.Properties;
 import javax.servlet.ServletConfig;
+import javax.validation.ConstraintViolationException;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -45,7 +46,7 @@ public final class ServletConfigWrapperTest {
      * ServletConfigWrapper constructor can check if config is null.
      * @throws Exception If something goes wrong
      */
-    @Test(expected = javax.validation.ConstraintViolationException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void throwsIfConfigNull() throws Exception {
         new ServletConfigWrapper(null, Mockito.mock(Properties.class));
     }
@@ -54,7 +55,7 @@ public final class ServletConfigWrapperTest {
      * ServletConfigWrapper constructor can check if properties param is null.
      * @throws Exception If something goes wrong
      */
-    @Test(expected = javax.validation.ConstraintViolationException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void throwsIfPropertiesNull() throws Exception {
         new ServletConfigWrapper(Mockito.mock(ServletConfig.class), null);
     }

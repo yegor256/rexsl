@@ -35,4 +35,4 @@
  * @version $Id$
  * @since 0.4.7
  */
-package com.rexsl.page.auth;
+package com.rexsl.page.auth.mock;

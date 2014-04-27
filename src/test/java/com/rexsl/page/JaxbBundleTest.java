@@ -29,6 +29,8 @@
  */
 package com.rexsl.page;
 
+import com.rexsl.page.mock.BasePageMocker;
+import com.rexsl.page.mock.ResourceMocker;
 import com.rexsl.test.JaxbConverter;
 import com.rexsl.test.XhtmlMatchers;
 import java.util.Arrays;

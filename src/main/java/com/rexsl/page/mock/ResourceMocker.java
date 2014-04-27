@@ -27,9 +27,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page;
+package com.rexsl.page.mock;
 
 import com.rexsl.core.XslResolver;
+import com.rexsl.mock.HttpHeadersMocker;
+import com.rexsl.mock.ServletContextMocker;
+import com.rexsl.mock.UriInfoMocker;
+import com.rexsl.page.BaseResource;
+import com.rexsl.page.Resource;
 import java.net.URI;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;

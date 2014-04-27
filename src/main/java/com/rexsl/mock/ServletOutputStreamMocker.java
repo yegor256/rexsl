@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.core;
+package com.rexsl.mock;
 
 import javax.servlet.ServletOutputStream;
 import org.apache.commons.lang3.CharEncoding;

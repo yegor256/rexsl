@@ -29,6 +29,9 @@
  */
 package com.rexsl.core;
 
+import com.rexsl.mock.HttpServletRequestMocker;
+import com.rexsl.mock.HttpServletResponseMocker;
+import com.rexsl.mock.ServletConfigMocker;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;

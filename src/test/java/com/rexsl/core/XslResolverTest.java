@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import com.rexsl.core.annotations.Stylesheet;
+import com.rexsl.mock.HttpServletRequestMocker;
 import com.rexsl.test.XhtmlMatchers;
 import java.io.StringWriter;
 import javax.servlet.ServletContext;

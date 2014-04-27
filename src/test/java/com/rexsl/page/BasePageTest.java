@@ -29,6 +29,8 @@
  */
 package com.rexsl.page;
 
+import com.rexsl.mock.HttpHeadersMocker;
+import com.rexsl.mock.UriInfoMocker;
 import com.rexsl.page.inset.FlashInset;
 import com.rexsl.page.inset.LinksInset;
 import com.rexsl.test.JaxbConverter;

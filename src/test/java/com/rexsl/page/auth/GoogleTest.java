@@ -29,9 +29,9 @@
  */
 package com.rexsl.page.auth;
 
+import com.rexsl.mock.UriInfoMocker;
 import com.rexsl.page.Resource;
-import com.rexsl.page.ResourceMocker;
-import com.rexsl.page.UriInfoMocker;
+import com.rexsl.page.mock.ResourceMocker;
 import java.net.URI;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;

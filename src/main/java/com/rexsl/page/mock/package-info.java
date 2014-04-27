@@ -35,4 +35,4 @@
  * @version $Id$
  * @since 0.3.7
  */
-package com.rexsl.page;
+package com.rexsl.page.mock;

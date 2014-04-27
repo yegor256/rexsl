@@ -30,7 +30,6 @@
 package com.rexsl.page.auth;
 
 import com.jcabi.urn.URN;
-import com.jcabi.urn.URNMocker;
 import java.net.URI;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -51,7 +50,7 @@ public final class EncryptedTest {
     public void convertsToTextAndBack() throws Exception {
         final String key = "&6%4\u0433-({}*7hrs";
         final String name = "John Doe, \u0433";
-        final URN urn = new URNMocker().mock();
+        final URN urn = new URN("urn:test:89798");
         final Encrypted user = new Encrypted(
             new Identity.Simple(urn, name, URI.create("#")), key
         );

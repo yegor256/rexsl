@@ -50,6 +50,7 @@ final class XsdEventHandler implements ValidationEventHandler {
     @Override
     public boolean handleEvent(final ValidationEvent event) {
         Logger.error(
+            this,
             "JAXB error: \"%s\" at '%s' [%d:%d]: %[document]s",
             event.getMessage(),
             event.getLocator().getURL(),

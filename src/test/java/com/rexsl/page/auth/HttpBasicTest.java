@@ -30,9 +30,9 @@
 package com.rexsl.page.auth;
 
 import com.jcabi.urn.URN;
-import com.rexsl.page.HttpHeadersMocker;
+import com.rexsl.mock.HttpHeadersMocker;
 import com.rexsl.page.Resource;
-import com.rexsl.page.ResourceMocker;
+import com.rexsl.page.mock.ResourceMocker;
 import java.net.URI;
 import javax.ws.rs.core.HttpHeaders;
 import org.hamcrest.MatcherAssert;

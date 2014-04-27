@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import com.jcabi.log.Logger;
+import com.rexsl.mock.HttpServletRequestMocker;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.ws.rs.core.HttpHeaders;

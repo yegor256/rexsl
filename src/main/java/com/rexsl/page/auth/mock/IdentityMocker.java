@@ -27,9 +27,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.rexsl.page.auth;
+package com.rexsl.page.auth.mock;
 
 import com.jcabi.urn.URN;
+import com.rexsl.page.auth.Identity;
 import java.net.URI;
 import org.mockito.Mockito;
 

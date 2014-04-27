@@ -29,6 +29,8 @@
  */
 package com.rexsl.core;
 
+import com.rexsl.mock.HttpServletRequestMocker;
+import com.rexsl.mock.ServletConfigMocker;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;

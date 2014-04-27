@@ -146,7 +146,7 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             mrsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             final String header = Logger.format(
                 "\n<?xml-stylesheet type='text/xsl' href='%s'?>",
-                StringEscapeUtils.escapeXml(this.stylesheet(type))
+                StringEscapeUtils.escapeXml11(this.stylesheet(type))
             );
             mrsh.setProperty("com.sun.xml.bind.xmlHeaders", header);
         } catch (JAXBException ex) {

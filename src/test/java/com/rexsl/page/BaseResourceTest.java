@@ -29,6 +29,8 @@
  */
 package com.rexsl.page;
 
+import com.rexsl.mock.HttpHeadersMocker;
+import com.rexsl.mock.UriInfoMocker;
 import java.net.URI;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
