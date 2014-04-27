@@ -52,10 +52,18 @@
             <item name="rexsl.com" href="http://www.rexsl.com"/>
         </breadcrumbs>
         <menu name="Overview">
-            <item name="Introduction" href="index.html"/>
-            <item name="Quick Start" href="start.html"/>
-            <item name="Testing" href="testing.html"/>
+            <item name="Introduction" href="./index.html"/>
+            <item name="Quick Start" href="./quick-start.html"/>
+            <item name="JavaDoc ${project.version}" href="apidocs-${project.version}/index.html"/>
+            <item name="Test Coverage" href="cobertura/index.html"/>
             <item name="Release History" href="https://github.com/yegor256/rexsl/releases"/>
+        </menu>
+        <menu name="Best Practices">
+            <item name="web.xml Config" href="./web-xml-configuration.html"/>
+            <item name="Page Builder" href="./page-builder.html"/>
+            <item name="Tomcat Testing" href="./tomcat-testing.html"/>
+            <item name="Exception Trap" href="./exception-trap.html"/>
+            <item name="Minify JS/CSS" href="./minify-js-and-css.html"/>
         </menu>
         <menu name="Insets">
             <item name="Flash messages" href="inset-flash.html"/>

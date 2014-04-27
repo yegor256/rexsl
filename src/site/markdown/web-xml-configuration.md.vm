@@ -45,23 +45,7 @@ and add it to classpath):
 ```xml
 <dependency>
   <groupId>com.rexsl</groupId>
-  <artifactId>rexsl-core</artifactId>
+  <artifactId>rexsl</artifactId>
   <version>${project.version}</version>
 </dependency>
 ```
-
-Also take a look at [rexsl-page](../rexsl-page/index.html), which
-helps to build RESTful XML pages.
-
-## Supplementary Classes
-
-[`Stylesheet`](./apidocs-${project.version}/com/rexsl/core/annotations/Stylesheet.html) annotation
-enables re-configuration of XSL stylesheet name for a JAXB-annotated object.
-
-[`Schema`](./apidocs-${project.version}/com/rexsl/core/annotations/Schema.html) annotation
-lets you set the name of XML Schema of a JAXB-annotated object.
-
-[`ExceptionTrap`](./apidocs-${project.version}/com/rexsl/core/ExceptionTrap.html) servlet
-helps you to catch all uncaught exceptions and manage them gracefully, showing
-some information to your end-users.
-

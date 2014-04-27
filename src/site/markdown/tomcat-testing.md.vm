@@ -1,0 +1,95 @@
+# Testing w/Tomcat
+
+First, configure your `pom.xml` with Tomcat plugin. On
+`pre-integration-test` phase you need to start a Tomcat server
+with your `.war` application inside, and on
+`post-integration-test` phase you shut it down. Here is the
+full code you need in your `pom.xml`:
+
+```
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>build-helper-maven-plugin</artifactId>
+      <version>1.8</version>
+      <executions>
+        <execution>
+          <goals>
+            <goal>reserve-network-port</goal>
+          </goals>
+          <configuration>
+            <portNames>
+              <portName>tomcat.port</portName>
+            </portNames>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+    <plugin>
+      <artifactId>maven-failsafe-plugin</artifactId>
+      <version>2.16</version>
+      <configuration>
+        <systemPropertyVariables>
+          <tomcat.home>http://localhost:${tomcat.port}</tomcat.home>
+        </systemPropertyVariables>
+      </configuration>
+      <executions>
+        <execution>
+          <goals>
+            <goal>integration-test</goal>
+            <goal>verify</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+    <plugin>
+      <groupId>org.apache.tomcat.maven</groupId>
+      <artifactId>tomcat7-maven-plugin</artifactId>
+      <version>2.2</version>
+      <configuration>
+        <port>${tomcat.port}</port>
+        <fork>true</fork>
+      </configuration>
+      <executions>
+        <execution>
+          <id>start-tomcat</id>
+          <phase>pre-integration-test</phase>
+          <goals>
+            <goal>run-war-only</goal>
+          </goals>
+        </execution>
+        <execution>
+          <id>stop-tomcat</id>
+          <phase>post-integration-test</phase>
+          <goals>
+            <goal>shutdown</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
+```
+
+Then, create a new integration test in `src/test/java` directory (the
+same place where you keep your unit tests). The name of the test file
+should end with `ITCase` (instead of `Test`). For example:
+
+```
+public class IndexRsITCase {
+  private static final String HOME = System.getProperty("tomcat.home");
+  @Test
+  public void rendersVersion() throws Exception {
+    new JdkRequest(IndexRsITCase.HOME)
+      .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
+      .fetch()
+      .as(RestResponse.class)
+      .assertStatus(HttpURLConnection.HTTP_OK)
+      .as(XmlResponse.class)
+      .assertXPath("/page/message");
+  }
+}
+```
+
+Run `mvn clean package` and see the output. Should work :)
