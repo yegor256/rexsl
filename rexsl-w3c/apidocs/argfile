@@ -1,10 +1,11 @@
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/main/java/com/rexsl/w3c/RetryPolicy.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/main/java/com/rexsl/w3c/package-info.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/main/java/com/rexsl/w3c/BaseValidator.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/main/java/com/rexsl/w3c/DefaultCssValidator.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/main/java/com/rexsl/w3c/DefaultValidationResponse.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/main/java/com/rexsl/w3c/Defect.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/main/java/com/rexsl/w3c/Validator.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/main/java/com/rexsl/w3c/ValidatorBuilder.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/main/java/com/rexsl/w3c/ValidationResponse.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/main/java/com/rexsl/w3c/DefaultHtmlValidator.java'
+<html>
+  <head>
+    <title>redirect</title>
+  </head>
+  <body>
+    <p>
+      Hey, glad to see you here! A few days ago 
+      rexsl-w3c module migrated to <a href="http://w3c.jcabi.com/">w3c.jcabi.com</a>.
+    </p>
+  </body>
+</html>

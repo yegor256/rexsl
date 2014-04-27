@@ -1,3 +1,11 @@
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/mock/java/com/rexsl/w3c/package-info.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/mock/java/com/rexsl/w3c/ValidationResponseMocker.java'
-'/home/cc/hudson/jobs/rexsl/workspace/rexsl/rexsl-w3c/src/mock/java/com/rexsl/w3c/ValidatorMocker.java'
+<html>
+  <head>
+    <title>redirect</title>
+  </head>
+  <body>
+    <p>
+      Hey, glad to see you here! A few days ago 
+      rexsl-w3c module migrated to <a href="http://w3c.jcabi.com/">w3c.jcabi.com</a>.
+    </p>
+  </body>
+</html>
