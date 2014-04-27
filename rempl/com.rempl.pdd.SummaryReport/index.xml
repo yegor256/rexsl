@@ -1,138 +1,57 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?xml-stylesheet type='text/xsl' href='puzzles.xsl'?><puzzles>
-   <puzzle>
-      <ticket>336</ticket>
-      <file>rexsl-core/src/test/java/com/rexsl/core/ContextResourceResolverTest.java</file>
-      <prefix> * </prefix>
-      <body>The majority of tests here are disabled, because YMOCK doesn't work at the moment with this Socket mocking mechanism. As soon as this feature is fixed in YMOCK let's use it here</body>
-      <estimate>0</estimate>
-      <lines>54-56</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>204</ticket>
-      <file>rexsl-core/src/test/java/com/rexsl/core/RestfulServletTest.java</file>
-      <prefix>     * </prefix>
-      <body>This test is disabled because of a defect in Jersey: http://java.net/jira/browse/JERSEY-1128. Once it is resolved we can try to enable the test and see how it works.</body>
-      <estimate>0</estimate>
-      <lines>105-107</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>760</ticket>
-      <file>rexsl-core/src/test/java/com/rexsl/core/StaticTemplateTest.java</file>
-      <prefix>     * </prefix>
-      <body>Add a correct test for http schema - need to create a template file that will be always available on the web.</body>
-      <estimate>0</estimate>
-      <lines>92-93</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>26</ticket>
-      <file>rexsl-maven-plugin/pom.xml</file>
-      <prefix>                        </prefix>
-      <body>This test is disabled (although it works fine) because I don't know how to stop its execution. It starts Jetty and stays waiting. There should be some way of canceling it somehow... http://jira.codehaus.org/browse/MINVOKER-132</body>
-      <estimate>0</estimate>
-      <lines>460-464</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>89</ticket>
-      <file>rexsl-maven-plugin/src/it/all-correct/pom.xml</file>
-      <prefix>        </prefix>
-      <body>If you change this path to something different from "/" there will be many problems with paths of XSL and CSS files. It's definitely a defect and should be fixed here somehow.</body>
-      <estimate>0</estimate>
-      <lines>49-51</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>342</ticket>
-      <file>rexsl-maven-plugin/src/main/java/com/rexsl/maven/PackageMojo.java</file>
-      <prefix>     * </prefix>
-      <body>Only properties from PROPERTIES section in pom.xml are supported. I don't know how to get access to all other project props.</body>
-      <estimate>0</estimate>
-      <lines>146-147</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>751</ticket>
-      <file>rexsl-maven-plugin/src/main/java/com/rexsl/maven/packers/PackersProvider.java</file>
-      <prefix>     * </prefix>
-      <body>When new JsPacker is ready, add it to the packers list and enable tests in JsPackerTest. Current packer uses YuiCompressor which uses old Rhino dependency that has problems with CssLint.js.</body>
-      <estimate>0</estimate>
-      <lines>68-70</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>342</ticket>
-      <file>rexsl-maven-plugin/src/main/java/com/rexsl/maven/utils/LoggingManager.java</file>
-      <prefix> * </prefix>
-      <body>Implement appender scope change</body>
-      <estimate>0</estimate>
-      <lines>41-41</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>529</ticket>
-      <file>rexsl-maven-plugin/src/test/java/com/rexsl/maven/PackageMojoTest.java</file>
-      <prefix>     * </prefix>
-      <body>Would be better to implement filtering in method under test with custom Reader. Current implementation loads the entire file into memory, which may be a problem if the file is too big.</body>
-      <estimate>0</estimate>
-      <lines>81-83</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>7</ticket>
-      <file>rexsl-maven-plugin/src/test/java/com/rexsl/maven/RunMojoTest.java</file>
-      <prefix>     * </prefix>
-      <body>This test is not implemented yet, but has to be implemented somehow. We should create a new thread and wait there for RunMojo execution termination.</body>
-      <estimate>0</estimate>
-      <lines>59-61</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>37</ticket>
-      <file>rexsl-maven-plugin/src/test/java/com/rexsl/maven/packers/XslPackerTest.java</file>
-      <prefix>     * </prefix>
-      <body>Remove comments from the output file. XSL files should be compressed (all comments and spaces removed).</body>
-      <estimate>60</estimate>
-      <lines>52-53</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>381</ticket>
-      <file>rexsl-page/src/main/java/com/rexsl/page/CookieBuilder.java</file>
-      <prefix> * </prefix>
-      <body>Somehow we should specify PORT in the cookie. Without this param the site doesn't work in localhost:9099 in Chrome. Works fine in Safari, but not in Chrome. see http://stackoverflow.com/questions/1612177</body>
-      <estimate>0</estimate>
-      <lines>71-73</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>430</ticket>
-      <file>rexsl-page/src/main/java/com/rexsl/page/JaxbBundle.java</file>
-      <prefix> * </prefix>
-      <body>A new design would be required for this class. &lt;br/&gt; &lt;b&gt;The problems&lt;/b&gt;: &lt;ul&gt; &lt;li&gt;this.content and this.parent are used as flags, not only as data storage variables. &lt;li&gt;there are three different "types" combined in one class: root element (parent == null), node element (content == null), and leaf element. &lt;/ul&gt; &lt;br/&gt; &lt;b&gt;The solution&lt;/b&gt;: A new hierarchy of classes: &lt;br/&gt; &lt;code&gt; interface TreeNode&lt;br/&gt; &lt;br/&gt; abstract AbstractNode implements TreeNode&lt;br/&gt; +name: String&lt;br/&gt; +attributes: ConcurrentMap&lt;String, String&gt;&lt;br/&gt; &lt;br/&gt; abstract SubNode extends AbstractNode&lt;br/&gt; +parent: TreeNode&lt;br/&gt; &lt;br/&gt; InnerNode extends SubNode&lt;br/&gt; +children: List&lt;TreeNode&gt;&lt;br/&gt; &lt;br/&gt; LeafNode extends SubNode&lt;br/&gt; +content: String&lt;br/&gt; &lt;br/&gt; DeadNode implements TreeNode&lt;br/&gt; // this is the node we set as parent in root node&lt;br/&gt; &lt;/code&gt; &lt;br/&gt;</body>
-      <estimate>0</estimate>
-      <lines>119-148</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>628</ticket>
-      <file>rexsl-page/src/test/java/com/rexsl/page/inset/FlashInsetTest.java</file>
-      <prefix>     * </prefix>
-      <body>Doesn't work because HttpHeadersMocker doesn't implement method getCookies() correctly</body>
-      <estimate>0</estimate>
-      <lines>77-78</lines>
-      <owner>someone</owner>
-   </puzzle>
-   <puzzle>
-      <ticket>316</ticket>
-      <file>rexsl-test/src/main/java/com/rexsl/test/JaxbConverter.java</file>
-      <prefix>     * </prefix>
-      <body>This "unchecked" warning should be removed somehow</body>
-      <estimate>0</estimate>
-      <lines>114-114</lines>
-      <owner>someone</owner>
-   </puzzle>
+<puzzle>
+<ticket>381</ticket>
+<file>src/main/java/com/rexsl/page/CookieBuilder.java</file>
+<prefix> * </prefix>
+<body>Somehow we should specify PORT in the cookie. Without this param the site doesn't work in localhost:9099 in Chrome. Works fine in Safari, but not in Chrome. see http://stackoverflow.com/questions/1612177</body>
+<estimate>0</estimate>
+<lines>71-73</lines>
+<owner>someone</owner>
+</puzzle>
+<puzzle>
+<ticket>430</ticket>
+<file>src/main/java/com/rexsl/page/JaxbBundle.java</file>
+<prefix> * </prefix>
+<body>A new design would be required for this class. &lt;br/&gt; &lt;b&gt;The problems&lt;/b&gt;: &lt;ul&gt; &lt;li&gt;this.content and this.parent are used as flags, not only as data storage variables. &lt;li&gt;there are three different "types" combined in one class: root element (parent == null), node element (content == null), and leaf element. &lt;/ul&gt; &lt;br/&gt; &lt;b&gt;The solution&lt;/b&gt;: A new hierarchy of classes: &lt;br/&gt; &lt;code&gt; interface TreeNode&lt;br/&gt; &lt;br/&gt; abstract AbstractNode implements TreeNode&lt;br/&gt; +name: String&lt;br/&gt; +attributes: ConcurrentMap&lt;String, String&gt;&lt;br/&gt; &lt;br/&gt; abstract SubNode extends AbstractNode&lt;br/&gt; +parent: TreeNode&lt;br/&gt; &lt;br/&gt; InnerNode extends SubNode&lt;br/&gt; +children: List&lt;TreeNode&gt;&lt;br/&gt; &lt;br/&gt; LeafNode extends SubNode&lt;br/&gt; +content: String&lt;br/&gt; &lt;br/&gt; DeadNode implements TreeNode&lt;br/&gt; // this is the node we set as parent in root node&lt;br/&gt; &lt;/code&gt; &lt;br/&gt;</body>
+<estimate>0</estimate>
+<lines>119-148</lines>
+<owner>someone</owner>
+</puzzle>
+<puzzle>
+<ticket>336</ticket>
+<file>src/test/java/com/rexsl/core/ContextResourceResolverTest.java</file>
+<prefix> * </prefix>
+<body>The majority of tests here are disabled, because YMOCK doesn't work at the moment with this Socket mocking mechanism. As soon as this feature is fixed in YMOCK let's use it here</body>
+<estimate>0</estimate>
+<lines>55-57</lines>
+<owner>someone</owner>
+</puzzle>
+<puzzle>
+<ticket>204</ticket>
+<file>src/test/java/com/rexsl/core/RestfulServletTest.java</file>
+<prefix>     * </prefix>
+<body>This test is disabled because of a defect in Jersey: http://java.net/jira/browse/JERSEY-1128. Once it is resolved we can try to enable the test and see how it works.</body>
+<estimate>0</estimate>
+<lines>108-110</lines>
+<owner>someone</owner>
+</puzzle>
+<puzzle>
+<ticket>760</ticket>
+<file>src/test/java/com/rexsl/core/StaticTemplateTest.java</file>
+<prefix>     * </prefix>
+<body>Add a correct test for http schema - need to create a template file that will be always available on the web.</body>
+<estimate>0</estimate>
+<lines>92-93</lines>
+<owner>someone</owner>
+</puzzle>
+<puzzle>
+<ticket>628</ticket>
+<file>src/test/java/com/rexsl/page/inset/FlashInsetTest.java</file>
+<prefix>     * </prefix>
+<body>Doesn't work because HttpHeadersMocker doesn't implement method getCookies() correctly</body>
+<estimate>0</estimate>
+<lines>77-78</lines>
+<owner>someone</owner>
+</puzzle>
 </puzzles>
