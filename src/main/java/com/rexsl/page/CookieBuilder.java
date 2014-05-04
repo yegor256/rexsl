@@ -65,12 +65,14 @@ import lombok.ToString;
  *
  * <p>The class is mutable and thread-safe.
  *
+ * <p>Note for Chrome users: because of
+ * https://code.google.com/p/chromium/issues/detail?id=56211 setting cookies
+ * doesn't work when using "localhost", instead use 127.0.0.1 or define e.g.
+ * localhost.com pointing to 127.0.0.1 in /etc/hosts file, and use it instead.
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @see <a href="http://tools.ietf.org/html/rfc6265">RFC6265</a>
- * @todo #381 Somehow we should specify PORT in the cookie. Without this param
- *  the site doesn't work in localhost:9099 in Chrome. Works fine in Safari,
- *  but not in Chrome. see http://stackoverflow.com/questions/1612177
  */
 @ToString
 @Loggable(Loggable.DEBUG)
