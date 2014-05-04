@@ -52,9 +52,6 @@ import org.mockito.Mockito;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @author Krzysztof Krason (Krzysztof.Krason@gmail.com)
  * @version $Id$
- * @todo #336 The majority of tests here are disabled, because YMOCK doesn't
- *  work at the moment with this Socket mocking mechanism. As soon as this
- *  feature is fixed in YMOCK let's use it here
  */
 public final class ContextResourceResolverTest {
 
@@ -119,23 +116,29 @@ public final class ContextResourceResolverTest {
      * @throws Exception If something goes wrong
      */
     @Test
-    @org.junit.Ignore
     public void resolvesWhenResourcesIsAnAbsoluteLink() throws Exception {
         final String href = "http://localhost/xsl/file.xsl";
         final ServletContext ctx = new ServletContextMocker()
             .withoutResource(href)
             .mock();
         Mockito.doReturn(null).when(ctx).getResourceAsStream(href);
-        final URIResolver resolver = new ContextResourceResolver(ctx);
-        final HttpURLConnection conn = this.mockConnection(href);
+        final ContextResourceResolver.ConnectionProvider provider =
+            Mockito.mock(ContextResourceResolver.ConnectionProvider.class);
+        final HttpURLConnection conn = this.mockConnection();
         Mockito.doReturn(HttpURLConnection.HTTP_OK)
             .when(conn).getResponseCode();
         Mockito.doReturn(
             IOUtils.toInputStream(
-                "<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform'/>"
+                // @checkstyle LineLength (1 line)
+                "<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform' version='1.0'/>"
             )
         )
             .when(conn).getInputStream();
+        Mockito.when(provider.open(Mockito.any(URL.class))).thenReturn(conn);
+        final URIResolver resolver = new ContextResourceResolver(
+            ctx,
+            provider
+        );
         final Source src = resolver.resolve(href, null);
         MatcherAssert.assertThat(src, Matchers.notNullValue());
         TransformerFactory.newInstance().newTransformer(src);
@@ -147,17 +150,19 @@ public final class ContextResourceResolverTest {
      * @throws Exception If something goes wrong
      */
     @Test(expected = javax.xml.transform.TransformerException.class)
-    @org.junit.Ignore
     public void throwsExceptionWhenAbsoluteResourceHasInvalidStatusCode()
         throws Exception {
         final String href = "http://localhost/some-non-existing-file.xsl";
         final ServletContext ctx = new ServletContextMocker()
             .withoutResource(href)
             .mock();
-        final URIResolver resolver = new ContextResourceResolver(ctx);
-        final HttpURLConnection conn = this.mockConnection(href);
+        final ContextResourceResolver.ConnectionProvider provider =
+            Mockito.mock(ContextResourceResolver.ConnectionProvider.class);
+        final HttpURLConnection conn = this.mockConnection();
         Mockito.doReturn(HttpURLConnection.HTTP_NOT_FOUND)
             .when(conn).getResponseCode();
+        Mockito.when(provider.open(Mockito.any(URL.class))).thenReturn(conn);
+        final URIResolver resolver = new ContextResourceResolver(ctx, provider);
         resolver.resolve(href, null);
     }
 
@@ -167,16 +172,18 @@ public final class ContextResourceResolverTest {
      * @throws Exception If something goes wrong
      */
     @Test(expected = javax.xml.transform.TransformerException.class)
-    @org.junit.Ignore
     public void throwsExceptionWhenAbsoluteResourceThrowsIoException()
         throws Exception {
         final String href = "http://localhost/erroneous-file.xsl";
         final ServletContext ctx = new ServletContextMocker()
             .withoutResource(href)
             .mock();
-        final URIResolver resolver = new ContextResourceResolver(ctx);
-        final HttpURLConnection conn = this.mockConnection(href);
+        final HttpURLConnection conn = this.mockConnection();
         Mockito.doThrow(new java.io.IOException("ouch")).when(conn).connect();
+        final ContextResourceResolver.ConnectionProvider provider =
+            Mockito.mock(ContextResourceResolver.ConnectionProvider.class);
+        Mockito.when(provider.open(Mockito.any(URL.class))).thenReturn(conn);
+        final URIResolver resolver = new ContextResourceResolver(ctx);
         resolver.resolve(href, null);
     }
 
@@ -213,13 +220,10 @@ public final class ContextResourceResolverTest {
 
     /**
      * Mock {@link HttpURLConnection} for the specific HREF.
-     * @param href The URI
      * @return The connection mock
-     * @throws Exception If something goes wrong
      */
-    private HttpURLConnection mockConnection(final String href)
-        throws Exception {
-        return (HttpURLConnection) new URL(href).openConnection();
+    private HttpURLConnection mockConnection() {
+        return Mockito.mock(HttpURLConnection.class);
     }
 
 }
