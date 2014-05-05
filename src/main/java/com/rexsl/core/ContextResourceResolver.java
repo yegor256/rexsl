@@ -31,7 +31,6 @@ package com.rexsl.core;
 
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -74,11 +73,35 @@ final class ContextResourceResolver implements URIResolver {
     private final transient ServletContext context;
 
     /**
+     * Opens connections.
+     */
+    private final transient ConnectionProvider provider;
+
+    /**
      * Constructor.
      * @param ctx Servlet Context.
      */
     ContextResourceResolver(@NotNull final ServletContext ctx) {
+        this(
+            ctx,
+            new ConnectionProvider() {
+                @Override
+                public URLConnection open(final URL url) throws IOException {
+                    return url.openConnection();
+                }
+            }
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param ctx Servlet Context.
+     * @param prov Connection provider.
+     */
+    ContextResourceResolver(@NotNull final ServletContext ctx,
+        final ConnectionProvider prov) {
         this.context = ctx;
+        this.provider = prov;
     }
 
     @Override
@@ -94,7 +117,7 @@ final class ContextResourceResolver implements URIResolver {
         } catch (final TransformerException ex) {
             try {
                 source = ContextResourceResolver.source(
-                    ContextResourceResolver.absolute(href, base)
+                    ContextResourceResolver.absolute(href, base, this.provider)
                 );
                 source.setSystemId(href);
             } catch (final TransformerException exp) {
@@ -114,7 +137,7 @@ final class ContextResourceResolver implements URIResolver {
         final Source source;
         try {
             source = new StreamSource(
-                new BufferedReader(
+                IOUtils.toBufferedReader(
                     new InputStreamReader(
                         IOUtils.toInputStream(
                             IOUtils.toString(stream, CharEncoding.UTF_8),
@@ -168,10 +191,12 @@ final class ContextResourceResolver implements URIResolver {
      * Try to find and return a resource, which is absolute.
      * @param href HREF provided by the client
      * @param base Base
+     * @param prov Connection provider.
      * @return The stream found
      * @throws TransformerException If not found
      */
-    private static InputStream absolute(final String href, final String base)
+    private static InputStream absolute(final String href, final String base,
+        final ConnectionProvider prov)
         throws TransformerException {
         final URI uri;
         if (base == null || base.isEmpty()) {
@@ -195,7 +220,7 @@ final class ContextResourceResolver implements URIResolver {
             );
         }
         try {
-            return ContextResourceResolver.fetch(uri);
+            return ContextResourceResolver.fetch(uri, prov);
         } catch (final IOException ex) {
             throw new TransformerException(
                 String.format(
@@ -210,11 +235,14 @@ final class ContextResourceResolver implements URIResolver {
     /**
      * Load HTTP stream from URI.
      * @param uri The URI to load from
+     * @param prov Connection provider.
      * @return The stream opened
      * @throws IOException If some problem happens
      */
-    private static InputStream fetch(final URI uri) throws IOException {
-        final URLConnection conn = uri.toURL().openConnection();
+    private static InputStream fetch(final URI uri,
+        final ConnectionProvider prov)
+        throws IOException {
+        final URLConnection conn = prov.open(uri.toURL());
         final InputStream stream;
         if (conn instanceof HttpURLConnection) {
             stream = ContextResourceResolver.http(
@@ -277,4 +305,16 @@ final class ContextResourceResolver implements URIResolver {
         ).getPath();
     }
 
+    /**
+     * Provides URL connection for this class.
+     */
+    public interface ConnectionProvider {
+        /**
+         * Open connection to given URL resource.
+         * @param url URL to open connection to.
+         * @return Opened connection.
+         * @throws IOException In case of problems when opening connection.
+         */
+        URLConnection open(URL url) throws IOException;
+    }
 }
