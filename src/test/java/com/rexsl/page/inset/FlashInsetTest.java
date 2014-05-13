@@ -74,16 +74,13 @@ public final class FlashInsetTest {
     /**
      * FlashInset can render cookie and add a cleaning header.
      * @throws Exception If there is some problem inside
-     * @todo #628 Doesn't work because HttpHeadersMocker doesn't implement
-     *  method getCookies() correctly
      */
     @Test
-    @org.junit.Ignore
     public void rendersCookieAndAddsHttpHeader() throws Exception {
         final Resource resource = new ResourceMocker().withHttpHeaders(
             new HttpHeadersMocker().withHeader(
                 HttpHeaders.COOKIE,
-                "Rexsl-Flash=SU5GTzo0NTY6aGVsbG8sIIAh;path=/"
+                "Rexsl-Flash=SU5GTzo0NTY6aGVsbG8sIOKCrCE;path=/"
             ).mock()
         ).mock();
         final Inset inset = new FlashInset(resource);
