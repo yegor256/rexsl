@@ -28,7 +28,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  -->
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee         http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  version="3.0"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/robots.txt</url-pattern>
@@ -76,12 +78,12 @@
         <url-pattern>/trap</url-pattern>
     </servlet-mapping>
     <error-page>
-        <exception-type>java.lang.Throwable</exception-type>
-        <location>/trap</location>
-    </error-page>
-    <error-page>
         <error-code>404</error-code>
         <location>/error</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/trap</location>
     </error-page>
     <mime-mapping>
         <extension>xsl</extension>
