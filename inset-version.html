@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * Copyright (c) 2012-2013, JCabi.com
+ * Copyright (c) 2012-2014, jcabi.com
  * All rights reserved.
  -->
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -23,19 +23,12 @@
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
                                                                                                                 
 <link rel="author" href="https://plus.google.com/u/0/114792568016408327418?rel=author"/>
-                                            <link rel="stylesheet" href="./css/highlight.css" />
-        <script src="./js/jquery-1.8.3.min.js"></script>
-        <script src="./js/highlight-7.3.min.js"></script>
+                                            <script src="./js/jquery-1.8.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
         <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
-                    $('div.source pre').each(
-                        function (idx, element) {
-                            hljs.highlightBlock(element);
-                        }
-                    );
                     $(".menu-button").click(
                         function() {
                             if ($("#here-goes-menu").attr("class") == "menu-off") {
@@ -52,8 +45,8 @@
         </script>
     </head>
     <body>
-                <div class="page">
-            <div class="menu-section">
+                <section class="page">
+            <nav class="menu-section">
                 <ul id="menu">
                                                                                     <li>
                             Overview
@@ -69,7 +62,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-1.0/index.html" title="JavaDoc 1.0">JavaDoc 1.0</a>
+                                                                                    <a href="apidocs-1.1/index.html" title="JavaDoc 1.1">JavaDoc 1.1</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -158,7 +151,7 @@
                                                                                         </ul>
                                                     </li>
                                     </ul>
-            </div>
+            </nav>
             <div id="right-side">
                 <div id="content">
                     <i class="menu-button fa fa-align-justify"></i>
@@ -173,9 +166,9 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
-                            <strong>1.0</strong>
+                            <strong>1.1</strong>
                             
-                            27-Apr-2014
+                            14-May-2014
                         </div>
                                                                             <div class="github">
                                 <iframe
@@ -200,9 +193,8 @@
                                             </div>
                     <div id="here-goes-menu" class="menu-off"></div>
                     <article>
-                        <div class="section">
-                            <h1>Versioned WAR Package</h1>
-<p>It is convenient for end-users and the development team to see which version of the software is currently deployed to the web server and serves HTTP requests. For example, take a look a the right bottom page of <a class="externalLink" href="http://www.s3auth.com">www.s3auth.com</a>. There is a version number and a Git revision hash. For most end-users this information doesn&#x2019;t add any value, but for developers and advanced users may help to test the system and explore its features. You can use <a href="./apidocs-1.0/com/rexsl/page/inset/VersionInset.html"><tt>VersionInset</tt></a> to automate the versioning mechanism:</p>
+                        <h1>Versioned WAR Package</h1>
+<p>It is convenient for end-users and the development team to see which version of the software is currently deployed to the web server and serves HTTP requests. For example, take a look a the right bottom page of <a class="externalLink" href="http://www.s3auth.com">www.s3auth.com</a>. There is a version number and a Git revision hash. For most end-users this information doesn&#x2019;t add any value, but for developers and advanced users may help to test the system and explore its features. You can use <a href="./apidocs-1.1/com/rexsl/page/inset/VersionInset.html"><tt>VersionInset</tt></a> to automate the versioning mechanism:</p>
 
 <div class="source">
 <pre>public abstract class BaseRs extends BaseResource {
@@ -236,22 +228,18 @@
 }
 </pre></div>
 <p>Then, during packaging of your <tt>WAR</tt> archive, Maven adds Example-Version, Example-Revision, and Example-Date attributes to the <tt>MANIFEST.MF</tt> file - read more about package versioning <a class="externalLink" href="http://www.jcabi.com/jcabi-manifests/versioning.html">here</a>.</p>
-                        </div>
                     </article>
-                    <img class="maven-mobile" src="./images/built-by-maven.png"
-                        alt="built by maven" style="float:right" width="80"/>
+                    <img class="maven-mobile" src="./images/built-by-maven.png" alt="built by maven"/>
                 </div>
-                <div class="legal-notes">
-                    <div class="copyright">
-                        Copyright &#169;
-                                                                            2011-2014
-                                                <br/>
-                        ReXSL.com, All Rights Reserved.
-                        <br/>
-                        <a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.
-                    </div>
-                </div>
+                <footer class="legal-notes">
+                    Copyright &#169;
+                                                                2011-2014
+                                        <br/>
+                    ReXSL.com, All Rights Reserved.
+                    <br/>
+                    <a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.
+                </footer>
             </div>
-        </div>
+        </section>
     </body>
 </html>

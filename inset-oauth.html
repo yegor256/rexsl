@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * Copyright (c) 2012-2013, JCabi.com
+ * Copyright (c) 2012-2014, jcabi.com
  * All rights reserved.
  -->
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -23,19 +23,12 @@
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
                                                                                                                 
 <link rel="author" href="https://plus.google.com/u/0/114792568016408327418?rel=author"/>
-                                            <link rel="stylesheet" href="./css/highlight.css" />
-        <script src="./js/jquery-1.8.3.min.js"></script>
-        <script src="./js/highlight-7.3.min.js"></script>
+                                            <script src="./js/jquery-1.8.3.min.js"></script>
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
         <link href="./css/jcabi.css" rel="stylesheet"/>
         <script>
             $(document).ready(
                 function() {
-                    $('div.source pre').each(
-                        function (idx, element) {
-                            hljs.highlightBlock(element);
-                        }
-                    );
                     $(".menu-button").click(
                         function() {
                             if ($("#here-goes-menu").attr("class") == "menu-off") {
@@ -52,8 +45,8 @@
         </script>
     </head>
     <body>
-                <div class="page">
-            <div class="menu-section">
+                <section class="page">
+            <nav class="menu-section">
                 <ul id="menu">
                                                                                     <li>
                             Overview
@@ -69,7 +62,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li>
-                                                                                    <a href="apidocs-1.0/index.html" title="JavaDoc 1.0">JavaDoc 1.0</a>
+                                                                                    <a href="apidocs-1.1/index.html" title="JavaDoc 1.1">JavaDoc 1.1</a>
                                                                                                                                                                         <ul>
                                                                     </ul>
                                                     </li>
@@ -158,7 +151,7 @@
                                                                                         </ul>
                                                     </li>
                                     </ul>
-            </div>
+            </nav>
             <div id="right-side">
                 <div id="content">
                     <i class="menu-button fa fa-align-justify"></i>
@@ -173,9 +166,9 @@
                     </div>
                     <div class="date">
                         <div class="date-numbers">
-                            <strong>1.0</strong>
+                            <strong>1.1</strong>
                             
-                            27-Apr-2014
+                            14-May-2014
                         </div>
                                                                             <div class="github">
                                 <iframe
@@ -200,11 +193,10 @@
                                             </div>
                     <div id="here-goes-menu" class="menu-off"></div>
                     <article>
-                        <div class="section">
-                            <h1>OAuth Authentication for JAX-RS Resources</h1>
+                        <h1>OAuth Authentication for JAX-RS Resources</h1>
 <p>Authentication in a RESTful API/interface/website can be implemented only by means of <a class="externalLink" href="http://en.wikipedia.org/wiki/HTTP_cookie">HTTP cookies</a>. An authenticated user makes HTTP requests to the server with authentication cookies inside. The cookie shall contain the name of the user in an encrypted format, to prevent a stranger from faking user identity, since encryption method, secret key, and &#x201c;cryptographic salt&#x201d; are not disclosed.</p>
 <p>Only the server can generate an authentication cookie, when user identity is verified and provided by an authentication provider. The most popular authentication protocol is <a class="externalLink" href="http://oauth.net/">OAuth</a>, used by major providers like <a class="externalLink" href="http://developers.facebook.com/docs/reference/dialogs/oauth/">Facebook</a> and <a class="externalLink" href="https://developers.google.com/accounts/docs/OAuth2">Google</a>.</p>
-<p><a href="./apidocs-1.0/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a> helps to manage OAuth authentication. First, make sure your base JAX-RS resource has a <a href="./apidocs-1.0/com/rexsl/page/Inset.html"><tt>@Inset.Runtime</tt></a>-annotated method that returns an instance of <a href="./apidocs-1.0/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a>:</p>
+<p><a href="./apidocs-1.1/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a> helps to manage OAuth authentication. First, make sure your base JAX-RS resource has a <a href="./apidocs-1.1/com/rexsl/page/Inset.html"><tt>@Inset.Runtime</tt></a>-annotated method that returns an instance of <a href="./apidocs-1.1/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a>:</p>
 
 <div class="source">
 <pre>public abstract class BaseRs extends BaseResource {
@@ -259,22 +251,18 @@
 <p>URN of identity is created by authentication providers and consists of namespace ID (<tt>&quot;facebook&quot;</tt> for <a class="externalLink" href="http:://www.facebook.com">Facebook</a>, <tt>&quot;google&quot;</tt> for <a class="externalLink" href="http://www.google.com">Google</a>, <tt>&quot;github&quot;</tt> for <a class="externalLink" href="http://www.github.com">Github</a>, etc.) and namespace specific string with a unique ID of the user, as defined by the provider. You can use this URN as a unique identifier of the user in your system. It is always unique.</p>
 <p>When a user is not authenticated <tt>AuthInset#identity()</tt> method returns <tt>Identity.ANONYMOUS</tt>.</p>
 <p>See also <a href="./inset-http-basic.html">HTTP Basic Authentication</a>.</p>
-                        </div>
                     </article>
-                    <img class="maven-mobile" src="./images/built-by-maven.png"
-                        alt="built by maven" style="float:right" width="80"/>
+                    <img class="maven-mobile" src="./images/built-by-maven.png" alt="built by maven"/>
                 </div>
-                <div class="legal-notes">
-                    <div class="copyright">
-                        Copyright &#169;
-                                                                            2011-2014
-                                                <br/>
-                        ReXSL.com, All Rights Reserved.
-                        <br/>
-                        <a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.
-                    </div>
-                </div>
+                <footer class="legal-notes">
+                    Copyright &#169;
+                                                                2011-2014
+                                        <br/>
+                    ReXSL.com, All Rights Reserved.
+                    <br/>
+                    <a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.
+                </footer>
             </div>
-        </div>
+        </section>
     </body>
 </html>
