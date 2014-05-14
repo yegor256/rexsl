@@ -45,6 +45,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -129,6 +130,7 @@ public final class XsltFilter implements Filter {
      * @checkstyle RedundantThrows (4 lines)
      */
     @Override
+    @Loggable(value = Loggable.DEBUG, ignore = WebApplicationException.class)
     public void doFilter(final ServletRequest req, final ServletResponse res,
         final FilterChain chain) throws IOException, ServletException {
         if (req instanceof HttpServletRequest

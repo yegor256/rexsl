@@ -48,6 +48,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.WebApplicationException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
@@ -176,6 +177,7 @@ public final class RestfulServlet extends ServletContainer {
      * @checkstyle RedundantThrows (5 lines)
      */
     @Override
+    @Loggable(value = Loggable.DEBUG, ignore = WebApplicationException.class)
     public void service(final HttpServletRequest request,
         final HttpServletResponse response)
         throws ServletException, IOException {
