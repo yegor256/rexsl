@@ -30,6 +30,7 @@
 package com.rexsl.core;
 
 import com.jcabi.aspects.LogExceptions;
+import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.net.URI;
@@ -134,61 +135,62 @@ public final class ExceptionTrap extends HttpServlet {
      * @return Builder of text
      */
     private StringBuilder text(final HttpServletRequest request) {
-        final StringBuilder text = new StringBuilder(0);
-        text.append(Logger.format("date: %s\n", new Date()));
+        final StringBuilder text = new StringBuilder(Tv.THOUSAND)
+            .append(Logger.format("date: %s\n", new Date()));
         this.append(text, request, "code");
         this.append(text, request, "message");
         this.append(text, request, "exception_type");
         this.append(text, request, "request_uri");
         final ServletContext ctx = this.getServletContext();
-        text.append(
-            Logger.format(
-                "servlet context path: \"%s\"\n",
-                request.getContextPath()
+        text
+            .append(
+                Logger.format(
+                    "servlet context path: \"%s\"\n",
+                    request.getContextPath()
             )
-        );
-        text.append(
-            Logger.format(
-                "requested: %s (%s) at %s:%d\n",
-                request.getRequestURL().toString(),
-                request.getMethod(),
-                request.getServerName(),
-                request.getServerPort()
+        )
+            .append(
+                Logger.format(
+                    "requested: %s (%s) at %s:%d\n",
+                    request.getRequestURL().toString(),
+                    request.getMethod(),
+                    request.getServerName(),
+                    request.getServerPort()
+                )
             )
-        );
-        text.append(
-            Logger.format(
-                "request: %s, %d bytes\n",
-                request.getContentType(),
-                request.getContentLength()
+            .append(
+                Logger.format(
+                    "request: %s, %d bytes\n",
+                    request.getContentType(),
+                    request.getContentLength()
+                )
             )
-        );
-        text.append(
-            Logger.format(
-                "remote: %s:%d (%s)\n",
-                request.getRemoteAddr(),
-                request.getRemotePort(),
-                request.getRemoteHost()
+            .append(
+                Logger.format(
+                    "remote: %s:%d (%s)\n",
+                    request.getRemoteAddr(),
+                    request.getRemotePort(),
+                    request.getRemoteHost()
+                )
             )
-        );
-        text.append(
-            Logger.format(
-                "servlet: \"%s\" (API %d.%d) at \"%s\"\n",
-                ctx.getServletContextName(),
-                ctx.getMajorVersion(),
-                ctx.getMinorVersion(),
-                ctx.getServerInfo()
+            .append(
+                Logger.format(
+                    "servlet: \"%s\" (API %d.%d) at \"%s\"\n",
+                    ctx.getServletContextName(),
+                    ctx.getMajorVersion(),
+                    ctx.getMinorVersion(),
+                    ctx.getServerInfo()
+                )
             )
-        );
-        text.append("headers:\n")
+            .append("headers:\n")
             .append(ExceptionTrap.headers(request))
-            .append('\n');
-        text.append(
-            Logger.format(
-                "exception: %[exception]s\n",
-                request.getAttribute("javax.servlet.error.exception")
-            )
-        );
+            .append('\n')
+            .append(
+                Logger.format(
+                    "exception: %[exception]s\n",
+                    request.getAttribute("javax.servlet.error.exception")
+                )
+            );
         return text;
     }
 
@@ -226,8 +228,8 @@ public final class ExceptionTrap extends HttpServlet {
             text.append("  ")
                 .append(header)
                 .append(": ")
-                .append(request.getHeader(header));
-            text.append('\n');
+                .append(request.getHeader(header))
+                .append('\n');
         }
         return text.toString();
     }

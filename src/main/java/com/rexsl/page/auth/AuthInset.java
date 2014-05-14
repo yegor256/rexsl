@@ -242,23 +242,27 @@ public final class AuthInset implements Inset {
             } catch (final IOException ex) {
                 throw new IllegalStateException(ex);
             }
-            if (identity.equals(Identity.ANONYMOUS)) {
-                continue;
+            if (!identity.equals(Identity.ANONYMOUS)) {
+                if (prov.getClass()
+                    .isAnnotationPresent(Provider.Redirect.class)) {
+                    throw new AuthException(
+                        Response
+                            .status(HttpURLConnection.HTTP_SEE_OTHER)
+                            .location(
+                                this.resource.uriInfo().getRequestUriBuilder()
+                                    .replaceQuery("")
+                                    .build()
+                            )
+                            .cookie(this.cookie(identity))
+                            .build(),
+                        Logger.format(
+                            "redirecting due to @Provider.Redirect at %[type]s",
+                            prov
+                        )
+                    );
+                }
+                break;
             }
-            if (prov.getClass().isAnnotationPresent(Provider.Redirect.class)) {
-                throw new AuthException(
-                    Response.status(HttpURLConnection.HTTP_SEE_OTHER).location(
-                        this.resource.uriInfo().getRequestUriBuilder()
-                            .replaceQuery("")
-                            .build()
-                    ).cookie(this.cookie(identity)).build(),
-                    Logger.format(
-                        "redirecting because of @Provider.Redirect at %[type]s",
-                        prov
-                    )
-                );
-            }
-            break;
         }
         return identity;
     }

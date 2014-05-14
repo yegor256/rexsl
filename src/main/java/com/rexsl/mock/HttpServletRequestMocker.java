@@ -31,8 +31,8 @@ package com.rexsl.mock;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.servlet.http.HttpServletRequest;
@@ -57,13 +57,13 @@ public final class HttpServletRequestMocker {
      * All headers.
      */
     private final transient ConcurrentMap<String, String> headers =
-        new ConcurrentHashMap<String, String>();
+        new ConcurrentHashMap<String, String>(0);
 
     /**
      * Public ctor.
      */
     public HttpServletRequestMocker() {
-        Mockito.doReturn(Collections.enumeration(new ArrayList<String>()))
+        Mockito.doReturn(Collections.enumeration(new LinkedList<String>()))
             .when(this.request).getHeaderNames();
         Mockito.doReturn("").when(this.request).getContextPath();
         Mockito.doReturn("").when(this.request).getServletPath();

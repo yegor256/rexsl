@@ -100,7 +100,6 @@ public final class XsltFilter implements Filter {
     @Override
     public void init(@NotNull final FilterConfig config)
         throws ServletException {
-        final ServletContext context = config.getServletContext();
         this.tfactory = TransformerFactory.newInstance();
         if (this.tfactory == null) {
             throw new ServletException(
@@ -116,6 +115,7 @@ public final class XsltFilter implements Filter {
                 this.tfactory, TransformerFactory.class.getName()
             );
         }
+        final ServletContext context = config.getServletContext();
         this.tfactory.setURIResolver(new ContextResourceResolver(context));
         try {
             Manifests.append(context);
@@ -126,8 +126,8 @@ public final class XsltFilter implements Filter {
 
     /**
      * {@inheritDoc}
-     * @checkstyle ThrowsCount (5 lines)
-     * @checkstyle RedundantThrows (4 lines)
+     * @checkstyle ThrowsCount (7 lines)
+     * @checkstyle RedundantThrows (7 lines)
      */
     @Override
     @Loggable(value = Loggable.DEBUG, ignore = WebApplicationException.class)

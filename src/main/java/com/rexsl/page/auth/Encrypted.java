@@ -144,6 +144,7 @@ final class Encrypted implements Identity {
      * @param ekey Encryption key
      * @return Instance of the class
      * @throws Encrypted.DecryptionException If can't decrypt
+     * @checkstyle RedundantThrowsCheck (5 lines)
      */
     public static Encrypted parse(final String txt, final String ekey)
         throws Encrypted.DecryptionException {
@@ -200,6 +201,7 @@ final class Encrypted implements Identity {
      * @param text Salted text
      * @return Original text
      * @throws Encrypted.DecryptionException If salt is wrong
+     * @checkstyle RedundantThrowsCheck (5 lines)
      */
     private static byte[] unsalt(final byte[] text)
         throws Encrypted.DecryptionException {

@@ -227,6 +227,7 @@ public final class FlashInset implements Inset {
         /**
          * Total elements expected in a cookie text.
          */
+        @SuppressWarnings("PMD.UnusedPrivateField")
         private static final int TOTAL = 3;
         /**
          * The message.

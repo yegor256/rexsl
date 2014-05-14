@@ -173,8 +173,8 @@ public final class RestfulServlet extends ServletContainer {
 
     /**
      * {@inheritDoc}
-     * @checkstyle ThrowsCount (6 lines)
-     * @checkstyle RedundantThrows (5 lines)
+     * @checkstyle ThrowsCount (8 lines)
+     * @checkstyle RedundantThrows (8 lines)
      */
     @Override
     @Loggable(value = Loggable.DEBUG, ignore = WebApplicationException.class)

@@ -29,6 +29,7 @@
  */
 package com.rexsl.mock;
 
+import com.jcabi.aspects.Tv;
 import javax.servlet.ServletOutputStream;
 import org.apache.commons.lang3.CharEncoding;
 import org.mockito.Mockito;
@@ -51,7 +52,9 @@ public final class ServletOutputStreamMocker {
     /**
      * Buffer.
      */
-    private final transient StringBuilder buffer = new StringBuilder();
+    @SuppressWarnings("PMD.AvoidStringBufferField")
+    private final transient StringBuilder buffer =
+        new StringBuilder(Tv.THOUSAND);
 
     /**
      * Public ctor.

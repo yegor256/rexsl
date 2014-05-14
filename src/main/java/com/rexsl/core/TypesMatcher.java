@@ -103,12 +103,11 @@ final class TypesMatcher {
                     && !parts[0].equals(reqs[0])) {
                     continue;
                 }
-                if (!TypesMatcher.ASTERISK.equals(parts[1])
-                    && !parts[1].equals(reqs[1])) {
-                    continue;
+                if (TypesMatcher.ASTERISK.equals(parts[1])
+                    || parts[1].equals(reqs[1])) {
+                    accepts = true;
+                    break;
                 }
-                accepts = true;
-                break;
             }
         }
         return accepts;

@@ -120,15 +120,6 @@ public final class PageBuilder {
     static final ClassPool POOL = ClassPool.getDefault();
 
     /**
-     * Static initialization of Javassist.
-     */
-    static {
-        PageBuilder.POOL.insertClassPath(
-            new ClassClassPath(PageBuilder.class)
-        );
-    }
-
-    /**
      * Stylesheet to use.
      */
     @NotNull
@@ -139,6 +130,15 @@ public final class PageBuilder {
      */
     @NotNull
     private transient String xsd = "";
+
+    /**
+     * Static initialization of Javassist.
+     */
+    static {
+        PageBuilder.POOL.insertClassPath(
+            new ClassClassPath(PageBuilder.class)
+        );
+    }
 
     /**
      * Configure the stylesheet to be used.

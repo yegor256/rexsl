@@ -29,8 +29,8 @@
  */
 package com.rexsl.mock;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
@@ -52,7 +52,7 @@ public final class FilterConfigMocker {
     /**
      * Params.
      */
-    private final transient List<String> params = new ArrayList<String>();
+    private final transient List<String> params = new LinkedList<String>();
 
     /**
      * Public ctor.
