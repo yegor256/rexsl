@@ -110,7 +110,7 @@
         </site>
     </distributionManagement>
     <properties>
-        <jersey.version>1.17.1</jersey.version>
+        <jersey.version>1.18.1</jersey.version>
         <saxon.version>9.1.0.8</saxon.version>
     </properties>
     <dependencies>
@@ -146,7 +146,7 @@
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>2.2.7-b52</version> <!-- doesn't work with higher versions, use 2.2.7-b52 -->
+            <version>2.2.8-b01</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -204,19 +204,16 @@
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
-            <version>3.0.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-matchers</artifactId>
-            <version>1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>1.4.01</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -237,7 +234,7 @@
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-xml</artifactId>
-            <version>0.7.8</version>
+            <version>0.7.8</version> <!-- see https://github.com/jcabi/jcabi-xml/issues/29 -->
         </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>
@@ -354,6 +351,7 @@
                         <configuration>
                             <excludes>
                                 <exclude>findbugs:.*</exclude>
+                                <exclude>duplicatefinder:.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
