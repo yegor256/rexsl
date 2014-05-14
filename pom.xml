@@ -351,6 +351,9 @@
                             <excludes>
                                 <exclude>findbugs:.*</exclude>
                                 <exclude>duplicatefinder:.*</exclude>
+                                <exclude>checkstyle:/src/it.*</exclude>
+                                <exclude>xml:/src/it/all-correct/src/main/webapp/WEB-INF/web.xml</exclude>
+                                <exclude>xml:/src/it/settings.xml</exclude>
                             </excludes>
                         </configuration>
                     </plugin>

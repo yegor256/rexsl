@@ -47,7 +47,7 @@ public final class Data {
     /**
      * Message to show.
      */
-    private String text = "Hello, \u041F\u0435\u0442\u044F!";
+    private transient String text = "Hello, \u041F\u0435\u0442\u044F!";
 
     /**
      * Private ctor.

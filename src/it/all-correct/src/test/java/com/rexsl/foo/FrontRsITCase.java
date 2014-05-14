@@ -51,6 +51,7 @@ public final class FrontRsITCase {
      * @throws Exception
      */
     @Test
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void rendersAllAvailablePages() throws Exception {
         final String[] paths = {
             "/css/screen.css",
