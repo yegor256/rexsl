@@ -59,7 +59,22 @@ public final class ErrorRsITCase {
             .as(RestResponse.class)
             .assertStatus(HttpURLConnection.HTTP_NOT_FOUND)
             .as(XmlResponse.class)
-            .assertXPath("//xhtml:html");
+            .assertXPath("//xhtml:p");
+    }
+
+    /**
+     * Renders 404 page itself.
+     * @throws Exception
+     */
+    @Test
+    public void rendersNotFoundPageItself() throws Exception {
+        new JdkRequest(ErrorRsITCase.HOME)
+            .uri().path("/404").back()
+            .fetch()
+            .as(RestResponse.class)
+            .assertStatus(HttpURLConnection.HTTP_OK)
+            .as(XmlResponse.class)
+            .assertXPath("/xhtml:html");
     }
 
 }

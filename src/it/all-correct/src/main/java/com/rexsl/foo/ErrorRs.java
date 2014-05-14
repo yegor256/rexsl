@@ -49,7 +49,7 @@ public final class ErrorRs {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String home() {
-        return "<html>not found!</html>";
+        return "<html xmlns='http://www.w3.org/1999/xhtml'><p>oops</p></html>";
     }
 
 }
