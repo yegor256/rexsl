@@ -80,7 +80,7 @@ public final class StaticTemplateTest {
         FileUtils.write(tmp, "Example text with ${text}");
         MatcherAssert.assertThat(
             new StaticTemplate(
-                URI.create(String.format("file://%s", tmp.getAbsolutePath()))
+                tmp.toURI()
             ).render(StaticTemplateTest.DEFECT),
             Matchers.endsWith(StaticTemplateTest.DEFECT)
         );
