@@ -29,10 +29,10 @@
  */
 package com.rexsl.core;
 
+import com.github.zafarkhaja.semver.Version;
 import com.jcabi.aspects.Immutable;
-import com.jcabi.log.Logger;
-import java.util.regex.Pattern;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Product version.
@@ -44,12 +44,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(of = "origin")
 @Immutable
 final class ProductVersion implements Comparable<ProductVersion> {
-
-    /**
-     * Pattern to split numbers.
-     */
-    private static final Pattern SEPARATOR =
-        Pattern.compile(".", Pattern.LITERAL);
 
     /**
      * Original version.
@@ -66,7 +60,8 @@ final class ProductVersion implements Comparable<ProductVersion> {
 
     @Override
     public int compareTo(final ProductVersion ver) {
-        return this.normalized().compareTo(ver.normalized());
+        return Version.valueOf(this.normalize(this.origin))
+            .compareTo(Version.valueOf(this.normalize(ver.origin)));
     }
 
     @Override
@@ -75,17 +70,20 @@ final class ProductVersion implements Comparable<ProductVersion> {
     }
 
     /**
-     * Get normalize version.
-     * @return Normalized text
-     * @see <a href="http://stackoverflow.com/questions/198431">prototype</a>
+     * Normalize version to the one supported by SemVer.
+     * @param org Initial version string.
+     * @return Normalized version.
      */
-    private String normalized() {
-        final String[] parts = ProductVersion.SEPARATOR.split(this.origin);
-        final StringBuilder bldr = new StringBuilder(0);
-        for (final String part : parts) {
-            bldr.append(Logger.format("%4s.", part));
+    private String normalize(final String org) {
+        String normalized;
+        final int count = StringUtils.countMatches(org, ".");
+        if (count == 0) {
+            normalized = String.format("%s.0.0", org);
+        } else if (count == 1) {
+            normalized = String.format("%s.0", org);
+        } else {
+            normalized = org;
         }
-        return bldr.toString();
+        return normalized;
     }
-
 }
