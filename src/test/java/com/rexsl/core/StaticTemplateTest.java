@@ -35,7 +35,6 @@ import java.net.URI;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -89,16 +88,13 @@ public final class StaticTemplateTest {
     /**
      * Should render template from http resource.
      * @throws IOException In case of error.
-     * @todo #760 Add a correct test for http schema - need to create a template
-     *  file that will be always available on the web.
      */
     @Test
-    @Ignore
     public void rendersFromHttpResource() throws IOException {
         MatcherAssert.assertThat(
-            new StaticTemplate(URI.create("http://example.com"))
-                .render(StaticTemplateTest.DEFECT),
-            Matchers.endsWith(StaticTemplateTest.DEFECT)
+            new StaticTemplate(URI.create("http://www.rexsl.com"))
+                .render(StaticTemplateTest.DEFECT, "</html>"),
+            Matchers.containsString(StaticTemplateTest.DEFECT)
         );
     }
 }
