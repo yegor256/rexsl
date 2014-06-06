@@ -78,8 +78,18 @@ final class StaticTemplate implements Template {
     @Override
     @NotNull
     public String render(@NotNull final String defect) {
+        return this.render(defect, StaticTemplate.MARKER);
+    }
+
+    /**
+     * Render a text into page.
+     * @param defect Text to render.
+     * @param marker Marker to replace.
+     * @return A page with rendered text.
+     */
+    public String render(final String defect, final String marker) {
         return this.text.replace(
-            StaticTemplate.MARKER,
+            marker,
             StringEscapeUtils.escapeHtml4(defect)
         );
     }
