@@ -305,24 +305,19 @@
                         </archive>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>com.texry</groupId>
-                    <artifactId>texry-maven-plugin</artifactId>
-                    <version>0.2.1</version>
-                    <configuration>
-                        <closures>
-                            <file>header.tex</file>
-                            <file>uml2.tex</file>
-                        </closures>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>com.texry</groupId>
-                <artifactId>texry-maven-plugin</artifactId>
-                <inherited>false</inherited>
+                <groupId>com.jcabi</groupId>
+                <artifactId>jcabi-latex-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <closures>
+                        <file>header.tex</file>
+                        <file>uml2.tex</file>
+                    </closures>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>

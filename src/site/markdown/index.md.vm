@@ -18,7 +18,7 @@ role of a Model.
 [JAX-RS](http://en.wikipedia.org/wiki/Java_API_for_RESTful_Web_Services) resources are Controllers.
 Stylesheets with a powerful XSL 2.0 language are Views.
 
-![UML diagram with layers](texry/layers.png)
+![UML diagram with layers](latex/layers.png)
 
 We assume that you are familiar
 with
