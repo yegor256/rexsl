@@ -43,6 +43,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.UriBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -104,8 +105,11 @@ public final class Facebook implements Provider, Provider.Visible {
                 // @checkstyle MultipleStringLiterals (1 line)
                 .getQueryParameters().get("code");
             if (code == null || code.isEmpty()) {
-                throw new IllegalStateException(
-                    "HTTP query parameter 'code' is mandatory"
+                throw new WebApplicationException(
+                    new IllegalArgumentException(
+                        "HTTP query parameter 'code' is mandatory"
+                    ),
+                    HttpURLConnection.HTTP_BAD_REQUEST
                 );
             }
             final User fbuser = this.fetch(this.token(code.get(0)));
