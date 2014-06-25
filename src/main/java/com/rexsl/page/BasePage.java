@@ -32,6 +32,7 @@ package com.rexsl.page;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.rexsl.core.XslResolver;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
@@ -124,10 +125,10 @@ import org.w3c.dom.Element;
 @XmlType(name = "com.rexsl.page.BasePage")
 @XmlRootElement(name = "page")
 @XmlAccessorType(XmlAccessType.NONE)
-@SuppressWarnings({ "unchecked", "PMD.ExcessiveImports" })
 @ToString
 @EqualsAndHashCode(callSuper = false, of = "resource")
 @Loggable(Loggable.DEBUG)
+@SuppressWarnings({ "unchecked", "PMD.ExcessiveImports" })
 public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
 
     /**
@@ -152,7 +153,6 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param res The resource
      * @return This object
      */
-    @NotNull
     public final T init(@NotNull final R res) {
         synchronized (this.links) {
             this.resource = res;
@@ -164,7 +164,6 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * Render it.
      * @return JAX-RS response
      */
-    @NotNull
     public final Response.ResponseBuilder render() {
         final Response.ResponseBuilder builder = Response.ok();
         for (final Class<? extends Inset> type
@@ -185,7 +184,6 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param element The element to append
      * @return This object
      */
-    @NotNull
     public final T append(@NotNull final Object element) {
         if (!element.getClass().isAnnotationPresent(XmlRootElement.class)) {
             throw new IllegalArgumentException(
@@ -210,7 +208,6 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param element The element to append
      * @return This object
      */
-    @NotNull
     public final T append(@NotNull final Element element) {
         this.elements.add(element);
         return (T) this;
@@ -221,7 +218,6 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param bundle The element
      * @return This object
      */
-    @NotNull
     public final T append(@NotNull final JaxbBundle bundle) {
         this.append(bundle.element());
         return (T) this;
@@ -231,7 +227,6 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * Get home.
      * @return The home resource
      */
-    @NotNull
     public final R home() {
         if (this.resource == null) {
             throw new IllegalStateException("call BasePage#init() first");
@@ -244,7 +239,6 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @param link The link to add
      * @return This object
      */
-    @NotNull
     public final T link(@NotNull final Link link) {
         link.attachTo(this.home());
         this.links.add(link);
@@ -257,7 +251,6 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      */
     @XmlAnyElement(lax = true)
     @XmlMixed
-    @NotNull
     public final Collection<Object> getElements() {
         return Collections.unmodifiableCollection(this.elements);
     }
@@ -281,7 +274,6 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
      * @return The IP address
      */
     @XmlAttribute
-    @NotNull
     public final String getIp() {
         String addr;
         try {
@@ -294,11 +286,23 @@ public class BasePage<T extends BasePage<?, ?>, R extends Resource> {
     }
 
     /**
+     * Get system load average of the server.
+     * @return The SLA number
+     * @since 1.2
+     */
+    @XmlAttribute
+    public final String getSla() {
+        return String.format(
+            "%.3f",
+            ManagementFactory.getOperatingSystemMXBean().getSystemLoadAverage()
+        );
+    }
+
+    /**
      * Get date and time when this page is generated.
      * @return The date
      */
     @XmlAttribute
-    @NotNull
     public final Date getDate() {
         return new Date();
     }

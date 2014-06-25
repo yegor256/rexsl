@@ -70,6 +70,7 @@ public final class BasePageTest {
                 "/page/@date",
                 "/page/@ip",
                 "/page/@ssl",
+                "/page[number(@sla) > 0]",
                 "/page/millis",
                 "/page/single/x",
                 "/page/title[. = 'hello, world!']",
