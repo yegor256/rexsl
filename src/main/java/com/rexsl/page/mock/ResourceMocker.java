@@ -31,7 +31,7 @@ package com.rexsl.page.mock;
 
 import com.rexsl.core.XslResolver;
 import com.rexsl.mock.HttpHeadersMocker;
-import com.rexsl.mock.ServletContextMocker;
+import com.rexsl.mock.MkServletContext;
 import com.rexsl.mock.UriInfoMocker;
 import com.rexsl.page.BaseResource;
 import com.rexsl.page.Resource;
@@ -80,7 +80,7 @@ public final class ResourceMocker {
         this.withProviders(providers);
         final SecurityContext security = Mockito.mock(SecurityContext.class);
         this.withSecurityContext(security);
-        this.withServletContext(new ServletContextMocker().mock());
+        this.withServletContext(new MkServletContext());
     }
 
     /**

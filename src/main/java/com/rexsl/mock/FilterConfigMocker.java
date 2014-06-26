@@ -58,7 +58,7 @@ public final class FilterConfigMocker {
      * Public ctor.
      */
     public FilterConfigMocker() {
-        this.withServletContext(new ServletContextMocker().mock());
+        this.withServletContext(new MkServletContext());
     }
 
     /**

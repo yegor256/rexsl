@@ -30,8 +30,9 @@
 package com.rexsl.core;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import com.rexsl.mock.ServletContextMocker;
+import com.rexsl.mock.MkServletContext;
 import java.io.File;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.servlet.ServletContext;
@@ -70,9 +71,8 @@ public final class ContextResourceResolverTest {
     public void resolvesResourceByHref() throws Exception {
         final String href = "/test.xml?123";
         final String ref = "/test.xml";
-        final ServletContext ctx = new ServletContextMocker()
-            .withResource(ref, "<r>\u0443</r>")
-            .mock();
+        final ServletContext ctx = new MkServletContext()
+            .withResource(ref, "<r>\u0443</r>");
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve(href, null);
         MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(ref));
@@ -86,9 +86,8 @@ public final class ContextResourceResolverTest {
     @Test
     public void resolvesResourceByRelativeLocalPath() throws Exception {
         final String ref = "/a/text.txt";
-        final ServletContext ctx = new ServletContextMocker()
-            .withResource(ref, "")
-            .mock();
+        final ServletContext ctx = new MkServletContext()
+            .withResource(ref, "");
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve("./text.txt?xxx", "/a/smth.xml?z");
         MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(ref));
@@ -102,9 +101,8 @@ public final class ContextResourceResolverTest {
     public void resolvesResourceByHrefAndBlankBase() throws Exception {
         final String href = "/test2.xml?1234";
         final String ref = "/test2.xml";
-        final ServletContext ctx = new ServletContextMocker()
-            .withResource(ref, "<r>\u0444</r>")
-            .mock();
+        final ServletContext ctx = new MkServletContext()
+            .withResource(ref, "<r>\u0444</r>");
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve(href, "");
         MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(ref));
@@ -118,10 +116,7 @@ public final class ContextResourceResolverTest {
     @Test
     public void resolvesWhenResourcesIsAnAbsoluteLink() throws Exception {
         final String href = "http://localhost/xsl/file.xsl";
-        final ServletContext ctx = new ServletContextMocker()
-            .withoutResource(href)
-            .mock();
-        Mockito.doReturn(null).when(ctx).getResourceAsStream(href);
+        final ServletContext ctx = new MkServletContext();
         final ContextResourceResolver.ConnectionProvider provider =
             Mockito.mock(ContextResourceResolver.ConnectionProvider.class);
         final HttpURLConnection conn = this.mockConnection();
@@ -153,9 +148,7 @@ public final class ContextResourceResolverTest {
     public void throwsExceptionWhenAbsoluteResourceHasInvalidStatusCode()
         throws Exception {
         final String href = "http://localhost/some-non-existing-file.xsl";
-        final ServletContext ctx = new ServletContextMocker()
-            .withoutResource(href)
-            .mock();
+        final ServletContext ctx = new MkServletContext();
         final ContextResourceResolver.ConnectionProvider provider =
             Mockito.mock(ContextResourceResolver.ConnectionProvider.class);
         final HttpURLConnection conn = this.mockConnection();
@@ -175,11 +168,9 @@ public final class ContextResourceResolverTest {
     public void throwsExceptionWhenAbsoluteResourceThrowsIoException()
         throws Exception {
         final String href = "http://localhost/erroneous-file.xsl";
-        final ServletContext ctx = new ServletContextMocker()
-            .withoutResource(href)
-            .mock();
+        final ServletContext ctx = new MkServletContext();
         final HttpURLConnection conn = this.mockConnection();
-        Mockito.doThrow(new java.io.IOException("ouch")).when(conn).connect();
+        Mockito.doThrow(new IOException("ouch")).when(conn).connect();
         final ContextResourceResolver.ConnectionProvider provider =
             Mockito.mock(ContextResourceResolver.ConnectionProvider.class);
         Mockito.when(provider.open(Mockito.any(URL.class))).thenReturn(conn);
@@ -195,9 +186,7 @@ public final class ContextResourceResolverTest {
     @Test(expected = javax.xml.transform.TransformerException.class)
     public void throwsWhenResourceIsAbsent() throws Exception {
         final String href = "/xsl/file.xsl";
-        final ServletContext ctx = new ServletContextMocker()
-            .withoutResource(href)
-            .mock();
+        final ServletContext ctx = new MkServletContext();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         resolver.resolve(href, null);
     }
@@ -211,7 +200,7 @@ public final class ContextResourceResolverTest {
         final File file = this.temp.newFile("file.xml");
         FileUtils.writeStringToFile(file, "<data/>");
         final String href = file.toURI().toString();
-        final ServletContext ctx = new ServletContextMocker().mock();
+        final ServletContext ctx = new MkServletContext();
         final URIResolver resolver = new ContextResourceResolver(ctx);
         final Source src = resolver.resolve(href, null);
         MatcherAssert.assertThat(src.getSystemId(), Matchers.equalTo(href));

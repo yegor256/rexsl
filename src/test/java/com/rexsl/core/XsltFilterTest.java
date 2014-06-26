@@ -34,7 +34,7 @@ import com.rexsl.mock.FilterChainMocker;
 import com.rexsl.mock.FilterConfigMocker;
 import com.rexsl.mock.HttpServletRequestMocker;
 import com.rexsl.mock.HttpServletResponseMocker;
-import com.rexsl.mock.ServletContextMocker;
+import com.rexsl.mock.MkServletContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -49,7 +49,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * Test case for {@link XslFilter}.
+ * Test case for {@link XsltFilter}.
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */
@@ -61,12 +61,12 @@ public final class XsltFilterTest {
      */
     @Test
     public void transformsFromXmlToHtml() throws Exception {
-        final ServletContext context = new ServletContextMocker()
+        final ServletContext context = new MkServletContext()
             .withResource(
                 "/foo.xsl",
                 // @checkstyle LineLength (1 line)
                 "<stylesheet xmlns='http://www.w3.org/1999/XSL/Transform' xmlns:x='http://www.w3.org/1999/xhtml' version='2.0'><template match='/'><x:html><x:div><value-of select='/page/data'/></x:div><x:p>\u0443</x:p></x:html></template></stylesheet>"
-        ).mock();
+        );
         final FilterConfig config = new FilterConfigMocker()
             .withServletContext(context)
             .mock();

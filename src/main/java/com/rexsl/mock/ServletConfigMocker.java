@@ -58,7 +58,7 @@ public final class ServletConfigMocker {
      * Public ctor.
      */
     public ServletConfigMocker() {
-        this.withServletContext(new ServletContextMocker().mock());
+        this.withServletContext(new MkServletContext());
     }
 
     /**
