@@ -61,6 +61,7 @@ final class TypesMatcher {
     /**
      * Media types.
      */
+    @Immutable.Array
     private final transient String[] types;
 
     /**
