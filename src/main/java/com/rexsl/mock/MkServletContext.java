@@ -222,12 +222,18 @@ public final class MkServletContext implements ServletContext {
 
     @Override
     public void setAttribute(final String str, final Object obj) {
-        throw new UnsupportedOperationException("#setAttribute()");
+        Logger.warn(
+            this, "#setAttribute('%s', ..) ignored by %s",
+            str, this.getClass().getSimpleName()
+        );
     }
 
     @Override
     public void removeAttribute(final String str) {
-        throw new UnsupportedOperationException("#removeAttribute()");
+        Logger.warn(
+            this, "#removeAttribute('%s') ignored by %s",
+            str, this.getClass().getSimpleName()
+        );
     }
 
     @Override
