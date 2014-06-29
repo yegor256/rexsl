@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> com.rexsl.mock.FilterConfigMocker;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> com.rexsl.mock.HttpServletRequestMocker;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> com.rexsl.mock.HttpServletResponseMocker;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> com.rexsl.mock.ServletContextMocker;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> com.rexsl.mock.MkServletContext;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> javax.servlet.Filter;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> javax.servlet.FilterChain;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> javax.servlet.FilterConfig;
@@ -57,7 +57,7 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> org.mockito.Mockito;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * Test case for {@link XslFilter}.</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * Test case for {@link XsltFilter}.</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * @author Yegor Bugayenko (yegor@tpc2.com)</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * @version $Id$</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> */</em>
@@ -69,12 +69,12 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      @Test
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transformsFromXmlToHtml() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">final</strong> ServletContext context = <strong class="jxr_keyword">new</strong> ServletContextMocker()
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">final</strong> ServletContext context = <strong class="jxr_keyword">new</strong> MkServletContext()
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>              .withResource(
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>                  <span class="jxr_string">"/foo.xsl"</span>,
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>                  <em class="jxr_comment">// @checkstyle LineLength (1 line)</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>                  <span class="jxr_string">"&lt;stylesheet xmlns='http://www.w3.org/1999/XSL/Transform' xmlns:x='http://www.w3.org/1999/xhtml' version='2.0'&gt;&lt;template match='/'&gt;&lt;x:html&gt;&lt;x:div&gt;&lt;value-of select='/page/data'/&gt;&lt;/x:div&gt;&lt;x:p&gt;\u0443&lt;/x:p&gt;&lt;/x:html&gt;&lt;/template&gt;&lt;/stylesheet&gt;"</span>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          ).mock();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          );
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">final</strong> FilterConfig config = <strong class="jxr_keyword">new</strong> FilterConfigMocker()
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>              .withServletContext(context)
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>              .mock();
