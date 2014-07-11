@@ -1,0 +1,15 @@
+assets:
+  settings.xml: "yegor256/home#assets/rexsl/settings.xml"
+release:
+  env:
+    MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1g"
+  script:
+    - "mvn versions:set \"-DnewVersion=${tag}\""
+    - "git commit -am \"${tag}\""
+    - "mvn clean deploy -Psonatype -Prexsl --settings ../settings.xml"
+    - "mvn clean site-deploy -Psite -Prempl --settings ../settings.xml"
+merge:
+  env:
+    MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1g"
+  script:
+    - "mvn help:system clean install -Pqulice --settings ../settings.xml"
