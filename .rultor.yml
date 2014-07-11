@@ -1,5 +1,8 @@
 assets:
   settings.xml: "yegor256/home#assets/rexsl/settings.xml"
+  pubring.gpg: "yegor256/home#assets/pubring.gpg"
+  secring.gpg: "yegor256/home#assets/secring.gpg"
+
 release:
   env:
     MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1g"
@@ -7,7 +10,8 @@ release:
     - "mvn versions:set \"-DnewVersion=${tag}\""
     - "git commit -am \"${tag}\""
     - "mvn clean deploy -Psonatype -Prexsl --settings ../settings.xml"
-    - "mvn clean site-deploy -Psite -Prempl --settings ../settings.xml"
+    - "mvn clean site-deploy -Psite -Prempl -Prexsl --settings ../settings.xml"
+
 merge:
   env:
     MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1g"
