@@ -29,6 +29,8 @@
  */
 package com.rexsl.core;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.jul.LevelChangePropagator;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
@@ -39,8 +41,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Handler;
-import java.util.logging.LogManager;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.ServletConfig;
@@ -52,6 +52,7 @@ import javax.ws.rs.WebApplicationException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
@@ -210,12 +211,13 @@ public final class RestfulServlet extends ServletContainer {
      * @see #init(ServletConfig)
      */
     private void reconfigureJUL() {
-        final java.util.logging.Logger root =
-            LogManager.getLogManager().getLogger("");
-        final Handler[] handlers = root.getHandlers();
-        for (final Handler handler : handlers) {
-            root.removeHandler(handler);
-        }
+        final LevelChangePropagator listener = new LevelChangePropagator();
+        final LoggerContext loggerContext = (LoggerContext) LoggerFactory
+            .getILoggerFactory();
+        loggerContext.addListener(listener);
+        listener.setContext(loggerContext);
+        loggerContext.start();
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
         Logger.debug(this, "#julToSlf4j(): JUL forwarded to SLF4j");
     }
