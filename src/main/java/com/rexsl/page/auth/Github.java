@@ -199,7 +199,7 @@ public final class Github implements Provider, Provider.Visible {
     private Identity parse(final JsonObject json) {
         return new Identity.Simple(
             URN.create(String.format("urn:github:%d", json.getInt("id"))),
-            json.getString("name", Identity.ANONYMOUS.name()),
+            json.getString("login", Identity.ANONYMOUS.name()),
             URI.create(
                 json.getString(
                     "avatar_url",
