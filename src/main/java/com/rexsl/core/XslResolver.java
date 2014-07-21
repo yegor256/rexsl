@@ -31,6 +31,7 @@ package com.rexsl.core;
 
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
+import com.jcabi.manifests.Manifests;
 import com.rexsl.core.annotations.Schema;
 import com.rexsl.core.annotations.Stylesheet;
 import java.io.File;
@@ -80,6 +81,11 @@ public final class XslResolver implements ContextResolver<Marshaller> {
      * (name of {@link ServletContext} init parameter).
      */
     public static final String XSD_FOLDER = "com.rexsl.core.XSD_FOLDER";
+
+    /**
+     * Manifest xsl suffix entry name.
+     */
+    private static final String XSL_SUFFIX = "ReXSL-Suffix";
 
     /**
      * Folder with XSD files.
@@ -222,9 +228,10 @@ public final class XslResolver implements ContextResolver<Marshaller> {
                         this.request.getServerName(),
                         this.request.getServerPort(),
                         Logger.format(
-                            "%s%s",
+                            "%s%s%s",
                             this.request.getContextPath(),
-                            stylesheet
+                            stylesheet,
+                            this.suffix()
                         )
                     ).toString();
                 } catch (final MalformedURLException ex) {
@@ -235,6 +242,23 @@ public final class XslResolver implements ContextResolver<Marshaller> {
             stylesheet = ((Stylesheet) antn).value();
         }
         return stylesheet;
+    }
+
+    /**
+     * Suffix for XSL files.
+     * @return Query string with suffix or empty string.
+     */
+    private String suffix() {
+        final String suffix;
+        if (Manifests.exists(XslResolver.XSL_SUFFIX)) {
+            suffix = String.format(
+                "?%s",
+                Manifests.read(XslResolver.XSL_SUFFIX)
+            );
+        } else {
+            suffix = "";
+        }
+        return suffix;
     }
 
     /**
