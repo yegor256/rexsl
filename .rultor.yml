@@ -12,6 +12,12 @@ release:
     - "mvn clean deploy -Psonatype -Prexsl --settings ../settings.xml"
     - "mvn clean site-deploy -Psite -Prempl -Prexsl --settings ../settings.xml"
 
+deploy:
+  env:
+    MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1g"
+  script:
+    - "mvn clean deploy -Ppdd -Pqulice --settings ../settings.xml"
+
 merge:
   env:
     MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1g"
