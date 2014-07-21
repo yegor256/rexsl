@@ -9,7 +9,7 @@ release:
   script:
     - "mvn versions:set \"-DnewVersion=${tag}\""
     - "git commit -am \"${tag}\""
-    - "mvn clean deploy -Psonatype -Prexsl --settings ../settings.xml"
+    - "mvn clean deploy -Pqulice -Psonatype -Prexsl --settings ../settings.xml"
     - "mvn clean site-deploy -Psite -Prempl -Prexsl --settings ../settings.xml"
 
 deploy:
