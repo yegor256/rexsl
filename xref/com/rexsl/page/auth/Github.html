@@ -207,7 +207,7 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../com/rexsl/page/auth/Identity.html">Identity</a> parse(<strong class="jxr_keyword">final</strong> JsonObject json) {
 <a class="jxr_linenumber" name="L200" href="#L200">200</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Identity.Simple(
 <a class="jxr_linenumber" name="L201" href="#L201">201</a>             URN.create(String.format(<span class="jxr_string">"urn:github:%d"</span>, json.getInt(<span class="jxr_string">"id"</span>))),
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>             json.getString(<span class="jxr_string">"name"</span>, Identity.ANONYMOUS.name()),
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>             json.getString(<span class="jxr_string">"login"</span>, Identity.ANONYMOUS.name()),
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>             URI.create(
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>                 json.getString(
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>                     <span class="jxr_string">"avatar_url"</span>,

@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?xml-stylesheet type='text/xsl' href='puzzles.xsl'?><puzzles>
 <puzzle>
-<ticket>1</ticket>
-<file>src/it/all-correct/src/test/java/com/rexsl/foo/ErrorRsITCase.java</file>
-<body>Error forwarding doesn't work, for some strange reason. It worked fine in version 1.0, but started to fail in version 1.1.</body>
-<role>IMP</role>
-<estimate>0</estimate>
-<lines>54-56</lines>
-</puzzle>
-<puzzle>
 <ticket>430</ticket>
 <file>src/main/java/com/rexsl/page/JaxbBundle.java</file>
 <body>A new design would be required for this class. &lt;br/&gt; &lt;b&gt;The problems&lt;/b&gt;: &lt;ul&gt; &lt;li&gt;this.content and this.parent are used as flags, not only as data storage variables. &lt;li&gt;there are three different "types" combined in one class: root element (parent == null), node element (content == null), and leaf element. &lt;/ul&gt; &lt;br/&gt; &lt;b&gt;The solution&lt;/b&gt;: A new hierarchy of classes: &lt;br/&gt; &lt;code&gt; interface TreeNode&lt;br/&gt; &lt;br/&gt; abstract AbstractNode implements TreeNode&lt;br/&gt; +name: String&lt;br/&gt; +attributes: ConcurrentMap&lt;String, String&gt;&lt;br/&gt; &lt;br/&gt; abstract SubNode extends AbstractNode&lt;br/&gt; +parent: TreeNode&lt;br/&gt; &lt;br/&gt; InnerNode extends SubNode&lt;br/&gt; +children: List&lt;TreeNode&gt;&lt;br/&gt; &lt;br/&gt; LeafNode extends SubNode&lt;br/&gt; +content: String&lt;br/&gt; &lt;br/&gt; DeadNode implements TreeNode&lt;br/&gt; // this is the node we set as parent in root node&lt;br/&gt; &lt;/code&gt; &lt;br/&gt;</body>
@@ -23,5 +15,13 @@
 <role>IMP</role>
 <estimate>0</estimate>
 <lines>108-110</lines>
+</puzzle>
+<puzzle>
+<ticket>1</ticket>
+<file>src/it/all-correct/src/test/java/com/rexsl/foo/ErrorRsITCase.java</file>
+<body>Error forwarding doesn't work, for some strange reason. It worked fine in version 1.0, but started to fail in version 1.1.</body>
+<role>IMP</role>
+<estimate>0</estimate>
+<lines>54-56</lines>
 </puzzle>
 </puzzles>
