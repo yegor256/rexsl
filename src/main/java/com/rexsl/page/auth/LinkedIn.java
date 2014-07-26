@@ -187,7 +187,8 @@ public final class LinkedIn implements Provider, Provider.Visible {
      */
     private Identity fetch(final String token) throws IOException {
         final URI uri = UriBuilder
-            .fromUri("https://api.linkedin.com/v1/people/~")
+            // @checkstyle LineLength (1 line)
+            .fromUri("https://api.linkedin.com/v1/people/~:(id,first-name,last-name,picture-url)?format=json")
             .queryParam("oauth2_access_token", "{token}")
             .build(token);
         return this.parse(
@@ -207,10 +208,13 @@ public final class LinkedIn implements Provider, Provider.Visible {
     private Identity parse(final JsonObject json) {
         return new Identity.Simple(
             URN.create(String.format("urn:linkedin:%d", json.getInt("id"))),
-            json.getString("login", Identity.ANONYMOUS.name()),
+            String.format("%s %s",
+                json.getString("first_name", Identity.ANONYMOUS.name()),
+                json.getString("last_name", "")
+            ).trim(),
             URI.create(
                 json.getString(
-                    "avatar_url",
+                    "picture-url",
                     Identity.ANONYMOUS.photo().toString()
                 )
             )
