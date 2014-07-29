@@ -208,7 +208,8 @@ public final class LinkedIn implements Provider, Provider.Visible {
     private Identity parse(final JsonObject json) {
         return new Identity.Simple(
             URN.create(String.format("urn:linkedin:%d", json.getInt("id"))),
-            String.format("%s %s",
+            String.format(
+                "%s %s",
                 json.getString("first_name", Identity.ANONYMOUS.name()),
                 json.getString("last_name", "")
             ).trim(),
