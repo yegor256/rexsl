@@ -32,6 +32,8 @@ package com.rexsl.foo;
 import com.jcabi.http.request.JdkRequest;
 import com.jcabi.http.response.RestResponse;
 import java.net.HttpURLConnection;
+import javax.ws.rs.core.HttpHeaders;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
@@ -66,4 +68,16 @@ public final class FrontRsITCase {
         }
     }
 
+    /**
+     * Renders page with XSL that has suffix.
+     * @throws Exception In case of error.
+     */
+    @Test
+    public void shouldAppendSuffixToXsl() throws Exception {
+        new JdkRequest(FrontRsITCase.HOME).uri().back()
+            .header(HttpHeaders.ACCEPT, "text/xml")
+            .fetch()
+            .as(RestResponse.class)
+            .assertBody(Matchers.containsString("Home.xsl?suffixtest"));
+    }
 }
