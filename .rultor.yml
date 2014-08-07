@@ -2,6 +2,7 @@ assets:
   settings.xml: "yegor256/home#assets/rexsl/settings.xml"
   pubring.gpg: "yegor256/home#assets/pubring.gpg"
   secring.gpg: "yegor256/home#assets/secring.gpg"
+  s3cfg: "yegor256/home#assets/s3cfg"
 
 release:
   env:
@@ -17,9 +18,12 @@ deploy:
     MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1g"
   script:
     - "mvn clean deploy -Ppdd -Pqulice --settings ../settings.xml"
+    - "pdd --source=$(pwd) --verbose --file=rexsl.xml"
+    - "s3cmd --no-progress put rexsl.xml --config=../s3cfg s3://pdd.teamed.io/rexsl.xml > /dev/null"
 
 merge:
   env:
     MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1g"
   script:
     - "mvn help:system clean install -Pqulice --settings ../settings.xml"
+    - "mvn clean site -Psite --settings ../settings.xml"
