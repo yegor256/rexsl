@@ -4,7 +4,6 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>rexsl - Surefire Report</title>
-        <link media="all" rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"/>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
                             <script>
                 var _gaq = _gaq || [];
@@ -44,7 +43,7 @@
             <nav class="menu-section" role="navigation">
                 <ul class="menu" id="menu">
                                                                                     <li>
-                            Overview
+                            <span>Overview</span>
                                                             <ul>
                                                                                                     <li >
                             <span>                        <a href="index.html" title="Introduction">Introduction</a>
@@ -59,7 +58,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li >
-                            <span>                        <a href="apidocs-1.3.1/index.html" title="JavaDoc 1.3.1">JavaDoc 1.3.1</a>
+                            <span>                        <a href="apidocs-1.4/index.html" title="JavaDoc 1.4">JavaDoc 1.4</a>
         </span>
                                                                                                                                                                 <ul>
                                                                     </ul>
@@ -79,7 +78,7 @@
                                                                                         </ul>
                                                     </li>
                                             <li>
-                            Best Practices
+                            <span>Best Practices</span>
                                                             <ul>
                                                                                                     <li >
                             <span>                        <a href="web-xml-configuration.html" title="web.xml Config">web.xml Config</a>
@@ -114,7 +113,7 @@
                                                                                         </ul>
                                                     </li>
                                             <li>
-                            Insets
+                            <span>Insets</span>
                                                             <ul>
                                                                                                     <li >
                             <span>                        <a href="inset-flash.html" title="Flash messages">Flash messages</a>
@@ -149,7 +148,7 @@
                                                                                         </ul>
                                                     </li>
                                             <li>
-                            Project Documentation
+                            <span>Project Documentation</span>
                                                             <ul>
                                                                                                     <li >
                             <span>                        <a href="project-info.html" title="Project Information">Project Information</a>
@@ -158,14 +157,8 @@
                                                                                                                         <li >
                             <span>                        <a href="project-reports.html" title="Project Reports">Project Reports</a>
         </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <ul>
                                                                                                     <li >
-                            <span>                        <a href="rempl.html" title="REMPL">REMPL</a>
-        </span>
-                                                                                                                                                                <ul>
-                                                                    </ul>
-                                                    </li>
-                                                                                                                        <li >
                             <span>                        <a href="xref-test/index.html" title="Test Source Xref">Test Source Xref</a>
         </span>
                                                                                                                                                                 <ul>
@@ -196,7 +189,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li >
-                            <span>                        <a href="apidocs-1.3.1/index.html" title="JavaDocs">JavaDocs</a>
+                            <span>                        <a href="apidocs-1.4/index.html" title="JavaDocs">JavaDocs</a>
         </span>
                                                                                                                                                                 <ul>
                                                                     </ul>
@@ -217,11 +210,10 @@
                 <main role="main">
                     <div class="content">
                         <header>
-                            <i class="menu-button fa fa-align-justify"></i>
                             <div class="logo">
                                 <a href="./"
                                     title=" home page of ReXSL.com ">
-                                    <img src="http://img.rexsl.com/logo.png"
+                                    <img src="http://img.rexsl.com/logo.svg"
                                         alt="ReXSL"
                                                                                     width="200"
                                                                                                                             height="45"
@@ -229,24 +221,30 @@
                                     />
                                 </a>
                             </div>
-                            <div class="date">
-                                <div class="date-numbers">
-                                    <strong itemprop="version">1.3.1</strong>
+                            <div class="teamed">
+                                <a href="http://www.teamed.io">
+                                    <img src="http://img.teamed.io/btn.svg" alt="teamed.io logo"/>
+                                </a>
+                            </div>
+                            <ul class="badges">
+                                <li>
+                                    <strong itemprop="version">1.4</strong>
+                                </li>
+                                <li>
                                     
-                                    <time itemprop="datePublished" datetime="2014-07-21T11:16:45Z">
+                                    <time itemprop="datePublished" datetime="2014-08-13T09:14:14Z">
                                         
-                                        21-Jul-2014
+                                        13-Aug-2014
                                     </time>
-                                </div>
-                                                                                                    <div>
-                                        <iframe src="http://ghbtns.com/github-btn.html?user=yegor256&amp;repo=rexsl&amp;type=watch&amp;count=true&amp;size=large"
-                                            style="border-width:0px;overflow:hidden;width:170px;height:30px;">
-                                        </iframe>
-                                    </div>
-                                                            </div>
-                            <div id="here-goes-menu" class="menu-off"></div>
+                                </li>
+                                <li class="menu-button">menu</li>
+                            </ul>
                         </header>
-                        <article role="article" itemprop="articleBody">
+                        <div id="here-goes-menu" class="menu-off"></div>
+                                                                            <a href="https://github.com/yegor256/rexsl">
+                                <img src="http://img.jcabi.com/fork-me.svg" class="fork-me"/>
+                            </a>
+                                                <article role="article" itemprop="articleBody">
                             <script type="text/javascript">
 //<![CDATA[
 function toggleDisplay(elementId) {
@@ -278,12 +276,12 @@ function toggleDisplay(elementId) {
 <th>Success Rate</th>
 <th>Time</th></tr>
 <tr class="b">
-<td>96</td>
+<td>102</td>
 <td>0</td>
 <td>0</td>
 <td>1</td>
-<td>98.958%</td>
-<td>24.865</td></tr></table><br />
+<td>99.02%</td>
+<td>37.328</td></tr></table><br />
 <p>Note: failures are anticipated and checked for with assertions while errors are unanticipated.</p><br /></div>
 <div class="section">
 <h2>Package List<a name="Package_List"></a></h2><a name="Package_List"></a>
@@ -304,15 +302,15 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>4.748</td></tr>
+<td>12.754</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.core">com.rexsl.core</a></td>
-<td>43</td>
+<td>49</td>
 <td>0</td>
 <td>0</td>
 <td>1</td>
-<td>97.674%</td>
-<td>13.635</td></tr>
+<td>97.959%</td>
+<td>18.566</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.page.inset">com.rexsl.page.inset</a></td>
 <td>7</td>
@@ -320,7 +318,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>4.138</td></tr>
+<td>3.049</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.page.auth">com.rexsl.page.auth</a></td>
 <td>18</td>
@@ -328,7 +326,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>2.344</td></tr></table><br />
+<td>2.959</td></tr></table><br />
 <p>Note: package statistics are not computed recursively, they only sum up all of its testsuites numbers.</p>
 <div class="section">
 <h3>com.rexsl.page<a name="com.rexsl.page"></a></h3><a name="com.rexsl.page"></a>
@@ -350,7 +348,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.44</td></tr>
+<td>0.506</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.pageCookieBuilderTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.pageCookieBuilderTest">CookieBuilderTest</a></td>
@@ -359,7 +357,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.104</td></tr>
+<td>0.181</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.pageBaseResourceTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.pageBaseResourceTest">BaseResourceTest</a></td>
@@ -368,7 +366,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.016</td></tr>
+<td>0.272</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.pageJaxbBundleTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.pageJaxbBundleTest">JaxbBundleTest</a></td>
@@ -377,7 +375,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.817</td></tr>
+<td>1.364</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.pagePageBuilderTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.pagePageBuilderTest">PageBuilderTest</a></td>
@@ -386,7 +384,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.748</td></tr>
+<td>3.659</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.pageForwardedUriInfoTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.pageForwardedUriInfoTest">ForwardedUriInfoTest</a></td>
@@ -395,7 +393,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.072</td></tr>
+<td>0.04</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.pageBasePageTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.pageBasePageTest">BasePageTest</a></td>
@@ -404,7 +402,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>1.929</td></tr>
+<td>3.749</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.pageJaxbGroupTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.pageJaxbGroupTest">JaxbGroupTest</a></td>
@@ -413,7 +411,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.622</td></tr></table></div>
+<td>2.983</td></tr></table></div>
 <div class="section">
 <h3>com.rexsl.core<a name="com.rexsl.core"></a></h3><a name="com.rexsl.core"></a>
 <table border="1" class="bodyTable">
@@ -434,7 +432,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.329</td></tr>
+<td>0.412</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.coreUserAgentTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreUserAgentTest">UserAgentTest</a></td>
@@ -443,25 +441,25 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.469</td></tr>
+<td>0.112</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.coreTypesMatcherTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreTypesMatcherTest">TypesMatcherTest</a></td>
-<td>2</td>
+<td>1</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.436</td></tr>
+<td>0.354</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.corePageAnalyzerTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.corePageAnalyzerTest">PageAnalyzerTest</a></td>
-<td>3</td>
+<td>4</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.506</td></tr>
+<td>0.655</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.coreXsdEventHandlerTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreXsdEventHandlerTest">XsdEventHandlerTest</a></td>
@@ -470,7 +468,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.048</td></tr>
+<td>0.211</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.coreContextResourceResolverTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreContextResourceResolverTest">ContextResourceResolverTest</a></td>
@@ -479,7 +477,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>1.439</td></tr>
+<td>5.072</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.coreXslResolverTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreXslResolverTest">XslResolverTest</a></td>
@@ -488,16 +486,16 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>6.33</td></tr>
+<td>3.534</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.coreProductVersionTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreProductVersionTest">ProductVersionTest</a></td>
-<td>4</td>
+<td>10</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.063</td></tr>
+<td>0.412</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.coreServletConfigWrapperTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreServletConfigWrapperTest">ServletConfigWrapperTest</a></td>
@@ -506,7 +504,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.075</td></tr>
+<td>0.138</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.coreXsltFilterTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreXsltFilterTest">XsltFilterTest</a></td>
@@ -515,7 +513,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>2.124</td></tr>
+<td>3.731</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.coreRestfulServletTest"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreRestfulServletTest">RestfulServletTest</a></td>
@@ -524,7 +522,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>1</td>
 <td>75%</td>
-<td>1.493</td></tr>
+<td>2.533</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.coreByteArrayResponseWrapperTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreByteArrayResponseWrapperTest">ByteArrayResponseWrapperTest</a></td>
@@ -533,7 +531,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.001</td></tr>
+<td>0.089</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.coreExceptionTrapTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.coreExceptionTrapTest">ExceptionTrapTest</a></td>
@@ -542,7 +540,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.322</td></tr></table></div>
+<td>1.313</td></tr></table></div>
 <div class="section">
 <h3>com.rexsl.page.inset<a name="com.rexsl.page.inset"></a></h3><a name="com.rexsl.page.inset"></a>
 <table border="1" class="bodyTable">
@@ -563,7 +561,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>2.595</td></tr>
+<td>0.94</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.page.insetVersionInsetTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.page.insetVersionInsetTest">VersionInsetTest</a></td>
@@ -572,7 +570,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.767</td></tr>
+<td>1.675</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.page.insetLinksInsetTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.page.insetLinksInsetTest">LinksInsetTest</a></td>
@@ -581,7 +579,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.776</td></tr></table></div>
+<td>0.434</td></tr></table></div>
 <div class="section">
 <h3>com.rexsl.page.auth<a name="com.rexsl.page.auth"></a></h3><a name="com.rexsl.page.auth"></a>
 <table border="1" class="bodyTable">
@@ -602,7 +600,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.063</td></tr>
+<td>0.205</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.page.authHttpBasicTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.page.authHttpBasicTest">HttpBasicTest</a></td>
@@ -611,7 +609,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.067</td></tr>
+<td>0.066</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.page.authEncryptedTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.page.authEncryptedTest">EncryptedTest</a></td>
@@ -620,7 +618,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>1.166</td></tr>
+<td>0.669</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.page.authFacebookTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.page.authFacebookTest">FacebookTest</a></td>
@@ -629,7 +627,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.185</td></tr>
+<td>0.205</td></tr>
 <tr class="b">
 <td><a href="#com.rexsl.page.authGoogleTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.page.authGoogleTest">GoogleTest</a></td>
@@ -638,7 +636,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.1</td></tr>
+<td>0.075</td></tr>
 <tr class="a">
 <td><a href="#com.rexsl.page.authAuthInsetTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.page.authAuthInsetTest">AuthInsetTest</a></td>
@@ -647,7 +645,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.763</td></tr></table></div><br /></div>
+<td>1.739</td></tr></table></div><br /></div>
 <div class="section">
 <h2>Test Cases<a name="Test_Cases"></a></h2><a name="Test_Cases"></a>
 <p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p>
@@ -657,283 +655,307 @@ function toggleDisplay(elementId) {
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>doestRenderWhenCookieIsAbsent</td>
-<td>0.036</td></tr>
+<td>0.085</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>generatesLink</td>
-<td>0.027</td></tr></table></div>
+<td>0.12</td></tr></table></div>
 <div class="section">
 <h3>StaticTemplateTest<a name="StaticTemplateTest"></a></h3><a name="com.rexsl.coreStaticTemplateTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>rendersFromLocalResource</td>
-<td>0.007</td></tr>
+<td>rendersFromFileResource</td>
+<td>0.049</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>rendersFromHttpResource</td>
-<td>0.305</td></tr>
+<td>rendersFromLocalResource</td>
+<td>0.04</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>rendersFromFileResource</td>
-<td>0.017</td></tr></table></div>
+<td>rendersFromHttpResource</td>
+<td>0.323</td></tr></table></div>
 <div class="section">
 <h3>LinkTest<a name="LinkTest"></a></h3><a name="com.rexsl.pageLinkTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsToXml</td>
-<td>0.278</td></tr>
+<td>0.406</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>attachesToResource</td>
+<td>0.044</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>attachesToResourceWithComplexUri</td>
+<td>0.026</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>buildsCleanUri</td>
-<td>0.05</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>attachesToResource</td>
-<td>0.076</td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>attachesToResourceWithComplexUri</td>
-<td>0.036</td></tr></table></div>
+<td>0.03</td></tr></table></div>
 <div class="section">
 <h3>CookieBuilderTest<a name="CookieBuilderTest"></a></h3><a name="com.rexsl.pageCookieBuilderTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>acceptsValidValues</td>
-<td>0.006</td></tr>
+<td>buildsCookieDeletionRequest</td>
+<td>0.064</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>buildsCookieDeletionRequest</td>
-<td>0.047</td></tr>
+<td>acceptsValidValues</td>
+<td>0.035</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>rejectsInvalidValues</td>
-<td>0.012</td></tr>
+<td>0.022</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>buildsCorrectCookie</td>
-<td>0.037</td></tr>
+<td>buildsCookieWithBrokenInputUri</td>
+<td>0.009</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>buildsCookieWithBrokenInputUri</td>
-<td>0.002</td></tr></table></div>
+<td>buildsCorrectCookie</td>
+<td>0.051</td></tr></table></div>
 <div class="section">
 <h3>UserAgentTest<a name="UserAgentTest"></a></h3><a name="com.rexsl.coreUserAgentTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>decidesToTransform[0]</td>
-<td>0.467</td></tr>
+<td>decidesToTransform[1]</td>
+<td>0.052</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>decidesToTransform[1]</td>
-<td>0.001</td></tr>
+<td>decidesToTransform[0]</td>
+<td>0.058</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>decidesToTransform[2]</td>
-<td>0.001</td></tr></table></div>
+<td>0.002</td></tr></table></div>
 <div class="section">
 <h3>TypesMatcherTest<a name="TypesMatcherTest"></a></h3><a name="com.rexsl.coreTypesMatcherTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>decidesToAcceptOrNot[0]</td>
-<td>0.218</td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>spotsAnExplicitRequestForCertainType[0]</td>
-<td>0.218</td></tr></table></div>
+<td>0.354</td></tr></table></div>
 <div class="section">
 <h3>FlashInsetTest<a name="FlashInsetTest"></a></h3><a name="com.rexsl.page.insetFlashInsetTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>rendersCookieAndAddsHttpHeader</td>
-<td>1.337</td></tr>
+<td>0.429</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>buildsRedirectingException</td>
-<td>0.282</td></tr>
+<td>0.091</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>buildsSevereForwardingException</td>
-<td>0.113</td></tr>
+<td>0.082</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>buildsForwardingException</td>
-<td>0.096</td></tr>
+<td>0.074</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>doestRenderWhenCookieIsAbsent</td>
-<td>0.767</td></tr></table></div>
+<td>0.264</td></tr></table></div>
 <div class="section">
 <h3>PageAnalyzerTest<a name="PageAnalyzerTest"></a></h3><a name="com.rexsl.corePageAnalyzerTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>decidesToTransform[0]</td>
-<td>0.466</td></tr>
+<td>0.511</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>decidesToTransform[1]</td>
-<td>0.034</td></tr>
+<td>0.067</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>decidesToTransform[2]</td>
-<td>0.006</td></tr></table></div>
+<td>0.042</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>decidesToTransform[3]</td>
+<td>0.035</td></tr></table></div>
 <div class="section">
 <h3>XsdEventHandlerTest<a name="XsdEventHandlerTest"></a></h3><a name="com.rexsl.coreXsdEventHandlerTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsExceptionOnEveryEvent</td>
-<td>0.048</td></tr></table></div>
+<td>0.211</td></tr></table></div>
 <div class="section">
 <h3>BaseResourceTest<a name="BaseResourceTest"></a></h3><a name="com.rexsl.pageBaseResourceTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>forwardsUriInfo</td>
-<td>0.009</td></tr>
+<td>setsAndReturnsContextElements</td>
+<td>0.167</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>setsAndReturnsContextElements</td>
-<td>0.007</td></tr></table></div>
+<td>forwardsUriInfo</td>
+<td>0.105</td></tr></table></div>
 <div class="section">
 <h3>VersionInsetTest<a name="VersionInsetTest"></a></h3><a name="com.rexsl.page.insetVersionInsetTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>rendersPageToXml</td>
-<td>0.767</td></tr></table></div>
+<td>1.675</td></tr></table></div>
 <div class="section">
 <h3>JaxbBundleTest<a name="JaxbBundleTest"></a></h3><a name="com.rexsl.pageJaxbBundleTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>convertsLinksToXml</td>
-<td>0.059</td></tr>
+<td>convertsGroupsToXml</td>
+<td>0.097</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>convertsGroupsToXml</td>
+<td>convertsLinksToXml</td>
 <td>0.074</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsItselfToXmlThroughJaxb</td>
-<td>0.294</td></tr>
+<td>0.445</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsSimpleDataToXml</td>
-<td>0.296</td></tr>
+<td>0.52</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>appendsDomElements</td>
-<td>0.052</td></tr>
+<td>0.116</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsKidBundlesToXml</td>
-<td>0.042</td></tr></table></div>
+<td>0.112</td></tr></table></div>
 <div class="section">
 <h3>ContextResourceResolverTest<a name="ContextResourceResolverTest"></a></h3><a name="com.rexsl.coreContextResourceResolverTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>resolvesResourceByRelativeLocalPath</td>
-<td>0.04</td></tr>
+<td>0.059</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>resolvesResourceByHrefAndBlankBase</td>
-<td>0.355</td></tr>
+<td>0.975</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsExceptionWhenAbsoluteResourceHasInvalidStatusCode</td>
-<td>0.179</td></tr>
+<td>0.183</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsWhenResourceIsAbsent</td>
-<td>0.001</td></tr>
+<td>0.051</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsExceptionWhenAbsoluteResourceThrowsIoException</td>
-<td>0.055</td></tr>
+<td>0.265</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>resolvesWhenResourcesIsAnAbsoluteLink</td>
-<td>0.665</td></tr>
+<td>1.649</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>resolvesResourceByHref</td>
-<td>0.075</td></tr>
+<td>0.951</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>resolvesUrlWithFile</td>
-<td>0.069</td></tr></table></div>
+<td>0.939</td></tr></table></div>
 <div class="section">
 <h3>XslResolverTest<a name="XslResolverTest"></a></h3><a name="com.rexsl.coreXslResolverTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>setServletContext</td>
-<td>0.432</td></tr>
+<td>injectsDefaultStylesheetPi</td>
+<td>0.772</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>testStylesheetAnnotation</td>
-<td>1.234</td></tr>
+<td>setServletContext</td>
+<td>0.037</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>injectsDefaultStylesheetPi</td>
-<td>1.286</td></tr>
+<td>testStylesheetAnnotation</td>
+<td>0.723</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>handlesDynamicallyExtendableObject</td>
-<td>1.233</td></tr>
+<td>0.7</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>instantiatesMarshaller</td>
-<td>0.578</td></tr>
+<td>0.413</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>avoidsReusalOfMarshallers</td>
-<td>0.592</td></tr>
+<td>injectsAbsolutePath</td>
+<td>0.508</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>injectsAbsolutePath</td>
-<td>0.975</td></tr></table></div>
+<td>avoidsReusalOfMarshallers</td>
+<td>0.381</td></tr></table></div>
 <div class="section">
 <h3>HttpBasicTest<a name="HttpBasicTest"></a></h3><a name="com.rexsl.page.authHttpBasicTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>authenticatesWhenHeaderIsPresent</td>
-<td>0.036</td></tr>
+<td>0.026</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>doestRenderWhenHeaderIsAbsent</td>
-<td>0.004</td></tr>
+<td>0.022</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>gracefullyHandlesEmptyParts</td>
-<td>0.027</td></tr></table></div>
+<td>0.018</td></tr></table></div>
 <div class="section">
 <h3>ProductVersionTest<a name="ProductVersionTest"></a></h3><a name="com.rexsl.coreProductVersionTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>equalsIsConsistentWithCompareTo[0]</td>
-<td>0.033</td></tr>
+<td>equalsIsConsistentWithCompareTo[2]</td>
+<td>0.039</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>equalsIsConsistentWithCompareTo[3]</td>
+<td>0.078</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>comparesTwoVersions[1]</td>
+<td>0.064</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>equalsIsConsistentWithCompareTo[0]</td>
+<td>0.061</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>comparesTwoVersions[0]</td>
-<td>0.028</td></tr>
+<td>0.03</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>comparesTwoVersions[2]</td>
+<td>0.067</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>equalsIsConsistentWithCompareTo[1]</td>
-<td>0.001</td></tr>
+<td>0.063</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>comparesTwoVersions[1]</td>
+<td>comparesTwoVersions[3]</td>
+<td>0.009</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>equalsIsConsistentWithCompareTo[4]</td>
+<td>0</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>comparesTwoVersions[4]</td>
 <td>0.001</td></tr></table></div>
 <div class="section">
 <h3>EncryptedTest<a name="EncryptedTest"></a></h3><a name="com.rexsl.page.authEncryptedTest"></a>
@@ -941,195 +963,195 @@ function toggleDisplay(elementId) {
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsOnEmptyInput</td>
-<td>0.471</td></tr>
+<td>0.165</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsOnNullInput</td>
-<td>0.25</td></tr>
+<td>0.147</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsToTextAndBack</td>
-<td>0.215</td></tr>
+<td>0.236</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsOnBrokenInput</td>
-<td>0.23</td></tr></table></div>
+<td>0.121</td></tr></table></div>
 <div class="section">
 <h3>FacebookTest<a name="FacebookTest"></a></h3><a name="com.rexsl.page.authFacebookTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>doestRenderWhenCookieIsAbsent</td>
-<td>0.059</td></tr>
+<td>generatesLink</td>
+<td>0.094</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>generatesLink</td>
-<td>0.126</td></tr></table></div>
+<td>doestRenderWhenCookieIsAbsent</td>
+<td>0.111</td></tr></table></div>
 <div class="section">
 <h3>ServletConfigWrapperTest<a name="ServletConfigWrapperTest"></a></h3><a name="com.rexsl.coreServletConfigWrapperTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsIfConfigNull</td>
-<td>0.045</td></tr>
+<td>0.099</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsIfPropertiesNull</td>
-<td>0.03</td></tr></table></div>
+<td>0.039</td></tr></table></div>
 <div class="section">
 <h3>LinksInsetTest<a name="LinksInsetTest"></a></h3><a name="com.rexsl.page.insetLinksInsetTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>rendersPageToXml</td>
-<td>0.776</td></tr></table></div>
+<td>0.434</td></tr></table></div>
 <div class="section">
 <h3>PageBuilderTest<a name="PageBuilderTest"></a></h3><a name="com.rexsl.pagePageBuilderTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>addsCorrectAnnotations</td>
-<td>0.231</td></tr>
+<td>0.872</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>buildsJaxbPageFromBareClass</td>
-<td>0.218</td></tr>
+<td>0.887</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>buildsJaxbPageConvertableToXml</td>
-<td>0.299</td></tr></table></div>
+<td>1.9</td></tr></table></div>
 <div class="section">
 <h3>XsltFilterTest<a name="XsltFilterTest"></a></h3><a name="com.rexsl.coreXsltFilterTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>transformsFromXmlToHtml</td>
-<td>1.423</td></tr>
+<td>2.582</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>doesntTouchBinaryContent</td>
-<td>0.701</td></tr></table></div>
+<td>1.149</td></tr></table></div>
 <div class="section">
 <h3>ForwardedUriInfoTest<a name="ForwardedUriInfoTest"></a></h3><a name="com.rexsl.pageForwardedUriInfoTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>throwsForNullUriInfo</td>
-<td>0.004</td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>forwardsUriCorrectlyWithOfficialForwarder</td>
-<td>0.033</td></tr>
-<tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>forwardsUriCorrectlyWithXForwarder</td>
-<td>0.034</td></tr>
+<td>0.015</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>throwsForNullHttpHeaders</td>
-<td>0.001</td></tr></table></div>
+<td>0.012</td></tr>
+<tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>forwardsUriCorrectlyWithXForwarder</td>
+<td>0.011</td></tr>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>throwsForNullUriInfo</td>
+<td>0.002</td></tr></table></div>
 <div class="section">
 <h3>RestfulServletTest<a name="RestfulServletTest"></a></h3><a name="com.rexsl.coreRestfulServletTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>initWithNonValidPackageHyphens</td>
-<td>0.038</td></tr>
+<td>0.029</td></tr>
 <tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>passesHttpRequestsToJersey</td>
+<td>2.485</td></tr>
+<tr class="a">
 <td><a href="#com.rexsl.core.RestfulServletTest.serializesItselfToStreamAndBack"><img src="images/icon_warning_sml.gif" alt="" /></a></td>
 <td><a href="#com.rexsl.core.RestfulServletTest.serializesItselfToStreamAndBack">serializesItselfToStreamAndBack</a>
 <div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;com_rexsl_core_RestfulServletTest_serializesItselfToStreamAndBack&apos;);"><span style="display:inline;" id="com_rexsl_core_RestfulServletTest_serializesItselfToStreamAndBackoff"> + </span><span style="display:none;" id="com_rexsl_core_RestfulServletTest_serializesItselfToStreamAndBackon"> - </span>[ Detail ]</a></div></td>
 <td>0</td></tr>
-<tr class="a">
+<tr class="b">
 <td></td>
 <td>skipped</td>
 <td></td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>initWithNonValidPackageStartsWithNumber</td>
-<td>0.035</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>passesHttpRequestsToJersey</td>
-<td>1.42</td></tr></table></div>
+<td>initWithNonValidPackageStartsWithNumber</td>
+<td>0.019</td></tr></table></div>
 <div class="section">
 <h3>ByteArrayResponseWrapperTest<a name="ByteArrayResponseWrapperTest"></a></h3><a name="com.rexsl.coreByteArrayResponseWrapperTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>writesToOutputStream</td>
-<td>0.001</td></tr></table></div>
+<td>0.089</td></tr></table></div>
 <div class="section">
 <h3>GoogleTest<a name="GoogleTest"></a></h3><a name="com.rexsl.page.authGoogleTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>doestRenderWhenCookieIsAbsent</td>
-<td>0.035</td></tr>
+<td>generatesLink</td>
+<td>0.059</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>generatesLink</td>
-<td>0.065</td></tr></table></div>
+<td>doestRenderWhenCookieIsAbsent</td>
+<td>0.016</td></tr></table></div>
 <div class="section">
 <h3>BasePageTest<a name="BasePageTest"></a></h3><a name="com.rexsl.pageBasePageTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsToXml</td>
-<td>1.17</td></tr>
+<td>2.177</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsToXmlWithoutLinks</td>
-<td>0.759</td></tr></table></div>
+<td>1.572</td></tr></table></div>
 <div class="section">
 <h3>AuthInsetTest<a name="AuthInsetTest"></a></h3><a name="com.rexsl.page.authAuthInsetTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>readsCookieAndAddsHttpHeader</td>
-<td>0.276</td></tr>
+<td>doestRenderWhenCookieIsAbsent</td>
+<td>0.4</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>authenticatesWithRedirectingProvider</td>
-<td>0.067</td></tr>
+<td>buildsUniqueIdentitiesAlways</td>
+<td>0.205</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>encryptsIdentityToText</td>
-<td>0.099</td></tr>
+<td>0.105</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>doestRenderWhenCookieIsAbsent</td>
-<td>0.18</td></tr>
+<td>authenticatesWithRedirectingProvider</td>
+<td>0.308</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>buildsUniqueIdentitiesAlways</td>
-<td>0.141</td></tr></table></div>
+<td>readsCookieAndAddsHttpHeader</td>
+<td>0.721</td></tr></table></div>
 <div class="section">
 <h3>JaxbGroupTest<a name="JaxbGroupTest"></a></h3><a name="com.rexsl.pageJaxbGroupTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsItselfToXml</td>
-<td>0.347</td></tr>
+<td>1.574</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>convertsItselfToXmlWhenEmpty</td>
-<td>0.275</td></tr></table></div>
+<td>1.409</td></tr></table></div>
 <div class="section">
 <h3>ExceptionTrapTest<a name="ExceptionTrapTest"></a></h3><a name="com.rexsl.coreExceptionTrapTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>serializesItself</td>
-<td>0.162</td></tr>
+<td>showsHeaders</td>
+<td>0.687</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>showsHeaders</td>
-<td>0.093</td></tr>
+<td>serializesItself</td>
+<td>0.361</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>rendersExceptionIntoHtmlPage</td>
-<td>0.067</td></tr></table></div><br /></div>
+<td>0.265</td></tr></table></div><br /></div>
 <div class="section">
 <h2>Failure Details<a name="Failure_Details"></a></h2><a name="Failure_Details"></a>
 <p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
@@ -1140,7 +1162,6 @@ function toggleDisplay(elementId) {
 <tr class="b">
 <td></td>
 <td>skipped: skipped</td></tr></table><br /></div>
-                            <img class="maven-logo" src="//img.jcabi.com/built-by-maven.png" alt="built by maven"/>
                         </article>
                     </div>
                 </main>
