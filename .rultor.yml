@@ -18,6 +18,7 @@ deploy:
   script:
     - "mvn clean deploy -Ppdd -Pqulice --settings ../settings.xml"
     - "gem install pdd"
+    - "mvn clean"
     - "pdd --source=$(pwd) --verbose --file=rexsl.xml"
     - "s3cmd --no-progress put rexsl.xml --config=../s3cfg s3://pdd.teamed.io/rexsl.xml > /dev/null"
 
