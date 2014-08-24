@@ -40,6 +40,7 @@ import com.rexsl.page.mock.ResourceMocker;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.util.logging.Level;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -210,6 +211,24 @@ public final class FlashInsetTest {
                 )
             )
         );
+    }
+
+    /**
+     * FlashInset can detect blank cookies and remove them.
+     */
+    @Test
+    public void blankCookieIsRemoved() {
+        final String name = "/other";
+        NewCookie cookie = null;
+        try {
+            new FlashInset.Flash(new NewCookie(name, ""));
+        } catch (final WebApplicationException ex) {
+            cookie = (NewCookie) ex.getResponse().getMetadata()
+                .get("Set-Cookie").get(0);
+        }
+        MatcherAssert.assertThat(cookie, Matchers.notNullValue());
+        MatcherAssert.assertThat(cookie.getName(), Matchers.equalTo(name));
+        MatcherAssert.assertThat(cookie.getMaxAge(), Matchers.equalTo(0));
     }
 
     /**
