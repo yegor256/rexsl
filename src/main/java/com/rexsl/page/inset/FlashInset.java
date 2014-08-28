@@ -48,6 +48,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -247,7 +248,13 @@ public final class FlashInset implements Inset {
          */
         public Flash(@NotNull final Cookie cookie) {
             super(FlashInset.COOKIE, cookie.getValue());
-            Validate.notBlank(cookie.getValue(), "cookie value is blank");
+            if (StringUtils.isBlank(cookie.getValue())) {
+                throw new WebApplicationException(
+                    Response.status(HttpURLConnection.HTTP_BAD_REQUEST)
+                        .cookie(new NewCookie(cookie, "", 0, false))
+                        .build()
+                );
+            }
             final String decoded = FlashInset.Flash.decode(this.getValue());
             final String[] parts = decoded.split(":", FlashInset.Flash.TOTAL);
             Validate.isTrue(
