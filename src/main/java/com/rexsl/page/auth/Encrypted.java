@@ -212,7 +212,7 @@ final class Encrypted implements Identity {
         if (text.length < size + 2) {
             throw new Encrypted.DecryptionException(
                 String.format(
-                    "not enough bytes, text length is %d while %d required",
+                    "not enough bytes for salt, length is %d while %d required",
                     text.length, size + 2
                 )
             );
@@ -222,7 +222,12 @@ final class Encrypted implements Identity {
             sum += text[idx + 1];
         }
         if (text[text.length - 1] != sum) {
-            throw new Encrypted.DecryptionException("checksum failure");
+            throw new Encrypted.DecryptionException(
+                String.format(
+                    "checksum %d failure, while %d expected",
+                    text[text.length - 1], sum
+                )
+            );
         }
         final byte[] output = new byte[text.length - size - 2];
         System.arraycopy(text, size + 1, output, 0, output.length);

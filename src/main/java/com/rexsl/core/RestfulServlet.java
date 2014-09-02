@@ -172,11 +172,8 @@ public final class RestfulServlet extends ServletContainer {
         this.init(new ServletConfigWrapper(config, props));
     }
 
-    /**
-     * {@inheritDoc}
-     * @checkstyle ThrowsCount (8 lines)
-     * @checkstyle RedundantThrows (8 lines)
-     */
+    // @checkstyle ThrowsCount (8 lines)
+    // @checkstyle RedundantThrows (8 lines)
     @Override
     @Loggable(value = Loggable.DEBUG, ignore = WebApplicationException.class)
     public void service(final HttpServletRequest request,
@@ -212,11 +209,12 @@ public final class RestfulServlet extends ServletContainer {
      */
     private void reconfigureJUL() {
         final LevelChangePropagator listener = new LevelChangePropagator();
-        final LoggerContext loggerContext = (LoggerContext) LoggerFactory
-            .getILoggerFactory();
-        loggerContext.addListener(listener);
-        listener.setContext(loggerContext);
-        loggerContext.start();
+        final LoggerContext ctx = LoggerContext.class.cast(
+            LoggerFactory.getILoggerFactory()
+        );
+        ctx.addListener(listener);
+        listener.setContext(ctx);
+        ctx.start();
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
         Logger.debug(this, "#julToSlf4j(): JUL forwarded to SLF4j");
