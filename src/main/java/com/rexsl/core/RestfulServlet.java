@@ -120,10 +120,7 @@ public final class RestfulServlet extends ServletContainer {
      */
     private static final String COMMA = ",";
 
-    /**
-     * {@inheritDoc}
-     * @checkstyle RedundantThrows (4 lines)
-     */
+    // @checkstyle RedundantThrows (4 lines)
     @Override
     public void init(@NotNull final ServletConfig config)
         throws ServletException {

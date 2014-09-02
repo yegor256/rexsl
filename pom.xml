@@ -40,7 +40,7 @@
     <parent>
         <groupId>com.jcabi</groupId>
         <artifactId>parent</artifactId>
-        <version>0.27.1</version>
+        <version>0.28</version>
     </parent>
     <groupId>com.rexsl</groupId>
     <artifactId>rexsl</artifactId>
@@ -99,8 +99,8 @@
         <url>https://github.com/yegor256/rexsl</url>
     </scm>
     <ciManagement>
-        <system>rultor</system>
-        <url>http://www.rultor.com/s/rexsl/</url>
+        <system>travis</system>
+        <url>https://travis-ci.org/yegor256/rexsl/</url>
     </ciManagement>
     <distributionManagement>
         <site>
