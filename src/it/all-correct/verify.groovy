@@ -29,4 +29,4 @@
  */
 
 def log = new File(basedir, 'build.log')
-assert log.text.contains('DEBUG com.rexsl.core.XsltFilter - #init')
+assert log.text.contains('Initiating Jersey application')

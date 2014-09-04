@@ -29,8 +29,6 @@
  */
 package com.rexsl.core;
 
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.jul.LevelChangePropagator;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
@@ -52,8 +50,6 @@ import javax.ws.rs.WebApplicationException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.LoggerFactory;
-import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  * The only and the main servlet from ReXSL framework.
@@ -165,7 +161,6 @@ public final class RestfulServlet extends ServletContainer {
             PackagesResourceConfig.PROPERTY_PACKAGES,
             StringUtils.join(packages, RestfulServlet.COMMA)
         );
-        this.reconfigureJUL();
         this.init(new ServletConfigWrapper(config, props));
     }
 
@@ -198,23 +193,6 @@ public final class RestfulServlet extends ServletContainer {
                 Manifests.read("ReXSL-Build")
             )
         );
-    }
-
-    /**
-     * Initialize JUL-to-SLF4J bridge.
-     * @see #init(ServletConfig)
-     */
-    private void reconfigureJUL() {
-        final LevelChangePropagator listener = new LevelChangePropagator();
-        final LoggerContext ctx = LoggerContext.class.cast(
-            LoggerFactory.getILoggerFactory()
-        );
-        ctx.addListener(listener);
-        listener.setContext(ctx);
-        ctx.start();
-        SLF4JBridgeHandler.removeHandlersForRootLogger();
-        SLF4JBridgeHandler.install();
-        Logger.debug(this, "#julToSlf4j(): JUL forwarded to SLF4j");
     }
 
 }
