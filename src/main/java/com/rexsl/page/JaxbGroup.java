@@ -38,6 +38,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javassist.CannotCompileException;
 import javassist.CtClass;
+import javassist.CtConstructor;
+import javassist.Modifier;
 import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
@@ -200,6 +202,9 @@ public final class JaxbGroup {
                 JaxbGroup.mnemo(types.isEmpty(), name)
             );
             final ClassFile file = ctc.getClassFile();
+            for (final CtConstructor ctr : ctc.getDeclaredConstructors()) {
+                ctr.setModifiers(Modifier.PUBLIC);
+            }
             final AnnotationsAttribute attribute =
                 AnnotationsAttribute.class.cast(
                     file.getAttribute(
