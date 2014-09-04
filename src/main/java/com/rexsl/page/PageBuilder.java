@@ -199,7 +199,7 @@ public final class PageBuilder {
                 cls = this.construct(name, base);
             } else {
                 try {
-                    cls = Class.forName(name);
+                    cls = PageBuilder.POOL.getClassLoader().loadClass(name);
                 } catch (final ClassNotFoundException ex) {
                     throw new IllegalStateException(ex);
                 }
