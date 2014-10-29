@@ -14,10 +14,12 @@ Create a new `src/main/java/foo/IndexRs.java` class:
 package foo;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 @Path("/")
 public class IndexRs {
   @GET
+  @Produces("text/xml")
   public String home() {
     return "<?xml version='1.0' encoding='UTF-8'?>"
       + "<?xml-stylesheet type='text/xsl' href='/xsl/index.xsl'?>"
