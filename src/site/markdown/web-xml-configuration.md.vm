@@ -7,28 +7,31 @@ of them are always mandatory):
 in `WEB-INF/web.xml`:
 
 ```xml
-<filter>
-  <filter-name>XsltFilter</filter-name>
-  <filter-class>com.rexsl.core.XsltFilter</filter-class>
-</filter>
-<filter-mapping>
-  <filter-name>XsltFilter</filter-name>
-  <servlet-name>RestfulServlet</servlet-name>
-  <dispatcher>REQUEST</dispatcher>
-  <dispatcher>ERROR</dispatcher>
-</filter-mapping>
-<servlet>
-  <servlet-name>RestfulServlet</servlet-name>
-  <servlet-class>com.rexsl.core.RestfulServlet</servlet-class>
-  <init-param>
-    <param-name>com.rexsl.PACKAGES</param-name>
-    <param-value>com.example.foo</param-value>
-  </init-param>
-</servlet>
-<servlet-mapping>
-  <servlet-name>RestfulServlet</servlet-name>
-  <url-pattern>/*</url-pattern>
-</servlet-mapping>
+<web-app>
+  <filter>
+    <filter-name>XsltFilter</filter-name>
+    <filter-class>com.rexsl.core.XsltFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>XsltFilter</filter-name>
+    <servlet-name>RestfulServlet</servlet-name>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+  </filter-mapping>
+  <servlet>
+    <servlet-name>RestfulServlet</servlet-name>
+    <servlet-class>com.rexsl.core.RestfulServlet</servlet-class>
+    <init-param>
+      <param-name>com.rexsl.PACKAGES</param-name>
+      <param-value>foo</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RestfulServlet</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
+  [...]
+</web-app>
 ```
 
 [`RestfulServlet`](./apidocs-${project.version}/com/rexsl/core/RestfulServlet.html) is
@@ -43,9 +46,15 @@ This dependency you add to `pom.xml` (or download
 and add it to classpath):
 
 ```xml
-<dependency>
-  <groupId>com.rexsl</groupId>
-  <artifactId>rexsl</artifactId>
-  <version>${project.version}</version>
-</dependency>
+<project>
+  <dependencies>
+    <dependency>
+      <groupId>com.rexsl</groupId>
+      <artifactId>rexsl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    [...]
+  </dependencies>
+  [...]
+</project>
 ```

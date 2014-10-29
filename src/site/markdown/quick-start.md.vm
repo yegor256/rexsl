@@ -6,7 +6,7 @@ Start a new web project with Maven:
 mvn archetype:generate -DarchetypeArtifactId=maven-archetype-webapp
 ```
 
-Configure web.xml as [explained here](./web-xml-configuration.html).
+Configure `web.xml` and `pom.xml` as [explained here](./web-xml-configuration.html).
 
 Create a new `src/main/java/foo/IndexRs.java` class:
 
@@ -19,7 +19,9 @@ import javax.ws.rs.core.MediaType;
 public class IndexRs {
   @GET
   public String home() {
-    return "<page><message>Hello, world!</message></page>";
+    return "<?xml version='1.0' encoding='UTF-8'?>"
+      + "<?xml-stylesheet type='text/xsl' href='/xsl/index.xsl'?>"
+      + "<page><message>Hello, world!</message></page>";
   }
 }
 ```
@@ -33,7 +35,8 @@ Then, create `src/main/webapp/xsl/index.xsl`:
     <html xml:lang="en">
       <body>
         <p>
-          <xsl:value-of name="message" />
+          <xsl:text>A message for you: </xsl:text>
+          <xsl:value-of select="message" />
         </p>
       </body>
     </html>
