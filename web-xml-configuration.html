@@ -3,8 +3,10 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl - </title>
+        <title>rexsl &#x2013; ReXSL core module</title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
+        <link media="all" rel="stylesheet" type="text/css" href="./ico/ico.css"/>
+                    <meta name="author" content="Yegor Bugayenko" />
                             <script>
                 var _gaq = _gaq || [];
                 _gaq.push(['_setAccount', 'UA-1963507-22']);
@@ -19,24 +21,8 @@
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
                                                                                                                 
 <link rel="author" href="https://plus.google.com/u/0/114792568016408327418?rel=author"/>
-                                            <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
-        <script>
-            $(document).ready(
-                function() {
-                    $(".menu-button").click(
-                        function() {
-                            if ($("#here-goes-menu").attr("class") == "menu-off") {
-                                $("#menu").clone().attr("class", "mobile-menu").appendTo("#here-goes-menu");
-                                $("#here-goes-menu").attr("class", "menu-on");
-                            } else {
-                                $(".mobile-menu").hide();
-                                $("#here-goes-menu").attr("class", "menu-off");
-                            }
-                        }
-                    );
-                }
-            );
-        </script>
+                                            <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+        <script type="text/javascript" src="./js/jcabi.js"></script>
     </head>
     <body>
                 <section class="page" itemscope="" itemtype="http://schema.org/BlogPosting">
@@ -58,7 +44,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li >
-                            <span>                        <a href="apidocs-1.5/index.html" title="JavaDoc 1.5">JavaDoc 1.5</a>
+                            <span>                        <a href="apidocs-1.5.6/index.html" title="JavaDoc 1.5.6">JavaDoc 1.5.6</a>
         </span>
                                                                                                                                                                 <ul>
                                                                     </ul>
@@ -184,61 +170,109 @@
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">1.5</strong>
+                                    <strong itemprop="version">1.5.6</strong>
                                 </li>
                                 <li>
                                     
-                                    <time itemprop="datePublished" datetime="2014-08-27T07:39:15Z">
+                                    <time itemprop="datePublished" datetime="2014-11-02T06:06:43Z">
                                         
-                                        27-Aug-2014
+                                        02-Nov-2014
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
                             </ul>
+                            <div class="social">
+                                <a href="http://www.facebook.com/sharer/sharer.php?u=URL"
+                                    title="Share on Facebook" class="ico">
+                                    <i class="icon-facebook"></i>
+                                </a>
+                                <a href="https://twitter.com/share?url=URL&amp;text=TITLE"
+                                    title="Share on Twitter" class="ico">
+                                    <i class="icon-twitter"></i>
+                                </a>
+                                <a href="https://plus.google.com/share?url=URL"
+                                    title="Share on Google+" class="ico">
+                                    <i class="icon-googleplus"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/cws/share?url=URL"
+                                    title="Share on LinkedIn" class="ico">
+                                    <i class="icon-linkedin"></i>
+                                </a>
+                                <a href="http://www.stumbleupon.com/submit?url=URL&amp;title=TITLE"
+                                    title="Share on StumbleUpon" class="ico">
+                                    <i class="icon-stumbleupon"></i>
+                                </a>
+                                <a href="http://digg.com/submit?phase=2&amp;url=URL&amp;title=TITLE"
+                                    title="Share on Digg" class="ico">
+                                    <i class="icon-digg"></i>
+                                </a>
+                                <a href="http://reddit.com/submit?url=URL&amp;title=TITLE"
+                                    title="Share on Reddit" class="ico">
+                                    <i class="icon-reddit"></i>
+                                </a>
+                                <a href="http://news.ycombinator.com/submitlink?u=URL&amp;t=TITLE"
+                                    title="Share on Hacker News" class="ico">
+                                    <i class="icon-hackernews"></i>
+                                </a>
+                            </div>
                         </header>
                         <div id="here-goes-menu" class="menu-off"></div>
                                                                             <a href="https://github.com/yegor256/rexsl">
                                 <img src="http://img.jcabi.com/fork-me.svg" class="fork-me"/>
                             </a>
                                                 <article role="article" itemprop="articleBody">
-                            <h1>ReXSL core module</h1>
-<p>There are two classes that you should use in your project (both of them are always mandatory): <a href="./apidocs-1.5/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> and <a href="./apidocs-1.5/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a>. Use them in <tt>WEB-INF/web.xml</tt>:</p>
-
+                            <div class="section">
+<h2><a name="ReXSL_core_module"></a>ReXSL core module</h2>
+<p>There are two classes that you should use in your project (both of them are always mandatory): <a href="./apidocs-1.5.6/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> and <a href="./apidocs-1.5.6/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a>. Use them in <tt>WEB-INF/web.xml</tt>:</p>
 <div class="source">
-<pre>&lt;filter&gt;
-  &lt;filter-name&gt;XsltFilter&lt;/filter-name&gt;
-  &lt;filter-class&gt;com.rexsl.core.XsltFilter&lt;/filter-class&gt;
-&lt;/filter&gt;
-&lt;filter-mapping&gt;
-  &lt;filter-name&gt;XsltFilter&lt;/filter-name&gt;
-  &lt;servlet-name&gt;RestfulServlet&lt;/servlet-name&gt;
-  &lt;dispatcher&gt;REQUEST&lt;/dispatcher&gt;
-  &lt;dispatcher&gt;ERROR&lt;/dispatcher&gt;
-&lt;/filter-mapping&gt;
-&lt;servlet&gt;
-  &lt;servlet-name&gt;RestfulServlet&lt;/servlet-name&gt;
-  &lt;servlet-class&gt;com.rexsl.core.RestfulServlet&lt;/servlet-class&gt;
-  &lt;init-param&gt;
-    &lt;param-name&gt;com.rexsl.PACKAGES&lt;/param-name&gt;
-    &lt;param-value&gt;com.example.foo&lt;/param-value&gt;
-  &lt;/init-param&gt;
-&lt;/servlet&gt;
-&lt;servlet-mapping&gt;
-  &lt;servlet-name&gt;RestfulServlet&lt;/servlet-name&gt;
-  &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;
-</pre></div>
-<p><a href="./apidocs-1.5/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> is responsible for handling of JAX-RS requests and converting your JAXB annotated classes into XML documents.</p>
-<p><a href="./apidocs-1.5/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a> is converting XML output documents into XHTML when necessary.</p>
-<p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-core/1.5/rexsl-core-1.5.jar"><tt>rexsl-core-1.5.jar</tt></a> and add it to classpath):</p>
-
+<pre>&lt;web-app&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;default&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/xsl/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  &lt;filter&gt;
+    &lt;filter-name&gt;XsltFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;com.rexsl.core.XsltFilter&lt;/filter-class&gt;
+  &lt;/filter&gt;
+  &lt;filter-mapping&gt;
+    &lt;filter-name&gt;XsltFilter&lt;/filter-name&gt;
+    &lt;servlet-name&gt;RestfulServlet&lt;/servlet-name&gt;
+    &lt;dispatcher&gt;REQUEST&lt;/dispatcher&gt;
+    &lt;dispatcher&gt;ERROR&lt;/dispatcher&gt;
+  &lt;/filter-mapping&gt;
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;RestfulServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;com.rexsl.core.RestfulServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;com.rexsl.PACKAGES&lt;/param-name&gt;
+      &lt;param-value&gt;foo&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;RestfulServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  &lt;mime-mapping&gt;
+    &lt;extension&gt;xsl&lt;/extension&gt;
+    &lt;mime-type&gt;text/xsl&lt;/mime-type&gt;
+  &lt;/mime-mapping&gt;
+  [...]
+&lt;/web-app&gt;</pre></div>
+<p><a href="./apidocs-1.5.6/com/rexsl/core/RestfulServlet.html"><tt>RestfulServlet</tt></a> is responsible for handling of JAX-RS requests and converting your JAXB annotated classes into XML documents.</p>
+<p><a href="./apidocs-1.5.6/com/rexsl/core/XsltFilter.html"><tt>XsltFilter</tt></a> is converting XML output documents into XHTML when necessary.</p>
+<p>This dependency you add to <tt>pom.xml</tt> (or download <a class="externalLink" href="http://repo1.maven.org/maven2/com/rexsl/rexsl-core/1.5.6/rexsl-core-1.5.6.jar"><tt>rexsl-core-1.5.6.jar</tt></a> and add it to classpath):</p>
 <div class="source">
-<pre>&lt;dependency&gt;
-  &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
-  &lt;artifactId&gt;rexsl&lt;/artifactId&gt;
-  &lt;version&gt;1.5&lt;/version&gt;
-&lt;/dependency&gt;
-</pre></div>
+<pre>&lt;project&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.rexsl&lt;/groupId&gt;
+      &lt;artifactId&gt;rexsl&lt;/artifactId&gt;
+      &lt;version&gt;1.5.6&lt;/version&gt;
+    &lt;/dependency&gt;
+    [...]
+  &lt;/dependencies&gt;
+  [...]
+&lt;/project&gt;</pre></div></div>
                         </article>
                     </div>
                 </main>

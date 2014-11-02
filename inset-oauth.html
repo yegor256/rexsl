@@ -3,8 +3,10 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl - </title>
+        <title>rexsl &#x2013; OAuth Authentication for JAX-RS Resources</title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
+        <link media="all" rel="stylesheet" type="text/css" href="./ico/ico.css"/>
+                    <meta name="author" content="Yegor Bugayenko" />
                             <script>
                 var _gaq = _gaq || [];
                 _gaq.push(['_setAccount', 'UA-1963507-22']);
@@ -19,24 +21,8 @@
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
                                                                                                                 
 <link rel="author" href="https://plus.google.com/u/0/114792568016408327418?rel=author"/>
-                                            <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
-        <script>
-            $(document).ready(
-                function() {
-                    $(".menu-button").click(
-                        function() {
-                            if ($("#here-goes-menu").attr("class") == "menu-off") {
-                                $("#menu").clone().attr("class", "mobile-menu").appendTo("#here-goes-menu");
-                                $("#here-goes-menu").attr("class", "menu-on");
-                            } else {
-                                $(".mobile-menu").hide();
-                                $("#here-goes-menu").attr("class", "menu-off");
-                            }
-                        }
-                    );
-                }
-            );
-        </script>
+                                            <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+        <script type="text/javascript" src="./js/jcabi.js"></script>
     </head>
     <body>
                 <section class="page" itemscope="" itemtype="http://schema.org/BlogPosting">
@@ -58,7 +44,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li >
-                            <span>                        <a href="apidocs-1.5/index.html" title="JavaDoc 1.5">JavaDoc 1.5</a>
+                            <span>                        <a href="apidocs-1.5.6/index.html" title="JavaDoc 1.5.6">JavaDoc 1.5.6</a>
         </span>
                                                                                                                                                                 <ul>
                                                                     </ul>
@@ -184,28 +170,62 @@
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">1.5</strong>
+                                    <strong itemprop="version">1.5.6</strong>
                                 </li>
                                 <li>
                                     
-                                    <time itemprop="datePublished" datetime="2014-08-27T07:39:15Z">
+                                    <time itemprop="datePublished" datetime="2014-11-02T06:06:43Z">
                                         
-                                        27-Aug-2014
+                                        02-Nov-2014
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
                             </ul>
+                            <div class="social">
+                                <a href="http://www.facebook.com/sharer/sharer.php?u=URL"
+                                    title="Share on Facebook" class="ico">
+                                    <i class="icon-facebook"></i>
+                                </a>
+                                <a href="https://twitter.com/share?url=URL&amp;text=TITLE"
+                                    title="Share on Twitter" class="ico">
+                                    <i class="icon-twitter"></i>
+                                </a>
+                                <a href="https://plus.google.com/share?url=URL"
+                                    title="Share on Google+" class="ico">
+                                    <i class="icon-googleplus"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/cws/share?url=URL"
+                                    title="Share on LinkedIn" class="ico">
+                                    <i class="icon-linkedin"></i>
+                                </a>
+                                <a href="http://www.stumbleupon.com/submit?url=URL&amp;title=TITLE"
+                                    title="Share on StumbleUpon" class="ico">
+                                    <i class="icon-stumbleupon"></i>
+                                </a>
+                                <a href="http://digg.com/submit?phase=2&amp;url=URL&amp;title=TITLE"
+                                    title="Share on Digg" class="ico">
+                                    <i class="icon-digg"></i>
+                                </a>
+                                <a href="http://reddit.com/submit?url=URL&amp;title=TITLE"
+                                    title="Share on Reddit" class="ico">
+                                    <i class="icon-reddit"></i>
+                                </a>
+                                <a href="http://news.ycombinator.com/submitlink?u=URL&amp;t=TITLE"
+                                    title="Share on Hacker News" class="ico">
+                                    <i class="icon-hackernews"></i>
+                                </a>
+                            </div>
                         </header>
                         <div id="here-goes-menu" class="menu-off"></div>
                                                                             <a href="https://github.com/yegor256/rexsl">
                                 <img src="http://img.jcabi.com/fork-me.svg" class="fork-me"/>
                             </a>
                                                 <article role="article" itemprop="articleBody">
-                            <h1>OAuth Authentication for JAX-RS Resources</h1>
-<p>Authentication in a RESTful API/interface/website can be implemented only by means of <a class="externalLink" href="http://en.wikipedia.org/wiki/HTTP_cookie">HTTP cookies</a>. An authenticated user makes HTTP requests to the server with authentication cookies inside. The cookie shall contain the name of the user in an encrypted format, to prevent a stranger from faking user identity, since encryption method, secret key, and &#x201c;cryptographic salt&#x201d; are not disclosed.</p>
+                            <div class="section">
+<h2><a name="OAuth_Authentication_for_JAX-RS_Resources"></a>OAuth Authentication for JAX-RS Resources</h2>
+<p>Authentication in a RESTful API/interface/website can be implemented only by means of <a class="externalLink" href="http://en.wikipedia.org/wiki/HTTP_cookie">HTTP cookies</a>. An authenticated user makes HTTP requests to the server with authentication cookies inside. The cookie shall contain the name of the user in an encrypted format, to prevent a stranger from faking user identity, since encryption method, secret key, and &quot;cryptographic salt&quot; are not disclosed.</p>
 <p>Only the server can generate an authentication cookie, when user identity is verified and provided by an authentication provider. The most popular authentication protocol is <a class="externalLink" href="http://oauth.net/">OAuth</a>, used by major providers like <a class="externalLink" href="http://developers.facebook.com/docs/reference/dialogs/oauth/">Facebook</a> and <a class="externalLink" href="https://developers.google.com/accounts/docs/OAuth2">Google</a>.</p>
-<p><a href="./apidocs-1.5/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a> helps to manage OAuth authentication. First, make sure your base JAX-RS resource has a <a href="./apidocs-1.5/com/rexsl/page/Inset.html"><tt>@Inset.Runtime</tt></a>-annotated method that returns an instance of <a href="./apidocs-1.5/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a>:</p>
-
+<p><a href="./apidocs-1.5.6/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a> helps to manage OAuth authentication. First, make sure your base JAX-RS resource has a <a href="./apidocs-1.5.6/com/rexsl/page/Inset.html"><tt>@Inset.Runtime</tt></a>-annotated method that returns an instance of <a href="./apidocs-1.5.6/com/rexsl/page/auth/AuthInset.html"><tt>AuthInset</tt></a>:</p>
 <div class="source">
 <pre>public abstract class BaseRs extends BaseResource {
   @Inset.Runtime
@@ -215,10 +235,8 @@
         .with(new Github(this, &quot;8fe...&quot;, &quot;34b2a...&quot;))
         .with(new Google(this, &quot;7395..&quot;, &quot;7auajs...&quot;));
   }
-}
-</pre></div>
-<p>Once it&#x2019;s done, every page of your site will be rendered with the following <tt>&lt;link&gt;</tt> elements inside <tt>&lt;links&gt;</tt> group:</p>
-
+}</pre></div>
+<p>Once it's done, every page of your site will be rendered with the following <tt>&lt;link</tt>&gt; elements inside <tt>&lt;links</tt>&gt; group:</p>
 <div class="source">
 <pre>&lt;page&gt;
   &lt;links&gt;
@@ -227,11 +245,9 @@
     &lt;link rel=&quot;rexsl:google&quot; href=&quot;https://accounts.google.com/o/oaut...&quot; /&gt;
     ... other links ...
   &lt;/links&gt;
-&lt;/page&gt;
-</pre></div>
+&lt;/page&gt;</pre></div>
 <p>When one of the links above is clicked, the user will be forwarded to the authentication page of the provider (Facebook, Google, etc.). When authenticated, the user comes back to your website with a secret code generated by the provider. The inset sends an HTTP request to the provider to fetch necessary identity information, like unique ID, full name, and a personal photo.</p>
 <p>Then, the inset redirects the user to the original page, and adds an authentication cookie. Besides that, the page gets this data:</p>
-
 <div class="source">
 <pre>&lt;page&gt;
   &lt;identity&gt;
@@ -240,11 +256,9 @@
     &lt;photo&gt;http://images.facebook.com/...&lt;/photo&gt;
     &lt;token&gt;7PGELH0M-FHS09VC0-...-1L33MJA7&lt;/token&gt;
   &lt;/identity&gt;
-&lt;/page&gt;
-</pre></div>
+&lt;/page&gt;</pre></div>
 <p>Authentication token in <tt>&quot;token&quot;</tt> element is the exact value of <tt>Rexsl-Auth</tt> cookie, which identifies the authenticated user.</p>
 <p>Also, you can get an access to the authenticated identity programmatically:</p>
-
 <div class="source">
 <pre>public final class IndexRs extends BaseRs {
   public String name() {
@@ -254,11 +268,10 @@
       return this.auth().identity().name();
     }
   }
-}
-</pre></div>
-<p>URN of identity is created by authentication providers and consists of namespace ID (<tt>&quot;facebook&quot;</tt> for <a class="externalLink" href="http:://www.facebook.com">Facebook</a>, <tt>&quot;google&quot;</tt> for <a class="externalLink" href="http://www.google.com">Google</a>, <tt>&quot;github&quot;</tt> for <a class="externalLink" href="http://www.github.com">Github</a>, etc.) and namespace specific string with a unique ID of the user, as defined by the provider. You can use this URN as a unique identifier of the user in your system. It is always unique.</p>
+}</pre></div>
+<p>URN of identity is created by authentication providers and consists of namespace ID (<tt>&quot;facebook&quot;</tt> for <a class="externalLink" href="http:://www.facebook.com">Facebook</a>, <tt>&quot;google&quot;</tt> for <a class="externalLink" href="http://www.google.com">Google</a>, <tt>&quot;github&quot;</tt> for <a class="externalLink" href="http://www.github.com), etc.">Github</a> and namespace specific string with a unique ID of the user, as defined by the provider. You can use this URN as a unique identifier of the user in your system. It is always unique.</p>
 <p>When a user is not authenticated <tt>AuthInset#identity()</tt> method returns <tt>Identity.ANONYMOUS</tt>.</p>
-<p>See also <a href="./inset-http-basic.html">HTTP Basic Authentication</a>.</p>
+<p>See also <a href="./inset-http-basic.html">HTTP Basic Authentication</a>.</p></div>
                         </article>
                     </div>
                 </main>

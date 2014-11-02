@@ -3,8 +3,10 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>rexsl - </title>
+        <title>rexsl &#x2013; Exception Trap</title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
+        <link media="all" rel="stylesheet" type="text/css" href="./ico/ico.css"/>
+                    <meta name="author" content="Yegor Bugayenko" />
                             <script>
                 var _gaq = _gaq || [];
                 _gaq.push(['_setAccount', 'UA-1963507-22']);
@@ -19,24 +21,8 @@
 <link rel="shortcut icon" href="http://img.rexsl.com/favicon.gif"/>
                                                                                                                 
 <link rel="author" href="https://plus.google.com/u/0/114792568016408327418?rel=author"/>
-                                            <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
-        <script>
-            $(document).ready(
-                function() {
-                    $(".menu-button").click(
-                        function() {
-                            if ($("#here-goes-menu").attr("class") == "menu-off") {
-                                $("#menu").clone().attr("class", "mobile-menu").appendTo("#here-goes-menu");
-                                $("#here-goes-menu").attr("class", "menu-on");
-                            } else {
-                                $(".mobile-menu").hide();
-                                $("#here-goes-menu").attr("class", "menu-off");
-                            }
-                        }
-                    );
-                }
-            );
-        </script>
+                                            <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+        <script type="text/javascript" src="./js/jcabi.js"></script>
     </head>
     <body>
                 <section class="page" itemscope="" itemtype="http://schema.org/BlogPosting">
@@ -58,7 +44,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li >
-                            <span>                        <a href="apidocs-1.5/index.html" title="JavaDoc 1.5">JavaDoc 1.5</a>
+                            <span>                        <a href="apidocs-1.5.6/index.html" title="JavaDoc 1.5.6">JavaDoc 1.5.6</a>
         </span>
                                                                                                                                                                 <ul>
                                                                     </ul>
@@ -184,27 +170,61 @@
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">1.5</strong>
+                                    <strong itemprop="version">1.5.6</strong>
                                 </li>
                                 <li>
                                     
-                                    <time itemprop="datePublished" datetime="2014-08-27T07:39:15Z">
+                                    <time itemprop="datePublished" datetime="2014-11-02T06:06:42Z">
                                         
-                                        27-Aug-2014
+                                        02-Nov-2014
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
                             </ul>
+                            <div class="social">
+                                <a href="http://www.facebook.com/sharer/sharer.php?u=URL"
+                                    title="Share on Facebook" class="ico">
+                                    <i class="icon-facebook"></i>
+                                </a>
+                                <a href="https://twitter.com/share?url=URL&amp;text=TITLE"
+                                    title="Share on Twitter" class="ico">
+                                    <i class="icon-twitter"></i>
+                                </a>
+                                <a href="https://plus.google.com/share?url=URL"
+                                    title="Share on Google+" class="ico">
+                                    <i class="icon-googleplus"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/cws/share?url=URL"
+                                    title="Share on LinkedIn" class="ico">
+                                    <i class="icon-linkedin"></i>
+                                </a>
+                                <a href="http://www.stumbleupon.com/submit?url=URL&amp;title=TITLE"
+                                    title="Share on StumbleUpon" class="ico">
+                                    <i class="icon-stumbleupon"></i>
+                                </a>
+                                <a href="http://digg.com/submit?phase=2&amp;url=URL&amp;title=TITLE"
+                                    title="Share on Digg" class="ico">
+                                    <i class="icon-digg"></i>
+                                </a>
+                                <a href="http://reddit.com/submit?url=URL&amp;title=TITLE"
+                                    title="Share on Reddit" class="ico">
+                                    <i class="icon-reddit"></i>
+                                </a>
+                                <a href="http://news.ycombinator.com/submitlink?u=URL&amp;t=TITLE"
+                                    title="Share on Hacker News" class="ico">
+                                    <i class="icon-hackernews"></i>
+                                </a>
+                            </div>
                         </header>
                         <div id="here-goes-menu" class="menu-off"></div>
                                                                             <a href="https://github.com/yegor256/rexsl">
                                 <img src="http://img.jcabi.com/fork-me.svg" class="fork-me"/>
                             </a>
                                                 <article role="article" itemprop="articleBody">
-                            <h1>Exception Trap</h1>
-<p>Read <a href="./apidocs-1.5/com/rexsl/core/ExceptionTrap.html"><tt>ExceptionTrap</tt></a> javadoc.</p>
+                            <div class="section">
+<h2><a name="Exception_Trap"></a>Exception Trap</h2>
+<p>Read <a href="./apidocs-1.5.6/com/rexsl/core/ExceptionTrap.html"><tt>ExceptionTrap</tt></a> javadoc.</p>
 <p>Configure it in your <tt>WEB-INF/web.xml</tt> like this:</p>
-
 <div class="source">
 <pre>&lt;servlet&gt;
   &lt;servlet-name&gt;ExceptionTrap&lt;/servlet-name&gt;
@@ -221,9 +241,8 @@
 &lt;error-page&gt;
   &lt;exception-type&gt;java.lang.Throwable&lt;/exception-type&gt;
   &lt;location&gt;/trap&lt;/location&gt;
-&lt;/error-page&gt;
-</pre></div>
-<p>Every exception will be caught by this servlet and rendered as &#x201c;service not available&#x201d; HTML pages. Read <a href="./apidocs-1.5/com/rexsl/core/ExceptionTrap.html">javadoc</a> for more information.</p>
+&lt;/error-page&gt;</pre></div>
+<p>Every exception will be caught by this servlet and rendered as &quot;service not available&quot; HTML pages. Read <a href="./apidocs-1.5.6/com/rexsl/core/ExceptionTrap.html">javadoc</a> for more information.</p></div>
                         </article>
                     </div>
                 </main>

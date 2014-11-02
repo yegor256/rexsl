@@ -1,0 +1,8 @@
+com.rexsl.core
+com.rexsl.core.annotations
+com.rexsl.mock
+com.rexsl.page
+com.rexsl.page.auth
+com.rexsl.page.auth.mock
+com.rexsl.page.inset
+com.rexsl.page.mock
