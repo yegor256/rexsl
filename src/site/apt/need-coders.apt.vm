@@ -6,11 +6,11 @@ turns into an HTML web-site by means of XSLT.
 
 We started to develop ReXSL in August 2011 and it is already being
 successfully used by a few open source
-(e.g. [s3auth.com](http://www.s3auth.com))
-and commercial (e.g. [expinia.com](http://p.expinia.com)) projects.
+(e.g. {{{http://www.s3auth.com)}s3auth.com}}
+and commercial (e.g. {{{http://p.expinia.com)}expinia.com}} projects.
 
 We need your help with coding, in order to release the first stable
 version (we're still in 0.x state). If you're passionate about
 quality of code and is interested to contribute or learn something new,
-email me: [yegor@tpc2.com](mailto:yegor@tpc2.com).
+email me: {{{mailto:yegor@tpc2.com}yegor@tpc2.com}}.
 

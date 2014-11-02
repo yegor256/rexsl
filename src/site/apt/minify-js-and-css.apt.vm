@@ -1,10 +1,10 @@
 # Minify JS and CSS
 
 It is recommended to minify JS and CSS files
-before packaging them into `war` archive. This is how
-you do it in your `pom.xml`:
+before packaging them into <<<war>>> archive. This is how
+you do it in your <<<pom.xml>>>:
 
-```
+<<<>>><<<
 <build>
   <pluginManagement>
     <plugins>
@@ -43,6 +43,6 @@ you do it in your `pom.xml`:
     </plugin>
   </plugins>
 </build>
-```
+>>><<<>>>
 
 

@@ -2,7 +2,7 @@
 
 Authentication in a RESTful API/interface/website can be implemented
 only by means of
-[HTTP cookies](http://en.wikipedia.org/wiki/HTTP_cookie). An authenticated
+{{{http://en.wikipedia.org/wiki/HTTP_cookie}HTTP cookies}}. An authenticated
 user makes HTTP requests to the server with authentication cookies inside.
 The cookie shall contain the name of the user in an encrypted format, to
 prevent a stranger from faking user identity, since encryption method,
@@ -10,19 +10,19 @@ secret key, and "cryptographic salt" are not disclosed.
 
 Only the server can generate an authentication cookie, when user identity is verified
 and provided by an authentication provider. The most popular authentication
-protocol is [OAuth](http://oauth.net/),
+protocol is {{{http://oauth.net/}OAuth}},
 used by major providers like
-[Facebook](http://developers.facebook.com/docs/reference/dialogs/oauth/) and
-[Google](https://developers.google.com/accounts/docs/OAuth2).
+{{{http://developers.facebook.com/docs/reference/dialogs/oauth/}Facebook}} and
+{{{https://developers.google.com/accounts/docs/OAuth2}Google}}.
 
-[`AuthInset`](./apidocs-${project.version}/com/rexsl/page/auth/AuthInset.html)
+{{{./apidocs-${project.version}/com/rexsl/page/auth/AuthInset.html}<<<AuthInset>>>}}
 helps to manage OAuth authentication. First, make sure your base
 JAX-RS resource has a
-[`@Inset.Runtime`](./apidocs-${project.version}/com/rexsl/page/Inset.html)-annotated
+{{{./apidocs-${project.version}/com/rexsl/page/Inset.html}<<<@Inset.Runtime>>>}}-annotated
 method that returns an instance of
-[`AuthInset`](./apidocs-${project.version}/com/rexsl/page/auth/AuthInset.html):
+{{{./apidocs-${project.version}/com/rexsl/page/auth/AuthInset.html}<<<AuthInset>>>}}:
 
-```java
+<<<>>><<<java
 public abstract class BaseRs extends BaseResource {
   @Inset.Runtime
   public final AuthInset auth() {
@@ -32,12 +32,12 @@ public abstract class BaseRs extends BaseResource {
         .with(new Google(this, "7395..", "7auajs..."));
   }
 }
-```
+>>><<<>>>
 
 Once it's done, every page of your site will be rendered with the
-following `<link>` elements inside `<links>` group:
+following <<<<link>>>> elements inside <<<<links>>>> group:
 
-```
+<<<>>><<<
 <page>
   <links>
     <link rel="rexsl:facebook" href="https://www.facebook.com/dial..." />
@@ -46,7 +46,7 @@ following `<link>` elements inside `<links>` group:
     ... other links ...
   </links>
 </page>
-```
+>>><<<>>>
 
 When one of the links above is clicked, the user will be forwarded to the
 authentication page of the provider (Facebook, Google, etc.). When
@@ -58,7 +58,7 @@ a personal photo.
 Then, the inset redirects the user to the original page,
 and adds an authentication cookie. Besides that, the page gets this data:
 
-```xml
+<<<>>><<<xml
 <page>
   <identity>
     <urn>urn:facebook:54321</urn>
@@ -67,15 +67,15 @@ and adds an authentication cookie. Besides that, the page gets this data:
     <token>7PGELH0M-FHS09VC0-...-1L33MJA7</token>
   </identity>
 </page>
-```
+>>><<<>>>
 
-Authentication token in `"token"` element is the exact value
-of `Rexsl-Auth` cookie, which identifies the authenticated user.
+Authentication token in <<<"token">>> element is the exact value
+of <<<Rexsl-Auth>>> cookie, which identifies the authenticated user.
 
 Also, you can get an access to the authenticated identity
 programmatically:
 
-```java
+<<<>>><<<java
 public final class IndexRs extends BaseRs {
   public String name() {
     if (this.auth().identity().equals(Identity.ANONYMOUS)) {
@@ -85,17 +85,17 @@ public final class IndexRs extends BaseRs {
     }
   }
 }
-```
+>>><<<>>>
 
 URN of identity is created by authentication providers and consists
-of namespace ID (`"facebook"` for [Facebook](http:://www.facebook.com),
-`"google"` for [Google](http://www.google.com),
-`"github"` for [Github](http://www.github.com), etc.)
+of namespace ID (<<<"facebook">>> for {{{http:://www.facebook.com}Facebook}},
+<<<"google">>> for {{{http://www.google.com}Google}},
+<<<"github">>> for {{{http://www.github.com), etc.}Github}}
 and namespace specific string with a unique ID of the user, as defined
 by the provider. You can use this URN as a unique identifier of the user
 in your system. It is always unique.
 
-When a user is not authenticated `AuthInset#identity()` method returns
-`Identity.ANONYMOUS`.
+When a user is not authenticated <<<AuthInset#identity()>>> method returns
+<<<Identity.ANONYMOUS>>>.
 
-See also [HTTP Basic Authentication](./inset-http-basic.html).
+See also {{{./inset-http-basic.html}HTTP Basic Authentication}}.
