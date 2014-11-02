@@ -1,11 +1,19 @@
-# Exception Trap
+  ---
+  Exception Trap
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-Read {{{./apidocs-${project.version}/com/rexsl/core/ExceptionTrap.html}<<<ExceptionTrap>>>}}
-javadoc.
+Exception Trap
 
-Configure it in your <<<WEB-INF/web.xml>>> like this:
+  Read {{{./apidocs-${project.version}/com/rexsl/core/ExceptionTrap.html}<<<ExceptionTrap>>>}}
+  javadoc.
 
-<<<>>><<<xml
+  Configure it in your <<<WEB-INF/web.xml>>> like this:
+
++--
 <servlet>
   <servlet-name>ExceptionTrap</servlet-name>
   <servlet-class>com.rexsl.core.ExceptionTrap</servlet-class>
@@ -22,9 +30,9 @@ Configure it in your <<<WEB-INF/web.xml>>> like this:
   <exception-type>java.lang.Throwable</exception-type>
   <location>/trap</location>
 </error-page>
->>><<<>>>
++--
 
-Every exception will be caught by this servlet and rendered
-as "service not available" HTML pages. Read
-{{{./apidocs-${project.version}/com/rexsl/core/ExceptionTrap.html}javadoc}}
-for more information.
+  Every exception will be caught by this servlet and rendered
+  as "service not available" HTML pages. Read
+  {{{./apidocs-${project.version}/com/rexsl/core/ExceptionTrap.html}javadoc}}
+  for more information.

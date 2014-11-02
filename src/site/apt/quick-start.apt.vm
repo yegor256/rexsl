@@ -1,16 +1,24 @@
-# ReXSL, Quick Start Guide
+  ---
+  ReXSL, Quick Start Guide
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-Start a new web project with Maven:
+ReXSL, Quick Start Guide
 
-<<<>>><<<
+  Start a new web project with Maven:
+
++--
 mvn archetype:generate -DarchetypeArtifactId=maven-archetype-webapp
->>><<<>>>
++--
 
-Configure <<<web.xml>>> and <<<pom.xml>>> as {{{./web-xml-configuration.html}explained here}}.
+  Configure <<<web.xml>>> and <<<pom.xml>>> as {{{./web-xml-configuration.html}explained here}}.
 
-Create a new <<<src/main/java/foo/IndexRs.java>>> class:
+  Create a new <<<src/main/java/foo/IndexRs.java>>> class:
 
-<<<>>><<<
++--
 package foo;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -26,11 +34,11 @@ public class IndexRs {
       + "<page><message>Hello, world!</message></page>";
   }
 }
->>><<<>>>
++--
 
-Then, create <<<src/main/webapp/xsl/index.xsl>>>:
+  Then, create <<<src/main/webapp/xsl/index.xsl>>>:
 
-<<<>>><<<xml
++--
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns="http://www.w3.org/1999/xhtml" version="1.0">
   <xsl:template match="/page">
@@ -44,7 +52,7 @@ Then, create <<<src/main/webapp/xsl/index.xsl>>>:
     </html>
   </xsl:template>
 </xsl:stylesheet>
->>><<<>>>
++--
 
-That's it. You WAR is ready and you can run deploy it to
-any web container.
+  That's it. You WAR is ready and you can run deploy it to
+  any web container.

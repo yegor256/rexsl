@@ -1,12 +1,20 @@
-# ReXSL core module
+  ---
+  ReXSL core module
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-There are two classes that you should use in your project (both
-of them are always mandatory):
-{{{./apidocs-${project.version}/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} and
-{{{./apidocs-${project.version}/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}}. Use them
-in <<<WEB-INF/web.xml>>>:
+ReXSL core module
 
-<<<>>><<<xml
+  There are two classes that you should use in your project (both
+  of them are always mandatory):
+  {{{./apidocs-${project.version}/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} and
+  {{{./apidocs-${project.version}/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}}. Use them
+  in <<<WEB-INF/web.xml>>>:
+
++--
 <web-app>
   <servlet-mapping>
     <servlet-name>default</servlet-name>
@@ -40,20 +48,20 @@ in <<<WEB-INF/web.xml>>>:
   </mime-mapping>
   [...]
 </web-app>
->>><<<>>>
++--
 
-{{{./apidocs-${project.version}/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} is
-responsible for handling of JAX-RS requests and converting your JAXB annotated
-classes into XML documents.
+  {{{./apidocs-${project.version}/com/rexsl/core/RestfulServlet.html}<<<RestfulServlet>>>}} is
+  responsible for handling of JAX-RS requests and converting your JAXB annotated
+  classes into XML documents.
 
-{{{./apidocs-${project.version}/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}} is converting
-XML output documents into XHTML when necessary.
+  {{{./apidocs-${project.version}/com/rexsl/core/XsltFilter.html}<<<XsltFilter>>>}} is converting
+  XML output documents into XHTML when necessary.
 
-This dependency you add to <<<pom.xml>>> (or download
-{{{http://repo1.maven.org/maven2/com/rexsl/rexsl-core/${project.version}/rexsl-core-${project.version}.jar}<<<rexsl-core-${project.version}.jar>>>}}
-and add it to classpath):
+  This dependency you add to <<<pom.xml>>> (or download
+  {{{http://repo1.maven.org/maven2/com/rexsl/rexsl-core/${project.version}/rexsl-core-${project.version}.jar}<<<rexsl-core-${project.version}.jar>>>}}
+  and add it to classpath):
 
-<<<>>><<<xml
++--
 <project>
   <dependencies>
     <dependency>
@@ -65,4 +73,4 @@ and add it to classpath):
   </dependencies>
   [...]
 </project>
->>><<<>>>
++--

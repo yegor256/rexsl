@@ -1,12 +1,20 @@
-# Testing w/Tomcat
+  ---
+  Testing w/Tomcat
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-First, configure your <<<pom.xml>>> with Tomcat plugin. On
-<<<pre-integration-test>>> phase you need to start a Tomcat server
-with your <<<.war>>> application inside, and on
-<<<post-integration-test>>> phase you shut it down. Here is the
-full code you need in your <<<pom.xml>>>:
+Testing w/Tomcat
 
-<<<>>><<<
+  First, configure your <<<pom.xml>>> with Tomcat plugin. On
+  <<<pre-integration-test>>> phase you need to start a Tomcat server
+  with your <<<.war>>> application inside, and on
+  <<<post-integration-test>>> phase you shut it down. Here is the
+  full code you need in your <<<pom.xml>>>:
+
++--
 <build>
   <plugins>
     <plugin>
@@ -70,13 +78,13 @@ full code you need in your <<<pom.xml>>>:
     </plugin>
   </plugins>
 </build>
->>><<<>>>
++--
 
-Then, create a new integration test in <<<src/test/java>>> directory (the
-same place where you keep your unit tests). The name of the test file
-should end with <<<ITCase>>> (instead of <<<Test>>>). For example:
+  Then, create a new integration test in <<<src/test/java>>> directory (the
+  same place where you keep your unit tests). The name of the test file
+  should end with <<<ITCase>>> (instead of <<<Test>>>). For example:
 
-<<<>>><<<
++--
 public class IndexRsITCase {
   private static final String HOME = System.getProperty("tomcat.home");
   @Test
@@ -90,6 +98,6 @@ public class IndexRsITCase {
       .assertXPath("/page/message");
   }
 }
->>><<<>>>
++--
 
-Run <<<mvn clean package>>> and see the output. Should work :)
+  Run <<<mvn clean package>>> and see the output. Should work :)

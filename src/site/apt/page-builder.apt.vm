@@ -1,9 +1,17 @@
-# RESTful XML Page Modeler
+  ---
+  RESTful XML Page Modeler
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-With this module you can build REST XML responses much faster
-(provided you defined <<<MyPage>>> class already):
+RESTful XML Page Modeler
 
-<<<>>><<<java
+  With this module you can build REST XML responses much faster
+  (provided you defined <<<MyPage>>> class already):
+
++--
 @Path("/")
 public class MainRs {
   @GET
@@ -15,59 +23,25 @@ public class MainRs {
       .add(new JaxbBundle("score", 123));
   }
 }
->>><<<>>>
++--
 
-The response will look like:
+  The response will look like:
 
-<<<>>><<<xml
++--
 <?xml version="1.0" ?>
 <?xml-stylesheet type='text/xsl' href='/xsl/front.xsl'?>
 <page>
   <score>123</score>
 </page>
->>><<<>>>
++--
 
-Isn't it neat? :)
-Start reading from
-{{{./apidocs-${project.version}/com/rexsl/page/PageBuilder.html}<<<PageBuilder>>>}}.
+  Isn't it neat? :)
+  Start reading from
+  {{{./apidocs-${project.version}/com/rexsl/page/PageBuilder.html}<<<PageBuilder>>>}}.
 
-Since version 0.4.8 you can use "insets", which implement basic
-functionalities required by most web applications, including
-{{{./inset-flash.html}flash messages}},
-{{{./inset-links.html}default HATEOAS links}},
-{{{./inset-version.html}version data}}, and
-{{{./inset-oauth.html}OAuth authentication}}.
-
-Include this dependency into your project (or download
-{{{http://repo1.maven.org/maven2/com/rexsl/rexsl-page/${project.version}/rexsl-page-${project.version}.jar}<<<rexsl-page-${project.version}.jar>>>}}
-and add to classpath):
-
-<<<>>><<<xml
-<dependency>
-  <groupId>com.rexsl</groupId>
-  <artifactId>rexsl-page</artifactId>
-  <version>${project.version}</version>
-</dependency>
->>><<<>>>
-
-This module also contains a few mockers.
-To use it you should include this dependencies into your project
-(or download
-{{{http://repo1.maven.org/maven2/com/rexsl/rexsl-page/${project.version}/rexsl-page-${project.version}-mock.jar}<<<rexsl-page-${project.version}-mock.jar>>>}}
-and add to classpath):
-
-<<<>>><<<xml
-<dependency>
-  <groupId>com.rexsl</groupId>
-  <artifactId>rexsl-page</artifactId>
-  <version>${project.version}</version>
-  <classifier>mock</classifier>
-  <scope>test</scope>
-</dependency>
-<dependency>
-  <groupId>javax.servlet</groupId>
-  <artifactId>servlet-api</artifactId>
-  <version>2.4</version>
-  <scope>provided</scope>
-</dependency>
->>><<<>>>
+  Since version 0.4.8 you can use "insets", which implement basic
+  functionalities required by most web applications, including
+  {{{./inset-flash.html}flash messages}},
+  {{{./inset-links.html}default HATEOAS links}},
+  {{{./inset-version.html}version data}}, and
+  {{{./inset-oauth.html}OAuth authentication}}.

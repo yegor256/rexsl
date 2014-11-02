@@ -1,10 +1,18 @@
-# HTTP Basic Authentication for JAX-RS Resources
+  ---
+  HTTP Basic Authentication for JAX-RS Resources
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-HTTP basic authentication is possible through the same
-{{{./apidocs-${project.version}/com/rexsl/page/auth/AuthInset.html}<<<AuthInset>>>}}
-used in {{{./inset-oauth.html}OAuth}}:
+HTTP Basic Authentication for JAX-RS Resources
 
-<<<>>><<<java
+  HTTP basic authentication is possible through the same
+  {{{./apidocs-${project.version}/com/rexsl/page/auth/AuthInset.html}<<<AuthInset>>>}}
+  used in {{{./inset-oauth.html}OAuth}}:
+
++--
 public abstract class BaseRs extends BaseResource {
   @Inset.Runtime
   public final AuthInset auth() {
@@ -22,10 +30,10 @@ public abstract class BaseRs extends BaseResource {
     );
   }
 }
->>><<<>>>
++--
 
-When your custom implementation of
-{{{./apidocs-${project.version}/com/rexsl/page/auth/HttpBasic.html}<<<HttpBasic.Vault>>>}}
-can't authenticate the user it has to return
-<<<Identity.ANONYMOUS>>>. Otherwise, it returns a proper
-{{{./apidocs-${project.version}/com/rexsl/page/auth/Identity.html}<<<Identity>>>}}.
+  When your custom implementation of
+  {{{./apidocs-${project.version}/com/rexsl/page/auth/HttpBasic.html}<<<HttpBasic.Vault>>>}}
+  can't authenticate the user it has to return
+  <<<Identity.ANONYMOUS>>>. Otherwise, it returns a proper
+  {{{./apidocs-${project.version}/com/rexsl/page/auth/Identity.html}<<<Identity>>>}}.

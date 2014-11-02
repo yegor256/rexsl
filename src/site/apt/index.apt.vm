@@ -1,70 +1,78 @@
-# RESTful Java Web Framework
+  ---
+  RESTful Java Web Framework
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-The idea is simple &mdash; to make a
-{{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}}
-XML API available in a browser-friendly
-format renderable with
-{{{http://en.wikipedia.org/wiki/XSL}XSL}} stylesheets.
-With ReXSL you develop your web
-application as a RESTful "web service" while XSL stylesheets transform it
-to an HTML web site.
+RESTful Java Web Framework
 
-The diagram explains how components are connected to each other. It is a
-classic
-{{{http://en.wikipedia.org/wiki/Model–view–controller}Model-view-controller (MVC) pattern}},
-where {{{http://en.wikipedia.org/wiki/Java_Architecture_for_XML_Binding}JAXB}}
-{{{http://en.wikipedia.org/wiki/Plain_Old_Java_Object}POJOs}} play a
-role of a Model.
-{{{http://en.wikipedia.org/wiki/Java_API_for_RESTful_Web_Services}JAX-RS}} resources are Controllers.
-Stylesheets with a powerful XSL 2.0 language are Views.
+  The idea is simple \u2014 to make a
+  {{{http://en.wikipedia.org/wiki/Representational_state_transfer}RESTful}}
+  XML API available in a browser-friendly
+  format renderable with
+  {{{http://en.wikipedia.org/wiki/XSL}XSL}} stylesheets.
+  With ReXSL you develop your web
+  application as a RESTful "web service" while XSL stylesheets transform it
+  to an HTML web site.
 
-!{{{latex/layers.png}UML diagram with layers}}
+  The diagram explains how components are connected to each other. It is a
+  classic
+  {{{http://en.wikipedia.org/wiki/Model–view–controller}Model-view-controller (MVC) pattern}},
+  where {{{http://en.wikipedia.org/wiki/Java_Architecture_for_XML_Binding}JAXB}}
+  {{{http://en.wikipedia.org/wiki/Plain_Old_Java_Object}POJOs}} play a
+  role of a Model.
+  {{{http://en.wikipedia.org/wiki/Java_API_for_RESTful_Web_Services}JAX-RS}} resources are Controllers.
+  Stylesheets with a powerful XSL 2.0 language are Views.
 
-We assume that you are familiar
-with
-{{{http://www.oracle.com/technetwork/java/javase/overview/index-jsp-136246.html}Java 6}},
-{{{http://maven.apache.org/}Apache Maven}},
-{{{http://www.w3.org/XML/}XML}},
-{{{http://www.w3.org/TR/xslt20/}XSL 2.0}},
-{{{http://www.w3.org/TR/xpath20/}XPath 2.0}},
-{{{http://jcp.org/en/jsr/detail?id=311}JAX-RS 2.0}},
-{{{http://jaxb.java.net/}JAXB 2}},
-{{{http://www.oracle.com/technetwork/java/javaee/servlet/index.html}Java Servlet API}},
-{{{http://en.wikipedia.org/wiki/Representational_State_Transfer}REST}},
-{{{http://en.wikipedia.org/wiki/HATEOAS}HATEOAS}},
-{{{http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol}HTTP 1.1}},
-{{{http://en.wikipedia.org/wiki/Test-driven_development}TDD}}.
-If any of these technologies are new for you &mdash; we strongly
-recommend to learn them.
+[latex/layers.png] UML diagram with layers
 
-These are the reasons why you should consider ReXSL over other Java web front
-frameworks like
-{{{http://en.wikipedia.org/wiki/JavaServer_Faces}JSF}},
-{{{http://en.wikipedia.org/wiki/JavaServer_Pages}JSP}},
-{{{http://en.wikipedia.org/wiki/Java_Servlet}Servlets}},
-{{{http://wicket.apache.org/}Wicket}},
-{{{http://www.springsource.org/}Spring MVC}},
-{{{http://struts.apache.org/}Struts}},
-{{{http://tapestry.apache.org/}Tapestry}},
-{{{http://en.wikipedia.org/wiki/Apache_Cocoon}Cocoon}},
-{{{http://www.contextfw.net/}Context Framework}},
-and others:
+  We assume that you are familiar
+  with
+  {{{http://www.oracle.com/technetwork/java/javase/overview/index-jsp-136246.html}Java 6}},
+  {{{http://maven.apache.org/}Apache Maven}},
+  {{{http://www.w3.org/XML/}XML}},
+  {{{http://www.w3.org/TR/xslt20/}XSL 2.0}},
+  {{{http://www.w3.org/TR/xpath20/}XPath 2.0}},
+  {{{http://jcp.org/en/jsr/detail?id=311}JAX-RS 2.0}},
+  {{{http://jaxb.java.net/}JAXB 2}},
+  {{{http://www.oracle.com/technetwork/java/javaee/servlet/index.html}Java Servlet API}},
+  {{{http://en.wikipedia.org/wiki/Representational_State_Transfer}REST}},
+  {{{http://en.wikipedia.org/wiki/HATEOAS}HATEOAS}},
+  {{{http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol}HTTP 1.1}},
+  {{{http://en.wikipedia.org/wiki/Test-driven_development}TDD}}.
+  If any of these technologies are new for you \u2014 we strongly
+  recommend to learn them.
 
- * Graphic design evolves in parallel with Java classes
+  These are the reasons why you should consider ReXSL over other Java web front
+  frameworks like
+  {{{http://en.wikipedia.org/wiki/JavaServer_Faces}JSF}},
+  {{{http://en.wikipedia.org/wiki/JavaServer_Pages}JSP}},
+  {{{http://en.wikipedia.org/wiki/Java_Servlet}Servlets}},
+  {{{http://wicket.apache.org/}Wicket}},
+  {{{http://www.springsource.org/}Spring MVC}},
+  {{{http://struts.apache.org/}Struts}},
+  {{{http://tapestry.apache.org/}Tapestry}},
+  {{{http://en.wikipedia.org/wiki/Apache_Cocoon}Cocoon}},
+  {{{http://www.contextfw.net/}Context Framework}},
+  and others:
 
- * Web front-end is an API at the same time
+    * Graphic design evolves in parallel with Java classes
 
- * Layout is decoupled from data
+    * Web front-end is an API at the same time
 
-This article explains how to create a working web application
-using ReXSL in five minutes: {{{./quick-start.html}Quick Start Guide}}.
-For example, {{{http://www.s3auth.com}s3auth.com}} is an open source web application
-that is build using ReXSL framework: see its code in
-{{{https://github.com/yegor256/s3auth}github}}.
+    * Layout is decoupled from data
 
-Post us a message in our
-{{{https://groups.google.com/forum/#!forum/rexsl}Google Newsgroup}}
-if you're interested or just
-curious what is it all about. Besides that, don't hesitate to submit a
-ticket to {{{https://github.com/yegor256/rexsl/issues}Github}} when something
-doesn't work or you need more features.
+  This article explains how to create a working web application
+  using ReXSL in five minutes: {{{./quick-start.html}Quick Start Guide}}.
+  For example, {{{http://www.s3auth.com}s3auth.com}} is an open source web application
+  that is build using ReXSL framework: see its code in
+  {{{https://github.com/yegor256/s3auth}github}}.
+
+  Post us a message in our
+  {{{https://groups.google.com/forum/#!forum/rexsl}Google Newsgroup}}
+  if you're interested or just
+  curious what is it all about. Besides that, don't hesitate to submit a
+  ticket to {{{https://github.com/yegor256/rexsl/issues}Github}} when something
+  doesn't work or you need more features.

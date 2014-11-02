@@ -1,31 +1,39 @@
-# Adding Default HATEOAS Links To JAX-RS Page
+  ---
+  Adding Default HATEOAS Links To JAX-RS Page
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-It is a good practice in
-{{{http://en.wikipedia.org/wiki/HATEOAS}HATEOAS}} to have certain
-{{{http://en.wikipedia.org/wiki/Link_relation}link relations}}
-between pages. There are a few default link relations that you
-may want to have in every page.
-{{{./apidocs-${project.version}/com/rexsl/page/inset/LinksInset.html}<<<LinksInset>>>}}
-simplifies them:
+Adding Default HATEOAS Links To JAX-RS Page
 
-<<<>>><<<java
+  It is a good practice in
+  {{{http://en.wikipedia.org/wiki/HATEOAS}HATEOAS}} to have certain
+  {{{http://en.wikipedia.org/wiki/Link_relation}link relations}}
+  between pages. There are a few default link relations that you
+  may want to have in every page.
+  {{{./apidocs-${project.version}/com/rexsl/page/inset/LinksInset.html}<<<LinksInset>>>}}
+  simplifies them:
+
++--
 @Inset.Default(LinksInset.class)
 public abstract class BaseRs extends BaseResource {
   // other methods
 }
->>><<<>>>
++--
 
-The page will be rendered like this:
+  The page will be rendered like this:
 
-<<<>>><<<xml
++--
 <page>
   <links>
     <link rel="home" href="http://www.example.com/" />
     <link rel="self" href="http://www.example.com/some-path/" />
   </links>
 </page>
->>><<<>>>
++--
 
-It is recommended to use
-{{{./apidocs-${project.version}/com/rexsl/page/inset/LinksInset.html}<<<LinksInset>>>}}
-for all websites.
+  It is recommended to use
+  {{{./apidocs-${project.version}/com/rexsl/page/inset/LinksInset.html}<<<LinksInset>>>}}
+  for all websites.
