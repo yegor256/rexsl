@@ -4,6 +4,7 @@
 [![DevOps By Rultor.com](http://www.rultor.com/b/yegor256/rexsl)](http://www.rultor.com/p/yegor256/rexsl)
 
 [![Build Status](https://travis-ci.org/yegor256/rexsl.svg?branch=master)](https://travis-ci.org/yegor256/rexsl)
+[![Build status](https://ci.appveyor.com/api/projects/status/qfgwopxasua7xtwg/branch/master?svg=true)](https://ci.appveyor.com/project/yegor256/rexsl/branch/master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rexsl/rexsl/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.rexsl/rexsl)
 
 The idea is simple - to make a RESTful XML API available in a browser-friendly
