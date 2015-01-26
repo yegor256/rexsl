@@ -32,6 +32,7 @@ package com.rexsl.core;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
+import com.jcabi.manifests.ServletMfs;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -118,7 +119,7 @@ public final class XsltFilter implements Filter {
         final ServletContext context = config.getServletContext();
         this.tfactory.setURIResolver(new ContextResourceResolver(context));
         try {
-            Manifests.append(context);
+            Manifests.DEFAULT.append(new ServletMfs(context));
         } catch (final IOException ex) {
             throw new IllegalStateException(ex);
         }
