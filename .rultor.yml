@@ -1,31 +1,22 @@
-assets:
-  settings.xml: "yegor256/home#assets/rexsl/settings.xml"
-  pubring.gpg: "yegor256/home#assets/pubring.gpg"
-  secring.gpg: "yegor256/home#assets/secring.gpg"
-  s3cfg: "yegor256/home#assets/s3cfg"
-
-env:
-  MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1g"
-
-install:
-  - "sudo gem install pdd"
-
+assets: {settings.xml: yegor256/home#assets/rexsl/settings.xml, pubring.gpg: yegor256/home#assets/pubring.gpg,
+  secring.gpg: yegor256/home#assets/secring.gpg, s3cfg: yegor256/home#assets/s3cfg}
+env: {MAVEN_OPTS: '-XX:MaxPermSize=256m -Xmx1g'}
+install: [sudo gem install pdd]
 release:
   script: |
     mvn versions:set "-DnewVersion=${tag}"
     git commit -am "${tag}"
     mvn clean deploy -Pqulice -Psonatype -Prexsl --settings ../settings.xml
     mvn clean site-deploy -Psite -Prexsl --settings ../settings.xml
-
 deploy:
   script: |
     mvn clean deploy -Pqulice --settings ../settings.xml
     mvn clean
     pdd --source=$(pwd) --verbose --file=rexsl.xml
     s3cmd --no-progress put rexsl.xml --config=../s3cfg s3://pdd.teamed.io/rexsl.xml > /dev/null
-
 merge:
-  script: |
+  script: |-
     mvn help:system clean install site -Psite -Pqulice --settings ../settings.xml
     mvn clean
     pdd --source=$(pwd) --verbose --file=/dev/null
+architect: [yegor256, yegor256, davvd]
