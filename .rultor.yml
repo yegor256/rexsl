@@ -1,7 +1,12 @@
-assets: {settings.xml: yegor256/home#assets/rexsl/settings.xml, pubring.gpg: yegor256/home#assets/pubring.gpg,
-  secring.gpg: yegor256/home#assets/secring.gpg, s3cfg: yegor256/home#assets/s3cfg}
-env: {MAVEN_OPTS: '-XX:MaxPermSize=256m -Xmx1g'}
-install: [sudo gem install pdd]
+assets:
+  settings.xml: yegor256/home#assets/rexsl/settings.xml
+  pubring.gpg: yegor256/home#assets/pubring.gpg
+  secring.gpg: yegor256/home#assets/secring.gpg
+  s3cfg: yegor256/home#assets/s3cfg
+env:
+  MAVEN_OPTS: -XX:MaxPermSize=256m -Xmx1g
+install:
+- sudo gem install pdd
 release:
   script: |
     mvn versions:set "-DnewVersion=${tag}"
@@ -19,4 +24,7 @@ merge:
     mvn help:system clean install site -Psite -Pqulice --settings ../settings.xml
     mvn clean
     pdd --source=$(pwd) --verbose --file=/dev/null
-architect: [yegor256, yegor256, davvd]
+architect:
+- yegor256
+- yegor256
+- davvd
