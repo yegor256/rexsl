@@ -3,7 +3,7 @@
 To build the project you need the following:
 
  - JDK 1.7
- - Maven (>= 3.0.3)
+ - Maven (>= 3.1.1)
 
 # Continuous Integration Configuration
 
