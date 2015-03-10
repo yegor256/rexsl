@@ -99,7 +99,7 @@ final class ContextResourceResolver implements URIResolver {
      * @param prov Connection provider.
      */
     ContextResourceResolver(@NotNull final ServletContext ctx,
-        final ConnectionProvider prov) {
+        @NotNull final ConnectionProvider prov) {
         this.context = ctx;
         this.provider = prov;
     }

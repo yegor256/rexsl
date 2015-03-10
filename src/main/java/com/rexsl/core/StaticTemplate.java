@@ -37,6 +37,7 @@ import java.net.URI;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -103,12 +104,12 @@ final class StaticTemplate implements Template {
         String txt;
         try {
             if (uri.isAbsolute()) {
-                txt = IOUtils.toString(uri);
+                txt = IOUtils.toString(uri, Charsets.UTF_8);
             } else {
                 final InputStream stream = StaticTemplate.class
                     .getResourceAsStream(uri.toString());
                 try {
-                    txt = IOUtils.toString(stream);
+                    txt = IOUtils.toString(stream, Charsets.UTF_8);
                 } finally {
                     IOUtils.closeQuietly(stream);
                 }
