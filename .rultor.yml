@@ -25,6 +25,5 @@ merge:
     mvn clean
     pdd --source=$(pwd) --verbose --file=/dev/null
 architect:
-- yegor256
-- yegor256
 - davvd
+- yegor256
