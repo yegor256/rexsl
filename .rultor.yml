@@ -19,6 +19,8 @@ deploy:
     mvn clean
     pdd --source=$(pwd) --verbose --file=rexsl.xml
     s3cmd --no-progress put rexsl.xml --config=../s3cfg s3://pdd.teamed.io/rexsl.xml > /dev/null
+  commanders:
+  - yegor256
 merge:
   script: |-
     mvn help:system clean install site -Psite -Pqulice --settings ../settings.xml
