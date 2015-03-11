@@ -7,6 +7,8 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/qfgwopxasua7xtwg/branch/master?svg=true)](https://ci.appveyor.com/project/yegor256/rexsl/branch/master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rexsl/rexsl/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.rexsl/rexsl)
 
+**ATTENTION:** This project is deprecated. Its successor is [takes.org](http://www.takes.org).
+
 The idea is simple - to make a RESTful XML API available in a browser-friendly
 format renderable with XSL stylesheets. With ReXSL you develop your web
 application as a RESTful "web service" while XSL stylesheets transform it to an HTML web site.
