@@ -13,6 +13,8 @@ release:
     git commit -am "${tag}"
     mvn clean deploy -Pqulice -Psonatype -Prexsl --settings ../settings.xml
     mvn clean site-deploy -Psite -Prexsl --settings ../settings.xml
+  commanders:
+  - yegor256
 deploy:
   script: |
     mvn clean deploy -Pqulice --settings ../settings.xml
