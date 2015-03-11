@@ -24,6 +24,8 @@ merge:
     mvn help:system clean install site -Psite -Pqulice --settings ../settings.xml
     mvn clean
     pdd --source=$(pwd) --verbose --file=/dev/null
+  commanders:
+  - yegor256
 architect:
 - davvd
 - yegor256
