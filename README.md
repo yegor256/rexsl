@@ -13,8 +13,6 @@ The idea is simple - to make a RESTful XML API available in a browser-friendly
 format renderable with XSL stylesheets. With ReXSL you develop your web
 application as a RESTful "web service" while XSL stylesheets transform it to an HTML web site.
 
-Read more at [www.rexsl.com](http://www.rexsl.com).
-
 For example, this site uses ReXSL:
 [s3auth.com](http://www.s3auth.com).
 
